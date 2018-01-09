@@ -88,7 +88,7 @@ defineProperties(window, {
   },
 });
 
-const oldTimeStamp = Object.getOwnPropertyDescriptor(Event.prototype, "timeStamp").get
+const oldTimeStamp = Object.getOwnPropertyDescriptor(Event.prototype, "timeStamp").get;
 const newTimeStamp = that => roundTimeMs(oldTimeStamp.apply(that));
 defineProperties(Event.prototype, {
   getters: {
