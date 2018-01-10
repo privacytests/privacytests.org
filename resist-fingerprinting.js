@@ -1,21 +1,19 @@
 
-/*
-# resist-fingerprinting.js
-
-This content script can be injected into a web page to
-prevent some Web APIs from being used for fingerprinting.
-Please note: this script is not sufficient to prevent all
-fingerprinting techniques! Some fingerprinting vectors cannot
-be mitigated by a content script.
-
-Here are some rules for adding code:
- * Later-defined functions call earlier functions
- * Each function must be documented
- * We (mostly) redefine properties of prototypes, not instances, so that
-   attackers can't call the old prototype on the instance.
-*/
+// This content script can be injected into a web page to
+// prevent some Web APIs from being used for fingerprinting.
+// Please note: this script is not sufficient to prevent all
+// fingerprinting techniques! Some fingerprinting vectors cannot
+// be mitigated by a content script.
+//
+// Here are some rules for adding code:
+//  * Later-defined functions call earlier functions
+//  * Each function must be documented
+//  * We (mostly) redefine properties of prototypes, not instances, so that
+//   attackers can't call the old prototype on the instance.
 
 (function () {
+  // Prevent use of arguments.caller.callee.arguments
+  "use strict";
 
 // __defineProperties(obj, m)__.
 // Takes an object 'obj' and a map 'm'. The map
@@ -137,7 +135,7 @@ defineProperties(Navigator.prototype, {
   }
 });
 
-// ## Canvas fingerprinting
+// #### Canvas fingerprinting
 
 let allowCanvas;
 const controlCanvas = function (canvas) {
