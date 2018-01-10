@@ -1,13 +1,18 @@
 
 /*
- * # resist-fingerprinting.js
- *
- * This content script can be injected into a web page to
- * prevent some Web APIs from being used for fingerprinting.
- * Please note: this script is not sufficient to prevent all
- * fingerprinting techniques! Some fingerprinting vectors cannot
- * be mitigated by a content script.
- */
+# resist-fingerprinting.js
+
+This content script can be injected into a web page to
+prevent some Web APIs from being used for fingerprinting.
+Please note: this script is not sufficient to prevent all
+fingerprinting techniques! Some fingerprinting vectors cannot
+be mitigated by a content script.
+
+Here are some rules for adding code:
+ * Later-defined functions call earlier functions
+ * We (mostly) redefine properties of prototypes, not instances, so that
+   attackers can't call the old prototype on the instance.
+*/
 
 (function () {
 
@@ -46,14 +51,14 @@ const defineProperties = function (obj, m) {
 
 const roundTimeMs = t => Math.round(t / 100) * 100;
 
-const oldNow = Object.getPrototypeOf(performance).now;
-defineProperties(performance, {
+const oldNow = Performance.prototype.now;
+defineProperties(Performance.prototype, {
   constants: {
-    now: () => roundTimeMs(oldNow.apply(performance)),
+    now: function () { return roundTimeMs(oldNow.apply(this)); },
   },
 });
 
-defineProperties(screen, {
+defineProperties(Screen.prototype, {
   constants: {
     availLeft: 0,
     availTop: 0,
@@ -73,7 +78,7 @@ defineProperties(screen, {
   },
 });
 
-defineProperties(screen.orientation, {
+defineProperties(ScreenOrientation.prototype, {
   constants: {
     type: "landscape-primary",
     angle: 0,
