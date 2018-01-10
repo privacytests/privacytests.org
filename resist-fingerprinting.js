@@ -57,12 +57,16 @@ const defineProperties = function (obj, m) {
 
 const roundTimeMs = t => Math.round(t / 100) * 100;
 
+// ## rounding performance.now()
+
 const oldNow = Performance.prototype.now;
 defineProperties(Performance.prototype, {
   constants: {
     now: function () { return roundTimeMs(oldNow.apply(this)); },
   },
 });
+
+// ## window.screen properties
 
 defineProperties(Screen.prototype, {
   constants: {
@@ -84,6 +88,8 @@ defineProperties(Screen.prototype, {
   },
 });
 
+// ## screen orientation
+
 defineProperties(ScreenOrientation.prototype, {
   constants: {
     type: "landscape-primary",
@@ -92,12 +98,16 @@ defineProperties(ScreenOrientation.prototype, {
   },
 });
 
+// ## window.screenX, window.screenY
+
 defineProperties(window, { // Can we use a prototype here instead?
   constants: {
     screenX: 0,
     screenY: 0,
   },
 });
+
+// ## Event.timeStamp
 
 const oldTimeStamp = Object.getOwnPropertyDescriptor(Event.prototype, "timeStamp").get;
 const newTimeStamp = that => roundTimeMs(oldTimeStamp.apply(that));
@@ -106,12 +116,17 @@ defineProperties(Event.prototype, {
     timeStamp: function () { return newTimeStamp(this); },
   }
 });
+
+// ## MouseEvent.screenX, MouseEvent.screenY
+
 defineProperties(MouseEvent.prototype, {
   getters: {
     screenX: function () { return this.clientX; },
     screenY: function () { return this.clientY; },
   }
 });
+
+// ## window.navigator properties
 
 defineProperties(Navigator.prototype, {
   constants: {
@@ -121,6 +136,8 @@ defineProperties(Navigator.prototype, {
     languages: "en-US,en",
   }
 });
+
+// ## Canvas fingerprinting
 
 let allowCanvas;
 const controlCanvas = function (canvas) {
@@ -136,12 +153,17 @@ const controlCanvas = function (canvas) {
     return blankCanvas;
   }
 };
+const oldToBlob = HTMLCanvasElement.prototype.toBlob;
+const newToBlob = function (canvas, ...args) {
+  return oldToBlob.apply(controlCanvas(canvas), args);
+};
 const oldToDataURL = HTMLCanvasElement.prototype.toDataURL;
 const newToDataURL = function (canvas, ...args) {
   return oldToDataURL.apply(controlCanvas(canvas), args);
 };
 defineProperties(HTMLCanvasElement.prototype, {
   constants: {
+    toBlob : function (...args) { return newToBlob(this, ...args); },
     toDataURL : function (...args) { return newToDataURL(this, ...args); },
   }
 });
