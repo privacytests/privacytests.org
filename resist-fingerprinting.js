@@ -185,10 +185,12 @@ defineProperties(Date.prototype, {
 });
 
 } catch (e) {
-  let errorDiv = document.createElement("div");
-  errorDiv.setAttribute("class", "error_message");
-  errorDiv.innerText = e.message + "\n" + e.stack.toString();
-  document.body.appendChild(errorDiv);
+  if (window.__showResistFingerprintingErrors) {
+    let errorDiv = document.createElement("div");
+    errorDiv.setAttribute("class", "error_message");
+    errorDiv.innerText = e.message + "\n" + e.stack.toString();
+    document.body.appendChild(errorDiv);
+  }
 }
 
 // End enclosing function
