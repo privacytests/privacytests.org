@@ -3,13 +3,13 @@ const testResultsDiv = document.getElementById("test_results");
 const is = function(a, b, description) {
   const div = document.createElement("div");
   const pass = (a === b);
-  div.innerText = `${pass ? "PASS" : "FAIL"}: ${description}`;
+  div.innerText = `${pass ? "PASS" : "FAIL"}: ${description}, [${a}, ${b}]`;
   div.setAttribute("class", pass ? "test_pass" : "test_fail");
   testResultsDiv.appendChild(div);
 }
 
 const is_rounded_time = function (t, description) {
-  is(Math.round(t/100), t/100, description);
+  is(100 * Math.round(t/100), t, description);
 };
 
 const test_performance = function () {
