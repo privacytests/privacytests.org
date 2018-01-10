@@ -168,5 +168,20 @@ defineProperties(HTMLCanvasElement.prototype, {
   }
 });
 
+// ## Date (enforce UTC)
+
+let constantMap = {};
+for (let unit of ["Date", "Day", "FullYear", "Hours", "Milliseconds",
+                  "Minutes", "Month", "Seconds"]) {
+  for (let option of ["set", "get"]) {
+    constantMap[`${option}${unit}`] = function (...args) {
+      return Date.prototype[`${option}UTC${unit}`].apply(this, args);
+    };
+  }
+}
+defineProperties(Date.prototype, {
+    constants: constantMap
+});
+
 // End enclosing function
 })();
