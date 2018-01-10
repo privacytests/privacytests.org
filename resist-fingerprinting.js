@@ -86,7 +86,7 @@ defineProperties(ScreenOrientation.prototype, {
   },
 });
 
-defineProperties(window, {
+defineProperties(window, { // Can we use a prototype here instead?
   constants: {
     screenX: 0,
     screenY: 0,
@@ -104,6 +104,15 @@ defineProperties(MouseEvent.prototype, {
   getters: {
     screenX: function () { return this.clientX; },
     screenY: function () { return this.clientY; },
+  }
+});
+
+defineProperties(Navigator.prototype, {
+  constants: {
+    getBattery: undefined,
+    hardwareConcurrency: 2,
+    language: "en-US",
+    languages: "en-US,en",
   }
 });
 
