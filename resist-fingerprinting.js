@@ -89,7 +89,7 @@ defineProperties(Screen.prototype, {
 
 // ## screen orientation
 
-if (ScreenOrientation) {
+if (window.ScreenOrientation) {
   defineProperties(ScreenOrientation.prototype, {
     constants: {
       type: "landscape-primary",
