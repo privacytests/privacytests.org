@@ -5,7 +5,11 @@ const is = function(a, b, description) {
   const pass = (a === b);
   div.innerText = `${pass ? "PASS" : "FAIL"}: ${description} [${a}, ${b}]`;
   div.setAttribute("class", pass ? "test_pass" : "test_fail");
-  testResultsDiv.appendChild(div);
+  if (pass) {
+    testResultsDiv.appendChild(div);
+  } else {
+    testResultsDiv.insertBefore(div, testResultsDiv.childNodes[0]);
+  }
 }
 
 const is_rounded_time = function (t, description) {
@@ -40,7 +44,7 @@ const test_navigator = function () {
   } catch (e) {
     is(true, true, "No battery API available.");
   }
-  is(navigator.hardwareConcurrency, 2, "hardwareConcurrency spoofed.");
+  is(navigator.hardwareConcurrency, true, "hardwareConcurrency spoofed.");
   is(navigator.language, "en-US", "spoof navigator.language");
   is(navigator.languages, "en-US,en", "spoof navigator.languages");
 };
