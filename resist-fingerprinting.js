@@ -89,13 +89,15 @@ defineProperties(Screen.prototype, {
 
 // ## screen orientation
 
-defineProperties(ScreenOrientation.prototype, {
-  constants: {
-    type: "landscape-primary",
-    angle: 0,
-    onchange: null,
-  },
-});
+if (ScreenOrientation) {
+  defineProperties(ScreenOrientation.prototype, {
+    constants: {
+      type: "landscape-primary",
+      angle: 0,
+      onchange: null,
+    },
+  });
+};
 
 // ## window.screenX, window.screenY
 
