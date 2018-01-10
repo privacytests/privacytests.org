@@ -44,7 +44,7 @@ const test_navigator = function () {
   } catch (e) {
     is(true, true, "No battery API available.");
   }
-  is(navigator.hardwareConcurrency, true, "hardwareConcurrency spoofed.");
+  is(navigator.hardwareConcurrency, 2, "hardwareConcurrency spoofed.");
   is(navigator.language, "en-US", "spoof navigator.language");
   is(navigator.languages, "en-US,en", "spoof navigator.languages");
 };
