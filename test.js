@@ -1,9 +1,11 @@
+const testResultsDiv = document.getElementById("test_results");
+
 const is = function(a, b, description) {
-  if (a === b) {
-    console.log(`PASS: ${description}`);
-  } else {
-    console.log(`FAIL: ${description}`);
-  }
+  const div = document.createElement("div");
+  const pass = (a === b);
+  div.innerText = `${pass ? "PASS" : "FAIL"}: ${description}`;
+  div.setAttribute("class", pass ? "test_pass" : "test_fail");
+  testResultsDiv.appendChild(div);
 }
 
 const is_rounded_time = function (t, description) {
