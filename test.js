@@ -3,7 +3,7 @@ const testResultsDiv = document.getElementById("test_results");
 const is = function(a, b, description) {
   const div = document.createElement("div");
   const pass = (a === b);
-  div.innerText = `${pass ? "PASS" : "FAIL"}: ${description}, [${a}, ${b}]`;
+  div.innerText = `${pass ? "PASS" : "FAIL"}: ${description} [${a}, ${b}]`;
   div.setAttribute("class", pass ? "test_pass" : "test_fail");
   testResultsDiv.appendChild(div);
 }
@@ -32,10 +32,24 @@ const test_mouse_event = function () {
   is_rounded_time(event.timeStamp, "MouseEvent.timeStamp is rounded");
 };
 
+const test_navigator = function () {
+  is(navigator.getBattery, undefined, "No battery API available.");
+  try {
+    navigator.getBattery()
+    is(true, false, "Battery API found.");
+  } catch (e) {
+    is(true, true, "No battery API available.");
+  }
+  is(navigator.hardwareConcurrency, 2, "hardwareConcurrency spoofed.");
+  is(navigator.language, "en-US", "spoof navigator.language");
+  is(navigator.languages, "en-US,en", "spoof navigator.languages");
+};
+
 const run_tests = async function () {
   test_performance();
   test_screenXY();
   test_mouse_event();
+  test_navigator();
 };
 
 run_tests();
