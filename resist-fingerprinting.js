@@ -12,6 +12,7 @@
 //   attackers can't call the old prototype on the instance.
 
 (function () {
+try {
   // Prevent use of arguments.caller.callee.arguments
   "use strict";
 
@@ -180,6 +181,13 @@ for (let unit of ["Date", "Day", "FullYear", "Hours", "Milliseconds",
 defineProperties(Date.prototype, {
     constants: constantMap
 });
+
+} catch (e) {
+  let errorDiv = document.createElement("div");
+  errorDiv.setAttribute("class", "error_message");
+  errorDiv.innerText = e.message + "\n" + e.stack.toString();
+  document.body.appendChild(errorDiv);
+}
 
 // End enclosing function
 })();
