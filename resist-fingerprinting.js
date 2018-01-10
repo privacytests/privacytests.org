@@ -10,12 +10,17 @@ be mitigated by a content script.
 
 Here are some rules for adding code:
  * Later-defined functions call earlier functions
+ * Each function must be documented
  * We (mostly) redefine properties of prototypes, not instances, so that
    attackers can't call the old prototype on the instance.
 */
 
 (function () {
 
+// __defineProperties(obj, m)__.
+// Takes an object 'obj' and a map 'm'. The map
+// should have one or more of the keys
+// 'constants', 'getters', 'setAndGetters', 'mutables'.
 const defineProperties = function (obj, m) {
   if (m.constants) {
     for (let prop in m.constants) {
@@ -32,10 +37,11 @@ const defineProperties = function (obj, m) {
       })
     }
   }
-  if (m.setters) {
-    for (let prop in m.setters) {
+  if (m.settersAndGetters) {
+    for (let {setter, getter} in m.settersAndGetters) {
       Object.defineProperty(obj, prop, {
-        set: m.setters[prop],
+        get: getter,
+        set: setter,
       })
     }
   }
@@ -116,4 +122,29 @@ defineProperties(Navigator.prototype, {
   }
 });
 
+let allowCanvas;
+const controlCanvas = function (canvas) {
+  if (allowCanvas === undefined) {
+    allowCanvas = window.confirm("Do you want to allow canvas image extraction?");
+  }
+  if (allowCanvas) {
+    return canvas;
+  } else {
+    const blankCanvas = document.createElement("canvas");
+    blankCanvas.width = canvas.width;
+    blankCanvas.height = canvas.height;
+    return blankCanvas;
+  }
+};
+const oldToDataURL = HTMLCanvasElement.prototype.toDataURL;
+const newToDataURL = function (canvas, ...args) {
+  return oldToDataURL.apply(controlCanvas(canvas), args);
+};
+defineProperties(HTMLCanvasElement.prototype, {
+  constants: {
+    toDataURL : function (...args) { return newToDataURL(this, ...args); },
+  }
+});
+
+// End enclosing function
 })();
