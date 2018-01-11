@@ -1,4 +1,5 @@
-
+// resist-fingerprinting.js
+//
 // This content script can be injected into a web page to
 // prevent some Web APIs from being used for fingerprinting.
 // Please note: this script is not sufficient to prevent all
@@ -13,8 +14,9 @@
 
 (function () {
 try {
-  // Prevent use of arguments.caller.callee.arguments
-  "use strict";
+
+// Prevent use of arguments.caller.callee.arguments
+"use strict";
 
 const defineConstants = function (obj, m) {
   for (let prop in m) {
@@ -112,6 +114,7 @@ defineGetters(MouseEvent.prototype, {
 // ## window.navigator properties
 
 defineConstants(Navigator.prototype, {
+  buildID: "20100101",
   getBattery: undefined,
   hardwareConcurrency: 2,
   language: "en-US",
@@ -169,7 +172,7 @@ defineConstants(Date.prototype, {
     errorDiv.innerText = e.message + "\n" + e.stack.toString();
     document.body.appendChild(errorDiv);
   }
-}
+} //try
 
 // End enclosing function
 })();

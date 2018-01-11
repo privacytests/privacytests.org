@@ -3,7 +3,7 @@ const testResultsDiv = document.getElementById("test_results");
 const is = function(a, b, description) {
   const div = document.createElement("div");
   const pass = (a === b);
-  div.innerText = `${pass ? "PASS" : "FAIL"}: ${description} [${a}, ${b}]`;
+  div.innerText = `${pass ? "PASS" : "FAIL"}: ${description} ${JSON.stringify([a, b])}`;
   div.setAttribute("class", pass ? "test_pass" : "test_fail");
   if (pass) {
     testResultsDiv.appendChild(div);
@@ -37,6 +37,7 @@ const test_mouse_event = function () {
 };
 
 const test_navigator = function () {
+  is(navigator.buildID, "20100101", "spoof navigator.buildID");
   is(navigator.getBattery, undefined, "No battery API available.");
   try {
     navigator.getBattery()
