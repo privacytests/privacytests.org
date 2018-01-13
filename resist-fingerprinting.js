@@ -121,10 +121,24 @@ defineConstants(Navigator.prototype, {
   languages: "en-US,en",
 });
 
-// ## window.navigator.mimeTypes properties
+// ## navigator.mimeTypes and navigator.plugins properties
 
-defineConstants(MimeTypeArray.prototype, {
+const dummy_mimeTypes = Object.create(MimeTypeArray.prototype);
+defineConstants(dummy_mimeTypes, {
   length: 0,
+  namedItem: () => undefined,
+  item: () => undefined,
+});
+const dummy_plugins = Object.create(PluginArray.prototype);
+defineConstants(dummy_plugins, {
+  length: 0,
+  namedItem: () => undefined,
+  item: () => undefined,
+});
+
+defineGetters(Navigator.prototype, {
+  mimeTypes: () => dummy_mimeTypes,
+  plugins: () => dummy_plugins,
 });
 
 // ## window.navigator.plugins properties

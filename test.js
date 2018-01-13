@@ -53,6 +53,12 @@ const test_navigator = function () {
 const test_mimeTypes = function () {
   is(navigator.mimeTypes.length, 0, "mimeTypes is empty");
   is(navigator.plugins.length, 0, "plugins is empty");
+  is(Object.keys(navigator.mimeTypes).length, 0, "mimeTypes has zero keys");
+  is(Object.keys(navigator.plugins).length, 0, "plugins has zero keys");
+  is(navigator.mimeTypes[0], undefined,
+     "no element found at index 0 of mimeTypes");
+  is(navigator.plugins[0], undefined,
+     "no element found at index 0 of plugins");
 };
 
 const run_tests = async function () {
