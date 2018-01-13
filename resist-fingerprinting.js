@@ -90,10 +90,15 @@ if (window.ScreenOrientation) {
 };
 
 // ## window.screenX, window.screenY
-
-defineConstants(window, { // Can we use a prototype here instead?
+// (Should we use a prototype here instead? I can't find one.)
+defineConstants(window, {
   screenX: 0,
   screenY: 0,
+  devicePixelRatio: 1,
+});
+defineGetters(window, {
+  outerWidth: () => window.innerWidth,
+  outerHeight: () => window.innerHeight,
 });
 
 // ## Event.timeStamp

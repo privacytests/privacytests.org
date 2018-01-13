@@ -23,9 +23,14 @@ const test_performance = function () {
   is_rounded_time(now2, "performance.now() via prototype is rounded to nearest 100 ms.");
 };
 
-const test_screenXY = function () {
+const test_window_properties = function () {
   is(window.screenX, 0, "screenX is 0.");
   is(window.screenY, 0, "screenY is 0.");
+  is(window.outerWidth, window.innerWidth,
+     "window.outerWidth spoofed to innerWidth");
+  is(window.outerHeight, window.outerHeight,
+     "window.outerHeight spoofed to innerHeight");
+  is(window.devicePixelRatio, 1, "devicePixelRatio spoofed to 1");
 };
 
 const test_mouse_event = function () {
@@ -63,7 +68,7 @@ const test_mimeTypes = function () {
 
 const run_tests = async function () {
   test_performance();
-  test_screenXY();
+  test_window_properties();
   test_mouse_event();
   test_navigator();
   test_mimeTypes();
