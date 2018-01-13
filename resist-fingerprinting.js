@@ -146,12 +146,6 @@ defineGetters(Navigator.prototype, {
   plugins: () => dummy_plugins,
 });
 
-// ## window.navigator.plugins properties
-
-defineConstants(PluginArray.prototype, {
-  length: 0,
-});
-
 // #### Canvas fingerprinting
 
 let allowCanvas;
