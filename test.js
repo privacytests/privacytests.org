@@ -50,11 +50,17 @@ const test_navigator = function () {
   is(navigator.languages, "en-US,en", "spoof navigator.languages");
 };
 
+const test_mimeTypes = function () {
+  is(navigator.mimeTypes.length, 0, "mimeTypes is empty");
+  is(navigator.plugins.length, 0, "plugins is empty");
+};
+
 const run_tests = async function () {
   test_performance();
   test_screenXY();
   test_mouse_event();
   test_navigator();
+  test_mimeTypes();
 };
 
 run_tests();

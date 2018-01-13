@@ -165,6 +165,10 @@ defineConstants(Date.prototype, {
   constants: constantMap
 });
 
+
+// ## Handle unexpected errors
+// Catch any errors. If the __showResistFingerprintingErrors
+// flags is enabled, then we will display on the page.
 } catch (e) {
   if (window.__showResistFingerprintingErrors) {
     let errorDiv = document.createElement("div");
