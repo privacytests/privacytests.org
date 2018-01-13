@@ -36,8 +36,8 @@ const test_window_properties = function () {
 const test_mouse_event = function () {
   const clientX = 10, clientY = 20;
   const event = new MouseEvent("click", { clientX, clientY });
-  is(event.screenX, clientX, "screenX matches clientX");
-  is(event.screenY, clientY, "screenY matches clientY");
+  is(event.screenX, clientX, "MouseEvent.screenX matches .clientX");
+  is(event.screenY, clientY, "MouseEvent.screenY matches .clientY");
   is_rounded_time(event.timeStamp, "MouseEvent.timeStamp is rounded");
 };
 
