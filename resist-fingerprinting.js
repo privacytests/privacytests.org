@@ -121,6 +121,18 @@ defineConstants(Navigator.prototype, {
   languages: "en-US,en",
 });
 
+// ## window.navigator.mimeTypes properties
+
+defineConstants(MimeTypeArray.prototype, {
+  length: 0,
+});
+
+// ## window.navigator.plugins properties
+
+defineConstants(PluginArray.prototype, {
+  length: 0,
+});
+
 // #### Canvas fingerprinting
 
 let allowCanvas;
