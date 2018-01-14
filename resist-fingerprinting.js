@@ -181,8 +181,8 @@ let constantMap = {};
 for (let unit of ["Date", "Day", "FullYear", "Hours", "Milliseconds",
                   "Minutes", "Month", "Seconds"]) {
   for (let option of ["set", "get"]) {
-    constantMap[`${option}${unit}`] = function (...args) {
-      return Date.prototype[`${option}UTC${unit}`].apply(this, args);
+    constantMap[option + unit] = function (...args) {
+      return Date.prototype[option + "UTC" + unit].apply(this, args);
     };
   }
 }
@@ -198,7 +198,7 @@ defineConstants(Date.prototype, {
   if (window.__showResistFingerprintingErrors) {
     let errorDiv = document.createElement("div");
     errorDiv.setAttribute("class", "error_message");
-    errorDiv.innerText = e.message + "\n" + e.stack.toString();
+    errorDiv.innerText = e.message + " -- " + e.stack.toString();
     document.body.appendChild(errorDiv);
   }
 } //try

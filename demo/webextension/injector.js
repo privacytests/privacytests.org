@@ -1,8 +1,6 @@
-//document.body.style.border = "5px dashed pink";
 const scriptElement = document.createElement("script");
-//const resistScriptURL = browser.extension.getURL("resist-fingerprinting.js");
-//scriptElement.src = resistScriptURL;
-scriptElement.textContent = `// resist-fingerprinting.js
+scriptElement.textContent = `
+// resist-fingerprinting.js
 //
 // This content script can be injected into a web page to
 // prevent some Web APIs from being used for fingerprinting.
@@ -19,7 +17,7 @@ scriptElement.textContent = `// resist-fingerprinting.js
 (function () {
 try {
 
-  console.log("hello from resist-fingerprinting.js: " + performance.now());
+console.log("hello from rfp");
 
 // Prevent use of arguments.caller.callee.arguments
 "use strict";
@@ -188,7 +186,7 @@ for (let unit of ["Date", "Day", "FullYear", "Hours", "Milliseconds",
                   "Minutes", "Month", "Seconds"]) {
   for (let option of ["set", "get"]) {
     constantMap[option + unit] = function (...args) {
-      return Date.prototype[option + "UTC" + unit].apply(this, args);
+      return Date.prototype[option + 'UTC' + unit].apply(this, args);
     };
   }
 }
@@ -212,25 +210,4 @@ defineConstants(Date.prototype, {
 // End enclosing function
 })();
 `;
-//console.log("multiline");
-//console.log("injector: ${performance.now()}");`;
 document.head || document.documentElement.appendChild(scriptElement);
-
-//window.setTimeout(() => document.body.appendChild(scriptElement), 0);
-/*
-document.body.appendChild(
-const resistScriptURL = browser.extension.getURL(
-  "resist-fingerprinting.js"
-)
-//document.body.innerHTML += `<script src="${resistScriptURL}"></script>`;
-console.log(resistScriptURL);
-(async function () {
-  console.log("async func");
-  const response = await fetch(resistScriptURL);
-  //console.log(response);
-  const text = await response.text();
-  console.log(`"${text}"`);
-  console.log(document.body.innerHTML);
-})();
-//document.body.innerHTML += `<script src=${resistScriptURL}></script>`;
-*/
