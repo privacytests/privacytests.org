@@ -18,11 +18,14 @@ try {
 // Prevent use of arguments.caller.callee.arguments
 "use strict";
 
+console.log("hello from resist-fingerprinting.js");
+
 const defineConstants = function (obj, m) {
   for (let prop in m) {
     Object.defineProperty(obj, prop, {
       value: m[prop],
       writable: false,
+      configurable: false,
     })
   }
 };
@@ -38,6 +41,8 @@ const defineSettersAndGetters = function (obj, m) {
     Object.defineProperty(obj, prop, {
       get: getter,
       set: setter,
+//      writable: false,
+//      configurable: false,
     })
   }
 };
@@ -48,6 +53,12 @@ const defineMutables = function (obj, m) {
       writable: true,
     })
   }
+};
+const freezeConstant = function (obj, prop) {
+  Object.defineProperty(obj, prop, {
+    writable: false,
+    configurable: false,
+  });
 };
 
 const roundTimeMs = t => Math.round(t / 100) * 100;
@@ -174,6 +185,7 @@ defineConstants(HTMLCanvasElement.prototype, {
     toBlob : function (...args) { return newToBlob(this, ...args); },
     toDataURL : function (...args) { return newToDataURL(this, ...args); },
 });
+freezeConstant(window, "confirm");
 
 // ## Date (enforce UTC)
 
@@ -186,10 +198,42 @@ for (let unit of ["Date", "Day", "FullYear", "Hours", "Milliseconds",
     };
   }
 }
-defineConstants(Date.prototype, {
-  constants: constantMap
-});
+defineConstants(Date.prototype, constantMap);
 
+// ## performance.timing members
+const performance_timing_members = [
+  'connectEnd',
+  'connectStart',
+  'domComplete',
+  'domContentLoadedEventEnd',
+  'domContentLoadedEventStart',
+  'domInteractive',
+  'domLoading',
+  'domainLookupEnd',
+  'domainLookupStart',
+  'fetchStart',
+  'loadEventEnd',
+  'loadEventStart',
+  'navigationStart',
+  'redirectEnd',
+  'redirectStart',
+  'requestStart',
+  'responseEnd',
+  'responseStart',
+  'secureConnectionStart',
+  'unloadEventEnd',
+  'unloadEventStart',
+];
+const dummy_performance_timing = Object.create(PerformanceTiming.prototype);
+  const timingConstantMap = {};
+for (let member of performance_timing_members) {
+  timingConstantMap[member] = 0;
+}
+defineConstants(dummy_performance_timing, timingConstantMap);
+console.log(dummy_performance_timing);
+defineGetters(Performance.prototype, {
+  timing: () => dummy_performance_timing,
+});
 
 // ## Handle unexpected errors
 // Catch any errors. If the __showResistFingerprintingErrors

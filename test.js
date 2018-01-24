@@ -43,6 +43,13 @@ const performance_timing_tests = [
   [`performance.timing.unloadEventStart`, 0],
 ];
 
+const performance_now_tests = [
+  [`performance.now()`,
+   `Math.floor(performance.now() / 100) * 100`],
+  [`Performance.prototype.now.apply(performance)`,
+   `Math.floor(performance.now() / 100) * 100`],
+];
+
 const screen_tests = [
   [`screen.width`, `innerWidth`],
   [`screen.height`, `innerHeight`],
@@ -64,108 +71,64 @@ const navigator_tests = [
    }`,
    `false`],
   [`navigator.hardwareConcurrency`, 2],
-  [`Navigator.prototype.__lookupGetter__("hardwareConcurrency")
-   .call(navigator)`, 2],
   [`navigator.language`, `"en-US"`],
-  [`Navigator.prototype.__lookupGetter__("language").call(navigator)`,
-   `"en-US"`],
   [`navigator.languages.toString()`, `"en-US,en"`],
-  [`Navigator.prototype.__lookupGetter__("languages")
-   .call(navigator).toString()`,
-   `"en-US,en"`],
   [`navigator.mimeTypes.length`, 0],
   [`navigator.plugins.length`, 0],
   [`Object.keys(navigator.mimeTypes).length`, 0],
   [`Object.keys(navigator.plugins).length`, 0],
   [`navigator.mimeTypes[0]`, undefined],
   [`navigator.plugins[0]`, undefined],
-  [`Navigator.prototype.__lookupGetter__("plugins").call(navigator).length`,
-   0],
-  [`Navigator.prototype.__lookupGetter__("mimeTypes").call(navigator).length`,
-   0],
+  [`Navigator.prototype.__lookupGetter__("plugins").call(navigator).length`, 0],
+  [`Navigator.prototype.__lookupGetter__("mimeTypes").call(navigator).length`, 0],
 ];
 
-let date = new Date();
+// ## Date object
 
+const date = new Date();
 const date_tests = [
   [`date.getDate()`, `date.getUTCDate()`],
+  [`date.getDay()`, `date.getUTCDay()`],
+  [`date.getFullYear()`, `date.getUTCFullYear()`],
+  [`date.getHours()`, `date.getUTCHours()`],
+  [`date.getMilliseconds()`, `date.getUTCMilliseconds()`],
+  [`date.getMinutes()`, `date.getUTCMinutes()`],
+  [`date.getMonth()`, `date.getUTCMonth()`],
+  [`date.getSeconds()`, `date.getUTCSeconds()`],
+  [`Date.prototype.getDate.call(date)`, `date.getUTCDate()`],
+  [`Date.prototype.getDay.call(date)`, `date.getUTCDay()`],
+  [`Date.prototype.getFullYear.call(date)`, `date.getUTCFullYear()`],
+  [`Date.prototype.getHours.call(date)`, `date.getUTCHours()`],
+  [`Date.prototype.getMilliseconds.call(date)`, `date.getUTCMilliseconds()`],
+  [`Date.prototype.getMinutes.call(date)`, `date.getUTCMinutes()`],
+  [`Date.prototype.getMonth.call(date)`, `date.getUTCMonth()`],
+  [`Date.prototype.getSeconds.call(date)`, `date.getUTCSeconds()`],
 ];
 
 const test_pairs = function (pairs) {
-  for (let [expression, desired_result] of pairs) {
-    const expression_value = eval(expression);
-    const desired_value = eval(desired_result);
-    const pass = expression_value === desired_value;
-    if (pass) {
-      console.log(`PASS: ${expression} --> ${desired_result}`);
-    } else {
-      console.log(`FAIL: ${expression} [${expression_value}] is not ${desired_result} [${desired_value}]`);
-    }
-  }
+  return pairs.map(
+    ([expression, spoof_expression]) => {
+      const actual_value = eval(expression);
+      const desired_value = eval(spoof_expression);
+      const passed = actual_value === desired_value;
+      return { expression, spoof_expression, actual_value, desired_value, passed };
+    })
 };
 
-const test_performance = function () {
-  const now = performance.now();
-  is_rounded_time(now, "performance.now() is rounded to nearest 100 ms.");
-  const now2 = Performance.prototype.now.apply(performance);
-  is_rounded_time(now2, "performance.now() via prototype is rounded to nearest 100 ms.");
-};
+const mouse_event_tests = [
+  [`mouseEvent.screenX`, `mouseEvent.clientX`],
+  [`mouseEvent.screenY`, `mouseEvent.clientY`],
+  [`mouseEvent.timeStamp`, `roundTime(mouseEvent.timeStamp)`],
+];
 
-const test_window_properties = function () {
-  is(window.screenX, 0, "screenX is 0.");
-  is(window.screenY, 0, "screenY is 0.");
-  is(window.outerWidth, window.innerWidth,
-     "window.outerWidth spoofed to innerWidth");
-  is(window.outerHeight, window.innerHeight,
-     "window.outerHeight spoofed to innerHeight");
-  is(window.devicePixelRatio, 1, "devicePixelRatio spoofed to 1");
-};
-
-const test_mouse_event = function () {
-  const clientX = 10, clientY = 20;
-  const event = new MouseEvent("click", { clientX, clientY });
-  is(event.screenX, clientX, "MouseEvent.screenX matches .clientX");
-  is(event.screenY, clientY, "MouseEvent.screenY matches .clientY");
-  is_rounded_time(event.timeStamp, "MouseEvent.timeStamp is rounded");
-};
-
-const test_navigator = function () {
-  is(navigator.buildID, "20100101", "spoof navigator.buildID");
-  is(navigator.getBattery, undefined, "No battery API available.");
-  try {
-    navigator.getBattery()
-    is(true, false, "Battery API found.");
-  } catch (e) {
-    is(true, true, "No battery API available.");
-  }
-  is(navigator.hardwareConcurrency, 2, "hardwareConcurrency spoofed.");
-  is(navigator.language, "en-US", "spoof navigator.language");
-  is(navigator.languages, "en-US,en", "spoof navigator.languages");
-};
-
-const test_mimeTypes = function () {
-  is(navigator.mimeTypes.length, 0, "mimeTypes is empty");
-  is(navigator.plugins.length, 0, "plugins is empty");
-  is(Object.keys(navigator.mimeTypes).length, 0, "mimeTypes has zero keys");
-  is(Object.keys(navigator.plugins).length, 0, "plugins has zero keys");
-  is(navigator.mimeTypes[0], undefined,
-     "no element found at index 0 of mimeTypes");
-  is(navigator.plugins[0], undefined,
-     "no element found at index 0 of plugins");
-};
+const prelude = `
+  window.mouseEvent = new MouseEvent("click", { clientX: 10, clientY: 20 });
+  window.roundTime = t => Math.round(t / 100) * 100;
+`;
 
 const testResultsDiv = document.getElementById("test_results");
 
 const is = function(a, b, description) {
-  const div = document.createElement("div");
-  const pass = (a === b);
-  div.innerText = `${pass ? "PASS" : "FAIL"}: ${description} ${JSON.stringify([a, b])}`;
-  div.setAttribute("class", pass ? "test_pass" : "test_fail");
-  if (pass) {
-    testResultsDiv.appendChild(div);
-  } else {
-    testResultsDiv.insertBefore(div, testResultsDiv.childNodes[0]);
-  }
 }
 
 const is_rounded_time = function (t, description) {
@@ -173,16 +136,27 @@ const is_rounded_time = function (t, description) {
 };
 
 const run_tests = async function () {
-  test_pairs(window_property_tests);
-  test_pairs(navigator_tests);
-  test_pairs(screen_tests);
-  test_pairs(performance_timing_tests);
-  test_pairs(date_tests);
-  test_performance();
-  test_window_properties();
-  test_mouse_event();
-  test_navigator();
-  test_mimeTypes();
+  eval(prelude);
+  let results = [].concat(
+    test_pairs(window_property_tests),
+    test_pairs(navigator_tests),
+    test_pairs(screen_tests),
+    test_pairs(performance_now_tests),
+    test_pairs(performance_timing_tests),
+    test_pairs(date_tests),
+    test_pairs(mouse_event_tests),
+  );
+  console.log(results);
+  for (let { expression, spoof_expression, actual_value, desired_value, passed }  of results) {
+    const div = document.createElement("div");
+    div.innerText = `${passed ? "PASS" : "FAIL"}: ${expression} ${JSON.stringify([actual_value, desired_value])}`;
+    div.setAttribute("class", passed ? "test_pass" : "test_fail");
+    if (passed) {
+      testResultsDiv.appendChild(div);
+    } else {
+      testResultsDiv.insertBefore(div, testResultsDiv.childNodes[0]);
+    }
+  }
 };
 
 
