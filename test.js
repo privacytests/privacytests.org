@@ -10,6 +10,10 @@
 //  can be useful for browser makers to patch their browsers. Also
 //  we can potentially make an automated scorecard using browserstack.com.
 
+const prelude = `
+  window.mouseEvent = new MouseEvent("click", { clientX: 10, clientY: 20 });
+  window.roundTime = t => Math.round(t / 100) * 100;
+`;
 
 const window_property_tests = [
   [`screenX`, 0],
@@ -59,7 +63,6 @@ const screen_tests = [
    `innerHeight`],
 ];
 
-
 const navigator_tests = [
   [`navigator.buildID`, `"20100101"`],
   [`navigator.getBattery`, undefined],
@@ -105,39 +108,25 @@ const date_tests = [
   [`Date.prototype.getSeconds.call(date)`, `date.getUTCSeconds()`],
 ];
 
-const test_pairs = function (pairs) {
-  return pairs.map(
-    ([expression, spoof_expression]) => {
-      const actual_value = eval(expression);
-      const desired_value = eval(spoof_expression);
-      const passed = actual_value === desired_value;
-      return { expression, spoof_expression, actual_value, desired_value, passed };
-    })
-};
-
 const mouse_event_tests = [
   [`mouseEvent.screenX`, `mouseEvent.clientX`],
   [`mouseEvent.screenY`, `mouseEvent.clientY`],
   [`mouseEvent.timeStamp`, `roundTime(mouseEvent.timeStamp)`],
 ];
 
-const prelude = `
-  window.mouseEvent = new MouseEvent("click", { clientX: 10, clientY: 20 });
-  window.roundTime = t => Math.round(t / 100) * 100;
-`;
+const test_pairs = (pairs) => pairs.map(
+  ([expression, spoof_expression]) => {
+    const actual_value = eval(expression);
+    const desired_value = eval(spoof_expression);
+    const passed = actual_value === desired_value;
+    return { expression, spoof_expression, actual_value, desired_value, passed };
+  });
 
 const testResultsDiv = document.getElementById("test_results");
 
-const is = function(a, b, description) {
-}
-
-const is_rounded_time = function (t, description) {
-  is(100 * Math.round(t/100), t, description);
-};
-
 const run_tests = async function () {
   eval(prelude);
-  let results = [].concat(
+  return [].concat(
     test_pairs(window_property_tests),
     test_pairs(navigator_tests),
     test_pairs(screen_tests),
@@ -146,6 +135,10 @@ const run_tests = async function () {
     test_pairs(date_tests),
     test_pairs(mouse_event_tests),
   );
+};
+
+const run_and_display_tests = async function () {
+  let results = await run_tests();
   console.log(results);
   for (let { expression, spoof_expression, actual_value, desired_value, passed }  of results) {
     const div = document.createElement("div");
@@ -161,5 +154,5 @@ const run_tests = async function () {
 
 
 
-run_tests();
+run_and_display_tests();
 

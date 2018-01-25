@@ -230,7 +230,6 @@ for (let member of performance_timing_members) {
   timingConstantMap[member] = 0;
 }
 defineConstants(dummy_performance_timing, timingConstantMap);
-console.log(dummy_performance_timing);
 defineGetters(Performance.prototype, {
   timing: () => dummy_performance_timing,
 });
