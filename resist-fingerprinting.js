@@ -132,6 +132,7 @@ defineGetters(MouseEvent.prototype, {
 defineConstants(Navigator.prototype, {
   buildID: "20100101",
   getBattery: undefined,
+  getGamepads: () => [],
   hardwareConcurrency: 2,
   language: "en-US",
   languages: "en-US,en",
@@ -151,7 +152,6 @@ defineConstants(dummy_plugins, {
   namedItem: () => undefined,
   item: () => undefined,
 });
-
 defineGetters(Navigator.prototype, {
   mimeTypes: () => dummy_mimeTypes,
   plugins: () => dummy_plugins,
@@ -182,8 +182,8 @@ const newToDataURL = function (canvas, ...args) {
   return oldToDataURL.apply(controlCanvas(canvas), args);
 };
 defineConstants(HTMLCanvasElement.prototype, {
-    toBlob : function (...args) { return newToBlob(this, ...args); },
-    toDataURL : function (...args) { return newToDataURL(this, ...args); },
+    toBlob: function (...args) { return newToBlob(this, ...args); },
+    toDataURL: function (...args) { return newToDataURL(this, ...args); },
 });
 freezeConstant(window, "confirm");
 

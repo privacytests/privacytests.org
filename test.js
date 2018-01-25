@@ -1,7 +1,7 @@
 // TODO: Let's do the following:
 // 1. Write each test such that the test can be printed in a string, which
 //    is then evaluated and checked against a predicted value.
-// 2. Have a single runAllTests() function that returns the results in JSON.
+// 2. Have a single run_all_tests() function that returns the results in JSON.
 // 3. Create a separate script that takes the results and
 //    displays them on test.html or test_browser.html.
 //
@@ -73,11 +73,16 @@ const navigator_tests = [
       false;
    }`,
    `false`],
+  [`navigator.getGamepads().length`, 0],
+  [`Array.isArray(navigator.getGamepads())`, true],
+  [`Navigator.prototype.getGamepads.call(navigator).length`, 0],
   [`navigator.hardwareConcurrency`, 2],
   [`navigator.language`, `"en-US"`],
   [`navigator.languages.toString()`, `"en-US,en"`],
   [`navigator.mimeTypes.length`, 0],
   [`navigator.plugins.length`, 0],
+  [`Object.getPrototypeOf(navigator.plugins)`, `PluginArray.prototype`],
+  [`Object.getPrototypeOf(navigator.mimeTypes)`, `MimeTypeArray.prototype`],
   [`Object.keys(navigator.mimeTypes).length`, 0],
   [`Object.keys(navigator.plugins).length`, 0],
   [`navigator.mimeTypes[0]`, undefined],
@@ -116,15 +121,24 @@ const mouse_event_tests = [
 
 const test_pairs = (pairs) => pairs.map(
   ([expression, spoof_expression]) => {
-    const actual_value = eval(expression);
-    const desired_value = eval(spoof_expression);
+    let actual_value, desired_value;
+    try {
+      actual_value = eval(expression);
+    } catch (e) {
+      e.message = expression + e.message;
+      throw e;
+    }
+    try {
+      desired_value = eval(spoof_expression);
+    } catch (e) {
+      e.message = expression + e.message;
+      throw e
+    }
     const passed = actual_value === desired_value;
     return { expression, spoof_expression, actual_value, desired_value, passed };
   });
 
-const testResultsDiv = document.getElementById("test_results");
-
-const run_tests = async function () {
+const run_all_tests = async function () {
   eval(prelude);
   return [].concat(
     test_pairs(window_property_tests),
@@ -136,23 +150,3 @@ const run_tests = async function () {
     test_pairs(mouse_event_tests),
   );
 };
-
-const run_and_display_tests = async function () {
-  let results = await run_tests();
-  console.log(results);
-  for (let { expression, spoof_expression, actual_value, desired_value, passed }  of results) {
-    const div = document.createElement("div");
-    div.innerText = `${passed ? "PASS" : "FAIL"}: ${expression} ${JSON.stringify([actual_value, desired_value])}`;
-    div.setAttribute("class", passed ? "test_pass" : "test_fail");
-    if (passed) {
-      testResultsDiv.appendChild(div);
-    } else {
-      testResultsDiv.insertBefore(div, testResultsDiv.childNodes[0]);
-    }
-  }
-};
-
-
-
-run_and_display_tests();
-
