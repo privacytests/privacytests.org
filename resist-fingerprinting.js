@@ -12,7 +12,7 @@
 //  * We (mostly) redefine properties of prototypes, not instances, so that
 //   attackers can't call the old prototype on the instance.
 
-(function () {
+(function resistFunction () {
 try {
 
 // Prevent use of arguments.caller.callee.arguments
@@ -70,6 +70,50 @@ defineConstants(Performance.prototype, {
   now: function () { return roundTimeMs(oldNow.apply(this)); },
 });
 
+// ## Date (enforce UTC)
+
+let constantMap = {};
+for (let unit of ["Date", "Day", "FullYear", "Hours", "Milliseconds",
+                  "Minutes", "Month", "Seconds"]) {
+  for (let option of ["set", "get"]) {
+    constantMap[option + unit] = function (...args) {
+      return Date.prototype[option + "UTC" + unit].apply(this, args);
+    };
+  }
+}
+defineConstants(Date.prototype, constantMap);
+
+// ## Event.timeStamp
+
+const oldTimeStamp = Object.getOwnPropertyDescriptor(Event.prototype, "timeStamp").get;
+const newTimeStamp = that => roundTimeMs(oldTimeStamp.apply(that));
+defineGetters(Event.prototype, {
+  timeStamp: function () { return newTimeStamp(this); },
+});
+
+// ## self.navigator properties
+
+defineConstants(Object.getPrototypeOf(navigator), {
+  hardwareConcurrency: 2,
+  language: "en-US",
+  languages: "en-US,en",
+});
+
+console.log(`we are in a ${self.Window ? "window" : "worker"}`);
+
+// A quine!
+
+const resistFunctionSource = '(' + resistFunction + ')();';
+console.log(resistFunctionSource);
+
+const oldWorker = self.Worker;
+self.Worker = function (src) {
+  return new oldWorker(URL.createObjectURL(new Blob([
+    `${resistFunctionSource} importScripts('${src}');`])));
+};
+
+if (self.Window) {
+
 // ## window.screen properties
 
 defineConstants(Screen.prototype, {
@@ -112,14 +156,6 @@ defineGetters(window, {
   outerHeight: () => window.innerHeight,
 });
 
-// ## Event.timeStamp
-
-const oldTimeStamp = Object.getOwnPropertyDescriptor(Event.prototype, "timeStamp").get;
-const newTimeStamp = that => roundTimeMs(oldTimeStamp.apply(that));
-defineGetters(Event.prototype, {
-  timeStamp: function () { return newTimeStamp(this); },
-});
-
 // ## MouseEvent.screenX, MouseEvent.screenY
 
 defineGetters(MouseEvent.prototype, {
@@ -129,13 +165,10 @@ defineGetters(MouseEvent.prototype, {
 
 // ## window.navigator properties
 
-defineConstants(Navigator.prototype, {
+defineConstants(navigator.__proto__, {
   buildID: "20100101",
   getBattery: undefined,
   getGamepads: () => [],
-  hardwareConcurrency: 2,
-  language: "en-US",
-  languages: "en-US,en",
 });
 
 // ## navigator.mimeTypes and navigator.plugins properties
@@ -187,19 +220,6 @@ defineConstants(HTMLCanvasElement.prototype, {
 });
 freezeConstant(window, "confirm");
 
-// ## Date (enforce UTC)
-
-let constantMap = {};
-for (let unit of ["Date", "Day", "FullYear", "Hours", "Milliseconds",
-                  "Minutes", "Month", "Seconds"]) {
-  for (let option of ["set", "get"]) {
-    constantMap[option + unit] = function (...args) {
-      return Date.prototype[option + "UTC" + unit].apply(this, args);
-    };
-  }
-}
-defineConstants(Date.prototype, constantMap);
-
 // ## performance.timing members
 const performance_timing_members = [
   'connectEnd',
@@ -234,14 +254,18 @@ defineGetters(Performance.prototype, {
   timing: () => dummy_performance_timing,
 });
 
+} // if (self.Window)
+
 // ## Handle unexpected errors
 // Catch any errors. If the __showResistFingerprintingErrors
 // flags is enabled, then we will display on the page.
 } catch (e) {
-  if (window.__showResistFingerprintingErrors) {
+  const errorMessage = e.message + "--" + e.stack.toString();
+  console.log(errorMessage);
+  if (window && window.__showResistFingerprintingErrors) {
     let errorDiv = document.createElement("div");
     errorDiv.setAttribute("class", "error_message");
-    errorDiv.innerText = e.message + " -- " + e.stack.toString();
+    errorDiv.innerText = errorMessage;
     document.body.appendChild(errorDiv);
   }
 } //try
