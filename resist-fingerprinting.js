@@ -14,13 +14,9 @@
 
 (function () { // Enclosing function
 
-try {
-
 // dualResistFunction provides protections for APIs shared by
 // both both Workers and Window contexts.
 (function dualResistFunction () {
-
-try {
 
 // Prevent use of arguments.caller.callee.arguments
 "use strict";
@@ -119,10 +115,6 @@ self.Worker = function (src) {
     `(${dualResistFunctionSource})();
      importScripts('${src}');`])));
 };
-
-} catch (e) {
-  console.log(e);
-}
 
 // End dualResistFunction
 })();
@@ -268,11 +260,6 @@ defineConstants(dummy_performance_timing, timingConstantMap);
 defineGetters(Performance.prototype, {
   timing: () => dummy_performance_timing,
 });
-
-// Log any errors.
-} catch (e) {
-  console.log(e);
-}
 
 })(); // End enclosing function.
 
