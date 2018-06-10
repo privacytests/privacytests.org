@@ -12,6 +12,8 @@
 //  * We (mostly) redefine properties of prototypes, not instances, so that
 //   attackers can't call the old prototype on the instance.
 
+/* jshint esversion: 6 */
+
 (function () { // Enclosing function
 
 // dualResistFunction provides protections for APIs shared by
@@ -30,14 +32,14 @@ const defineConstants = function (obj, m) {
       value: m[prop],
       writable: false,
       configurable: false,
-    })
+    });
   }
 };
 const defineGetters = function (obj, m) {
   for (let prop in m) {
     Object.defineProperty(obj, prop, {
       get: m[prop],
-    })
+    });
   }
 };
 const defineSettersAndGetters = function (obj, m) {
@@ -47,7 +49,7 @@ const defineSettersAndGetters = function (obj, m) {
       set: setter,
 //      writable: false,
 //      configurable: false,
-    })
+    });
   }
 };
 const defineMutables = function (obj, m) {
@@ -55,7 +57,7 @@ const defineMutables = function (obj, m) {
     Object.defineProperty(obj, prop, {
       value: m[prop],
       writable: true,
-    })
+    });
   }
 };
 const freezeConstant = function (obj, prop) {
@@ -154,7 +156,7 @@ if (window.ScreenOrientation) {
     angle: 0,
     onchange: null,
   });
-};
+}
 
 // ## window.screenX, window.screenY
 // (Should we use a prototype here instead? I can't find one.)
@@ -177,7 +179,7 @@ defineGetters(MouseEvent.prototype, {
 
 // ## window.navigator properties
 
-defineConstants(navigator.__proto__, {
+defineConstants(Object.getPrototypeOf(navigator), {
   buildID: "20100101",
   getBattery: undefined,
   getGamepads: () => [],

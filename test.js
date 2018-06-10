@@ -10,6 +10,84 @@
 //  can be useful for browser makers to patch their browsers. Also
 //  we can potentially make an automated scorecard using browserstack.com.
 
+/* jshint esversion: 6 */
+
+const dual_tests = function dual_tests () {
+
+const performance_now_tests = [
+  [`performance.now()`,
+   `Math.floor(performance.now() / 100) * 100`],
+  [`Performance.prototype.now.apply(performance)`,
+   `Math.floor(performance.now() / 100) * 100`],
+];
+
+// ## Date object
+
+const date = new Date();
+const date_tests = [
+  [`date.getDate()`, `date.getUTCDate()`],
+  [`date.getDay()`, `date.getUTCDay()`],
+  [`date.getFullYear()`, `date.getUTCFullYear()`],
+  [`date.getHours()`, `date.getUTCHours()`],
+  [`date.getMilliseconds()`, `date.getUTCMilliseconds()`],
+  [`date.getMinutes()`, `date.getUTCMinutes()`],
+  [`date.getMonth()`, `date.getUTCMonth()`],
+  [`date.getSeconds()`, `date.getUTCSeconds()`],
+  [`Date.prototype.getDate.call(date)`, `date.getUTCDate()`],
+  [`Date.prototype.getDay.call(date)`, `date.getUTCDay()`],
+  [`Date.prototype.getFullYear.call(date)`, `date.getUTCFullYear()`],
+  [`Date.prototype.getHours.call(date)`, `date.getUTCHours()`],
+  [`Date.prototype.getMilliseconds.call(date)`, `date.getUTCMilliseconds()`],
+  [`Date.prototype.getMinutes.call(date)`, `date.getUTCMinutes()`],
+  [`Date.prototype.getMonth.call(date)`, `date.getUTCMonth()`],
+  [`Date.prototype.getSeconds.call(date)`, `date.getUTCSeconds()`],
+];
+
+const dual_navigator_tests = [
+  [`navigator.hardwareConcurrency`, 2],
+  [`navigator.language`, `"en-US"`],
+  [`navigator.languages.toString()`, `"en-US,en"`],
+];
+
+const event_tests = [
+  [`new Event("test").timeStamp % 100`, `0`],
+];
+
+const test_pairs = (pairs) => pairs.map(
+  ([expression, spoof_expression]) => {
+    let actual_value, desired_value;
+    try {
+      actual_value = eval(expression);
+    } catch (e) {
+      e.message = expression + e.message;
+      throw e;
+    }
+    try {
+      desired_value = eval(spoof_expression);
+    } catch (e) {
+      e.message = expression + e.message;
+      throw e
+    }
+    const passed = actual_value === desired_value;
+    return { expression, spoof_expression, actual_value, desired_value, passed };
+  });
+
+const run_all_tests = function () {
+  return [].concat(
+    test_pairs(dual_navigator_tests),
+    test_pairs(performance_now_tests),
+    test_pairs(date_tests),
+    test_pairs(event_tests),
+  );
+};
+
+// end dual_tests function
+return { test_results: run_all_tests(),
+         test_pairs: self.Window ? test_pairs : undefined };
+};
+
+const { test_pairs, test_results} = dual_tests();
+
 const prelude = `
   window.mouseEvent = new MouseEvent("click", { clientX: 10, clientY: 20 });
 `;
@@ -46,13 +124,6 @@ const performance_timing_tests = [
   [`performance.timing.unloadEventStart`, 0],
 ];
 
-const performance_now_tests = [
-  [`performance.now()`,
-   `Math.floor(performance.now() / 100) * 100`],
-  [`Performance.prototype.now.apply(performance)`,
-   `Math.floor(performance.now() / 100) * 100`],
-];
-
 const screen_tests = [
   [`screen.width`, `innerWidth`],
   [`screen.height`, `innerHeight`],
@@ -75,9 +146,6 @@ const navigator_tests = [
   [`navigator.getGamepads().length`, 0],
   [`Array.isArray(navigator.getGamepads())`, true],
   [`Navigator.prototype.getGamepads.call(navigator).length`, 0],
-  [`navigator.hardwareConcurrency`, 2],
-  [`navigator.language`, `"en-US"`],
-  [`navigator.languages.toString()`, `"en-US,en"`],
   [`navigator.mimeTypes.length`, 0],
   [`navigator.plugins.length`, 0],
   [`Object.getPrototypeOf(navigator.plugins)`, `PluginArray.prototype`],
@@ -90,52 +158,11 @@ const navigator_tests = [
   [`Navigator.prototype.__lookupGetter__("mimeTypes").call(navigator).length`, 0],
 ];
 
-// ## Date object
-
-const date = new Date();
-const date_tests = [
-  [`date.getDate()`, `date.getUTCDate()`],
-  [`date.getDay()`, `date.getUTCDay()`],
-  [`date.getFullYear()`, `date.getUTCFullYear()`],
-  [`date.getHours()`, `date.getUTCHours()`],
-  [`date.getMilliseconds()`, `date.getUTCMilliseconds()`],
-  [`date.getMinutes()`, `date.getUTCMinutes()`],
-  [`date.getMonth()`, `date.getUTCMonth()`],
-  [`date.getSeconds()`, `date.getUTCSeconds()`],
-  [`Date.prototype.getDate.call(date)`, `date.getUTCDate()`],
-  [`Date.prototype.getDay.call(date)`, `date.getUTCDay()`],
-  [`Date.prototype.getFullYear.call(date)`, `date.getUTCFullYear()`],
-  [`Date.prototype.getHours.call(date)`, `date.getUTCHours()`],
-  [`Date.prototype.getMilliseconds.call(date)`, `date.getUTCMilliseconds()`],
-  [`Date.prototype.getMinutes.call(date)`, `date.getUTCMinutes()`],
-  [`Date.prototype.getMonth.call(date)`, `date.getUTCMonth()`],
-  [`Date.prototype.getSeconds.call(date)`, `date.getUTCSeconds()`],
-];
-
 const mouse_event_tests = [
   [`mouseEvent.screenX`, `mouseEvent.clientX`],
   [`mouseEvent.screenY`, `mouseEvent.clientY`],
   [`mouseEvent.timeStamp % 100`, `0`],
 ];
-
-const test_pairs = (pairs) => pairs.map(
-  ([expression, spoof_expression]) => {
-    let actual_value, desired_value;
-    try {
-      actual_value = eval(expression);
-    } catch (e) {
-      e.message = expression + e.message;
-      throw e;
-    }
-    try {
-      desired_value = eval(spoof_expression);
-    } catch (e) {
-      e.message = expression + e.message;
-      throw e
-    }
-    const passed = actual_value === desired_value;
-    return { expression, spoof_expression, actual_value, desired_value, passed };
-  });
 
 const run_in_worker = function (aFunction) {
   return new Promise(resolve => {
@@ -151,14 +178,14 @@ const run_in_worker = function (aFunction) {
 };
 
 const run_all_tests = async function () {
+  const { test_results: test_results_worker } = await run_in_worker(dual_tests);
   eval(prelude);
-  return [].concat(
+  return test_results.concat(
+    ...test_results_worker,
     test_pairs(window_property_tests),
     test_pairs(navigator_tests),
     test_pairs(screen_tests),
-    test_pairs(performance_now_tests),
     test_pairs(performance_timing_tests),
-    test_pairs(date_tests),
     test_pairs(mouse_event_tests),
   );
 };

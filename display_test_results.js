@@ -1,3 +1,5 @@
+/* jshint esversion: 6 */
+
 const run_and_display_all_tests = async function (testResultsDiv) {
   let results = await run_all_tests();
   console.log(results);
