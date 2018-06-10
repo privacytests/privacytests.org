@@ -16,6 +16,7 @@
 
 // dualResistFunction provides protections for APIs shared by
 // both both Workers and Window contexts.
+const { defineConstants, defineGetters, defineMutables, freezeConstant } =
 (function dualResistFunction () {
 
 // Prevent use of arguments.caller.callee.arguments
@@ -115,6 +116,8 @@ self.Worker = function (src) {
     `(${dualResistFunctionSource})();
      importScripts('${src}');`])));
 };
+
+return { defineConstants, defineGetters, defineMutables, freezeConstant };
 
 // End dualResistFunction
 })();
