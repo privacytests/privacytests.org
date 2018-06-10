@@ -113,7 +113,9 @@ const dualResistFunctionSource = dualResistFunction.toString();
 const oldWorker = self.Worker;
 self.Worker = function (src) {
   return new oldWorker(URL.createObjectURL(new Blob([
-    `(${dualResistFunctionSource})();
+    `(function () {
+       (${dualResistFunctionSource})();
+     })();
      importScripts('${src}');`])));
 };
 
