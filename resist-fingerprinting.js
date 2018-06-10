@@ -12,7 +12,14 @@
 //  * We (mostly) redefine properties of prototypes, not instances, so that
 //   attackers can't call the old prototype on the instance.
 
-(function resistFunction () {
+(function () { // Enclosing function
+
+try {
+
+// dualResistFunction provides protections for APIs shared by
+// both both Workers and Window contexts.
+(function dualResistFunction () {
+
 try {
 
 // Prevent use of arguments.caller.callee.arguments
@@ -103,17 +110,24 @@ console.log(`we are in a ${self.Window ? "window" : "worker"}`);
 
 // A quine!
 
-const resistFunctionSource = resistFunction.toString();
-console.log(resistFunctionSource);
+const dualResistFunctionSource = dualResistFunction.toString();
+console.log(dualResistFunctionSource);
 
 const oldWorker = self.Worker;
 self.Worker = function (src) {
   return new oldWorker(URL.createObjectURL(new Blob([
-    `(${resistFunctionSource})();
+    `(${dualResistFunctionSource})();
      importScripts('${src}');`])));
 };
 
-if (self.Window) {
+} catch (e) {
+  console.log(e);
+}
+
+// End dualResistFunction
+})();
+
+// Following are additional protections that only apply to Window contexts.
 
 // ## window.screen properties
 
@@ -255,21 +269,10 @@ defineGetters(Performance.prototype, {
   timing: () => dummy_performance_timing,
 });
 
-} // if (self.Window)
-
-// ## Handle unexpected errors
-// Catch any errors. If the __showResistFingerprintingErrors
-// flags is enabled, then we will display on the page.
+// Log any errors.
 } catch (e) {
-  const errorMessage = e.message + "--" + e.stack.toString();
-  console.log(errorMessage);
-  if (window && window.__showResistFingerprintingErrors) {
-    let errorDiv = document.createElement("div");
-    errorDiv.setAttribute("class", "error_message");
-    errorDiv.innerText = errorMessage;
-    document.body.appendChild(errorDiv);
-  }
-} //try
+  console.log(e);
+}
 
-// End enclosing function
-})();
+})(); // End enclosing function.
+
