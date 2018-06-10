@@ -103,13 +103,14 @@ console.log(`we are in a ${self.Window ? "window" : "worker"}`);
 
 // A quine!
 
-const resistFunctionSource = '(' + resistFunction + ')();';
+const resistFunctionSource = resistFunction.toString();
 console.log(resistFunctionSource);
 
 const oldWorker = self.Worker;
 self.Worker = function (src) {
   return new oldWorker(URL.createObjectURL(new Blob([
-    `${resistFunctionSource} importScripts('${src}');`])));
+    `(${resistFunctionSource})();
+     importScripts('${src}');`])));
 };
 
 if (self.Window) {
