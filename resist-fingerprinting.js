@@ -108,7 +108,7 @@ console.log(`we are in a ${self.Window ? "window" : "worker"}`);
 // A quine!
 
 const dualResistFunctionSource = dualResistFunction.toString();
-console.log(dualResistFunctionSource);
+//console.log(dualResistFunctionSource);
 
 const oldWorker = self.Worker;
 self.Worker = function (src) {

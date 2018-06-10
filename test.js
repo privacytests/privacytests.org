@@ -12,7 +12,6 @@
 
 const prelude = `
   window.mouseEvent = new MouseEvent("click", { clientX: 10, clientY: 20 });
-  window.roundTime = t => Math.round(t / 100) * 100;
 `;
 
 const window_property_tests = [
@@ -116,7 +115,7 @@ const date_tests = [
 const mouse_event_tests = [
   [`mouseEvent.screenX`, `mouseEvent.clientX`],
   [`mouseEvent.screenY`, `mouseEvent.clientY`],
-  [`mouseEvent.timeStamp`, `roundTime(mouseEvent.timeStamp)`],
+  [`mouseEvent.timeStamp % 100`, `0`],
 ];
 
 const test_pairs = (pairs) => pairs.map(
@@ -137,6 +136,19 @@ const test_pairs = (pairs) => pairs.map(
     const passed = actual_value === desired_value;
     return { expression, spoof_expression, actual_value, desired_value, passed };
   });
+
+const run_in_worker = function (aFunction) {
+  return new Promise(resolve => {
+    const worker = new Worker(
+      URL.createObjectURL(
+        new Blob([
+          `postMessage((${aFunction.toString()})())`
+        ])
+      )
+    );
+    worker.onmessage = msg => resolve(msg.data);
+  });
+};
 
 const run_all_tests = async function () {
   eval(prelude);
