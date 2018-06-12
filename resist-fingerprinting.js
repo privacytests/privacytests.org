@@ -16,12 +16,16 @@
 
 (function () { // Enclosing function
 
+// Prevent use of arguments.caller.callee.arguments
+"use strict";
+
 // dualResistFunction provides protections for APIs shared by
 // both both Workers and Window contexts.
 const { defineConstants, defineGetters, defineMutables, freezeConstant } =
 (function dualResistFunction () {
 
 // Prevent use of arguments.caller.callee.arguments
+// (needed again for web workers)
 "use strict";
 
 console.log("hello from resist-fingerprinting.js");
