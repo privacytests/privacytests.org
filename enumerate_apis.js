@@ -2,18 +2,14 @@
 var __API = __API || {};
 
 // Returns unique members of an array.
-__API.uniqueMembers = function (arr) {
-  return arr.filter(function (value, index, self) { 
-    return self.indexOf(value) === index;
-  });
-};
+__API.uniqueMembers = aArray => [...(new Set(aArray))];
 
 // Returns all immediate properties of an object.
 __API.getImmediateChildNames = function (object) {
   return __API.uniqueMembers(
     Object.getOwnPropertyNames(object)
-          .concat(Object.getOwnPropertyNames(Object.getPrototypeOf(object))))
-          .sort();
+      .concat(Object.getOwnPropertyNames(Object.getPrototypeOf(object))))
+    .sort();
 };
 
 // A list of all the properties found in every function.
@@ -30,7 +26,7 @@ __API.getChildNames = function getChildNames(object, name) {
   }
   for (var i = 0; i < shortChildNames.length; ++i) {
     if (!(shortChildNames[i] === '__API' ||
-          (typeof(object) === 'function' && 
+          (typeof(object) === 'function' &&
            __API.standardFunctionProperties.indexOf(shortChildNames[i]) !== -1) ||
           (typeof(object) === 'object' &&
            shortChildNames[i] === 'prototype')
