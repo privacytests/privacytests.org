@@ -4,6 +4,6 @@ This project allows browsers to be tested for fingerprintability via information
 
 We hope to test many browsers using BrowserStack.com:
 
-![BrowserStack logo](./Browserstack-logo.svg)
+[![BrowserStack logo](./Browserstack-logo.svg | width=100)](https://browserstack.com)
 
 resist-fingerprinting-js is an open source project under the MIT license (included).
