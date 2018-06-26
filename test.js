@@ -133,7 +133,7 @@ const screen_tests = [
    `innerHeight`],
 ];
 
-const navigator_tests = [
+let navigator_tests = [
   [`navigator.buildID`, `"20100101"`],
   [`navigator.getBattery`, undefined],
   [`try {
@@ -143,9 +143,6 @@ const navigator_tests = [
       false;
    }`,
    `false`],
-  [`navigator.getGamepads().length`, 0],
-  [`Array.isArray(navigator.getGamepads())`, true],
-  [`Navigator.prototype.getGamepads.call(navigator).length`, 0],
   [`navigator.mimeTypes.length`, 0],
   [`navigator.plugins.length`, 0],
   [`Object.getPrototypeOf(navigator.plugins)`, `PluginArray.prototype`],
@@ -157,6 +154,14 @@ const navigator_tests = [
   [`Navigator.prototype.__lookupGetter__("plugins").call(navigator).length`, 0],
   [`Navigator.prototype.__lookupGetter__("mimeTypes").call(navigator).length`, 0],
 ];
+
+if (navigator.getGamepads) {
+  navigator_tests.concat([
+    [`navigator.getGamepads().length`, 0],
+    [`Array.isArray(navigator.getGamepads())`, true],
+    [`Navigator.prototype.getGamepads.call(navigator).length`, 0],
+  ]);
+};
 
 const mouse_event_tests = [
   [`mouseEvent.screenX`, `mouseEvent.clientX`],
