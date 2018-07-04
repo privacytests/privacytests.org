@@ -56,19 +56,22 @@ const event_tests = [
 const test_pairs = (pairs) => pairs.map(
   ([expression, spoof_expression]) => {
     let actual_value, desired_value;
+    let failure = false;
     try {
       actual_value = eval(expression);
     } catch (e) {
-      e.message = expression + e.message;
-      throw e;
+      actual_value = e.message;
+      failure = true;
+      console.log(e);
     }
     try {
       desired_value = eval(spoof_expression);
     } catch (e) {
-      e.message = expression + e.message;
-      throw e
+      desired_value = e.message;
+      failure = true;
+      console.log(e);
     }
-    const passed = actual_value === desired_value;
+    const passed = !failure && (actual_value === desired_value);
     return { expression, spoof_expression, actual_value, desired_value, passed };
   });
 
