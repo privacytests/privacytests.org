@@ -3,6 +3,7 @@
 const run_and_display_all_tests = async function (testResultsDiv) {
   let results = await run_all_tests();
   console.log(results);
+  document.body.setAttribute("data-test-results", JSON.stringify(results));
   for (let { expression, spoof_expression, actual_value, desired_value, passed }  of results) {
     const div = document.createElement("div");
     div.innerText = `${passed ? "PASS" : "FAIL"}: ${expression} [${actual_value}, ${desired_value}]`;
