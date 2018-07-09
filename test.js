@@ -186,7 +186,8 @@ const run_in_worker = function (aFunction) {
 };
 
 const run_all_tests = async function () {
-  const { test_results: test_results_worker } = await run_in_worker(dual_tests);
+  let { test_results: test_results_worker } = await run_in_worker(dual_tests);
+  test_results_worker.map(t => { t.worker = true; return t; });
   eval(prelude);
   return test_results.concat(
     ...test_results_worker,
