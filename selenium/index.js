@@ -41,6 +41,7 @@ let browserStackDriver = async function (capabilities) {
 
 let localDriver = async function (capabilities) {
   return new Builder()
+    .withCapabilities(capabilities)
     .forBrowser('firefox')
     .build();
 };
@@ -126,6 +127,7 @@ let runTestsBatch = async function (driverType, capabilityList) {
     console.log(`${fingerprintingResults ? fingerprintingResults.length : "No"} items received.`);
     all_data.push({ capabilities, fingerprintingResults, timeStarted });
   }
+  return all_data;
 };
 
 let writeData = async function (data) {
@@ -133,13 +135,23 @@ let writeData = async function (data) {
   if (!(existsSync("results"))) {
     await fs.mkdir("results");
   }
-  await fs.writeFile(`results/results_${dateStub}.json`, JSON.stringify(data));
+  let filePath = `results/results_${dateStub}.json`;
+  await fs.writeFile(filePath, JSON.stringify(data));
+  console.log(`Wrote results to "${filePath}".`);
 };
 
 let main = async function () {
-  let browserStackCapabilityList = selectRecentBrowserstackBrowsers(
-    await fetchBrowserstackCapabilities());
-  await writeData(await runTestsBatch("browser", browserStackCapabilityList));
+  let driverType = process.argv[2];
+  let browserPath = process.argv[3];
+  let capabilityList;
+  if (driverType === "browser") {
+    capabilityList = selectRecentBrowserstackBrowsers(
+      await fetchBrowserstackCapabilities());
+  } else if (driverType === "local") {
+    capabilityList = [{"browser" : "firefox",
+                       "moz:firefoxOptions": {binary: browserPath}}];
+  }
+  await writeData(await runTestsBatch(driverType, capabilityList));
 };
 
 main();
