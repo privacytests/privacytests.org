@@ -110,24 +110,36 @@ const selectRecentBrowserstackBrowsers = function (allCapabilities) {
 };
 
 
-let main = async function () {
-  let browserStackCapabilityList = selectRecentBrowserstackBrowsers(
-    await fetchBrowserstackCapabilities());
+let runTestsBatch = async function (driverType, capabilityList) {
+  let driverConstructor = { browser: browserStackDriver,
+                            local: localDriver, }[driverType];
+  if (!driverConstructor) {
+    throw new Error(`unknown driver type ${driverType}`);
+  }
   let all_data = [];
-  for (let capabilities of browserStackCapabilityList) {
+  for (let capabilities of capabilityList) {
     capabilities.browserName = capabilities.browser;
     console.log(capabilities);
-    let driver = await browserStackDriver(capabilities);
+    let driver = await driverConstructor(capabilities);
     let timeStarted = new Date().toISOString();
     let fingerprintingResults = await runTests(driver);
     console.log(`${fingerprintingResults ? fingerprintingResults.length : "No"} items received.`);
     all_data.push({ capabilities, fingerprintingResults, timeStarted });
   }
+};
+
+let writeData = async function (data) {
   let dateStub = dateFormat(new Date(), "yyyymmdd_HHMMss", true);
   if (!(existsSync("results"))) {
     await fs.mkdir("results");
   }
-  await fs.writeFile(`results/results_${dateStub}.json`, JSON.stringify(all_data));
+  await fs.writeFile(`results/results_${dateStub}.json`, JSON.stringify(data));
+};
+
+let main = async function () {
+  let browserStackCapabilityList = selectRecentBrowserstackBrowsers(
+    await fetchBrowserstackCapabilities());
+  await writeData(await runTestsBatch("browser", browserStackCapabilityList));
 };
 
 main();
