@@ -42,7 +42,7 @@ let browserStackDriver = async function (capabilities) {
 let localDriver = async function (capabilities) {
   return new Builder()
     .withCapabilities(capabilities)
-    .forBrowser('firefox')
+    .forBrowser(capabilities["browser"])
     .build();
 };
 
@@ -113,7 +113,8 @@ const selectRecentBrowserstackBrowsers = function (allCapabilities) {
 
 let runTestsBatch = async function (driverType, capabilityList) {
   let driverConstructor = { browserstack: browserStackDriver,
-                            local: localDriver, }[driverType];
+                            firefox: localDriver,
+                            chrome: localDriver }[driverType];
   if (!driverConstructor) {
     throw new Error(`unknown driver type ${driverType}`);
   }
@@ -142,14 +143,24 @@ let writeData = async function (data) {
 
 let main = async function () {
   let driverType = process.argv[2];
+  if (driverType === "chromium") {
+    driverType = "chrome";
+  }
+  console.log(driverType);
   let browserPath = process.argv[3];
   let capabilityList;
   if (driverType === "browserstack") {
     capabilityList = selectRecentBrowserstackBrowsers(
       await fetchBrowserstackCapabilities());
-  } else if (driverType === "local") {
-    capabilityList = [{"browser" : "firefox",
-                       "moz:firefoxOptions": {binary: browserPath}}];
+  } else if (driverType === "firefox") {
+    capabilityList = [{"browser": "firefox"}];
+    if (browserPath) {
+      capabilityList[0]["moz:firefoxOptions"] = {binary: browserPath};
+    }
+  } else if (driverType === "chrome") {
+    capabilityList = [{"browser": "chrome"}];
+  } else {
+    throw new Error(`Unknown driver type '${driverType}'.`);
   }
   await writeData(await runTestsBatch(driverType, capabilityList));
 };

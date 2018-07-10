@@ -6,7 +6,11 @@ To set up:
 
 To run tests locally, point to the firefox binary:
 
-`node index local /home/arthur/firefox/firefox`
+`node index firefox /home/arthur/firefox/firefox`
+
+or, ask for chrome:
+
+`node index chrome`
 
 To run tests on browserstack:
 
