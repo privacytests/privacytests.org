@@ -1,5 +1,4 @@
-const mkdirp = require('mkdirp');
-const { promises : fs } = require('fs');
+const { existsSync, promises : fs } = require('fs');
 
 let htmlPage = ({ title, content, style }) => `
 <!DOCTYPE html>
@@ -133,7 +132,9 @@ let latestFile = async (path) => {
 }
 
 let main = async () => {
-  mkdirp("./out/");
+  if (!(existsSync("./out"))) {
+    await fs.mkdir("./out");
+  }
   let resultsFile = await latestFile("../selenium/results/");
   let results = await readResults(resultsFile);
   await fs.writeFile("./out/index.html", htmlPage({
