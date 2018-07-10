@@ -112,7 +112,7 @@ const selectRecentBrowserstackBrowsers = function (allCapabilities) {
 
 
 let runTestsBatch = async function (driverType, capabilityList) {
-  let driverConstructor = { browser: browserStackDriver,
+  let driverConstructor = { browserstack: browserStackDriver,
                             local: localDriver, }[driverType];
   if (!driverConstructor) {
     throw new Error(`unknown driver type ${driverType}`);
@@ -144,7 +144,7 @@ let main = async function () {
   let driverType = process.argv[2];
   let browserPath = process.argv[3];
   let capabilityList;
-  if (driverType === "browser") {
+  if (driverType === "browserstack") {
     capabilityList = selectRecentBrowserstackBrowsers(
       await fetchBrowserstackCapabilities());
   } else if (driverType === "local") {
