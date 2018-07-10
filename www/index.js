@@ -124,18 +124,24 @@ let content = (results) => {
                className:"comparison-table"});
 };
 
-let readResults = async () =>
-    JSON.parse(await fs.readFile(
-      "../selenium/results/results_20180709_065329.json"));
+let readResults = async (file) =>
+    JSON.parse(await fs.readFile(file));
+
+let latestFile = async (path) => {
+  let stem = (await fs.readdir(path)).sort().pop();
+  return path + "/" + stem;
+}
 
 let main = async () => {
   mkdirp("./out/");
-  let results = await readResults();
+  let resultsFile = await latestFile("../selenium/results/");
+  let results = await readResults(resultsFile);
   await fs.writeFile("./out/index.html", htmlPage({
     title: "Browser Fingerprinting Comparison",
     content: content(results),
     style: pageStyle
   }));
+  console.log("Wrote file ./out/index.html");
 };
 
 main();
