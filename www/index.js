@@ -63,10 +63,6 @@ table.comparison-table tr td:first-child {
 }
 `;
 
-let readResults = async () =>
-    JSON.parse(await fs.readFile(
-      "../selenium/results/results_20180709_065329.json"));
-
 let capabilitiesToDescription = ({ os, os_version, browser, browser_version, device }) =>
   browser_version ?
     `${browser} ${browser_version}, ${os} ${os_version}` :
@@ -120,8 +116,7 @@ ${ worker ? "[Worker]" : "" }
   return { headers, body };
 };
 
-let content = async () => {
-  let results = await readResults();
+let content = (results) => {
   let { headers, body } = resultsToTable(results);
   return `<h2>Browser Fingerprinting Comparison</h2>` +
   //  `<pre>${headers}</pre>` +
@@ -129,11 +124,16 @@ let content = async () => {
                className:"comparison-table"});
 };
 
+let readResults = async () =>
+    JSON.parse(await fs.readFile(
+      "../selenium/results/results_20180709_065329.json"));
+
 let main = async () => {
   mkdirp("./out/");
+  let results = await readResults();
   await fs.writeFile("./out/index.html", htmlPage({
     title: "Browser Fingerprinting Comparison",
-    content: await content(),
+    content: content(results),
     style: pageStyle
   }));
 };
