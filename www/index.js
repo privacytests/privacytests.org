@@ -1,4 +1,5 @@
 const { existsSync, promises : fs } = require('fs');
+const fileUrl = require('file-url');
 
 let htmlPage = ({ title, content, style }) => `
 <!DOCTYPE html>
@@ -142,7 +143,7 @@ let main = async () => {
     content: content(results),
     style: pageStyle
   }));
-  console.log("Wrote file ./out/index.html");
+  console.log(`Wrote out ${fileUrl("./out/index.html")}`);
 };
 
 main();
