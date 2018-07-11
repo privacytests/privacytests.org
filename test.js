@@ -89,8 +89,6 @@ return { test_results: run_all_tests(),
          test_pairs: self.Window ? test_pairs : undefined };
 };
 
-const { test_pairs, test_results} = dual_tests();
-
 const prelude = `
   window.mouseEvent = new MouseEvent("click", { clientX: 10, clientY: 20 });
 `;
@@ -186,8 +184,9 @@ const run_in_worker = function (aFunction) {
 };
 
 const run_all_tests = async function () {
+  let { test_pairs, test_results } = dual_tests();
   let { test_results: test_results_worker } = await run_in_worker(dual_tests);
-  test_results_worker.map(t => { t.worker = true; return t; });
+  test_results_worker.map(t => Object.assign(t, {worker: true}));
   eval(prelude);
   return test_results.concat(
     ...test_results_worker,
