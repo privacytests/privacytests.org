@@ -89,12 +89,11 @@ const selectRecentBrowserstackBrowsers = function (allCapabilities) {
     for (let browser of browsers) {
       let capabilities = allCapabilities.filter(c => c.os === os && c.browser === browser);
       // Find recent versions of operating system
-      let os_versions = [];
-      for (let { os, os_version } of capabilities) {
-        if (os_versions.indexOf(os_version) == -1) {
-          os_versions.push(os_version);
-        }
+      let os_versions_set = new Set();
+      for (let { os_version } of capabilities) {
+        os_versions_set.add(os_version);
       }
+      let os_versions = [... os_versions_set];
       let mobile = os === "android" || os === "ios";
       // Use two most recent os versions.
       let recent_os_versions = (mobile ? os_versions.sort() : os_versions).slice(-2);
