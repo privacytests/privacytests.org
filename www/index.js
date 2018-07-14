@@ -118,7 +118,7 @@ ${ worker ? "[Worker]" : "" }
 
 let content = (results) => {
   let { headers, body } = resultsToTable(results);
-  return `<h2>Browser Fingerprinting Comparison</h2>` +
+  return `<h2>Browser Privacy Project</h2>` +
   //  `<pre>${headers}</pre>` +
     htmlTable({headers, body,
                className:"comparison-table"});
@@ -139,7 +139,7 @@ let main = async () => {
   let resultsFile = await latestFile("../selenium/results/");
   let results = await readResults(resultsFile);
   await fs.writeFile("./out/index.html", htmlPage({
-    title: "Browser Fingerprinting Comparison",
+    title: "Browser Privacy Project",
     content: content(results),
     style: pageStyle
   }));
