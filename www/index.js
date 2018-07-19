@@ -130,7 +130,7 @@ let readResults = async (file) =>
 let latestFile = async (path) => {
   let stem = (await fs.readdir(path)).sort().pop();
   return path + "/" + stem;
-}
+};
 
 let main = async () => {
   if (!(existsSync("./out"))) {
