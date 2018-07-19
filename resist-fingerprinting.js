@@ -83,6 +83,10 @@ defineConstants(Performance.prototype, {
 // ## Date (enforce UTC)
 
 let constantMap = {};
+const oldGetMilliseconds = Date.prototype.getUTCMilliseconds;
+constantMap["getUTCMilliseconds"] = function (...args) {
+  return roundTimeMs(oldGetMilliseconds.apply(this, args));
+};
 for (let unit of ["Date", "Day", "FullYear", "Hours", "Milliseconds",
                   "Minutes", "Month", "Seconds"]) {
   for (let option of ["set", "get"]) {
