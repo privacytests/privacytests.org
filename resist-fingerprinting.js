@@ -80,6 +80,44 @@ defineConstants(Performance.prototype, {
   now: function () { return roundTimeMs(oldNow.apply(this)); },
 });
 
+// ## Intl API
+
+const spoofLocale = "en-US";
+const oldIntlCollator = Intl.Collator;
+const oldIntlDateTimeFormat = Intl.DateTimeFormat;
+const oldIntlNumberFormat = Intl.NumberFormat;
+const oldIntlPluralRules = Intl.PluralRules;
+defineConstants(Intl, {
+  Collator: function(...args) {
+    if (!args[0]) {
+      return new oldIntlCollator(spoofLocale);
+    } else {
+      return new oldIntlCollator(...args);
+    }
+  },
+  DateTimeFormat: function(...args) {
+    if (!args[0]) {
+      return new oldIntlDateTimeFormat(spoofLocale);
+    } else {
+      return new oldIntlDateTimeFormat(...args);
+    }
+  },
+  NumberFormat: function(...args) {
+    if (!args[0]) {
+      return new oldIntlNumberFormat(spoofLocale);
+    } else {
+      return new oldIntlNumberFormat(...args);
+    }
+  },
+  PluralRules: function(...args) {
+    if (!args[0]) {
+      return new oldIntlPluralRules(spoofLocale);
+    } else {
+      return new oldIntlPluralRules(...args);
+    }
+  },
+});
+
 // ## Date (enforce UTC)
 
 let constantMap = {};

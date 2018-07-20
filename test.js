@@ -43,6 +43,15 @@ const date_tests = [
   [`Date.prototype.getSeconds.call(date)`, `date.getUTCSeconds()`],
 ];
 
+// ## Intl object
+
+const intl_tests = [
+  [`Intl.Collator().resolvedOptions().locale`, `"en-US"`],
+  [`Intl.DateTimeFormat().resolvedOptions().locale`, `"en-US"`],
+  [`Intl.NumberFormat().resolvedOptions().locale`, `"en-US"`],
+  [`Intl.PluralRules().resolvedOptions().locale`, `"en-US"`],
+];
+
 const dual_navigator_tests = [
   [`navigator.hardwareConcurrency`, 2],
   [`navigator.language`, `"en-US"`],
@@ -77,6 +86,7 @@ const test_pairs = (pairs) => pairs.map(
 
 const run_all_tests = function () {
   return [].concat(
+    test_pairs(intl_tests),
     test_pairs(dual_navigator_tests),
     test_pairs(performance_now_tests),
     test_pairs(date_tests),
