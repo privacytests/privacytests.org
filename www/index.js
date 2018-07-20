@@ -66,7 +66,7 @@ table.comparison-table tr td:first-child {
 let capabilitiesToDescription = ({ os, os_version, browser, browser_version, device }) =>
   browser_version ?
     `${browser} ${browser_version}, ${os} ${os_version}` :
-    `${os} ${os_version}, ${device}`;
+    (os ? `${os} ${os_version}, ${device}` : `${browser}`);
 
 let resultItemToName = ({expression, worker}) =>
     `${expression} ${worker ? " [Worker]" : ""}`;
