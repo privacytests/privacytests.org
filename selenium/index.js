@@ -11,15 +11,16 @@ let browserstackCredentials = memoize(
   async () => JSON.parse(await fs.readFile(homeDir + "/" + ".browserstack.json")),
   { promise: true });
 
+let waitForAttribute = (driver, element, attrName, timeout) =>
+    driver.wait(async () => element.getAttribute(attrName), timeout);
+
 let runTests = async function (driver) {
   let testResultsObject;
   try {
     await driver.get('https://arthuredelstein.github.io/resist-fingerprinting-js/test_unprotected.html');
 //    await driver.get('file:///home/arthur/resist-fingerprinting-js/test_unprotected.html');
     let body = await driver.findElement(By.tagName('body'));
-    let testResultsString = await driver.wait(
-      async () => body.getAttribute("data-test-results"),
-      10000);
+    let testResultsString = await waitForAttribute(driver, body, "data-test-results", 10000);
     testResultsObject = JSON.parse(testResultsString);
   } catch (e) {
     console.log(e);
