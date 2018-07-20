@@ -14,20 +14,27 @@ let browserstackCredentials = memoize(
 let waitForAttribute = (driver, element, attrName, timeout) =>
     driver.wait(async () => element.getAttribute(attrName), timeout);
 
-let runTests = async function (driver) {
-  let testResultsObject;
+let loadAndGetResults = async (driver, url, timeout) => {
   try {
-    await driver.get('https://arthuredelstein.github.io/resist-fingerprinting-js/test_unprotected.html');
-//    await driver.get('file:///home/arthur/resist-fingerprinting-js/test_unprotected.html');
+    await driver.get(url);
     let body = await driver.findElement(By.tagName('body'));
-    let testResultsString = await waitForAttribute(driver, body, "data-test-results", 10000);
-    testResultsObject = JSON.parse(testResultsString);
+    let testResultsString =
+        await waitForAttribute(driver, body, "data-test-results", timeout);
+    return JSON.parse(testResultsString);
   } catch (e) {
     console.log(e);
-  } finally {
-    await driver.quit();
-    return testResultsObject;
+    return null;
   }
+};
+
+let runTests = async function (driver) {
+  let testResultsObject;
+  let fingerprinting = await loadAndGetResults(
+    driver, 'https://arthuredelstein.github.io/resist-fingerprinting-js/test_unprotected.html', 10000);
+  let tor = await loadAndGetResults(
+    driver, 'https://arthuredelstein.github.io/resist-fingerprinting-js/test_tor.html', 10000);
+  await driver.quit();
+  return { fingerprinting, tor };
 };
 
 let browserStackDriver = async function (capabilities) {
@@ -124,9 +131,8 @@ let runTestsBatch = async function (driverType, capabilityList) {
     console.log(capabilities);
     let driver = await driverConstructor(capabilities);
     let timeStarted = new Date().toISOString();
-    let fingerprintingResults = await runTests(driver);
-    console.log(`${fingerprintingResults ? fingerprintingResults.length : "No"} items received.`);
-    all_data.push({ capabilities, fingerprintingResults, timeStarted });
+    let testResults = await runTests(driver);
+    all_data.push({ capabilities, testResults, timeStarted });
   }
   return all_data;
 };

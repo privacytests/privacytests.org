@@ -35,6 +35,9 @@ let htmlTable = ({ headers, body, className }) => {
 };
 
 const pageStyle = `
+.title {
+  font-weight: bold;
+}
 table.comparison-table {
   border-collapse:collapse;
 }
@@ -49,6 +52,9 @@ table.comparison-table tr:nth-child(2n) td {
 table.comparison-table tr td {
   text-align: center;
 }
+table.comparison-table tr th:first-child {
+  font-size: 16px;
+}
 table.comparison-table tr td span {
   font-size: 16px;
 }
@@ -58,8 +64,9 @@ table.comparison-table tr td span.good {
 table.comparison-table tr td span.bad {
   color: red;
 }
-table.comparison-table tr td:first-child {
+table.comparison-table tr :first-child {
   text-align: start;
+  padding-left: 3px;
 }
 `;
 
@@ -80,15 +87,15 @@ let fingerprintingMap = ({rowNames, fingerprintingResult}) => {
 };
 
 let resultsToTable = (results) => {
-  let bestResults = results.filter(m => m["fingerprintingResults"]);
+  let bestResults = results.filter(m => m["testResults"]["fingerprinting"]);
   let headers = bestResults
       .map(m => m["capabilities"])
       .map(capabilitiesToDescription);
-  headers.unshift("");
-  let rowNames = bestResults[0]["fingerprintingResults"]
+  headers.unshift("Fingerprinting tests");
+  let rowNames = bestResults[0]["testResults"]["fingerprinting"]
       .map(resultItemToName);
   let fingerprintingMaps = bestResults
-      .map(m => m["fingerprintingResults"])
+      .map(m => m["testResults"]["fingerprinting"])
       .map(fingerprintingResult => fingerprintingMap({rowNames,
                                                       fingerprintingResult}));
   let body = [];
@@ -118,7 +125,7 @@ ${ worker ? "[Worker]" : "" }
 
 let content = (results) => {
   let { headers, body } = resultsToTable(results);
-  return `<h2>Browser Privacy Project</h2>` +
+  return `<h1 class="title">browserprivacy.net</h1>` +
   //  `<pre>${headers}</pre>` +
     htmlTable({headers, body,
                className:"comparison-table"});
@@ -138,6 +145,7 @@ let main = async () => {
   }
   let resultsFile = await latestFile("../selenium/results/");
   let results = await readResults(resultsFile);
+  console.log(results);
   await fs.writeFile("./out/index.html", htmlPage({
     title: "Browser Privacy Project",
     content: content(results),

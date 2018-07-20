@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>test for tor connectivity</title>
+    <meta charset="utf8">
+    <link rel="stylesheet" href="test.css">
+  </head>
+  <body>
+    <script>
+     (async () => {
+       let response = await fetch("https://wtfismyip.com/json");
+       let json = await response.json();
+       console.log(json);
+       document.body.setAttribute("data-test-results", JSON.stringify(json));
+     })();
+    </script>
+  </body>
+</html>
