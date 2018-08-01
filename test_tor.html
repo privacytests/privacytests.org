@@ -10,8 +10,14 @@
      (async () => {
        let response = await fetch("https://wtfismyip.com/json");
        let json = await response.json();
-       console.log(json);
-       document.body.setAttribute("data-test-results", JSON.stringify(json));
+       let json2 = {};
+       for (let k of Object.keys(json)) {
+         let k2 = k.replace("YourFucking", "");
+         json2[k2] = json[k];
+       }
+       json2["passed"] = json2["TorExit"] === "true";
+       console.log(json2);
+       document.body.setAttribute("data-test-results", JSON.stringify(json2));
      })();
     </script>
   </body>

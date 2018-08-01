@@ -86,7 +86,26 @@ let fingerprintingMap = ({rowNames, fingerprintingResult}) => {
   return result;
 };
 
-let resultsToTable = (results) => {
+let bodyItem = ({passed, tooltip}) =>
+`<span class='${passed ? "good" : "bad"}'
+title = '${ tooltip }'>
+  ${passed ? "&#x2714;" : "&#x00D7;"}
+</span>`;
+
+let fingerprintingTooltip = fingerprintingItem => {
+  let { expression, spoof_expression, actual_value,
+        desired_value, passed, worker } = fingerprintingItem;
+  return `
+expression: ${ expression }
+spoof expression: ${ spoof_expression }
+actual value: ${ actual_value }
+desired value: ${ desired_value }
+passed: ${ passed }
+${ worker ? "[Worker]" : "" }
+  `.trim();
+};
+
+let fingerprintingResultsToTable = (results) => {
   let bestResults = results.filter(m => m["testResults"]["fingerprinting"]);
   let headers = bestResults
       .map(m => m["capabilities"])
@@ -103,20 +122,8 @@ let resultsToTable = (results) => {
     let row = [];
     row.push(rowName);
     for (let fingerprintingMap of fingerprintingMaps) {
-      let { expression, spoof_expression, actual_value, desired_value, passed, worker } =
-          fingerprintingMap[rowName];
-      let tooltip = `
-expression: ${ expression }
-spoof expression: ${ spoof_expression }
-actual value: ${ actual_value }
-desired value: ${ desired_value }
-passed: ${ passed }
-${ worker ? "[Worker]" : "" }
-`.trim();
-      row.push(`<span class='${passed ? "good" : "bad"}'
-               title = '${ tooltip }'>
-               ${passed ? "&#x2714;" : "&#x00D7;"}
-               </span>`);
+      let tooltip = fingerprintingTooltip(fingerprintingMap(rowName));
+      row.push(bodyItem({ passed, tooltip }));
     }
     body.push(row);
   };
@@ -124,7 +131,7 @@ ${ worker ? "[Worker]" : "" }
 };
 
 let content = (results) => {
-  let { headers, body } = resultsToTable(results);
+  let { headers, body } = fingerprintingResultsToTable(results);
   return `<h1 class="title">browserprivacy.net</h1>` +
   //  `<pre>${headers}</pre>` +
     htmlTable({headers, body,

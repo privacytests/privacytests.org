@@ -54,24 +54,6 @@ let localDriver = async function (capabilities) {
     .build();
 };
 
-/*
-const browserStackCapabilityList = [
-  {
-    'browserName' : 'Firefox',
-    'browser_version' : '61.0',
-    'os' : 'Windows',
-    'os_version' : '10',
-    'resolution' : '1024x768',
-  },
-  {
-    'browserName' : 'android',
-    'device' : 'Samsung Galaxy S8',
-    'realMobile' : 'true',
-    'os_version' : '7.0',
-  },
-];
-*/
-
 let fetchBrowserstackCapabilities = async function () {
   let credentials = await browserstackCredentials();
   return request("https://api.browserstack.com/automate/browsers.json", {
