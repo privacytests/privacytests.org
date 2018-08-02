@@ -55,14 +55,19 @@ table.comparison-table tr td {
 table.comparison-table tr th:first-child {
   font-size: 16px;
 }
-table.comparison-table tr td span {
+table.comparison-table tr td div {
   font-size: 16px;
+  background-repeat: no-repeat;
+  background-size: 12px;
+  background-position: center;
+  background-clip: border-box;
 }
-table.comparison-table tr td span.good {
-  color: green;
+table.comparison-table tr td div.good {
+  background-image: url('check-mark.png');
 }
-table.comparison-table tr td span.bad {
-  color: red;
+table.comparison-table tr td div.bad {
+  background-image: url('x-mark.png');
+  background-size: 10px;
 }
 table.comparison-table tr :first-child {
   text-align: start;
@@ -76,10 +81,9 @@ let capabilitiesToDescription = ({ os, os_version, browser, browser_version, dev
     (os ? `${os} ${os_version}, ${device}` : `${browser}`);
 
 let bodyItem = ({passed, tooltip}) =>
-`<span class='${passed ? "good" : "bad"}'
-title = '${ tooltip }'>
-  ${passed ? "&#x2714;" : "&#x00D7;"}
-</span>`;
+`<div class='${passed ? "good" : "bad"}'
+title = '${ tooltip }'> &nbsp;
+</div>`;
 
 let fingerprintingTooltip = fingerprintingItem => {
   let { expression, spoof_expression, actual_value,
@@ -120,7 +124,7 @@ let fingerprintingResultsToTable = (results) => {
 
 let content = (results) => {
   let { headers, body } = fingerprintingResultsToTable(results);
-  return `<h1 class="title">browserprivacy.net</h1>` +
+  return `<h1 class="title">Browser Privacy Tests</h1>` +
   //  `<pre>${headers}</pre>` +
     htmlTable({headers, body,
                className:"comparison-table"});
