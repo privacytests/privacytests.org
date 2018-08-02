@@ -111,18 +111,18 @@ let fingerprintingResultsToTable = (results) => {
       .map(m => m["capabilities"])
       .map(capabilitiesToDescription);
   headers.unshift("Fingerprinting tests");
-  let rowNames = bestResults[0]["testResults"]["fingerprinting"]
-      .map(resultItemToName);
+  let rowNames = Object.keys(bestResults[0]["testResults"]["fingerprinting"])
+      .sort();
+//  console.log(bestResults[0]["testResults"]);
   let fingerprintingMaps = bestResults
-      .map(m => m["testResults"]["fingerprinting"])
-      .map(fingerprintingResult => fingerprintingMap({rowNames,
-                                                      fingerprintingResult}));
+      .map(m => m["testResults"]["fingerprinting"]);
   let body = [];
   for (let rowName of rowNames) {
     let row = [];
     row.push(rowName);
     for (let fingerprintingMap of fingerprintingMaps) {
-      let tooltip = fingerprintingTooltip(fingerprintingMap(rowName));
+      let tooltip = fingerprintingTooltip(fingerprintingMap[rowName]);
+      let passed = fingerprintingMap[rowName].passed;
       row.push(bodyItem({ passed, tooltip }));
     }
     body.push(row);

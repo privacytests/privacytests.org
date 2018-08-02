@@ -49,7 +49,7 @@ const intl_tests = [
   [`Intl.Collator().resolvedOptions().locale`, `"en-US"`],
   [`Intl.DateTimeFormat().resolvedOptions().locale`, `"en-US"`],
   [`Intl.NumberFormat().resolvedOptions().locale`, `"en-US"`],
-  [`Intl.PluralRules().resolvedOptions().locale`, `"en-US"`],
+  [`new Intl.PluralRules().resolvedOptions().locale`, `"en-US"`],
 ];
 
 const dual_navigator_tests = [
@@ -193,12 +193,21 @@ const run_in_worker = function (aFunction) {
   });
 };
 
+const list_to_map = (list, keyFn) => {
+  let obj = {};
+  for (let item of list) {
+    let key = keyFn(item);
+    obj[key] = item;
+  };
+  return obj;
+};
+
 const run_all_tests = async function () {
   let { test_pairs, test_results } = dual_tests();
   let { test_results: test_results_worker } = await run_in_worker(dual_tests);
   test_results_worker.map(t => Object.assign(t, {worker: true}));
   eval(prelude);
-  return test_results.concat(
+  let all_tests = test_results.concat(
     ...test_results_worker,
     test_pairs(window_property_tests),
     test_pairs(navigator_tests),
@@ -206,4 +215,6 @@ const run_all_tests = async function () {
     test_pairs(performance_timing_tests),
     test_pairs(mouse_event_tests),
   );
+  return list_to_map(all_tests,
+                     x => x.expression + (x.worker ? " [Worker]" : ""));
 };
