@@ -15,7 +15,7 @@
          let k2 = k.replace("YourFucking", "");
          json2[k2] = json[k];
        }
-       json2["passed"] = json2["TorExit"] === "true";
+       json2["passed"] = json2["TorExit"] !== "false";
        console.log(json2);
        document.body.setAttribute("data-test-results", JSON.stringify(json2));
      })();
