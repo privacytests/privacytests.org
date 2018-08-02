@@ -75,17 +75,6 @@ let capabilitiesToDescription = ({ os, os_version, browser, browser_version, dev
     `${browser} ${browser_version}, ${os} ${os_version}` :
     (os ? `${os} ${os_version}, ${device}` : `${browser}`);
 
-let resultItemToName = ({expression, worker}) =>
-    `${expression} ${worker ? " [Worker]" : ""}`;
-
-let fingerprintingMap = ({rowNames, fingerprintingResult}) => {
-  let result = {};
-  for (let item of fingerprintingResult) {
-    result[resultItemToName(item)] = item;
-  }
-  return result;
-};
-
 let bodyItem = ({passed, tooltip}) =>
 `<span class='${passed ? "good" : "bad"}'
 title = '${ tooltip }'>
@@ -113,7 +102,6 @@ let fingerprintingResultsToTable = (results) => {
   headers.unshift("Fingerprinting tests");
   let rowNames = Object.keys(bestResults[0]["testResults"]["fingerprinting"])
       .sort();
-//  console.log(bestResults[0]["testResults"]);
   let fingerprintingMaps = bestResults
       .map(m => m["testResults"]["fingerprinting"]);
   let body = [];
@@ -138,7 +126,7 @@ let content = (results) => {
                className:"comparison-table"});
 };
 
-let readResults = async (file) =>
+let readJSONFile = async (file) =>
     JSON.parse(await fs.readFile(file));
 
 let latestFile = async (path) => {
@@ -151,7 +139,7 @@ let main = async () => {
     await fs.mkdir("./out");
   }
   let resultsFile = await latestFile("../selenium/results/");
-  let results = await readResults(resultsFile);
+  let results = await readJSONFile(resultsFile);
   console.log(results);
   await fs.writeFile("./out/index.html", htmlPage({
     title: "Browser Privacy Project",
