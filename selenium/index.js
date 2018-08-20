@@ -27,12 +27,17 @@ let loadAndGetResults = async (driver, url, timeout) => {
   }
 };
 
+let runTorTests = async function (driver) {
+  let tor = await loadAndGetResults(
+    driver, 'https://arthuredelstein.github.io/resist-fingerprinting-js/test_tor.html', 10000);
+  return { "TorNetworkUse" : tor };
+};
+
 let runTests = async function (driver) {
   let testResultsObject;
   let fingerprinting = await loadAndGetResults(
     driver, 'https://arthuredelstein.github.io/resist-fingerprinting-js/test_unprotected.html', 10000);
-  let tor = await loadAndGetResults(
-    driver, 'https://arthuredelstein.github.io/resist-fingerprinting-js/test_tor.html', 10000);
+  let tor = await runTorTests(driver);
   await driver.quit();
   return { fingerprinting, tor };
 };

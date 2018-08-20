@@ -26,7 +26,11 @@ let htmlTable = ({ headers, body, className }) => {
   for (let row of body) {
     elements.push("<tr>");
     for (let item of row) {
-      elements.push(`<td>${item}</td>`);
+      if (item.subheading) {
+        elements.push(`<th>${item.subheading}</th>`);
+      } else {
+        elements.push(`<td>${item}</td>`);
+      }
     }
     elements.push("</tr>");
   }
@@ -98,34 +102,52 @@ ${ worker ? "[Worker]" : "" }
   `.trim();
 };
 
-let fingerprintingResultsToTable = (results) => {
-  let bestResults = results.filter(m => m["testResults"]["fingerprinting"]);
-  let headers = bestResults
-      .map(m => m["capabilities"])
-      .map(capabilitiesToDescription);
-  headers.unshift("Fingerprinting tests");
-  let rowNames = Object.keys(bestResults[0]["testResults"]["fingerprinting"])
+let torTooltip = torItem => {
+  let { IPAddress, TorExit, passed } = torItem;
+  return `
+IPAddress: ${ IPAddress }
+TorExit: ${ TorExit }
+passed: ${ passed }
+`.trim();
+};
+
+let resultsSection = ({results, category, tooltipFunction}) => {
+  let bestResults = results.filter(m => m["testResults"][category]);
+  let rowNames = Object.keys(bestResults[0]["testResults"][category])
       .sort();
-  let fingerprintingMaps = bestResults
-      .map(m => m["testResults"]["fingerprinting"]);
-  let body = [];
+  let resultMaps = bestResults
+      .map(m => m["testResults"][category]);
+  let section = [];
   for (let rowName of rowNames) {
     let row = [];
     row.push(rowName);
-    for (let fingerprintingMap of fingerprintingMaps) {
-      let tooltip = fingerprintingTooltip(fingerprintingMap[rowName]);
-      let passed = fingerprintingMap[rowName].passed;
+    for (let resultMap of resultMaps) {
+      let tooltip = tooltipFunction(resultMap[rowName]);
+      let passed = resultMap[rowName].passed;
       row.push(bodyItem({ passed, tooltip }));
     }
-    body.push(row);
+    section.push(row);
   };
+  return section;
+};
+
+let resultsToTable = (results) => {
+  let headers = results.filter(m => m["testResults"]["fingerprinting"])
+      .map(m => m["capabilities"])
+      .map(capabilitiesToDescription);
+  headers.unshift("");
+  let body = [];
+  body.push([{subheading:"Tor tests"}]);
+  body = body.concat(resultsSection({results, category:"tor", tooltipFunction: torTooltip}));
+  body.push([{subheading:"Fingerprinting tests"}]);
+  body = body.concat(resultsSection({results, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
   return { headers, body };
 };
 
 let content = (results) => {
-  let { headers, body } = fingerprintingResultsToTable(results);
+  let { headers, body } = resultsToTable(results);
   return `<h1 class="title">Browser Privacy Tests</h1>` +
-  //  `<pre>${headers}</pre>` +
+//    `<pre>${JSON.stringify(results[0].testResults)}</pre>` +
     htmlTable({headers, body,
                className:"comparison-table"});
 };
