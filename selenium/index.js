@@ -30,7 +30,7 @@ let loadAndGetResults = async (driver, url, timeout) => {
 let runTorTests = async function (driver) {
   let tor = await loadAndGetResults(
     driver, 'https://arthuredelstein.github.io/resist-fingerprinting-js/test_tor.html', 10000);
-  return { "TorNetworkUse" : tor };
+  return tor ? { "TorNetworkUse" : tor } : null;
 };
 
 let runTests = async function (driver) {
