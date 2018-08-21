@@ -145,11 +145,14 @@ let resultsToTable = (results) => {
 };
 
 let content = (results) => {
-  let { headers, body } = resultsToTable(results);
+  let { headers, body } = resultsToTable(results.all_tests);
   return `<h1 class="title">Browser Privacy Tests</h1>` +
 //    `<pre>${JSON.stringify(results[0].testResults)}</pre>` +
     htmlTable({headers, body,
-               className:"comparison-table"});
+               className:"comparison-table"}) +
+    `<p>Tests ran at ${results.timeStarted}</p>` +
+    `<p>Source code: <a href="https://github.com/arthuredelstein/resist-fingerprinting-js/commit/${results.git}"
+    >${results.git.slice(0,8)}</a></p>`;
 };
 
 let readJSONFile = async (file) =>
@@ -166,7 +169,6 @@ let main = async () => {
   }
   let resultsFile = await latestFile("../selenium/results/");
   let results = await readJSONFile(resultsFile);
-  console.log(results);
   await fs.writeFile("./out/index.html", htmlPage({
     title: "Browser Privacy Project",
     content: content(results),

@@ -122,17 +122,19 @@ let runTestsBatch = async function (driverType, capabilityList) {
   if (!driverConstructor) {
     throw new Error(`unknown driver type ${driverType}`);
   }
-  let all_data = [];
+  let all_tests = [];
+  let timeStarted = new Date().toISOString();
+  let git = await gitHash();
   for (let capabilities of capabilityList) {
     capabilities.browserName = capabilities.browser;
     console.log(capabilities);
-    let git = await gitHash();
     let driver = await driverConstructor(capabilities);
     let timeStarted = new Date().toISOString();
     let testResults = await runTests(driver);
-    all_data.push({ capabilities, testResults, timeStarted, git });
+    all_tests.push({ capabilities, testResults, timeStarted });
   }
-  return all_data;
+  let timeStopped = new Date().toISOString();
+  return { all_tests, git, timeStarted, timeStopped };
 };
 
 let writeData = async function (data) {
