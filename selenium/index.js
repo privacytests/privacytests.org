@@ -6,6 +6,8 @@ const {Builder, By, Key, until} = require('selenium-webdriver');
 const memoize = require('memoizee');
 const request = require('request-promise-native');
 const dateFormat = require('dateformat');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 
 let browserstackCredentials = memoize(
   async () => JSON.parse(await fs.readFile(homeDir + "/" + ".browserstack.json")),
@@ -104,6 +106,14 @@ const selectRecentBrowserstackBrowsers = function (allCapabilities) {
   return selectedCapabilities;
 };
 
+let gitHash = async function () {
+  const { stdout, stderr } = await exec('git rev-parse HEAD');
+  if (stderr) {
+    throw new Error(stderr);
+  } else {
+    return stdout;
+  }
+};
 
 let runTestsBatch = async function (driverType, capabilityList) {
   let driverConstructor = { browserstack: browserStackDriver,
@@ -116,10 +126,11 @@ let runTestsBatch = async function (driverType, capabilityList) {
   for (let capabilities of capabilityList) {
     capabilities.browserName = capabilities.browser;
     console.log(capabilities);
+    let git = await gitHash();
     let driver = await driverConstructor(capabilities);
     let timeStarted = new Date().toISOString();
     let testResults = await runTests(driver);
-    all_data.push({ capabilities, testResults, timeStarted });
+    all_data.push({ capabilities, testResults, timeStarted, git });
   }
   return all_data;
 };
