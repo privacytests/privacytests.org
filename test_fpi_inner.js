@@ -58,10 +58,12 @@ let runReadTests = async (readParams) => {
 };
 
 (async () => {
+  console.log("hi");
   let searchParams = new URL(document.URL).searchParams;
   let secret = searchParams.get("secret");
   let write = searchParams.get("write");
   let read = searchParams.get("read");
+  console.log(searchParams, secret, write, read);
   let readParams = JSON.parse(searchParams.get("readParams"));
   let results = write ? runWriteTests(secret) : await runReadTests(readParams);
   if (window.location !== parent.location) {

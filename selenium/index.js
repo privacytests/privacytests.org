@@ -34,11 +34,14 @@ let runSupercookieTests = async function (driver) {
   let secret = "sflkjdlfkjsdf";
   let writeResults = await loadAndGetResults(
     driver, `https://arthuredelstein.net/resist-fingerprinting-js/test_fpi.html?write=true&secret=${secret}`, 10000);
+  console.log("writeResults:", writeResults);
   let readParamsString = encodeURIComponent(JSON.stringify(writeResults));
-  let readResults = await loadAndGetResults(
+  let readResultsSameFirstParty = await loadAndGetResults(
     driver, `https://arthuredelstein.net/resist-fingerprinting-js/test_fpi.html?read=true&readParams=${readParamsString}`, 10000);
-    console.log("writeResults:", writeResults);
-    console.log("readResults:", readResults);
+  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
+  let readResultsDifferentFirstParty = await loadAndGetResults(
+    driver, `https://arthuredelstein.github.io/resist-fingerprinting-js/test_fpi.html?read=true&readParams=${readParamsString}`, 10000);
+  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
 };
 
 let runTorTests = async function (driver) {
