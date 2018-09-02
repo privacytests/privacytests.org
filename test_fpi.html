@@ -5,6 +5,9 @@
     <meta charset="utf8"/>
   </head>
   <body>
-    <iframe src="https://arthuredelstein.github.io/resist-fingerprinting-js/test_fpi_inner.html"></iframe>
+    <script>
+     addEventListener("message", e => console.log(e), false);
+    </script>
+    <iframe src="./test_fpi_inner.html?write=true&secret=blah"></iframe>
   </body>
 </html>

@@ -1,5 +1,3 @@
-let secret = "{5865e370-a471-4095-af80-b1ab3571b0a3}"
-
 let tests = {
   "cookie": {
     write: (secret) => {
@@ -37,3 +35,39 @@ let tests = {
     },
   },
 };
+
+let runWriteTests = (secret) => {
+  let keys = {};
+  for (let test of Object.keys(tests)) {
+    console.log(test, tests[test].write.toString());
+    let key = tests[test].write(secret);
+    if (key !== undefined) {
+      keys[test] = key;
+    }
+  }
+  return keys;
+};
+
+let runReadTests = async () => {
+  let results = {};
+  for (let test of Object.keys(tests)) {
+    let readout = await tests[test].read();
+    console.log(test, tests[test].read.toString(), readout);
+    results[test] = readout;
+  }
+  return results;
+};
+
+(async () => {
+  let searchParams = new URL(document.URL).searchParams;
+  let secret = searchParams.get("secret");
+  let write = searchParams.get("write");
+  let read = searchParams.get("read");
+  let readParams = searchParams.get("readParams");
+  let results = write ? runWriteTests(secret) : runReadTests();
+  if (window.location !== parent.location) {
+    parent.postMessage(results, "*");
+//  } else {
+    console.log(results);
+//  }
+})();
