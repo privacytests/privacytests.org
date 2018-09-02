@@ -18,6 +18,7 @@ let waitForAttribute = (driver, element, attrName, timeout) =>
 
 let loadAndGetResults = async (driver, url, timeout) => {
   try {
+    console.log(`loading ${url}`);
     await driver.get(url);
     let body = await driver.findElement(By.tagName('body'));
     let testResultsString =
@@ -29,6 +30,17 @@ let loadAndGetResults = async (driver, url, timeout) => {
   }
 };
 
+let runSupercookieTests = async function (driver) {
+  let secret = "sflkjdlfkjsdf";
+  let writeResults = await loadAndGetResults(
+    driver, `https://arthuredelstein.net/resist-fingerprinting-js/test_fpi.html?write=true&secret=${secret}`, 10000);
+  let readParamsString = encodeURIComponent(JSON.stringify(writeResults));
+  let readResults = await loadAndGetResults(
+    driver, `https://arthuredelstein.net/resist-fingerprinting-js/test_fpi.html?read=true&readParams=${readParamsString}`, 10000);
+    console.log("writeResults:", writeResults);
+    console.log("readResults:", readResults);
+};
+
 let runTorTests = async function (driver) {
   let tor = await loadAndGetResults(
     driver, 'https://arthuredelstein.github.io/resist-fingerprinting-js/test_tor.html', 10000);
@@ -36,12 +48,12 @@ let runTorTests = async function (driver) {
 };
 
 let runTests = async function (driver) {
-  let testResultsObject;
   let fingerprinting = await loadAndGetResults(
     driver, 'https://arthuredelstein.github.io/resist-fingerprinting-js/test_unprotected.html', 10000);
   let tor = await runTorTests(driver);
+  let supercookies = await runSupercookieTests(driver);
   await driver.quit();
-  return { fingerprinting, tor };
+  return { fingerprinting, tor, supercookies };
 };
 
 let browserStackDriver = async function (capabilities) {
