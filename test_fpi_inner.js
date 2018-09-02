@@ -5,30 +5,18 @@ let tests = {
       expiry.setFullYear(expiry.getFullYear() + 1);
       document.cookie = `secret=${secret};expires=${expiry.toUTCString()}`;
     },
-    read: () => {
-      return document.cookie;
-    },
-  },
+    read: () => document.cookie.match(/secret=(\S+)/)[1],
+   },
   "localStorage": {
-    write: (secret) => {
-      localStorage.setItem("secret", secret);
-    },
-    read: () => {
-      return localStorage.getItem("secret");
-    }
+    write: (secret) => localStorage.setItem("secret", secret),
+    read: () => localStorage.getItem("secret"),
   },
   "sessionStorage": {
-    write: (secret) => {
-      sessionStorage.setItem("secret", secret);
-    },
-    read: () => {
-      return sessionStorage.getItem("secret");
-    },
+    write: (secret) => sessionStorage.setItem("secret", secret),
+    read: () => sessionStorage.getItem("secret"),
   },
   "blob": {
-    write: (secret) => {
-      return URL.createObjectURL(new Blob([secret]));
-    },
+    write: (secret) => URL.createObjectURL(new Blob([secret])),
     read: async (url) => {
       if (url) {
         let response = await fetch(url);
@@ -50,12 +38,17 @@ let runWriteTests = (secret) => {
   return keys;
 };
 
-let runReadTests = async () => {
+let runReadTests = async (readParams) => {
   let results = {};
   for (let test of Object.keys(tests)) {
-    let readout = await tests[test].read();
-    console.log(test, tests[test].read.toString(), readout);
-    results[test] = readout;
+    let param = readParams[test];
+    let result;
+    try {
+      result = await tests[test].read(param);
+    } catch (e) {
+      result = e.message;
+    }
+    results[test] = { result, readFunction: tests[test].read.toString() };
   }
   return results;
 };
@@ -65,8 +58,8 @@ let runReadTests = async () => {
   let secret = searchParams.get("secret");
   let write = searchParams.get("write");
   let read = searchParams.get("read");
-  let readParams = searchParams.get("readParams");
-  let results = write ? runWriteTests(secret) : runReadTests();
+  let readParams = JSON.parse(searchParams.get("readParams"));
+  let results = write ? runWriteTests(secret) : await runReadTests(readParams);
   if (window.location !== parent.location) {
     parent.postMessage(results, "*");
   }

@@ -6,9 +6,13 @@
   </head>
   <body>
     <script>
-     addEventListener("message", e => console.log(e), false);
+     addEventListener("message", e => {
+       console.log(e.data);
+       document.body.setAttribute("data-test-results", JSON.stringify(e.data));
+     }, false);
      let iframe = document.createElement("iframe");
-     iframe.src = `test_fpi_inner.html${window.location.search}`;
+     document.body.appendChild(iframe);
+     iframe.src = `https://arthuredelstein.net/resist-fingerprinting-js/test_fpi_inner.html${window.location.search}`;
     </script>
   </body>
 </html>
