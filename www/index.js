@@ -150,8 +150,8 @@ let content = (results) => {
 //    `<pre>${JSON.stringify(results[0].testResults)}</pre>` +
     htmlTable({headers, body,
                className:"comparison-table"}) +
-    `<p>Tests ran at ${results.timeStarted}</p>` +
-    `<p>Source code: <a href="https://github.com/arthuredelstein/resist-fingerprinting-js/commit/${results.git}"
+	`<p>Tests ran at ${results.timeStarted}.
+         Source code: <a href="https://github.com/arthuredelstein/resist-fingerprinting-js/commit/${results.git}"
     >${results.git.slice(0,8)}</a></p>`;
 };
 
@@ -167,8 +167,10 @@ let main = async () => {
   if (!(existsSync("./out"))) {
     await fs.mkdir("./out");
   }
-  let resultsFile = await latestFile("../selenium/results/");
+  let resultsFile = await latestFile("../selenium/results");
+  console.log(`Reading from raw results file: ${resultsFile}`);  
   let results = await readJSONFile(resultsFile);
+//  console.log(JSON.stringify(results));
   await fs.writeFile("./out/index.html", htmlPage({
     title: "Browser Privacy Project",
     content: content(results),
@@ -177,4 +179,4 @@ let main = async () => {
   console.log(`Wrote out ${fileUrl("./out/index.html")}`);
 };
 
-main();
+main(); 
