@@ -67,7 +67,5 @@ let runReadTests = async () => {
   let results = write ? runWriteTests(secret) : runReadTests();
   if (window.location !== parent.location) {
     parent.postMessage(results, "*");
-//  } else {
-    console.log(results);
-//  }
+  }
 })();
