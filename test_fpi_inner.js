@@ -48,7 +48,11 @@ let runReadTests = async (readParams) => {
     } catch (e) {
       result = e.message;
     }
-    results[test] = { result, readFunction: tests[test].read.toString() };
+    results[test] = {
+      write: tests[test].write.toString(),
+      read: tests[test].read.toString(),
+      result,
+    };
   }
   return results;
 };
