@@ -30,8 +30,10 @@ let tests = {
       return URL.createObjectURL(new Blob([secret]));
     },
     read: async (url) => {
-      let response = await fetch(url);
-      return response.text();
+      if (url) {
+        let response = await fetch(url);
+        return response.text();
+      }
     },
   },
 };
