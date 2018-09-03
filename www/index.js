@@ -111,6 +111,14 @@ passed: ${ passed }
 `.trim();
 };
 
+let supercookieTooltip = ({ write, read, passed }) => {
+  return `
+write: ${ write }
+read: ${ read }
+passed: ${ passed }
+`.trim();
+};
+
 let resultsSection = ({results, category, tooltipFunction}) => {
   let bestResults = results.filter(m => m["testResults"][category]);
   let rowNames = Object.keys(bestResults[0]["testResults"][category])
@@ -139,6 +147,8 @@ let resultsToTable = (results) => {
   let body = [];
   body.push([{subheading:"Tor tests"}]);
   body = body.concat(resultsSection({results, category:"tor", tooltipFunction: torTooltip}));
+  body.push([{subheading:"Supercookie tests"}]);
+  body = body.concat(resultsSection({results, category:"supercookies", tooltipFunction: supercookieTooltip}));
   body.push([{subheading:"Fingerprinting tests"}]);
   body = body.concat(resultsSection({results, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
   return { headers, body };
