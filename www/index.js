@@ -1,4 +1,5 @@
 const { existsSync, promises : fs } = require('fs');
+const path = require('path');
 const fileUrl = require('file-url');
 
 let htmlPage = ({ title, content, style }) => `
@@ -158,15 +159,17 @@ let resultsToTable = (results) => {
   return { headers, body };
 };
 
-let content = (results) => {
+let content = (results, jsonFilename) => {
   let { headers, body } = resultsToTable(results.all_tests);
   return `<h1 class="title">Browser Privacy Tests</h1>` +
 //    `<pre>${JSON.stringify(results[0].testResults)}</pre>` +
     htmlTable({headers, body,
                className:"comparison-table"}) +
 	`<p>Tests ran at ${results.timeStarted}.
-         Source code: <a href="https://github.com/arthuredelstein/resist-fingerprinting-js/commit/${results.git}"
-    >${results.git.slice(0,8)}</a></p>`;
+         Source version: <a href="https://github.com/arthuredelstein/resist-fingerprinting-js/commit/${results.git}"
+    >${results.git.slice(0,8)}</a>.
+    Raw data in <a href="${jsonFilename}">JSON</a>.
+    </p>`;
 };
 
 let readJSONFile = async (file) =>
@@ -182,13 +185,14 @@ let main = async () => {
     await fs.mkdir("./out");
   }
   let resultsFile = await latestFile("../selenium/results");
+  fs.copyFile(resultsFile, "./out/" + path.basename(resultsFile));
   console.log(`Reading from raw results file: ${resultsFile}`);
   let results = await readJSONFile(resultsFile);
   console.log(results.all_tests[0]);
 //  console.log(JSON.stringify(results));
   await fs.writeFile("./out/index.html", htmlPage({
     title: "Browser Privacy Project",
-    content: content(results),
+    content: content(results, path.basename(resultsFile)),
     style: pageStyle
   }));
   console.log(`Wrote out ${fileUrl("./out/index.html")}`);
