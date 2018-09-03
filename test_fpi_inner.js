@@ -5,7 +5,7 @@ let tests = {
       expiry.setFullYear(expiry.getFullYear() + 1);
       document.cookie = `secret=${secret};expires=${expiry.toUTCString()}`;
     },
-    read: () => document.cookie.match(/secret=(\S+)/)[1],
+    read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null,
    },
   "localStorage": {
     write: (secret) => localStorage.setItem("secret", secret),

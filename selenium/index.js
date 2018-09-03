@@ -3,6 +3,7 @@
 const homeDir = require('os').homedir();
 const { existsSync, promises : fs } = require('fs');
 const {Builder, By, Key, until} = require('selenium-webdriver');
+const firefox = require('selenium-webdriver/firefox');
 const memoize = require('memoizee');
 const request = require('request-promise-native');
 const dateFormat = require('dateformat');
@@ -31,7 +32,7 @@ let loadAndGetResults = async (driver, url, timeout) => {
 };
 
 let runSupercookieTests = async function (driver) {
-  let secret = "sflkjdlfkjsdf";
+  let secret = Math.random().toString().slice(2);
   let writeResults = await loadAndGetResults(
     driver, `https://arthuredelstein.net/resist-fingerprinting-js/test_fpi.html?write=true&secret=${secret}`, 10000);
   console.log("writeResults:", writeResults);
@@ -70,9 +71,12 @@ let browserStackDriver = async function (capabilities) {
 };
 
 let localDriver = async function (capabilities) {
+//  let options = new firefox.Options()
+//      .setPreference('privacy.firstparty.isolate', true);
   return new Builder()
     .withCapabilities(capabilities)
     .forBrowser(capabilities["browser"])
+//    .setFirefoxOptions(options)
     .build();
 };
 
