@@ -18,17 +18,12 @@ let waitForAttribute = (driver, element, attrName, timeout) =>
     driver.wait(async () => element.getAttribute(attrName), timeout);
 
 let loadAndGetResults = async (driver, url, timeout) => {
-  try {
     console.log(`loading ${url}`);
     await driver.get(url);
     let body = await driver.findElement(By.tagName('body'));
     let testResultsString =
         await waitForAttribute(driver, body, "data-test-results", timeout);
     return JSON.parse(testResultsString);
-  } catch (e) {
-    console.log(e);
-    return null;
-  }
 };
 
 let runSupercookieTests = async function (driver) {
@@ -57,12 +52,17 @@ let runTorTests = async function (driver) {
 };
 
 let runTests = async function (driver) {
-  let fingerprinting = await loadAndGetResults(
-    driver, 'https://arthuredelstein.github.io/resist-fingerprinting-js/test_unprotected.html', 10000);
-  let tor = await runTorTests(driver);
-  let supercookies = await runSupercookieTests(driver);
-  await driver.quit();
-  return { fingerprinting, tor, supercookies };
+  try {
+    let fingerprinting = await loadAndGetResults(
+      driver, 'https://arthuredelstein.github.io/resist-fingerprinting-js/test_unprotected.html', 10000);
+    let tor = await runTorTests(driver);
+    let supercookies = await runSupercookieTests(driver);
+    await driver.quit();
+    return { fingerprinting, tor, supercookies };
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
 };
 
 let browserStackDriver = async function (capabilities) {

@@ -140,17 +140,21 @@ let resultsSection = ({results, category, tooltipFunction}) => {
 };
 
 let resultsToTable = (results) => {
-  let headers = results.filter(m => m["testResults"]["fingerprinting"])
+  let filteredResults = results
+      .filter(m => m["testResults"])
+      .filter(m => m["testResults"]["fingerprinting"]);
+  console.log(filteredResults[0]);
+  let headers = filteredResults
       .map(m => m["capabilities"])
       .map(capabilitiesToDescription);
   headers.unshift("");
   let body = [];
   body.push([{subheading:"Tor tests"}]);
-  body = body.concat(resultsSection({results, category:"tor", tooltipFunction: torTooltip}));
+  body = body.concat(resultsSection({results: filteredResults, category:"tor", tooltipFunction: torTooltip}));
   body.push([{subheading:"Supercookie tests"}]);
-  body = body.concat(resultsSection({results, category:"supercookies", tooltipFunction: supercookieTooltip}));
+  body = body.concat(resultsSection({results: filteredResults, category:"supercookies", tooltipFunction: supercookieTooltip}));
   body.push([{subheading:"Fingerprinting tests"}]);
-  body = body.concat(resultsSection({results, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
+  body = body.concat(resultsSection({results: filteredResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
   return { headers, body };
 };
 
@@ -178,8 +182,9 @@ let main = async () => {
     await fs.mkdir("./out");
   }
   let resultsFile = await latestFile("../selenium/results");
-  console.log(`Reading from raw results file: ${resultsFile}`);  
+  console.log(`Reading from raw results file: ${resultsFile}`);
   let results = await readJSONFile(resultsFile);
+  console.log(results.all_tests[0]);
 //  console.log(JSON.stringify(results));
   await fs.writeFile("./out/index.html", htmlPage({
     title: "Browser Privacy Project",
@@ -189,4 +194,4 @@ let main = async () => {
   console.log(`Wrote out ${fileUrl("./out/index.html")}`);
 };
 
-main(); 
+main();
