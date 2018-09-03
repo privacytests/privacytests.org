@@ -135,7 +135,7 @@ let gitHash = async function () {
   if (stderr) {
     throw new Error(stderr);
   } else {
-    return stdout;
+    return stdout.trim();
   }
 };
 
