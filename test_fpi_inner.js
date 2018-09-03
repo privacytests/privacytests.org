@@ -15,6 +15,7 @@ let tests = {
     write: (secret) => sessionStorage.setItem("secret", secret),
     read: () => sessionStorage.getItem("secret"),
   },
+/*
   "blob": {
     write: (secret) => URL.createObjectURL(new Blob([secret])),
     read: async (url) => {
@@ -24,6 +25,7 @@ let tests = {
       }
     },
   },
+*/
 };
 
 let runWriteTests = (secret) => {
