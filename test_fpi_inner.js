@@ -1,3 +1,17 @@
+const run_in_sharedworker = function (aFunction) {
+  return new Promise(resolve => {
+    const worker = new SharedWorker(
+      URL.createObjectURL(
+        new Blob([
+          `postMessage((${aFunction.toString()})())`
+        ])
+      )
+    );
+    worker.onmessage = msg => resolve(msg.data);
+  });
+};
+
+
 let tests = {
   "cookie": {
     write: (secret) => {
@@ -14,6 +28,10 @@ let tests = {
   "sessionStorage": {
     write: (secret) => sessionStorage.setItem("secret", secret),
     read: () => sessionStorage.getItem("secret"),
+  },
+  "SharedWorker": {
+    write: run_in_sharedworker(() => { self.secret = secret; }),
+    read: run_in_sharedworker(() => self.secret),
   },
 /*
   "blob": {
