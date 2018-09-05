@@ -124,14 +124,14 @@ let loadAndGetResults = async (driver, url, timeout) => {
 let runSupercookieTests = async function (driver) {
   let secret = Math.random().toString().slice(2);
   let writeResults = await loadAndGetResults(
-    driver, `https://arthuredelstein.net/resist-fingerprinting-js/tests/supercookies.html?write=true&secret=${secret}`, 10000);
+    driver, `https://arthuredelstein.net/browser-privacy/tests/supercookies.html?write=true&secret=${secret}`, 10000);
   console.log("writeResults:", writeResults);
   let readParamsString = encodeURIComponent(JSON.stringify(writeResults));
   let readResultsSameFirstParty = await loadAndGetResults(
-    driver, `https://arthuredelstein.net/resist-fingerprinting-js/tests/supercookies.html?read=true&readParams=${readParamsString}`, 10000);
+    driver, `https://arthuredelstein.net/browser-privacy/tests/supercookies.html?read=true&readParams=${readParamsString}`, 10000);
   console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
   let readResultsDifferentFirstParty = await loadAndGetResults(
-    driver, `https://arthuredelstein.github.io/resist-fingerprinting-js/tests/supercookies.html?read=true&readParams=${readParamsString}`, 10000);
+    driver, `https://arthuredelstein.github.io/browser-privacy/tests/supercookies.html?read=true&readParams=${readParamsString}`, 10000);
   for (let test in readResultsDifferentFirstParty) {
     let passed = (readResultsDifferentFirstParty[test].result !== secret);
     readResultsDifferentFirstParty[test].passed = passed;
@@ -144,7 +144,7 @@ let runSupercookieTests = async function (driver) {
 // Returns a map of test names to test results.
 let runTorTests = async function (driver) {
   let tor = await loadAndGetResults(
-    driver, 'https://arthuredelstein.github.io/resist-fingerprinting-js/tests/tor.html', 10000);
+    driver, 'https://arthuredelstein.github.io/browser-privacy/tests/tor.html', 10000);
   return tor ? { "TorNetworkUse" : tor } : null;
 };
 
@@ -157,7 +157,7 @@ let runTorTests = async function (driver) {
 let runTests = async function (driver) {
   try {
     let fingerprinting = await loadAndGetResults(
-      driver, 'https://arthuredelstein.github.io/resist-fingerprinting-js/tests/fingerprinting.html', 10000);
+      driver, 'https://arthuredelstein.github.io/browser-privacy/tests/fingerprinting.html', 10000);
     let tor = await runTorTests(driver);
     let supercookies = await runSupercookieTests(driver);
     await driver.quit();
