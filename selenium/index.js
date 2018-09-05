@@ -140,14 +140,6 @@ let runSupercookieTests = async function (driver) {
   return readResultsDifferentFirstParty;
 };
 
-// Causes driver to connect to our tor network test page.
-// Returns a map of test names to test results.
-let runTorTests = async function (driver) {
-  let tor = await loadAndGetResults(
-    driver, 'https://arthuredelstein.github.io/browser-privacy/tests/tor.html', 10000);
-  return tor ? { "TorNetworkUse" : tor } : null;
-};
-
 // Run all of our privacy tests using selenium. Returns
 // a map of test types to test result maps. Such as:
 // `
@@ -158,7 +150,8 @@ let runTests = async function (driver) {
   try {
     let fingerprinting = await loadAndGetResults(
       driver, 'https://arthuredelstein.github.io/browser-privacy/tests/fingerprinting.html', 10000);
-    let tor = await runTorTests(driver);
+    let tor = await loadAndGetResults(
+      driver, 'https://arthuredelstein.github.io/browser-privacy/tests/tor.html', 10000);
     let supercookies = await runSupercookieTests(driver);
     await driver.quit();
     return { fingerprinting, tor, supercookies };

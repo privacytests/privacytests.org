@@ -16,8 +16,9 @@
          json2[k2] = json[k];
        }
        json2["passed"] = json2["TorExit"] !== "false";
-       console.log(json2);
-       document.body.setAttribute("data-test-results", JSON.stringify(json2));
+       json3 = { TorNetworkUse: json2 };
+       console.log(json3);
+       document.body.setAttribute("data-test-results", JSON.stringify(json3));
      })();
     </script>
   </body>
