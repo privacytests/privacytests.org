@@ -42,6 +42,7 @@ let htmlTable = ({ headers, body, className }) => {
 const pageStyle = `
 .title {
   font-weight: bold;
+  margin: 0px -1px;
 }
 table.comparison-table {
   border-collapse:collapse;
@@ -49,7 +50,7 @@ table.comparison-table {
 table.comparison-table tr th {
   text-align: center;
   font-size: 12px;
-  padding: 4px;
+  padding: 3px 0px;
 }
 table.comparison-table tr:nth-child(2n) td {
   background-color: #eee;
@@ -76,7 +77,7 @@ table.comparison-table tr td div.bad {
 }
 table.comparison-table tr :first-child {
   text-align: start;
-  padding-left: 3px;
+/*  padding-left: 3px;*/
 }
 `;
 
@@ -140,7 +141,7 @@ let resultsSection = ({results, category, tooltipFunction}) => {
   return section;
 };
 
-let resultsToTable = (results) => {
+let resultsToTable = (results, title) => {
   let filteredResults = results
       .filter(m => m["testResults"])
       .filter(m => m["testResults"]["fingerprinting"]);
@@ -148,7 +149,7 @@ let resultsToTable = (results) => {
   let headers = filteredResults
       .map(m => m["capabilities"])
       .map(capabilitiesToDescription);
-  headers.unshift("");
+  headers.unshift(`<h1 class="title">${title}</h1>`);
   let body = [];
   body.push([{subheading:"Tor tests"}]);
   body = body.concat(resultsSection({results: filteredResults, category:"tor", tooltipFunction: torTooltip}));
@@ -160,8 +161,8 @@ let resultsToTable = (results) => {
 };
 
 let content = (results, jsonFilename) => {
-  let { headers, body } = resultsToTable(results.all_tests);
-  return `<h1 class="title">Browser Privacy Tests</h1>` +
+  let { headers, body } = resultsToTable(results.all_tests, "Browser Privacy Tests");
+  return '' + // `<h1 class="title">Browser Privacy Tests</h1>` +
 //    `<pre>${JSON.stringify(results[0].testResults)}</pre>` +
     htmlTable({headers, body,
                className:"comparison-table"}) +
