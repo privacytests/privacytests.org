@@ -29,10 +29,12 @@ let tests = {
     write: (secret) => sessionStorage.setItem("secret", secret),
     read: () => sessionStorage.getItem("secret"),
   },
+/*
   "SharedWorker": {
     write: run_in_sharedworker(() => { self.secret = secret; }),
     read: run_in_sharedworker(() => self.secret),
   },
+*/
 /*
   "blob": {
     write: (secret) => URL.createObjectURL(new Blob([secret])),
