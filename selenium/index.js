@@ -231,6 +231,9 @@ let main = async function () {
   if (driverType === "brave") {
     driverType = "electron";
   }
+  if (driverType === "cliqz") {
+    driverType = "firefox";
+  }
   let browserPath = process.argv[3];
   let capabilityList;
   if (driverType === "browserstack") {
