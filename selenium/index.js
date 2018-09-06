@@ -11,6 +11,8 @@ const request = require('request-promise-native');
 const dateFormat = require('dateformat');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+require('geckodriver');
+require('chromedriver');
 
 // ## Selenium setup
 
@@ -93,11 +95,16 @@ let browserStackDriver = async function (capabilities) {
 let localDriver = async function (capabilities) {
 //  let options = new firefox.Options()
 //      .setPreference('privacy.firstparty.isolate', true);
-  return new Builder()
-    .withCapabilities(capabilities)
+  let builder = new Builder();
+  if (capabilities.server) {
+    builder = builder.usingServer(capabilities.server);
+  }
+  let driver = builder.withCapabilities(capabilities)
     .forBrowser(capabilities["browser"])
 //    .setFirefoxOptions(options)
     .build();
+//  console.log("driver made:", driver);
+  return driver;
 };
 
 // ## Testing
@@ -177,7 +184,9 @@ let gitHash = async function () {
 let runTestsBatch = async function (driverType, capabilityList) {
   let driverConstructor = { browserstack: browserStackDriver,
                             firefox: localDriver,
-                            chrome: localDriver }[driverType];
+                            chrome: localDriver,
+                            electron: localDriver,
+                          }[driverType];
   if (!driverConstructor) {
     throw new Error(`unknown driver type ${driverType}`);
   }
@@ -219,7 +228,9 @@ let main = async function () {
   if (driverType === "chromium") {
     driverType = "chrome";
   }
-  console.log(driverType);
+  if (driverType === "brave") {
+    driverType = "electron";
+  }
   let browserPath = process.argv[3];
   let capabilityList;
   if (driverType === "browserstack") {
@@ -232,6 +243,12 @@ let main = async function () {
     }
   } else if (driverType === "chrome") {
     capabilityList = [{"browser": "chrome"}];
+  } else if (driverType === "electron") {
+    // Doesn't work at the moment.
+    capabilityList = [{browser: "chrome",
+                       chromeOptions: { binary: browserPath,
+                                        args: ['no-sandbox'] },
+                       server: 'http://localhost:9515'}];
   } else {
     throw new Error(`Unknown driver type '${driverType}'.`);
   }
