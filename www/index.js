@@ -1,4 +1,4 @@
-const { existsSync, promises : fs } = require('fs');
+const { existsSync, promises : fs, constants : fsConstants } = require('fs');
 const path = require('path');
 const fileUrl = require('file-url');
 
@@ -52,10 +52,14 @@ table.comparison-table tr th {
   font-size: 12px;
   padding: 3px 0px;
 }
+table.comparison-table tr th:not(first-child) {
+}
 table.comparison-table tr:nth-child(2n) td {
   background-color: #eee;
 }
 table.comparison-table tr td {
+  min-width: 100px;
+  padding: 4px 0px;
   text-align: center;
 }
 table.comparison-table tr th:first-child {
@@ -83,8 +87,8 @@ table.comparison-table tr :first-child {
 
 let capabilitiesToDescription = ({ os, os_version, browser, browser_version, device }) =>
   browser_version ?
-    `${browser} ${browser_version}, ${os} ${os_version}` :
-    (os ? `${os} ${os_version}, ${device}` : `${browser}`);
+    `${browser} ${browser_version},<br>${os} ${os_version}` :
+    (os ? `${os} ${os_version},<br>${device}` : `${browser}`);
 
 let bodyItem = ({passed, tooltip}) =>
 `<div class='${passed ? "good" : "bad"}'
@@ -186,7 +190,7 @@ let main = async () => {
     await fs.mkdir("./out");
   }
   let resultsFile = await latestFile("../selenium/results");
-  fs.copyFile(resultsFile, "./out/" + path.basename(resultsFile));
+  fs.copyFile(resultsFile, "./out/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
   console.log(`Reading from raw results file: ${resultsFile}`);
   let results = await readJSONFile(resultsFile);
   console.log(results.all_tests[0]);
