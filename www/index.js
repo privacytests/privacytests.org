@@ -50,9 +50,7 @@ table.comparison-table {
 table.comparison-table tr th {
   text-align: center;
   font-size: 12px;
-  padding: 3px 0px;
-}
-table.comparison-table tr th:not(first-child) {
+  padding: 15px 0px 2px 0px;
 }
 table.comparison-table tr:nth-child(2n) td {
   background-color: #eee;
