@@ -3,7 +3,7 @@
 // ## imports
 
 const homeDir = require('os').homedir();
-const { existsSync, promises : fs } = require('fs');
+const fs = require('fs');
 const {Builder, By, Key, until} = require('selenium-webdriver');
 const firefox = require('selenium-webdriver/firefox');
 const memoize = require('memoizee');
@@ -25,7 +25,7 @@ require('chromedriver');
 // }
 // `
 let browserstackCredentials = memoize(
-  async () => JSON.parse(await fs.readFile(homeDir + "/" + ".browserstack.json")),
+  () => JSON.parse(fs.readFileSync(homeDir + "/" + ".browserstack.json")),
   { promise: true });
 
 // Returns a browserstack capabilities object. Required
@@ -181,25 +181,25 @@ let gitHash = async function () {
 
 // Runs a batch of tests (multiple browsers) for a given driver.
 // Returns results in a JSON object.
-let runTestsBatch = async function (driverType, capabilityList) {
-  let driverConstructor = { browserstack: browserStackDriver,
-                            firefox: localDriver,
-                            chrome: localDriver,
-                            electron: localDriver,
-                          }[driverType];
-  if (!driverConstructor) {
-    throw new Error(`unknown driver type ${driverType}`);
-  }
+let runTestsBatch = async function (configData) {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
   let git = await gitHash();
-  for (let capabilities of capabilityList) {
+  for (let { browser, driverType, capabilities } of configData) {
+    let driverConstructor = { browserstack: browserStackDriver,
+                              firefox: localDriver,
+                              chrome: localDriver,
+                              electron: localDriver,
+                            }[driverType];
+    if (!driverConstructor) {
+      throw new Error(`unknown driver type ${driverType}`);
+    }
     capabilities.browserName = capabilities.browser;
     console.log(capabilities);
     let driver = await driverConstructor(capabilities);
     let timeStarted = new Date().toISOString();
     let testResults = await runTests(driver);
-    all_tests.push({ capabilities, testResults, timeStarted });
+    all_tests.push({ browser, driverType, capabilities, testResults, timeStarted });
   }
   let timeStopped = new Date().toISOString();
   return { all_tests, git, timeStarted, timeStopped };
@@ -209,53 +209,64 @@ let runTestsBatch = async function (driverType, capabilityList) {
 
 // Takes our results in a JSON object and writes them to disk.
 // The file name looks like `results_yyyymmdd__HHMMss.json`.
-let writeData = async function (data) {
+let writeDataSync = function (data) {
   let dateStub = dateFormat(new Date(), "yyyymmdd_HHMMss", true);
-  if (!(existsSync("results"))) {
-    await fs.mkdir("results");
+  if (!(fs.existsSync("results"))) {
+    fs.mkdirSync("results");
   }
   let filePath = `results/results_${dateStub}.json`;
-  await fs.writeFile(filePath, JSON.stringify(data));
+  fs.writeFileSync(filePath, JSON.stringify(data));
   console.log(`Wrote results to "${filePath}".`);
 };
 
-// ## Main program
-
 // Reads the command line, sets up requested selenium driver(s),
 // runs our browser privacy tests, and writes the result to disk.
-let main = async function () {
+let setup_tests = async function () {
   let driverType = process.argv[2];
-  if (driverType === "chromium") {
-    driverType = "chrome";
-  }
-  if (driverType === "brave") {
-    driverType = "electron";
-  }
-  if (driverType === "cliqz") {
-    driverType = "firefox";
-  }
-  let browserPath = process.argv[3];
-  let capabilityList;
-  if (driverType === "browserstack") {
-    capabilityList = selectRecentBrowserstackBrowsers(
-      await fetchBrowserstackCapabilities());
-  } else if (driverType === "firefox") {
-    capabilityList = [{"browser": "firefox"}];
-    if (browserPath) {
-      capabilityList[0]["moz:firefoxOptions"] = {binary: browserPath};
-    }
-  } else if (driverType === "chrome") {
-    capabilityList = [{"browser": "chrome"}];
-  } else if (driverType === "electron") {
-    // Doesn't work at the moment.
-    capabilityList = [{browser: "chrome",
-                       chromeOptions: { binary: browserPath,
-                                        args: ['no-sandbox'] },
-                       server: 'http://localhost:9515'}];
-  } else {
-    throw new Error(`Unknown driver type '${driverType}'.`);
-  }
-  await writeData(await runTestsBatch(driverType, capabilityList));
 };
+
+let expandConfig = async (configData) => {
+  let results = [];
+  let driverType;
+  let capabilityList;
+  for (let { browser, service, path } of configData) {
+    if (browser === "chromium" || browser === "chrome") {
+      driverType = "chrome";
+      capabilityList = [{"browser": "chrome"}];
+    } else if (browser === "brave") {
+      driverType = "electron";
+      // Doesn't work.
+      capabilityList = [{browser: "chrome",
+                         chromeOptions: { binary: path,
+                                          args: ['no-sandbox'] },
+                         server: 'http://localhost:9515'}];
+    } else if (browser === "cliqz" ||
+               browser === "firefox" ||
+               browser === "tor browser") {
+      driverType = "firefox";
+      capabilityList = [{"browser": "firefox"}];
+      if (path) {
+        capabilityList[0]["moz:firefoxOptions"] = {binary: path};
+      }
+    } else if (service === "browserstack") {
+      driverType = "browserstack";
+      capabilityList = selectRecentBrowserstackBrowsers(
+        await fetchBrowserstackCapabilities());
+    } else {
+      throw new Error(`Unknown browser or service '${browser || service}'.`);
+    }
+    for (let capabilities of capabilityList) {
+      results.push({ browser, driverType, service, path, capabilities });
+    }
+  }
+  return results;
+}
+
+let main = async () => {
+  let configFile = process.argv[2];
+  let configData = JSON.parse(fs.readFileSync(configFile));
+  let expandedConfigData = await expandConfig(configData);
+  writeDataSync(await runTestsBatch(expandedConfigData));
+}
 
 main();
