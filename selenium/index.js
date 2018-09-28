@@ -10,7 +10,8 @@ const memoize = require('memoizee');
 const request = require('request-promise-native');
 const dateFormat = require('dateformat');
 const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+const { spawn, exec } = require('child_process');
+const execAsync = util.promisify(exec);
 require('geckodriver');
 require('chromedriver');
 
@@ -132,18 +133,18 @@ let runSupercookieTests = async function (driver) {
   let secret = Math.random().toString().slice(2);
   let writeResults = await loadAndGetResults(
     driver, `https://arthuredelstein.net/browser-privacy/tests/supercookies.html?write=true&secret=${secret}`, 10000);
-  console.log("writeResults:", writeResults);
+//  console.log("writeResults:", writeResults);
   let readParamsString = encodeURIComponent(JSON.stringify(writeResults));
   let readResultsSameFirstParty = await loadAndGetResults(
     driver, `https://arthuredelstein.net/browser-privacy/tests/supercookies.html?read=true&readParams=${readParamsString}`, 10000);
-  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
+//  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
   let readResultsDifferentFirstParty = await loadAndGetResults(
     driver, `https://arthuredelstein.github.io/browser-privacy/tests/supercookies.html?read=true&readParams=${readParamsString}`, 10000);
   for (let test in readResultsDifferentFirstParty) {
     let passed = (readResultsDifferentFirstParty[test].result !== secret);
     readResultsDifferentFirstParty[test].passed = passed;
   }
-  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
+//  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
   return readResultsDifferentFirstParty;
 };
 
@@ -171,7 +172,7 @@ let runTests = async function (driver) {
 // Reads the current git commit hash for this program in a string. Used
 // when reporting results, to make them easier to reproduce.
 let gitHash = async function () {
-  const { stdout, stderr } = await exec('git rev-parse HEAD');
+  const { stdout, stderr } = await execAsync('git rev-parse HEAD');
   if (stderr) {
     throw new Error(stderr);
   } else {
@@ -264,9 +265,21 @@ let expandConfig = async (configData) => {
   return results;
 }
 
+let sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+let prepare = async (configData) => {
+  for (let { prestart } of configData) {
+    if (prestart) {
+      spawn(prestart.command, { cwd : prestart.dir });
+      await sleep(prestart.waitSeconds * 1000);
+    }
+  }
+}
+
 let main = async () => {
   let configFile = process.argv[2];
   let configData = JSON.parse(fs.readFileSync(configFile));
+  await prepare(configData);
   let expandedConfigData = await expandConfig(configData);
   writeDataSync(await runTestsBatch(expandedConfigData));
 }
