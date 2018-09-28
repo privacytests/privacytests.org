@@ -52,7 +52,7 @@ table.comparison-table tr th {
   font-size: 12px;
   padding: 15px 0px 2px 0px;
 }
-table.comparison-table tr:nth-child(2n) td {
+table.comparison-table tr:nth-child(2n+1) td {
   background-color: #eee;
 }
 table.comparison-table tr td {
