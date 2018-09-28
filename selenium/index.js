@@ -229,34 +229,36 @@ let expandConfig = async (configData) => {
   let results = [];
   let driverType;
   let capabilityList;
-  for (let { browser, service, path } of configData) {
-    if (browser === "chromium" || browser === "chrome") {
-      driverType = "chrome";
-      capabilityList = [{"browser": "chrome"}];
-    } else if (browser === "brave") {
-      driverType = "electron";
-      // Doesn't work.
-      capabilityList = [{browser: "chrome",
-                         chromeOptions: { binary: path,
-                                          args: ['no-sandbox'] },
-                         server: 'http://localhost:9515'}];
-    } else if (browser === "cliqz" ||
-               browser === "firefox" ||
-               browser === "tor browser") {
-      driverType = "firefox";
-      capabilityList = [{"browser": "firefox"}];
-      if (path) {
-        capabilityList[0]["moz:firefoxOptions"] = {binary: path};
+  for (let { browser, service, path, disable } of configData) {
+    if (!disable) {
+      if (browser === "chromium" || browser === "chrome") {
+        driverType = "chrome";
+        capabilityList = [{"browser": "chrome"}];
+      } else if (browser === "brave") {
+        driverType = "electron";
+        // Doesn't work.
+        capabilityList = [{browser: "chrome",
+                           chromeOptions: { binary: path,
+                                            args: ['no-sandbox'] },
+                           server: 'http://localhost:9515'}];
+      } else if (browser === "cliqz" ||
+                 browser === "firefox" ||
+                 browser === "tor browser") {
+        driverType = "firefox";
+        capabilityList = [{"browser": "firefox"}];
+        if (path) {
+          capabilityList[0]["moz:firefoxOptions"] = {binary: path};
+        }
+      } else if (service === "browserstack") {
+        driverType = "browserstack";
+        capabilityList = selectRecentBrowserstackBrowsers(
+          await fetchBrowserstackCapabilities());
+      } else {
+        throw new Error(`Unknown browser or service '${browser || service}'.`);
       }
-    } else if (service === "browserstack") {
-      driverType = "browserstack";
-      capabilityList = selectRecentBrowserstackBrowsers(
-        await fetchBrowserstackCapabilities());
-    } else {
-      throw new Error(`Unknown browser or service '${browser || service}'.`);
-    }
-    for (let capabilities of capabilityList) {
-      results.push({ browser, driverType, service, path, capabilities });
+      for (let capabilities of capabilityList) {
+        results.push({ browser, driverType, service, path, capabilities });
+      }
     }
   }
   return results;
