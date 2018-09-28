@@ -83,10 +83,14 @@ table.comparison-table tr :first-child {
 }
 `;
 
-let capabilitiesToDescription = ({ os, os_version, browser, browser_version, device }) =>
-  browser_version ?
-    `${browser} ${browser_version},<br>${os} ${os_version}` :
-    (os ? `${os} ${os_version},<br>${device}` : `${browser}`);
+let resultsToDescription = ({browser,
+                             capabilities: { os, os_version, browser: browser2,
+                                             browser_version, device }}) => {
+  let browserFinal = browser || browser2;
+    return browser_version ?
+      `${browser} ${browser_version},<br>${os} ${os_version}` :
+      (os ? `${os} ${os_version},<br>${device}` : `${browser}`);
+};
 
 let bodyItem = ({passed, tooltip}) =>
 `<div class='${passed ? "good" : "bad"}'
@@ -148,9 +152,7 @@ let resultsToTable = (results, title) => {
       .filter(m => m["testResults"])
       .filter(m => m["testResults"]["fingerprinting"]);
   console.log(filteredResults[0]);
-  let headers = filteredResults
-      .map(m => m["capabilities"])
-      .map(capabilitiesToDescription);
+  let headers = filteredResults.map(resultsToDescription);
   headers.unshift(`<h1 class="title">${title}</h1>`);
   let body = [];
   body.push([{subheading:"Tor tests"}]);
