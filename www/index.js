@@ -88,8 +88,8 @@ let resultsToDescription = ({browser,
                                              browser_version, device }}) => {
   let browserFinal = browser || browser2;
     return browser_version ?
-      `${browser} ${browser_version},<br>${os} ${os_version}` :
-      (os ? `${os} ${os_version},<br>${device}` : `${browser}`);
+      `${browserFinal} ${browser_version},<br>${os} ${os_version}` :
+      (os ? `${os} ${os_version},<br>${device}` : `${browserFinal}`);
 };
 
 let bodyItem = ({passed, tooltip}) =>
