@@ -195,12 +195,12 @@ let main = async () => {
   let results = await readJSONFile(resultsFile);
   console.log(results.all_tests[0]);
 //  console.log(JSON.stringify(results));
-  await fs.writeFile("./out/index.html", htmlPage({
+  await fs.writeFile("./out/tests.html", htmlPage({
     title: "Browser Privacy Project",
     content: content(results, path.basename(resultsFile)),
     style: pageStyle
   }));
-  console.log(`Wrote out ${fileUrl("./out/index.html")}`);
+  console.log(`Wrote out ${fileUrl("./out/tests.html")}`);
 };
 
 main();
