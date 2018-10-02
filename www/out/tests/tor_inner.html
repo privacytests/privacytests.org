@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>test for tor connectivity</title>
+    <meta charset="utf8">
+    <link rel="stylesheet" href="test.css">
+  </head>
+  <body>
+    <script>
+     (async () => {
+       let response = await fetch("https://wtfismyip.com/json");
+       let json = await response.json();
+       let json2 = {};
+       for (let k of Object.keys(json)) {
+         let k2 = k.replace("YourFucking", "");
+         json2[k2] = json[k];
+       }
+       json2["passed"] = json2["TorExit"] !== "false";
+       json3 = { TorNetworkUse: json2 };
+       console.log(json3);
+       parent.postMessage(results, "*");
+     })();
+    </script>
+  </body>
+</html>
