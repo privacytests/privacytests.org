@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Testing super-cookies</title>
+    <meta charset="utf8"/>
+  </head>
+  <body>
+    <script>
+     addEventListener("message", e => {
+       console.log(e.data);
+       document.body.setAttribute("data-test-results", JSON.stringify(e.data));
+     }, false);
+     let iframe = document.createElement("iframe");
+     document.body.appendChild(iframe);
+     iframe.src = `https://arthuredelstein.net/browser-privacy/tests/supercookies_inner.html${window.location.search}`;
+    </script>
+  </body>
+</html>
