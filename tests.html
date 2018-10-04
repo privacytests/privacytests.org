@@ -8,17 +8,28 @@
 .title {
   font-weight: bold;
   margin: 0px -1px;
+  text-align: start;
+  padding-left: 8px;
 }
 table.comparison-table {
   border-collapse:collapse;
 }
-table.comparison-table tr th {
+table.comparison-table tr:first-child th:first-child {
+  z-index: 1;
+}
+table.comparison-table tr:first-child th {
+  background-color: white;
   text-align: center;
+  top: 0px;
   font-size: 12px;
   padding: 15px 0px 2px 0px;
+  position: sticky;
 }
 table.comparison-table tr:nth-child(2n+1) td {
   background-color: #eee;
+}
+table.comparison-table tr:nth-child(2n) td {
+  background-color: white;
 }
 table.comparison-table tr td {
   min-width: 100px;
@@ -42,9 +53,11 @@ table.comparison-table tr td div.bad {
   background-image: url('x-mark.png');
   background-size: 10px;
 }
-table.comparison-table tr :first-child {
+table.comparison-table tr td:first-child,th:first-child {
   text-align: start;
-/*  padding-left: 3px;*/
+  left: 0px;
+  padding-left: 8px;
+  position: sticky;
 }
 </style>
   </head>
