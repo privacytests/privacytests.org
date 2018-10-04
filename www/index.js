@@ -59,6 +59,7 @@ table.comparison-table tr:first-child th {
   font-size: 12px;
   padding: 15px 0px 2px 0px;
   position: sticky;
+  position: -webkit-sticky;
 }
 table.comparison-table tr:nth-child(2n+1) td {
   background-color: #eee;
@@ -93,6 +94,7 @@ table.comparison-table tr td:first-child,th:first-child {
   left: 0px;
   padding-left: 8px;
   position: sticky;
+  position: -webkit-sticky;
 }
 `;
 
