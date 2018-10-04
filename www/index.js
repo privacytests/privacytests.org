@@ -43,7 +43,7 @@ const pageStyle = `
 .title {
   font-weight: bold;
   margin: 0px -1px;
-  text-align: start;
+  text-align: left;;
   padding-left: 8px;
 }
 table.comparison-table {
@@ -90,7 +90,7 @@ table.comparison-table tr td div.bad {
   background-size: 10px;
 }
 table.comparison-table tr td:first-child,th:first-child {
-  text-align: start;
+  text-align: left;
   left: 0px;
   padding-left: 8px;
   position: sticky;
