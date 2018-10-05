@@ -4,12 +4,10 @@
 We want to test for the following fingerprinting vulnerabilities:
 * AudioContext fingerprinting
 * Canvas fingerprinting
-* window.innerWidth
-* window.innerHeight
-* navigator.plugins
-* navigator.mimeTypes
-* screen.width
-* screen.height
+* window.innerWidth, window.innerHeight
+* navigator.plugins, navigator.mimeTypes
+* screen.width, screen.height
+* window.screenX, window.screenY
 * navigator.userAgent
 * screen width and height media queries
 * screen.availHeight
@@ -23,11 +21,33 @@ We want to test for the following fingerprinting vulnerabilities:
 * Intl.DateTimeFormat (locale)
 * performance.now()
 * <input type="datetime"> (locale)
-* camera/microphone IDs
+* media devices (camera/microphone IDs)
+* webgl
+* keyboard layout
+* locale
+* accept-language
+* system media queries
+* browser version
+* timezone to UTC
+* gamepad API (disabled)
+* device sensors
+* webspeech api (disabled)
+* webgl debug renderer info extension
+* navigator.hardwareConcurrency
+* site-specific zoom
+* mediaerror.message
+* network information api (connection type) + ontypechange event
+* media statstics api
+* gelocation (disabloed)
+* screen.oritientation
+* prefers-reduced-motion
+* PointerEvents
 
 ## Supercookies
 * document.cookie
 * cookie header
+* localStorage, sessionStorage
+* broadcast channels
 * etag header
 * HSTS cache
 * HPKP cache
@@ -42,12 +62,18 @@ We want to test for the following fingerprinting vulnerabilities:
 * SharedWorker
 * ServiceWorker
 * indexeddb
-* TLS session tickets
-* TLS session IDs
-* permissions
+* TLS session tickets, session IDs
+* site permissions
 * blob URL
+* mediaSource URI
 * window.name
 * referer
+* favicon caching
+* http auth
+* isolate page info media previews to content first party (cache, network)
+* favicons in tabs dropdown list (cache, network)
+* CSS history
+* caching through canvas? (see https://samy.pl/evercookie/)
 
 ## Tor/Proxy bypass
 * Uses Tor
@@ -62,4 +88,6 @@ We want to test for the following fingerprinting vulnerabilities:
 * page info
 * save as
 * web notifications
-
+* link rel=preconnect
+* network preditor, speculative connect
+* bare IP Addresses
