@@ -4,15 +4,6 @@ To set up:
 
 `npm install`
 
-To run tests locally, point to the firefox binary:
+To run tests, point to a browserprivacy.config file:
 
-`node index firefox /home/arthur/firefox/firefox`
-
-or, ask for chrome:
-
-`node index chrome`
-
-To run tests on browserstack:
-
-`node index browserstack`
-
+`node index browserprivacy.config`
