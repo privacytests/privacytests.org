@@ -39,7 +39,7 @@ We want to test for the following fingerprinting vulnerabilities:
 * network information api (connection type) + ontypechange event
 * media statstics api
 * gelocation (disabloed)
-* screen.oritientation
+* screen.orientation
 * prefers-reduced-motion
 * PointerEvents
 
