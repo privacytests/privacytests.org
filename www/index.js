@@ -141,7 +141,11 @@ passed: ${ passed }
 };
 
 let resultsSection = ({results, category, tooltipFunction}) => {
+  console.log(results);
   let bestResults = results.filter(m => m["testResults"][category]);
+  if (bestResults.length === 0) {
+    return [];
+  }
   let rowNames = Object.keys(bestResults[0]["testResults"][category])
       .sort();
   let resultMaps = bestResults
