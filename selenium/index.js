@@ -17,7 +17,7 @@ require('chromedriver');
 
 // ## Selenium setup
 
-// Read a file called .browsterstack.json. The file should contain a JSON
+// Read a file called .browserstack.json. The file should contain a JSON
 // object that looks like:
 // `
 // {
@@ -76,7 +76,7 @@ const selectRecentBrowserstackBrowsers = (allCapabilities) => {
 
 // Produces a selenium driver to run tests on browserstack.com,
 // with the given capabilities object.
-let browserStackDriver = async (capabilities) => {
+let browserstackDriver = async (capabilities) => {
   let { user, key } = await browserstackCredentials();
   capabilitiesWithCred = Object.assign(
     {},
@@ -159,7 +159,7 @@ let runTests = async function (driver) {
       driver, 'https://arthuredelstein.github.io/browser-privacy/tests/fingerprinting.html', 10000);
     let tor = await loadAndGetResults(
       driver, 'https://arthuredelstein.github.io/browser-privacy/tests/tor.html', 10000);
-    let supercookies = await runSupercookieTests(driver);
+    let supercookies = null; // await runSupercookieTests(driver);
     return { fingerprinting, tor, supercookies };
   } catch (e) {
     console.log(e);
@@ -185,7 +185,7 @@ let runTestsBatch = async function (configData) {
   let timeStarted = new Date().toISOString();
   let git = await gitHash();
   for (let { browser, driverType, capabilities } of configData) {
-    let driverConstructor = { browserstack: browserStackDriver,
+    let driverConstructor = { browserstack: browserstackDriver,
                               firefox: localDriver,
                               chrome: localDriver,
                               electron: localDriver,
