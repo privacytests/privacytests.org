@@ -15,7 +15,7 @@
          let k2 = k.replace("YourFucking", "");
          json2[k2] = json[k];
        }
-       json2["passed"] = json2["TorExit"] !== "false";
+       json2["passed"] = json2["TorExit"];
        json3 = { TorNetworkUse: json2 };
        console.log(json3);
        document.body.setAttribute("data-test-results", JSON.stringify(json3));
