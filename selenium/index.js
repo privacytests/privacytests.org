@@ -7,7 +7,7 @@ const fs = require('fs');
 const {Builder, By, Key, until} = require('selenium-webdriver');
 const firefox = require('selenium-webdriver/firefox');
 const memoize = require('memoizee');
-const request = require('request-promise-native');
+const fetch = require('node-fetch');
 const dateFormat = require('dateformat');
 const util = require('util');
 const { spawn, exec } = require('child_process');
@@ -21,8 +21,8 @@ require('chromedriver');
 // object that looks like:
 // `
 // {
-//   "browserstack.user": "my_username",
-//   "browserstack.key": "my_api_key"
+//   "user": "my_username",
+//   "key": "my_api_key"
 // }
 // `
 let browserstackCredentials = memoize(
@@ -31,22 +31,17 @@ let browserstackCredentials = memoize(
 
 // Returns a browserstack capabilities object. Required
 // for producing a browserstack driver.
-let fetchBrowserstackCapabilities = async function () {
-  let credentials = await browserstackCredentials();
-  return request("https://api.browserstack.com/automate/browsers.json", {
-    'json': true,
-    'auth': {
-      'user': credentials["browserstack.user"],
-      'pass': credentials["browserstack.key"],
-      'sendImmediately': true
-    }
-  });
+let fetchBrowserstackCapabilities = async () => {
+  let { user, key } = await browserstackCredentials();
+  let results = await fetch(`https://${user}:${key}@api.browserstack.com/automate/browsers.json`);
+  console.log(results);
+  return results.json();
 };
 
 // Takes a long capability list from browserstack.com, and
 // returns a selection of these. We choose the most recent browsers
 // and OS versions.
-const selectRecentBrowserstackBrowsers = function (allCapabilities) {
+const selectRecentBrowserstackBrowsers = (allCapabilities) => {
   let OSs = new Set();
   let browsers = new Set();
   // Get names of all operating systems and browsers
@@ -81,9 +76,13 @@ const selectRecentBrowserstackBrowsers = function (allCapabilities) {
 
 // Produces a selenium driver to run tests on browserstack.com,
 // with the given capabilities object.
-let browserStackDriver = async function (capabilities) {
-  let credentials = await browserstackCredentials();
-  capabilitiesWithCred = Object.assign({}, capabilities, credentials);
+let browserStackDriver = async (capabilities) => {
+  let { user, key } = await browserstackCredentials();
+  capabilitiesWithCred = Object.assign(
+    {},
+    capabilities,
+    { "browserstack.user": user,
+      "browserstack.key": key });
   let driver = new Builder()
       .usingServer('http://hub-cloud.browserstack.com/wd/hub')
       .withCapabilities(capabilitiesWithCred)
@@ -93,7 +92,7 @@ let browserStackDriver = async function (capabilities) {
 
 // Produces a selenium driver to run tests on a local browser,
 // using the given capabilities object.
-let localDriver = async function (capabilities) {
+let localDriver = async (capabilities) => {
 //  let options = new firefox.Options()
 //      .setPreference('privacy.firstparty.isolate', true);
   let builder = new Builder();
@@ -129,11 +128,11 @@ let loadAndGetResults = async (driver, url, timeout) => {
 
 // Causes driver to connect to our supercookie tests. Returns
 // a map of test names to test results.
-let runSupercookieTests = async function (driver) {
+let runSupercookieTests = async (driver) => {
   let secret = Math.random().toString().slice(2);
   let writeResults = await loadAndGetResults(
     driver, `https://arthuredelstein.net/browser-privacy/tests/supercookies.html?write=true&secret=${secret}`, 10000);
-//  console.log("writeResults:", writeResults);
+  console.log("writeResults:", writeResults);
   let readParamsString = encodeURIComponent(JSON.stringify(writeResults));
   let readResultsSameFirstParty = await loadAndGetResults(
     driver, `https://arthuredelstein.net/browser-privacy/tests/supercookies.html?read=true&readParams=${readParamsString}`, 10000);
@@ -161,7 +160,6 @@ let runTests = async function (driver) {
     let tor = await loadAndGetResults(
       driver, 'https://arthuredelstein.github.io/browser-privacy/tests/tor.html', 10000);
     let supercookies = await runSupercookieTests(driver);
-    await driver.quit();
     return { fingerprinting, tor, supercookies };
   } catch (e) {
     console.log(e);
@@ -200,6 +198,7 @@ let runTestsBatch = async function (configData) {
     let driver = await driverConstructor(capabilities);
     let timeStarted = new Date().toISOString();
     let testResults = await runTests(driver);
+    await driver.quit();
     all_tests.push({ browser, driverType, capabilities, testResults, timeStarted });
   }
   let timeStopped = new Date().toISOString();
