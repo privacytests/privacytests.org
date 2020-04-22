@@ -1,3 +1,5 @@
+console.log("hi");
+
 const run_in_sharedworker = function (aFunction) {
   return new Promise(resolve => {
     const worker = new SharedWorker(
@@ -49,26 +51,21 @@ let tests = {
 };
 
 let runWriteTests = (secret) => {
-  let keys = {};
-  for (let test of Object.keys(tests)) {
-    console.log(test, tests[test].write.toString());
-    let key = tests[test].write(secret);
-    if (key !== undefined) {
-      keys[test] = key;
-    }
+  console.log(`runWriteTests(${secret})`);
+  for (let key of Object.keys(tests)) {
+    console.log(key, tests[key].write.toString());
+    tests[key].write(secret);
   }
-  return keys;
 };
 
-let runReadTests = async (readParams) => {
+let runReadTests = async () => {
   let results = {};
   for (let test of Object.keys(tests)) {
-    let param = readParams[test];
     let result;
     try {
-      result = await tests[test].read(param);
+      result = await tests[test].read();
     } catch (e) {
-      result = e.message;
+      result = "Error: " + e.message;
     }
     results[test] = {
       write: tests[test].write.toString(),
@@ -81,16 +78,13 @@ let runReadTests = async (readParams) => {
 
 (async () => {
   let searchParams = new URL(document.URL).searchParams;
+  console.log(`searchParams = ${searchParams}`);
   let secret = searchParams.get("secret");
-  let write = searchParams.get("write");
-  let read = searchParams.get("read");
-  let readParams = JSON.parse(searchParams.get("readParams"));
-  let results = write ? runWriteTests(secret) : await runReadTests(readParams);
-  console.log(results);
-  console.log(window.location);
-  console.log(parent.location);
+  let mode = searchParams.get("mode");
+  let results = mode === "write" ? runWriteTests(secret) : await runReadTests();
+  console.log("results", results);
   if (window.location !== parent.location) {
-    console.log("results", results);
     parent.postMessage(results, "*");
   }
 })();
+console.log("hello from supercookies_inner.js");
