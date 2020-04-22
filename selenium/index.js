@@ -230,7 +230,7 @@ let expandConfig = async (configData) => {
   let results = [];
   let driverType;
   let capabilityList;
-  for (let { browser, service, path, disable } of configData) {
+  for (let { browser, service, path, disable, prefs } of configData) {
     if (!disable) {
       if (browser === "chromium" || browser === "chrome") {
         driverType = "chrome";
@@ -246,9 +246,13 @@ let expandConfig = async (configData) => {
                  browser === "firefox" ||
                  browser === "tor browser") {
         driverType = "firefox";
-        capabilityList = [{"browser": "firefox"}];
+        capabilityList = [{"browser": "firefox",
+                           "moz:firefoxOptions": {}}];
         if (path) {
-          capabilityList[0]["moz:firefoxOptions"] = {binary: path};
+          capabilityList[0]["moz:firefoxOptions"]["binary"] = path;
+        }
+        if (prefs) {
+          capabilityList[0]["moz:firefoxOptions"]["prefs"] = prefs;
         }
       } else if (service === "browserstack") {
         driverType = "browserstack";
