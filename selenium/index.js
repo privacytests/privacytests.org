@@ -185,7 +185,7 @@ let runTestsBatch = async function (configData) {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
   let git = await gitHash();
-  for (let { browser, driverType, capabilities } of configData) {
+  for (let { browser, driverType, capabilities, prefs } of configData) {
     let driverConstructor = { browserstack: browserstackDriver,
                               firefox: localDriver,
                               chrome: localDriver,
@@ -200,7 +200,7 @@ let runTestsBatch = async function (configData) {
     let timeStarted = new Date().toISOString();
     let testResults = await runTests(driver);
     await driver.quit();
-    all_tests.push({ browser, driverType, capabilities, testResults, timeStarted });
+    all_tests.push({ browser, driverType, capabilities, testResults, timeStarted, prefs });
   }
   let timeStopped = new Date().toISOString();
   return { all_tests, git, timeStarted, timeStopped };
@@ -262,7 +262,7 @@ let expandConfig = async (configData) => {
         throw new Error(`Unknown browser or service '${browser || service}'.`);
       }
       for (let capabilities of capabilityList) {
-        results.push({ browser, driverType, service, path, capabilities });
+        results.push({ browser, driverType, service, path, capabilities, prefs });
       }
     }
   }

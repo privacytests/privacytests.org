@@ -98,11 +98,18 @@ table.comparison-table tr td:first-child,th:first-child {
 
 let resultsToDescription = ({browser,
                              capabilities: { os, os_version, browser: browser2,
-                                             browser_version, device }}) => {
-  let browserFinal = browser || browser2;
-    return browser_version ?
+                                             browser_version, device },
+                             prefs}) => {
+                               let browserFinal = browser || browser2;
+                               let finalText = browser_version ?
       `${browserFinal} ${browser_version},<br>${os} ${os_version}` :
       (os ? `${os} ${os_version},<br>${device}` : `${browserFinal}`);
+                               if (prefs) {
+                                 for (let key of Object.keys(prefs).sort()) { 
+                                   finalText += `<br>${key}: ${prefs[key]}`
+                                 }
+                               }
+                               return finalText;
 };
 
 let bodyItem = ({passed, tooltip}) =>
