@@ -131,14 +131,13 @@ let loadAndGetResults = async (driver, url, timeout) => {
 let runSupercookieTests = async (driver) => {
   let secret = Math.random().toString().slice(2);
   let writeResults = await loadAndGetResults(
-    driver, `https://arthuredelstein.net/browser-privacy/tests/supercookies.html?write=true&secret=${secret}`, 10000);
+    driver, `https://arthuredelstein.net/browser-privacy/tests/supercookies.html?mode=write&secret=${secret}`, 10000);
   console.log("writeResults:", writeResults);
-  let readParamsString = encodeURIComponent(JSON.stringify(writeResults));
   let readResultsSameFirstParty = await loadAndGetResults(
-    driver, `https://arthuredelstein.net/browser-privacy/tests/supercookies.html?read=true&readParams=${readParamsString}`, 10000);
+    driver, `https://arthuredelstein.net/browser-privacy/tests/supercookies.html?mode=read&readParams=${readParamsString}`, 10000);
 //  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
   let readResultsDifferentFirstParty = await loadAndGetResults(
-    driver, `https://arthuredelstein.github.io/browser-privacy/tests/supercookies.html?read=true&readParams=${readParamsString}`, 10000);
+    driver, `https://arthuredelstein.github.io/browser-privacy/tests/supercookies.html?mode=read&readParams=${readParamsString}`, 10000);
   for (let test in readResultsDifferentFirstParty) {
     let passed = (readResultsDifferentFirstParty[test].result !== secret);
     readResultsDifferentFirstParty[test].passed = passed;
@@ -159,7 +158,7 @@ let runTests = async function (driver) {
       driver, 'https://arthuredelstein.github.io/browser-privacy/tests/fingerprinting.html', 10000);
     let tor = await loadAndGetResults(
       driver, 'https://arthuredelstein.github.io/browser-privacy/tests/tor.html', 10000);
-    let supercookies = null; // await runSupercookieTests(driver);
+    let supercookies = await runSupercookieTests(driver);
     return { fingerprinting, tor, supercookies };
   } catch (e) {
     console.log(e);

@@ -12,7 +12,11 @@
      }, false);
      let iframe = document.createElement("iframe");
      document.body.appendChild(iframe);
-     iframe.src = `https://arthuredelstein.net/browser-privacy/tests/supercookies_inner.html${window.location.search}`;
+     iframe_root = (location.hostname === "localhost" ||
+                    location.hostname === "127.0.0.1" ||
+                    location.hostname === "")
+                 ? "" : "https://arthuredelstein.net/browser-privacy";
+     iframe.src = `${iframe_root}/tests/supercookies_inner.html${window.location.search}`;
     </script>
   </body>
 </html>
