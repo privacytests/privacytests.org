@@ -118,26 +118,28 @@ let waitForAttribute = (driver, element, attrName, timeout) =>
 // "data-test-results" to have a value, and resolve that value
 // in a promise. Rejects if timeout elapses first.
 let loadAndGetResults = async (driver, url, timeout) => {
-    console.log(`loading ${url}`);
-    await driver.get(url);
-    let body = await driver.findElement(By.tagName('body'));
-    let testResultsString =
-        await waitForAttribute(driver, body, "data-test-results", timeout);
-    return JSON.parse(testResultsString);
+  console.log(`loading ${url}`);
+  await driver.get(url);
+  let body = await driver.findElement(By.tagName('body'));
+  let testResultsString =
+      await waitForAttribute(driver, body, "data-test-results", timeout);
+  return testResultsString === "undefined" ? undefined : JSON.parse(testResultsString);
 };
 
 // Causes driver to connect to our supercookie tests. Returns
 // a map of test names to test results.
 let runSupercookieTests = async (driver) => {
   let secret = Math.random().toString().slice(2);
+  let iframe_root_same = false ? "http://localhost:8080" : "https://arthuredelstein.net/browser-privacy";
+  let iframe_root_different = false ? "http://localhost:8080" : "https://arthuredelstein.github.io/browser-privacy";
   let writeResults = await loadAndGetResults(
-    driver, `https://arthuredelstein.net/browser-privacy/tests/supercookies.html?mode=write&secret=${secret}`, 10000);
+    driver, `${iframe_root_same}/tests/supercookies.html?mode=write&secret=${secret}`, 10000);
   console.log("writeResults:", writeResults);
   let readResultsSameFirstParty = await loadAndGetResults(
-    driver, `https://arthuredelstein.net/browser-privacy/tests/supercookies.html?mode=read&readParams=${readParamsString}`, 10000);
+    driver, `${iframe_root_same}/tests/supercookies.html?mode=read`, 10000);
 //  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
   let readResultsDifferentFirstParty = await loadAndGetResults(
-    driver, `https://arthuredelstein.github.io/browser-privacy/tests/supercookies.html?mode=read&readParams=${readParamsString}`, 10000);
+    driver, `${iframe_root_different}/tests/supercookies.html?mode=read`, 10000);
   for (let test in readResultsDifferentFirstParty) {
     let passed = (readResultsDifferentFirstParty[test].result !== secret);
     readResultsDifferentFirstParty[test].passed = passed;

@@ -83,7 +83,7 @@ let runReadTests = async () => {
   let mode = searchParams.get("mode");
   let results = mode === "write" ? runWriteTests(secret) : await runReadTests();
   console.log("results", results);
-  if (window.location !== parent.location && mode === "write") {
+  if (window.location !== parent.location) {
     parent.postMessage(results, "*");
   }
 })();
