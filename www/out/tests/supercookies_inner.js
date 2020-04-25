@@ -37,7 +37,7 @@ let tests = {
     read: run_in_sharedworker(() => self.secret),
   },
 */
-/*
+
   "blob": {
     write: (secret) => URL.createObjectURL(new Blob([secret])),
     read: async (url) => {
@@ -47,7 +47,6 @@ let tests = {
       }
     },
   },
-*/
 };
 
 let runWriteTests = (secret) => {
