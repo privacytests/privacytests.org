@@ -1,7 +1,9 @@
+// imports
 const { existsSync, promises : fs, constants : fsConstants } = require('fs');
 const path = require('path');
 const fileUrl = require('file-url');
 
+// The basic structure of the HTML page
 let htmlPage = ({ title, content, style }) => `
 <!DOCTYPE html>
 <html>
@@ -16,6 +18,7 @@ let htmlPage = ({ title, content, style }) => `
 </html>
 `;
 
+// An empty HTML table with styling
 let htmlTable = ({ headers, body, className }) => {
   elements = [];
   elements.push(`<table class="${className}">`);
@@ -39,6 +42,7 @@ let htmlTable = ({ headers, body, className }) => {
   return elements.join("");
 };
 
+// Inline CSS for our page
 const pageStyle = `
 .title {
   font-weight: bold;
@@ -96,6 +100,9 @@ table.comparison-table tr td:first-child,th:first-child {
 }
 `;
 
+// Takes the results for tests on a specific browser,
+// and returns an HTML fragment that will serve as
+// the header for the column showing thoses tests.
 let resultsToDescription = ({
   browser,
   capabilities: { os, os_version, browser: browser2,
@@ -114,11 +121,17 @@ let resultsToDescription = ({
   return finalText;
 };
 
-let bodyItem = ({passed, tooltip}) =>
+// Generates a table cell which indicates whether
+// a test passed, and includes the tooltip with
+// more information.
+let itemBody = ({passed, tooltip}) =>
 `<div class='${passed ? "good" : "bad"}'
 title = '${ tooltip }'> &nbsp;
 </div>`;
 
+// Creates a tooltip with fingerprinting test results
+// including the test expressions, the actual
+// and desired values, and whether the test passed.
 let fingerprintingTooltip = fingerprintingItem => {
   let { expression, spoof_expression, actual_value,
         desired_value, passed, worker } = fingerprintingItem;
@@ -132,6 +145,9 @@ ${ worker ? "[Worker]" : "" }
   `.trim();
 };
 
+// For a tor tests, creates a tooltip that gives detail on
+// the ip address and whether it's a Tor exit and
+// whether the test passed.
 let torTooltip = torItem => {
   let { IPAddress, TorExit, passed } = torItem;
   return `
@@ -166,7 +182,7 @@ let resultsSection = ({results, category, tooltipFunction}) => {
     for (let resultMap of resultMaps) {
       let tooltip = tooltipFunction(resultMap[rowName]);
       let passed = resultMap[rowName].passed;
-      row.push(bodyItem({ passed, tooltip }));
+      row.push(itemBody({ passed, tooltip }));
     }
     section.push(row);
   };
