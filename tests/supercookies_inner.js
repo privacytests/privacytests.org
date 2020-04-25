@@ -49,20 +49,12 @@ let tests = {
   },
 };
 
-let runWriteTests = (secret) => {
-  console.log(`runWriteTests(${secret})`);
-  for (let key of Object.keys(tests)) {
-    console.log(key, tests[key].write.toString());
-    tests[key].write(secret);
-  }
-};
-
-let runReadTests = async () => {
+let runTests = async (mode, param) => {
   let results = {};
   for (let test of Object.keys(tests)) {
     let result;
     try {
-      result = await tests[test].read();
+      result = await tests[test][mode](param);
     } catch (e) {
       result = "Error: " + e.message;
     }
@@ -78,9 +70,9 @@ let runReadTests = async () => {
 (async () => {
   let searchParams = new URL(document.URL).searchParams;
   console.log(`searchParams = ${searchParams}`);
-  let secret = searchParams.get("secret");
+  let param = searchParams.get("param");
   let mode = searchParams.get("mode");
-  let results = mode === "write" ? runWriteTests(secret) : await runReadTests();
+  let results = await runTests(mode, param);
   console.log("results", results);
   if (window.location !== parent.location) {
     parent.postMessage(results, "*");
