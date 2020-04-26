@@ -107,14 +107,13 @@ table.comparison-table tr td:first-child,th:first-child {
 // the header for the column showing thoses tests.
 let resultsToDescription = ({
   browser,
-  capabilities: { os, os_version, browser: browser2,
-                  browser_version, device },
+  capabilities: { os, os_version, browser: browser2, browserName, browserVersion,
+                  browser_version, device, platformVersion, platformName },
   prefs
 }) => {
-  let browserFinal = browser || browser2;
-  let finalText = browser_version ?
-      `${browserFinal} ${browser_version},<br>${os} ${os_version}` :
-      (os ? `${os} ${os_version},<br>${device}` : `${browserFinal}`);
+  let browserFinal = browserName || browser || browser2;
+  let platformFinal = platformName || os;
+  let finalText = `${browserName} ${browserVersion},<br>${platformName} ${platformVersion}`;
   if (prefs) {
     for (let key of Object.keys(prefs).sort()) {
       finalText += `<br>${key}: ${prefs[key]}`
