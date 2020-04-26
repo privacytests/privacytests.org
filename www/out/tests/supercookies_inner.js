@@ -69,8 +69,8 @@ let runTests = async (mode, params) => {
   return results;
 };
 
-let queryParams = (URL) => {
-  let searchParams = new URL(URL).searchParams;
+let queryParams = (urlString) => {
+  let searchParams = new URL(urlString).searchParams;
   return Object.fromEntries(searchParams.entries());
 };
 
