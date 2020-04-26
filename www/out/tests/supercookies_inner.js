@@ -53,6 +53,25 @@ let tests = {
       }
     },
   },
+  "broadcastChannel": {
+    write: (secret) => {
+      let bc = new BroadcastChannel("secrets");
+      bc.onmessage = (event) => {
+        if (event.data === "request") {
+          bc.postMessage(secret);
+        }
+      }
+    },
+    read: () => new Promise((resolve) => {
+      let bc = new BroadcastChannel("secrets");
+      bc.onmessage = (event) => {
+        if (event.data !== "request") {
+          resolve(event.data);
+        }
+      };
+      bc.postMessage("request");
+    })
+  }
 };
 
 let runTests = async (mode, params) => {
