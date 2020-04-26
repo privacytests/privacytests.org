@@ -48,7 +48,7 @@ const pageStyle = `
   font-weight: bold;
   margin: 0px -1px;
   text-align: left;
-  padding-left: 8px;
+  padding-left: 0px;
 }
 table.comparison-table {
   border-collapse:collapse;
@@ -77,7 +77,9 @@ table.comparison-table tr td {
   text-align: center;
 }
 table.comparison-table tr th:first-child {
-  font-size: 16px;
+  font-size: 20px;
+  padding-top: 20px;
+  padding-bottom: 6px;
 }
 table.comparison-table tr td div {
   font-size: 16px;
