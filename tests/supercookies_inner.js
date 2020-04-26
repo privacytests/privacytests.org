@@ -62,7 +62,7 @@ let tests = {
         }
       }
     },
-    read: () => new Promise((resolve) => {
+    read: () => new Promise((resolve, reject) => {
       let bc = new BroadcastChannel("secrets");
       bc.onmessage = (event) => {
         if (event.data !== "request") {
@@ -70,6 +70,7 @@ let tests = {
         }
       };
       bc.postMessage("request");
+      setTimeout(() => reject(null), 3000);
     })
   }
 };
