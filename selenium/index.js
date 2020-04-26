@@ -33,9 +33,9 @@ let browserstackCredentials = memoize(
 // for producing a browserstack driver.
 let fetchBrowserstackCapabilities = async () => {
   let { user, key } = await browserstackCredentials();
-  let results = await fetch(`https://${user}:${key}@api.browserstack.com/automate/browsers.json`);
-  console.log(results);
-  return results.json();
+  let results = (await fetch(`https://${user}:${key}@api.browserstack.com/automate/browsers.json`)).json();
+//  console.log(await results);
+  return results;
 };
 
 // Takes a long capability list from browserstack.com, and
@@ -52,7 +52,9 @@ const selectRecentBrowserstackBrowsers = (allCapabilities) => {
   let selectedCapabilities = [];
   for (let os of OSs) {
     for (let browser of browsers) {
-      let capabilities = allCapabilities.filter(c => c.os === os && c.browser === browser);
+      let capabilities = allCapabilities
+          .filter(c => c.os === os && c.browser === browser)
+          .filter(c => c.browser !== "opera" && c.browser !== "ie");
       // Find recent versions of operating system
       let os_versions_set = new Set();
       for (let { os_version } of capabilities) {
@@ -60,13 +62,13 @@ const selectRecentBrowserstackBrowsers = (allCapabilities) => {
       }
       let os_versions = [... os_versions_set];
       let mobile = os === "android" || os === "ios";
-      // Use two most recent os versions.
-      let recent_os_versions = (mobile ? os_versions.sort() : os_versions).slice(-2);
+      // Use most recent os versions.
+      let recent_os_versions = (mobile ? os_versions.sort() : os_versions).slice(-1);
       if (recent_os_versions.length > 0) {
         for (let os_version of recent_os_versions) {
           let capabilities2 = capabilities.filter(c => c.os_version === os_version);
-          // Use three most recent browser versions or three representative devices
-          selectedCapabilities = selectedCapabilities.concat(capabilities2.slice(-3));
+          // Use two most recent browser versions or two representative devices
+          selectedCapabilities = selectedCapabilities.concat(capabilities2.slice(-2));
         }
       }
     }
@@ -148,12 +150,12 @@ let runSupercookieTests = async (driver) => {
   let iframe_root_different = false ? "http://localhost:8080" : "https://arthuredelstein.github.io/browser-privacy";
   let writeResults = await loadAndGetResults(
     driver, `${iframe_root_same}/tests/supercookies.html?mode=write&default=${secret}`, 10000);
-  console.log("writeResults:", writeResults, typeof(writeResults));
+//  console.log("writeResults:", writeResults, typeof(writeResults));
   let readParams = "";
   for (let [test, data] of Object.entries(writeResults)) {
     readParams += `&${test}=${encodeURIComponent(data["result"])}`;
   }
-  console.log(readParams);
+//  console.log(readParams);
   let readResultsSameFirstParty = await loadAndGetResults(
     driver, `${iframe_root_same}/tests/supercookies.html?mode=read${readParams}`, 10000);
 //  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
@@ -163,7 +165,7 @@ let runSupercookieTests = async (driver) => {
     let passed = (readResultsDifferentFirstParty[test].result !== secret);
     readResultsDifferentFirstParty[test].passed = passed;
   }
-  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
+//  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
   return readResultsDifferentFirstParty;
 };
 
@@ -205,21 +207,26 @@ let runTestsBatch = async function (configData) {
   let timeStarted = new Date().toISOString();
   let git = await gitHash();
   for (let { browser, driverType, capabilities, prefs } of configData) {
-    let driverConstructor = { browserstack: browserstackDriver,
-                              firefox: localDriver,
-                              chrome: localDriver,
-                              electron: localDriver,
-                            }[driverType];
-    if (!driverConstructor) {
-      throw new Error(`unknown driver type ${driverType}`);
+    try {
+      let driverConstructor = { browserstack: browserstackDriver,
+                                firefox: localDriver,
+                                chrome: localDriver,
+                                electron: localDriver,
+                                opera: localDriver,
+                              }[driverType];
+      if (!driverConstructor) {
+        throw new Error(`unknown driver type ${driverType}`);
+      }
+      capabilities.browserName = capabilities.browser;
+      console.log(capabilities);
+      let driver = await driverConstructor(capabilities);
+      let timeStarted = new Date().toISOString();
+      let testResults = await runTests(driver);
+      await driver.quit();
+      all_tests.push({ browser, driverType, capabilities, testResults, timeStarted, prefs });
+    } catch (e) {
+      console.log(e, browser, driverType, capabilities, prefs);
     }
-    capabilities.browserName = capabilities.browser;
-    console.log(capabilities);
-    let driver = await driverConstructor(capabilities);
-    let timeStarted = new Date().toISOString();
-    let testResults = await runTests(driver);
-    await driver.quit();
-    all_tests.push({ browser, driverType, capabilities, testResults, timeStarted, prefs });
   }
   let timeStopped = new Date().toISOString();
   return { all_tests, git, timeStarted, timeStopped };
@@ -252,6 +259,9 @@ let expandConfig = async (configData) => {
   for (let { browser, service, path, disable, prefs } of configData) {
     if (!disable) {
       if (browser === "chromium" || browser === "chrome") {
+        driverType = "chrome";
+        capabilityList = [{"browser": "chrome"}];
+      } else if (browser === "opera") {
         driverType = "chrome";
         capabilityList = [{"browser": "chrome"}];
       } else if (browser === "brave") {
