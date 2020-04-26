@@ -29,10 +29,6 @@ let tests = {
     write: (secret) => localStorage.setItem("secret", secret),
     read: () => localStorage.getItem("secret"),
   },
-  "sessionStorage": {
-    write: (secret) => sessionStorage.setItem("secret", secret),
-    read: () => sessionStorage.getItem("secret"),
-  },
   "indexedDB": {
     write: async (secret) => await IdbKeyVal.set("secret", secret),
     read: async () => IdbKeyVal.get("secret")
