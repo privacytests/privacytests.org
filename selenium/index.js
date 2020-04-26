@@ -221,12 +221,15 @@ let runTestsBatch = async function (configData) {
       capabilities.browserName = capabilities.browser;
       console.log(capabilities);
       let driver = await driverConstructor(capabilities);
+      let fullCapabilitiesMap = (await driver.getCapabilities())["map_"];
+      let fullCapabilities = Object.fromEntries(fullCapabilitiesMap.entries());
+      console.log(fullCapabilities);
       let timeStarted = new Date().toISOString();
       let testResults = await runTests(driver);
       await driver.quit();
-      all_tests.push({ browser, driverType, capabilities, testResults, timeStarted, prefs });
+      all_tests.push({ browser, driverType, capabilities: fullCapabilities, testResults, timeStarted, prefs });
     } catch (e) {
-      console.log(e, browser, driverType, capabilities, prefs);
+      console.log(e, browser, driverType, fullCapabilities, prefs);
     }
   }
   let timeStopped = new Date().toISOString();
