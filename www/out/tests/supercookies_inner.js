@@ -49,12 +49,14 @@ let tests = {
   },
 };
 
-let runTests = async (mode, param) => {
+let runTests = async (mode, params) => {
   let results = {};
   for (let test of Object.keys(tests)) {
     let result;
     try {
-      result = await tests[test][mode](param);
+      let input = params[test] || params["default"];
+      console.log("input", input);
+      result = await tests[test][mode](input);
     } catch (e) {
       result = "Error: " + e.message;
     }
@@ -67,12 +69,14 @@ let runTests = async (mode, param) => {
   return results;
 };
 
+let queryParams = (URL) => {
+  let searchParams = new URL(URL).searchParams;
+  return Object.fromEntries(searchParams.entries());
+};
+
 (async () => {
-  let searchParams = new URL(document.URL).searchParams;
-  console.log(`searchParams = ${searchParams}`);
-  let param = searchParams.get("param");
-  let mode = searchParams.get("mode");
-  let results = await runTests(mode, param);
+  let params = queryParams(document.URL);
+  let results = await runTests(params["mode"], params);
   console.log("results", results);
   if (window.location !== parent.location) {
     parent.postMessage(results, "*");
