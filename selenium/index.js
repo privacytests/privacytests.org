@@ -265,11 +265,11 @@ let expandConfig = async (configData) => {
         driverType = "chrome";
         capabilityList = [{"browser": "chrome"}];
       } else if (browser === "brave") {
-        driverType = "electron";
+        driverType = "chrome";
         // Doesn't work.
-        capabilityList = [{browser: "chrome",
-                           chromeOptions: { binary: path,
-                                            args: ['no-sandbox'] },
+        capabilityList = [{browser: "brave",
+                           chromeOptions: {  binary: path,
+                                             args: ['no-sandbox'] },
                            server: 'http://localhost:9515'}];
       } else if (browser === "cliqz" ||
                  browser === "firefox" ||
