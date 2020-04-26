@@ -1,0 +1,2082 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf8'/>
+    <title>Browser Privacy Project</title>
+    <style>
+.title {
+  font-weight: bold;
+  margin: 0px -1px;
+  text-align: left;
+  padding-left: 0px;
+}
+table.comparison-table {
+  border-collapse:collapse;
+}
+table.comparison-table tr:first-child th:first-child {
+  z-index: 1;
+}
+table.comparison-table tr:first-child th {
+  background-color: white;
+  text-align: center;
+  top: 0px;
+  font-size: 12px;
+  padding: 15px 5px 2px 5px;
+  position: sticky;
+  position: -webkit-sticky;
+}
+table.comparison-table tr:nth-child(2n+1) td {
+  background-color: #eee;
+}
+table.comparison-table tr:nth-child(2n) td {
+  background-color: white;
+}
+table.comparison-table tr td {
+  min-width: 100px;
+  padding: 4px 0px;
+  text-align: center;
+}
+table.comparison-table tr th:first-child {
+  font-size: 20px;
+  padding-top: 20px;
+  padding-bottom: 6px;
+}
+table.comparison-table tr td div {
+  font-size: 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-clip: border-box;
+}
+table.comparison-table tr td div.good {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABEVBMVEUAAABKx0o/wz82wTY2wDb///84wTgAgABHxkcxvzEvvi8wvzAguiAxvzEluyUxvzErvSsuvi5OyE5Mx0xizmIRtREPtQ8rvSt01HQStRIDsQMBsAEPtQ////////+X35cTthMEsQQDsQMRtRFAxEAWtxYZuBn3/PcVthUEsQQDsQMQtRBSyVIStRIDsQMFsgUWtxb///8WtxYEsQQDsQMQtRBQyVAPtQ8BsAEEsQQRtREEsQQCsQIPtQ9GxkYtvi0MtAwCsAIBsAECsQIQtRBGxUYwvzANtA0CsQICsQIQtRBHxkcxvzEOtA4FsQUQtRBJxkkuvi4guiAuvi4AsAAAsAAAsAAAsAAAsAAAsAD////XNc91AAAAVHRSTlMAAAAAAAAAAAAAAAAAAAAAAAAEBwJljBMCYe78ogAAAV3s73gFWUABWerybAR38N1HAFXo83AEnvrfiOP0cwUPjvr+9XYFDIr59nkGCobvfQcMQAv6JZO0AAAAAWJLR0QF+G/pxwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAAd0SU1FB+ILDwYJMqVzpxUAAAB7SURBVAjXY2CAAkYhYSYYm1lEVEwcymaRkJSSlmFglZVjZWCTV1AMUVJmUFFVY+dQ19AM0dLWYdDV0zcwNDIONTE142QwtwiztLIOtbG142JgsHdwDHeKcHZx5Qaaw+Pm7hHp6eXNCzaVz8fXzz+AH2qHQGBQsCADBgAAgLoQVIbOYasAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtMDktMDVUMTQ6MjQ6MjktMDc6MDD3IjJVAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTA5LTA1VDE0OjI0OjI5LTA3OjAwhn+K6QAAAABJRU5ErkJggg==);
+}
+table.comparison-table tr td div.bad {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAMAAAC67D+PAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABF1BMVEXPAADeTEzgWFjIAADNAADLAADKAADNAADiY2PKAADPAADdTEzdTEzPAADKAADiZGTNAADKAADLAADMAADJAADhYWHdS0vOAADUGRnSDAzUFBTUFRXSDAzUGRnSDAzRBQXUFhbUFxfRBQXSDAzUFhbRBQXRBQXUGBjUGBjRBQXRBQXUFRXUFxfRBQXRBQXRBQXRBQXUFxfUGRnRBQXRBQXUGBjUGBjRBQXRBQXUGRnUFhbRBQXRBQXRBQXRBQXUFxfUFRXRBQXRBQXUGBjUGBjRBQXRBQXUFRXSDAzRBQXUFxfUFxfRBQXSDAzSDAzUFRXUFBTSDAzQAQHQAQHQAADQAADQAADQAADQAADQAADQAQHQAQH////CqmDcAAAAUnRSTlMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5rjpHtze2zDI61a1F1M8yN9XNOznU19nPMzfa2DMz2No4Ms/Z19U6OcvUNzPP1Uet1Dkzzba3RTuu4CS2RAAAAAFiS0dEXOrYAJcAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfiCw8GCRaZcEPEAAAAdklEQVQI12OQkJRiYGRilpaRZZALkldgYVVUClZmUFENUVPX0AzV0mZg09EN09MPNzBkZ+DgNDKOiDAx5eJm4OE1M4+IsLDk42cQsLIOtbGNtLMXZHBwDHFydnENdXNn8Ijy9BIS9vaJ9mWQ8PMXERUTDwiUBQB4nxKWDdKgdgAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0wOS0wNVQxNDoyNDoyOS0wNzowMPciMlUAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMDktMDVUMTQ6MjQ6MjktMDc6MDCGf4rpAAAAAElFTkSuQmCC);
+}
+table.comparison-table tr td:first-child,th:first-child {
+  text-align: left;
+  left: 0px;
+  padding-left: 8px;
+  position: sticky;
+  position: -webkit-sticky;
+}
+</style>
+  </head>
+  <body>
+    <table class="comparison-table"><tr><th><h1 class="title">Browser Privacy Tests</h1></th><th>firefox</th><th>firefox<br>privacy.firstparty.isolate: true<br>privacy.resistFingerprinting: true</th><th>firefox<br>network.cookie.cookieBehavior: 5</th></tr><tr><th>IP address masking tests</th></tr><tr><td>TorNetworkUse</td><td><div class='bad'
+title = 'IPAddress: 2600:8802:2200:14e:f8af:a6a7:4ae4:22e6
+TorExit: false
+passed: false'> &nbsp;
+</div></td><td><div class='bad'
+title = 'IPAddress: 2600:8802:2200:14e:f8af:a6a7:4ae4:22e6
+TorExit: false
+passed: false'> &nbsp;
+</div></td><td><div class='bad'
+title = 'IPAddress: 70.187.185.230
+TorExit: false
+passed: false'> &nbsp;
+</div></td></tr><tr><th>Partitioning tests</th></tr><tr><td>blob</td><td><div class='bad'
+title = 'write: (secret) => URL.createObjectURL(new Blob([secret]))
+read: async (url) => {
+      if (url) {
+        let response = await fetch(url);
+        return response.text();
+      }
+    }
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'write: (secret) => URL.createObjectURL(new Blob([secret]))
+read: async (url) => {
+      if (url) {
+        let response = await fetch(url);
+        return response.text();
+      }
+    }
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'write: (secret) => URL.createObjectURL(new Blob([secret]))
+read: async (url) => {
+      if (url) {
+        let response = await fetch(url);
+        return response.text();
+      }
+    }
+passed: false'> &nbsp;
+</div></td></tr><tr><td>broadcastChannel</td><td><div class='bad'
+title = 'write: (secret) => {
+      let bc = new BroadcastChannel("secrets");
+      bc.onmessage = (event) => {
+        if (event.data === "request") {
+          bc.postMessage(secret);
+        }
+      }
+    }
+read: () => new Promise((resolve, reject) => {
+      let bc = new BroadcastChannel("secrets");
+      bc.onmessage = (event) => {
+        if (event.data !== "request") {
+          resolve(event.data);
+        }
+      };
+      bc.postMessage("request");
+      setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
+    })
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'write: (secret) => {
+      let bc = new BroadcastChannel("secrets");
+      bc.onmessage = (event) => {
+        if (event.data === "request") {
+          bc.postMessage(secret);
+        }
+      }
+    }
+read: () => new Promise((resolve, reject) => {
+      let bc = new BroadcastChannel("secrets");
+      bc.onmessage = (event) => {
+        if (event.data !== "request") {
+          resolve(event.data);
+        }
+      };
+      bc.postMessage("request");
+      setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
+    })
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'write: (secret) => {
+      let bc = new BroadcastChannel("secrets");
+      bc.onmessage = (event) => {
+        if (event.data === "request") {
+          bc.postMessage(secret);
+        }
+      }
+    }
+read: () => new Promise((resolve, reject) => {
+      let bc = new BroadcastChannel("secrets");
+      bc.onmessage = (event) => {
+        if (event.data !== "request") {
+          resolve(event.data);
+        }
+      };
+      bc.postMessage("request");
+      setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
+    })
+passed: false'> &nbsp;
+</div></td></tr><tr><td>cookie</td><td><div class='bad'
+title = 'write: (secret) => {
+      let expiry = new Date();
+      expiry.setFullYear(expiry.getFullYear() + 1);
+      document.cookie = `secret=${secret};expires=${expiry.toUTCString()}`;
+    }
+read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'write: (secret) => {
+      let expiry = new Date();
+      expiry.setFullYear(expiry.getFullYear() + 1);
+      document.cookie = `secret=${secret};expires=${expiry.toUTCString()}`;
+    }
+read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'write: (secret) => {
+      let expiry = new Date();
+      expiry.setFullYear(expiry.getFullYear() + 1);
+      document.cookie = `secret=${secret};expires=${expiry.toUTCString()}`;
+    }
+read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
+passed: false'> &nbsp;
+</div></td></tr><tr><td>indexedDB</td><td><div class='bad'
+title = 'write: async (secret) => await IdbKeyVal.set("secret", secret)
+read: async () => IdbKeyVal.get("secret")
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'write: async (secret) => await IdbKeyVal.set("secret", secret)
+read: async () => IdbKeyVal.get("secret")
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'write: async (secret) => await IdbKeyVal.set("secret", secret)
+read: async () => IdbKeyVal.get("secret")
+passed: false'> &nbsp;
+</div></td></tr><tr><td>localStorage</td><td><div class='bad'
+title = 'write: (secret) => localStorage.setItem("secret", secret)
+read: () => localStorage.getItem("secret")
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'write: (secret) => localStorage.setItem("secret", secret)
+read: () => localStorage.getItem("secret")
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'write: (secret) => localStorage.setItem("secret", secret)
+read: () => localStorage.getItem("secret")
+passed: false'> &nbsp;
+</div></td></tr><tr><th>Fingerprinting resistance tests</th></tr><tr><td>Date.prototype.getDate.call(date)</td><td><div class='good'
+title = 'expression: Date.prototype.getDate.call(date)
+spoof expression: date.getUTCDate()
+actual value: 26
+desired value: 26
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getDate.call(date)
+spoof expression: date.getUTCDate()
+actual value: 26
+desired value: 26
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getDate.call(date)
+spoof expression: date.getUTCDate()
+actual value: 26
+desired value: 26
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getDate.call(date) [Worker]</td><td><div class='good'
+title = 'expression: Date.prototype.getDate.call(date)
+spoof expression: date.getUTCDate()
+actual value: 26
+desired value: 26
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getDate.call(date)
+spoof expression: date.getUTCDate()
+actual value: 26
+desired value: 26
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getDate.call(date)
+spoof expression: date.getUTCDate()
+actual value: 26
+desired value: 26
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getDay.call(date)</td><td><div class='good'
+title = 'expression: Date.prototype.getDay.call(date)
+spoof expression: date.getUTCDay()
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getDay.call(date)
+spoof expression: date.getUTCDay()
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getDay.call(date)
+spoof expression: date.getUTCDay()
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getDay.call(date) [Worker]</td><td><div class='good'
+title = 'expression: Date.prototype.getDay.call(date)
+spoof expression: date.getUTCDay()
+actual value: 0
+desired value: 0
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getDay.call(date)
+spoof expression: date.getUTCDay()
+actual value: 0
+desired value: 0
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getDay.call(date)
+spoof expression: date.getUTCDay()
+actual value: 0
+desired value: 0
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getFullYear.call(date)</td><td><div class='good'
+title = 'expression: Date.prototype.getFullYear.call(date)
+spoof expression: date.getUTCFullYear()
+actual value: 2020
+desired value: 2020
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getFullYear.call(date)
+spoof expression: date.getUTCFullYear()
+actual value: 2020
+desired value: 2020
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getFullYear.call(date)
+spoof expression: date.getUTCFullYear()
+actual value: 2020
+desired value: 2020
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getFullYear.call(date) [Worker]</td><td><div class='good'
+title = 'expression: Date.prototype.getFullYear.call(date)
+spoof expression: date.getUTCFullYear()
+actual value: 2020
+desired value: 2020
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getFullYear.call(date)
+spoof expression: date.getUTCFullYear()
+actual value: 2020
+desired value: 2020
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getFullYear.call(date)
+spoof expression: date.getUTCFullYear()
+actual value: 2020
+desired value: 2020
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getHours.call(date)</td><td><div class='bad'
+title = 'expression: Date.prototype.getHours.call(date)
+spoof expression: date.getUTCHours()
+actual value: 10
+desired value: 17
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getHours.call(date)
+spoof expression: date.getUTCHours()
+actual value: 17
+desired value: 17
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: Date.prototype.getHours.call(date)
+spoof expression: date.getUTCHours()
+actual value: 10
+desired value: 17
+passed: false'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getHours.call(date) [Worker]</td><td><div class='bad'
+title = 'expression: Date.prototype.getHours.call(date)
+spoof expression: date.getUTCHours()
+actual value: 10
+desired value: 17
+passed: false
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getHours.call(date)
+spoof expression: date.getUTCHours()
+actual value: 17
+desired value: 17
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: Date.prototype.getHours.call(date)
+spoof expression: date.getUTCHours()
+actual value: 10
+desired value: 17
+passed: false
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getMilliseconds.call(date)</td><td><div class='good'
+title = 'expression: Date.prototype.getMilliseconds.call(date)
+spoof expression: date.getUTCMilliseconds()
+actual value: 78
+desired value: 78
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getMilliseconds.call(date)
+spoof expression: date.getUTCMilliseconds()
+actual value: 200
+desired value: 200
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getMilliseconds.call(date)
+spoof expression: date.getUTCMilliseconds()
+actual value: 233
+desired value: 233
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getMilliseconds.call(date) [Worker]</td><td><div class='good'
+title = 'expression: Date.prototype.getMilliseconds.call(date)
+spoof expression: date.getUTCMilliseconds()
+actual value: 107
+desired value: 107
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getMilliseconds.call(date)
+spoof expression: date.getUTCMilliseconds()
+actual value: 200
+desired value: 200
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getMilliseconds.call(date)
+spoof expression: date.getUTCMilliseconds()
+actual value: 264
+desired value: 264
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getMinutes.call(date)</td><td><div class='good'
+title = 'expression: Date.prototype.getMinutes.call(date)
+spoof expression: date.getUTCMinutes()
+actual value: 9
+desired value: 9
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getMinutes.call(date)
+spoof expression: date.getUTCMinutes()
+actual value: 9
+desired value: 9
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getMinutes.call(date)
+spoof expression: date.getUTCMinutes()
+actual value: 9
+desired value: 9
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getMinutes.call(date) [Worker]</td><td><div class='good'
+title = 'expression: Date.prototype.getMinutes.call(date)
+spoof expression: date.getUTCMinutes()
+actual value: 9
+desired value: 9
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getMinutes.call(date)
+spoof expression: date.getUTCMinutes()
+actual value: 9
+desired value: 9
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getMinutes.call(date)
+spoof expression: date.getUTCMinutes()
+actual value: 9
+desired value: 9
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getMonth.call(date)</td><td><div class='good'
+title = 'expression: Date.prototype.getMonth.call(date)
+spoof expression: date.getUTCMonth()
+actual value: 3
+desired value: 3
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getMonth.call(date)
+spoof expression: date.getUTCMonth()
+actual value: 3
+desired value: 3
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getMonth.call(date)
+spoof expression: date.getUTCMonth()
+actual value: 3
+desired value: 3
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getMonth.call(date) [Worker]</td><td><div class='good'
+title = 'expression: Date.prototype.getMonth.call(date)
+spoof expression: date.getUTCMonth()
+actual value: 3
+desired value: 3
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getMonth.call(date)
+spoof expression: date.getUTCMonth()
+actual value: 3
+desired value: 3
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getMonth.call(date)
+spoof expression: date.getUTCMonth()
+actual value: 3
+desired value: 3
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getSeconds.call(date)</td><td><div class='good'
+title = 'expression: Date.prototype.getSeconds.call(date)
+spoof expression: date.getUTCSeconds()
+actual value: 22
+desired value: 22
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getSeconds.call(date)
+spoof expression: date.getUTCSeconds()
+actual value: 29
+desired value: 29
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getSeconds.call(date)
+spoof expression: date.getUTCSeconds()
+actual value: 38
+desired value: 38
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getSeconds.call(date) [Worker]</td><td><div class='good'
+title = 'expression: Date.prototype.getSeconds.call(date)
+spoof expression: date.getUTCSeconds()
+actual value: 22
+desired value: 22
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getSeconds.call(date)
+spoof expression: date.getUTCSeconds()
+actual value: 29
+desired value: 29
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Date.prototype.getSeconds.call(date)
+spoof expression: date.getUTCSeconds()
+actual value: 38
+desired value: 38
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>Intl.Collator().resolvedOptions().locale</td><td><div class='good'
+title = 'expression: Intl.Collator().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Intl.Collator().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Intl.Collator().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Intl.Collator().resolvedOptions().locale [Worker]</td><td><div class='good'
+title = 'expression: Intl.Collator().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Intl.Collator().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Intl.Collator().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>Intl.DateTimeFormat().resolvedOptions().locale</td><td><div class='good'
+title = 'expression: Intl.DateTimeFormat().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Intl.DateTimeFormat().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Intl.DateTimeFormat().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Intl.DateTimeFormat().resolvedOptions().locale [Worker]</td><td><div class='good'
+title = 'expression: Intl.DateTimeFormat().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Intl.DateTimeFormat().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Intl.DateTimeFormat().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>Intl.NumberFormat().resolvedOptions().locale</td><td><div class='good'
+title = 'expression: Intl.NumberFormat().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Intl.NumberFormat().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Intl.NumberFormat().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Intl.NumberFormat().resolvedOptions().locale [Worker]</td><td><div class='good'
+title = 'expression: Intl.NumberFormat().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Intl.NumberFormat().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Intl.NumberFormat().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>Navigator.prototype.__lookupGetter__("mimeTypes").call(navigator).length</td><td><div class='good'
+title = 'expression: Navigator.prototype.__lookupGetter__("mimeTypes").call(navigator).length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Navigator.prototype.__lookupGetter__("mimeTypes").call(navigator).length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Navigator.prototype.__lookupGetter__("mimeTypes").call(navigator).length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Navigator.prototype.__lookupGetter__("plugins").call(navigator).length</td><td><div class='good'
+title = 'expression: Navigator.prototype.__lookupGetter__("plugins").call(navigator).length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Navigator.prototype.__lookupGetter__("plugins").call(navigator).length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Navigator.prototype.__lookupGetter__("plugins").call(navigator).length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Object.getPrototypeOf(navigator.mimeTypes) === MimeTypeArray.prototype</td><td><div class='good'
+title = 'expression: Object.getPrototypeOf(navigator.mimeTypes) === MimeTypeArray.prototype
+spoof expression: true
+actual value: true
+desired value: true
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Object.getPrototypeOf(navigator.mimeTypes) === MimeTypeArray.prototype
+spoof expression: true
+actual value: true
+desired value: true
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Object.getPrototypeOf(navigator.mimeTypes) === MimeTypeArray.prototype
+spoof expression: true
+actual value: true
+desired value: true
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Object.getPrototypeOf(navigator.plugins) === PluginArray.prototype</td><td><div class='good'
+title = 'expression: Object.getPrototypeOf(navigator.plugins) === PluginArray.prototype
+spoof expression: true
+actual value: true
+desired value: true
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Object.getPrototypeOf(navigator.plugins) === PluginArray.prototype
+spoof expression: true
+actual value: true
+desired value: true
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Object.getPrototypeOf(navigator.plugins) === PluginArray.prototype
+spoof expression: true
+actual value: true
+desired value: true
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Object.keys(navigator.mimeTypes).length</td><td><div class='good'
+title = 'expression: Object.keys(navigator.mimeTypes).length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Object.keys(navigator.mimeTypes).length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Object.keys(navigator.mimeTypes).length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Object.keys(navigator.plugins).length</td><td><div class='good'
+title = 'expression: Object.keys(navigator.plugins).length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Object.keys(navigator.plugins).length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Object.keys(navigator.plugins).length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td></tr><tr><td>Performance.prototype.now.apply(performance)</td><td><div class='bad'
+title = 'expression: Performance.prototype.now.apply(performance)
+spoof expression: Math.floor(performance.now() / 100) * 100
+actual value: 549
+desired value: 500
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Performance.prototype.now.apply(performance)
+spoof expression: Math.floor(performance.now() / 100) * 100
+actual value: 300
+desired value: 300
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: Performance.prototype.now.apply(performance)
+spoof expression: Math.floor(performance.now() / 100) * 100
+actual value: 256
+desired value: 200
+passed: false'> &nbsp;
+</div></td></tr><tr><td>Performance.prototype.now.apply(performance) [Worker]</td><td><div class='bad'
+title = 'expression: Performance.prototype.now.apply(performance)
+spoof expression: Math.floor(performance.now() / 100) * 100
+actual value: 17
+desired value: 0
+passed: false
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Performance.prototype.now.apply(performance)
+spoof expression: Math.floor(performance.now() / 100) * 100
+actual value: 0
+desired value: 0
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: Performance.prototype.now.apply(performance)
+spoof expression: Math.floor(performance.now() / 100) * 100
+actual value: 19
+desired value: 0
+passed: false
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>Screen.prototype.__lookupGetter__("height").apply(screen)</td><td><div class='bad'
+title = 'expression: Screen.prototype.__lookupGetter__("height").apply(screen)
+spoof expression: innerHeight
+actual value: 900
+desired value: 737
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Screen.prototype.__lookupGetter__("height").apply(screen)
+spoof expression: innerHeight
+actual value: 800
+desired value: 800
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: Screen.prototype.__lookupGetter__("height").apply(screen)
+spoof expression: innerHeight
+actual value: 900
+desired value: 737
+passed: false'> &nbsp;
+</div></td></tr><tr><td>Screen.prototype.__lookupGetter__("width").apply(screen)</td><td><div class='bad'
+title = 'expression: Screen.prototype.__lookupGetter__("width").apply(screen)
+spoof expression: innerWidth
+actual value: 1440
+desired value: 1280
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: Screen.prototype.__lookupGetter__("width").apply(screen)
+spoof expression: innerWidth
+actual value: 1000
+desired value: 1000
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: Screen.prototype.__lookupGetter__("width").apply(screen)
+spoof expression: innerWidth
+actual value: 1440
+desired value: 1280
+passed: false'> &nbsp;
+</div></td></tr><tr><td>date.getDate()</td><td><div class='good'
+title = 'expression: date.getDate()
+spoof expression: date.getUTCDate()
+actual value: 26
+desired value: 26
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getDate()
+spoof expression: date.getUTCDate()
+actual value: 26
+desired value: 26
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getDate()
+spoof expression: date.getUTCDate()
+actual value: 26
+desired value: 26
+passed: true'> &nbsp;
+</div></td></tr><tr><td>date.getDate() [Worker]</td><td><div class='good'
+title = 'expression: date.getDate()
+spoof expression: date.getUTCDate()
+actual value: 26
+desired value: 26
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getDate()
+spoof expression: date.getUTCDate()
+actual value: 26
+desired value: 26
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getDate()
+spoof expression: date.getUTCDate()
+actual value: 26
+desired value: 26
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>date.getDay()</td><td><div class='good'
+title = 'expression: date.getDay()
+spoof expression: date.getUTCDay()
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getDay()
+spoof expression: date.getUTCDay()
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getDay()
+spoof expression: date.getUTCDay()
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td></tr><tr><td>date.getDay() [Worker]</td><td><div class='good'
+title = 'expression: date.getDay()
+spoof expression: date.getUTCDay()
+actual value: 0
+desired value: 0
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getDay()
+spoof expression: date.getUTCDay()
+actual value: 0
+desired value: 0
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getDay()
+spoof expression: date.getUTCDay()
+actual value: 0
+desired value: 0
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>date.getFullYear()</td><td><div class='good'
+title = 'expression: date.getFullYear()
+spoof expression: date.getUTCFullYear()
+actual value: 2020
+desired value: 2020
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getFullYear()
+spoof expression: date.getUTCFullYear()
+actual value: 2020
+desired value: 2020
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getFullYear()
+spoof expression: date.getUTCFullYear()
+actual value: 2020
+desired value: 2020
+passed: true'> &nbsp;
+</div></td></tr><tr><td>date.getFullYear() [Worker]</td><td><div class='good'
+title = 'expression: date.getFullYear()
+spoof expression: date.getUTCFullYear()
+actual value: 2020
+desired value: 2020
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getFullYear()
+spoof expression: date.getUTCFullYear()
+actual value: 2020
+desired value: 2020
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getFullYear()
+spoof expression: date.getUTCFullYear()
+actual value: 2020
+desired value: 2020
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>date.getHours()</td><td><div class='bad'
+title = 'expression: date.getHours()
+spoof expression: date.getUTCHours()
+actual value: 10
+desired value: 17
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getHours()
+spoof expression: date.getUTCHours()
+actual value: 17
+desired value: 17
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: date.getHours()
+spoof expression: date.getUTCHours()
+actual value: 10
+desired value: 17
+passed: false'> &nbsp;
+</div></td></tr><tr><td>date.getHours() [Worker]</td><td><div class='bad'
+title = 'expression: date.getHours()
+spoof expression: date.getUTCHours()
+actual value: 10
+desired value: 17
+passed: false
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getHours()
+spoof expression: date.getUTCHours()
+actual value: 17
+desired value: 17
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: date.getHours()
+spoof expression: date.getUTCHours()
+actual value: 10
+desired value: 17
+passed: false
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>date.getMilliseconds()</td><td><div class='good'
+title = 'expression: date.getMilliseconds()
+spoof expression: date.getUTCMilliseconds()
+actual value: 78
+desired value: 78
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getMilliseconds()
+spoof expression: date.getUTCMilliseconds()
+actual value: 200
+desired value: 200
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getMilliseconds()
+spoof expression: date.getUTCMilliseconds()
+actual value: 233
+desired value: 233
+passed: true'> &nbsp;
+</div></td></tr><tr><td>date.getMilliseconds() [Worker]</td><td><div class='good'
+title = 'expression: date.getMilliseconds()
+spoof expression: date.getUTCMilliseconds()
+actual value: 107
+desired value: 107
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getMilliseconds()
+spoof expression: date.getUTCMilliseconds()
+actual value: 200
+desired value: 200
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getMilliseconds()
+spoof expression: date.getUTCMilliseconds()
+actual value: 264
+desired value: 264
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>date.getMinutes()</td><td><div class='good'
+title = 'expression: date.getMinutes()
+spoof expression: date.getUTCMinutes()
+actual value: 9
+desired value: 9
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getMinutes()
+spoof expression: date.getUTCMinutes()
+actual value: 9
+desired value: 9
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getMinutes()
+spoof expression: date.getUTCMinutes()
+actual value: 9
+desired value: 9
+passed: true'> &nbsp;
+</div></td></tr><tr><td>date.getMinutes() [Worker]</td><td><div class='good'
+title = 'expression: date.getMinutes()
+spoof expression: date.getUTCMinutes()
+actual value: 9
+desired value: 9
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getMinutes()
+spoof expression: date.getUTCMinutes()
+actual value: 9
+desired value: 9
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getMinutes()
+spoof expression: date.getUTCMinutes()
+actual value: 9
+desired value: 9
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>date.getMonth()</td><td><div class='good'
+title = 'expression: date.getMonth()
+spoof expression: date.getUTCMonth()
+actual value: 3
+desired value: 3
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getMonth()
+spoof expression: date.getUTCMonth()
+actual value: 3
+desired value: 3
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getMonth()
+spoof expression: date.getUTCMonth()
+actual value: 3
+desired value: 3
+passed: true'> &nbsp;
+</div></td></tr><tr><td>date.getMonth() [Worker]</td><td><div class='good'
+title = 'expression: date.getMonth()
+spoof expression: date.getUTCMonth()
+actual value: 3
+desired value: 3
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getMonth()
+spoof expression: date.getUTCMonth()
+actual value: 3
+desired value: 3
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getMonth()
+spoof expression: date.getUTCMonth()
+actual value: 3
+desired value: 3
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>date.getSeconds()</td><td><div class='good'
+title = 'expression: date.getSeconds()
+spoof expression: date.getUTCSeconds()
+actual value: 22
+desired value: 22
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getSeconds()
+spoof expression: date.getUTCSeconds()
+actual value: 29
+desired value: 29
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getSeconds()
+spoof expression: date.getUTCSeconds()
+actual value: 38
+desired value: 38
+passed: true'> &nbsp;
+</div></td></tr><tr><td>date.getSeconds() [Worker]</td><td><div class='good'
+title = 'expression: date.getSeconds()
+spoof expression: date.getUTCSeconds()
+actual value: 22
+desired value: 22
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getSeconds()
+spoof expression: date.getUTCSeconds()
+actual value: 29
+desired value: 29
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: date.getSeconds()
+spoof expression: date.getUTCSeconds()
+actual value: 38
+desired value: 38
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>devicePixelRatio</td><td><div class='bad'
+title = 'expression: devicePixelRatio
+spoof expression: 1
+actual value: 2
+desired value: 1
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: devicePixelRatio
+spoof expression: 1
+actual value: 1
+desired value: 1
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: devicePixelRatio
+spoof expression: 1
+actual value: 2
+desired value: 1
+passed: false'> &nbsp;
+</div></td></tr><tr><td>mouseEvent.screenX</td><td><div class='bad'
+title = 'expression: mouseEvent.screenX
+spoof expression: mouseEvent.clientX
+actual value: 0
+desired value: 10
+passed: false'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: mouseEvent.screenX
+spoof expression: mouseEvent.clientX
+actual value: 0
+desired value: 10
+passed: false'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: mouseEvent.screenX
+spoof expression: mouseEvent.clientX
+actual value: 0
+desired value: 10
+passed: false'> &nbsp;
+</div></td></tr><tr><td>mouseEvent.screenY</td><td><div class='bad'
+title = 'expression: mouseEvent.screenY
+spoof expression: mouseEvent.clientY
+actual value: 0
+desired value: 20
+passed: false'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: mouseEvent.screenY
+spoof expression: mouseEvent.clientY
+actual value: 0
+desired value: 20
+passed: false'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: mouseEvent.screenY
+spoof expression: mouseEvent.clientY
+actual value: 0
+desired value: 20
+passed: false'> &nbsp;
+</div></td></tr><tr><td>mouseEvent.timeStamp % 100</td><td><div class='bad'
+title = 'expression: mouseEvent.timeStamp % 100
+spoof expression: 0
+actual value: 68
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: mouseEvent.timeStamp % 100
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: mouseEvent.timeStamp % 100
+spoof expression: 0
+actual value: 78
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>navigator.buildID</td><td><div class='bad'
+title = 'expression: navigator.buildID
+spoof expression: "20100101"
+actual value: 20181001000000
+desired value: 20100101
+passed: false'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: navigator.buildID
+spoof expression: "20100101"
+actual value: 20181001000000
+desired value: 20100101
+passed: false'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: navigator.buildID
+spoof expression: "20100101"
+actual value: 20181001000000
+desired value: 20100101
+passed: false'> &nbsp;
+</div></td></tr><tr><td>navigator.getBattery</td><td><div class='good'
+title = 'expression: navigator.getBattery
+spoof expression: undefined
+actual value: undefined
+desired value: undefined
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.getBattery
+spoof expression: undefined
+actual value: undefined
+desired value: undefined
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.getBattery
+spoof expression: undefined
+actual value: undefined
+desired value: undefined
+passed: true'> &nbsp;
+</div></td></tr><tr><td>navigator.hardwareConcurrency</td><td><div class='bad'
+title = 'expression: navigator.hardwareConcurrency
+spoof expression: 2
+actual value: 4
+desired value: 2
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.hardwareConcurrency
+spoof expression: 2
+actual value: 2
+desired value: 2
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: navigator.hardwareConcurrency
+spoof expression: 2
+actual value: 4
+desired value: 2
+passed: false'> &nbsp;
+</div></td></tr><tr><td>navigator.hardwareConcurrency [Worker]</td><td><div class='bad'
+title = 'expression: navigator.hardwareConcurrency
+spoof expression: 2
+actual value: 4
+desired value: 2
+passed: false
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.hardwareConcurrency
+spoof expression: 2
+actual value: 2
+desired value: 2
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: navigator.hardwareConcurrency
+spoof expression: 2
+actual value: 4
+desired value: 2
+passed: false
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>navigator.language</td><td><div class='good'
+title = 'expression: navigator.language
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.language
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.language
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true'> &nbsp;
+</div></td></tr><tr><td>navigator.language [Worker]</td><td><div class='good'
+title = 'expression: navigator.language
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.language
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.language
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>navigator.languages.toString()</td><td><div class='good'
+title = 'expression: navigator.languages.toString()
+spoof expression: "en-US,en"
+actual value: en-US,en
+desired value: en-US,en
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.languages.toString()
+spoof expression: "en-US,en"
+actual value: en-US,en
+desired value: en-US,en
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.languages.toString()
+spoof expression: "en-US,en"
+actual value: en-US,en
+desired value: en-US,en
+passed: true'> &nbsp;
+</div></td></tr><tr><td>navigator.languages.toString() [Worker]</td><td><div class='good'
+title = 'expression: navigator.languages.toString()
+spoof expression: "en-US,en"
+actual value: en-US,en
+desired value: en-US,en
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.languages.toString()
+spoof expression: "en-US,en"
+actual value: en-US,en
+desired value: en-US,en
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.languages.toString()
+spoof expression: "en-US,en"
+actual value: en-US,en
+desired value: en-US,en
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>navigator.mimeTypes.length</td><td><div class='good'
+title = 'expression: navigator.mimeTypes.length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.mimeTypes.length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.mimeTypes.length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td></tr><tr><td>navigator.mimeTypes[0]</td><td><div class='good'
+title = 'expression: navigator.mimeTypes[0]
+spoof expression: undefined
+actual value: undefined
+desired value: undefined
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.mimeTypes[0]
+spoof expression: undefined
+actual value: undefined
+desired value: undefined
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.mimeTypes[0]
+spoof expression: undefined
+actual value: undefined
+desired value: undefined
+passed: true'> &nbsp;
+</div></td></tr><tr><td>navigator.plugins.length</td><td><div class='good'
+title = 'expression: navigator.plugins.length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.plugins.length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.plugins.length
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td></tr><tr><td>navigator.plugins[0]</td><td><div class='good'
+title = 'expression: navigator.plugins[0]
+spoof expression: undefined
+actual value: undefined
+desired value: undefined
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.plugins[0]
+spoof expression: undefined
+actual value: undefined
+desired value: undefined
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: navigator.plugins[0]
+spoof expression: undefined
+actual value: undefined
+desired value: undefined
+passed: true'> &nbsp;
+</div></td></tr><tr><td>new Event("test").timeStamp % 100</td><td><div class='bad'
+title = 'expression: new Event("test").timeStamp % 100
+spoof expression: 0
+actual value: 49
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: new Event("test").timeStamp % 100
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: new Event("test").timeStamp % 100
+spoof expression: 0
+actual value: 56
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>new Event("test").timeStamp % 100 [Worker]</td><td><div class='bad'
+title = 'expression: new Event("test").timeStamp % 100
+spoof expression: 0
+actual value: 17
+desired value: 0
+passed: false
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: new Event("test").timeStamp % 100
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: new Event("test").timeStamp % 100
+spoof expression: 0
+actual value: 20
+desired value: 0
+passed: false
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>new Intl.PluralRules().resolvedOptions().locale</td><td><div class='good'
+title = 'expression: new Intl.PluralRules().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: new Intl.PluralRules().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: new Intl.PluralRules().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true'> &nbsp;
+</div></td></tr><tr><td>new Intl.PluralRules().resolvedOptions().locale [Worker]</td><td><div class='good'
+title = 'expression: new Intl.PluralRules().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: new Intl.PluralRules().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: new Intl.PluralRules().resolvedOptions().locale
+spoof expression: "en-US"
+actual value: en-US
+desired value: en-US
+passed: true
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>outerHeight</td><td><div class='bad'
+title = 'expression: outerHeight
+spoof expression: innerHeight
+actual value: 811
+desired value: 737
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: outerHeight
+spoof expression: innerHeight
+actual value: 800
+desired value: 800
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: outerHeight
+spoof expression: innerHeight
+actual value: 811
+desired value: 737
+passed: false'> &nbsp;
+</div></td></tr><tr><td>outerWidth</td><td><div class='good'
+title = 'expression: outerWidth
+spoof expression: innerWidth
+actual value: 1280
+desired value: 1280
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: outerWidth
+spoof expression: innerWidth
+actual value: 1000
+desired value: 1000
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: outerWidth
+spoof expression: innerWidth
+actual value: 1280
+desired value: 1280
+passed: true'> &nbsp;
+</div></td></tr><tr><td>performance.now()</td><td><div class='bad'
+title = 'expression: performance.now()
+spoof expression: Math.floor(performance.now() / 100) * 100
+actual value: 549
+desired value: 500
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.now()
+spoof expression: Math.floor(performance.now() / 100) * 100
+actual value: 300
+desired value: 300
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.now()
+spoof expression: Math.floor(performance.now() / 100) * 100
+actual value: 256
+desired value: 200
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.now() [Worker]</td><td><div class='bad'
+title = 'expression: performance.now()
+spoof expression: Math.floor(performance.now() / 100) * 100
+actual value: 16
+desired value: 0
+passed: false
+[Worker]'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.now()
+spoof expression: Math.floor(performance.now() / 100) * 100
+actual value: 0
+desired value: 0
+passed: true
+[Worker]'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.now()
+spoof expression: Math.floor(performance.now() / 100) * 100
+actual value: 19
+desired value: 0
+passed: false
+[Worker]'> &nbsp;
+</div></td></tr><tr><td>performance.timing.connectEnd</td><td><div class='bad'
+title = 'expression: performance.timing.connectEnd
+spoof expression: 0
+actual value: 1587920961774
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.connectEnd
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.connectEnd
+spoof expression: 0
+actual value: 1587920978142
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.connectStart</td><td><div class='bad'
+title = 'expression: performance.timing.connectStart
+spoof expression: 0
+actual value: 1587920961728
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.connectStart
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.connectStart
+spoof expression: 0
+actual value: 1587920978087
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.domComplete</td><td><div class='bad'
+title = 'expression: performance.timing.domComplete
+spoof expression: 0
+actual value: 1587920962102
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.domComplete
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.domComplete
+spoof expression: 0
+actual value: 1587920978257
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.domContentLoadedEventEnd</td><td><div class='bad'
+title = 'expression: performance.timing.domContentLoadedEventEnd
+spoof expression: 0
+actual value: 1587920962101
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.domContentLoadedEventEnd
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.domContentLoadedEventEnd
+spoof expression: 0
+actual value: 1587920978256
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.domContentLoadedEventStart</td><td><div class='bad'
+title = 'expression: performance.timing.domContentLoadedEventStart
+spoof expression: 0
+actual value: 1587920962098
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.domContentLoadedEventStart
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.domContentLoadedEventStart
+spoof expression: 0
+actual value: 1587920978254
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.domInteractive</td><td><div class='bad'
+title = 'expression: performance.timing.domInteractive
+spoof expression: 0
+actual value: 1587920962098
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.domInteractive
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.domInteractive
+spoof expression: 0
+actual value: 1587920978254
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.domLoading</td><td><div class='bad'
+title = 'expression: performance.timing.domLoading
+spoof expression: 0
+actual value: 1587920961904
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.domLoading
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.domLoading
+spoof expression: 0
+actual value: 1587920978166
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.domainLookupEnd</td><td><div class='bad'
+title = 'expression: performance.timing.domainLookupEnd
+spoof expression: 0
+actual value: 1587920961728
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.domainLookupEnd
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.domainLookupEnd
+spoof expression: 0
+actual value: 1587920978087
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.domainLookupStart</td><td><div class='bad'
+title = 'expression: performance.timing.domainLookupStart
+spoof expression: 0
+actual value: 1587920961709
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.domainLookupStart
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.domainLookupStart
+spoof expression: 0
+actual value: 1587920978087
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.fetchStart</td><td><div class='bad'
+title = 'expression: performance.timing.fetchStart
+spoof expression: 0
+actual value: 1587920961707
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.fetchStart
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.fetchStart
+spoof expression: 0
+actual value: 1587920978080
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.loadEventEnd</td><td><div class='bad'
+title = 'expression: performance.timing.loadEventEnd
+spoof expression: 0
+actual value: 1587920962102
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.loadEventEnd
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.loadEventEnd
+spoof expression: 0
+actual value: 1587920978257
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.loadEventStart</td><td><div class='bad'
+title = 'expression: performance.timing.loadEventStart
+spoof expression: 0
+actual value: 1587920962102
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.loadEventStart
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.loadEventStart
+spoof expression: 0
+actual value: 1587920978257
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.navigationStart</td><td><div class='bad'
+title = 'expression: performance.timing.navigationStart
+spoof expression: 0
+actual value: 1587920961548
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.navigationStart
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.navigationStart
+spoof expression: 0
+actual value: 1587920977995
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.redirectEnd</td><td><div class='good'
+title = 'expression: performance.timing.redirectEnd
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.redirectEnd
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.redirectEnd
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td></tr><tr><td>performance.timing.redirectStart</td><td><div class='good'
+title = 'expression: performance.timing.redirectStart
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.redirectStart
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.redirectStart
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td></tr><tr><td>performance.timing.requestStart</td><td><div class='bad'
+title = 'expression: performance.timing.requestStart
+spoof expression: 0
+actual value: 1587920961774
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.requestStart
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.requestStart
+spoof expression: 0
+actual value: 1587920978142
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.responseEnd</td><td><div class='bad'
+title = 'expression: performance.timing.responseEnd
+spoof expression: 0
+actual value: 1587920961904
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.responseEnd
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.responseEnd
+spoof expression: 0
+actual value: 1587920978164
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.responseStart</td><td><div class='bad'
+title = 'expression: performance.timing.responseStart
+spoof expression: 0
+actual value: 1587920961904
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.responseStart
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.responseStart
+spoof expression: 0
+actual value: 1587920978164
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.secureConnectionStart</td><td><div class='bad'
+title = 'expression: performance.timing.secureConnectionStart
+spoof expression: 0
+actual value: 1587920961746
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.secureConnectionStart
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: performance.timing.secureConnectionStart
+spoof expression: 0
+actual value: 1587920978107
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>performance.timing.unloadEventEnd</td><td><div class='good'
+title = 'expression: performance.timing.unloadEventEnd
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.unloadEventEnd
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.unloadEventEnd
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td></tr><tr><td>performance.timing.unloadEventStart</td><td><div class='good'
+title = 'expression: performance.timing.unloadEventStart
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.unloadEventStart
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: performance.timing.unloadEventStart
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td></tr><tr><td>screen.height</td><td><div class='bad'
+title = 'expression: screen.height
+spoof expression: innerHeight
+actual value: 900
+desired value: 737
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: screen.height
+spoof expression: innerHeight
+actual value: 800
+desired value: 800
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: screen.height
+spoof expression: innerHeight
+actual value: 900
+desired value: 737
+passed: false'> &nbsp;
+</div></td></tr><tr><td>screen.width</td><td><div class='bad'
+title = 'expression: screen.width
+spoof expression: innerWidth
+actual value: 1440
+desired value: 1280
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: screen.width
+spoof expression: innerWidth
+actual value: 1000
+desired value: 1000
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: screen.width
+spoof expression: innerWidth
+actual value: 1440
+desired value: 1280
+passed: false'> &nbsp;
+</div></td></tr><tr><td>screenX</td><td><div class='bad'
+title = 'expression: screenX
+spoof expression: 0
+actual value: 4
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: screenX
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: screenX
+spoof expression: 0
+actual value: 4
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>screenY</td><td><div class='bad'
+title = 'expression: screenY
+spoof expression: 0
+actual value: 23
+desired value: 0
+passed: false'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: screenY
+spoof expression: 0
+actual value: 0
+desired value: 0
+passed: true'> &nbsp;
+</div></td><td><div class='bad'
+title = 'expression: screenY
+spoof expression: 0
+actual value: 23
+desired value: 0
+passed: false'> &nbsp;
+</div></td></tr><tr><td>try {
+      navigator.getBattery();
+      true;
+    } catch (e) {
+      false;
+   }</td><td><div class='good'
+title = 'expression: try {
+      navigator.getBattery();
+      true;
+    } catch (e) {
+      false;
+   }
+spoof expression: false
+actual value: false
+desired value: false
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: try {
+      navigator.getBattery();
+      true;
+    } catch (e) {
+      false;
+   }
+spoof expression: false
+actual value: false
+desired value: false
+passed: true'> &nbsp;
+</div></td><td><div class='good'
+title = 'expression: try {
+      navigator.getBattery();
+      true;
+    } catch (e) {
+      false;
+   }
+spoof expression: false
+actual value: false
+desired value: false
+passed: true'> &nbsp;
+</div></td></tr></table><p>Tests ran at 2020-04-26T17:09:19.054Z.
+         Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/610a2e28f325c9c9f03db4e638de0fe31b2ed581"
+    >610a2e28</a>.
+    Raw data in <a href="results_20200426_170942.json">JSON</a>.
+    </p>
+  </body>
+</html>
