@@ -54,7 +54,7 @@ const selectRecentBrowserstackBrowsers = (allCapabilities) => {
     for (let browser of browsers) {
       let capabilities = allCapabilities
           .filter(c => c.os === os && c.browser === browser)
-          .filter(c => c.browser !== "opera" && c.browser !== "ie");
+          .filter(c => c.browser !== "opera" && c.browser !== "ie" && c.os !== "ios");
       // Find recent versions of operating system
       let os_versions_set = new Set();
       for (let { os_version } of capabilities) {
@@ -73,6 +73,7 @@ const selectRecentBrowserstackBrowsers = (allCapabilities) => {
       }
     }
   }
+  console.log(selectedCapabilities);
   return selectedCapabilities;
 };
 
