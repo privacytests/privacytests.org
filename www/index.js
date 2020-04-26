@@ -47,7 +47,7 @@ const pageStyle = `
 .title {
   font-weight: bold;
   margin: 0px -1px;
-  text-align: left;;
+  text-align: left;
   padding-left: 8px;
 }
 table.comparison-table {
@@ -61,7 +61,7 @@ table.comparison-table tr:first-child th {
   text-align: center;
   top: 0px;
   font-size: 12px;
-  padding: 15px 0px 2px 0px;
+  padding: 15px 5px 2px 5px;
   position: sticky;
   position: -webkit-sticky;
 }
@@ -197,11 +197,11 @@ let resultsToTable = (results, title) => {
   let headers = filteredResults.map(resultsToDescription);
   headers.unshift(`<h1 class="title">${title}</h1>`);
   let body = [];
-  body.push([{subheading:"Tor tests"}]);
+  body.push([{subheading:"IP address masking tests"}]);
   body = body.concat(resultsSection({results: filteredResults, category:"tor", tooltipFunction: torTooltip}));
-  body.push([{subheading:"Supercookie tests"}]);
+  body.push([{subheading:"Partitioning tests"}]);
   body = body.concat(resultsSection({results: filteredResults, category:"supercookies", tooltipFunction: supercookieTooltip}));
-  body.push([{subheading:"Fingerprinting tests"}]);
+  body.push([{subheading:"Fingerprinting resistance tests"}]);
   body = body.concat(resultsSection({results: filteredResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
   return { headers, body };
 };
@@ -213,7 +213,7 @@ let content = (results, jsonFilename) => {
     htmlTable({headers, body,
                className:"comparison-table"}) +
 	`<p>Tests ran at ${results.timeStarted}.
-         Source version: <a href="https://github.com/arthuredelstein/browser-privacy/commit/${results.git}"
+         Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/${results.git}"
     >${results.git.slice(0,8)}</a>.
     Raw data in <a href="${jsonFilename}">JSON</a>.
     </p>`;
@@ -232,17 +232,19 @@ let main = async () => {
     await fs.mkdir("./out");
   }
   let resultsFile = await latestFile("../selenium/results");
+  let resultsFileJSON = "./out/" + path.basename(resultsFile);
+  let resultsFileHTML = resultsFileJSON.replace(/\.json$/, ".html");
   fs.copyFile(resultsFile, "./out/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
   console.log(`Reading from raw results file: ${resultsFile}`);
-  let results = await readJSONFile(resultsFile);
+  let results = await readJSONFile(resultsFileJSON);
   console.log(results.all_tests[0]);
 //  console.log(JSON.stringify(results));
-  await fs.writeFile("./out/tests.html", htmlPage({
+  await fs.writeFile(resultsFileHTML, htmlPage({
     title: "Browser Privacy Project",
     content: content(results, path.basename(resultsFile)),
     style: pageStyle
   }));
-  console.log(`Wrote out ${fileUrl("./out/tests.html")}`);
+  console.log(`Wrote out ${fileUrl(resultsFileHTML)}`);
 };
 
 main();
