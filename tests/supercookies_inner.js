@@ -30,8 +30,8 @@ let tests = {
     read: () => localStorage.getItem("secret"),
   },
   "indexedDB": {
-    write: async (secret) => await IdbKeyVal.set("secret", secret),
-    read: async () => IdbKeyVal.get("secret")
+    write: (secret) => IdbKeyVal.set("secret", secret),
+    read: () => IdbKeyVal.get("secret")
   },
 /*
   "SharedWorker": {
