@@ -2,20 +2,6 @@ import * as IdbKeyVal from 'https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-k
 
 console.log("hi");
 
-const run_in_sharedworker = function (aFunction) {
-  return new Promise(resolve => {
-    const worker = new SharedWorker(
-      URL.createObjectURL(
-        new Blob([
-          `postMessage((${aFunction.toString()})())`
-        ])
-      )
-    );
-    worker.onmessage = msg => resolve(msg.data);
-  });
-};
-
-
 let tests = {
   "cookie": {
     write: (secret) => {
@@ -30,16 +16,24 @@ let tests = {
     read: () => localStorage.getItem("secret"),
   },
   "indexedDB": {
-    write: async (secret) => await IdbKeyVal.set("secret", secret),
-    read: async () => IdbKeyVal.get("secret")
+    write: (secret) => IdbKeyVal.set("secret", secret),
+    read: () => IdbKeyVal.get("secret")
   },
-/*
   "SharedWorker": {
-    write: run_in_sharedworker(() => { self.secret = secret; }),
-    read: run_in_sharedworker(() => self.secret),
+    write: (secret) => {
+      let worker = new SharedWorker("supercookies_sharedworker.js");
+      worker.port.start();
+      worker.port.postMessage(secret);
+    },
+    read: () =>
+      new Promise((resolve, reject) => {
+        let worker = new SharedWorker("supercookies_sharedworker.js");
+        worker.port.start();
+        worker.port.postMessage("request");
+        worker.port.onmessage = (e) => resolve(e.data);
+        setTimeout(() => reject("no SharedWorker message received"), 1000);
+      })
   },
-*/
-
   "blob": {
     write: (secret) => URL.createObjectURL(new Blob([secret])),
     read: async (url) => {
@@ -49,7 +43,7 @@ let tests = {
       }
     },
   },
-  "broadcastChannel": {
+  "BroadcastChannel": {
     write: (secret) => {
       let bc = new BroadcastChannel("secrets");
       bc.onmessage = (event) => {
@@ -58,16 +52,17 @@ let tests = {
         }
       }
     },
-    read: () => new Promise((resolve, reject) => {
-      let bc = new BroadcastChannel("secrets");
-      bc.onmessage = (event) => {
-        if (event.data !== "request") {
-          resolve(event.data);
-        }
-      };
-      bc.postMessage("request");
-      setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
-    })
+    read: () =>
+      new Promise((resolve, reject) => {
+        let bc = new BroadcastChannel("secrets");
+        bc.onmessage = (event) => {
+          if (event.data !== "request") {
+            resolve(event.data);
+          }
+        };
+        bc.postMessage("request");
+        setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
+      })
   }
 };
 
