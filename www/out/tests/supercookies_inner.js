@@ -70,7 +70,7 @@ let tests = {
         }
       };
       bc.postMessage("request");
-      setTimeout(() => reject(null), 3000);
+      setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
     })
   }
 };
