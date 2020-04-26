@@ -1,3 +1,5 @@
+import * as IdbKeyVal from 'https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs';
+
 console.log("hi");
 
 const run_in_sharedworker = function (aFunction) {
@@ -30,6 +32,10 @@ let tests = {
   "sessionStorage": {
     write: (secret) => sessionStorage.setItem("secret", secret),
     read: () => sessionStorage.getItem("secret"),
+  },
+  "indexedDB": {
+    write: async (secret) => await IdbKeyVal.set("secret", secret),
+    read: async () => IdbKeyVal.get("secret")
   },
 /*
   "SharedWorker": {
