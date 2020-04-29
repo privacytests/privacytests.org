@@ -102,7 +102,7 @@ let tests = {
     write: (key) => new Promise((resolve, reject) => {
       let iframe = document.createElement("iframe");
       document.body.appendChild(iframe);
-      iframe.addEventListener("load", () => resolve({"secret":"2"}));
+      iframe.addEventListener("load", () => resolve("2"));
       iframe.src = `https://arthuredelstein.net/browser-privacy-live/count?key=${key}`;
     }),
     read: async (key) => {
