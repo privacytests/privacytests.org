@@ -163,7 +163,9 @@ let runSupercookieTests = async (driver) => {
   let readResultsDifferentFirstParty = await loadAndGetResults(
     driver, `${iframe_root_different}/tests/supercookies.html?mode=read${readParams}`, 10000);
   for (let test in readResultsDifferentFirstParty) {
-    let passed = (readResultsDifferentFirstParty[test].result !== secret);
+    let writeResult = writeResults[test].result;
+    let testSecret = (writeResult ? writeResult["secret"] : undefined) || secret;
+    let passed = (readResultsDifferentFirstParty[test].result !== testSecret);
     readResultsDifferentFirstParty[test].passed = passed;
   }
 //  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
