@@ -95,7 +95,7 @@ let tests = {
       xhr.open("GET", "https://arthuredelstein.net");
       xhr.setRequestHeader("Cache-Control", "max-age");
       xhr.send();
-      setTimeout(() => reject({message: "XHR: no response"}, 3000);
+      setTimeout(() => reject({message: "XHR: no response"}, 3000));
     })
   }
 };
