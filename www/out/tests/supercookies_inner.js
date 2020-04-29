@@ -117,6 +117,7 @@ let tests = {
       let response = await fetch(address, {"cache":"force-cache"});
       return (await response.text()).trim();
     }
+  }
 };
 
 let runTests = async (mode, params) => {
