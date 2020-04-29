@@ -82,7 +82,7 @@ let tests = {
     write: () => new Promise((request, reject) => {
       let xhr = new XMLHttpRequest();
       xhr.addEventListener("load", () => resolve(
-        {"secret": this.getAllResponseHeaders()}));
+        {"secret": xhr.getAllResponseHeaders()}));
       xhr.open("GET", "https://arthuredelstein.net");
       xhr.setRequestHeader("Cache-Control", "no-cache");
       xhr.send();
@@ -91,7 +91,7 @@ let tests = {
     read: () => new Promise((request, reject) => {
       let xhr = new XMLHttpRequest();
       xhr.addEventListener("load", () => resolve(
-        this.getAllResponseHeaders()));
+        xhr.getAllResponseHeaders()));
       xhr.open("GET", "https://arthuredelstein.net");
       xhr.setRequestHeader("Cache-Control", "max-age");
       xhr.send();
