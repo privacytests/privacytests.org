@@ -69,13 +69,13 @@ let tests = {
       let response = await fetch("https://worldtimeapi.org/api/timezone/etc/utc",
                                  {cache: "reload"});
       let json = await response.json();
-      return {"secret": json["unixtime"]};
+      return {"secret": json["utc_datetime"]};
     },
     read: async () => {
       let response = await fetch("https://worldtimeapi.org/api/timezone/etc/utc",
                                  {cache: "force-cache"});
       let json = await response.json();
-      return json["unixtime"];
+      return json["utc_datetime"];
     }
   }
 };
