@@ -63,6 +63,18 @@ let tests = {
         bc.postMessage("request");
         setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
       })
+  },
+  "fetch_caching": {
+    write: async () => {
+      let response = await fetch("https://www.random.org/integers/?num=1&min=1&max=1000000000&col=5&base=10&format=plain&rnd=new",
+                                 {cache: "reload"});
+      return response.text().trim();
+    },
+    read: async () => {
+      let response = await fetch("https://www.random.org/integers/?num=1&min=1&max=1000000000&col=5&base=10&format=plain&rnd=new",
+                                 {cache: "force-cache"});
+      return response.text().trim();
+    }
   }
 };
 
