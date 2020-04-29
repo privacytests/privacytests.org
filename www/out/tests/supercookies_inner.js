@@ -86,7 +86,7 @@ let tests = {
       xhr.open("GET", "https://arthuredelstein.net");
       xhr.setRequestHeader("Cache-Control", "no-cache");
       xhr.send();
-      setTimeout(() => reject({message: "XHR: no response"}, 3000));
+      setTimeout(() => reject({message: "XHR: no response"}), 3000);
     }),
     read: () => new Promise((request, reject) => {
       let xhr = new XMLHttpRequest();
@@ -95,7 +95,7 @@ let tests = {
       xhr.open("GET", "https://arthuredelstein.net");
       xhr.setRequestHeader("Cache-Control", "max-age");
       xhr.send();
-      setTimeout(() => reject({message: "XHR: no response"}, 3000));
+      setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
   }
 };
