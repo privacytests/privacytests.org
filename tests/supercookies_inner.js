@@ -77,6 +77,26 @@ let tests = {
       let json = await response.json();
       return json["utc_datetime"];
     }
+  },
+  "XMLHttpRequest": {
+    write: () => new Promise((request, reject) => {
+      let xhr = new XMLHttpRequest();
+      xhr.addEventListener("load", () => resolve(
+        {"secret": this.getAllResponseHeaders()}));
+      xhr.open("GET", "https://arthuredelstein.net");
+      xhr.setRequestHeader("Cache-Control", "no-cache");
+      xhr.send();
+      setTimeout(() => reject({message: "XHR: no response"}, 3000);
+    }),
+    read: () => new Promise((request, reject) => {
+      let xhr = new XMLHttpRequest();
+      xhr.addEventListener("load", () => resolve(
+        this.getAllResponseHeaders()));
+      xhr.open("GET", "https://arthuredelstein.net");
+      xhr.setRequestHeader("Cache-Control", "max-age");
+      xhr.send();
+      setTimeout(() => reject({message: "XHR: no response"}, 3000);
+    })
   }
 };
 
