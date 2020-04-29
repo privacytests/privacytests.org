@@ -66,16 +66,16 @@ let tests = {
   },
   "fetch_caching": {
     write: async () => {
-      let response = await fetch("https://www.random.org/integers/?num=1&min=1&max=1000000000&col=5&base=10&format=plain&rnd=new",
+      let response = await fetch("https://worldtimeapi.org/api/timezone/etc/utc",
                                  {cache: "reload"});
-      let text = await response.text();
-      return {"secret": text.trim()};
+      let json = await response.json();
+      return {"secret": json["unixtime"]};
     },
     read: async () => {
-      let response = await fetch("https://www.random.org/integers/?num=1&min=1&max=1000000000&col=5&base=10&format=plain&rnd=new",
+      let response = await fetch("https://worldtimeapi.org/api/timezone/etc/utc",
                                  {cache: "force-cache"});
-      let text = await response.text();
-      return text.trim();
+      let json = await response.json();
+      return json["unixtime"];
     }
   }
 };

@@ -165,6 +165,7 @@ let runSupercookieTests = async (driver) => {
   for (let test in readResultsDifferentFirstParty) {
     let writeResult = writeResults[test].result;
     let testSecret = (writeResult ? writeResult["secret"] : undefined) || secret;
+    console.log(writeResult, readResultsDifferentFirstParty[test].result, testSecret);
     let passed = (readResultsDifferentFirstParty[test].result !== testSecret);
     readResultsDifferentFirstParty[test].passed = passed;
   }
