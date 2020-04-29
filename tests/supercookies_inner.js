@@ -97,7 +97,26 @@ let tests = {
       xhr.send();
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
-  }
+  },
+  "iframe": {
+    write: (key) => new Promise((resolve, reject) => {
+      let iframe = document.createElement("iframe");
+      document.body.appendChild(iframe);
+      iframe.addEventListener("load", () => resolve({"secret":"2"}));
+      iframe.src = `https://arthuredelstein.net/browser-privacy-live/count?key=${key}`;
+    }),
+    read: async (key) => {
+      let iframe = document.createElement("iframe");
+      document.body.appendChild(iframe);
+      let iframeLoadPromise = new Promise((resolve, reject) => {
+        iframe.addEventListener("load", resolve);
+      });
+      let address = `https://arthuredelstein.net/browser-privacy-live/count?key=${key}`;
+      iframe.src = address;
+      await iframeLoadPromise;
+      let response = await fetch(address, {"cache":"force-cache"});
+      return (await response.text()).trim();
+    }
 };
 
 let runTests = async (mode, params) => {
