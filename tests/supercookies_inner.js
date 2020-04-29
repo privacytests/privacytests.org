@@ -79,7 +79,7 @@ let tests = {
     }
   },
   "XMLHttpRequest": {
-    write: () => new Promise((request, reject) => {
+    write: () => new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
       xhr.addEventListener("load", () => resolve(
         {"secret": xhr.getAllResponseHeaders()}));
@@ -88,7 +88,7 @@ let tests = {
       xhr.send();
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     }),
-    read: () => new Promise((request, reject) => {
+    read: () => new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
       xhr.addEventListener("load", () => resolve(
         xhr.getAllResponseHeaders()));
