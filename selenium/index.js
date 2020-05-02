@@ -215,6 +215,7 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
                                 firefox: localDriver,
                                 chrome: localDriver,
                                 electron: localDriver,
+                                safari: localDriver,
                                 opera: localDriver,
                               }[driverType];
       if (!driverConstructor) {
@@ -223,6 +224,7 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
       capabilities.browserName = capabilities.browser;
       console.log(capabilities);
       let driver = await driverConstructor(capabilities);
+      console.log(driver);
       let fullCapabilitiesMap = (await driver.getCapabilities())["map_"];
       let fullCapabilities = Object.fromEntries(fullCapabilitiesMap.entries());
       console.log(fullCapabilities);
@@ -233,7 +235,7 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
       }
       all_tests.push({ browser, driverType, capabilities: fullCapabilities, testResults, timeStarted, prefs });
     } catch (e) {
-      console.log(e, browser, driverType, fullCapabilities, prefs);
+      console.log(e, browser, driverType, capabilities, prefs);
     }
   }
   let timeStopped = new Date().toISOString();
@@ -272,6 +274,9 @@ let expandConfig = async (configData) => {
       } else if (browser === "opera") {
         driverType = "chrome";
         capabilityList = [{"browser": "chrome"}];
+      } else if (browser === "safari") {
+        driverType = "safari";
+        capabilityList = [{"browser": "safari"}];
       } else if (browser === "brave") {
         driverType = "chrome";
         // Doesn't work.
