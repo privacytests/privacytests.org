@@ -102,14 +102,14 @@ let tests = {
     write: (key) => new Promise((resolve, reject) => {
       let iframe = document.createElement("iframe");
       document.body.appendChild(iframe);
-      iframe.addEventListener("load", () => resolve("2"));
+      iframe.addEventListener("load", () => resolve("2"), {once: true});
       iframe.src = `https://arthuredelstein.net/browser-privacy-live/count?key=${key}`;
     }),
     read: async (key) => {
       let iframe = document.createElement("iframe");
       document.body.appendChild(iframe);
       let iframeLoadPromise = new Promise((resolve, reject) => {
-        iframe.addEventListener("load", resolve);
+        iframe.addEventListener("load", resolve, {once: true});
       });
       let address = `https://arthuredelstein.net/browser-privacy-live/count?key=${key}`;
       iframe.src = address;
