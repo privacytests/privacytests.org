@@ -154,7 +154,9 @@ let runSupercookieTests = async (driver) => {
 //  console.log("writeResults:", writeResults, typeof(writeResults));
   let readParams = "";
   for (let [test, data] of Object.entries(writeResults)) {
-    readParams += `&${test}=${encodeURIComponent(data["result"])}`;
+    if ((typeof data["result"]) === "string") {
+      readParams += `&${test}=${encodeURIComponent(data["result"])}`;
+    }
   }
 //  console.log(readParams);
   let readResultsSameFirstParty = await loadAndGetResults(
@@ -163,10 +165,7 @@ let runSupercookieTests = async (driver) => {
   let readResultsDifferentFirstParty = await loadAndGetResults(
     driver, `${iframe_root_different}/tests/supercookies.html?mode=read${readParams}`, 10000);
   for (let test in readResultsDifferentFirstParty) {
-    let writeResult = writeResults[test].result;
-    let testSecret = (writeResult ? writeResult["secret"] : undefined) || secret;
-    console.log(writeResult, readResultsDifferentFirstParty[test].result, testSecret);
-    let passed = (readResultsDifferentFirstParty[test].result !== testSecret);
+    let passed = (readResultsDifferentFirstParty[test].result !== readResultsSameFirstParty[test].result);
     readResultsDifferentFirstParty[test].passed = passed;
   }
 //  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
