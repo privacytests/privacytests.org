@@ -205,7 +205,7 @@ let gitHash = async function () {
 
 // Runs a batch of tests (multiple browsers) for a given driver.
 // Returns results in a JSON object.
-let runTestsBatch = async function (configData) {
+let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}) {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
   let git = await gitHash();
@@ -228,7 +228,9 @@ let runTestsBatch = async function (configData) {
       console.log(fullCapabilities);
       let timeStarted = new Date().toISOString();
       let testResults = await runTests(driver);
-      await driver.quit();
+      if (shouldQuit) {
+        await driver.quit();
+      }
       all_tests.push({ browser, driverType, capabilities: fullCapabilities, testResults, timeStarted, prefs });
     } catch (e) {
       console.log(e, browser, driverType, fullCapabilities, prefs);
