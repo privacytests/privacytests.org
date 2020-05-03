@@ -16,7 +16,7 @@ app.get('/resource', (req, res) => {
   res.set({
     "Cache-Control": "public, max-age=604800, immutable"
   });
-  res.send(`${countMap[key]}`);
+  res.send("page.html");
 });
 app.get('/count', (req, res) => {
   let { key, type } = req.query;
