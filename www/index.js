@@ -120,7 +120,7 @@ let resultsToDescription = ({
   let browserFinal = browser || browserName || browser2;
   let platformFinal = platformName || os;
   let platformVersionFinal = platformVersion || "";
-  let finalText = `${browserFinal} ${browserVersion},<br>${platformFinal} ${platformVersionFinal}`;
+  let finalText = `${browserFinal} ${browserVersion}<br>${platformFinal} ${platformVersionFinal}`;
   if (prefs) {
     for (let key of Object.keys(prefs).sort()) {
       finalText += `<br>${key}: ${prefs[key]}`
