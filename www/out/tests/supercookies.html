@@ -7,7 +7,7 @@
   </head>
   <body>
     <script>
-     addEventListener("message", { data } => {
+     addEventListener("message", ({data}) => {
        console.log(data);
        if (data["faviconURL"]) {
          let favicon = document.head.getElementById("favicon");
