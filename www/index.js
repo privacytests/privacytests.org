@@ -62,9 +62,12 @@ table.comparison-table tr:first-child th:first-child {
 table.comparison-table tr:first-child th {
   background-color: white;
   text-align: center;
+  word-break: break-all;
+  vertical-align: middle;
   top: 0px;
   font-size: 12px;
-  padding: 15px 5px 2px 5px;
+  table-layout: fixed;
+  width: 120px;
   position: sticky;
   position: -webkit-sticky;
 }
