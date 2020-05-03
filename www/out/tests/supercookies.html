@@ -3,12 +3,18 @@
   <head>
     <title>Testing super-cookies</title>
     <meta charset="utf8"/>
+    <link id="favicon" rel="shortcut icon" type="image/png" href="" />
   </head>
   <body>
     <script>
-     addEventListener("message", e => {
-       console.log(e.data);
-       document.body.setAttribute("data-test-results", JSON.stringify(e.data));
+     addEventListener("message", { data } => {
+       console.log(data);
+       if (data["faviconURL"]) {
+         let favicon = document.head.getElementById("favicon");
+         favicon.setAttribute("href", data["faviconURL"]);
+       } else {
+         document.body.setAttribute("data-test-results", JSON.stringify(data));
+       }
      }, false);
      let iframe = document.createElement("iframe");
      document.body.appendChild(iframe);

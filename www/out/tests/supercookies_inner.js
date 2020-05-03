@@ -119,7 +119,7 @@ let tests = {
       iframe.src = address;
       await iframeLoadPromise;
       let response = await fetch(
-        testURI("count", "page", key), {"cache": "force-cache"});
+        testURI("count", "page", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
   },
@@ -140,7 +140,7 @@ let tests = {
       img.src = address;
       await imgLoadPromise;
       let response = await fetch(
-        testURI("count", "image", key), {"cache": "force-cache"});
+        testURI("count", "image", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
   },
@@ -154,6 +154,22 @@ let tests = {
       let cacheKeys = await cache.keys();
       let url = cacheKeys[0].url;
       return (new URL(url)).searchParams.get("key");
+    }
+  },
+  "favicon": {
+    write: (key) => {
+      window.postMessage({
+        faviconURI: testURI("resource", "favicon", key)
+      });
+      return key;
+    }
+    read: async (key) => {
+      window.postMessage({
+        faviconURI: testURI("resource", "favicon", key)
+      });
+      let response = await fetch(
+        testURI("count", "image", key), {"cache": "reload"});
+      return (await response.text()).trim();
     }
   }
 };
