@@ -143,6 +143,18 @@ let tests = {
         testURI("count", "image", key), {"cache": "force-cache"});
       return (await response.text()).trim();
     }
+  },
+  "CacheStorage": {
+    write: async (key) => {
+      let cache = await caches.open("supercookies");
+      cache.addAll([`test.css?key=${key}`]);
+    },
+    read: async () => {
+      let cache = await caches.open("supercookies");
+      let cacheKeys = await cache.keys();
+      let url = cacheKeys[0].url;
+      return (new URL(url)).searchParams.get("key");
+    }
   }
 };
 
