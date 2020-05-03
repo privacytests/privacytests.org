@@ -2,11 +2,12 @@ const express = require('express')
 const app = express()
 const port = 3333
 
-let countMap = {};
+let countMaps = { "page":{}, "favicon":{}, "image": {}};
 
 app.get('/', (req, res) => res.send('Hello World!'));
-app.get('/count', (req, res) => {
-  let key = req.query.key;
+app.get('/resource', (req, res) => {
+  let { key, type } = req.query;
+  let countMap = countMaps[type];
   if (countMap[key]) {
     countMap[key] = countMap[key] + 1;
   } else {
@@ -16,6 +17,10 @@ app.get('/count', (req, res) => {
     "Cache-Control": "public, max-age=604800, immutable"
   });
   res.send(`${countMap[key]}`);
+});
+app.get('/count', (req, res) => {
+  let { key, type } = req.query;
+  res.send(`${countMaps[type][key] || 0}`);
 });
 
 
