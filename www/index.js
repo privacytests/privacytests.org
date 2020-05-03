@@ -128,7 +128,7 @@ let resultsToDescription = ({
 // more information.
 let itemBody = ({passed, tooltip}) =>
 `<div class='${passed ? "good" : "bad"}'
-title = '${ tooltip }'> &nbsp;
+title = '${ tooltip.replace(/'/g, "&#39;") }'> &nbsp;
 </div>`;
 
 // Creates a tooltip with fingerprinting test results
@@ -159,10 +159,13 @@ passed: ${ passed }
 `.trim();
 };
 
-let supercookieTooltip = ({ write, read, passed }) => {
+let supercookieTooltip = (
+  { write, readSameFirstParty, readDifferentFirstParty, passed }
+) => {
   return `
 write: ${ write }
-read: ${ read }
+read, same first party: ${ readSameFirstParty }
+read, different first party: ${ readDifferentFirstParty }
 passed: ${ passed }
 `.trim();
 };
