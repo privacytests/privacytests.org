@@ -4,7 +4,7 @@ console.log("hi");
 
 
 let testURI = (path, type, key) =>
-    return `https://arthuredelstein.net/browser-privacy-live/${path}?type=${type}&key=${key}`;
+    `https://arthuredelstein.net/browser-privacy-live/${path}?type=${type}&key=${key}`;
 
 let tests = {
   "cookie": {
