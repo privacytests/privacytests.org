@@ -122,6 +122,26 @@ let tests = {
         testURI("count", "page", key), {"cache": "force-cache"});
       return (await response.text()).trim();
     }
+  "image": {
+    write: (key) => new Promise((resolve, reject) => {
+      let img = document.createElement("img");
+      document.body.appendChild(img);
+      img.addEventListener("load", () => resolve(key), {once: true});
+      img.src = testURI("resource", "image", key);
+    }),
+    read: async (key) => {
+      let img = document.createElement("img");
+      document.body.appendChild(img);
+      let imgLoadPromise = new Promise((resolve, reject) => {
+        img.addEventListener("load", resolve, {once: true});
+      });
+      let address = testURI("resource", "image", key);
+      img.src = address;
+      await imgLoadPromise;
+      let response = await fetch(
+        testURI("count", "image", key), {"cache": "force-cache"});
+      return (await response.text()).trim();
+    }
   }
 };
 
