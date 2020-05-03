@@ -114,7 +114,7 @@ let resultsToDescription = ({
                   browser_version, device, platformVersion, platformName },
   prefs
 }) => {
-  let browserFinal = browserName || browser || browser2;
+  let browserFinal = browser || browserName || browser2;
   let platformFinal = platformName || os;
   let platformVersionFinal = platformVersion || "";
   let finalText = `${browserFinal} ${browserVersion},<br>${platformFinal} ${platformVersionFinal}`;
