@@ -163,10 +163,11 @@ passed: ${ passed }
 };
 
 let supercookieTooltip = (
-  { write, readSameFirstParty, readDifferentFirstParty, passed, testFailed }
+  { write, read, readSameFirstParty, readDifferentFirstParty, passed, testFailed }
 ) => {
   return `
 write: ${ write }
+read: ${ read }
 read, same first party: ${ readSameFirstParty }
 read, different first party: ${ readDifferentFirstParty }
 passed: ${ passed }
