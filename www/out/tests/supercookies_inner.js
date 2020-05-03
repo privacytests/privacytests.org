@@ -2,6 +2,10 @@ import * as IdbKeyVal from 'https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-k
 
 console.log("hi");
 
+
+let testURI = (path, type, key) =>
+    return `https://arthuredelstein.net/browser-privacy-live/${path}?type=${type}&key=${key}`;
+
 let tests = {
   "cookie": {
     write: (secret) => {
@@ -103,7 +107,7 @@ let tests = {
       let iframe = document.createElement("iframe");
       document.body.appendChild(iframe);
       iframe.addEventListener("load", () => resolve(key), {once: true});
-      iframe.src = `https://arthuredelstein.net/browser-privacy-live/count?key=${key}`;
+      iframe.src = testURI("resource", "page", key);
     }),
     read: async (key) => {
       let iframe = document.createElement("iframe");
@@ -111,10 +115,11 @@ let tests = {
       let iframeLoadPromise = new Promise((resolve, reject) => {
         iframe.addEventListener("load", resolve, {once: true});
       });
-      let address = `https://arthuredelstein.net/browser-privacy-live/count?key=${key}`;
+      let address = testURI("resource", "page", key);
       iframe.src = address;
       await iframeLoadPromise;
-      let response = await fetch(address, {"cache":"force-cache"});
+      let response = await fetch(
+        testURI("count", "page", key), {"cache": "force-cache"});
       return (await response.text()).trim();
     }
   }
