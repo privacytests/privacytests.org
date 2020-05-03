@@ -162,7 +162,7 @@ let tests = {
         faviconURI: testURI("resource", "favicon", key)
       });
       return key;
-    }
+    },
     read: async (key) => {
       window.postMessage({
         faviconURI: testURI("resource", "favicon", key)
