@@ -6,6 +6,10 @@ console.log("hi");
 let testURI = (path, type, key) =>
     `https://arthuredelstein.net/browser-privacy-live/${path}?type=${type}&key=${key}`;
 
+let sleepMs = (timeMs) => new Promise(
+  (resolve, reject) => setTimeout(resolve, timeMs)
+);
+
 let tests = {
   "cookie": {
     write: (secret) => {
@@ -167,6 +171,7 @@ let tests = {
       window.postMessage({
         faviconURI: testURI("resource", "favicon", key)
       });
+      await sleepMs(500);
       let response = await fetch(
         testURI("count", "image", key), {"cache": "reload"});
       return (await response.text()).trim();
