@@ -122,6 +122,7 @@ let tests = {
         testURI("count", "page", key), {"cache": "force-cache"});
       return (await response.text()).trim();
     }
+  },
   "image": {
     write: (key) => new Promise((resolve, reject) => {
       let img = document.createElement("img");
