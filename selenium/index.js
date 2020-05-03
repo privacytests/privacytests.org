@@ -164,12 +164,15 @@ let runSupercookieTests = async (driver) => {
 //  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
   let readResultsDifferentFirstParty = await loadAndGetResults(
     driver, `${iframe_root_different}/tests/supercookies.html?mode=read${readParams}`, 10000);
+  let jointResult = {};
   for (let test in readResultsDifferentFirstParty) {
-    let passed = (readResultsDifferentFirstParty[test].result !== readResultsSameFirstParty[test].result);
-    readResultsDifferentFirstParty[test].passed = passed;
+    let { write, read, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
+    let { result: readSameFirstParty } = readResultsSameFirstParty[test];
+    let passed = (readSameFirstParty !== readDifferentFirstParty);
+    jointResult[test] = { write, read, readSameFirstParty, readDifferentFirstParty, passed };
   }
 //  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
-  return readResultsDifferentFirstParty;
+  return jointResult;
 };
 
 // Run all of our privacy tests using selenium. Returns
@@ -280,6 +283,7 @@ let expandConfig = async (configData) => {
       } else if (browser === "brave") {
         driverType = "chrome";
         // Doesn't work.
+//        capabilityList = [{"browser": "brave"}];
         capabilityList = [{browser: "brave",
                            chromeOptions: {  binary: path,
                                              args: ['no-sandbox'] },
