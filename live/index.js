@@ -2,7 +2,16 @@ const express = require('express')
 const app = express()
 const port = 3333
 
-let countMaps = { "page":{}, "favicon":{}, "image": {}};
+let countMaps = {
+  "page": {},
+  "favicon": {},
+  "image": {}
+};
+let resourceFiles = {
+  "page": "page.html",
+  "favicon": "favicon.png",
+  "image": "image.png"
+};
 
 app.get('/', (req, res) => res.send('Hello World!'));
 app.get('/resource', (req, res) => {
@@ -16,7 +25,7 @@ app.get('/resource', (req, res) => {
   res.set({
     "Cache-Control": "public, max-age=604800, immutable"
   });
-  res.send("page.html");
+  res.sendFile(resourceFiles[type], { root: __dirname });
 });
 app.get('/count', (req, res) => {
   let { key, type } = req.query;
