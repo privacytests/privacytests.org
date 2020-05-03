@@ -6,6 +6,7 @@ const homeDir = require('os').homedir();
 const fs = require('fs');
 const {Builder, By, Key, until} = require('selenium-webdriver');
 const firefox = require('selenium-webdriver/firefox');
+const chrome = require('selenium-webdriver/chrome');
 const memoize = require('memoizee');
 const fetch = require('node-fetch');
 const dateFormat = require('dateformat');
@@ -96,15 +97,18 @@ let browserstackDriver = async (capabilities) => {
 // Produces a selenium driver to run tests on a local browser,
 // using the given capabilities object.
 let localDriver = async (capabilities) => {
-//  let options = new firefox.Options()
-//      .setPreference('privacy.firstparty.isolate', true);
+  let chromeOptions = new chrome.Options();
+  if (capabilities.chromeOptions && capabilities.chromeOptions.binary) {
+    chromeOptions.setChromeBinaryPath(capabilities.chromeOptions.binary);
+  }
   let builder = new Builder();
   if (capabilities.server) {
     builder = builder.usingServer(capabilities.server);
   }
   let driver = builder.withCapabilities(capabilities)
     .forBrowser(capabilities["browser"])
-//    .setFirefoxOptions(options)
+  //    .setFirefoxOptions(options)
+      .setChromeOptions(chromeOptions)
     .build();
 //  console.log("driver made:", driver);
   return driver;
@@ -285,10 +289,12 @@ let expandConfig = async (configData) => {
         driverType = "chrome";
         // Doesn't work.
 //        capabilityList = [{"browser": "brave"}];
-        capabilityList = [{browser: "brave",
-                           chromeOptions: {  binary: path,
-                                             args: ['no-sandbox'] },
-                           server: 'http://localhost:9515'}];
+        capabilityList = [{
+          browser: "chrome",
+          chromeOptions: {  binary: path,
+                            args: ['no-sandbox'] },
+        //  server: 'http://localhost:9515'
+        }];
       } else if (browser === "cliqz" ||
                  browser === "firefox" ||
                  browser === "tor browser") {
