@@ -7,6 +7,7 @@ const fs = require('fs');
 const {Builder, By, Key, until} = require('selenium-webdriver');
 const firefox = require('selenium-webdriver/firefox');
 const chrome = require('selenium-webdriver/chrome');
+const edge = require('selenium-webdriver/edge');
 const memoize = require('memoizee');
 const fetch = require('node-fetch');
 const dateFormat = require('dateformat');
@@ -15,6 +16,7 @@ const { spawn, exec } = require('child_process');
 const execAsync = util.promisify(exec);
 require('geckodriver');
 require('chromedriver');
+const { installDriver } = require('ms-chromium-edge-driver');
 
 // ## Selenium setup
 
@@ -101,6 +103,12 @@ let localDriver = async (capabilities) => {
   if (capabilities.chromeOptions && capabilities.chromeOptions.binary) {
     chromeOptions.setChromeBinaryPath(capabilities.chromeOptions.binary);
   }
+  let edgeOptions = new edge.Options();
+  const edgePaths = await installDriver();
+  edgeOptions.setEdgeChromium(true);
+  if (capabilities.path) {
+    edgeOptions.setBinaryPath(capabilities.path);
+  }
   let builder = new Builder();
   if (capabilities.server) {
     builder = builder.usingServer(capabilities.server);
@@ -109,7 +117,9 @@ let localDriver = async (capabilities) => {
     .forBrowser(capabilities["browser"])
   //    .setFirefoxOptions(options)
       .setChromeOptions(chromeOptions)
-    .build();
+      .setEdgeOptions(edgeOptions)
+      .setEdgeService(new edge.ServiceBuilder(edgePaths.driverPath))
+      .build();
 //  console.log("driver made:", driver);
   return driver;
 };
@@ -225,6 +235,7 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
                                 electron: localDriver,
                                 safari: localDriver,
                                 opera: localDriver,
+                                MicrosoftEdge: localDriver,
                               }[driverType];
       if (!driverConstructor) {
         throw new Error(`unknown driver type ${driverType}`);
@@ -279,21 +290,25 @@ let expandConfig = async (configData) => {
       if (browser === "chromium" || browser === "chrome") {
         driverType = "chrome";
         capabilityList = [{"browser": "chrome"}];
-      } else if (browser === "opera") {
-        driverType = "chrome";
-        capabilityList = [{"browser": "chrome"}];
       } else if (browser === "safari") {
         driverType = "safari";
         capabilityList = [{"browser": "safari"}];
-      } else if (browser === "brave") {
+      } else if (browser === "edge") {
+        driverType = "MicrosoftEdge";
+        capabilityList = [{"browser": "MicrosoftEdge"}];
+      } else if (browser === "opera") {
         driverType = "chrome";
-        // Doesn't work.
-//        capabilityList = [{"browser": "brave"}];
         capabilityList = [{
           browser: "chrome",
           chromeOptions: {  binary: path,
-                            args: ['no-sandbox'] },
-        //  server: 'http://localhost:9515'
+                            args: ['no-sandbox'] }
+        }]
+      } else if (browser === "brave") {
+        driverType = "chrome";
+        capabilityList = [{
+          browser: "chrome",
+          chromeOptions: {  binary: path,
+                            args: ['no-sandbox'] }
         }];
       } else if (browser === "cliqz" ||
                  browser === "firefox" ||
