@@ -5,12 +5,14 @@ const port = 3333
 let countMaps = {
   "page": {},
   "favicon": {},
-  "image": {}
+  "image": {},
+  "fetch": {}
 };
 let resourceFiles = {
   "page": "page.html",
   "favicon": "favicon.png",
-  "image": "image.png"
+  "image": "image.png",
+  "fetch": "page.html"
 };
 
 app.get('/', (req, res) => res.send('Hello World!'));
