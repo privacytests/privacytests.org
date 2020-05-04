@@ -72,18 +72,18 @@ let tests = {
         setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
       })
   },
-  "fetch_caching": {
-    write: async () => {
-      let response = await fetch("https://worldtimeapi.org/api/timezone/etc/utc",
-                                 {cache: "reload"});
-      let json = await response.json();
-      return {"secret": json["utc_datetime"]};
-    },
-    read: async () => {
-      let response = await fetch("https://worldtimeapi.org/api/timezone/etc/utc",
+  "fetch": {
+    write: async (key) => {
+      let response = await fetch(testURI("resource", "fetch", key),
                                  {cache: "force-cache"});
-      let json = await response.json();
-      return json["utc_datetime"];
+      return key;
+    },
+    read: async (key) => {
+      let response = await fetch(testURI("resource", "fetch", key),
+                                 {cache: "force-cache"});
+      let countResponse = await fetch(testURI("count", "fetch", key),
+                                      {cache: "reload"})
+      return (await countResponse.text()).trim();
     }
   },
   "XMLHttpRequest": {
