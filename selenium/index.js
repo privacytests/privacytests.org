@@ -55,7 +55,7 @@ const selectRecentBrowserstackBrowsers = (allCapabilities) => {
     for (let browser of browsers) {
       let capabilities = allCapabilities
           .filter(c => c.os === os && c.browser === browser)
-          .filter(c => c.browser !== "opera" && c.browser !== "ie" && c.os !== "ios");
+          .filter(c => c.browser !== "opera" && c.browser !== "ie");
       // Find recent versions of operating system
       let os_versions_set = new Set();
       for (let { os_version } of capabilities) {
@@ -68,8 +68,8 @@ const selectRecentBrowserstackBrowsers = (allCapabilities) => {
       if (recent_os_versions.length > 0) {
         for (let os_version of recent_os_versions) {
           let capabilities2 = capabilities.filter(c => c.os_version === os_version);
-          // Use two most recent browser versions or two representative devices
-          selectedCapabilities = selectedCapabilities.concat(capabilities2.slice(-2));
+          // Use most recent browser version or representative device
+          selectedCapabilities = selectedCapabilities.concat(capabilities2.slice(-1));
         }
       }
     }
@@ -173,7 +173,7 @@ let runSupercookieTests = async (driver) => {
     let { write, read, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
     let { result: readSameFirstParty } = readResultsSameFirstParty[test];
     let passed = (readSameFirstParty !== readDifferentFirstParty);
-    let testFailed = readSameFirstParty.startsWith("Error:");
+    let testFailed = !readSameFirstParty || readSameFirstParty.startsWith("Error:");
     jointResult[test] = { write, read, readSameFirstParty, readDifferentFirstParty, passed, testFailed };
   }
 //  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
