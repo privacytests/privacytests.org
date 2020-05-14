@@ -1,4 +1,4 @@
-import "./test_utils.js";
+import { runAllTests } from "./test_utils.js";
 
 let tests = {
   "sessionStorage": {
