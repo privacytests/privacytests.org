@@ -1,4 +1,4 @@
-import "test_utils.js"
+import "./test_utils.js"
 import * as IdbKeyVal from 'https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs';
 
 let testURI = (path, type, key) =>
