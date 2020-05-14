@@ -23,7 +23,7 @@ let queryParams = (urlString) => {
   return Object.fromEntries(searchParams.entries());
 };
 
-let runAllTests = async (tests) => {
+export let runAllTests = async (tests) => {
   let params = queryParams(document.URL);
   let results = await runTests(tests, params["mode"], params);
   console.log("results", results);
@@ -31,5 +31,3 @@ let runAllTests = async (tests) => {
     parent.postMessage(results, "*");
   }
 };
-
-export runAllTests;
