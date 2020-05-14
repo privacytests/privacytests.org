@@ -146,9 +146,11 @@ let openNewTab = async (driver) => {
 // Tell the selenium driver to visit a url, wait for the attribute
 // "data-test-results" to have a value, and resolve that value
 // in a promise. Rejects if timeout elapses first.
-let loadAndGetResults = async (driver, url, timeout) => {
-  let tab = await openNewTab(driver);
-  await driver.switchTo().window(tab);
+let loadAndGetResults = async (driver, url, timeout, newTab) => {
+  if (newTab) {
+    let tab = await openNewTab(driver);
+    await driver.switchTo().window(tab);
+  }
   console.log(`loading ${url}`);
   await driver.get(url);
   let body = await driver.findElement(By.tagName('body'));
@@ -159,12 +161,13 @@ let loadAndGetResults = async (driver, url, timeout) => {
 
 // Causes driver to connect to our supercookie tests. Returns
 // a map of test names to test results.
-let runSupercookieTests = async (driver) => {
+let runSupercookieTests = async (driver, newTabs) => {
+  let stem = newTabs ? "supercookies" : "navigation";
   let secret = Math.random().toString().slice(2);
   let iframe_root_same = false ? "http://localhost:8080" : "https://arthuredelstein.net/browser-privacy";
   let iframe_root_different = false ? "http://localhost:8080" : "https://arthuredelstein.github.io/browser-privacy";
   let writeResults = await loadAndGetResults(
-    driver, `${iframe_root_same}/tests/supercookies.html?mode=write&default=${secret}`, 10000);
+    driver, `${iframe_root_same}/tests/${stem}.html?mode=write&default=${secret}`, 10000, true);
 //  console.log("writeResults:", writeResults, typeof(writeResults));
   let readParams = "";
   for (let [test, data] of Object.entries(writeResults)) {
@@ -174,10 +177,10 @@ let runSupercookieTests = async (driver) => {
   }
 //  console.log(readParams);
   let readResultsSameFirstParty = await loadAndGetResults(
-    driver, `${iframe_root_same}/tests/supercookies.html?mode=read${readParams}`, 10000);
+    driver, `${iframe_root_same}/tests/${stem}.html?mode=read${readParams}`, 10000, newTabs);
 //  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
   let readResultsDifferentFirstParty = await loadAndGetResults(
-    driver, `${iframe_root_different}/tests/supercookies.html?mode=read${readParams}`, 10000);
+    driver, `${iframe_root_different}/tests/${stem}.html?mode=read${readParams}`, 10000, newTabs);
   let jointResult = {};
   for (let test in readResultsDifferentFirstParty) {
     let { write, read, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
@@ -202,8 +205,10 @@ let runTests = async function (driver) {
       driver, 'https://arthuredelstein.github.io/browser-privacy/tests/fingerprinting.html', 10000);
     let tor = await loadAndGetResults(
       driver, 'https://arthuredelstein.github.io/browser-privacy/tests/tor.html', 10000);
-    let supercookies = await runSupercookieTests(driver);
-    return { fingerprinting, tor, supercookies };
+    let supercookies = await runSupercookieTests(driver, true);
+    let navigation = await runSupercookieTests(driver, false);
+    return { fingerprinting, tor,
+             supercookies: Object.assign({}, supercookies, navigation)};
   } catch (e) {
     console.log(e);
     return null;
