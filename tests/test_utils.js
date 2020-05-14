@@ -1,24 +1,4 @@
-let testURI = (path, type, key) =>
-    `https://arthuredelstein.net/browser-privacy-live/${path}?type=${type}&key=${key}`;
-
-let sleepMs = (timeMs) => new Promise(
-  (resolve, reject) => setTimeout(resolve, timeMs)
-);
-
-let tests = {
-  "window.name": {
-    write: (secret) => {
-      window.name = secret;
-    },
-    read: () => window.name;
-   },
-  "sessionStorage": {
-    write: (secret) => localStorage.setItem("secret", secret),
-    read: () => localStorage.getItem("secret"),
-  }
-};
-
-let runTests = async (mode, params) => {
+let runTests = async (tests, mode, params) => {
   let results = {};
   for (let test of Object.keys(tests)) {
     let result;
@@ -43,12 +23,13 @@ let queryParams = (urlString) => {
   return Object.fromEntries(searchParams.entries());
 };
 
-(async () => {
+let runAllTests = (tests) => {
   let params = queryParams(document.URL);
-  let results = await runTests(params["mode"], params);
+  let results = await runTests(tests, params["mode"], params);
   console.log("results", results);
   if (window.location !== parent.location) {
     parent.postMessage(results, "*");
   }
-})();
-console.log("hello from supercookies_inner.js");
+};
+
+export runAllTests;
