@@ -1,7 +1,5 @@
+import { runAllTests} from "./test_utils.js"
 import * as IdbKeyVal from 'https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs';
-
-console.log("hi");
-
 
 let testURI = (path, type, key) =>
     `https://arthuredelstein.net/browser-privacy-live/${path}?type=${type}&key=${key}`;
@@ -179,37 +177,6 @@ let tests = {
   }
 };
 
-let runTests = async (mode, params) => {
-  let results = {};
-  for (let test of Object.keys(tests)) {
-    let result;
-    try {
-      let input = params[test] || params["default"];
-      console.log("input", input);
-      result = await tests[test][mode](input);
-    } catch (e) {
-      result = "Error: " + e.message;
-    }
-    results[test] = {
-      write: tests[test].write.toString(),
-      read: tests[test].read.toString(),
-      result,
-    };
-  }
-  return results;
-};
+runAllTests(tests);
 
-let queryParams = (urlString) => {
-  let searchParams = new URL(urlString).searchParams;
-  return Object.fromEntries(searchParams.entries());
-};
-
-(async () => {
-  let params = queryParams(document.URL);
-  let results = await runTests(params["mode"], params);
-  console.log("results", results);
-  if (window.location !== parent.location) {
-    parent.postMessage(results, "*");
-  }
-})();
 console.log("hello from supercookies_inner.js");

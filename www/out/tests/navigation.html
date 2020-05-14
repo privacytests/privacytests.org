@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Testing navigation tracking</title>
+    <meta charset="utf8"/>
+  </head>
+  <body>
+    <script>
+     addEventListener("message", ({data}) => {
+       console.log(data);
+       document.body.setAttribute("data-test-results", JSON.stringify(data));
+     }, false);
+     let iframe = document.createElement("iframe");
+     document.body.appendChild(iframe);
+     iframe_root = (location.hostname === "localhost" ||
+                    location.hostname === "127.0.0.1" ||
+                    location.hostname === "")
+                 ? "" : "https://arthuredelstein.net/browser-privacy";
+     iframe.src = `${iframe_root}/tests/navigation_inner.html${window.location.search}`;
+    </script>
+  </body>
+</html>
