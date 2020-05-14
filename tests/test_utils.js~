@@ -1,4 +1,4 @@
-let runTests = async (mode, params) => {
+let runTests = async (tests, mode, params) => {
   let results = {};
   for (let test of Object.keys(tests)) {
     let result;
@@ -31,3 +31,5 @@ let runAllTests = (tests) => {
     parent.postMessage(results, "*");
   }
 };
+
+export runAllTests;
