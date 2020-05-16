@@ -8,18 +8,21 @@
     "dateformat": "^3.0.3",
     "electron-chromedriver": "^3.0.0-beta.1",
     "geckodriver": "^1.12.2",
+    "gh-pages": "^2.0.0",
     "memoizee": "^0.4.12",
     "ms-chromium-edge-driver": "^0.2.4",
     "node-fetch": "2.6.0",
-    "selenium-webdriver": "^4.0.0-alpha.1",
-    "gh-pages": "^2.0.0"
+    "selenium-webdriver": "^4.0.0-alpha.1"
   },
   "devDependencies": {
-    "file-url": "^2.0.2"
+    "file-url": "^2.0.2",
+    "live-server": "^1.2.1",
+    "nodemon": "^2.0.4"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "gh-pages -d out"
+    "deploy": "gh-pages -d out",
+    "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render\" & ./node_modules/live-server/live-server.js --open=results.html out"
   },
   "author": "Arthur Edelstein",
   "license": "MIT"
