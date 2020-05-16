@@ -5,10 +5,15 @@ let tests = {
     write: (secret) => sessionStorage.setItem("secret", secret),
     read: () => sessionStorage.getItem("secret"),
   },
-//  "window.name": {
-//    write: (secret) => window.postMessage({"window.name": secret}),
-//    read: () => 
-//  },
+  "window.name": {
+    write: (secret) => parent.postMessage({"write window.name": secret}),
+    read: () => {
+      parent.postMessage({"read window.name": true})
+      addEventListener("message", {data} => {
+        return data;
+      }, { once: true });
+    }
+  },
 };
 
 runAllTests(tests);

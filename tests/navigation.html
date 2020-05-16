@@ -8,7 +8,13 @@
     <script>
      addEventListener("message", ({data}) => {
        console.log(data);
-       document.body.setAttribute("data-test-results", JSON.stringify(data));
+       if (data["write window.name"]) {
+         window.name = data["write window.name"];
+       } else if (data["read window.name"]) {
+         iframe.postMessage(window.name);
+       } else {
+         document.body.setAttribute("data-test-results", JSON.stringify(data));
+       }
      }, false);
      let iframe = document.createElement("iframe");
      document.body.appendChild(iframe);
