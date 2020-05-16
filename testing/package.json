@@ -1,6 +1,6 @@
 {
   "name": "selenium",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "dependencies": {
@@ -11,11 +11,15 @@
     "memoizee": "^0.4.12",
     "ms-chromium-edge-driver": "^0.2.4",
     "node-fetch": "2.6.0",
-    "selenium-webdriver": "^4.0.0-alpha.1"
+    "selenium-webdriver": "^4.0.0-alpha.1",
+    "gh-pages": "^2.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "file-url": "^2.0.2"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "gh-pages -d out"
   },
   "author": "Arthur Edelstein",
   "license": "MIT"
