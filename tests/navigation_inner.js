@@ -9,7 +9,7 @@ let tests = {
     write: (secret) => parent.postMessage({"write window.name": secret}),
     read: () => new Promise((resolve) => {
       parent.postMessage({"read window.name": true})
-      addEventListener("message", {data} => {
+      addEventListener("message", ({data}) => {
         resolve(data);
       }, { once: true });
     })
