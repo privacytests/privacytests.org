@@ -198,14 +198,14 @@ let tests = {
     write: (key) => new Promise((resolve, reject) => {
       let video = document.createElement("video");
       document.body.appendChild(video);
-      video.addEventListener("loadstart", () => resolve(key), {once: true});
+      video.addEventListener("canplaythrough", () => resolve(key), {once: true});
       video.src = testURI("resource", "video", key);
     }),
     read: async (key) => {
       let video = document.createElement("video");
       document.body.appendChild(video);
       let videoLoadPromise = new Promise((resolve, reject) => {
-        video.addEventListener("loadstart", resolve, {once: true});
+        video.addEventListener("canplaythrough", resolve, {once: true});
       });
       video.src = testURI("resource", "video", key);
       await videoLoadPromise;
