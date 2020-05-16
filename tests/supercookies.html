@@ -8,7 +8,7 @@
   <body>
     <script>
      addEventListener("message", ({data}) => {
-       console.log(data);
+       console.log("message received in supercookies.html:", data);
        if (data["faviconURL"]) {
          let favicon = document.head.getElementById("favicon");
          favicon.setAttribute("href", data["faviconURL"]);
