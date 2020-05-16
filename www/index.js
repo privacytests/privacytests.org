@@ -172,8 +172,8 @@ let supercookieTooltip = (
   return `
 write: ${ write }
 read: ${ read }
-read, same first party: ${ readSameFirstParty }
-read, different first party: ${ readDifferentFirstParty }
+result, same first party: ${ readSameFirstParty }
+result, different first party: ${ readDifferentFirstParty }
 passed: ${ passed }
 test failed: ${ testFailed }
 `.trim();
