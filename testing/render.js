@@ -186,7 +186,7 @@ let resultsSection = ({results, category, tooltipFunction}) => {
     return [];
   }
   let rowNames = Object.keys(bestResults[0]["testResults"][category])
-      .sort();
+      .sort(Intl.Collator().compare);
   let resultMaps = bestResults
       .map(m => m["testResults"][category]);
   let section = [];
