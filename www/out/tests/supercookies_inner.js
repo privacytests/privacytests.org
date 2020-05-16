@@ -138,8 +138,7 @@ let tests = {
       let imgLoadPromise = new Promise((resolve, reject) => {
         img.addEventListener("load", resolve, {once: true});
       });
-      let address = testURI("resource", "image", key);
-      img.src = address;
+      img.src = testURI("resource", "image", key);
       await imgLoadPromise;
       let response = await fetch(
         testURI("count", "image", key), {"cache": "reload"});
@@ -194,7 +193,27 @@ let tests = {
         testURI("count", "font", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
-  }
+  },
+  "video": {
+    write: (key) => new Promise((resolve, reject) => {
+      let video = document.createElement("video");
+      document.body.appendChild(video);
+      video.addEventListener("load", () => resolve(key), {once: true});
+      video.src = testURI("resource", "video", key);
+    }),
+    read: async (key) => {
+      let video = document.createElement("video");
+      document.body.appendChild(video);
+      let videoLoadPromise = new Promise((resolve, reject) => {
+        video.addEventListener("load", resolve, {once: true});
+      });
+      video.src = testURI("resource", "video", key);
+      await videoLoadPromise;
+      let response = await fetch(
+        testURI("count", "video", key), {"cache": "reload"});
+      return (await response.text()).trim();
+    }
+  },
 };
 
 runAllTests(tests);
