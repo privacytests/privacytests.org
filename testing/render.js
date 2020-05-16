@@ -245,7 +245,7 @@ let main = async () => {
   if (!(existsSync("./out"))) {
     await fs.mkdir("./out");
   }
-  let resultsFile = await latestFile("../selenium/results");
+  let resultsFile = await latestFile("./results");
   let resultsFileJSON = "./out/" + path.basename(resultsFile);
   let resultsFileHTML = resultsFileJSON.replace(/\.json$/, ".html");
   fs.copyFile(resultsFile, "./out/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
