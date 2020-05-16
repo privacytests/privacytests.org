@@ -180,7 +180,7 @@ test failed: ${ testFailed }
 };
 
 let resultsSection = ({results, category, tooltipFunction}) => {
-  console.log(results);
+//  console.log(results);
   let bestResults = results.filter(m => m["testResults"][category]);
   if (bestResults.length === 0) {
     return [];
@@ -207,7 +207,7 @@ let resultsToTable = (results, title) => {
   let filteredResults = results
       .filter(m => m["testResults"])
       .filter(m => m["testResults"]["fingerprinting"]);
-  console.log(filteredResults[0]);
+//  console.log(filteredResults[0]);
   let headers = filteredResults.map(resultsToDescription);
   headers.unshift(`<h1 class="title">${title}</h1>`);
   let body = [];
@@ -236,27 +236,32 @@ let content = (results, jsonFilename) => {
 let readJSONFile = async (file) =>
     JSON.parse(await fs.readFile(file));
 
-let latestFile = async (path) => {
+let latestResultsFile = async (path) => {
   let files = await fs.readdir(path);
-  let stem = files.sort().filter(f => f.startsWith("results_")).pop();
+  let stem = files
+      .filter(f => f.match("^results_(.*?)\.json$"))
+      .sort()
+      .pop();
   return path + "/" + stem;
 };
 
 let main = async () => {
-  let resultsFile = await latestFile("./out/");
-  let resultsFileJSON = "./out/" + path.basename(resultsFile);
+  let resultsFileJSON = await latestResultsFile("./out");
+  let resultsFileHTMLTemp = "./out/results.html";
   let resultsFileHTML = resultsFileJSON.replace(/\.json$/, ".html");
-  fs.copyFile(resultsFile, "./out/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
-  console.log(`Reading from raw results file: ${resultsFile}`);
+//  fs.copyFile(resultsFile, "./out/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
+  console.log(`Reading from raw results file: ${resultsFileJSON}`);
   let results = await readJSONFile(resultsFileJSON);
-  console.log(results.all_tests[0]);
+//  console.log(results.all_tests[0]);
 //  console.log(JSON.stringify(results));
-  await fs.writeFile(resultsFileHTML, htmlPage({
+  await fs.writeFile(resultsFileHTMLTemp, htmlPage({
     title: "Browser Privacy Project",
-    content: content(results, path.basename(resultsFile)),
+    content: content(results, path.basename(resultsFileJSON)),
     style: pageStyle,
     faviconURI
   }));
+  console.log(`Wrote out ${fileUrl(resultsFileHTMLTemp)}`);
+  await fs.copyFile(resultsFileHTMLTemp, resultsFileHTML);
   console.log(`Wrote out ${fileUrl(resultsFileHTML)}`);
 };
 
