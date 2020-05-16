@@ -198,14 +198,16 @@ let tests = {
     write: (key) => new Promise((resolve, reject) => {
       let video = document.createElement("video");
       document.body.appendChild(video);
-      video.addEventListener("loadstart", () => resolve(key), {once: true});
+      video.preload="auto";
+      video.addEventListener("canplaythrough", () => resolve(key), {once: true});
       video.src = testURI("resource", "video", key);
     }),
     read: async (key) => {
       let video = document.createElement("video");
       document.body.appendChild(video);
+      video.preload="auto";
       let videoLoadPromise = new Promise((resolve, reject) => {
-        video.addEventListener("loadstart", resolve, {once: true});
+        video.addEventListener("canplaythrough", resolve, {once: true});
       });
       video.src = testURI("resource", "video", key);
       await videoLoadPromise;
@@ -214,6 +216,17 @@ let tests = {
       return (await response.text()).trim();
     }
   },
+  "locks": {
+    write: async (key) => {
+      navigator.locks.request(key, lock => new Promise((f,r) => {}));
+      let queryResult = await navigator.locks.query();
+      return queryResult.held[0].clientId;
+    },
+    read: async () => {
+      let queryResult = await navigator.locks.query();
+      return queryResult.held[0].name;
+    }
+  }
 };
 
 runAllTests(tests);
