@@ -174,6 +174,38 @@ let tests = {
         testURI("count", "image", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
+  },
+  "font": {
+    write: async (key) => {
+      let style = document.createElement("style");
+      style.type='text/css';
+      let fontURI = testURI("resource", "font", key);
+      style.innerHTML = `
+        @font-face {
+          font-family: "myFont";
+          src: url("${fontURI}");
+        }
+        body { font-family: "myFont" }
+      `;
+      document.getElementsByTagName("head")[0].appendChild(style);
+      return key;
+    },
+    read: (key) => async () => {
+      let style = document.createElement("style");
+      style.type='text/css';
+      let fontURI = testURI("resource", "font", key);
+      style.innerHTML = `
+        @font-face {
+          font-family: "myFont";
+          src: url("${fontURI}");
+        }
+        body { font-family: "myFont" }
+      `;
+      document.getElementsByTagName("head")[0].appendChild(style);
+      let response = await fetch(
+        testURI("count", "font", key), {"cache": "reload"});
+      return (await response.text()).trim();
+    }
   }
 };
 
