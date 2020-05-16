@@ -216,6 +216,17 @@ let tests = {
       return (await response.text()).trim();
     }
   },
+  "locks": {
+    write: async (key) => {
+      navigator.locks.request(key, lock => new Promise((f,r) => {}));
+      let queryResult = await navigator.locks.query();
+      return queryResult.held[0].clientId;
+    },
+    read: async () => {
+      let queryResult = await navigator.locks.query();
+      return queryResult.held[0].name;
+    }
+  }
 };
 
 runAllTests(tests);
