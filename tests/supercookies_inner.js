@@ -160,13 +160,13 @@ let tests = {
   },
   "favicon": {
     write: (key) => {
-      window.postMessage({
+      parent.postMessage({
         faviconURI: testURI("resource", "favicon", key)
       }, "*");
       return key;
     },
     read: async (key) => {
-      window.postMessage({
+      parent.postMessage({
         faviconURI: testURI("resource", "favicon", key)
       }, "*");
       await sleepMs(500);
