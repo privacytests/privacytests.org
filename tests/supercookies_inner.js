@@ -180,17 +180,11 @@ let tests = {
       let style = document.createElement("style");
       style.type='text/css';
       let fontURI = testURI("resource", "font", key);
-      style.innerHTML = `
-        @font-face {
-          font-family: "myFont";
-          src: url("${fontURI}");
-        }
-        body { font-family: "myFont" }
-      `;
+      style.innerHTML = `@font-face {font-family: "myFont"; src: url("${fontURI}"); } body { font-family: "myFont" }`;
       document.getElementsByTagName("head")[0].appendChild(style);
       return key;
     },
-    read: (key) => async () => {
+    read: async (key) => {
       let style = document.createElement("style");
       style.type='text/css';
       let fontURI = testURI("resource", "font", key);
