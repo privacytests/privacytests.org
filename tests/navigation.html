@@ -7,7 +7,7 @@
   <body>
     <script>
      addEventListener("message", ({data}) => {
-       console.log(data);
+       console.log("navigation.html received message:", data);
        if (data["write window.name"]) {
          window.name = data["write window.name"];
        } else if (data["read window.name"]) {
