@@ -7,8 +7,14 @@
   <body>
     <script>
      addEventListener("message", ({data}) => {
-       console.log(data);
-       document.body.setAttribute("data-test-results", JSON.stringify(data));
+       console.log("navigation.html received message:", data);
+       if (data["write window.name"]) {
+         window.name = data["write window.name"];
+       } else if (data["read window.name"]) {
+         iframe.contentWindow.postMessage(window.name, "*");
+       } else {
+         document.body.setAttribute("data-test-results", JSON.stringify(data));
+       }
      }, false);
      let iframe = document.createElement("iframe");
      document.body.appendChild(iframe);
