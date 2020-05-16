@@ -7,6 +7,7 @@ const fs = require('fs');
 const {Builder, By, Key, until} = require('selenium-webdriver');
 const firefox = require('selenium-webdriver/firefox');
 const chrome = require('selenium-webdriver/chrome');
+const edge = require('selenium-webdriver/edge');
 const memoize = require('memoizee');
 const fetch = require('node-fetch');
 const dateFormat = require('dateformat');
@@ -15,6 +16,7 @@ const { spawn, exec } = require('child_process');
 const execAsync = util.promisify(exec);
 require('geckodriver');
 require('chromedriver');
+const { installDriver } = require('ms-chromium-edge-driver');
 
 // ## Selenium setup
 
@@ -55,7 +57,7 @@ const selectRecentBrowserstackBrowsers = (allCapabilities) => {
     for (let browser of browsers) {
       let capabilities = allCapabilities
           .filter(c => c.os === os && c.browser === browser)
-          .filter(c => c.browser !== "opera" && c.browser !== "ie" && c.os !== "ios");
+          .filter(c => c.browser !== "opera" && c.browser !== "ie");
       // Find recent versions of operating system
       let os_versions_set = new Set();
       for (let { os_version } of capabilities) {
@@ -68,8 +70,8 @@ const selectRecentBrowserstackBrowsers = (allCapabilities) => {
       if (recent_os_versions.length > 0) {
         for (let os_version of recent_os_versions) {
           let capabilities2 = capabilities.filter(c => c.os_version === os_version);
-          // Use two most recent browser versions or two representative devices
-          selectedCapabilities = selectedCapabilities.concat(capabilities2.slice(-2));
+          // Use most recent browser version or representative device
+          selectedCapabilities = selectedCapabilities.concat(capabilities2.slice(-1));
         }
       }
     }
@@ -101,6 +103,12 @@ let localDriver = async (capabilities) => {
   if (capabilities.chromeOptions && capabilities.chromeOptions.binary) {
     chromeOptions.setChromeBinaryPath(capabilities.chromeOptions.binary);
   }
+  let edgeOptions = new edge.Options();
+  const edgePaths = await installDriver();
+  edgeOptions.setEdgeChromium(true);
+  if (capabilities.path) {
+    edgeOptions.setBinaryPath(capabilities.path);
+  }
   let builder = new Builder();
   if (capabilities.server) {
     builder = builder.usingServer(capabilities.server);
@@ -109,7 +117,9 @@ let localDriver = async (capabilities) => {
     .forBrowser(capabilities["browser"])
   //    .setFirefoxOptions(options)
       .setChromeOptions(chromeOptions)
-    .build();
+      .setEdgeOptions(edgeOptions)
+      .setEdgeService(new edge.ServiceBuilder(edgePaths.driverPath))
+      .build();
 //  console.log("driver made:", driver);
   return driver;
 };
@@ -136,9 +146,11 @@ let openNewTab = async (driver) => {
 // Tell the selenium driver to visit a url, wait for the attribute
 // "data-test-results" to have a value, and resolve that value
 // in a promise. Rejects if timeout elapses first.
-let loadAndGetResults = async (driver, url, timeout) => {
-  let tab = await openNewTab(driver);
-  await driver.switchTo().window(tab);
+let loadAndGetResults = async (driver, url, timeout, newTab) => {
+  if (newTab) {
+    let tab = await openNewTab(driver);
+    await driver.switchTo().window(tab);
+  }
   console.log(`loading ${url}`);
   await driver.get(url);
   let body = await driver.findElement(By.tagName('body'));
@@ -149,12 +161,13 @@ let loadAndGetResults = async (driver, url, timeout) => {
 
 // Causes driver to connect to our supercookie tests. Returns
 // a map of test names to test results.
-let runSupercookieTests = async (driver) => {
+let runSupercookieTests = async (driver, newTabs) => {
+  let stem = newTabs ? "supercookies" : "navigation";
   let secret = Math.random().toString().slice(2);
   let iframe_root_same = false ? "http://localhost:8080" : "https://arthuredelstein.net/browser-privacy";
   let iframe_root_different = false ? "http://localhost:8080" : "https://arthuredelstein.github.io/browser-privacy";
   let writeResults = await loadAndGetResults(
-    driver, `${iframe_root_same}/tests/supercookies.html?mode=write&default=${secret}`, 10000);
+    driver, `${iframe_root_same}/tests/${stem}.html?mode=write&default=${secret}`, 10000, true);
 //  console.log("writeResults:", writeResults, typeof(writeResults));
   let readParams = "";
   for (let [test, data] of Object.entries(writeResults)) {
@@ -164,16 +177,16 @@ let runSupercookieTests = async (driver) => {
   }
 //  console.log(readParams);
   let readResultsSameFirstParty = await loadAndGetResults(
-    driver, `${iframe_root_same}/tests/supercookies.html?mode=read${readParams}`, 10000);
+    driver, `${iframe_root_same}/tests/${stem}.html?mode=read${readParams}`, 10000, newTabs);
 //  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
   let readResultsDifferentFirstParty = await loadAndGetResults(
-    driver, `${iframe_root_different}/tests/supercookies.html?mode=read${readParams}`, 10000);
+    driver, `${iframe_root_different}/tests/${stem}.html?mode=read${readParams}`, 10000, newTabs);
   let jointResult = {};
   for (let test in readResultsDifferentFirstParty) {
     let { write, read, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
     let { result: readSameFirstParty } = readResultsSameFirstParty[test];
     let passed = (readSameFirstParty !== readDifferentFirstParty);
-    let testFailed = readSameFirstParty.startsWith("Error:");
+    let testFailed = !readSameFirstParty || readSameFirstParty.startsWith("Error:");
     jointResult[test] = { write, read, readSameFirstParty, readDifferentFirstParty, passed, testFailed };
   }
 //  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
@@ -192,8 +205,10 @@ let runTests = async function (driver) {
       driver, 'https://arthuredelstein.github.io/browser-privacy/tests/fingerprinting.html', 10000);
     let tor = await loadAndGetResults(
       driver, 'https://arthuredelstein.github.io/browser-privacy/tests/tor.html', 10000);
-    let supercookies = await runSupercookieTests(driver);
-    return { fingerprinting, tor, supercookies };
+    let supercookies = await runSupercookieTests(driver, true);
+    let navigation = await runSupercookieTests(driver, false);
+    return { fingerprinting, tor,
+             supercookies: Object.assign({}, supercookies, navigation)};
   } catch (e) {
     console.log(e);
     return null;
@@ -225,6 +240,7 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
                                 electron: localDriver,
                                 safari: localDriver,
                                 opera: localDriver,
+                                MicrosoftEdge: localDriver,
                               }[driverType];
       if (!driverConstructor) {
         throw new Error(`unknown driver type ${driverType}`);
@@ -279,21 +295,25 @@ let expandConfig = async (configData) => {
       if (browser === "chromium" || browser === "chrome") {
         driverType = "chrome";
         capabilityList = [{"browser": "chrome"}];
-      } else if (browser === "opera") {
-        driverType = "chrome";
-        capabilityList = [{"browser": "chrome"}];
       } else if (browser === "safari") {
         driverType = "safari";
         capabilityList = [{"browser": "safari"}];
-      } else if (browser === "brave") {
+      } else if (browser === "edge") {
+        driverType = "MicrosoftEdge";
+        capabilityList = [{"browser": "MicrosoftEdge"}];
+      } else if (browser === "opera") {
         driverType = "chrome";
-        // Doesn't work.
-//        capabilityList = [{"browser": "brave"}];
         capabilityList = [{
           browser: "chrome",
           chromeOptions: {  binary: path,
-                            args: ['no-sandbox'] },
-        //  server: 'http://localhost:9515'
+                            args: ['no-sandbox'] }
+        }]
+      } else if (browser === "brave") {
+        driverType = "chrome";
+        capabilityList = [{
+          browser: "chrome",
+          chromeOptions: {  binary: path,
+                            args: ['no-sandbox'] }
         }];
       } else if (browser === "cliqz" ||
                  browser === "firefox" ||
