@@ -10,8 +10,8 @@
      addEventListener("message", ({data}) => {
        console.log("message received in supercookies.html:", data);
        if (data["faviconURI"]) {
-         let favicon = document.head.getElementById("favicon");
-         favicon.setAttribute("href", data["faviconURL"]);
+         let favicon = document.getElementById("favicon");
+         favicon.setAttribute("href", data["faviconURI"]);
        } else {
          document.body.setAttribute("data-test-results", JSON.stringify(data));
        }
