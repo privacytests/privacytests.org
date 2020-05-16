@@ -6,13 +6,15 @@ let countMaps = {
   "page": {},
   "favicon": {},
   "image": {},
-  "fetch": {}
+  "fetch": {},
+  "font": {}
 };
 let resourceFiles = {
   "page": "page.html",
   "favicon": "favicon.png",
   "image": "image.png",
-  "fetch": "page.html"
+  "fetch": "page.html",
+  "font": "font.woff"
 };
 
 app.get('/', (req, res) => res.send('Hello World!'));
