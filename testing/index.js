@@ -272,10 +272,7 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
 // The file name looks like `results_yyyymmdd__HHMMss.json`.
 let writeDataSync = function (data) {
   let dateStub = dateFormat(new Date(), "yyyymmdd_HHMMss", true);
-  if (!(fs.existsSync("results"))) {
-    fs.mkdirSync("results");
-  }
-  let filePath = `results/results_${dateStub}.json`;
+  let filePath = `out/results_${dateStub}.json`;
   fs.writeFileSync(filePath, JSON.stringify(data));
   console.log(`Wrote results to "${filePath}".`);
 };

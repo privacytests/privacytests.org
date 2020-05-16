@@ -237,15 +237,13 @@ let readJSONFile = async (file) =>
     JSON.parse(await fs.readFile(file));
 
 let latestFile = async (path) => {
-  let stem = (await fs.readdir(path)).sort().pop();
+  let files = await fs.readdir(path);
+  let stem = files.sort().filter(f => f.startsWith("results_")).pop();
   return path + "/" + stem;
 };
 
 let main = async () => {
-  if (!(existsSync("./out"))) {
-    await fs.mkdir("./out");
-  }
-  let resultsFile = await latestFile("./results");
+  let resultsFile = await latestFile("./out/");
   let resultsFileJSON = "./out/" + path.basename(resultsFile);
   let resultsFileHTML = resultsFileJSON.replace(/\.json$/, ".html");
   fs.copyFile(resultsFile, "./out/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
