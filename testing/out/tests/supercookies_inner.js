@@ -194,7 +194,7 @@ let tests = {
       return (await response.text()).trim();
     }
   },
-  "video": {
+/*  "video": {
     write: (key) => new Promise((resolve, reject) => {
       let video = document.createElement("video");
       document.body.appendChild(video);
@@ -215,7 +215,7 @@ let tests = {
         testURI("count", "video", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
-  },
+  },*/
   "locks": {
     write: async (key) => {
       navigator.locks.request(key, lock => new Promise((f,r) => {}));
