@@ -233,7 +233,8 @@ let tests = {
     },
     read: async(key) => {
       await fetch(testURI("etag", "request", key));
-      return await fetch(testURI("etag", "value", key));
+      let response = await fetch(testURI("etag", "value", key));
+      return response.text();
     }
   }
 };

@@ -355,7 +355,7 @@ let main = async () => {
   let configData = JSON.parse(fs.readFileSync(configFile));
   await prepare(configData);
   let expandedConfigData = await expandConfig(configData);
-  writeDataSync(await runTestsBatch(expandedConfigData, { shouldQuit: true}));
+  writeDataSync(await runTestsBatch(expandedConfigData, { shouldQuit: false}));
 }
 
 main();
