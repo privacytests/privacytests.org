@@ -234,6 +234,7 @@ let tests = {
   "etag": {
     write: async (key) => {
       await fetch(testURI("etag", "request", key));
+      return key;
     },
     read: async (key) => {
       await fetch(testURI("etag", "request", key));
