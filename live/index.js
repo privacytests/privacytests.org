@@ -45,12 +45,12 @@ app.get('/altsvc', (req, res) => {
 let ifNoneMatchValues = {};
 
 app.get('/etag', (req, res) => {
-  let { key, mode } = req.query;
+  let { key, type } = req.query;
   res.set({ "Cache-Control": "max-age=0" });
-  if (mode === "request") {
+  if (type === "request") {
     ifNoneMatchValues[key] = req.headers['if-none-match'];
-    res.send("etag test");
-  } else if (mode === "value") {
+    res.send(`etag test: ${key}`);
+  } else if (type === "value") {
     res.send(`${ifNoneMatchValues[key]}`);
   }
 });
