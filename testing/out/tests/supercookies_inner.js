@@ -218,20 +218,24 @@ let tests = {
   },*/
   "locks": {
     write: async (key) => {
-      navigator.locks.request(key, lock => new Promise((f,r) => {}));
-      let queryResult = await navigator.locks.query();
-      return queryResult.held[0].clientId;
+      if (navigator.locks) {
+        navigator.locks.request(key, lock => new Promise((f,r) => {}));
+        let queryResult = await navigator.locks.query();
+        return queryResult.held[0].clientId;
+      }
     },
     read: async () => {
-      let queryResult = await navigator.locks.query();
-      return queryResult.held[0].name;
+      if (navigator.locks) {
+        let queryResult = await navigator.locks.query();
+        return queryResult.held[0].name;
+      }
     }
   },
   "etag": {
     write: async (key) => {
       await fetch(testURI("etag", "request", key));
     },
-    read: async(key) => {
+    read: async (key) => {
       await fetch(testURI("etag", "request", key));
       let response = await fetch(testURI("etag", "value", key));
       return response.text();
