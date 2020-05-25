@@ -226,6 +226,15 @@ let tests = {
       let queryResult = await navigator.locks.query();
       return queryResult.held[0].name;
     }
+  },
+  "etag": {
+    write: async (key) => {
+      await fetch(testURI("etag", "request", key));
+    },
+    read: async(key) => {
+      await fetch(testURI("etag", "request", key));
+      return await fetch(testURI("etag", "value", key));
+    }
   }
 };
 
