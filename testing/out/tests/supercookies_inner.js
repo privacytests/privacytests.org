@@ -239,7 +239,12 @@ let tests = {
     read: async (key) => {
       await fetch(testURI("etag", "request", key));
       let response = await fetch(testURI("etag", "value", key));
-      return response.text();
+      let responseText = await response.text();
+      if (responseText === "undefined") {
+        return undefined;
+      } else {
+        return responseText;
+      }
     }
   }
 };
