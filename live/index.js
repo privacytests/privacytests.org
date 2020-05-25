@@ -35,6 +35,24 @@ app.get('/count', (req, res) => {
   let { key, type } = req.query;
   res.send(`${countMaps[type][key] || 0}`);
 });
+app.get('/altsvc', (req, res) => {
+  res.set({
+    "Alt-Svc": "h2=\"torpat.ch:443\"; ma=2592000;"
+  })
+  res.send("Alt-Svc");
+});
 
+let ifNoneMatchValues = {};
+
+app.get('/etag', (req, res) => {
+  let { key, mode } = req.query;
+  res.set({ "Cache-Control": "max-age=0" });
+  if (mode === "request") {
+    ifNoneMatchValues[key] = req.headers['if-none-match'];
+    res.send("etag test");
+  } else if (mode === "value") {
+    res.send(`${ifNoneMatchValues[key]}`);
+  }
+});
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
