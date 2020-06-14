@@ -247,7 +247,7 @@ let tests = {
       }
     }
   },
-  "hsts": {
+  "HSTS": {
     write: () => {
       let image = document.getElementById("hsts-image");
       image.src = "https://hsts.arthuredelstein.net/set_hsts.png";
