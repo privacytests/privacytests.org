@@ -55,4 +55,11 @@ app.get('/etag', (req, res) => {
   }
 });
 
+app.get('/hsts', (req, res) => {
+  let { maxAge } = req.query;
+  res.set({ "Strict-Transport-Security": `max-age=${maxAge || 0}`,
+            "Access-Control-Allow-Origin": "*"});
+  res.send("hsts test");
+});
+
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
