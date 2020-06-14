@@ -230,7 +230,7 @@ let tests = {
         return queryResult.held[0].name;
       }
     }
-  },
+  },*/
   "etag": {
     write: async (key) => {
       await fetch(testURI("etag", "request", key));
@@ -247,7 +247,7 @@ let tests = {
       }
     }
   },
-  "HSTS": {
+  /*"HSTS": {
     write: () => {
       let image = document.getElementById("hsts-image");
       image.src = "https://hsts.arthuredelstein.net/set_hsts.png";
