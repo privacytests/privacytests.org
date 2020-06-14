@@ -69,7 +69,7 @@ let tests = {
         bc.postMessage("request");
         setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
       })
-  },
+  },*/
   "fetch": {
     write: async (key) => {
       let response = await fetch(testURI("resource", "fetch", key),
@@ -83,7 +83,7 @@ let tests = {
                                       {cache: "reload"})
       return (await countResponse.text()).trim();
     }
-  },
+  },/*
   "XMLHttpRequest": {
     write: () => new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
@@ -230,7 +230,7 @@ let tests = {
         return queryResult.held[0].name;
       }
     }
-  },*/
+  },
   "etag": {
     write: async (key) => {
       await fetch(testURI("etag", "request", key));
@@ -247,7 +247,7 @@ let tests = {
       }
     }
   },
-  /*"HSTS": {
+  "HSTS": {
     write: () => {
       let image = document.getElementById("hsts-image");
       image.src = "https://hsts.arthuredelstein.net/set_hsts.png";
