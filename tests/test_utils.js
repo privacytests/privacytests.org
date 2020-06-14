@@ -1,6 +1,6 @@
 let runTests = async (tests, mode, params) => {
   let results = {};
-  for (let test of ["image"] /*Object.keys(tests)*/) {
+  for (let test of Object.keys(tests)) {
     let result;
     try {
       let input = params[test] || params["default"];
