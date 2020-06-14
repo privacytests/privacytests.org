@@ -9,7 +9,7 @@ let sleepMs = (timeMs) => new Promise(
 );
 
 let tests = {
-  "cookie": {
+/*  "cookie": {
     write: (secret) => {
       let expiry = new Date();
       expiry.setFullYear(expiry.getFullYear() + 1);
@@ -124,7 +124,7 @@ let tests = {
         testURI("count", "page", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
-  },
+  },*/
   "image": {
     write: (key) => new Promise((resolve, reject) => {
       let img = document.createElement("img");
@@ -157,7 +157,7 @@ let tests = {
       return (new URL(url)).searchParams.get("key");
     }
   },
-  "favicon": {
+/*  "favicon": {
     write: (key) => {
       parent.postMessage({
         faviconURI: testURI("resource", "favicon", key)
@@ -193,7 +193,7 @@ let tests = {
         testURI("count", "font", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
-  },
+  },*/
 /*  "video": {
     write: (key) => new Promise((resolve, reject) => {
       let video = document.createElement("video");
@@ -216,7 +216,7 @@ let tests = {
       return (await response.text()).trim();
     }
   },*/
-  "locks": {
+/*  "locks": {
     write: async (key) => {
       if (navigator.locks) {
         navigator.locks.request(key, lock => new Promise((f,r) => {}));
@@ -258,7 +258,7 @@ let tests = {
       image.onerror = () => reject(new Error("image load failed"));
       image.src = "http://hsts.arthuredelstein.net/test_hsts.png";
     })
-  }
+  }*/
 };
 
 runAllTests(tests);
