@@ -107,6 +107,15 @@ table.comparison-table tr td:first-child,th:first-child {
   position: sticky;
   position: -webkit-sticky;
 }
+table.comparison-table tr td:first-child {
+  max-width: 220px;
+  min-width: 220px;
+  word-break: break-all;
+}
+h1 {
+  word-break: normal;
+  font-size: 32px;
+}
 `;
 
 // Takes the results for tests on a specific browser,
@@ -262,9 +271,9 @@ let main = async () => {
     faviconURI
   }));
   console.log(`Wrote out ${fileUrl(resultsFileHTML)}`);
-  open(fileUrl(resultsFileHTML));
-//  await fs.copyFile(resultsFileHTMLTemp, resultsFileHTMLTemp);
-//  console.log(`Wrote out ${fileUrl(resultsFileHTMLTemp)}`);
+//  open(fileUrl(resultsFileHTML));
+  await fs.copyFile(resultsFileHTML, resultsFileHTMLTemp);
+  console.log(`Wrote out ${fileUrl(resultsFileHTMLTemp)}`);
 };
 
 main();
