@@ -255,7 +255,7 @@ let tests = {
     read: () => new Promise((resolve, reject) => {
       let image = document.getElementById("hsts-image");
       image.onload = () => resolve("image load succeeded");
-      image.onerror = () => reject("image load failed");
+      image.onerror = () => reject(new Error("image load failed"));
       image.src = "http://hsts.arthuredelstein.net/test_hsts.png";
     })
   }
