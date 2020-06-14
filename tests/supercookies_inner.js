@@ -103,7 +103,7 @@ let tests = {
       xhr.send();
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
-  },
+  },*/
   "iframe": {
     write: (key) => new Promise((resolve, reject) => {
       let iframe = document.createElement("iframe");
@@ -124,7 +124,7 @@ let tests = {
         testURI("count", "page", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
-  },*/
+  },/**/
   "image": {
     write: (key) => new Promise((resolve, reject) => {
       let img = document.createElement("img");
