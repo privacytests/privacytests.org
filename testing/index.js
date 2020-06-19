@@ -341,24 +341,16 @@ let expandConfig = async (configData) => {
   return results;
 }
 
+// Returns a promise that sleeps for the given millseconds.
 let sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-let prepare = async (configData) => {
-  for (let { prestart } of configData) {
-    if (prestart) {
-      spawn(prestart.command, { cwd : prestart.dir });
-      await sleep(prestart.waitSeconds * 1000);
-    }
-  }
-}
-
+// The main program
 let main = async () => {
   let commands = minimist(process.argv.slice(2));
   console.log(commands);
   let configFile = commands["_"][0];
   let { stayOpen } = commands;
   let configData = JSON.parse(fs.readFileSync(configFile));
-  await prepare(configData);
   let expandedConfigData = await expandConfig(configData);
   writeDataSync(await runTestsBatch(expandedConfigData, { shouldQuit: !stayOpen}));
 }
