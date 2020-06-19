@@ -16,6 +16,7 @@ const { spawn, exec } = require('child_process');
 const execAsync = util.promisify(exec);
 const { installDriver } = require('ms-chromium-edge-driver');
 const minimist = require('minimist');
+const render = require('./render');
 
 require('geckodriver');
 require('chromedriver');
@@ -352,6 +353,7 @@ let main = async () => {
   let expandedConfigData = await expandConfig(configData);
   writeDataSync(await runTestsBatch(expandedConfigData,
                                     { shouldQuit: !stayOpen }));
+  render.main();
 }
 
 main();
