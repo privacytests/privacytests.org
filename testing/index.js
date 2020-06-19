@@ -14,9 +14,11 @@ const dateFormat = require('dateformat');
 const util = require('util');
 const { spawn, exec } = require('child_process');
 const execAsync = util.promisify(exec);
+const { installDriver } = require('ms-chromium-edge-driver');
+const minimist = require('minimist');
+
 require('geckodriver');
 require('chromedriver');
-const { installDriver } = require('ms-chromium-edge-driver');
 
 // ## Selenium setup
 
@@ -351,11 +353,14 @@ let prepare = async (configData) => {
 }
 
 let main = async () => {
-  let configFile = process.argv[2];
+  let commands = minimist(process.argv.slice(2));
+  console.log(commands);
+  let configFile = commands["_"][0];
+  let { stayOpen } = commands;
   let configData = JSON.parse(fs.readFileSync(configFile));
   await prepare(configData);
   let expandedConfigData = await expandConfig(configData);
-  writeDataSync(await runTestsBatch(expandedConfigData, { shouldQuit: true}));
+  writeDataSync(await runTestsBatch(expandedConfigData, { shouldQuit: !stayOpen}));
 }
 
 main();
