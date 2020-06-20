@@ -258,7 +258,7 @@ let tests = {
       image.onerror = () => reject(new Error("image load failed"));
       image.src = "http://hsts.arthuredelstein.net/test_hsts.png";
     })
-  }
+  },
   "TLS Session Id": {
     write: async () => {
       let results = await fetch("https://tls.arthuredelstein.net/");
