@@ -265,7 +265,7 @@ let tests = {
       return results.json().sessionId;
     },
     read: async () => {
-      let results = await fetch("https://tls.arthuredelstein.net/");
+      let results = await fetch("https://tls.arthuredelstein.net:8900/");
       return results.json().sessionId;
     }
   }
