@@ -258,14 +258,14 @@ let tests = {
       image.onerror = () => reject(new Error("image load failed"));
       image.src = "http://hsts.arthuredelstein.net/test_hsts.png";
     })
-  }
+  },
   "TLS Session Id": {
     write: async () => {
       let results = await fetch("https://tls.arthuredelstein.net/");
       return results.json().sessionId;
     },
     read: async () => {
-      let results = await fetch("https://tls.arthuredelstein.net/");
+      let results = await fetch("https://tls.arthuredelstein.net:8900/");
       return results.json().sessionId;
     }
   }
