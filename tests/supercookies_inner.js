@@ -1,4 +1,4 @@
-import { runAllTests} from "./test_utils.js"
+8900import { runAllTests} from "./test_utils.js"
 import * as IdbKeyVal from 'https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs';
 
 let testURI = (path, type, key) =>
@@ -262,11 +262,11 @@ let tests = {
   "TLS Session Id": {
     write: async () => {
       let results = await fetch("https://tls.arthuredelstein.net:8900/");
-      return results.json().sessionId;
+      return (await results.json()).sessionId;
     },
     read: async () => {
       let results = await fetch("https://tls.arthuredelstein.net:8900/");
-      return results.json().sessionId;
+      return (await results.json()).sessionId;
     }
   }
 };
