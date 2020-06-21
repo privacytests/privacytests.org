@@ -135,7 +135,9 @@ let resultsToDescription = ({
   let finalText = `${browserFinal} ${browserVersionFinal}<br>${platformFinal} ${platformVersionFinal}`;
   if (prefs) {
     for (let key of Object.keys(prefs).sort()) {
-      finalText += `<br>${key}: ${prefs[key]}`
+      if (key !== "extensions.torlauncher.prompt_at_startup") {
+        finalText += `<br>${key}: ${prefs[key]}`;
+      }
     }
   }
   return finalText;
