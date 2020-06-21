@@ -259,7 +259,7 @@ let tests = {
       image.src = "http://hsts.arthuredelstein.net/test_hsts.png";
     })
   },
-  "TLS Session Id": {
+  "TLS_Session_Id": {
     write: async () => {
       let results = await fetch("https://tls.arthuredelstein.net:8900/");
       return (await results.json()).sessionId;
