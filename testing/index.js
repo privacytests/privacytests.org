@@ -354,10 +354,12 @@ let sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // The main program
 let main = async () => {
   // Read config file and flags from command line
-  let { _ : [configFile], stayOpen } = minimist(process.argv.slice(2));
+  let { _ : [configFile], stayOpen, only } = minimist(process.argv.slice(2));
   let configData = JSON.parse(fs.readFileSync(configFile));
   let expandedConfigData = await expandConfig(configData);
-  writeDataSync(await runTestsBatch(expandedConfigData,
+  let filteredExpandedConfigData = expandedConfigData.filter(
+    d => only ? d.browser.startsWith(only) : true);
+  writeDataSync(await runTestsBatch(filteredExpandedConfigData,
                                     { shouldQuit: !stayOpen }));
   render.main();
 }
