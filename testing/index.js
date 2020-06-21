@@ -307,7 +307,7 @@ let expandConfig = async (configData) => {
           browser: "chrome",
           chromeOptions: {  binary: path,
                             args: ['no-sandbox'] }
-        }]
+        }];
       } else if (browser === "brave") {
         driverType = "chrome";
         capabilityList = [{
@@ -323,6 +323,12 @@ let expandConfig = async (configData) => {
                            "moz:firefoxOptions": {}}];
         if (path) {
           capabilityList[0]["moz:firefoxOptions"]["binary"] = path;
+        }
+        if (browser === "tor browser") {
+          if (!prefs) {
+            prefs = {};
+          }
+          prefs["extensions.torlauncher.prompt_at_startup"] = false;
         }
         if (prefs) {
           capabilityList[0]["moz:firefoxOptions"]["prefs"] = prefs;
