@@ -307,7 +307,7 @@ let expandConfig = async (configData) => {
           browser: "chrome",
           chromeOptions: {  binary: path,
                             args: ['no-sandbox'] }
-        }]
+        }];
       } else if (browser === "brave") {
         driverType = "chrome";
         capabilityList = [{
@@ -323,6 +323,12 @@ let expandConfig = async (configData) => {
                            "moz:firefoxOptions": {}}];
         if (path) {
           capabilityList[0]["moz:firefoxOptions"]["binary"] = path;
+        }
+        if (browser === "tor browser") {
+          if (!prefs) {
+            prefs = {};
+          }
+          prefs["extensions.torlauncher.prompt_at_startup"] = false;
         }
         if (prefs) {
           capabilityList[0]["moz:firefoxOptions"]["prefs"] = prefs;
@@ -348,10 +354,12 @@ let sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // The main program
 let main = async () => {
   // Read config file and flags from command line
-  let { _ : [configFile], stayOpen } = minimist(process.argv.slice(2));
+  let { _ : [configFile], stayOpen, only } = minimist(process.argv.slice(2));
   let configData = JSON.parse(fs.readFileSync(configFile));
   let expandedConfigData = await expandConfig(configData);
-  writeDataSync(await runTestsBatch(expandedConfigData,
+  let filteredExpandedConfigData = expandedConfigData.filter(
+    d => only ? d.browser.startsWith(only) : true);
+  writeDataSync(await runTestsBatch(filteredExpandedConfigData,
                                     { shouldQuit: !stayOpen }));
   render.main();
 }
