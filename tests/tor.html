@@ -20,7 +20,9 @@
          resultJSON[k2] = wtfJSON[k];
        }
        let onionooJSON = await fetchJSON(`https://onionoo.torproject.org/details?limit=1&search=${resultJSON["IPAddress"]}`);
-       resultJSON["passed"] = (onionooJSON.relays.length > 0);
+       delete resultJSON.TorExit;
+       resultJSON["IsTorExit"] = (onionooJSON.relays.length > 0);
+       resultJSON["passed"] = resultJSON["IsTorExit"];
        console.log(onionooJSON);
        resultsJSON = { TorNetworkUse: resultJSON };
        console.log(resultsJSON);
