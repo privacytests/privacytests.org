@@ -24,7 +24,7 @@
        console.log(onionooJSON);
        resultsJSON = { TorNetworkUse: resultJSON };
        console.log(resultsJSON);
-       parent.postMessage(resultsJSON, "*");
+       document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
      })();
     </script>
   </body>
