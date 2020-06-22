@@ -22,7 +22,7 @@
        let onionooJSON = await fetchJSON(`https://onionoo.torproject.org/details?limit=1&search=${resultJSON["IPAddress"]}`);
        resultJSON["passed"] = (onionooJSON.relays.length > 0);
        console.log(onionooJSON);
-       resultsJSON = { TorNetworkUse: resulsJSON };
+       resultsJSON = { TorNetworkUse: resultJSON };
        console.log(resultsJSON);
        parent.postMessage(resultsJSON, "*");
      })();
