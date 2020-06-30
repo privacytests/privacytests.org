@@ -194,6 +194,24 @@ let tests = {
       return (await response.text()).trim();
     }
   },
+  "css": {
+    write: async (key) => {
+      let link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = testURI("resource", "css", key);
+      document.getElementsByTagName("head")[0].appendChild(link);
+      return key;
+    },
+    read: async (key) => {
+      let link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = testURI("resource", "css", key);
+      document.getElementsByTagName("head")[0].appendChild(link);
+      let response = await fetch(
+        testURI("count", "css", key), {"cache": "reload"});
+      return (await response.text()).trim();
+    }
+  },
 /*  "video": {
     write: (key) => new Promise((resolve, reject) => {
       let video = document.createElement("video");
