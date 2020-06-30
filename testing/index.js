@@ -139,7 +139,7 @@ let openNewTab = async (driver) => {
   await driver.switchTo().window(tabsBefore[0]);
   await driver.get("https://example.com");
   await driver.executeScript(`
-    document.body.addEventListener("click", () => window.open("", "_blank"));
+    document.body.addEventListener("click", () => window.open("", "_blank", "noopener"));
   `);
   await driver.findElement(By.tagName('body')).click();
   let tabsAfter = await driver.getAllWindowHandles();

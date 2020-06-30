@@ -7,18 +7,26 @@
   </head>
   <body>
     <script>
+     const fetchJSON = async (...fetchArgs) => {
+       let response = await fetch(...fetchArgs);
+       return response.json();
+     };
+
      (async () => {
-       let response = await fetch("https://wtfismyip.com/json");
-       let json = await response.json();
-       let json2 = {};
-       for (let k of Object.keys(json)) {
+       let wtfJSON = await fetchJSON("https://wtfismyip.com/json");
+       let resultJSON = {};
+       for (let k of Object.keys(wtfJSON)) {
          let k2 = k.replace("YourFucking", "");
-         json2[k2] = json[k];
+         resultJSON[k2] = wtfJSON[k];
        }
-       json2["passed"] = json2["TorExit"];
-       json3 = { TorNetworkUse: json2 };
-       console.log(json3);
-       document.body.setAttribute("data-test-results", JSON.stringify(json3));
+       let onionooJSON = await fetchJSON(`https://onionoo.torproject.org/details?limit=1&search=${resultJSON["IPAddress"]}`);
+       delete resultJSON.TorExit;
+       resultJSON["IsTorExit"] = (onionooJSON.relays.length > 0);
+       resultJSON["passed"] = resultJSON["IsTorExit"];
+       console.log(onionooJSON);
+       resultsJSON = { TorNetworkUse: resultJSON };
+       console.log(resultsJSON);
+       document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
      })();
     </script>
   </body>
