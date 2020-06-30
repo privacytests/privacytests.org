@@ -3,18 +3,20 @@ const app = express()
 const port = 3333
 
 let countMaps = {
-  "page": {},
+  "css": {},
   "favicon": {},
-  "image": {},
   "fetch": {},
-  "font": {}
+  "font": {},
+  "image": {},
+  "page": {},
 };
 let resourceFiles = {
-  "page": "page.html",
+  "css": "stylesheet.css",
   "favicon": "favicon.png",
-  "image": "image.png",
   "fetch": "page.html",
-  "font": "font.woff"
+  "font": "font.woff",
+  "image": "image.png",
+  "page": "page.html",
 };
 
 app.get('/', (req, res) => res.send('Hello World!'));
