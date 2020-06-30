@@ -171,10 +171,10 @@ ${ worker ? "[Worker]" : "" }
 // the ip address and whether it's a Tor exit and
 // whether the test passed.
 let torTooltip = torItem => {
-  let { IPAddress, TorExit, passed } = torItem;
+  let { IPAddress, IsTorExit, passed } = torItem;
   return `
 IPAddress: ${ IPAddress }
-TorExit: ${ TorExit }
+IsTorExit: ${ IsTorExit }
 passed: ${ passed }
 `.trim();
 };
@@ -192,12 +192,8 @@ test failed: ${ testFailed }
 `.trim();
 };
 
-let resultsSection = ({results, category, tooltipFunction}) => {
+let resultsSection = ({bestResults, category, tooltipFunction}) => {
 //  console.log(results);
-  let bestResults = results.filter(m => m["testResults"][category]);
-  if (bestResults.length === 0) {
-    return [];
-  }
   let rowNames = Object.keys(bestResults[0]["testResults"][category])
       .sort(Intl.Collator().compare);
   let resultMaps = bestResults
@@ -217,19 +213,22 @@ let resultsSection = ({results, category, tooltipFunction}) => {
 };
 
 let resultsToTable = (results, title) => {
-  let filteredResults = results
+  let bestResults = results
       .filter(m => m["testResults"])
-      .filter(m => m["testResults"]["fingerprinting"]);
-//  console.log(filteredResults[0]);
-  let headers = filteredResults.map(resultsToDescription);
+      .filter(m => m["testResults"]["fingerprinting"])
+      .sort((m1, m2) => m1["browser"].localeCompare(m2["browser"]));
+  let headers = bestResults.map(resultsToDescription);
   headers.unshift(`<h1 class="title">${title}</h1>`);
   let body = [];
+  if (bestResults.length === 0) {
+    return [];
+  }
   body.push([{subheading:"IP address masking tests"}]);
-  body = body.concat(resultsSection({results: filteredResults, category:"tor", tooltipFunction: torTooltip}));
+  body = body.concat(resultsSection({bestResults, category:"tor", tooltipFunction: torTooltip}));
   body.push([{subheading:"Partitioning tests"}]);
-  body = body.concat(resultsSection({results: filteredResults, category:"supercookies", tooltipFunction: supercookieTooltip}));
+  body = body.concat(resultsSection({bestResults, category:"supercookies", tooltipFunction: supercookieTooltip}));
   body.push([{subheading:"Fingerprinting resistance tests"}]);
-  body = body.concat(resultsSection({results: filteredResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
+  body = body.concat(resultsSection({bestResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
   return { headers, body };
 };
 
