@@ -9,6 +9,7 @@ let countMaps = {
   "font": {},
   "image": {},
   "page": {},
+  "prefetch": {},
 };
 let resourceFiles = {
   "css": "stylesheet.css",
@@ -17,6 +18,7 @@ let resourceFiles = {
   "font": "font.woff",
   "image": "image.png",
   "page": "page.html",
+  "prefetch": "page.html",
 };
 
 app.get('/', (req, res) => res.send('Hello World!'));
@@ -65,6 +67,5 @@ app.get('/set_hsts.png', (req, res) => {
 app.get('/test_hsts.png', (req, res) => {
   res.sendFile("image.png", { root: __dirname });
 });
-
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
