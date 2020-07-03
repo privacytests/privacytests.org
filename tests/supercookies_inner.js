@@ -286,7 +286,7 @@ let tests = {
       let results = await fetch("https://tls.arthuredelstein.net:8900/");
       return (await results.json()).sessionId;
     }
-  }
+  },
   "prefetch": {
     write: async (key) => {
       let link = document.createElement("link");
