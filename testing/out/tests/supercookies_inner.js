@@ -189,6 +189,7 @@ let tests = {
       let fontURI = testURI("resource", "font", key);
       style.innerHTML = `@font-face {font-family: "myFont"; src: url("${fontURI}"); } body { font-family: "myFont" }`;
       document.getElementsByTagName("head")[0].appendChild(style);
+      await sleepMs(1000);
       let response = await fetch(
         testURI("count", "font", key), {"cache": "reload"});
       return (await response.text()).trim();
@@ -207,6 +208,7 @@ let tests = {
       link.rel = "stylesheet";
       link.href = testURI("resource", "css", key);
       document.getElementsByTagName("head")[0].appendChild(link);
+      await sleepMs(1000);
       let response = await fetch(
         testURI("count", "css", key), {"cache": "reload"});
       return (await response.text()).trim();
@@ -286,7 +288,7 @@ let tests = {
       let results = await fetch("https://tls.arthuredelstein.net:8900/");
       return (await results.json()).sessionId;
     }
-  }
+  },
   "prefetch": {
     write: async (key) => {
       let link = document.createElement("link");
@@ -300,6 +302,7 @@ let tests = {
       link.rel = "prefetch";
       link.href = testURI("resource", "prefetch", key);
       document.getElementsByTagName("head")[0].appendChild(link);
+      await sleepMs(1000);
       let response = await fetch(
         testURI("count", "prefetch", key), {"cache": "reload"});
       return (await response.text()).trim();
