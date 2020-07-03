@@ -208,6 +208,7 @@ let tests = {
       link.rel = "stylesheet";
       link.href = testURI("resource", "css", key);
       document.getElementsByTagName("head")[0].appendChild(link);
+      await sleepMs(1000);
       let response = await fetch(
         testURI("count", "css", key), {"cache": "reload"});
       return (await response.text()).trim();
