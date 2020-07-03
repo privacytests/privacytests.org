@@ -295,7 +295,6 @@ let tests = {
       link.rel = "prefetch";
       link.href = testURI("resource", "prefetch", key);
       document.getElementsByTagName("head")[0].appendChild(link);
-      await sleepMs(1000);
       return key;
     },
     read: async (key) => {
