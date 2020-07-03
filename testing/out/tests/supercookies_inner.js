@@ -287,6 +287,24 @@ let tests = {
       return (await results.json()).sessionId;
     }
   }
+  "prefetch": {
+    write: async (key) => {
+      let link = document.createElement("link");
+      link.rel = "prefetch";
+      link.href = testURI("resource", "prefetch", key);
+      document.getElementsByTagName("head")[0].appendChild(link);
+      return key;
+    },
+    read: async (key) => {
+      let link = document.createElement("link");
+      link.rel = "prefetch";
+      link.href = testURI("resource", "prefetch", key);
+      document.getElementsByTagName("head")[0].appendChild(link);
+      let response = await fetch(
+        testURI("count", "prefetch", key), {"cache": "reload"});
+      return (await response.text()).trim();
+    }
+  }
 };
 
 runAllTests(tests);
