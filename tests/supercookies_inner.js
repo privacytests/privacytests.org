@@ -199,7 +199,6 @@ let tests = {
       let link = document.createElement("link");
       link.rel = "stylesheet";
       link.href = testURI("resource", "css", key);
-      await sleepMs(1000);
       document.getElementsByTagName("head")[0].appendChild(link);
       return key;
     },
@@ -208,7 +207,6 @@ let tests = {
       link.rel = "stylesheet";
       link.href = testURI("resource", "css", key);
       document.getElementsByTagName("head")[0].appendChild(link);
-      await sleepMs(1000);
       let response = await fetch(
         testURI("count", "css", key), {"cache": "reload"});
       return (await response.text()).trim();
@@ -295,6 +293,7 @@ let tests = {
       link.rel = "prefetch";
       link.href = testURI("resource", "prefetch", key);
       document.getElementsByTagName("head")[0].appendChild(link);
+      await sleepMs(1000);
       return key;
     },
     read: async (key) => {
@@ -302,6 +301,7 @@ let tests = {
       link.rel = "prefetch";
       link.href = testURI("resource", "prefetch", key);
       document.getElementsByTagName("head")[0].appendChild(link);
+      await sleepMs(1000);
       let response = await fetch(
         testURI("count", "prefetch", key), {"cache": "reload"});
       return (await response.text()).trim();
