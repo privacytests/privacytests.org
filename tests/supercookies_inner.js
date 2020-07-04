@@ -309,7 +309,7 @@ let tests = {
       if (parseInt(countString) === 0) {
         throw new Error("prefetch isn't being used");
       }
-      return (await response.text()).trim();
+      return countString;
     }
   }
 };
