@@ -305,6 +305,10 @@ let tests = {
       await sleepMs(1000);
       let response = await fetch(
         testURI("count", "prefetch", key), {"cache": "reload"});
+      let countString = (await response.text()).trim();
+      if (parseInt(countString) === 0) {
+        throw new Error("prefetch isn't being used");
+      }
       return (await response.text()).trim();
     }
   }
