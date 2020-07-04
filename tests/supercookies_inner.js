@@ -328,7 +328,7 @@ let tests = {
         tx.executeSql(
           `INSERT OR REPLACE INTO cache(name, value)
            VALUES(?, ?)`,
-          [name, key], (tx, rs) => {}, (tx, rs) => {});
+          ["secret", key], (tx, rs) => {}, (tx, rs) => {});
       }));
     },
     read: async () => {
@@ -336,7 +336,7 @@ let tests = {
       let result = await new Promise((resolve, reject) => database.transaction(tx => {
         tx.executeSql(
           "SELECT value FROM cache WHERE name=?",
-          [name],
+          [secret],
           (tx, rs) => resolve(rs),
           (tx, err) => reject(err))
       }));
