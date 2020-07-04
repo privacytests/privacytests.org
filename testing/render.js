@@ -171,9 +171,8 @@ ${ worker ? "[Worker]" : "" }
 // the ip address and whether it's a Tor exit and
 // whether the test passed.
 let torTooltip = torItem => {
-  let { IPAddress, IsTorExit, passed } = torItem;
+  let { IsTorExit, passed } = torItem;
   return `
-IPAddress: ${ IPAddress }
 IsTorExit: ${ IsTorExit }
 passed: ${ passed }
 `.trim();
