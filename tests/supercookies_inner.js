@@ -336,7 +336,7 @@ let tests = {
       let result = await new Promise((resolve, reject) => database.transaction(tx => {
         tx.executeSql(
           "SELECT value FROM cache WHERE name=?",
-          [secret],
+          ["secret"],
           (tx, rs) => resolve(rs),
           (tx, err) => reject(err))
       }));
