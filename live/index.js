@@ -30,6 +30,7 @@ app.get('/resource', (req, res) => {
   } else {
     countMap[key] = 1;
   }
+  console.log(key, type, countMap[key]);
   res.set({
     "Cache-Control": "public, max-age=604800, immutable"
   });
@@ -37,6 +38,7 @@ app.get('/resource', (req, res) => {
 });
 app.get('/count', (req, res) => {
   let { key, type } = req.query;
+  console.log(type, key, "count:", countMaps[type][key]);
   res.send(`${countMaps[type][key] || 0}`);
 });
 app.get('/altsvc', (req, res) => {
@@ -66,6 +68,34 @@ app.get('/set_hsts.png', (req, res) => {
 
 app.get('/test_hsts.png', (req, res) => {
   res.sendFile("image.png", { root: __dirname });
+});
+
+let passwordCounts = {};
+
+// HTTP Basic Auth (not used for now)
+app.get('/auth', (req, res) => {
+  let auth = req.get("authorization");
+  console.log(auth);
+  if (auth) {
+    let decodedAuth = Buffer.from(auth.split("Basic ")[1], 'base64')
+        .toString('utf-8');
+    let [username, password] = decodedAuth.split(":");
+    if (passwordCounts[password]) {
+      passwordCounts[password] = passwordCounts[password] + 1;
+    } else {
+      passwordCounts[password] = 1;
+    }
+    let results = { username, password, count: passwordCounts[password] };
+    res.status(200)
+    res.send(JSON.stringify(results));
+  } else {
+    res.set({
+      'WWW-Authenticate': 'Basic realm="User Visible Realm", charset="UTF-8"',
+      "Cache-Control": "max-age=0"
+    })
+    res.status(401)
+    res.send("empty");
+  }
 });
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
