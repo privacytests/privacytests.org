@@ -189,6 +189,7 @@ let tests = {
       let fontURI = testURI("resource", "font", key);
       style.innerHTML = `@font-face {font-family: "myFont"; src: url("${fontURI}"); } body { font-family: "myFont" }`;
       document.getElementsByTagName("head")[0].appendChild(style);
+      await sleepMs(1000);
       let response = await fetch(
         testURI("count", "font", key), {"cache": "reload"});
       return (await response.text()).trim();
@@ -207,6 +208,7 @@ let tests = {
       link.rel = "stylesheet";
       link.href = testURI("resource", "css", key);
       document.getElementsByTagName("head")[0].appendChild(link);
+      await sleepMs(1000);
       let response = await fetch(
         testURI("count", "css", key), {"cache": "reload"});
       return (await response.text()).trim();
@@ -286,7 +288,71 @@ let tests = {
       let results = await fetch("https://tls.arthuredelstein.net:8900/");
       return (await results.json()).sessionId;
     }
+  },
+  "prefetch": {
+    write: async (key) => {
+      let link = document.createElement("link");
+      link.rel = "prefetch";
+      link.href = testURI("resource", "prefetch", key);
+      document.getElementsByTagName("head")[0].appendChild(link);
+      return key;
+    },
+    read: async (key) => {
+      let link = document.createElement("link");
+      link.rel = "prefetch";
+      link.href = testURI("resource", "prefetch", key);
+      document.getElementsByTagName("head")[0].appendChild(link);
+      await sleepMs(1000);
+      let response = await fetch(
+        testURI("count", "prefetch", key), {"cache": "reload"});
+      let countString = (await response.text()).trim();
+      if (parseInt(countString) === 0) {
+        throw new Error("prefetch isn't being used");
+      }
+      return countString;
+    }
+  },
+  "web_sql_database": {
+    // Borrowed from https://github.com/samyk/evercookie
+    write: async (key) => {
+      let database = window.openDatabase("sqlite_supercookie", "", "supercookie", 1024 * 1024);
+      let tx = new Promise((resolve) => database.transaction(tx => {
+        tx.executeSql(
+          `CREATE TABLE IF NOT EXISTS cache(
+             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+             name TEXT NOT NULL,
+             value TEXT NOT NULL,
+             UNIQUE (name)
+           )`,
+          [], (tx, rs) => {}, (tx, err) => {});
+        tx.executeSql(
+          `INSERT OR REPLACE INTO cache(name, value)
+           VALUES(?, ?)`,
+          ["secret", key], (tx, rs) => {}, (tx, rs) => {});
+      }));
+    },
+    read: async () => {
+      let database = window.openDatabase("sqlite_supercookie", "", "supercookie", 1024 * 1024);
+      let result = await new Promise((resolve, reject) => database.transaction(tx => {
+        tx.executeSql(
+          "SELECT value FROM cache WHERE name=?",
+          ["secret"],
+          (tx, rs) => resolve(rs),
+          (tx, err) => reject(err))
+      }));
+      return result.rows.item(0).value;
+    }
+  },
+/*  "basic_auth": {
+    write: async (key) => {
+      let response = await fetch("https://arthuredelstein.net/browser-privacy-live/auth", {"cache": "reload"});
+    },
+    read: async () => {
+      let response = await fetch("https://arthuredelstein.net/browser-privacy-live/auth", {"cache": "reload"});
+      return (await response.json()).password;
+    }
   }
+*/
 };
 
 runAllTests(tests);
