@@ -317,6 +317,7 @@ let tests = {
       let link = document.createElement("link");
       link.rel = "preload";
       link.href = testURI("resource", "preload", key);
+      link.as="document";
       document.getElementsByTagName("head")[0].appendChild(link);
       return key;
     },
@@ -324,6 +325,7 @@ let tests = {
       let link = document.createElement("link");
       link.rel = "preload";
       link.href = testURI("resource", "preload", key);
+      link.as="document";
       document.getElementsByTagName("head")[0].appendChild(link);
       await sleepMs(1000);
       let response = await fetch(
