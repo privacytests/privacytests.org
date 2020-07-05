@@ -312,25 +312,25 @@ let tests = {
       return countString;
     }
   },
-  "preconnect": {
+  "preload": {
     write: async (key) => {
       let link = document.createElement("link");
-      link.rel = "preconnect";
-      link.href = testURI("resource", "preconnect", key);
+      link.rel = "preload";
+      link.href = testURI("resource", "preload", key);
       document.getElementsByTagName("head")[0].appendChild(link);
       return key;
     },
     read: async (key) => {
       let link = document.createElement("link");
-      link.rel = "preconnect";
-      link.href = testURI("resource", "preconnect", key);
+      link.rel = "preload";
+      link.href = testURI("resource", "preload", key);
       document.getElementsByTagName("head")[0].appendChild(link);
       await sleepMs(1000);
       let response = await fetch(
-        testURI("count", "preconnect", key), {"cache": "reload"});
+        testURI("count", "preload", key), {"cache": "reload"});
       let countString = (await response.text()).trim();
       if (parseInt(countString) === 0) {
-        throw new Error("preconnect isn't being used");
+        throw new Error("preload isn't being used");
       }
       return countString;
     }
