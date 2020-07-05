@@ -345,7 +345,7 @@ let tests = {
   },
   "basic_auth": {
     write: async (key) => {
-      let response = await fetch("https://alpha:beta@arthuredelstein.net/browser-privacy-live/auth", {"cache": "reload"});
+      let response = await fetch("https://arthuredelstein.net/browser-privacy-live/auth", {"cache": "reload"});
     },
     read: async () => {
       let response = await fetch("https://arthuredelstein.net/browser-privacy-live/auth", {"cache": "reload"});
