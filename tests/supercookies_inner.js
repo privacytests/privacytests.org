@@ -345,11 +345,11 @@ let tests = {
   },
   "basic_auth": {
     write: async (key) => {
-      let response = await fetch("https://alpha:beta@arthuredelstein.net/browser-privacy-live/auth");
-      return await (response.json());
+      let response = await fetch("https://alpha:beta@arthuredelstein.net/browser-privacy-live/auth", {"cache": "reload"});
     },
     read: async () => {
-      return null;
+      let response = await fetch("https://arthuredelstein.net/browser-privacy-live/auth", {"cache": "reload"});
+      return await (response.json());
     }
   }
 };
