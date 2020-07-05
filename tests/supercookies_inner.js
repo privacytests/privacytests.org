@@ -345,7 +345,8 @@ let tests = {
   },
   "basic_auth": {
     write: async (key) => {
-      let response = await fetch("https://arthuredelstein.net/browser-privacy-live/auth");
+      let response = await fetch("https://alpha:beta@arthuredelstein.net/browser-privacy-live/auth");
+      return await (response.json());
     },
     read: async () => {
       return null;
