@@ -312,6 +312,29 @@ let tests = {
       return countString;
     }
   },
+  "preconnect": {
+    write: async (key) => {
+      let link = document.createElement("link");
+      link.rel = "preconnect";
+      link.href = testURI("resource", "preconnect", key);
+      document.getElementsByTagName("head")[0].appendChild(link);
+      return key;
+    },
+    read: async (key) => {
+      let link = document.createElement("link");
+      link.rel = "preconnect";
+      link.href = testURI("resource", "preconnect", key);
+      document.getElementsByTagName("head")[0].appendChild(link);
+      await sleepMs(1000);
+      let response = await fetch(
+        testURI("count", "preconnect", key), {"cache": "reload"});
+      let countString = (await response.text()).trim();
+      if (parseInt(countString) === 0) {
+        throw new Error("preconnect isn't being used");
+      }
+      return countString;
+    }
+  },
   "web_sql_database": {
     // Borrowed from https://github.com/samyk/evercookie
     write: async (key) => {
@@ -343,7 +366,7 @@ let tests = {
       return result.rows.item(0).value;
     }
   },
-  "basic_auth": {
+/*  "basic_auth": {
     write: async (key) => {
       let response = await fetch("https://arthuredelstein.net/browser-privacy-live/auth", {"cache": "reload"});
     },
@@ -352,6 +375,7 @@ let tests = {
       return (await response.json()).password;
     }
   }
+*/
 };
 
 runAllTests(tests);
