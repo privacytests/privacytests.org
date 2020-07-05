@@ -349,7 +349,7 @@ let tests = {
     },
     read: async () => {
       let response = await fetch("https://arthuredelstein.net/browser-privacy-live/auth", {"cache": "reload"});
-      return await (response.json()).password;
+      return (await response.json()).password;
     }
   }
 };
