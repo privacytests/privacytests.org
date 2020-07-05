@@ -312,31 +312,6 @@ let tests = {
       return countString;
     }
   },
-  "preload": {
-    write: async (key) => {
-      let link = document.createElement("link");
-      link.rel = "preload";
-      link.href = testURI("resource", "preload", key);
-      link.setAttribute("as", "document");
-      document.getElementsByTagName("head")[0].appendChild(link);
-      return key;
-    },
-    read: async (key) => {
-      let link = document.createElement("link");
-      link.rel = "preload";
-      link.href = testURI("resource", "preload", key);
-      link.setAttribute("as", "document");
-      document.getElementsByTagName("head")[0].appendChild(link);
-      await sleepMs(1000);
-      let response = await fetch(
-        testURI("count", "preload", key), {"cache": "reload"});
-      let countString = (await response.text()).trim();
-      if (parseInt(countString) === 0) {
-        throw new Error("preload isn't being used");
-      }
-      return countString;
-    }
-  },
   "web_sql_database": {
     // Borrowed from https://github.com/samyk/evercookie
     write: async (key) => {
