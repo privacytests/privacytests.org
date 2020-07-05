@@ -342,7 +342,17 @@ let tests = {
       }));
       return result.rows.item(0).value;
     }
+  },
+/*  "basic_auth": {
+    write: async (key) => {
+      let response = await fetch("https://arthuredelstein.net/browser-privacy-live/auth", {"cache": "reload"});
+    },
+    read: async () => {
+      let response = await fetch("https://arthuredelstein.net/browser-privacy-live/auth", {"cache": "reload"});
+      return (await response.json()).password;
+    }
   }
+*/
 };
 
 runAllTests(tests);
