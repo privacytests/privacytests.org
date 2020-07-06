@@ -358,6 +358,7 @@ let tests = {
         'serviceWorker.js');
       console.log(registration);
       await navigator.serviceWorker.ready;
+      console.log("service worker ready");
       await fetch(`serviceworker-write?secret=${key}`);
     },
     read: async () => {
