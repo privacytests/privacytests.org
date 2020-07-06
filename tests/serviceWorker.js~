@@ -3,8 +3,8 @@
 //  return self.clients.claim();
 //});
 
-let secret = undefined;
-
+//let secret = undefined;
+/*
 self.addEventListener("fetch", async (event) => {
   const scope = self.registration.scope;
   let shortPath = event.request.url.split(scope)[1];
@@ -18,3 +18,4 @@ self.addEventListener("fetch", async (event) => {
   }
 });
 
+*/
