@@ -357,19 +357,14 @@ let tests = {
       let registration = await navigator.serviceWorker.register(
         'serviceWorker.js');
       console.log(registration);
-      navigator.serviceWorker.addEventListener('message', event => {
-        console.log(event);
-      });
-      await fetch('dummy.html');
+      await fetch(`serviceworker-write?secret=${key}`);
     },
     read: async () => {
       let registration = await navigator.serviceWorker.register(
         'serviceWorker.js');
       console.log(registration);
-      navigator.serviceWorker.addEventListener('message', event => {
-        console.log(event);
-      });
-      await fetch('dummy.html');
+      let response = await fetch("serviceworker-read");
+      return await response.text();
     }
   },
 };
