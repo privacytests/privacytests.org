@@ -354,20 +354,22 @@ let tests = {
     },*/
   "ServiceWorker": {
     write: async (key) => {
-      let registration = await navigator.serviceWorker.register('serviceWorkers/serviceWorker.js');
+      let registration = await navigator.serviceWorker.register(
+        'serviceWorker.js', { scope: "serviceWorkerTesting" });
       console.log(registration);
       navigator.serviceWorker.addEventListener('message', event => {
         console.log(event);
       });
-      await fetch('serviceWorkers/dummy.html');
+      await fetch('serviceWorkerTesting/dummy.html');
     },
     read: async () => {
-      let registration = await navigator.serviceWorker.register('serviceWorkers/serviceWorker.js');
+      let registration = await navigator.serviceWorker.register(
+        'serviceWorker.js', { scope: "serviceWorkerTesting" });
       console.log(registration);
       navigator.serviceWorker.addEventListener('message', event => {
         console.log(event);
       });
-      await fetch('serviceWorkers/dummy.html');
+      await fetch('serviceWorkerTesting/dummy.html');
     }
   },
 };
