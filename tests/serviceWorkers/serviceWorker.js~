@@ -1,7 +1,7 @@
-self.addEventListener('fetch', (event) => {
-  let clientList = await clients.matchAll();
-  for (let client of clientList) {
-    client.postMessage("hello from service worker!");
+self.addEventListener("fetch", event => {
+  let url = new URL(event.request.url);
+  if (url.pathname.startsWith("/test")) {
+    event.respondWith(new Response("Hello from worker!"));
   }
 });
 
