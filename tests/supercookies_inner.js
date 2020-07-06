@@ -359,6 +359,7 @@ let tests = {
       console.log(registration);
       await navigator.serviceWorker.ready;
       console.log("service worker ready");
+      await sleepMs(1000);
       await fetch(`serviceworker-write?secret=${key}`);
     },
     read: async () => {
@@ -367,6 +368,7 @@ let tests = {
       console.log(registration);
       await navigator.serviceWorker.ready;
       console.log("service worker ready");
+      await sleepMs(1000);
       let response = await fetch("serviceworker-read");
       return await response.text();
     }
