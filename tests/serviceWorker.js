@@ -4,7 +4,9 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener("fetch", async (event) => {
-  console.log("fetch received:", event);
+  let scope = event.registration.scope;
+  let path = event.request.url.split(scope)[1];
+  console.log("fetch received:", path);
   event.respondWith(new Response("Hi there from service worker!"));
 });
 
