@@ -365,6 +365,8 @@ let tests = {
       let registration = await navigator.serviceWorker.register(
         'serviceWorker.js');
       console.log(registration);
+      await navigator.serviceWorker.ready;
+      console.log("service worker ready");
       let response = await fetch("serviceworker-read");
       return await response.text();
     }
