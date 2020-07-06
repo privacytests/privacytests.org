@@ -355,21 +355,21 @@ let tests = {
   "ServiceWorker": {
     write: async (key) => {
       let registration = await navigator.serviceWorker.register(
-        'serviceWorker.js', { scope: "serviceWorkerTesting" });
+        'serviceWorker.js');
       console.log(registration);
       navigator.serviceWorker.addEventListener('message', event => {
         console.log(event);
       });
-      await fetch('serviceWorkerTesting/dummy.html');
+      await fetch('dummy.html');
     },
     read: async () => {
       let registration = await navigator.serviceWorker.register(
-        'serviceWorker.js', { scope: "serviceWorkerTesting" });
+        'serviceWorker.js');
       console.log(registration);
       navigator.serviceWorker.addEventListener('message', event => {
         console.log(event);
       });
-      await fetch('serviceWorkerTesting/dummy.html');
+      await fetch('dummy.html');
     }
   },
 };
