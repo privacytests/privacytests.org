@@ -189,7 +189,7 @@ let tests = {
       let fontURI = testURI("resource", "font", key);
       style.innerHTML = `@font-face {font-family: "myFont"; src: url("${fontURI}"); } body { font-family: "myFont" }`;
       document.getElementsByTagName("head")[0].appendChild(style);
-      await sleepMs(1000);
+      await sleepMs(500);
       let response = await fetch(
         testURI("count", "font", key), {"cache": "reload"});
       return (await response.text()).trim();
@@ -208,7 +208,7 @@ let tests = {
       link.rel = "stylesheet";
       link.href = testURI("resource", "css", key);
       document.getElementsByTagName("head")[0].appendChild(link);
-      await sleepMs(1000);
+      await sleepMs(500);
       let response = await fetch(
         testURI("count", "css", key), {"cache": "reload"});
       return (await response.text()).trim();
@@ -302,7 +302,7 @@ let tests = {
       link.rel = "prefetch";
       link.href = testURI("resource", "prefetch", key);
       document.getElementsByTagName("head")[0].appendChild(link);
-      await sleepMs(1000);
+      await sleepMs(500);
       let response = await fetch(
         testURI("count", "prefetch", key), {"cache": "reload"});
       let countString = (await response.text()).trim();
@@ -359,7 +359,7 @@ let tests = {
       console.log(registration);
       await navigator.serviceWorker.ready;
       console.log("service worker ready");
-      await sleepMs(1000);
+      await sleepMs(100);
       await fetch(`serviceworker-write?secret=${key}`);
     },
     read: async () => {
@@ -368,7 +368,7 @@ let tests = {
       console.log(registration);
       await navigator.serviceWorker.ready;
       console.log("service worker ready");
-      await sleepMs(1000);
+      await sleepMs(100);
       let response = await fetch("serviceworker-read");
       return await response.text();
     }
