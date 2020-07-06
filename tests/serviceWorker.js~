@@ -3,10 +3,16 @@ self.addEventListener('activate', function(event) {
   return self.clients.claim();
 });
 
+const scope = self.registration.scope;
+let secret = undefined;
+
 self.addEventListener("fetch", async (event) => {
-  let scope = self.registration.scope;
-  let path = event.request.url.split(scope)[1];
-  console.log("fetch received:", path);
-  event.respondWith(new Response("Hi there from service worker!"));
+  let shortPath = event.request.url.split(scope)[1];
+  if (shortPath.startsWith("serviceworker-write?")) {
+    secret = (new URL(event.request.url)).searchParams.get("secret");
+    event.respondWith(new Response(""));
+  } else if (shortPath === "serviceworker-read") {
+    event.respondWith(new Response(secret));
+  }
 });
 
