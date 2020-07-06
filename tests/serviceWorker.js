@@ -1,7 +1,7 @@
-self.addEventListener('activate', function(event) {
-  console.log('Claiming control');
-  return self.clients.claim();
-});
+//self.addEventListener('activate', function(event) {
+//  console.log('Claiming control');
+//  return self.clients.claim();
+//});
 
 let secret = undefined;
 

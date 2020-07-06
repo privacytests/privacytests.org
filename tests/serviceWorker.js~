@@ -8,7 +8,6 @@ let secret = undefined;
 self.addEventListener("fetch", async (event) => {
   const scope = self.registration.scope;
   let shortPath = event.request.url.split(scope)[1];
-  console.log(event.request.url, shortPath);
   if (shortPath) {
     if (shortPath.startsWith("serviceworker-write?")) {
       secret = (new URL(event.request.url)).searchParams.get("secret");
