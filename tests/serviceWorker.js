@@ -1,6 +1,5 @@
 self.addEventListener('activate', function(event) {
-  console.log('Claiming control');
-  return self.clients.claim();
+  event.waitUntil(self.clients.claim());
 });
 
 let secret = undefined;
