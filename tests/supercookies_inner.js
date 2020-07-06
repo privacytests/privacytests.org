@@ -358,12 +358,14 @@ let tests = {
       navigator.serviceWorker.addEventListener('message', event => {
         console.log(event);
       });
+      await fetch('serviceWorkers/dummy.html');
     },
     read: async () => {
       let registration = await navigator.serviceWorker.register('serviceWorkers/serviceWorker.js');
       navigator.serviceWorker.addEventListener('message', event => {
         console.log(event);
       });
+      await fetch('serviceWorkers/dummy.html');
     }
   },
 };
