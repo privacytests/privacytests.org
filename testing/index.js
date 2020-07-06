@@ -18,7 +18,7 @@ const { installDriver } = require('ms-chromium-edge-driver');
 const minimist = require('minimist');
 const render = require('./render');
 
-const DEFAULT_TIMEOUT_MS = 20000;
+const DEFAULT_TIMEOUT_MS = 30000;
 
 require('geckodriver');
 require('chromedriver');
