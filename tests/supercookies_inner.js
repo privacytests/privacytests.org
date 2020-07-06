@@ -351,8 +351,21 @@ let tests = {
       let response = await fetch("https://arthuredelstein.net/browser-privacy-live/auth", {"cache": "reload"});
       return (await response.json()).password;
     }
-  }
-*/
+    },*/
+  "ServiceWorker": {
+    write: async (key) => {
+      let registration = await navigator.serviceWorker.register('serviceWorkers/serviceWorker.js');
+      navigator.serviceWorker.addEventListener('message', event => {
+        console.log(event);
+      });
+    },
+    read: async () => {
+      let registration = await navigator.serviceWorker.register('serviceWorkers/serviceWorker.js');
+      navigator.serviceWorker.addEventListener('message', event => {
+        console.log(event);
+      });
+    }
+  },
 };
 
 runAllTests(tests);
