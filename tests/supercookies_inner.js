@@ -355,6 +355,7 @@ let tests = {
   "ServiceWorker": {
     write: async (key) => {
       let registration = await navigator.serviceWorker.register('serviceWorkers/serviceWorker.js');
+      console.log(registration);
       navigator.serviceWorker.addEventListener('message', event => {
         console.log(event);
       });
@@ -362,6 +363,7 @@ let tests = {
     },
     read: async () => {
       let registration = await navigator.serviceWorker.register('serviceWorkers/serviceWorker.js');
+      console.log(registration);
       navigator.serviceWorker.addEventListener('message', event => {
         console.log(event);
       });
