@@ -357,6 +357,7 @@ let tests = {
       let registration = await navigator.serviceWorker.register(
         'serviceWorker.js');
       console.log(registration);
+      await navigator.serviceWorker.ready;
       await fetch(`serviceworker-write?secret=${key}`);
     },
     read: async () => {
