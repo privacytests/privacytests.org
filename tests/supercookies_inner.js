@@ -358,19 +358,19 @@ let tests = {
         'serviceWorker.js');
       console.log(registration);
   //    await navigator.serviceWorker.ready;
-      console.log("service worker ready");
-      await sleepMs(1000);
-      await fetch(`serviceworker-write?secret=${key}`);
+  //    console.log("service worker ready");
+  //    await sleepMs(1000);
+  //    await fetch(`serviceworker-write?secret=${key}`);
     },
     read: async () => {
       let registration = await navigator.serviceWorker.register(
         'serviceWorker.js');
       console.log(registration);
   //    await navigator.serviceWorker.ready;
-      console.log("service worker ready");
-      await sleepMs(1000);
-      let response = await fetch("serviceworker-read");
-      return await response.text();
+  //    console.log("service worker ready");
+  //    await sleepMs(1000);
+  //    let response = await fetch("serviceworker-read");
+  //    return await response.text();
     }
   },
 };
