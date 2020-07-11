@@ -362,7 +362,7 @@ let tests = {
       await sleepMs(100);
       await fetch(`serviceworker-write?secret=${key}`);
     },
-    read: async () => {
+    read: async () => { /*
       let registration = await navigator.serviceWorker.register(
         'serviceWorker.js');
       console.log(registration);
@@ -371,7 +371,7 @@ let tests = {
       await sleepMs(100);
       let response = await fetch("serviceworker-read");
       return await response.text();
-    }
+    */ }
   },
 };
 
