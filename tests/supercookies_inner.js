@@ -356,11 +356,11 @@ let tests = {
     write: async (key) => {
       let registration = await navigator.serviceWorker.register(
         'serviceWorker.js');
-      console.log(registration);
+/*      console.log(registration);
       await navigator.serviceWorker.ready;
       console.log("service worker ready");
       await sleepMs(100);
-      await fetch(`serviceworker-write?secret=${key}`);
+      await fetch(`serviceworker-write?secret=${key}`);*/
     },
     read: async () => { /*
       let registration = await navigator.serviceWorker.register(
