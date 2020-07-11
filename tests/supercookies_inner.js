@@ -354,8 +354,8 @@ let tests = {
     },*/
   "ServiceWorker": {
     write: async (key) => {
-      let registration = await navigator.serviceWorker.register(
-        'serviceWorker.js');
+//      let registration = await navigator.serviceWorker.register(
+//        'serviceWorker.js');
 /*      console.log(registration);
       await navigator.serviceWorker.ready;
       console.log("service worker ready");
