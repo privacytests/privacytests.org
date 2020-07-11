@@ -352,7 +352,7 @@ let tests = {
       return (await response.json()).password;
     }
     },*/
-  "ServiceWorker": {
+/*  "ServiceWorker": {
     write: async (key) => {
       let registration = await navigator.serviceWorker.register(
         'serviceWorker.js');
@@ -363,16 +363,16 @@ let tests = {
       await fetch(`serviceworker-write?secret=${key}`);
     },
     read: async () => {
-      /*let registration = await navigator.serviceWorker.register(
+      let registration = await navigator.serviceWorker.register(
         'serviceWorker.js');
       console.log(registration);
       await navigator.serviceWorker.ready;
       console.log("service worker ready");
       await sleepMs(100);
       let response = await fetch("serviceworker-read");
-      return await response.text();*/
+      return await response.text();
     }
-  },
+  },*/
 };
 
 runAllTests(tests);
