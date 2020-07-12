@@ -215,7 +215,7 @@ let resultsToTable = (results, title) => {
   let bestResults = results
       .filter(m => m["testResults"])
       .filter(m => m["testResults"]["fingerprinting"])
-      .sort((m1, m2) => m1["browser"].localeCompare(m2["browser"]));
+      .sort((m1, m2) => m1["browser"] ? m1["browser"].localeCompare(m2["browser"]) : -1);
   let headers = bestResults.map(resultsToDescription);
   headers.unshift(`<h1 class="title">${title}</h1>`);
   let body = [];
