@@ -6,6 +6,7 @@ const options = {
   key: fs.readFileSync('/home/arthur/certs/h2.arthuredelstein.net/privkey.pem'),
   cert: fs.readFileSync('/home/arthur/certs/h2.arthuredelstein.net/cert.pem')
 };
+
 // Create a secure HTTP/2 server
 const server = http2.createSecureServer(options);
 
@@ -18,10 +19,15 @@ server.on('request', (request, response) => {
   let path = request.headers[":path"];
   let parsedURL = url.parse(path, true);
   let query = parsedURL.query;
+  let session = request.stream.session;
   if (query["mode"] === "write") {
-    sessionTags.set(request.session, query["secret"]);
+    sessionTags.set(session, query["secret"]);
   }
+  console.log("request:",sessionTags.get(session));
   response.setHeader('Content-Type', 'text/plain');
-  response.end(sessionTags.get(request.session));
+  response.setHeader('Cache-Control', 'no-store');
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.end(sessionTags.get(session));
 });
+
 server.listen(8901);
