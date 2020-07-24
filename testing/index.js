@@ -4,7 +4,7 @@
 
 const homeDir = require('os').homedir();
 const fs = require('fs');
-const {Builder, By, Key, until} = require('selenium-webdriver');
+const {Builder, By, Key, logging, until} = require('selenium-webdriver');
 const firefox = require('selenium-webdriver/firefox');
 const chrome = require('selenium-webdriver/chrome');
 const edge = require('selenium-webdriver/edge');
@@ -18,7 +18,7 @@ const { installDriver } = require('ms-chromium-edge-driver');
 const minimist = require('minimist');
 const render = require('./render');
 
-const DEFAULT_TIMEOUT_MS = 20000;
+const DEFAULT_TIMEOUT_MS = 30000;
 
 require('geckodriver');
 require('chromedriver');
@@ -97,6 +97,7 @@ let browserstackDriver = async (capabilities) => {
   let driver = new Builder()
       .usingServer('http://hub-cloud.browserstack.com/wd/hub')
       .withCapabilities(capabilitiesWithCred)
+      .setLoggingPrefs({ 'browser':'ALL' })
       .build();
   return driver;
 };
@@ -291,40 +292,46 @@ let setup_tests = async function () {
 let expandConfig = async (configData) => {
   let results = [];
   let driverType;
-  let capabilityList;
+  let capabilities;
   for (let { browser, service, path, disable, prefs } of configData) {
     if (!disable) {
-      if (browser === "chromium" || browser === "chrome") {
+      if (service) {
+        driverType = "browserstack";
+        let capabilitiesList = selectRecentBrowserstackBrowsers(
+          await fetchBrowserstackCapabilities());
+        capability = capabilitiesList[0];
+      } else if (browser === "chromium" || browser === "chrome") {
         driverType = "chrome";
-        capabilityList = [{"browser": "chrome"}];
+        capabilities = {"browser": "chrome"};
       } else if (browser === "safari") {
         driverType = "safari";
-        capabilityList = [{"browser": "safari"}];
+        capabilities = {"browser": "safari",
+                      "safariAllowPopups": "true"};
       } else if (browser === "edge") {
         driverType = "MicrosoftEdge";
-        capabilityList = [{"browser": "MicrosoftEdge"}];
+        capabilities = {"browser": "MicrosoftEdge"};
       } else if (browser === "opera") {
         driverType = "chrome";
-        capabilityList = [{
+        capabilities = {
           browser: "chrome",
           chromeOptions: {  binary: path,
                             args: ['no-sandbox'] }
-        }];
+        };
       } else if (browser === "brave") {
         driverType = "chrome";
-        capabilityList = [{
+        capabilities = {
           browser: "chrome",
           chromeOptions: {  binary: path,
                             args: ['no-sandbox'] }
-        }];
+        };
       } else if (browser === "cliqz" ||
                  browser === "firefox" ||
                  browser === "tor browser") {
         driverType = "firefox";
-        capabilityList = [{"browser": "firefox",
-                           "moz:firefoxOptions": {}}];
+        capabilities = {"browser": "firefox",
+                      "moz:firefoxOptions": {}};
         if (path) {
-          capabilityList[0]["moz:firefoxOptions"]["binary"] = path;
+          capabilities["moz:firefoxOptions"]["binary"] = path;
         }
         if (browser === "tor browser") {
           if (!prefs) {
@@ -333,18 +340,12 @@ let expandConfig = async (configData) => {
           prefs["extensions.torlauncher.prompt_at_startup"] = false;
         }
         if (prefs) {
-          capabilityList[0]["moz:firefoxOptions"]["prefs"] = prefs;
+          capabilities["moz:firefoxOptions"]["prefs"] = prefs;
         }
-      } else if (service === "browserstack") {
-        driverType = "browserstack";
-        capabilityList = selectRecentBrowserstackBrowsers(
-          await fetchBrowserstackCapabilities());
       } else {
         throw new Error(`Unknown browser or service '${browser || service}'.`);
       }
-      for (let capabilities of capabilityList) {
-        results.push({ browser, driverType, service, path, capabilities, prefs });
-      }
+      results.push({ browser, driverType, service, path, capabilities, prefs });
     }
   }
   return results;
@@ -356,14 +357,25 @@ let sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // The main program
 let main = async () => {
   // Read config file and flags from command line
-  let { _ : [configFile], stayOpen, only } = minimist(process.argv.slice(2));
-  let configData = JSON.parse(fs.readFileSync(configFile));
-  let expandedConfigData = await expandConfig(configData);
-  let filteredExpandedConfigData = expandedConfigData.filter(
-    d => only ? d.browser.startsWith(only) : true);
-  writeDataSync(await runTestsBatch(filteredExpandedConfigData,
-                                    { shouldQuit: !stayOpen }));
-  render.main();
+//  logging.installConsoleHandler();
+//  logging.getLogger().setLevel(logging.Level.ALL);
+//  logging.getLogger("browser").setLevel(logging.Level.ALL);
+  let { _ : [configFile], stayOpen, only, list } = minimist(process.argv.slice(2));
+  if (list) {
+    let capabilityList = await fetchBrowserstackCapabilities();
+    for (let capability of capabilityList) {
+      console.log(capability);
+    }
+  } else {
+    let configData = JSON.parse(fs.readFileSync(configFile));
+    let expandedConfigData = await expandConfig(configData);
+    let filteredExpandedConfigData = expandedConfigData.filter(
+      d => only ? d.browser.startsWith(only) : true);
+    console.log(filteredExpandedConfigData);
+    writeDataSync(await runTestsBatch(filteredExpandedConfigData,
+                                      { shouldQuit: !stayOpen }));
+    render.main();
+  }
 }
 
 main();
