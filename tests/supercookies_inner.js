@@ -375,10 +375,10 @@ let tests = {
   },
   "h2_connection": {
     write: async (secret) => {
-      await fetch("https://h2.arthuredelstein.net:8901/?mode=write&secret=${secret}");
+      await fetch(`https://h2.arthuredelstein.net:8901/?mode=write&secret=${secret}`);
     },
     read: async () => {
-      let response = await fetch("https://h2.arthuredelstein.net:8901/?mode=read");
+      let response = await fetch(`https://h2.arthuredelstein.net:8901/?mode=read`);
       return await response.text();
     }
   },
