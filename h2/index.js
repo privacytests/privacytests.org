@@ -22,6 +22,8 @@ server.on('request', (request, response) => {
     sessionTags.set(request.session, query["secret"]);
   }
   response.setHeader('Content-Type', 'text/plain');
+  response.setHeader('Cache-Control', 'no-store');
+  response.setHeader('Access-Control-Allow-Origin', '*');
   response.end(sessionTags.get(request.session));
 });
 server.listen(8901);
