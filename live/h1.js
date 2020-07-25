@@ -14,7 +14,8 @@ let socketTags = new Map();
 // https://h1.arthuredelstein.net:8902/?mode=write&secret=123test
 // https://h1.arthuredelstein.net:8902/?mode=read
 const server = https.createServer(options, (request, response) => {
-  let parsedURL = url.parse(request.path, true);
+  console.log(request.url);
+  let parsedURL = url.parse(request.url, true);
   let query = parsedURL.query;
   let socket = request.socket;
   if (query["mode"] === "write") {
@@ -24,6 +25,8 @@ const server = https.createServer(options, (request, response) => {
   response.setHeader('Content-Type', 'text/plain');
   response.setHeader('Cache-Control', 'no-store');
   response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Connection', 'Keep-Alive');
+  response.setHeader('Keep-Alive', 'timeout=300, max=1000');
   response.end(socketTags.get(socket));
 });
 
