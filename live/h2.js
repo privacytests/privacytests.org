@@ -13,8 +13,8 @@ const server = http2.createSecureServer(options);
 let sessionTags = new Map();
 
 // Exampleas:
-// https://h2.arthuredelstein.net:8901/?mode=write&secret=123test
-// https://h2.arthuredelstein.net:8901/?mode=read
+// https://h2.arthuredelstein.net:8902/?mode=write&secret=123test
+// https://h2.arthuredelstein.net:8902/?mode=read
 server.on('request', (request, response) => {
   let path = request.headers[":path"];
   let parsedURL = url.parse(path, true);
@@ -30,4 +30,4 @@ server.on('request', (request, response) => {
   response.end(sessionTags.get(session));
 });
 
-server.listen(8901);
+server.listen(8902);
