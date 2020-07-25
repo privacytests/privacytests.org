@@ -23,7 +23,7 @@ server.on('request', (request, response) => {
   if (query["mode"] === "write") {
     sessionTags.set(session, query["secret"]);
   }
-  console.log("request:",sessionTags.get(session));
+  console.log("h2 request. session tag found:",sessionTags.get(session));
   response.setHeader('Content-Type', 'text/plain');
   response.setHeader('Cache-Control', 'no-store');
   response.setHeader('Access-Control-Allow-Origin', '*');
