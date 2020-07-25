@@ -9,6 +9,7 @@ let countMaps = {
   "font": {},
   "image": {},
   "page": {},
+  "preload": {},
   "prefetch": {},
 };
 let resourceFiles = {
@@ -18,6 +19,7 @@ let resourceFiles = {
   "font": "font.woff",
   "image": "image.png",
   "page": "page.html",
+  "preload": "page.html",
   "prefetch": "page.html",
 };
 
