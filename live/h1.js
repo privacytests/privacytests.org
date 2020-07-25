@@ -11,8 +11,8 @@ let socketTags = new Map();
 
 // Create a secure HTTP1 server
 // Exampleas:
-// https://h1.arthuredelstein.net:8902/?mode=write&secret=123test
-// https://h1.arthuredelstein.net:8902/?mode=read
+// https://h1.arthuredelstein.net:8901/?mode=write&secret=123test
+// https://h1.arthuredelstein.net:8901/?mode=read
 const server = https.createServer(options, (request, response) => {
   console.log(request.url);
   let parsedURL = url.parse(request.url, true);
@@ -30,4 +30,4 @@ const server = https.createServer(options, (request, response) => {
   response.end(socketTags.get(socket));
 });
 
-server.listen(8902);
+server.listen(8901);
