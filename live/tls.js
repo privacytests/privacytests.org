@@ -51,3 +51,4 @@ theServer.on('secureConnection', (tlsSocket) => {
 });
 
 theServer.listen(8900);
+console.log("listening for tls connections on 8900");

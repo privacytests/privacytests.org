@@ -31,3 +31,4 @@ server.on('request', (request, response) => {
 });
 
 server.listen(8902);
+console.log("listening for h2 connections on 8902");
