@@ -100,4 +100,4 @@ app.get('/auth', (req, res) => {
   }
 });
 
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+app.listen(port, () => console.log(`listening for file requests on ${port}`));

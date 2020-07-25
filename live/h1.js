@@ -31,3 +31,4 @@ const server = https.createServer(options, (request, response) => {
 });
 
 server.listen(8901);
+console.log("listening for h1 connections on 8901");
