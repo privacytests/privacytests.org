@@ -250,7 +250,7 @@ let readJSONFile = async (file) =>
 let latestResultsFile = async (path) => {
   let files = await fs.readdir(path);
   let stem = files
-      .filter(f => f.match("^results_(.*?)\.json$"))
+      .filter(f => f.match("^(.*?)\.json$"))
       .sort()
       .pop();
   return path + "/" + stem;
@@ -259,7 +259,7 @@ let latestResultsFile = async (path) => {
 let main = async () => {
   let { live } = minimist(process.argv.slice(2));
   let resultsFileJSON = await latestResultsFile("./out/results");
-  let resultsFileHTMLLatest = "./out/results/results_latest.html";
+  let resultsFileHTMLLatest = "./out/results/latest.html";
   let resultsFileHTML = resultsFileJSON.replace(/\.json$/, ".html");
 //  fs.copyFile(resultsFile, "./out/results/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
   console.log(`Reading from raw results file: ${resultsFileJSON}`);
