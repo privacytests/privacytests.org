@@ -275,10 +275,10 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
 // ## Writing results
 
 // Takes our results in a JSON object and writes them to disk.
-// The file name looks like `results_yyyymmdd__HHMMss.json`.
+// The file name looks like `yyyymmdd__HHMMss.json`.
 let writeDataSync = function (data) {
   let dateStub = dateFormat(new Date(), "yyyymmdd_HHMMss", true);
-  let filePath = `out/results_${dateStub}.json`;
+  let filePath = `out/results/${dateStub}.json`;
   fs.writeFileSync(filePath, JSON.stringify(data));
   console.log(`Wrote results to "${filePath}".`);
 };
