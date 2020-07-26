@@ -258,10 +258,10 @@ let latestResultsFile = async (path) => {
 
 let main = async () => {
   let { live } = minimist(process.argv.slice(2));
-  let resultsFileJSON = await latestResultsFile("./out");
-  let resultsFileHTMLLatest = "./out/results_latest.html";
+  let resultsFileJSON = await latestResultsFile("./out/results");
+  let resultsFileHTMLLatest = "./out/results/results_latest.html";
   let resultsFileHTML = resultsFileJSON.replace(/\.json$/, ".html");
-//  fs.copyFile(resultsFile, "./out/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
+//  fs.copyFile(resultsFile, "./out/results/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
   console.log(`Reading from raw results file: ${resultsFileJSON}`);
   let results = await readJSONFile(resultsFileJSON);
 //  console.log(results.all_tests[0]);
