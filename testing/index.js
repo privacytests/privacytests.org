@@ -302,7 +302,9 @@ let expandConfig = async (configData) => {
         capability = capabilitiesList[0];
       } else if (browser === "chromium" || browser === "chrome") {
         driverType = "chrome";
-        capabilities = {"browser": "chrome"};
+        capabilities = {"browser": "chrome",
+                        chromeOptions: {  binary: path,
+                                          args: ['no-sandbox'] }};
       } else if (browser === "safari") {
         driverType = "safari";
         capabilities = {"browser": "safari",
