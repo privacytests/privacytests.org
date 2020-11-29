@@ -145,7 +145,7 @@ const screen_tests = [
 ];
 
 let navigator_tests = [
-  [`navigator.buildID`, `"20100101"`],
+  [`navigator.buildID === undefined || navigator.buildID === "20181001000000"`, true],
   [`navigator.getBattery`, undefined],
   [`try {
       navigator.getBattery();
