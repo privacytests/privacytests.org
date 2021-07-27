@@ -111,7 +111,7 @@ let localDriver = async (capabilities) => {
   }
   let edgeOptions = new edge.Options();
   const edgePaths = await installDriver();
-  edgeOptions.setEdgeChromium(true);
+//  edgeOptions.setEdgeChromium(true);
   if (capabilities.path) {
     edgeOptions.setBinaryPath(capabilities.path);
   }
@@ -293,7 +293,7 @@ let expandConfig = async (configData) => {
   let results = [];
   let driverType;
   let capabilities;
-  for (let { browser, service, path, disable, prefs } of configData) {
+  for (let { browser, service, path, disable, args, prefs } of configData) {
     if (!disable) {
       if (service) {
         driverType = "browserstack";
@@ -304,7 +304,7 @@ let expandConfig = async (configData) => {
         driverType = "chrome";
         capabilities = {"browser": "chrome",
                         chromeOptions: {  binary: path,
-                                          args: ['no-sandbox'] }};
+                                          "args": ['no-sandbox'].concat(args) }};
       } else if (browser === "safari") {
         driverType = "safari";
         capabilities = {"browser": "safari",
@@ -317,15 +317,13 @@ let expandConfig = async (configData) => {
         capabilities = {
           browser: "chrome",
           chromeOptions: {  binary: path,
-                            args: ['no-sandbox'] }
-        };
+                            "args": ['no-sandbox'].concat(args) }};
       } else if (browser === "brave") {
         driverType = "chrome";
         capabilities = {
           browser: "chrome",
           chromeOptions: {  binary: path,
-                            args: ['no-sandbox'] }
-        };
+                            "args": ['no-sandbox'].concat(args) }};
       } else if (browser === "cliqz" ||
                  browser === "firefox" ||
                  browser === "tor browser") {
@@ -340,6 +338,7 @@ let expandConfig = async (configData) => {
             prefs = {};
           }
           prefs["extensions.torlauncher.prompt_at_startup"] = false;
+          prefs["extensions.torlauncher.quickstart"] = true;
         }
         if (prefs) {
           capabilities["moz:firefoxOptions"]["prefs"] = prefs;
