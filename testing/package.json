@@ -17,15 +17,15 @@
     "selenium-webdriver": "^4.0.0-beta.4"
   },
   "devDependencies": {
+    "@compodoc/live-server": "^1.2.2",
     "file-url": "^2.0.2",
-    "live-server": "^1.2.1",
     "nodemon": "^2.0.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "gh-pages -d out",
     "publish": "cp out/results/latest.html out/results/index.html && gh-pages -d out",
-    "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render --live\" & ./node_modules/live-server/live-server.js --open=results/latest.html out"
+    "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render --live\" & ./node_modules/@compodoc/live-server/live-server.js --open=results/latest.html out"
   },
   "author": "Arthur Edelstein",
   "license": "MIT"
