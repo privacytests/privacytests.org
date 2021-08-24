@@ -279,6 +279,7 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
 let writeDataSync = function (data) {
   let dateStub = dateFormat(new Date(), "yyyymmdd_HHMMss", true);
   let filePath = `out/results/${dateStub}.json`;
+  fs.mkdirSync("out/results", { recursive: true });
   fs.writeFileSync(filePath, JSON.stringify(data));
   console.log(`Wrote results to "${filePath}".`);
 };
