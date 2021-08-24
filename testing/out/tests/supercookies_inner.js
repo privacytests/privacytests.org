@@ -13,7 +13,7 @@ let tests = {
     write: (secret) => {
       let expiry = new Date();
       expiry.setFullYear(expiry.getFullYear() + 1);
-      document.cookie = `secret=${secret};expires=${expiry.toUTCString()}`;
+      document.cookie = `secret=${secret}; SameSite=None; Secure`;
     },
     read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null,
    },
