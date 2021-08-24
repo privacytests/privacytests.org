@@ -114,11 +114,12 @@ let localDriver = async (driverType, capabilities) => {
     .withCapabilities(capabilities)
     .forBrowser(capabilities["browser"]);
   if (driverType === "chrome") {
-    let chromeOptions = new chrome.Options();
+    let options = new chrome.Options();
     if (capabilities.chromeOptions && capabilities.chromeOptions.binary) {
-      chromeOptions.setChromeBinaryPath(capabilities.chromeOptions.binary);
+      options.setChromeBinaryPath(capabilities.chromeOptions.binary);
     }
-    builder.setChromeOptions(chromeOptions);
+    options.addArguments(["--remote-debugging-port=9222"]);
+    builder.setChromeOptions(options);
   }
   if (driverType === "MicrosoftEdge") {
     let edgeOptions = new edge.Options();
@@ -132,9 +133,10 @@ let localDriver = async (driverType, capabilities) => {
   }
 //  if (driverType === "firefox") {
 //    builder.setFirefoxOptions(options);
-//  }
-  return await builder.build();
-//  console.log("driver made:", driver);
+  //  }
+  let driver = builder.build();
+  console.log("driver built:", driver);
+  return driver;
 };
 
 // ## Testing
@@ -260,11 +262,12 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
       }
       capabilities.browserName = capabilities.browser;
       console.log(capabilities);
+      console.log("about to create driver:");
       let driver = await driverConstructor(driverType, capabilities);
       console.log("driver", driver);
       let fullCapabilitiesMap = (await driver.getCapabilities())["map_"];
       let fullCapabilities = Object.fromEntries(fullCapabilitiesMap.entries());
-      console.log(fullCapabilities);
+      console.log('fullCapabilities', fullCapabilities);
       let timeStarted = new Date().toISOString();
       let testResults = await runTests(driver);
       if (shouldQuit) {
