@@ -224,7 +224,7 @@ let resultsToTable = (results, title) => {
   }
   body.push([{subheading:"IP address masking tests"}]);
   body = body.concat(resultsSection({bestResults, category:"tor", tooltipFunction: torTooltip}));
-  body.push([{subheading:"Partitioning tests"}]);
+  body.push([{subheading:"State Partitioning tests"}]);
   body = body.concat(resultsSection({bestResults, category:"supercookies", tooltipFunction: supercookieTooltip}));
   body.push([{subheading:"Fingerprinting resistance tests"}]);
   body = body.concat(resultsSection({bestResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
