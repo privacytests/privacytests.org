@@ -104,30 +104,37 @@ let browserstackDriver = async (capabilities) => {
 
 // Produces a selenium driver to run tests on a local browser,
 // using the given capabilities object.
-let localDriver = async (capabilities) => {
-  let chromeOptions = new chrome.Options();
-  if (capabilities.chromeOptions && capabilities.chromeOptions.binary) {
-    chromeOptions.setChromeBinaryPath(capabilities.chromeOptions.binary);
-  }
-  let edgeOptions = new edge.Options();
-  const edgePaths = await installDriver();
-//  edgeOptions.setEdgeChromium(true);
-  if (capabilities.path) {
-    edgeOptions.setBinaryPath(capabilities.path);
-  }
+let localDriver = async (driverType, capabilities) => {
+  console.log("capabilities", capabilities);
   let builder = new Builder();
   if (capabilities.server) {
-    builder = builder.usingServer(capabilities.server);
+    builder.usingServer(capabilities.server);
   }
-  let driver = builder.withCapabilities(capabilities)
-    .forBrowser(capabilities["browser"])
-  //    .setFirefoxOptions(options)
-      .setChromeOptions(chromeOptions)
-      .setEdgeOptions(edgeOptions)
-      .setEdgeService(new edge.ServiceBuilder(edgePaths.driverPath))
-      .build();
+  builder
+    .withCapabilities(capabilities)
+    .forBrowser(capabilities["browser"]);
+  if (driverType === "chrome") {
+    let chromeOptions = new chrome.Options();
+    if (capabilities.chromeOptions && capabilities.chromeOptions.binary) {
+      chromeOptions.setChromeBinaryPath(capabilities.chromeOptions.binary);
+    }
+    builder.setChromeOptions(chromeOptions);
+  }
+  if (driverType === "MicrosoftEdge") {
+    let edgeOptions = new edge.Options();
+    if (capabilities.path) {
+      edgeOptions.setBinaryPath(capabilities.path);
+    }
+    const edgePaths = await installDriver();
+    edgeOptions.setEdgeChromium(true);
+    builder.setEdgeOptions(edgeOptions)
+    builder.setEdgeService(new edge.ServiceBuilder(edgePaths.driverPath))
+  }
+//  if (driverType === "firefox") {
+//    builder.setFirefoxOptions(options);
+//  }
+  return await builder.build();
 //  console.log("driver made:", driver);
-  return driver;
 };
 
 // ## Testing
@@ -253,8 +260,8 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
       }
       capabilities.browserName = capabilities.browser;
       console.log(capabilities);
-      let driver = await driverConstructor(capabilities);
-      console.log(driver);
+      let driver = await driverConstructor(driverType, capabilities);
+      console.log("driver", driver);
       let fullCapabilitiesMap = (await driver.getCapabilities())["map_"];
       let fullCapabilities = Object.fromEntries(fullCapabilitiesMap.entries());
       console.log(fullCapabilities);
