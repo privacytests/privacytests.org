@@ -110,9 +110,7 @@ let localDriver = async (driverType, capabilities) => {
   if (capabilities.server) {
     builder.usingServer(capabilities.server);
   }
-  builder
-    .withCapabilities(capabilities)
-    .forBrowser(capabilities["browser"]);
+  builder.withCapabilities(capabilities).forBrowser(capabilities["browser"]);
   if (driverType === "chrome") {
     let options = new chrome.Options();
     if (capabilities.chromeOptions && capabilities.chromeOptions.binary) {
@@ -122,21 +120,19 @@ let localDriver = async (driverType, capabilities) => {
     builder.setChromeOptions(options);
   }
   if (driverType === "MicrosoftEdge") {
-    let edgeOptions = new edge.Options();
+    let options = new edge.Options();
     if (capabilities.path) {
-      edgeOptions.setBinaryPath(capabilities.path);
+      options.setBinaryPath(capabilities.path);
     }
     const edgePaths = await installDriver();
-    edgeOptions.setEdgeChromium(true);
-    builder.setEdgeOptions(edgeOptions)
+    options.setEdgeChromium(true);
+    builder.setEdgeOptions(options)
     builder.setEdgeService(new edge.ServiceBuilder(edgePaths.driverPath))
   }
 //  if (driverType === "firefox") {
 //    builder.setFirefoxOptions(options);
   //  }
-  let driver = builder.build();
-  console.log("driver built:", driver);
-  return driver;
+  return builder.build();
 };
 
 // ## Testing
