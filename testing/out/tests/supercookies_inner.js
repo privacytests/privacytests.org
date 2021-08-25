@@ -170,7 +170,7 @@ let tests = {
       }, "*");
       await sleepMs(500);
       let response = await fetch(
-        testURI("count", "image", key), {"cache": "reload"});
+        testURI("count", "favicon", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
   },
