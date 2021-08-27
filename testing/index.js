@@ -23,6 +23,9 @@ const DEFAULT_TIMEOUT_MS = 30000;
 require('geckodriver');
 require('chromedriver');
 
+// Returns a promise that sleeps for the given millseconds.
+let sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 // ## Selenium setup
 
 // Read a file called .browserstack.json. The file should contain a JSON
@@ -186,10 +189,12 @@ let runSupercookieTests = async (driver, newTabs) => {
       readParams += `&${test}=${encodeURIComponent(data["result"])}`;
     }
   }
-//  console.log(readParams);
+  //  console.log(readParams);
+//  await sleep(5000);
   let readResultsSameFirstParty = await loadAndGetResults(
     driver, `${iframe_root_same}/tests/${stem}.html?mode=read${readParams}`, newTabs);
-//  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
+  //  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
+  //await sleep(5000);
   let readResultsDifferentFirstParty = await loadAndGetResults(
     driver, `${iframe_root_different}/tests/${stem}.html?mode=read${readParams}`, newTabs);
   let jointResult = {};
@@ -256,8 +261,10 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
       if (!driverConstructor) {
         throw new Error(`unknown driver type ${driverType}`);
       }
-      capabilities.browserName = capabilities.browser;
       console.log(capabilities);
+      if (capabilities && capabilities.browser) {
+        capabilities.browserName = capabilities.browser;
+      }
       console.log("about to create driver:");
       let driver = await driverConstructor(driverType, capabilities);
       console.log("driver", driver);
@@ -300,7 +307,7 @@ let expandConfig = async (configData) => {
   let results = [];
   let driverType;
   let capabilities;
-  for (let { browser, service, path, disable, args, prefs } of configData) {
+  for (let { browser, service, path, disable, args, prefs, repeat } of configData) {
     if (!disable) {
       if (service) {
         driverType = "browserstack";
@@ -353,14 +360,13 @@ let expandConfig = async (configData) => {
       } else {
         throw new Error(`Unknown browser or service '${browser || service}'.`);
       }
-      results.push({ browser, driverType, service, path, capabilities, prefs });
+      repeat ??= 1;
+      let result = { browser, driverType, service, path, capabilities, prefs };
+      results = [].concat(results, Array(repeat).fill({ browser, driverType, service, path, capabilities, prefs }));
     }
   }
   return results;
 }
-
-// Returns a promise that sleeps for the given millseconds.
-let sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // The main program
 let main = async () => {
