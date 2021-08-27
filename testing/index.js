@@ -90,14 +90,16 @@ const selectRecentBrowserstackBrowsers = (allCapabilities) => {
 
 // Produces a selenium driver to run tests on browserstack.com,
 // with the given capabilities object.
-let browserstackDriver = async (capabilities) => {
+let browserstackDriver = async (driverType, capabilities) => {
   let { user, key } = await browserstackCredentials();
+  console.log("browserstackDriver: ", driverType, capabilities)
   capabilitiesWithCred = Object.assign(
     {},
     capabilities,
     { "browserstack.user": user,
       "browserstack.key": key });
   let driver = new Builder()
+      .forBrowser(driverType)
       .usingServer('http://hub-cloud.browserstack.com/wd/hub')
       .withCapabilities(capabilitiesWithCred)
       .setLoggingPrefs({ 'browser':'ALL' })
@@ -313,7 +315,7 @@ let expandConfig = async (configData) => {
         driverType = "browserstack";
         let capabilitiesList = selectRecentBrowserstackBrowsers(
           await fetchBrowserstackCapabilities());
-        capability = capabilitiesList[0];
+        capabilities = capabilitiesList[0];
       } else if (browser === "chromium" || browser === "chrome") {
         driverType = "chrome";
         capabilities = {"browser": "chrome",
