@@ -351,7 +351,7 @@ let tests = {
       let response = await fetch("https://arthuredelstein.net/browser-privacy-live/auth", {"cache": "reload"});
       return (await response.json()).password;
     }
-    },*/
+    },*//*
   "ServiceWorker": {
     write: async (key) => {
       let registration = await navigator.serviceWorker.register(
@@ -372,7 +372,7 @@ let tests = {
       let response = await fetch("serviceworker-read");
       return await response.text();
     }
-  },/*
+  },
   "h2_connection": {
     write: async (secret) => {
       await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`);
