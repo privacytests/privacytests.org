@@ -125,6 +125,7 @@ let tests = {
       return (await response.text()).trim();
     }
   },
+  /*
   "image": {
     write: (key) => new Promise((resolve, reject) => {
       let img = document.createElement("img");
@@ -145,6 +146,7 @@ let tests = {
       return (await response.text()).trim();
     }
   },
+*/
   "CacheStorage": {
     write: async (key) => {
       let cache = await caches.open("supercookies");
