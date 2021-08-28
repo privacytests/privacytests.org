@@ -9,6 +9,7 @@ let sleepMs = (timeMs) => new Promise(
 );
 
 let tests = {
+  /*
   "cookie": {
     write: (secret) => {
       let expiry = new Date();
@@ -125,7 +126,7 @@ let tests = {
       return (await response.text()).trim();
     }
   },
-  /*
+  */
   "image": {
     write: (key) => new Promise((resolve, reject) => {
       let img = document.createElement("img");
@@ -146,7 +147,7 @@ let tests = {
       return (await response.text()).trim();
     }
   },
-*/
+/*
   "CacheStorage": {
     write: async (key) => {
       let cache = await caches.open("supercookies");
@@ -175,7 +176,7 @@ let tests = {
         testURI("count", "favicon", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
-  },
+  },*/
   "font": {
     write: async (key) => {
       let style = document.createElement("style");
@@ -238,7 +239,7 @@ let tests = {
       return (await response.text()).trim();
     }
   },*/
-  "locks": {
+  /*"locks": {
     write: async (key) => {
       if (navigator.locks) {
         navigator.locks.request(key, lock => new Promise((f,r) => {}));
@@ -290,7 +291,7 @@ let tests = {
       let results = await fetch("https://tls.arthuredelstein.net:8900/");
       return (await results.json()).sessionId;
     }
-  },
+  },*/
   "prefetch": {
     write: async (key) => {
       let link = document.createElement("link");
@@ -313,7 +314,7 @@ let tests = {
       }
       return countString;
     }
-  },
+  },/*
   "web_sql_database": {
     // Borrowed from https://github.com/samyk/evercookie
     write: async (key) => {
@@ -344,7 +345,7 @@ let tests = {
       }));
       return result.rows.item(0).value;
     }
-  },
+  },*/
 /*  "basic_auth": {
     write: async (key) => {
       let response = await fetch("https://arthuredelstein.net/browser-privacy-live/auth", {"cache": "reload"});
@@ -354,7 +355,7 @@ let tests = {
       return (await response.json()).password;
     }
     },*/
-  "ServiceWorker": {
+ /* "ServiceWorker": {
     write: async (key) => {
       let registration = await navigator.serviceWorker.register(
         'serviceWorker.js');
@@ -392,7 +393,7 @@ let tests = {
       let response = await fetch(`https://h1.arthuredelstein.net:8901/?mode=read`);
       return await response.text();
     }
-  },
+  },*/
 };
 
 runAllTests(tests);
