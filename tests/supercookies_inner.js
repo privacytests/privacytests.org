@@ -361,7 +361,7 @@ let tests = {
       console.log("service worker ready");
       await sleepMs(100);
       await fetch(`serviceworker-write?secret=${key}`);
-    },*/
+    },
     read: async () => {
       let registration = await navigator.serviceWorker.register(
         'serviceWorker.js');
@@ -372,7 +372,7 @@ let tests = {
       let response = await fetch("serviceworker-read");
       return await response.text();
     }
-  },
+  },*/
   "h2_connection": {
     write: async (secret) => {
       await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`);
