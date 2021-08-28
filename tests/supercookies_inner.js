@@ -9,7 +9,7 @@ let sleepMs = (timeMs) => new Promise(
 );
 
 let tests = {
-  /*
+
   "cookie": {
     write: (secret) => {
       let expiry = new Date();
@@ -126,7 +126,6 @@ let tests = {
       return (await response.text()).trim();
     }
   },
-  */
   "image": {
     write: (key) => new Promise((resolve, reject) => {
       let img = document.createElement("img");
