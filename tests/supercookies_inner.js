@@ -311,7 +311,7 @@ let tests = {
       }
       return countString;
     }
-  },/*
+  },
   "web_sql_database": {
     // Borrowed from https://github.com/samyk/evercookie
     write: async (key) => {
@@ -342,7 +342,7 @@ let tests = {
       }));
       return result.rows.item(0).value;
     }
-  },*/
+  },
 /*  "basic_auth": {
     write: async (key) => {
       let response = await fetch("https://arthuredelstein.net/browser-privacy-live/auth", {"cache": "reload"});
@@ -352,7 +352,7 @@ let tests = {
       return (await response.json()).password;
     }
     },*/
- /* "ServiceWorker": {
+  "ServiceWorker": {
     write: async (key) => {
       let registration = await navigator.serviceWorker.register(
         'serviceWorker.js');
@@ -372,7 +372,7 @@ let tests = {
       let response = await fetch("serviceworker-read");
       return await response.text();
     }
-  },
+  },/*
   "h2_connection": {
     write: async (secret) => {
       await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`);
