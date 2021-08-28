@@ -121,7 +121,8 @@ let localDriver = async (driverType, capabilities) => {
     if (capabilities.chromeOptions && capabilities.chromeOptions.binary) {
       options.setChromeBinaryPath(capabilities.chromeOptions.binary);
     }
-    options.addArguments(["--remote-debugging-port=9222"]);
+    options.addArguments("--remote-debugging-port=9222");
+//    options.addArguments("--incognito");
     builder.setChromeOptions(options);
   }
   if (driverType === "MicrosoftEdge") {
