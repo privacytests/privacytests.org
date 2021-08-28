@@ -9,7 +9,6 @@ let sleepMs = (timeMs) => new Promise(
 );
 
 let tests = {
-
   "cookie": {
     write: (secret) => {
       let expiry = new Date();
@@ -237,7 +236,7 @@ let tests = {
       return (await response.text()).trim();
     }
   },*/
-  /*"locks": {
+  "locks": {
     write: async (key) => {
       if (navigator.locks) {
         navigator.locks.request(key, lock => new Promise((f,r) => {}));
@@ -289,7 +288,7 @@ let tests = {
       let results = await fetch("https://tls.arthuredelstein.net:8900/");
       return (await results.json()).sessionId;
     }
-  },*/
+  },
   "prefetch": {
     write: async (key) => {
       let link = document.createElement("link");
