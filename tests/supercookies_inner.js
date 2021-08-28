@@ -147,7 +147,6 @@ let tests = {
       return (await response.text()).trim();
     }
   },
-/*
   "CacheStorage": {
     write: async (key) => {
       let cache = await caches.open("supercookies");
@@ -176,7 +175,7 @@ let tests = {
         testURI("count", "favicon", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
-  },*/
+  },
   "font": {
     write: async (key) => {
       let style = document.createElement("style");
