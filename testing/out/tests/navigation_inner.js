@@ -1,4 +1,4 @@
-import { runAllTests } from "./test_utils.js";
+import { runAllTests, sleepMs } from "./test_utils.js";
 
 let tests = {
   "sessionStorage": {
@@ -14,6 +14,27 @@ let tests = {
       }, { once: true });
     })
   },
+    "ServiceWorker": {
+    write: async (key) => {
+      let registration = await navigator.serviceWorker.register(
+        'serviceWorker.js');
+      console.log(registration);
+      await navigator.serviceWorker.ready;
+      console.log("service worker ready");
+      await sleepMs(100);
+      await fetch(`serviceworker-write?secret=${key}`);
+    },
+    read: async () => {
+      let registration = await navigator.serviceWorker.register(
+        'serviceWorker.js');
+      console.log(registration);
+      await navigator.serviceWorker.ready;
+      console.log("service worker ready");
+      await sleepMs(100);
+      let response = await fetch("serviceworker-read");
+      return await response.text();
+    }
+  }
 };
 
 runAllTests(tests);
