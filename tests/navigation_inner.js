@@ -34,6 +34,7 @@ let tests = {
       let response = await fetch("serviceworker-read");
       return await response.text();
     }
+  }
 };
 
 runAllTests(tests);
