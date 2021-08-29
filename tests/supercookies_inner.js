@@ -352,7 +352,14 @@ let tests = {
       return (await response.json()).password;
     }
     },*/
-/*  "ServiceWorker": {
+/*  ***********************************
+    NOTE: ServiceWorker test has been disabled because it inexplicably causes
+    intermittent passing/failing of 4 other tests: css, font, image, prefetch.
+    TODO: Re-enable ServiceWorker tests after we find a way not to interfere
+    with the other tests. Maybe move to a separate test suite, such as
+    the navigation tests?
+    ***********************************
+    "ServiceWorker": {
     write: async (key) => {
       let registration = await navigator.serviceWorker.register(
         'serviceWorker.js');
