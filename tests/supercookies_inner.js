@@ -1,12 +1,8 @@
-import { runAllTests} from "./test_utils.js"
+import { runAllTests, sleepMs } from "./test_utils.js"
 import * as IdbKeyVal from 'https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs';
 
 let testURI = (path, type, key) =>
     `https://arthuredelstein.net/browser-privacy-live/${path}?type=${type}&key=${key}`;
-
-let sleepMs = (timeMs) => new Promise(
-  (resolve, reject) => setTimeout(resolve, timeMs)
-);
 
 let tests = {
   "cookie": {
