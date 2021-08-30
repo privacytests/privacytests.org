@@ -129,7 +129,8 @@ let resultsToDescription = ({
   browser,
   capabilities: { os, os_version, browser: browser2, browserName, browserVersion, version,
                   browser_version, device, platformVersion, platformName, platform },
-  prefs
+  prefs,
+  incognito
 }) => {
   let browserFinal = browser || browserName || browser2;
   let browserVersionFinal = browserVersion || version || "(version unknown)";
@@ -142,6 +143,9 @@ let resultsToDescription = ({
         finalText += `<br>${key}: ${prefs[key]}`;
       }
     }
+  }
+  if (incognito === true) {
+    finalText += "<br>(incognito)";
   }
   return finalText;
 };
@@ -281,7 +285,8 @@ const resultsKeys = [
 let aggregateRepeatedTrials = (results) => {
   let aggregatedResults = new Map();
   for (let test of results.all_tests) {
-    let key = `${test.capabilities.browserName}|${test.capabilities.browserVersion}`;
+    let key = resultsToDescription(test);
+    console.log(test, key);
     if (aggregatedResults.has(key)) {
       for (let subcategory of ["supercookies", "fingerprinting", "tor"]) {
         let someTests = aggregatedResults.get(key).testResults[subcategory];

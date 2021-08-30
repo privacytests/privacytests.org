@@ -116,6 +116,10 @@ let browserstackDriver = async (driverType, capabilities) => {
     capabilities,
     { "browserstack.user": user,
       "browserstack.key": key });
+  if (capabilities.incognito === true) {
+    capabilitiesWithCred["chromeOptions"] = { "args" : ["incognito"] };
+    capabilitiesWithCred["moz:firefoxOptions"] = { "args" : ["-private"] };
+  }
   let driver = new Builder()
       .forBrowser(driverType)
       .usingServer('http://hub-cloud.browserstack.com/wd/hub')
@@ -140,7 +144,9 @@ let localDriver = async (driverType, capabilities) => {
       options.setChromeBinaryPath(capabilities.chromeOptions.binary);
     }
     options.addArguments("--remote-debugging-port=9222");
-//    options.addArguments("--incognito");
+    if (capabilities.incognito === true) {
+      options.addArguments("--incognito");
+    }
     builder.setChromeOptions(options);
   }
   if (driverType === "MicrosoftEdge") {
@@ -153,9 +159,11 @@ let localDriver = async (driverType, capabilities) => {
     builder.setEdgeOptions(options)
     builder.setEdgeService(new edge.ServiceBuilder(edgePaths.driverPath))
   }
-//  if (driverType === "firefox") {
-//    builder.setFirefoxOptions(options);
-  //  }
+  if (driverType === "firefox") {
+    let options = new firefox.Options();
+    options.addArguments("-private");
+    builder.setFirefoxOptions(options);
+  }
   return builder.build();
 };
 
@@ -269,7 +277,7 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
   let all_tests = [];
   let timeStarted = new Date().toISOString();
   let git = await gitHash();
-  for (let { browser, driverType, capabilities, prefs } of configData) {
+  for (let { browser, driverType, capabilities, prefs, incognito } of configData) {
     try {
       let driverConstructor = { browserstack: browserstackDriver,
                                 firefox: localDriver,
@@ -297,7 +305,7 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
       if (shouldQuit) {
         await driver.quit();
       }
-      all_tests.push({ browser, driverType, capabilities: fullCapabilities, testResults, timeStarted, prefs });
+      all_tests.push({ browser, driverType, capabilities: fullCapabilities, testResults, timeStarted, prefs, incognito });
     } catch (e) {
       console.log(e, browser, driverType, capabilities, prefs);
     }
@@ -328,7 +336,7 @@ let expandConfig = async (configData) => {
   let results = [];
   let driverType;
   let capabilities;
-  for (let { browser, service, path, disable, args, prefs, repeat, os, os_version, browser_version } of configData) {
+  for (let { browser, service, path, disable, args, prefs, repeat, os, os_version, browser_version, incognito } of configData) {
     if (!disable) {
       if (service) {
         driverType = "browserstack";
@@ -340,9 +348,11 @@ let expandConfig = async (configData) => {
         //          await fetchBrowserstackCapabilities());
         console.log("capabilitiesList", capabilitiesList);
         capabilities = capabilitiesList[0];
+        capabilities.incognito = incognito;
       } else if (browser === "chromium" || browser === "chrome") {
         driverType = "chrome";
         capabilities = {"browser": "chrome",
+                        incognito,
                         chromeOptions: {  binary: path,
                                           "args": ['no-sandbox'].concat(args) }};
       } else if (browser === "safari") {
@@ -369,6 +379,7 @@ let expandConfig = async (configData) => {
                  browser === "tor browser") {
         driverType = "firefox";
         capabilities = {"browser": "firefox",
+                        incognito,
                       "moz:firefoxOptions": {}};
         if (path) {
           capabilities["moz:firefoxOptions"]["binary"] = path;
@@ -387,8 +398,8 @@ let expandConfig = async (configData) => {
         throw new Error(`Unknown browser or service '${browser || service}'.`);
       }
       repeat ??= 1;
-      let result = { browser, driverType, service, path, capabilities, prefs };
-      results = [].concat(results, Array(repeat).fill({ browser, driverType, service, path, capabilities, prefs }));
+      let result = { browser, driverType, service, path, capabilities, incognito, prefs };
+      results = [].concat(results, Array(repeat).fill(result));
     }
   }
   return results;
