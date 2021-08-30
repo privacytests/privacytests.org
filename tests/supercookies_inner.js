@@ -167,7 +167,11 @@ let tests = {
       await sleepMs(500);
       let response = await fetch(
         testURI("count", "favicon", key), {"cache": "reload"});
-      return (await response.text()).trim();
+      let count = (await response.text()).trim();
+      if (count === "0") {
+        throw new Error("favicons never requested");
+      }
+      return count;
     }
   },
   "font": {
@@ -348,34 +352,6 @@ let tests = {
       return (await response.json()).password;
     }
     },*/
-/*  ***********************************
-    NOTE: ServiceWorker test has been disabled because it inexplicably causes
-    intermittent passing/failing of 4 other tests: css, font, image, prefetch.
-    TODO: Re-enable ServiceWorker tests after we find a way not to interfere
-    with the other tests. Maybe move to a separate test suite, such as
-    the navigation tests?
-    ***********************************
-    "ServiceWorker": {
-    write: async (key) => {
-      let registration = await navigator.serviceWorker.register(
-        'serviceWorker.js');
-      console.log(registration);
-      await navigator.serviceWorker.ready;
-      console.log("service worker ready");
-      await sleepMs(100);
-      await fetch(`serviceworker-write?secret=${key}`);
-    },
-    read: async () => {
-      let registration = await navigator.serviceWorker.register(
-        'serviceWorker.js');
-      console.log(registration);
-      await navigator.serviceWorker.ready;
-      console.log("service worker ready");
-      await sleepMs(100);
-      let response = await fetch("serviceworker-read");
-      return await response.text();
-    }
-  },*/
   "h2_connection": {
     write: async (secret) => {
       await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`);
