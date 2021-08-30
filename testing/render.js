@@ -23,6 +23,9 @@ let htmlPage = ({ title, content, style, faviconURI }) => `
 </html>
 `;
 
+// Deep-copy a JSON structure (by value)
+const deepCopy = (json) => JSON.parse(JSON.stringify(json));
+
 // An empty HTML table with styling
 let htmlTable = ({ headers, body, className }) => {
   elements = [];
@@ -146,10 +149,13 @@ let resultsToDescription = ({
 // Generates a table cell which indicates whether
 // a test passed, and includes the tooltip with
 // more information.
-let itemBody = ({passed, testFailed, tooltip}) =>
-`<div class='${testFailed ? "na" : (passed ? "good" : "bad")}'
+let itemBody = ({passed, testFailed, tooltip}) => {
+  let allTestsFailed = Array.isArray(testFailed) ? testFailed.every(x => x === true) : testFailed;
+  let anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : !passed;
+  return `<div class='${allTestsFailed ? "na" : (anyDidntPass ? "bad" : "good")}'
 title = '${ tooltip.replace(/'/g, "&#39;") }'> &nbsp;
 </div>`;
+};
 
 // Creates a tooltip with fingerprinting test results
 // including the test expressions, the actual
@@ -178,16 +184,23 @@ passed: ${ passed }
 `.trim();
 };
 
+let joinIfArray = x => Array.isArray(x) ? x.join(", ") : x;
+
 let supercookieTooltip = (
   { write, read, readSameFirstParty, readDifferentFirstParty, passed, testFailed }
 ) => {
   return `
 write: ${ write }
+
 read: ${ read }
-result, same first party: ${ readSameFirstParty }
-result, different first party: ${ readDifferentFirstParty }
-passed: ${ passed }
-test failed: ${ testFailed }
+
+result, same first party: ${ joinIfArray(readSameFirstParty) }
+
+result, different first party: ${ joinIfArray(readDifferentFirstParty) }
+
+passed: ${ joinIfArray(passed) }
+
+test failed: ${ joinIfArray(testFailed) }
 `.trim();
 };
 
@@ -256,19 +269,56 @@ let latestResultsFile = async (path) => {
   return path + "/" + stem;
 };
 
+// List of results keys that should be collected in an array
+const resultsKeys = [
+  "IsTorExit", "passed", "testFailed",
+  "readSameFirstParty", "readDifferentFirstParty",
+  "actual_value", "desired_value"
+];
+
+// Finds any repeated trials of tests and aggregate the results
+// for a simpler rendering.
+let aggregateRepeatedTrials = (results) => {
+  let aggregatedResults = new Map();
+  for (let test of results.all_tests) {
+    let key = `${test.capabilities.browserName}|${test.capabilities.browserVersion}`;
+    if (aggregatedResults.has(key)) {
+      for (let subcategory of ["supercookies", "fingerprinting", "tor"]) {
+        let someTests = aggregatedResults.get(key).testResults[subcategory];
+        for (let testName in someTests) {
+          for (let value of resultsKeys) {
+            if (!Array.isArray(someTests[testName][value])) {
+              someTests[testName][value] = [someTests[testName][value]];
+            }
+            someTests[testName][value].push(test.testResults[subcategory][testName][value]);
+          }
+        }
+      }
+    } else {
+      aggregatedResults.set(key, deepCopy(test));
+    }
+  }
+  let resultsCopy = deepCopy(results);
+  resultsCopy.all_tests = [...aggregatedResults.values()];
+  return resultsCopy;
+};
+
 let main = async () => {
-  let { live } = minimist(process.argv.slice(2));
+  let { live, aggregate } = minimist(process.argv.slice(2),
+                                     opts = { default: { aggregate: true }});
+  console.log("aggregate:", aggregate);
   let resultsFileJSON = await latestResultsFile("./out/results");
   let resultsFileHTMLLatest = "./out/results/latest.html";
   let resultsFileHTML = resultsFileJSON.replace(/\.json$/, ".html");
 //  fs.copyFile(resultsFile, "./out/results/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
   console.log(`Reading from raw results file: ${resultsFileJSON}`);
   let results = await readJSONFile(resultsFileJSON);
+  let processedResults = aggregate ? aggregateRepeatedTrials(results) : results;
 //  console.log(results.all_tests[0]);
 //  console.log(JSON.stringify(results));
   await fs.writeFile(resultsFileHTMLLatest, htmlPage({
     title: "Browser Privacy Project",
-    content: content(results, path.basename(resultsFileJSON)),
+    content: content(processedResults, path.basename(resultsFileJSON)),
     style: pageStyle,
     faviconURI
   }));

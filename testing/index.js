@@ -222,8 +222,8 @@ let runSupercookieTests = async (driver, newTabs) => {
   for (let test in readResultsDifferentFirstParty) {
     let { write, read, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
     let { result: readSameFirstParty } = readResultsSameFirstParty[test];
-    let passed = (readSameFirstParty !== readDifferentFirstParty);
     let testFailed = !readSameFirstParty || readSameFirstParty.startsWith("Error:");
+    let passed = testFailed ? undefined : (readSameFirstParty !== readDifferentFirstParty);
     jointResult[test] = { write, read, readSameFirstParty, readDifferentFirstParty, passed, testFailed };
   }
 //  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
