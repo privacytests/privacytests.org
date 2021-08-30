@@ -167,7 +167,11 @@ let tests = {
       await sleepMs(500);
       let response = await fetch(
         testURI("count", "favicon", key), {"cache": "reload"});
-      return (await response.text()).trim();
+      let count = (await response.text()).trim();
+      if (count === "0") {
+        throw new Error("favicons never requested");
+      }
+      return count;
     }
   },
   "font": {
