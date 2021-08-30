@@ -49,6 +49,24 @@ let fetchBrowserstackCapabilities = async () => {
   return results;
 };
 
+// Takes the long capability list from browserstack.com, and
+// returns all such browsers that match.
+const selectMatchingBrowsers = (allCapabilities, selectionMap) =>
+  allCapabilities.filter((capability) => {
+    let keep = true;
+    console.log("match", capability, selectionMap);
+    for (let prop in selectionMap) {
+      if (capability[prop] &&
+          selectionMap[prop] &&
+          capability[prop].toLowerCase() !== selectionMap[prop].toLowerCase()) {
+        keep = false;
+      }
+//      console.log(prop, capability[prop], selectionMap[prop], keep);
+      if (keep === false) break;
+    }
+    return keep;
+  });
+
 // Takes a long capability list from browserstack.com, and
 // returns a selection of these. We choose the most recent browsers
 // and OS versions.
@@ -310,12 +328,17 @@ let expandConfig = async (configData) => {
   let results = [];
   let driverType;
   let capabilities;
-  for (let { browser, service, path, disable, args, prefs, repeat } of configData) {
+  for (let { browser, service, path, disable, args, prefs, repeat, os, os_version, browser_version } of configData) {
     if (!disable) {
       if (service) {
         driverType = "browserstack";
-        let capabilitiesList = selectRecentBrowserstackBrowsers(
-          await fetchBrowserstackCapabilities());
+        let browserstackCapabilities = await fetchBrowserstackCapabilities();
+//        console.log("browserstackCapabilities", browserstackCapabilities);
+        let capabilitiesList = selectMatchingBrowsers(
+          browserstackCapabilities, { browser, os, browser_version, os_version });
+//        let capabilitiesList = selectRecentBrowserstackBrowsers(
+        //          await fetchBrowserstackCapabilities());
+        console.log("capabilitiesList", capabilitiesList);
         capabilities = capabilitiesList[0];
       } else if (browser === "chromium" || browser === "chrome") {
         driverType = "chrome";
