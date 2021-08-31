@@ -76,7 +76,6 @@ let setChromeOptions = (builder, {incognito, path}) => {
   if (incognito) {
     options.addArguments("incognito");
   }
-  console.log("setChromeOptions");
   return builder
     .setChromeOptions(options)
     .forBrowser("chrome");
@@ -103,13 +102,20 @@ let setEdgeOptions = async (builder, {incognito, path, local}) => {
 };
 
 // Set Firefox options for the Builder.
-let setFirefoxOptions = (builder, {incognito, path}) => {
+let setFirefoxOptions = (builder, {incognito, path, tor}) => {
+  if (!path && tor) {
+    throw new Error("Please specify a path for the Tor Browser firefox binary.")
+  }
   let options = new firefox.Options();
   if (path) {
     options.setBinary(path);
   }
   if (incognito) {
     options.addArguments("-private");
+  }
+  if (tor) {
+    options.setPreference("extensions.torlauncher.prompt_at_startup", false);
+    options.setPreference("extensions.torlauncher.quickstart", true);
   }
   return builder
     .setFirefoxOptions(options)
@@ -148,7 +154,7 @@ let createDriver = async ({browser, browser_version,
   } else if (browser === "edge") {
     await setEdgeOptions(builder, { incognito, path, local: !browserstack });
   } else if (browser === "firefox" || browser === "tor browser") {
-    setFirefoxOptions(builder, { incognito, path });
+    setFirefoxOptions(builder, { incognito, path, tor: browser === "tor browser" });
   } else {
     throw new Error("unknown browser");
   }
