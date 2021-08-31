@@ -111,9 +111,6 @@ const selectRecentBrowserstackBrowsers = (allCapabilities) => {
 let createDriver = async (driverType, capabilities) => {
   console.log("capabilities", capabilities);
   let builder = new Builder();
-  if (capabilities.server) {
-    builder.usingServer(capabilities.server);
-  }
   if (driverType === "chrome") {
     let options = new chrome.Options();
     if (capabilities.chromeOptions && capabilities.chromeOptions.binary) {
