@@ -42,8 +42,7 @@ let browserstackCredentials = memoize(
 
 // Returns a browserstack capabilities object. Required
 // for producing a browserstack driver.
-let fetchBrowserstackCapabilities = async () => {
-  let { user, key } = await browserstackCredentials();
+let fetchBrowserstackCapabilities = async ({user, key}) => {
   let results = (await fetch(`https://${user}:${key}@api.browserstack.com/automate/browsers.json`)).json();
 //  console.log(await results);
   return results;
@@ -54,7 +53,7 @@ let fetchBrowserstackCapabilities = async () => {
 const selectMatchingBrowsers = (allCapabilities, selectionMap) =>
   allCapabilities.filter((capability) => {
     let keep = true;
-    console.log("match", capability, selectionMap);
+//    console.log("match", capability, selectionMap);
     for (let prop in selectionMap) {
       if (capability[prop] &&
           selectionMap[prop] &&
@@ -102,50 +101,89 @@ const selectRecentBrowserstackBrowsers = (allCapabilities) => {
       }
     }
   }
-  console.log(selectedCapabilities);
+//  console.log(selectedCapabilities);
   return selectedCapabilities;
 };
 
+// Sets Chrome options for the Builder.
+let setChromeOptions = (builder, {incognito, path}) => {
+  let options = new chrome.Options();
+  if (path) {
+    options.setChromeBinaryPath(path);
+  }
+  options.addArguments("--remote-debugging-port=9222");
+  if (incognito) {
+    options.addArguments("incognito");
+  }
+  console.log("setChromeOptions");
+  return builder
+    .setChromeOptions(options)
+    .forBrowser("chrome");
+};
+
+// Sets Edge options for the Builder.
+let setEdgeOptions = async (builder, {incognito, path}) => {
+  let options = new edge.Options();
+  if (path) {
+    options.setBinaryPath(path);
+  }
+  const edgePaths = await installEdgeDriver();
+  options.setEdgeChromium(true);
+  return builder
+    .setEdgeOptions(options)
+    .setEdgeService(new edge.ServiceBuilder(edgePaths.driverPath))
+    .forBrowser("edge");
+};
+
+// Set Firefox options for the Builder.
+let setFirefoxOptions = (builder, {incognito, path}) => {
+  let options = new firefox.Options();
+  if (path) {
+    options.setBinaryPath(path);
+  }
+  if (incognito) {
+    options.addArguments("-private");
+  }
+  return builder
+    .setFirefoxOptions(options)
+    .forBrowser("firefox")
+};
+
+let getBestBrowserstackCapabilities =
+    async ({ user, key, browser, browser_version, os, os_version }) => {
+  let browserstackCapabilities = await fetchBrowserstackCapabilities({user, key});
+  let capabilitiesList = selectMatchingBrowsers(
+    browserstackCapabilities, { browser, os, browser_version, os_version });
+  return capabilitiesList[0];
+}
+
+let setToBrowserstack =
+    async (builder, { browser, browser_version, os, os_version }) => {
+  let { user, key } = await browserstackCredentials();
+  builder.usingServer(`http://${user}:${key}@hub-cloud.browserstack.com/wd/hub`);
+  let capabilities = await getBestBrowserstackCapabilities(
+    { user, key, browser, browser_version, os, os_version });
+  builder.withCapabilities(capabilities);
+};
+
 // Produces a selenium driver to run tests,
-// using the given capabilities object.
-let createDriver = async (driverType, capabilities) => {
-  console.log("capabilities", capabilities);
+// using the given config object.
+let createDriver = async ({browser, browser_version,
+                           os, os_version,
+                           service, incognito, path}) => {
   let builder = new Builder();
-  if (driverType === "chrome") {
-    let options = new chrome.Options();
-    if (capabilities.chromeOptions && capabilities.chromeOptions.binary) {
-      options.setChromeBinaryPath(capabilities.chromeOptions.binary);
-    }
-    options.addArguments("--remote-debugging-port=9222");
-    builder.setChromeOptions(options);
+  if (service === "browserstack") {
+    await setToBrowserstack(builder, { browser, browser_version, os, os_version });
   }
-  if (driverType === "MicrosoftEdge") {
-    let options = new edge.Options();
-    if (capabilities.path) {
-      options.setBinaryPath(capabilities.path);
-    }
-    const edgePaths = await installEdgeDriver();
-    options.setEdgeChromium(true);
-    builder.setEdgeOptions(options)
-    builder.setEdgeService(new edge.ServiceBuilder(edgePaths.driverPath))
+  if (browser === "chrome" || browser === "chromium") {
+    setChromeOptions(builder, { incognito, path });
+  } else if (browser === "edge") {
+    await setEdgeOptions(builder, { incognito, path });
+  } else if (browser === "firefox") {
+    setFirefoxOptions(builder, { incognito, path });
+  } else {
+    throw new Exception("unknown browser");
   }
-  if (driverType === "browserstack") {
-    let { user, key } = await browserstackCredentials();
-    console.log("browserstackDriver: ", driverType, capabilities)
-    capabilities["browserstack.user"] = user;
-    capabilities["browserstack.key"] = key;
-    builder
-      .forBrowser(driverType)
-      .usingServer('http://hub-cloud.browserstack.com/wd/hub')
-      .setLoggingPrefs({ 'browser':'ALL' })
-  }
-  if (capabilities.incognito === true) {
-    capabilities["chromeOptions"] = { "args" : ["incognito"] };
-    capabilities["moz:firefoxOptions"] = { "args" : ["-private"] };
-    capabilities["ms:inPrivate"] = true;
-  }
-  builder.withCapabilities(capabilities).forBrowser(capabilities["browser"]);
-  console.log("builder", JSON.stringify(builder));
   return builder.build();
 };
 
@@ -255,18 +293,15 @@ let gitHash = async function () {
 
 // Runs a batch of tests (multiple browsers) for a given driver.
 // Returns results in a JSON object.
-let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}) {
+let runTestsBatch = async function (configList, {shouldQuit} = {shouldQuit:true}) {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
   let git = await gitHash();
-  for (let { browser, driverType, capabilities, prefs, incognito } of configData) {
+  for (let config of configList) {
     try {
-      console.log(capabilities);
-      if (capabilities && capabilities.browser) {
-        capabilities.browserName = capabilities.browser;
-      }
+      let { browser, prefs, incognito } = config;
       console.log("about to create driver:");
-      let driver = await createDriver(driverType, capabilities);
+      let driver = await createDriver(config);
       console.log("driver", driver);
       let fullCapabilitiesMap = (await driver.getCapabilities())["map_"];
       let fullCapabilities = Object.fromEntries(fullCapabilitiesMap.entries());
@@ -276,9 +311,10 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
       if (shouldQuit) {
         await driver.quit();
       }
-      all_tests.push({ browser, driverType, capabilities: fullCapabilities, testResults, timeStarted, prefs, incognito });
+      all_tests.push({ browser, capabilities: fullCapabilities, testResults, timeStarted,
+                       prefs, incognito });
     } catch (e) {
-      console.log(e, browser, driverType, capabilities, prefs);
+      console.log(e);
     }
   }
   let timeStopped = new Date().toISOString();
@@ -303,74 +339,11 @@ let setup_tests = async function () {
   let driverType = process.argv[2];
 };
 
-let expandConfig = async (configData) => {
+let expandConfigList = async (configList) => {
   let results = [];
-  let driverType;
-  let capabilities;
-  for (let { browser, service, path, disable, args, prefs, repeat, os, os_version, browser_version, incognito } of configData) {
-    if (!disable) {
-      if (service) {
-        driverType = "browserstack";
-        let browserstackCapabilities = await fetchBrowserstackCapabilities();
-//        console.log("browserstackCapabilities", browserstackCapabilities);
-        let capabilitiesList = selectMatchingBrowsers(
-          browserstackCapabilities, { browser, os, browser_version, os_version });
-//        let capabilitiesList = selectRecentBrowserstackBrowsers(
-        //          await fetchBrowserstackCapabilities());
-        console.log("capabilitiesList", capabilitiesList);
-        capabilities = capabilitiesList[0];
-        capabilities.incognito = incognito;
-      } else if (browser === "chromium" || browser === "chrome") {
-        driverType = "chrome";
-        capabilities = {"browser": "chrome",
-                        incognito,
-                        chromeOptions: {  binary: path,
-                                          "args": ['no-sandbox'].concat(args) }};
-      } else if (browser === "safari") {
-        driverType = "safari";
-        capabilities = {"browser": "safari",
-                      "safariAllowPopups": "true"};
-      } else if (browser === "edge") {
-        driverType = "MicrosoftEdge";
-        capabilities = {"browser": "MicrosoftEdge"};
-      } else if (browser === "opera") {
-        driverType = "chrome";
-        capabilities = {
-          browser: "chrome",
-          chromeOptions: {  binary: path,
-                            "args": ['no-sandbox'].concat(args) }};
-      } else if (browser === "brave") {
-        driverType = "chrome";
-        capabilities = {
-          browser: "chrome",
-          chromeOptions: {  binary: path,
-                            "args": ['no-sandbox'].concat(args) }};
-      } else if (browser === "cliqz" ||
-                 browser === "firefox" ||
-                 browser === "tor browser") {
-        driverType = "firefox";
-        capabilities = {"browser": "firefox",
-                        incognito,
-                      "moz:firefoxOptions": {}};
-        if (path) {
-          capabilities["moz:firefoxOptions"]["binary"] = path;
-        }
-        if (browser === "tor browser") {
-          if (!prefs) {
-            prefs = {};
-          }
-          prefs["extensions.torlauncher.prompt_at_startup"] = false;
-          prefs["extensions.torlauncher.quickstart"] = true;
-        }
-        if (prefs) {
-          capabilities["moz:firefoxOptions"]["prefs"] = prefs;
-        }
-      } else {
-        throw new Error(`Unknown browser or service '${browser || service}'.`);
-      }
-      repeat ??= 1;
-      let result = { browser, driverType, service, path, capabilities, incognito, prefs };
-      results = [].concat(results, Array(repeat).fill(result));
+  for (let config of configList) {
+    if (!config.disable) {
+      results = [].concat(results, Array(config.repeat).fill(config));
     }
   }
   return results;
@@ -389,12 +362,12 @@ let main = async () => {
       console.log(capability);
     }
   } else {
-    let configData = JSON.parse(fs.readFileSync(configFile));
-    let expandedConfigData = await expandConfig(configData);
-    let filteredExpandedConfigData = expandedConfigData.filter(
+    let configList = JSON.parse(fs.readFileSync(configFile));
+    let expandedConfigList = await expandConfigList(configList);
+    let filteredExpandedConfigList = expandedConfigList.filter(
       d => only ? d.browser.startsWith(only) : true);
-    console.log(filteredExpandedConfigData);
-    writeDataSync(await runTestsBatch(filteredExpandedConfigData,
+    console.log(filteredExpandedConfigList);
+    writeDataSync(await runTestsBatch(filteredExpandedConfigList,
                                       { shouldQuit: !stayOpen }));
     render.main();
   }
