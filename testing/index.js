@@ -106,7 +106,7 @@ let setEdgeOptions = async (builder, {incognito, path, local}) => {
 let setFirefoxOptions = (builder, {incognito, path}) => {
   let options = new firefox.Options();
   if (path) {
-    options.setBinaryPath(path);
+    options.setBinary(path);
   }
   if (incognito) {
     options.addArguments("-private");
@@ -147,10 +147,10 @@ let createDriver = async ({browser, browser_version,
     setChromeOptions(builder, { incognito, path });
   } else if (browser === "edge") {
     await setEdgeOptions(builder, { incognito, path, local: !browserstack });
-  } else if (browser === "firefox") {
+  } else if (browser === "firefox" || browser === "tor browser") {
     setFirefoxOptions(builder, { incognito, path });
   } else {
-    throw new Exception("unknown browser");
+    throw new Error("unknown browser");
   }
   return builder.build();
 };
