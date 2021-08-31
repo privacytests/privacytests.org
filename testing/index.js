@@ -66,45 +66,6 @@ const selectMatchingBrowsers = (allCapabilities, selectionMap) =>
     return keep;
   });
 
-// Takes a long capability list from browserstack.com, and
-// returns a selection of these. We choose the most recent browsers
-// and OS versions.
-const selectRecentBrowserstackBrowsers = (allCapabilities) => {
-  let OSs = new Set();
-  let browsers = new Set();
-  // Get names of all operating systems and browsers
-  for (let { os, browser } of allCapabilities) {
-    OSs.add(os);
-    browsers.add(browser);
-  }
-  let selectedCapabilities = [];
-  for (let os of OSs) {
-    for (let browser of browsers) {
-      let capabilities = allCapabilities
-          .filter(c => c.os === os && c.browser === browser)
-          .filter(c => c.browser !== "opera" && c.browser !== "ie");
-      // Find recent versions of operating system
-      let os_versions_set = new Set();
-      for (let { os_version } of capabilities) {
-        os_versions_set.add(os_version);
-      }
-      let os_versions = [... os_versions_set];
-      let mobile = os === "android" || os === "ios";
-      // Use most recent os versions.
-      let recent_os_versions = (mobile ? os_versions.sort() : os_versions).slice(-1);
-      if (recent_os_versions.length > 0) {
-        for (let os_version of recent_os_versions) {
-          let capabilities2 = capabilities.filter(c => c.os_version === os_version);
-          // Use most recent browser version or representative device
-          selectedCapabilities = selectedCapabilities.concat(capabilities2.slice(-1));
-        }
-      }
-    }
-  }
-//  console.log(selectedCapabilities);
-  return selectedCapabilities;
-};
-
 // Sets Chrome options for the Builder.
 let setChromeOptions = (builder, {incognito, path}) => {
   let options = new chrome.Options();
