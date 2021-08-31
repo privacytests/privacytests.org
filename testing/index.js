@@ -14,7 +14,7 @@ const dateFormat = require('dateformat');
 const util = require('util');
 const { spawn, exec } = require('child_process');
 const execAsync = util.promisify(exec);
-const { installDriver } = require('ms-chromium-edge-driver');
+const { installDriver: installEdgeDriver } = require('ms-chromium-edge-driver');
 const minimist = require('minimist');
 const render = require('./render');
 
@@ -106,38 +106,14 @@ const selectRecentBrowserstackBrowsers = (allCapabilities) => {
   return selectedCapabilities;
 };
 
-// Produces a selenium driver to run tests on browserstack.com,
-// with the given capabilities object.
-let browserstackDriver = async (driverType, capabilities) => {
-  let { user, key } = await browserstackCredentials();
-  console.log("browserstackDriver: ", driverType, capabilities)
-  capabilitiesWithCred = Object.assign(
-    {},
-    capabilities,
-    { "browserstack.user": user,
-      "browserstack.key": key });
-  if (capabilities.incognito === true) {
-    capabilitiesWithCred["chromeOptions"] = { "args" : ["incognito"] };
-    capabilitiesWithCred["moz:firefoxOptions"] = { "args" : ["-private"] };
-  }
-  let driver = new Builder()
-      .forBrowser(driverType)
-      .usingServer('http://hub-cloud.browserstack.com/wd/hub')
-      .withCapabilities(capabilitiesWithCred)
-      .setLoggingPrefs({ 'browser':'ALL' })
-      .build();
-  return driver;
-};
-
-// Produces a selenium driver to run tests on a local browser,
+// Produces a selenium driver to run tests,
 // using the given capabilities object.
-let localDriver = async (driverType, capabilities) => {
+let createDriver = async (driverType, capabilities) => {
   console.log("capabilities", capabilities);
   let builder = new Builder();
   if (capabilities.server) {
     builder.usingServer(capabilities.server);
   }
-  builder.withCapabilities(capabilities).forBrowser(capabilities["browser"]);
   if (driverType === "chrome") {
     let options = new chrome.Options();
     if (capabilities.chromeOptions && capabilities.chromeOptions.binary) {
@@ -154,7 +130,7 @@ let localDriver = async (driverType, capabilities) => {
     if (capabilities.path) {
       options.setBinaryPath(capabilities.path);
     }
-    const edgePaths = await installDriver();
+    const edgePaths = await installEdgeDriver();
     options.setEdgeChromium(true);
     builder.setEdgeOptions(options)
     builder.setEdgeService(new edge.ServiceBuilder(edgePaths.driverPath))
@@ -164,6 +140,23 @@ let localDriver = async (driverType, capabilities) => {
     options.addArguments("-private");
     builder.setFirefoxOptions(options);
   }
+  if (driverType === "browserstack") {
+    let { user, key } = await browserstackCredentials();
+    console.log("browserstackDriver: ", driverType, capabilities)
+    capabilities["browserstack.user"] = user;
+    capabilities["browserstack.key"] = key;
+    if (capabilities.incognito === true) {
+      capabilities["chromeOptions"] = { "args" : ["incognito"] };
+      capabilities["moz:firefoxOptions"] = { "args" : ["-private"] };
+      capabilities["ms:inPrivate"] = true;
+    }
+    builder
+      .forBrowser(driverType)
+      .usingServer('http://hub-cloud.browserstack.com/wd/hub')
+      .setLoggingPrefs({ 'browser':'ALL' })
+  }
+  builder.withCapabilities(capabilities).forBrowser(capabilities["browser"]);
+  console.log("builder", JSON.stringify(builder));
   return builder.build();
 };
 
@@ -279,23 +272,12 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
   let git = await gitHash();
   for (let { browser, driverType, capabilities, prefs, incognito } of configData) {
     try {
-      let driverConstructor = { browserstack: browserstackDriver,
-                                firefox: localDriver,
-                                chrome: localDriver,
-                                electron: localDriver,
-                                safari: localDriver,
-                                opera: localDriver,
-                                MicrosoftEdge: localDriver,
-                              }[driverType];
-      if (!driverConstructor) {
-        throw new Error(`unknown driver type ${driverType}`);
-      }
       console.log(capabilities);
       if (capabilities && capabilities.browser) {
         capabilities.browserName = capabilities.browser;
       }
       console.log("about to create driver:");
-      let driver = await driverConstructor(driverType, capabilities);
+      let driver = await createDriver(driverType, capabilities);
       console.log("driver", driver);
       let fullCapabilitiesMap = (await driver.getCapabilities())["map_"];
       let fullCapabilities = Object.fromEntries(fullCapabilitiesMap.entries());
