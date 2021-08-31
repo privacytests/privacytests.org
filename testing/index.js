@@ -122,14 +122,29 @@ let setFirefoxOptions = (builder, {incognito, path, tor}) => {
     .forBrowser("firefox")
 };
 
+// Set Safari options for the Builder.
+let setSafariOptions = (builder, {incognito, path}) => {
+  if (incognito) {
+    throw new Error("I don't know how to set incognito mode for Safari.");
+  }
+  if (path) {
+    throw new Error("I don't know how to set a path for Safari.");
+  }
+  return builder.forBrowser("safari");
+};
+
+// Find the best browserstack capabilities that match the specified
+// browser, browser_version, os, and os_version.
 let getBestBrowserstackCapabilities =
     async ({ user, key, browser, browser_version, os, os_version }) => {
   let browserstackCapabilities = await fetchBrowserstackCapabilities({user, key});
   let capabilitiesList = selectMatchingBrowsers(
     browserstackCapabilities, { browser, os, browser_version, os_version });
   return capabilitiesList[0];
-}
+};
 
+// Takes the given Builder and sets it up for the specified
+// browser, browser_version, os, and os_version on browserstack.
 let setToBrowserstack =
     async (builder, { browser, browser_version, os, os_version }) => {
   let { user, key } = await browserstackCredentials();
@@ -156,7 +171,7 @@ let createDriver = async ({browser, browser_version,
   } else if (browser === "firefox" || browser === "tor browser") {
     setFirefoxOptions(builder, { incognito, path, tor: browser === "tor browser" });
   } else if (browser === "safari") {
-    builder.forBrowser("safari");
+    setSafariOptions(builder, { incognito, path });
   } else {
     throw new Error("unknown browser");
   }
