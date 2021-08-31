@@ -155,6 +155,8 @@ let createDriver = async ({browser, browser_version,
     await setEdgeOptions(builder, { incognito, path, local: !browserstack });
   } else if (browser === "firefox" || browser === "tor browser") {
     setFirefoxOptions(builder, { incognito, path, tor: browser === "tor browser" });
+  } else if (browser === "safari") {
+    builder.forBrowser("safari");
   } else {
     throw new Error("unknown browser");
   }
