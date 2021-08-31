@@ -333,12 +333,6 @@ let writeDataSync = function (data) {
   console.log(`Wrote results to "${filePath}".`);
 };
 
-// Reads the command line, sets up requested selenium driver(s),
-// runs our browser privacy tests, and writes the result to disk.
-let setup_tests = async function () {
-  let driverType = process.argv[2];
-};
-
 let expandConfigList = async (configList) => {
   let results = [];
   for (let config of configList) {
