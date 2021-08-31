@@ -251,7 +251,8 @@ let runTests = async function (driver) {
 // Reads the current git commit hash for this program in a string. Used
 // when reporting results, to make them easier to reproduce.
 let gitHash = async function () {
-  const { stdout, stderr } = await execAsync('git rev-parse HEAD');
+  const { stdout, stderr } = await execAsync(
+    'git rev-parse HEAD', { cwd: __dirname});
   if (stderr) {
     throw new Error(stderr);
   } else {
