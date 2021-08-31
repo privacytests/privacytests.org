@@ -122,16 +122,22 @@ let setChromeOptions = (builder, {incognito, path}) => {
 };
 
 // Sets Edge options for the Builder.
-let setEdgeOptions = async (builder, {incognito, path}) => {
+let setEdgeOptions = async (builder, {incognito, path, local}) => {
   let options = new edge.Options();
   if (path) {
     options.setBinaryPath(path);
   }
-  const edgePaths = await installEdgeDriver();
-  options.setEdgeChromium(true);
+  if (incognito) {
+    options.addArguments("incognito");
+    options.addArguments("-inprivate");
+  }
+  if (local) {
+    const edgePaths = await installEdgeDriver();
+    //options.setEdgeChromium(true);
+    builder.setEdgeService(new edge.ServiceBuilder(edgePaths.driverPath));
+  }
   return builder
     .setEdgeOptions(options)
-    .setEdgeService(new edge.ServiceBuilder(edgePaths.driverPath))
     .forBrowser("edge");
 };
 
@@ -172,13 +178,14 @@ let createDriver = async ({browser, browser_version,
                            os, os_version,
                            service, incognito, path}) => {
   let builder = new Builder();
-  if (service === "browserstack") {
+  let browserstack = service === "browserstack";
+    if (browserstack) {
     await setToBrowserstack(builder, { browser, browser_version, os, os_version });
   }
   if (browser === "chrome" || browser === "chromium") {
     setChromeOptions(builder, { incognito, path });
   } else if (browser === "edge") {
-    await setEdgeOptions(builder, { incognito, path });
+    await setEdgeOptions(builder, { incognito, path, local: !browserstack });
   } else if (browser === "firefox") {
     setFirefoxOptions(builder, { incognito, path });
   } else {
