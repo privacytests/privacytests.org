@@ -120,9 +120,6 @@ let createDriver = async (driverType, capabilities) => {
       options.setChromeBinaryPath(capabilities.chromeOptions.binary);
     }
     options.addArguments("--remote-debugging-port=9222");
-    if (capabilities.incognito === true) {
-      options.addArguments("--incognito");
-    }
     builder.setChromeOptions(options);
   }
   if (driverType === "MicrosoftEdge") {
@@ -135,25 +132,20 @@ let createDriver = async (driverType, capabilities) => {
     builder.setEdgeOptions(options)
     builder.setEdgeService(new edge.ServiceBuilder(edgePaths.driverPath))
   }
-  if (driverType === "firefox") {
-    let options = new firefox.Options();
-    options.addArguments("-private");
-    builder.setFirefoxOptions(options);
-  }
   if (driverType === "browserstack") {
     let { user, key } = await browserstackCredentials();
     console.log("browserstackDriver: ", driverType, capabilities)
     capabilities["browserstack.user"] = user;
     capabilities["browserstack.key"] = key;
-    if (capabilities.incognito === true) {
-      capabilities["chromeOptions"] = { "args" : ["incognito"] };
-      capabilities["moz:firefoxOptions"] = { "args" : ["-private"] };
-      capabilities["ms:inPrivate"] = true;
-    }
     builder
       .forBrowser(driverType)
       .usingServer('http://hub-cloud.browserstack.com/wd/hub')
       .setLoggingPrefs({ 'browser':'ALL' })
+  }
+  if (capabilities.incognito === true) {
+    capabilities["chromeOptions"] = { "args" : ["incognito"] };
+    capabilities["moz:firefoxOptions"] = { "args" : ["-private"] };
+    capabilities["ms:inPrivate"] = true;
   }
   builder.withCapabilities(capabilities).forBrowser(capabilities["browser"]);
   console.log("builder", JSON.stringify(builder));
