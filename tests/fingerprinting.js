@@ -12,6 +12,8 @@
 
 /* jshint esversion: 6 */
 
+// dual_tests() define functions that run in both windows and workers.
+// Because they run in workers, they need to be synchronous.
 const dual_tests = async function dual_tests () {
 
 const performance_now_tests = [
@@ -85,7 +87,7 @@ const test_pairs = (pairs) => Promise.all(pairs.map(
     }
     const passed = !failure && (actual_value === desired_value);
     return { expression, spoof_expression, actual_value, desired_value, passed };
-  }));
+  });
 
 const run_all_tests = async function () {
   return Promise.all([].concat(
@@ -188,7 +190,7 @@ const run_in_worker = function (aFunction) {
     const worker = new Worker(
       URL.createObjectURL(
         new Blob([
-          `postMessage(await (${aFunction.toString()})())`
+          `postMessage((${aFunction.toString()})())`
         ])
       )
     );
