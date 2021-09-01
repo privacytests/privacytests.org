@@ -65,8 +65,8 @@ const event_tests = [
 const eval_async = async (expression) =>
   eval(`(async () => { return (${expression}); })();`);
 
-const test_pairs = async (pairs) => pairs.map(
-  ([expression, spoof_expression]) => {
+const test_pairs = (pairs) => Promise.all(pairs.map(
+  async ([expression, spoof_expression]) => {
     let actual_value, desired_value;
     let failure = false;
     try {
@@ -85,7 +85,7 @@ const test_pairs = async (pairs) => pairs.map(
     }
     const passed = !failure && (actual_value === desired_value);
     return { expression, spoof_expression, actual_value, desired_value, passed };
-  });
+  }));
 
 const run_all_tests = async function () {
   return Promise.all([].concat(
