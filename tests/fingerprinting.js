@@ -87,7 +87,7 @@ const test_pairs = (pairs) => Promise.all(pairs.map(
     }
     const passed = !failure && (actual_value === desired_value);
     return { expression, spoof_expression, actual_value, desired_value, passed };
-  });
+  }));
 
 const run_all_tests = async function () {
   return Promise.all([].concat(
