@@ -136,8 +136,9 @@ let setSafariOptions = (builder, {incognito, path}) => {
 // Find the best browserstack capabilities that match the specified
 // browser, browser_version, os, and os_version.
 let getBestBrowserstackCapabilities =
-    async ({ user, key, browser, browser_version, os, os_version }) => {
-  let browserstackCapabilities = await fetchBrowserstackCapabilities({user, key});
+  async ({ user, key, browser, browser_version, os, os_version }) => {
+      let browserstackCapabilities = await fetchBrowserstackCapabilities({user, key});
+    console.log(JSON.stringify([...new Set(browserstackCapabilities.map(x => x["browser"]))], null, "  "));
   let capabilitiesList = selectMatchingBrowsers(
     browserstackCapabilities, { browser, os, browser_version, os_version });
   return capabilitiesList[0];
@@ -164,7 +165,7 @@ let createDriver = async ({browser, browser_version,
     if (browserstack) {
     await setToBrowserstack(builder, { browser, browser_version, os, os_version });
   }
-  if (browser === "chrome" || browser === "chromium") {
+  if (browser === "chrome" || browser === "chromium" || browser === "android" || browser === "samsung" || browser === "opera" || browser === "brave") {
     setChromeOptions(builder, { incognito, path });
   } else if (browser === "edge") {
     await setEdgeOptions(builder, { incognito, path, local: !browserstack });
@@ -325,11 +326,13 @@ let writeDataSync = function (data) {
   console.log(`Wrote results to "${filePath}".`);
 };
 
-let expandConfigList = async (configList) => {
+let expandConfigList = async (configList, repeat) => {
   let results = [];
   for (let config of configList) {
     if (!config.disable) {
-      results = [].concat(results, Array(config.repeat).fill(config));
+      config2 = deepCopy(config);
+      delete config2["repeat"];
+      results = [].concat(results, Array(config.repeat * repeat).fill(config2));
     }
   }
   return results;
@@ -341,7 +344,7 @@ let main = async () => {
 //  logging.installConsoleHandler();
 //  logging.getLogger().setLevel(logging.Level.ALL);
 //  logging.getLogger("browser").setLevel(logging.Level.ALL);
-  let { _ : [configFile], stayOpen, only, list } = minimist(process.argv.slice(2));
+  let { _ : [configFile], stayOpen, only, list, repeat } = minimist(process.argv.slice(2));
   if (list) {
     let capabilityList = await fetchBrowserstackCapabilities();
     for (let capability of capabilityList) {
@@ -349,7 +352,7 @@ let main = async () => {
     }
   } else {
     let configList = JSON.parse(fs.readFileSync(configFile));
-    let expandedConfigList = await expandConfigList(configList);
+    let expandedConfigList = await expandConfigList(configList, repeat);
     let filteredExpandedConfigList = expandedConfigList.filter(
       d => only ? d.browser.startsWith(only) : true);
     console.log(filteredExpandedConfigList);
