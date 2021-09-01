@@ -24,7 +24,10 @@ require('geckodriver');
 require('chromedriver');
 
 // Returns a promise that sleeps for the given millseconds.
-let sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Returns a deep copy of a JSON object.
+const deepCopy = (x) => JSON.parse(JSON.stringify(x));
 
 // ## Selenium setup
 
@@ -332,7 +335,7 @@ let expandConfigList = async (configList, repeat) => {
     if (!config.disable) {
       config2 = deepCopy(config);
       delete config2["repeat"];
-      results = [].concat(results, Array(config.repeat * repeat).fill(config2));
+      results = [].concat(results, Array((config.repeat ?? 1) * (repeat ?? 1)).fill(config2));
     }
   }
   return results;
