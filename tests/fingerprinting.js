@@ -12,9 +12,7 @@
 
 /* jshint esversion: 6 */
 
-// dual_tests() define functions that run in both windows and workers.
-// Because they run in workers, they need to be synchronous.
-const dual_tests = async function dual_tests () {
+const dual_tests = function dual_tests () {
 
 const performance_now_tests = [
   [`performance.now()`,
@@ -64,22 +62,19 @@ const event_tests = [
   [`new Event("test").timeStamp % 100`, `0`],
 ];
 
-const eval_async = async (expression) =>
-  eval(`(async () => { return (${expression}); })();`);
-
-const test_pairs = (pairs) => Promise.all(pairs.map(
-  async ([expression, spoof_expression]) => {
+const test_pairs = (pairs) => pairs.map(
+  ([expression, spoof_expression]) => {
     let actual_value, desired_value;
     let failure = false;
     try {
-      actual_value = await eval_async(expression);
+      actual_value = eval(expression);
     } catch (e) {
       actual_value = e.message;
       failure = true;
       console.log(e);
     }
     try {
-      desired_value = await eval_async(spoof_expression);
+      desired_value = eval(spoof_expression);
     } catch (e) {
       desired_value = e.message;
       failure = true;
@@ -87,20 +82,20 @@ const test_pairs = (pairs) => Promise.all(pairs.map(
     }
     const passed = !failure && (actual_value === desired_value);
     return { expression, spoof_expression, actual_value, desired_value, passed };
-  }));
+  });
 
-const run_all_tests = async function () {
-  return Promise.all([].concat(
+const run_all_tests = function () {
+  return [].concat(
     test_pairs(intl_tests),
     test_pairs(dual_navigator_tests),
     test_pairs(performance_now_tests),
     test_pairs(date_tests),
     test_pairs(event_tests),
-  ));
+  );
 };
 
 // end dual_tests function
-return { test_results: await run_all_tests(),
+return { test_results: run_all_tests(),
          test_pairs: self.Window ? test_pairs : undefined };
 };
 
@@ -208,7 +203,7 @@ const list_to_map = (list, keyFn) => {
 };
 
 const run_all_tests = async function () {
-  let { test_pairs, test_results } = await dual_tests();
+  let { test_pairs, test_results } = dual_tests();
   let { test_results: test_results_worker } = await run_in_worker(dual_tests);
   test_results_worker.map(t => Object.assign(t, {worker: true}));
   eval(prelude);
