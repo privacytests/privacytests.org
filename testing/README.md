@@ -11,18 +11,27 @@ To run tests, point to a .config file:
 
 `node index browserprivacy.config`
 
+There are a few optional flags:
+
+`--repeat 10`: repeat the whole set of tests 10 times
+`--stayOpen`: Don't close browser(s) after test is done
+`--only brave`: Only run a single browser with the name given
+
 Config files are JSON arrays. Each item in the array is an object
-that describes what should go into a single test.
+that describes what should go into a single test. All parameters
+are optional, except `browser`:
 
 ```
 {
-  browser: "name" // name=chrome, firefox, brave, opera, edge, et.c
-  browser_version: "92.0" // A string, the version of the browser number
-  os: "windows" // windows, macOS, iOS, linux (optional)
-  os_version: "10" // a string, the version of the OS we want (for remote)
-  incognito: true // set incognito to true for private browsing windows
-  tor_mode: true // Tor mode is currently supported in Brave
-  service: "browserstack" // set remote service (currently browserstack supported)
+  browser: "chrome", // Possible values include chrome, firefox, brave, opera, edge, etc.
+  browser_version: "92.0", // A string, the version of the browser
+  os: "windows", // windows, macOS, iOS, linux (optional)
+  os_version: "10", // a string, the version of the OS we want (for remote)
+  incognito: true, // set incognito to true for private browsing windows
+  tor_mode: true, // Tor mode is currently supported in Brave
+  service: "browserstack", // set remote service (currently browserstack supported)
+  repeat: 1 // integer, how many times we should repeat this test.
+  disable: false // If true, this test won't be run.
 }
 ```
 
