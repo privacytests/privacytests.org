@@ -129,8 +129,7 @@ let resultsToDescription = ({
   browser,
   capabilities: { os, os_version, browser: browser2, browserName, browserVersion, version,
                   browser_version, device, platformVersion, platformName, platform },
-  prefs,
-  incognito
+  prefs, incognito, tor_mode
 }) => {
   let browserFinal = browser || browserName || browser2;
   let browserVersionFinal = browserVersion || version || "(version unknown)";
@@ -146,6 +145,9 @@ let resultsToDescription = ({
   }
   if (incognito === true) {
     finalText += "<br>(incognito)";
+  }
+  if (tor_mode === true) {
+    finalText += "<br>(Tor window)"
   }
   return finalText;
 };
