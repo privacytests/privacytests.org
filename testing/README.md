@@ -17,22 +17,22 @@ There are a few optional flags:
 * `--stayOpen`: Don't close browser(s) after test is done
 * `--only brave`: Only run a single browser with the name given
 
-Config files are JSON arrays. Each item in the array is an object
+Config files are YAML arrays. Each item in the array is an object
 that describes what should go into a single test. All parameters
 are optional, except `browser`:
 
 ```
-{
-  browser: "chrome", // Possible values include chrome, firefox, brave, opera, edge, etc.
-  browser_version: "92.0", // A string, the version of the browser
-  os: "windows", // windows, macOS, iOS, linux (optional)
-  os_version: "10", // a string, the version of the OS we want (for remote)
-  incognito: true, // set incognito to true for private browsing windows
-  tor_mode: true, // Tor mode is currently supported in Brave
-  service: "browserstack", // set remote service (currently browserstack supported)
-  repeat: 1 // integer, how many times we should repeat this test.
-  disable: false // If true, this test won't be run.
-}
+- browser: chrome          # Possible values include chrome, firefox, brave, opera, edge, etc.
+  browser_version: '92.0'  # A string, the version of the browser (for remote).
+  os: windows              # Operating system: windows, macOS, iOS, linux (for remote).
+  os_version: '10'         # A string, the version of the OS we want (for remote).
+  incognito: true,         # Set incognito to true for private browsing windows.
+  tor_mode: true           # Set tor_mode to true for 'Brave Private Window with Tor.'
+  service: browserstack    # Use remote selenium service (currently browserstack is supported).
+  repeat: 1                # Integer, how many times we should repeat this test.
+  disable: false           # If true, this test won't be run.
+- browser: firefox         # On to the next test item in the array...
+  ...
 ```
 
 To hack on the code, and get fast feedback, use:
