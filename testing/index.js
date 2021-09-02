@@ -6,13 +6,10 @@ const fs = require('fs');
 const { exec } = require('child_process');
 const execAsync = require('util').promisify(exec);
 const minimist = require('minimist');
-
 const dateFormat = require('dateformat');
 const YAML = require('yaml');
 
-const { By } = require('selenium-webdriver');
 const { createDriver, openNewTab, waitForAttribute } = require('./webdriver_utils.js');
-
 const render = require('./render');
 
 const DEFAULT_TIMEOUT_MS = 30000;
@@ -35,9 +32,8 @@ let loadAndGetResults = async (driver, url, newTab = false, timeout = DEFAULT_TI
   }
   console.log(`loading ${url}`);
   await driver.get(url);
-  let body = await driver.findElement(By.tagName('body'));
   let testResultsString =
-      await waitForAttribute(driver, body, "data-test-results", timeout);
+      await waitForAttribute(driver, "body", "data-test-results", timeout);
   return testResultsString === "undefined" ? undefined : JSON.parse(testResultsString);
 };
 

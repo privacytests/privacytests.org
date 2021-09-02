@@ -175,10 +175,12 @@ let createDriver = async ({browser, browser_version,
   return builder.build();
 };
 
-// Tell the selenium driver to look at a particular elements's
+// Tell the selenium driver to look at a particular element's
 // attribute and wait for it to have a value. Returns a promise.
-let waitForAttribute = (driver, element, attrName, timeout) =>
-    driver.wait(async () => element.getAttribute(attrName), timeout);
+let waitForAttribute = async (driver, elementCssSelector, attrName, timeout) => {
+  let element = await driver.findElement(By.css(elementCssSelector));
+  return driver.wait(async () => element.getAttribute(attrName), timeout);
+};
 
 // Tell the selenium driver to open a new tab at https://example.com.
 // Returns a promise containing a handle to the new tab window.
