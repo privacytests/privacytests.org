@@ -39,7 +39,7 @@ let htmlTable = ({ headers, body, className }) => {
     elements.push("<tr>");
     for (let item of row) {
       if (item.subheading) {
-        elements.push(`<th>${item.subheading}</th>`);
+        elements.push(`<th colspan="999">${item.subheading}</th>`);
       } else {
         elements.push(`<td>${item}</td>`);
       }
