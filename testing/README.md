@@ -7,9 +7,9 @@ To set up:
 * index.js runs the browser tests.
 * render.js takes the results of the browser tests and renders them to a web page.
 
-To run tests, point to a .config file:
+To run tests, point to a .yaml file:
 
-`node index browserprivacy.config`
+`node index chromium.yaml`
 
 There are a few optional flags:
 
