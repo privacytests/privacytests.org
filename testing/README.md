@@ -13,9 +13,9 @@ To run tests, point to a .config file:
 
 There are a few optional flags:
 
-`--repeat 10`: repeat the whole set of tests 10 times
-`--stayOpen`: Don't close browser(s) after test is done
-`--only brave`: Only run a single browser with the name given
+* `--repeat 10`: repeat the whole set of tests 10 times
+* `--stayOpen`: Don't close browser(s) after test is done
+* `--only brave`: Only run a single browser with the name given
 
 Config files are JSON arrays. Each item in the array is an object
 that describes what should go into a single test. All parameters
