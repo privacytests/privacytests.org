@@ -54,7 +54,7 @@ const selectMatchingBrowsers = (allCapabilities, selectionMap) =>
   });
 
 // Sets Chrome options for the Builder.
-let setChromeOptions = (builder, {incognito, path}) => {
+let setChromeOptions = (builder, {incognito, path, tor_mode}) => {
   let options = new chrome.Options();
   if (path) {
     options.setChromeBinaryPath(path);
@@ -62,6 +62,9 @@ let setChromeOptions = (builder, {incognito, path}) => {
   options.addArguments("--remote-debugging-port=9222");
   if (incognito) {
     options.addArguments("incognito");
+  }
+  if (tor_mode) {
+    options.addArguments("tor");
   }
   return builder
     .setChromeOptions(options)
@@ -146,14 +149,14 @@ let setToBrowserstack =
 // using the given config object.
 let createDriver = async ({browser, browser_version,
                            os, os_version,
-                           service, incognito, path}) => {
+                           service, incognito, path, tor_mode}) => {
   let builder = new Builder();
   let browserstack = service === "browserstack";
     if (browserstack) {
     await setToBrowserstack(builder, { browser, browser_version, os, os_version });
   }
   if (browser === "chrome" || browser === "chromium" || browser === "android" || browser === "samsung" || browser === "opera" || browser === "brave") {
-    setChromeOptions(builder, { incognito, path });
+    setChromeOptions(builder, { incognito, path, tor_mode });
   } else if (browser === "edge") {
     await setEdgeOptions(builder, { incognito, path, local: !browserstack });
   } else if (browser === "firefox" || browser === "tor browser") {
