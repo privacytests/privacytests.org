@@ -15,6 +15,8 @@ const { installDriver: installEdgeDriver } = require('ms-chromium-edge-driver');
 require('geckodriver');
 require('chromedriver');
 
+// ## Utility functions for browserstack
+
 // Read a file called .browserstack.json. The file should contain a JSON
 // object that looks like:
 // `
@@ -52,6 +54,30 @@ const selectMatchingBrowsers = (allCapabilities, selectionMap) =>
     }
     return keep;
   });
+
+// Find the best browserstack capabilities that match the specified
+// browser, browser_version, os, and os_version.
+let getBestBrowserstackCapabilities =
+  async ({ user, key, browser, browser_version, os, os_version }) => {
+      let browserstackCapabilities = await fetchBrowserstackCapabilities({user, key});
+    console.log(JSON.stringify([...new Set(browserstackCapabilities.map(x => x["browser"]))], null, "  "));
+  let capabilitiesList = selectMatchingBrowsers(
+    browserstackCapabilities, { browser, os, browser_version, os_version });
+  return capabilitiesList[0];
+};
+
+// Takes the given Builder and sets it up for the specified
+// browser, browser_version, os, and os_version on browserstack.
+let setToBrowserstack =
+    async (builder, { browser, browser_version, os, os_version }) => {
+  let { user, key } = await browserstackCredentials();
+  builder.usingServer(`http://${user}:${key}@hub-cloud.browserstack.com/wd/hub`);
+  let capabilities = await getBestBrowserstackCapabilities(
+    { user, key, browser, browser_version, os, os_version });
+  builder.withCapabilities(capabilities);
+};
+
+// ## Builder options for specific browsers
 
 // Sets Chrome options for the Builder.
 let setChromeOptions = (builder, {incognito, path, tor_mode}) => {
@@ -123,27 +149,7 @@ let setSafariOptions = (builder, {incognito, path}) => {
   return builder.forBrowser("safari");
 };
 
-// Find the best browserstack capabilities that match the specified
-// browser, browser_version, os, and os_version.
-let getBestBrowserstackCapabilities =
-  async ({ user, key, browser, browser_version, os, os_version }) => {
-      let browserstackCapabilities = await fetchBrowserstackCapabilities({user, key});
-    console.log(JSON.stringify([...new Set(browserstackCapabilities.map(x => x["browser"]))], null, "  "));
-  let capabilitiesList = selectMatchingBrowsers(
-    browserstackCapabilities, { browser, os, browser_version, os_version });
-  return capabilitiesList[0];
-};
-
-// Takes the given Builder and sets it up for the specified
-// browser, browser_version, os, and os_version on browserstack.
-let setToBrowserstack =
-    async (builder, { browser, browser_version, os, os_version }) => {
-  let { user, key } = await browserstackCredentials();
-  builder.usingServer(`http://${user}:${key}@hub-cloud.browserstack.com/wd/hub`);
-  let capabilities = await getBestBrowserstackCapabilities(
-    { user, key, browser, browser_version, os, os_version });
-  builder.withCapabilities(capabilities);
-};
+// ## High-level webdriver utility functions
 
 // Produces a selenium driver to run tests,
 // using the given config object.
