@@ -61,9 +61,6 @@ const pageStyle = `
 table.comparison-table {
   border-collapse:collapse;
 }
-table.comparison-table tr:first-child th:first-child {
-  z-index: 1;
-}
 table.comparison-table tr:first-child th {
   background-color: white;
   text-align: center;
@@ -75,6 +72,7 @@ table.comparison-table tr:first-child th {
   width: 120px;
   position: sticky;
   position: -webkit-sticky;
+  z-index: 1;
 }
 table.comparison-table tr:nth-child(2n+1) td {
   background-color: #eee;
