@@ -119,15 +119,21 @@ let runTestsBatch = async function (configList, {shouldQuit} = {shouldQuit:true}
   for (let config of configList) {
     try {
       let { browser, prefs, incognito } = config;
-      console.log("about to create driver:");
+      console.log("about to create driver:", config);
       let driver = await createDriver(config);
-      console.log("driver", driver);
+//      console.log("driver", driver);
       let fullCapabilitiesMap = (await driver.getCapabilities())["map_"];
       let fullCapabilities = Object.fromEntries(fullCapabilitiesMap.entries());
-      console.log('fullCapabilities', fullCapabilities);
+//      console.log('fullCapabilities', fullCapabilities);
       let timeStarted = new Date().toISOString();
       let testResults = await runTests(driver);
+//      console.log({shouldQuit});
       if (shouldQuit) {
+        let windowHandles = await driver.getAllWindowHandles();
+        for (let windowHandle of windowHandles) {
+          await driver.switchTo().window(windowHandle);
+          await driver.close();
+        }
         await driver.quit();
       }
       all_tests.push({ browser, capabilities: fullCapabilities, testResults, timeStarted,
