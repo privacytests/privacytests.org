@@ -137,7 +137,7 @@ let runTestsBatch = async function (configList, {shouldQuit} = {shouldQuit:true}
         await driver.quit();
       }
       all_tests.push({ browser, capabilities: fullCapabilities, testResults, timeStarted,
-                       prefs, incognito });
+                       prefs, incognito, tor_mode });
     } catch (e) {
       console.log(e);
     }
