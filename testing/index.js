@@ -12,6 +12,7 @@ const minimist = require('minimist');
 const render = require('./render');
 const { createDriver, openNewTab, waitForAttribute } = require('./webdriver_utils.js');
 const DEFAULT_TIMEOUT_MS = 30000;
+const YAML = require('yaml');
 
 // Returns a promise that sleeps for the given millseconds.
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -118,7 +119,7 @@ let runTestsBatch = async function (configList, {shouldQuit} = {shouldQuit:true}
   let git = await gitHash();
   for (let config of configList) {
     try {
-      let { browser, prefs, incognito } = config;
+      let { browser, prefs, incognito, tor_mode } = config;
       console.log("about to create driver:", config);
       let driver = await createDriver(config);
 //      console.log("driver", driver);
@@ -170,6 +171,12 @@ let expandConfigList = async (configList, repeat) => {
   return results;
 }
 
+// Read config file in YAML or JSON.
+let parseConfigFile = (configFile) => {
+  let configFileContents = fs.readFileSync(configFile, 'utf8');
+  return YAML.parse(configFileContents);
+};
+
 // The main program
 let main = async () => {
   // Read config file and flags from command line
@@ -183,7 +190,7 @@ let main = async () => {
       console.log(capability);
     }
   } else {
-    let configList = JSON.parse(fs.readFileSync(configFile));
+    let configList = parseConfigFile(configFile);
     let expandedConfigList = await expandConfigList(configList, repeat);
     let filteredExpandedConfigList = expandedConfigList.filter(
       d => only ? d.browser.startsWith(only) : true);
