@@ -3,16 +3,19 @@
 // ## imports
 
 const fs = require('fs');
-const {By} = require('selenium-webdriver');
-const dateFormat = require('dateformat');
-const util = require('util');
-const { spawn, exec } = require('child_process');
-const execAsync = util.promisify(exec);
+const { exec } = require('child_process');
+const execAsync = require('util').promisify(exec);
 const minimist = require('minimist');
-const render = require('./render');
-const { createDriver, openNewTab, waitForAttribute } = require('./webdriver_utils.js');
-const DEFAULT_TIMEOUT_MS = 30000;
+
+const dateFormat = require('dateformat');
 const YAML = require('yaml');
+
+const { By } = require('selenium-webdriver');
+const { createDriver, openNewTab, waitForAttribute } = require('./webdriver_utils.js');
+
+const render = require('./render');
+
+const DEFAULT_TIMEOUT_MS = 30000;
 
 // Returns a promise that sleeps for the given millseconds.
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
