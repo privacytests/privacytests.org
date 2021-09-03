@@ -15,7 +15,7 @@ let tests = {
     })
   },
   "document.referrer": {
-    write: (secret) => { /* do nothing */ };
+    write: (secret) => { /* do nothing */ },
     read: () => new Promise((resolve) => {
       parent.postMessage({"read document.referrer": true}, "*");
       addEventListener("message", ({data}) => {
