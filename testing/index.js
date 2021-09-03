@@ -114,10 +114,18 @@ let gitHash = async function () {
 let quit = async (driver) => {
   let windowHandles = await driver.getAllWindowHandles();
   for (let windowHandle of windowHandles) {
-    await driver.switchTo().window(windowHandle);
-    await driver.close();
+    try {
+      await driver.switchTo().window(windowHandle);
+      await driver.close();
+    } catch (e) {
+      console.log(e);
+    }
   }
-  await driver.quit();
+  try {
+    await driver.quit();
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 // Runs a batch of tests (multiple browsers) for a given driver.
@@ -141,7 +149,7 @@ let runTestsBatch = async function (configList, {shouldQuit} = {shouldQuit:true}
       all_tests.push({ browser, capabilities: fullCapabilities, testResults, timeStarted,
                        prefs, incognito, tor_mode });
       if (shouldQuit) {
-        quit(driver);
+        await quit(driver);
       }
     } catch (e) {
       console.log(e);
