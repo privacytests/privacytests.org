@@ -21,7 +21,7 @@ let tests = {
       addEventListener("message", ({data}) => {
         resolve(data);
       }, { once: true });
-    });
+    })
   },
   "ServiceWorker": {
     write: async (key) => {
