@@ -110,6 +110,16 @@ let gitHash = async function () {
   }
 };
 
+// Get the browser to quit.
+let quit = async (driver) => {
+  let windowHandles = await driver.getAllWindowHandles();
+  for (let windowHandle of windowHandles) {
+    await driver.switchTo().window(windowHandle);
+    await driver.close();
+  }
+  await driver.quit();
+};
+
 // Runs a batch of tests (multiple browsers) for a given driver.
 // Returns results in a JSON object.
 let runTestsBatch = async function (configList, {shouldQuit} = {shouldQuit:true}) {
@@ -128,16 +138,11 @@ let runTestsBatch = async function (configList, {shouldQuit} = {shouldQuit:true}
       let timeStarted = new Date().toISOString();
       let testResults = await runTests(driver);
 //      console.log({shouldQuit});
-      if (shouldQuit) {
-        let windowHandles = await driver.getAllWindowHandles();
-        for (let windowHandle of windowHandles) {
-          await driver.switchTo().window(windowHandle);
-          await driver.close();
-        }
-        await driver.quit();
-      }
       all_tests.push({ browser, capabilities: fullCapabilities, testResults, timeStarted,
                        prefs, incognito, tor_mode });
+      if (shouldQuit) {
+        quit(driver);
+      }
     } catch (e) {
       console.log(e);
     }
