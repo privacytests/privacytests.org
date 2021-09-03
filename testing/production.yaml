@@ -4,31 +4,6 @@
   os_version: '10'
   browser_version: '91.0'
 
-- browser: chrome
-  service: browserstack
-  os: windows
-  os_version: '10'
-  browser_version: '92.0'
-
-- browser: edge
-  service: browserstack
-  os: windows
-  os_version: '10'
-  browser_version: '92.0'
-
-- browser: safari
-  service: browserstack
-  os: os x
-  os_version: Big Sur
-  browser_version: '14.1'
-
-- service: browserstack
-  browser: chrome
-  os: windows
-  os_version: '10'
-  browser_version: '92.0'
-  incognito: true
-
 - browser: firefox
   service: browserstack
   os: windows
@@ -36,8 +11,24 @@
   browser_version: '91.0'
   incognito: true
 
-- browser: tor browser
-  path: /home/arthur/tor-browser_en-US/Browser/firefox
+- browser: chrome
+  service: browserstack
+  os: windows
+  os_version: '10'
+  browser_version: '92.0'
+
+- browser: chrome
+  service: browserstack
+  os: windows
+  os_version: '10'
+  browser_version: '92.0'
+  incognito: true
+
+- browser: edge
+  service: browserstack
+  os: windows
+  os_version: '10'
+  browser_version: '92.0'
 
 - browser: opera
   path: /snap/bin/opera
@@ -45,6 +36,15 @@
 - browser: opera
   path: /snap/bin/opera
   incognito: true
+
+- browser: safari
+  service: browserstack
+  os: os x
+  os_version: Big Sur
+  browser_version: '14.1'
+
+- browser: tor browser
+  path: /home/arthur/tor-browser_en-US/Browser/firefox
 
 - browser: brave
   path: /snap/bin/brave
