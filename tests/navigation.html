@@ -16,7 +16,7 @@
          console.log("send window.name:", window.name);
        } else if (data["read document.referrer"]) {
          iframe.contentWindow.postMessage(document.referrer, "*");
-         console.log("send window.document.referrer:", document.referrer);
+         console.log("send document.referrer:", document.referrer);
        } else {
          document.body.setAttribute("data-test-results", JSON.stringify(data));
        }
