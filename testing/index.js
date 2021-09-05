@@ -90,6 +90,9 @@ let runTests = async function (driver) {
       driver, 'https://arthuredelstein.github.io/browser-privacy/tests/tor.html');
     let supercookies = await runSupercookieTests(driver, true);
     let navigation = await runSupercookieTests(driver, false);
+    // Move ServiceWorker from supercookies to navigation :P
+    supercookies["ServiceWorker"] = navigation["ServiceWorker"];
+    delete navigation["ServiceWorker"]
     return { fingerprinting, tor, supercookies, navigation };
   } catch (e) {
     console.log(e);
