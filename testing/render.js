@@ -39,7 +39,7 @@ let htmlTable = ({ headers, body, className }) => {
     elements.push("<tr>");
     for (let item of row) {
       if (item.subheading) {
-        elements.push(`<th colspan="999">${item.subheading}</th>`);
+        elements.push(`<th colspan="4">${item.subheading}</th>`);
       } else {
         elements.push(`<td>${item}</td>`);
       }
@@ -73,6 +73,9 @@ table.comparison-table tr:first-child th {
   position: sticky;
   position: -webkit-sticky;
   z-index: 1;
+}
+table.comparison-table tr:first-child th:first-child {
+  z-index: 2;
 }
 table.comparison-table tr:nth-child(2n+1) td {
   background-color: #eee;
@@ -145,7 +148,7 @@ let resultsToDescription = ({
     finalText += "<br>(incognito)";
   }
   if (tor_mode === true) {
-    finalText += "<br>(Tor window)"
+    finalText += "<br>(Tor window)";
   }
   return finalText;
 };
@@ -224,7 +227,7 @@ let resultsSection = ({bestResults, category, tooltipFunction}) => {
       row.push(itemBody({ passed, testFailed, tooltip }));
     }
     section.push(row);
-  };
+  }
   return section;
 };
 
