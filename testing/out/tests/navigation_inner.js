@@ -14,7 +14,16 @@ let tests = {
       }, { once: true });
     })
   },
-    "ServiceWorker": {
+  "document.referrer": {
+    write: (secret) => { /* do nothing */ },
+    read: () => new Promise((resolve) => {
+      parent.postMessage({"read document.referrer": true}, "*");
+      addEventListener("message", ({data}) => {
+        resolve(data);
+      }, { once: true });
+    })
+  },
+  "ServiceWorker": {
     write: async (key) => {
       let registration = await navigator.serviceWorker.register(
         'serviceWorker.js');

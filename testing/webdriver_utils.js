@@ -182,6 +182,15 @@ let waitForAttribute = async (driver, elementCssSelector, attrName, timeout) => 
   return driver.wait(async () => element.getAttribute(attrName), timeout);
 };
 
+// Tell the selenium driver to navigate to a new url. Make sure
+// that the existing page has unloaded before promise resolves.
+let navigate = async (driver, url) => {
+  let htmlPage = await driver.findElement(By.tagName("html"));
+  await driver.executeScript(`document.body.innerHTML += "<a id='navigationLink' href='${url}'>click</a>"`);
+  await driver.findElement({id:"navigationLink"}).click();
+  await driver.wait(until.stalenessOf(htmlPage));
+};
+
 // Tell the selenium driver to open a new tab at https://example.com.
 // Returns a promise containing a handle to the new tab window.
 let openNewTab = async (driver) => {
@@ -196,4 +205,4 @@ let openNewTab = async (driver) => {
   return tabsAfter.filter(x => !tabsBefore.includes(x))[0];
 };
 
-module.exports = { createDriver, waitForAttribute, openNewTab };
+module.exports = { createDriver, waitForAttribute, navigate, openNewTab };
