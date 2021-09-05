@@ -1,3 +1,7 @@
+// # WebDriver utilities
+// A wrapper around node Selenium WebDriver library that makes it simpler to
+// launch and control browsers.
+
 // ## imports
 
 const homeDir = require('os').homedir();
