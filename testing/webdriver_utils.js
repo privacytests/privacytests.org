@@ -120,7 +120,7 @@ let setEdgeOptions = async (builder, {incognito, path, local}) => {
 };
 
 // Set Firefox options for the Builder.
-let setFirefoxOptions = (builder, {incognito, path, tor}) => {
+let setFirefoxOptions = (builder, {incognito, path, tor, prefs}) => {
   if (!path && tor) {
     throw new Error("Please specify a path for the Tor Browser firefox binary.");
   }
@@ -134,6 +134,11 @@ let setFirefoxOptions = (builder, {incognito, path, tor}) => {
   if (tor) {
     options.setPreference("extensions.torlauncher.prompt_at_startup", false);
     options.setPreference("extensions.torlauncher.quickstart", true);
+  }
+  if (prefs) {
+    for (let [pref, val] of Object.entries(prefs)) {
+      options.setPreference(pref, val);
+    }
   }
   return builder
     .setFirefoxOptions(options)
@@ -157,7 +162,8 @@ let setSafariOptions = (builder, {incognito, path}) => {
 // using the given config object.
 let createDriver = async ({browser, browser_version,
                            os, os_version,
-                           service, incognito, path, tor_mode}) => {
+                           service, incognito, path,
+                           prefs, tor_mode}) => {
   let builder = new Builder();
   let browserstack = service === "browserstack";
     if (browserstack) {
@@ -168,7 +174,7 @@ let createDriver = async ({browser, browser_version,
   } else if (browser === "edge") {
     await setEdgeOptions(builder, { incognito, path, local: !browserstack });
   } else if (browser === "firefox" || browser === "tor browser") {
-    setFirefoxOptions(builder, { incognito, path, tor: browser === "tor browser" });
+    setFirefoxOptions(builder, { incognito, path, prefs, tor: browser === "tor browser" });
   } else if (browser === "safari") {
     setSafariOptions(builder, { incognito, path });
   } else {

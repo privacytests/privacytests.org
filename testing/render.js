@@ -241,7 +241,7 @@ let resultsToTable = (results, title) => {
   if (bestResults.length === 0) {
     return [];
   }
-  body.push([{subheading:"IP address masking tests"}]);
+  body.push([{subheading:"Network privacy tests"}]);
   body = body.concat(resultsSection({bestResults, category:"network", tooltipFunction: networkToolTip}));
   body.push([{subheading:"State Partitioning tests"}]);
   body = body.concat(resultsSection({bestResults, category:"supercookies", tooltipFunction: crossSiteTooltip}));
