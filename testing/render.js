@@ -180,15 +180,14 @@ ${ worker ? "[Worker]" : "" }
   `.trim();
 };
 
-// For a tor tests, creates a tooltip that gives detail on
-// the ip address and whether it's a Tor exit and
-// whether the test passed.
-let torTooltip = torItem => {
-  let { IsTorExit, passed } = torItem;
-  return `
-IsTorExit: ${ IsTorExit }
-passed: ${ passed }
-`.trim();
+// For network tests, creates a tooltip that shows detailed results.
+let networkToolTip = networkItem => {
+  let text = "";
+  console.log(networkItem);
+  for (let key in networkItem) {
+    text += `${key}: ${networkItem[key]}\n`;
+  }
+  return text.trim();
 };
 
 let joinIfArray = x => Array.isArray(x) ? x.join(", ") : x;
@@ -243,7 +242,7 @@ let resultsToTable = (results, title) => {
     return [];
   }
   body.push([{subheading:"IP address masking tests"}]);
-  body = body.concat(resultsSection({bestResults, category:"tor", tooltipFunction: torTooltip}));
+  body = body.concat(resultsSection({bestResults, category:"network", tooltipFunction: networkToolTip}));
   body.push([{subheading:"State Partitioning tests"}]);
   body = body.concat(resultsSection({bestResults, category:"supercookies", tooltipFunction: crossSiteTooltip}));
   body.push([{subheading:"Navigation tests"}]);
@@ -280,9 +279,10 @@ let latestResultsFile = async (path) => {
 
 // List of results keys that should be collected in an array
 const resultsKeys = [
-  "IsTorExit", "passed", "testFailed",
+  "passed", "testFailed",
   "readSameFirstParty", "readDifferentFirstParty",
-  "actual_value", "desired_value"
+  "actual_value", "desired_value",
+  "IsTorExit", "cloudflareDoH", "nextDoH"
 ];
 
 // Finds any repeated trials of tests and aggregate the results
@@ -293,7 +293,7 @@ let aggregateRepeatedTrials = (results) => {
     let key = resultsToDescription(test);
     console.log(test, key);
     if (aggregatedResults.has(key)) {
-      for (let subcategory of ["supercookies", "fingerprinting", "tor"]) {
+      for (let subcategory of ["supercookies", "fingerprinting", "network"]) {
         let someTests = aggregatedResults.get(key).testResults[subcategory];
         for (let testName in someTests) {
           for (let value of resultsKeys) {
