@@ -28,6 +28,10 @@
     "publish": "cp out/results/latest.html out/results/index.html && gh-pages -d out",
     "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render --live\" & ./node_modules/@compodoc/live-server/live-server.js --open=results/latest.html out"
   },
+  "jshintConfig": {
+    "esversion": 11,
+    "sub": true
+  },
   "author": "Arthur Edelstein",
   "license": "MIT"
 }

@@ -1,5 +1,3 @@
-/* jshint esversion: 6 */
-
 // ## imports
 
 const fs = require('fs');
@@ -92,7 +90,7 @@ let runTests = async function (driver) {
     let navigation = await runSupercookieTests(driver, false);
     // Move ServiceWorker from supercookies to navigation :P
     supercookies["ServiceWorker"] = navigation["ServiceWorker"];
-    delete navigation["ServiceWorker"]
+    delete navigation["ServiceWorker"];
     return { fingerprinting, tor, supercookies, navigation };
   } catch (e) {
     console.log(e);
@@ -183,7 +181,7 @@ let expandConfigList = async (configList, repeat) => {
     }
   }
   return results;
-}
+};
 
 // Read config file in YAML or JSON.
 let parseConfigFile = (configFile) => {
@@ -213,6 +211,6 @@ let main = async () => {
                                       { shouldQuit: !stayOpen }));
     render.main();
   }
-}
+};
 
 main();

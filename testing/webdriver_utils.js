@@ -1,5 +1,3 @@
-/* jshint esversion: 6 */
-
 // ## imports
 
 const homeDir = require('os').homedir();
@@ -120,7 +118,7 @@ let setEdgeOptions = async (builder, {incognito, path, local}) => {
 // Set Firefox options for the Builder.
 let setFirefoxOptions = (builder, {incognito, path, tor}) => {
   if (!path && tor) {
-    throw new Error("Please specify a path for the Tor Browser firefox binary.")
+    throw new Error("Please specify a path for the Tor Browser firefox binary.");
   }
   let options = new firefox.Options();
   if (path) {
@@ -135,7 +133,7 @@ let setFirefoxOptions = (builder, {incognito, path, tor}) => {
   }
   return builder
     .setFirefoxOptions(options)
-    .forBrowser("firefox")
+    .forBrowser("firefox");
 };
 
 // Set Safari options for the Builder.
