@@ -26,8 +26,13 @@ const testDoH = async () => {
     console.log(e);
     cloudflareDoH = false;
   }
-  let nextDoHResponse = await fetchJSON("https://test.nextdns.io/");
-  let nextDoH = nextDoHResponse["status"] === "unconfigured";
+  let nextDoH;
+  try {
+    let nextDoHResponse = await fetchJSON("https://test.nextdns.io/");
+    nextDoH = nextDoHResponse["status"] === "unconfigured";
+  } catch (e) {
+    nextDoH = false;
+  }
   let passed = cloudflareDoH || nextDoH;
   return { cloudflareDoH, nextDoH, passed };
 }
