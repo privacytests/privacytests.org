@@ -190,7 +190,7 @@ passed: ${ passed }
 
 let joinIfArray = x => Array.isArray(x) ? x.join(", ") : x;
 
-let supercookieTooltip = (
+let crossSiteTooltip = (
   { write, read, readSameFirstParty, readDifferentFirstParty, passed, testFailed }
 ) => {
   return `
@@ -242,7 +242,9 @@ let resultsToTable = (results, title) => {
   body.push([{subheading:"IP address masking tests"}]);
   body = body.concat(resultsSection({bestResults, category:"tor", tooltipFunction: torTooltip}));
   body.push([{subheading:"State Partitioning tests"}]);
-  body = body.concat(resultsSection({bestResults, category:"supercookies", tooltipFunction: supercookieTooltip}));
+  body = body.concat(resultsSection({bestResults, category:"supercookies", tooltipFunction: crossSiteTooltip}));
+  body.push([{subheading:"Navigation tests"}]);
+  body = body.concat(resultsSection({bestResults, category:"navigation", tooltipFunction: crossSiteTooltip}));
   body.push([{subheading:"Fingerprinting resistance tests"}]);
   body = body.concat(resultsSection({bestResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
   return { headers, body };
