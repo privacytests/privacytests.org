@@ -9,7 +9,7 @@ const minimist = require('minimist');
 const dateFormat = require('dateformat');
 const YAML = require('yaml');
 
-const { createDriver, openNewTab, waitForAttribute } = require('./webdriver_utils.js');
+const { createDriver, navigate, openNewTab, waitForAttribute } = require('./webdriver_utils.js');
 const render = require('./render');
 
 const DEFAULT_TIMEOUT_MS = 30000;
@@ -31,7 +31,7 @@ let loadAndGetResults = async (driver, url, newTab = false, timeout = DEFAULT_TI
     await driver.switchTo().window(tab);
   }
   console.log(`loading ${url}`);
-  await driver.get(url);
+  await navigate(driver, url);
   let testResultsString =
       await waitForAttribute(driver, "body", "data-test-results", timeout);
   return testResultsString === "undefined" ? undefined : JSON.parse(testResultsString);
