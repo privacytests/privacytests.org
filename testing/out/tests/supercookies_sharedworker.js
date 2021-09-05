@@ -9,5 +9,5 @@ onconnect = function(e) {
     } else {
       secret = e.data;
     }
-  }
-}
+  };
+};

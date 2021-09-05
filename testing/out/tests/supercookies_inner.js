@@ -1,4 +1,4 @@
-import { runAllTests, sleepMs } from "./test_utils.js"
+import { runAllTests, sleepMs } from "./test_utils.js";
 import * as IdbKeyVal from 'https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs';
 
 let testURI = (path, type, key) =>
@@ -52,7 +52,7 @@ let tests = {
         if (event.data === "request") {
           bc.postMessage(secret);
         }
-      }
+      };
     },
     read: () =>
       new Promise((resolve, reject) => {
@@ -76,7 +76,7 @@ let tests = {
       let response = await fetch(testURI("resource", "fetch", key),
                                  {cache: "force-cache"});
       let countResponse = await fetch(testURI("count", "fetch", key),
-                                      {cache: "reload"})
+                                      {cache: "reload"});
       return (await countResponse.text()).trim();
     }
   },
@@ -338,7 +338,7 @@ let tests = {
           "SELECT value FROM cache WHERE name=?",
           ["secret"],
           (tx, rs) => resolve(rs),
-          (tx, err) => reject(err))
+          (tx, err) => reject(err));
       }));
       return result.rows.item(0).value;
     }
