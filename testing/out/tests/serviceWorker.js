@@ -2,7 +2,7 @@ self.addEventListener('activate', function(event) {
   event.waitUntil(self.clients.claim());
 });
 
-let secret = undefined;
+let secret; // undefined
 
 self.addEventListener("fetch", async (event) => {
   const scope = self.registration.scope;
