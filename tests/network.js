@@ -18,8 +18,14 @@ const testTor = async () => {
 };
 
 const testDoH = async () => {
-  let cloudflareDoHResponse = await fetchJSON("https://is-doh.help.every1dns.net/resolvertest");
-  let cloudflareDoH = cloudflareDoHResponse === 1;
+  let cloudflareDoH;
+  try {
+    let cloudflareDoHResponse = await fetchJSON("https://is-doh.help.every1dns.net/resolvertest");
+    cloudflareDoH = cloudflareDoHResponse === 1;
+  } catch (e) {
+    console.log(e);
+    cloudflareDoH = false;
+  }
   let nextDoHResponse = await fetchJSON("https://test.nextdns.io/");
   let nextDoH = nextDoHResponse["status"] === "unconfigured";
   let passed = cloudflareDoH || nextDoH;
