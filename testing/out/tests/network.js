@@ -39,8 +39,8 @@ const testDoH = async () => {
 
 (async () => {
   let resultsJSON = {
-    TorNetworkUse: await testTor(),
-    DoHenabled: await testDoH()
+    "Tor enabled": await testTor(),
+    "DoH enabled": await testDoH()
   };
   console.log(resultsJSON);
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
