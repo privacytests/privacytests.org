@@ -10,16 +10,30 @@ const minimist = require('minimist');
 const dateFormat = require('dateformat');
 const YAML = require('yaml');
 
-const { createDriver, navigate, openNewTab, waitForAttribute } = require('./webdriver_utils.js');
+const { createDriver, navigate, openNewTab, waitForAttribute, quit } = require('./webdriver_utils.js');
 const render = require('./render');
 
 const DEFAULT_TIMEOUT_MS = 30000;
+
+// ## Utility functions
 
 // Returns a promise that sleeps for the given millseconds.
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Returns a deep copy of a JSON object.
 const deepCopy = (x) => JSON.parse(JSON.stringify(x));
+
+// Reads the current git commit hash for this program in a string. Used
+// when reporting results, to make them easier to reproduce.
+let gitHash = async function () {
+  const { stdout, stderr } = await execAsync(
+    'git rev-parse HEAD', { cwd: __dirname});
+  if (stderr) {
+    throw new Error(stderr);
+  } else {
+    return stdout.trim();
+  }
+};
 
 // ## Testing
 
@@ -98,36 +112,6 @@ let runTests = async function (driver) {
   } catch (e) {
     console.log(e);
     return null;
-  }
-};
-
-// Reads the current git commit hash for this program in a string. Used
-// when reporting results, to make them easier to reproduce.
-let gitHash = async function () {
-  const { stdout, stderr } = await execAsync(
-    'git rev-parse HEAD', { cwd: __dirname});
-  if (stderr) {
-    throw new Error(stderr);
-  } else {
-    return stdout.trim();
-  }
-};
-
-// Get the browser to quit.
-let quit = async (driver) => {
-  let windowHandles = await driver.getAllWindowHandles();
-  for (let windowHandle of windowHandles) {
-    try {
-      await driver.switchTo().window(windowHandle);
-      await driver.close();
-    } catch (e) {
-      console.log(e);
-    }
-  }
-  try {
-    await driver.quit();
-  } catch (e) {
-    console.log(e);
   }
 };
 
