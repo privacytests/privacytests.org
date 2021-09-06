@@ -6,7 +6,7 @@
 
 const homeDir = require('os').homedir();
 const fs = require('fs');
-const {Builder, By, Key, logging, until} = require('selenium-webdriver');
+const {Builder, By, Capabilities, Key, logging, until} = require('selenium-webdriver');
 const firefox = require('selenium-webdriver/firefox');
 const chrome = require('selenium-webdriver/chrome');
 const edge = require('selenium-webdriver/edge');
@@ -82,14 +82,18 @@ let setToBrowserstack =
 // ## Builder options for specific browsers
 
 // Sets Chrome options for the Builder.
-let setChromeOptions = (builder, {incognito, path, tor_mode}) => {
+let setChromeOptions = (builder, {edge, incognito, path, tor_mode}) => {
   let options = new chrome.Options();
   if (path) {
     options.setChromeBinaryPath(path);
   }
   options.addArguments("--remote-debugging-port=9222");
   if (incognito) {
-    options.addArguments("incognito");
+    if (edge) {
+      options.addArguments("-inprivate");
+    } else {
+      options.addArguments("incognito");
+    }
   }
   if (tor_mode) {
     options.addArguments("tor");
@@ -106,8 +110,10 @@ let setEdgeOptions = async (builder, {incognito, path, local}) => {
     options.setBinaryPath(path);
   }
   if (incognito) {
-    options.addArguments("incognito");
+//    options.addArguments("incognito");
+//    options.addArguments("--incognito");
     options.addArguments("-inprivate");
+//    options.set("ms:inPrivate", true);
   }
   if (local) {
     const edgePaths = await installEdgeDriver();
@@ -169,10 +175,10 @@ let createDriver = async ({browser, browser_version,
     if (browserstack) {
     await setToBrowserstack(builder, { browser, browser_version, os, os_version });
   }
-  if (browser === "chrome" || browser === "chromium" || browser === "android" || browser === "samsung" || browser === "opera" || browser === "brave") {
-    setChromeOptions(builder, { incognito, path, tor_mode });
-  } else if (browser === "edge") {
-    await setEdgeOptions(builder, { incognito, path, local: !browserstack });
+  if (browser === "chrome" || browser === "chromium" || browser === "android" || browser === "samsung" || browser === "opera" || browser === "brave" || browser=== "edge") {
+    setChromeOptions(builder, { edge: browser === "edge", incognito, path, tor_mode });
+  /*} else if (browser === "edge") {
+    await setEdgeOptions(builder, { incognito, path, local: !browserstack });*/
   } else if (browser === "firefox" || browser === "tor browser") {
     setFirefoxOptions(builder, { incognito, path, prefs, tor: browser === "tor browser" });
   } else if (browser === "safari") {
