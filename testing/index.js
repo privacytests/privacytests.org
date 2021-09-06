@@ -100,9 +100,9 @@ let passed = testFailed ? undefined : ((readSameFirstParty !== readDifferentFirs
 let runTests = async function (driver) {
   try {
     let fingerprinting = await loadAndGetResults(
-      driver, 'https://arthuredelstein.github.io/browser-privacy/tests/fingerprinting.html');
+      driver, 'https://arthuredelstein.net/browser-privacy/tests/fingerprinting.html');
     let network = await loadAndGetResults(
-      driver, 'https://arthuredelstein.github.io/browser-privacy/tests/network.html');
+      driver, 'https://arthuredelstein.net/browser-privacy/tests/network.html');
     let supercookies = await runSupercookieTests(driver, true);
     let navigation = await runSupercookieTests(driver, false);
     // Move ServiceWorker from supercookies to navigation :P
@@ -124,7 +124,7 @@ let runTestsBatch = async function (configList, {shouldQuit} = {shouldQuit:true}
   for (let config of configList) {
     try {
       let { browser, prefs, incognito, tor_mode } = config;
-      console.log("about to create driver:", config);
+      console.log("\ncreating driver:", config);
       let driver = await createDriver(config);
 //      console.log("driver", driver);
       let fullCapabilitiesMap = (await driver.getCapabilities())["map_"];
@@ -193,7 +193,7 @@ let main = async () => {
     let expandedConfigList = await expandConfigList(configList, repeat);
     let filteredExpandedConfigList = expandedConfigList.filter(
       d => only ? d.browser.startsWith(only) : true);
-    console.log(filteredExpandedConfigList);
+    console.log("List of browsers to run:", filteredExpandedConfigList);
     writeDataSync(await runTestsBatch(filteredExpandedConfigList,
                                       { shouldQuit: !stayOpen }));
     render.main();
