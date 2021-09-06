@@ -6,7 +6,7 @@
 
 const homeDir = require('os').homedir();
 const fs = require('fs');
-const {Builder, By, Capabilities, Key, logging, until} = require('selenium-webdriver');
+const {Builder, until} = require('selenium-webdriver');
 const firefox = require('selenium-webdriver/firefox');
 const chrome = require('selenium-webdriver/chrome');
 const edge = require('selenium-webdriver/edge');
@@ -192,14 +192,14 @@ let createDriver = async ({browser, browser_version,
 // Tell the selenium driver to look at a particular element's
 // attribute and wait for it to have a value. Returns a promise.
 let waitForAttribute = async (driver, elementCssSelector, attrName, timeout) => {
-  let element = await driver.findElement(By.css(elementCssSelector));
+  let element = await driver.findElement({css:elementCssSelector});
   return driver.wait(async () => element.getAttribute(attrName), timeout);
 };
 
 // Tell the selenium driver to navigate to a new url. Make sure
 // that the existing page has unloaded before promise resolves.
 let navigate = async (driver, url) => {
-  let htmlPage = await driver.findElement(By.tagName("html"));
+  let htmlPage = await driver.findElement({css:"html"});
   await driver.executeScript(`document.body.innerHTML += "<a id='navigationLink' href='${url}'>click</a>"`);
   await driver.findElement({id:"navigationLink"}).click();
   await driver.wait(until.stalenessOf(htmlPage));
@@ -214,7 +214,7 @@ let openNewTab = async (driver) => {
   await driver.executeScript(`
     document.body.addEventListener("click", () => window.open("https://example.com", "_blank"));
   `);
-  await driver.findElement(By.tagName('body')).click();
+  await driver.findElement({css:"body"}).click();
   let tabsAfter = await driver.getAllWindowHandles();
   return tabsAfter.filter(x => !tabsBefore.includes(x))[0];
 };
