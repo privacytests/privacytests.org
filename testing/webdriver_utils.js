@@ -62,7 +62,7 @@ const selectMatchingBrowsers = (allCapabilities, selectionMap) =>
 let getBestBrowserstackCapabilities =
   async ({ user, key, browser, browser_version, os, os_version }) => {
       let browserstackCapabilities = await fetchBrowserstackCapabilities({user, key});
-    console.log(JSON.stringify([...new Set(browserstackCapabilities.map(x => x["browser"]))], null, "  "));
+//    console.log(JSON.stringify([...new Set(browserstackCapabilities.map(x => x["browser"]))], null, "  "));
   let capabilitiesList = selectMatchingBrowsers(
     browserstackCapabilities, { browser, os, browser_version, os_version });
   return capabilitiesList[0];
