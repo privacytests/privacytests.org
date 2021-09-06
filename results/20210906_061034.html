@@ -76,7 +76,7 @@ h1 {
 }</style>
   </head>
   <body>
-    <table class="comparison-table"><tr><th><h1 class="title">Browser Privacy Tests</h1></th><th>firefox 91.0.2<br>linux 5.11.0-16-generic</th></tr><tr><th colspan="4">Network privacy tests</th></tr><tr><td>DoH enabled</td><td><div class='bad'
+    <table class="comparison-table"><tr><th><h1 class="title">Browser Privacy Tests</h1></th><th>edge 92.0.902.55<br>windows <br>(incognito)</th></tr><tr><th colspan="4">Network privacy tests</th></tr><tr><td>DoH enabled</td><td><div class='bad'
 title = 'cloudflareDoH: false
 nextDoH: false
 passed: false'> &nbsp;
@@ -93,9 +93,9 @@ read: async (url) => {
       }
     }
 
-result, same first party: 444254307832177
+result, same first party: 4593611445417687
 
-result, different first party: 444254307832177
+result, different first party: 4593611445417687
 
 passed: false
 
@@ -122,9 +122,9 @@ read: () =>
         setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
       })
 
-result, same first party: 444254307832177
+result, same first party: 4593611445417687
 
-result, different first party: 444254307832177
+result, different first party: 4593611445417687
 
 passed: false
 
@@ -142,9 +142,9 @@ read: async () => {
       return (new URL(url)).searchParams.get("key");
     }
 
-result, same first party: 444254307832177
+result, same first party: 4593611445417687
 
-result, different first party: 444254307832177
+result, different first party: 4593611445417687
 
 passed: false
 
@@ -158,14 +158,14 @@ title = 'write: (secret) => {
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 444254307832177
+result, same first party: 4593611445417687
 
-result, different first party: 444254307832177
+result, different first party: 4593611445417687
 
 passed: false
 
 test failed: false'> &nbsp;
-</div></td></tr><tr><td>css</td><td><div class='good'
+</div></td></tr><tr><td>css</td><td><div class='bad'
 title = 'write: async (key) => {
       let link = document.createElement("link");
       link.rel = "stylesheet";
@@ -187,9 +187,9 @@ read: async (key) => {
 
 result, same first party: 1
 
-result, different first party: 2
+result, different first party: 1
 
-passed: true
+passed: false
 
 test failed: false'> &nbsp;
 </div></td></tr><tr><td>etag</td><td><div class='good'
@@ -209,7 +209,7 @@ read: async (key) => {
       }
     }
 
-result, same first party: W/"1a-qe5zNbBuAX7pZz+S1scEH/083Pk"
+result, same first party: W/"1b-EqW4U8u9/Jm4/mZdZQLntkkS/MQ"
 
 result, different first party: undefined
 
@@ -267,7 +267,7 @@ result, different first party: 2
 passed: true
 
 test failed: false'> &nbsp;
-</div></td></tr><tr><td>font</td><td><div class='good'
+</div></td></tr><tr><td>font</td><td><div class='bad'
 title = 'write: async (key) => {
       let style = document.createElement("style");
       style.type=&#39;text/css&#39;;
@@ -291,9 +291,9 @@ read: async (key) => {
 
 result, same first party: 1
 
-result, different first party: 2
+result, different first party: 1
 
-passed: true
+passed: false
 
 test failed: false'> &nbsp;
 </div></td></tr><tr><td>h1_connection</td><td><div class='good'
@@ -306,14 +306,14 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 444254307832177
+result, same first party: 4593611445417687
 
 result, different first party: 
 
 passed: true
 
 test failed: false'> &nbsp;
-</div></td></tr><tr><td>h2_connection</td><td><div class='good'
+</div></td></tr><tr><td>h2_connection</td><td><div class='bad'
 title = 'write: async (secret) => {
       await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`);
     }
@@ -323,14 +323,14 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 444254307832177
+result, same first party: 4593611445417687
 
-result, different first party: 
+result, different first party: 4593611445417687
 
-passed: true
+passed: false
 
 test failed: false'> &nbsp;
-</div></td></tr><tr><td>HSTS</td><td><div class='good'
+</div></td></tr><tr><td>HSTS</td><td><div class='bad'
 title = 'write: () => {
       let image = document.getElementById("hsts-image");
       image.src = "https://hsts.arthuredelstein.net/set_hsts.png";
@@ -345,9 +345,9 @@ read: () => new Promise((resolve, reject) => {
 
 result, same first party: image load succeeded
 
-result, different first party: Error: image load failed
+result, different first party: image load succeeded
 
-passed: true
+passed: false
 
 test failed: false'> &nbsp;
 </div></td></tr><tr><td>iframe</td><td><div class='good'
@@ -379,7 +379,7 @@ result, different first party: 2
 passed: true
 
 test failed: false'> &nbsp;
-</div></td></tr><tr><td>image</td><td><div class='good'
+</div></td></tr><tr><td>image</td><td><div class='bad'
 title = 'write: (key) => new Promise((resolve, reject) => {
       let img = document.createElement("img");
       document.body.appendChild(img);
@@ -402,9 +402,9 @@ read: async (key) => {
 
 result, same first party: 1
 
-result, different first party: 2
+result, different first party: 1
 
-passed: true
+passed: false
 
 test failed: false'> &nbsp;
 </div></td></tr><tr><td>indexedDB</td><td><div class='bad'
@@ -412,9 +412,9 @@ title = 'write: (secret) => IdbKeyVal.set("secret", secret)
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: 444254307832177
+result, same first party: 4593611445417687
 
-result, different first party: 444254307832177
+result, different first party: 4593611445417687
 
 passed: false
 
@@ -424,14 +424,14 @@ title = 'write: (secret) => localStorage.setItem("secret", secret)
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 444254307832177
+result, same first party: 4593611445417687
 
-result, different first party: 444254307832177
+result, different first party: 4593611445417687
 
 passed: false
 
 test failed: false'> &nbsp;
-</div></td></tr><tr><td>locks</td><td><div class='na'
+</div></td></tr><tr><td>locks</td><td><div class='bad'
 title = 'write: async (key) => {
       if (navigator.locks) {
         navigator.locks.request(key, lock => new Promise((f,r) => {}));
@@ -447,13 +447,13 @@ read: async () => {
       }
     }
 
-result, same first party: undefined
+result, same first party: 4593611445417687
 
-result, different first party: undefined
+result, different first party: 4593611445417687
 
-passed: undefined
+passed: false
 
-test failed: true'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td>prefetch</td><td><div class='good'
 title = 'write: async (key) => {
       let link = document.createElement("link");
@@ -507,9 +507,9 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 2776495684480167
+result, same first party: 8808079156823172
 
-result, different first party: 2776495684480167
+result, different first party: 8808079156823172
 
 passed: false
 
@@ -530,9 +530,9 @@ read: () =>
         setTimeout(() => reject("no SharedWorker message received"), 1000);
       })
 
-result, same first party: 444254307832177
+result, same first party: 4593611445417687
 
-result, different first party: 444254307832177
+result, different first party: 4593611445417687
 
 passed: false
 
@@ -548,14 +548,14 @@ read: async () => {
       return (await results.json()).sessionId;
     }
 
-result, same first party: 5a2837fd1a1ab97b53bea3033b006f8271389c1aa008a49160e3de40a0f65ab6
+result, same first party: b14f903a79f6e38547457368ea2ab5c6d2ed58185e4040558b16d168270156c1
 
-result, different first party: 9eafb743610a71b4a6e150684e3bc61b41c266c9276c621bbfe345865d522561
+result, different first party: 93bdbcce5c7de5faa0f3d29a904f1b08c3c778dd9d38e4fcf7b979b7014fd142
 
 passed: true
 
 test failed: false'> &nbsp;
-</div></td></tr><tr><td>web_sql_database</td><td><div class='na'
+</div></td></tr><tr><td>web_sql_database</td><td><div class='bad'
 title = 'write: async (key) => {
       let database = window.openDatabase("sqlite_supercookie", "", "supercookie", 1024 * 1024);
       let tx = new Promise((resolve) => database.transaction(tx => {
@@ -586,13 +586,13 @@ read: async () => {
       return result.rows.item(0).value;
     }
 
-result, same first party: Error: window.openDatabase is not a function
+result, same first party: 4593611445417687
 
-result, different first party: Error: window.openDatabase is not a function
+result, different first party: 4593611445417687
 
-passed: undefined
+passed: false
 
-test failed: true'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td>XMLHttpRequest</td><td><div class='good'
 title = 'write: () => new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
@@ -614,9 +614,9 @@ read: () => new Promise((resolve, reject) => {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
 
-result, same first party: Mon, 06 Sep 2021 17:20:33 GMT
+result, same first party: Mon, 06 Sep 2021 06:10:09 GMT
 
-result, different first party: Mon, 06 Sep 2021 17:20:38 GMT
+result, different first party: Mon, 06 Sep 2021 06:10:19 GMT
 
 passed: true
 
@@ -643,9 +643,9 @@ title = 'write: (secret) => sessionStorage.setItem("secret", secret)
 
 read: () => sessionStorage.getItem("secret")
 
-result, same first party: 2776495684480167
+result, same first party: 8808079156823172
 
-result, different first party: 2776495684480167
+result, different first party: 8808079156823172
 
 passed: false
 
@@ -660,38 +660,38 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 2776495684480167
+result, same first party: 8808079156823172
 
-result, different first party: 2776495684480167
+result, different first party: 8808079156823172
 
 passed: false
 
 test failed: false'> &nbsp;
-</div></td></tr><tr><th colspan="4">Fingerprinting resistance tests</th></tr><tr><td>date.getDate()</td><td><div class='good'
+</div></td></tr><tr><th colspan="4">Fingerprinting resistance tests</th></tr><tr><td>date.getDate()</td><td><div class='bad'
 title = 'expression: date.getDate()
 spoof expression: date.getUTCDate()
-actual value: 6
+actual value: 5
 desired value: 6
-passed: true'> &nbsp;
-</div></td></tr><tr><td>date.getDate() [Worker]</td><td><div class='good'
+passed: false'> &nbsp;
+</div></td></tr><tr><td>date.getDate() [Worker]</td><td><div class='bad'
 title = 'expression: date.getDate()
 spoof expression: date.getUTCDate()
-actual value: 6
+actual value: 5
 desired value: 6
-passed: true
+passed: false
 [Worker]'> &nbsp;
-</div></td></tr><tr><td>date.getDay()</td><td><div class='good'
+</div></td></tr><tr><td>date.getDay()</td><td><div class='bad'
 title = 'expression: date.getDay()
 spoof expression: date.getUTCDay()
-actual value: 1
+actual value: 0
 desired value: 1
-passed: true'> &nbsp;
-</div></td></tr><tr><td>date.getDay() [Worker]</td><td><div class='good'
+passed: false'> &nbsp;
+</div></td></tr><tr><td>date.getDay() [Worker]</td><td><div class='bad'
 title = 'expression: date.getDay()
 spoof expression: date.getUTCDay()
-actual value: 1
+actual value: 0
 desired value: 1
-passed: true
+passed: false
 [Worker]'> &nbsp;
 </div></td></tr><tr><td>date.getFullYear()</td><td><div class='good'
 title = 'expression: date.getFullYear()
@@ -709,40 +709,40 @@ passed: true
 </div></td></tr><tr><td>date.getHours()</td><td><div class='bad'
 title = 'expression: date.getHours()
 spoof expression: date.getUTCHours()
-actual value: 10
-desired value: 17
+actual value: 23
+desired value: 6
 passed: false'> &nbsp;
 </div></td></tr><tr><td>date.getHours() [Worker]</td><td><div class='bad'
 title = 'expression: date.getHours()
 spoof expression: date.getUTCHours()
-actual value: 10
-desired value: 17
+actual value: 23
+desired value: 6
 passed: false
 [Worker]'> &nbsp;
 </div></td></tr><tr><td>date.getMilliseconds()</td><td><div class='good'
 title = 'expression: date.getMilliseconds()
 spoof expression: date.getUTCMilliseconds()
-actual value: 915
-desired value: 915
+actual value: 770
+desired value: 770
 passed: true'> &nbsp;
 </div></td></tr><tr><td>date.getMilliseconds() [Worker]</td><td><div class='good'
 title = 'expression: date.getMilliseconds()
 spoof expression: date.getUTCMilliseconds()
-actual value: 932
-desired value: 932
+actual value: 913
+desired value: 913
 passed: true
 [Worker]'> &nbsp;
 </div></td></tr><tr><td>date.getMinutes()</td><td><div class='good'
 title = 'expression: date.getMinutes()
 spoof expression: date.getUTCMinutes()
-actual value: 20
-desired value: 20
+actual value: 9
+desired value: 9
 passed: true'> &nbsp;
 </div></td></tr><tr><td>date.getMinutes() [Worker]</td><td><div class='good'
 title = 'expression: date.getMinutes()
 spoof expression: date.getUTCMinutes()
-actual value: 20
-desired value: 20
+actual value: 9
+desired value: 9
 passed: true
 [Worker]'> &nbsp;
 </div></td></tr><tr><td>date.getMonth()</td><td><div class='good'
@@ -761,41 +761,41 @@ passed: true
 </div></td></tr><tr><td>date.getSeconds()</td><td><div class='good'
 title = 'expression: date.getSeconds()
 spoof expression: date.getUTCSeconds()
-actual value: 29
-desired value: 29
+actual value: 59
+desired value: 59
 passed: true'> &nbsp;
 </div></td></tr><tr><td>date.getSeconds() [Worker]</td><td><div class='good'
 title = 'expression: date.getSeconds()
 spoof expression: date.getUTCSeconds()
-actual value: 29
-desired value: 29
+actual value: 59
+desired value: 59
 passed: true
 [Worker]'> &nbsp;
-</div></td></tr><tr><td>Date.prototype.getDate.call(date)</td><td><div class='good'
+</div></td></tr><tr><td>Date.prototype.getDate.call(date)</td><td><div class='bad'
 title = 'expression: Date.prototype.getDate.call(date)
 spoof expression: date.getUTCDate()
-actual value: 6
+actual value: 5
 desired value: 6
-passed: true'> &nbsp;
-</div></td></tr><tr><td>Date.prototype.getDate.call(date) [Worker]</td><td><div class='good'
+passed: false'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getDate.call(date) [Worker]</td><td><div class='bad'
 title = 'expression: Date.prototype.getDate.call(date)
 spoof expression: date.getUTCDate()
-actual value: 6
+actual value: 5
 desired value: 6
-passed: true
+passed: false
 [Worker]'> &nbsp;
-</div></td></tr><tr><td>Date.prototype.getDay.call(date)</td><td><div class='good'
+</div></td></tr><tr><td>Date.prototype.getDay.call(date)</td><td><div class='bad'
 title = 'expression: Date.prototype.getDay.call(date)
 spoof expression: date.getUTCDay()
-actual value: 1
+actual value: 0
 desired value: 1
-passed: true'> &nbsp;
-</div></td></tr><tr><td>Date.prototype.getDay.call(date) [Worker]</td><td><div class='good'
+passed: false'> &nbsp;
+</div></td></tr><tr><td>Date.prototype.getDay.call(date) [Worker]</td><td><div class='bad'
 title = 'expression: Date.prototype.getDay.call(date)
 spoof expression: date.getUTCDay()
-actual value: 1
+actual value: 0
 desired value: 1
-passed: true
+passed: false
 [Worker]'> &nbsp;
 </div></td></tr><tr><td>Date.prototype.getFullYear.call(date)</td><td><div class='good'
 title = 'expression: Date.prototype.getFullYear.call(date)
@@ -813,40 +813,40 @@ passed: true
 </div></td></tr><tr><td>Date.prototype.getHours.call(date)</td><td><div class='bad'
 title = 'expression: Date.prototype.getHours.call(date)
 spoof expression: date.getUTCHours()
-actual value: 10
-desired value: 17
+actual value: 23
+desired value: 6
 passed: false'> &nbsp;
 </div></td></tr><tr><td>Date.prototype.getHours.call(date) [Worker]</td><td><div class='bad'
 title = 'expression: Date.prototype.getHours.call(date)
 spoof expression: date.getUTCHours()
-actual value: 10
-desired value: 17
+actual value: 23
+desired value: 6
 passed: false
 [Worker]'> &nbsp;
 </div></td></tr><tr><td>Date.prototype.getMilliseconds.call(date)</td><td><div class='good'
 title = 'expression: Date.prototype.getMilliseconds.call(date)
 spoof expression: date.getUTCMilliseconds()
-actual value: 915
-desired value: 915
+actual value: 770
+desired value: 770
 passed: true'> &nbsp;
 </div></td></tr><tr><td>Date.prototype.getMilliseconds.call(date) [Worker]</td><td><div class='good'
 title = 'expression: Date.prototype.getMilliseconds.call(date)
 spoof expression: date.getUTCMilliseconds()
-actual value: 932
-desired value: 932
+actual value: 913
+desired value: 913
 passed: true
 [Worker]'> &nbsp;
 </div></td></tr><tr><td>Date.prototype.getMinutes.call(date)</td><td><div class='good'
 title = 'expression: Date.prototype.getMinutes.call(date)
 spoof expression: date.getUTCMinutes()
-actual value: 20
-desired value: 20
+actual value: 9
+desired value: 9
 passed: true'> &nbsp;
 </div></td></tr><tr><td>Date.prototype.getMinutes.call(date) [Worker]</td><td><div class='good'
 title = 'expression: Date.prototype.getMinutes.call(date)
 spoof expression: date.getUTCMinutes()
-actual value: 20
-desired value: 20
+actual value: 9
+desired value: 9
 passed: true
 [Worker]'> &nbsp;
 </div></td></tr><tr><td>Date.prototype.getMonth.call(date)</td><td><div class='good'
@@ -865,14 +865,14 @@ passed: true
 </div></td></tr><tr><td>Date.prototype.getSeconds.call(date)</td><td><div class='good'
 title = 'expression: Date.prototype.getSeconds.call(date)
 spoof expression: date.getUTCSeconds()
-actual value: 29
-desired value: 29
+actual value: 59
+desired value: 59
 passed: true'> &nbsp;
 </div></td></tr><tr><td>Date.prototype.getSeconds.call(date) [Worker]</td><td><div class='good'
 title = 'expression: Date.prototype.getSeconds.call(date)
 spoof expression: date.getUTCSeconds()
-actual value: 29
-desired value: 29
+actual value: 59
+desired value: 59
 passed: true
 [Worker]'> &nbsp;
 </div></td></tr><tr><td>devicePixelRatio</td><td><div class='good'
@@ -935,7 +935,7 @@ passed: false'> &nbsp;
 </div></td></tr><tr><td>mouseEvent.timeStamp % 100</td><td><div class='bad'
 title = 'expression: mouseEvent.timeStamp % 100
 spoof expression: 0
-actual value: 5
+actual value: 53.300000000046566
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>navigator.buildID === undefined || navigator.buildID === "20181001000000"</td><td><div class='good'
@@ -944,24 +944,24 @@ spoof expression: true
 actual value: true
 desired value: true
 passed: true'> &nbsp;
-</div></td></tr><tr><td>navigator.getBattery</td><td><div class='good'
+</div></td></tr><tr><td>navigator.getBattery</td><td><div class='bad'
 title = 'expression: navigator.getBattery
 spoof expression: undefined
 actual value: undefined
 desired value: undefined
-passed: true'> &nbsp;
-</div></td></tr><tr><td>navigator.hardwareConcurrency</td><td><div class='bad'
-title = 'expression: navigator.hardwareConcurrency
-spoof expression: 2
-actual value: 8
-desired value: 2
 passed: false'> &nbsp;
-</div></td></tr><tr><td>navigator.hardwareConcurrency [Worker]</td><td><div class='bad'
+</div></td></tr><tr><td>navigator.hardwareConcurrency</td><td><div class='good'
 title = 'expression: navigator.hardwareConcurrency
 spoof expression: 2
-actual value: 8
+actual value: 2
 desired value: 2
-passed: false
+passed: true'> &nbsp;
+</div></td></tr><tr><td>navigator.hardwareConcurrency [Worker]</td><td><div class='good'
+title = 'expression: navigator.hardwareConcurrency
+spoof expression: 2
+actual value: 2
+desired value: 2
+passed: true
 [Worker]'> &nbsp;
 </div></td></tr><tr><td>navigator.language</td><td><div class='good'
 title = 'expression: navigator.language
@@ -976,67 +976,67 @@ actual value: en-US
 desired value: en-US
 passed: true
 [Worker]'> &nbsp;
-</div></td></tr><tr><td>navigator.languages.toString()</td><td><div class='good'
+</div></td></tr><tr><td>navigator.languages.toString()</td><td><div class='bad'
 title = 'expression: navigator.languages.toString()
 spoof expression: "en-US,en"
-actual value: en-US,en
+actual value: en-US
 desired value: en-US,en
-passed: true'> &nbsp;
-</div></td></tr><tr><td>navigator.languages.toString() [Worker]</td><td><div class='good'
+passed: false'> &nbsp;
+</div></td></tr><tr><td>navigator.languages.toString() [Worker]</td><td><div class='bad'
 title = 'expression: navigator.languages.toString()
 spoof expression: "en-US,en"
-actual value: en-US,en
+actual value: en-US
 desired value: en-US,en
-passed: true
+passed: false
 [Worker]'> &nbsp;
-</div></td></tr><tr><td>navigator.mimeTypes.length</td><td><div class='good'
+</div></td></tr><tr><td>navigator.mimeTypes.length</td><td><div class='bad'
 title = 'expression: navigator.mimeTypes.length
 spoof expression: 0
-actual value: 0
+actual value: 4
 desired value: 0
-passed: true'> &nbsp;
-</div></td></tr><tr><td>navigator.mimeTypes[0]</td><td><div class='good'
+passed: false'> &nbsp;
+</div></td></tr><tr><td>navigator.mimeTypes[0]</td><td><div class='bad'
 title = 'expression: navigator.mimeTypes[0]
 spoof expression: undefined
-actual value: undefined
+actual value: [object Object]
 desired value: undefined
-passed: true'> &nbsp;
-</div></td></tr><tr><td>navigator.plugins.length</td><td><div class='good'
+passed: false'> &nbsp;
+</div></td></tr><tr><td>navigator.plugins.length</td><td><div class='bad'
 title = 'expression: navigator.plugins.length
 spoof expression: 0
-actual value: 0
+actual value: 3
 desired value: 0
-passed: true'> &nbsp;
-</div></td></tr><tr><td>navigator.plugins[0]</td><td><div class='good'
+passed: false'> &nbsp;
+</div></td></tr><tr><td>navigator.plugins[0]</td><td><div class='bad'
 title = 'expression: navigator.plugins[0]
 spoof expression: undefined
-actual value: undefined
+actual value: [object Object]
 desired value: undefined
-passed: true'> &nbsp;
-</div></td></tr><tr><td>Navigator.prototype.__lookupGetter__("mimeTypes").call(navigator).length</td><td><div class='good'
+passed: false'> &nbsp;
+</div></td></tr><tr><td>Navigator.prototype.__lookupGetter__("mimeTypes").call(navigator).length</td><td><div class='bad'
 title = 'expression: Navigator.prototype.__lookupGetter__("mimeTypes").call(navigator).length
 spoof expression: 0
-actual value: 0
+actual value: 4
 desired value: 0
-passed: true'> &nbsp;
-</div></td></tr><tr><td>Navigator.prototype.__lookupGetter__("plugins").call(navigator).length</td><td><div class='good'
+passed: false'> &nbsp;
+</div></td></tr><tr><td>Navigator.prototype.__lookupGetter__("plugins").call(navigator).length</td><td><div class='bad'
 title = 'expression: Navigator.prototype.__lookupGetter__("plugins").call(navigator).length
 spoof expression: 0
-actual value: 0
+actual value: 3
 desired value: 0
-passed: true'> &nbsp;
+passed: false'> &nbsp;
 </div></td></tr><tr><td>new Event("test").timeStamp % 100</td><td><div class='bad'
 title = 'expression: new Event("test").timeStamp % 100
 spoof expression: 0
-actual value: 95
+actual value: 91.09999999997672
 desired value: 0
 passed: false'> &nbsp;
-</div></td></tr><tr><td>new Event("test").timeStamp % 100 [Worker]</td><td><div class='bad'
+</div></td></tr><tr><td>new Event("test").timeStamp % 100 [Worker]</td><td><div class='good'
 title = 'expression: new Event("test").timeStamp % 100
 spoof expression: 0
-actual value: 9
+actual value: 0
 desired value: 0
-passed: false
+passed: true
 [Worker]'> &nbsp;
 </div></td></tr><tr><td>new Intl.PluralRules().resolvedOptions().locale</td><td><div class='good'
 title = 'expression: new Intl.PluralRules().resolvedOptions().locale
@@ -1063,132 +1063,132 @@ spoof expression: true
 actual value: true
 desired value: true
 passed: true'> &nbsp;
-</div></td></tr><tr><td>Object.keys(navigator.mimeTypes).length</td><td><div class='good'
+</div></td></tr><tr><td>Object.keys(navigator.mimeTypes).length</td><td><div class='bad'
 title = 'expression: Object.keys(navigator.mimeTypes).length
 spoof expression: 0
-actual value: 0
+actual value: 4
 desired value: 0
-passed: true'> &nbsp;
-</div></td></tr><tr><td>Object.keys(navigator.plugins).length</td><td><div class='good'
+passed: false'> &nbsp;
+</div></td></tr><tr><td>Object.keys(navigator.plugins).length</td><td><div class='bad'
 title = 'expression: Object.keys(navigator.plugins).length
 spoof expression: 0
-actual value: 0
+actual value: 3
 desired value: 0
-passed: true'> &nbsp;
+passed: false'> &nbsp;
 </div></td></tr><tr><td>outerHeight</td><td><div class='bad'
 title = 'expression: outerHeight
 spoof expression: innerHeight
-actual value: 947
-desired value: 862
+actual value: 708
+desired value: 577
 passed: false'> &nbsp;
-</div></td></tr><tr><td>outerWidth</td><td><div class='good'
+</div></td></tr><tr><td>outerWidth</td><td><div class='bad'
 title = 'expression: outerWidth
 spoof expression: innerWidth
-actual value: 1280
-desired value: 1280
-passed: true'> &nbsp;
+actual value: 1004
+desired value: 988
+passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.now()</td><td><div class='bad'
 title = 'expression: performance.now()
 spoof expression: Math.floor(performance.now() / 100) * 100
-actual value: 295
-desired value: 200
+actual value: 688.5999999999767
+desired value: 600
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.now() [Worker]</td><td><div class='bad'
 title = 'expression: performance.now()
 spoof expression: Math.floor(performance.now() / 100) * 100
-actual value: 8
+actual value: 22.900000000023283
 desired value: 0
 passed: false
 [Worker]'> &nbsp;
 </div></td></tr><tr><td>Performance.prototype.now.apply(performance)</td><td><div class='bad'
 title = 'expression: Performance.prototype.now.apply(performance)
 spoof expression: Math.floor(performance.now() / 100) * 100
-actual value: 295
-desired value: 200
+actual value: 689.9000000000233
+desired value: 600
 passed: false'> &nbsp;
 </div></td></tr><tr><td>Performance.prototype.now.apply(performance) [Worker]</td><td><div class='bad'
 title = 'expression: Performance.prototype.now.apply(performance)
 spoof expression: Math.floor(performance.now() / 100) * 100
-actual value: 8
+actual value: 23
 desired value: 0
 passed: false
 [Worker]'> &nbsp;
 </div></td></tr><tr><td>performance.timing.connectEnd</td><td><div class='bad'
 title = 'expression: performance.timing.connectEnd
 spoof expression: 0
-actual value: 1630948829822
+actual value: 1630908599302
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.connectStart</td><td><div class='bad'
 title = 'expression: performance.timing.connectStart
 spoof expression: 0
-actual value: 1630948829773
+actual value: 1630908599256
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.domainLookupEnd</td><td><div class='bad'
 title = 'expression: performance.timing.domainLookupEnd
 spoof expression: 0
-actual value: 1630948829773
+actual value: 1630908599256
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.domainLookupStart</td><td><div class='bad'
 title = 'expression: performance.timing.domainLookupStart
 spoof expression: 0
-actual value: 1630948829713
+actual value: 1630908599244
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.domComplete</td><td><div class='bad'
 title = 'expression: performance.timing.domComplete
 spoof expression: 0
-actual value: 1630948829927
+actual value: 1630908599866
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.domContentLoadedEventEnd</td><td><div class='bad'
 title = 'expression: performance.timing.domContentLoadedEventEnd
 spoof expression: 0
-actual value: 1630948829927
+actual value: 1630908599866
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.domContentLoadedEventStart</td><td><div class='bad'
 title = 'expression: performance.timing.domContentLoadedEventStart
 spoof expression: 0
-actual value: 1630948829927
+actual value: 1630908599865
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.domInteractive</td><td><div class='bad'
 title = 'expression: performance.timing.domInteractive
 spoof expression: 0
-actual value: 1630948829926
+actual value: 1630908599865
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.domLoading</td><td><div class='bad'
 title = 'expression: performance.timing.domLoading
 spoof expression: 0
-actual value: 1630948829853
+actual value: 1630908599566
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.fetchStart</td><td><div class='bad'
 title = 'expression: performance.timing.fetchStart
 spoof expression: 0
-actual value: 1630948829712
+actual value: 1630908599242
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.loadEventEnd</td><td><div class='bad'
 title = 'expression: performance.timing.loadEventEnd
 spoof expression: 0
-actual value: 1630948829927
+actual value: 1630908599866
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.loadEventStart</td><td><div class='bad'
 title = 'expression: performance.timing.loadEventStart
 spoof expression: 0
-actual value: 1630948829927
+actual value: 1630908599866
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.navigationStart</td><td><div class='bad'
 title = 'expression: performance.timing.navigationStart
 spoof expression: 0
-actual value: 1630948829630
+actual value: 1630908599166
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.redirectEnd</td><td><div class='good'
@@ -1206,25 +1206,25 @@ passed: true'> &nbsp;
 </div></td></tr><tr><td>performance.timing.requestStart</td><td><div class='bad'
 title = 'expression: performance.timing.requestStart
 spoof expression: 0
-actual value: 1630948829822
+actual value: 1630908599303
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.responseEnd</td><td><div class='bad'
 title = 'expression: performance.timing.responseEnd
 spoof expression: 0
-actual value: 1630948829848
+actual value: 1630908599415
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.responseStart</td><td><div class='bad'
 title = 'expression: performance.timing.responseStart
 spoof expression: 0
-actual value: 1630948829848
+actual value: 1630908599414
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.secureConnectionStart</td><td><div class='bad'
 title = 'expression: performance.timing.secureConnectionStart
 spoof expression: 0
-actual value: 1630948829795
+actual value: 1630908599265
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.timing.unloadEventEnd</td><td><div class='good'
@@ -1242,37 +1242,37 @@ passed: true'> &nbsp;
 </div></td></tr><tr><td>screen.height</td><td><div class='bad'
 title = 'expression: screen.height
 spoof expression: innerHeight
-actual value: 1080
-desired value: 862
+actual value: 768
+desired value: 577
 passed: false'> &nbsp;
 </div></td></tr><tr><td>Screen.prototype.__lookupGetter__("height").apply(screen)</td><td><div class='bad'
 title = 'expression: Screen.prototype.__lookupGetter__("height").apply(screen)
 spoof expression: innerHeight
-actual value: 1080
-desired value: 862
+actual value: 768
+desired value: 577
 passed: false'> &nbsp;
 </div></td></tr><tr><td>Screen.prototype.__lookupGetter__("width").apply(screen)</td><td><div class='bad'
 title = 'expression: Screen.prototype.__lookupGetter__("width").apply(screen)
 spoof expression: innerWidth
-actual value: 1920
-desired value: 1280
+actual value: 1024
+desired value: 988
 passed: false'> &nbsp;
 </div></td></tr><tr><td>screen.width</td><td><div class='bad'
 title = 'expression: screen.width
 spoof expression: innerWidth
-actual value: 1920
-desired value: 1280
+actual value: 1024
+desired value: 988
 passed: false'> &nbsp;
 </div></td></tr><tr><td>screenX</td><td><div class='bad'
 title = 'expression: screenX
 spoof expression: 0
-actual value: 50
+actual value: 10
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>screenY</td><td><div class='bad'
 title = 'expression: screenY
 spoof expression: 0
-actual value: 27
+actual value: 10
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>try {
@@ -1280,7 +1280,7 @@ passed: false'> &nbsp;
       true;
     } catch (e) {
       false;
-   }</td><td><div class='good'
+   }</td><td><div class='bad'
 title = 'expression: try {
       navigator.getBattery();
       true;
@@ -1288,13 +1288,13 @@ title = 'expression: try {
       false;
    }
 spoof expression: false
-actual value: false
+actual value: true
 desired value: false
-passed: true'> &nbsp;
-</div></td></tr></table><p>Tests ran at 2021-09-06T17:20:27.810Z.
-         Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/a000b8fe6ac98d0d8d150183506c11d2a7dcf16e"
-    >a000b8fe</a>.
-    Raw data in <a href="20210906_172043.json">JSON</a>.
+passed: false'> &nbsp;
+</div></td></tr></table><p>Tests ran at 2021-09-06T06:09:52.139Z.
+         Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/837e3a6cf17d78090840b3a18a635e8f764c2fb7"
+    >837e3a6c</a>.
+    Raw data in <a href="20210906_061034.json">JSON</a>.
     </p>
   </body>
 </html>
