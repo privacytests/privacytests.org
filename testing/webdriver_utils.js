@@ -213,4 +213,22 @@ let openNewTab = async (driver) => {
   return tabsAfter.filter(x => !tabsBefore.includes(x))[0];
 };
 
-module.exports = { createDriver, waitForAttribute, navigate, openNewTab };
+// Get the browser to quit.
+let quit = async (driver) => {
+  let windowHandles = await driver.getAllWindowHandles();
+  for (let windowHandle of windowHandles) {
+    try {
+      await driver.switchTo().window(windowHandle);
+      await driver.close();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  try {
+    await driver.quit();
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+module.exports = { createDriver, waitForAttribute, navigate, openNewTab, quit };
