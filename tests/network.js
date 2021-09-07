@@ -49,10 +49,10 @@ const insecurePassiveSubresource = async (tagName) => {
   const element = document.createElement(tagName);
   document.body.appendChild(element);
   let resultPromise = new Promise((resolve, reject) => {
-    image.addEventListener("load", resolve, { once: true });
-    image.addEventListener("error", reject, { once: true });
+    element.addEventListener("load", resolve, { once: true });
+    element.addEventListener("error", reject, { once: true });
   });
-  image.src = "http://upgradable.arthuredelstein.net/image.png";
+  element.src = "http://upgradable.arthuredelstein.net/image.png";
   let status;
   try {
     let result = await resultPromise;
