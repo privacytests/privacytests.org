@@ -56,30 +56,27 @@ const loadSubresource = async(tagName, url) => {
   try {
     return await resultPromise;
   } catch (e) {
-    // some sort of error happened
+    // some sort of loading error happened
     return e;
   }
 };
 
-const passive = async () => {
-  let upgradable = await loadSubresource("img", "http://upgradable.arthuredelstein.net/image.png");
-  let insecure = await loadSubresource("img", "http://insecure.arthuredelstein.net/image.png");
-  return { upgradable, insecure };
+const insecureSubresourceTest = async (tag, fileName) => {
+  let upgradableEvent = await loadSubresource(tag, `http://upgradable.arthuredelstein.net/${fileName}`);
+  let insecureEvent = await loadSubresource(tag, `http://insecure.arthuredelstein.net/${fileName}`);
+  let passed = insecureEvent.type === "error";
+  let upgradeHandling = upgradableEvent.type === "load" ? "upgraded" : "blocked";
+  let handling = passed ? upgradeHandling : "allowed";
+  return { passed, handling };
 };
-
-const active = async () => {
-  let upgradable = await loadSubresource("script", "http://upgradable.arthuredelstein.net/test.js");
-  let insecure = await loadSubresource("script", "http://insecure.arthuredelstein.net/test.js");
-  return { upgradable, insecure };
-};
-
 
 let runTests = async () => {
   let resultsJSON = {
     "Tor enabled": await testTor(),
     "DoH enabled": await testDoH(),
     "GPC enabled": await testGPC(),
-    "Insecure passive subresources": await insecurePassiveSubresource("image")
+    "Insecure passive subresource": await insecureSubresourceTest("img", "image.png"),
+    "Insecure active subresource": await insecureSubresourceTest("script", "test.js")
   };
   console.log(resultsJSON);
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
