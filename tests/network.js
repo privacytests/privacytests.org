@@ -2,9 +2,9 @@
 
 
 const fetchJSON = async (...fetchArgs) => {
-    let response = await fetch(...fetchArgs);
-    return response.json();
-  };
+  let response = await fetch(...fetchArgs);
+  return response.json();
+};
 
 const testTor = async () => {
   let wtfJSON = await fetchJSON("https://wtfismyip.com/json");
@@ -45,11 +45,33 @@ const testGPC = async () => {
   return { "sec-gpc": requestHeaders["sec-gpc"], passed };
 };
 
+const insecurePassiveSubresource = async () => {
+  const image = document.createElement("img");
+  image.src = "https://insecure.arthuredelstein.net";
+  let resultPromise = new Promise((resolve, reject) => {
+    image.addEventListener("load", resolve, { once: true });
+    image.addEventListener("error", reject, { once: true });
+  });
+  try {
+    let result = await resultPromise;
+    if (image.src.startsWith("https:")) {
+      // Was upgraded to a secure connection.
+      return true; 
+    } else {
+      return false;
+    }
+  } catch (e) {
+    // some sort of blocking happened
+    return true;
+  }
+};
+
 let runTests = async () => {
   let resultsJSON = {
     "Tor enabled": await testTor(),
     "DoH enabled": await testDoH(),
-    "GPC enabled": await testGPC()
+    "GPC enabled": await testGPC(),
+    "Insecure passive subresources": await insecurePassiveSubresource()
   };
   console.log(resultsJSON);
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
