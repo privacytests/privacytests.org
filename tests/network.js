@@ -52,7 +52,7 @@ const insecurePassiveSubresource = async () => {
     image.addEventListener("load", resolve, { once: true });
     image.addEventListener("error", reject, { once: true });
   });
-  image.src = "http://insecure.arthuredelstein.net/image.png";
+  image.src = "http://upgradable.arthuredelstein.net/image.png";
   let status;
   try {
     let result = await resultPromise;
