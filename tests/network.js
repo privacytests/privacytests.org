@@ -71,7 +71,7 @@ let runTests = async () => {
     "Tor enabled": await testTor(),
     "DoH enabled": await testDoH(),
     "GPC enabled": await testGPC(),
-    "Insecure passive subresources": await insecurePassiveSubresource()
+    "Insecure passive subresources": await insecurePassiveSubresource("image")
   };
   console.log(resultsJSON);
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
