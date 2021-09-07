@@ -45,26 +45,34 @@ const testGPC = async () => {
   return { "sec-gpc": requestHeaders["sec-gpc"], passed };
 };
 
-const insecurePassiveSubresource = async (tagName) => {
+const loadSubresource = async(tagName, url) => {
   const element = document.createElement(tagName);
   document.body.appendChild(element);
   let resultPromise = new Promise((resolve, reject) => {
     element.addEventListener("load", resolve, { once: true });
     element.addEventListener("error", reject, { once: true });
   });
-  element.src = "http://upgradable.arthuredelstein.net/image.png";
-  let status;
+  element.src = url;
   try {
-    let result = await resultPromise;
-    status = "upgraded";
+    return await resultPromise;
   } catch (e) {
     // some sort of error happened
-    console.log(e);
-    status = "failed";
+    return e;
   }
-  let passed = (status === "upgraded" || status === "blocked");
-  return { status, passed };
 };
+
+const passive = async () => {
+  let upgradable = await loadSubresource("img", "http://upgradable.arthuredelstein.net/image.png");
+  let insecure = await loadSubresource("img", "http://insecure.arthuredelstein.net/image.png");
+  return { upgradable, insecure };
+};
+
+const active = async () => {
+  let upgradable = await loadSubresource("script", "http://upgradable.arthuredelstein.net/test.js");
+  let insecure = await loadSubresource("script", "http://insecure.arthuredelstein.net/test.js");
+  return { upgradable, insecure };
+};
+
 
 let runTests = async () => {
   let resultsJSON = {
