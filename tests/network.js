@@ -47,7 +47,7 @@ const testGPC = async () => {
 
 const insecurePassiveSubresource = async () => {
   const image = document.createElement("img");
-  image.src = "https://insecure.arthuredelstein.net";
+  image.src = "http://insecure.arthuredelstein.net";
   let resultPromise = new Promise((resolve, reject) => {
     image.addEventListener("load", resolve, { once: true });
     image.addEventListener("error", reject, { once: true });
