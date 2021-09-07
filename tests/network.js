@@ -52,18 +52,21 @@ const insecurePassiveSubresource = async () => {
     image.addEventListener("load", resolve, { once: true });
     image.addEventListener("error", reject, { once: true });
   });
+  let status;
   try {
     let result = await resultPromise;
     if (image.src.startsWith("https:")) {
       // Was upgraded to a secure connection.
-      return true; 
+      status = "upgraded"; 
     } else {
-      return false;
+      status = "insecure";
     }
   } catch (e) {
     // some sort of blocking happened
-    return true;
+    status = "blocked";
   }
+  let passed = (status === "upgraded" || status === "blocked");
+  return { status, passed };
 };
 
 let runTests = async () => {
