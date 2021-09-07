@@ -45,9 +45,9 @@ const testGPC = async () => {
   return { "sec-gpc": requestHeaders["sec-gpc"], passed };
 };
 
-const insecurePassiveSubresource = async () => {
-  const image = document.createElement("img");
-  document.body.appendChild(image);
+const insecurePassiveSubresource = async (tagName) => {
+  const element = document.createElement(tagName);
+  document.body.appendChild(element);
   let resultPromise = new Promise((resolve, reject) => {
     image.addEventListener("load", resolve, { once: true });
     image.addEventListener("error", reject, { once: true });
@@ -56,15 +56,11 @@ const insecurePassiveSubresource = async () => {
   let status;
   try {
     let result = await resultPromise;
-    if (image.src.startsWith("https:")) {
-      // Was upgraded to a secure connection.
-      status = "upgraded"; 
-    } else {
-      status = "insecure";
-    }
+    status = "upgraded";
   } catch (e) {
-    // some sort of blocking happened
-    status = "blocked";
+    // some sort of error happened
+    console.log(e);
+    status = "failed";
   }
   let passed = (status === "upgraded" || status === "blocked");
   return { status, passed };
