@@ -65,7 +65,7 @@ const insecureSubresourceTest = async (tag, fileName) => {
   let upgradableEvent = await loadSubresource(tag, `http://upgradable.arthuredelstein.net/${fileName}`);
   let insecureEvent = await loadSubresource(tag, `http://insecure.arthuredelstein.net/${fileName}`);
   let passed = insecureEvent.type === "error";
-  let upgradeHandling = upgradableEvent.type === "load" ? "upgraded" : "blocked";
+  let upgradeHandling = upgradableEvent.type === "load" ? "loaded" : "blocked";
   let handling = passed ? upgradeHandling : "allowed";
   return { passed, handling };
 };
