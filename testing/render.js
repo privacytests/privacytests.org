@@ -111,7 +111,7 @@ ${ worker ? "[Worker]" : "" }
 };
 
 // For network tests, creates a tooltip that shows detailed results.
-const networkToolTip = networkItem => {
+const simpleToolTip = networkItem => {
   let text = "";
   console.log(networkItem);
   for (let key in networkItem) {
@@ -171,12 +171,13 @@ const resultsToTable = (results, title) => {
   if (bestResults.length === 0) {
     return [];
   }
-  body.push([{subheading:"Network privacy tests"}]);
-  body = body.concat(resultsSection({bestResults, category:"network", tooltipFunction: networkToolTip}));
   body.push([{subheading:"State Partitioning tests"}]);
   body = body.concat(resultsSection({bestResults, category:"supercookies", tooltipFunction: crossSiteTooltip}));
   body.push([{subheading:"Navigation tests"}]);
   body = body.concat(resultsSection({bestResults, category:"navigation", tooltipFunction: crossSiteTooltip}));
+  body.push([{subheading:"HTTPS tests"}]);
+  body = body.concat(resultsSection({bestResults, category:"https", tooltipFunction: simpleToolTip}));
+  body.push([{subheading:"Miscellaneous tests"}]);
   body.push([{subheading:"Fingerprinting resistance tests"}]);
   body = body.concat(resultsSection({bestResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
   return { headers, body };
@@ -223,7 +224,7 @@ const aggregateRepeatedTrials = (results) => {
     let key = resultsToDescription(test);
     console.log(test, key);
     if (aggregatedResults.has(key)) {
-      for (let subcategory of ["supercookies", "fingerprinting", "network"]) {
+      for (let subcategory of ["supercookies", "fingerprinting", "https", "misc"]) {
         let someTests = aggregatedResults.get(key).testResults[subcategory];
         for (let testName in someTests) {
           for (let value of resultsKeys) {
