@@ -93,9 +93,63 @@ const runSupercookieTests = async (driver, newTabs) => {
   return jointResult;
 };
 
+// Borrowed from https://github.com/brave/brave-core/blob/50df76971db6a6023b3db9aead0827606162dc9c/browser/net/brave_site_hacks_network_delegate_helper.cc#L29
+// and https://github.com/jparise/chrome-utm-stripper:
+const TRACKING_QUERY_PARAMETERS =
+  [
+    // https://github.com/brave/brave-browser/issues/4239
+    "fbclid", "gclid", "msclkid", "mc_eid",
+    // https://github.com/brave/brave-browser/issues/9879
+    "dclid",
+    // https://github.com/brave/brave-browser/issues/13644
+    "oly_anon_id", "oly_enc_id",
+    // https://github.com/brave/brave-browser/issues/11579
+    "_openstat",
+    // https://github.com/brave/brave-browser/issues/11817
+    "vero_conv", "vero_id",
+    // https://github.com/brave/brave-browser/issues/13647
+    "wickedid",
+    // https://github.com/brave/brave-browser/issues/11578
+    "yclid",
+    // https://github.com/brave/brave-browser/issues/8975
+    "__s",
+    // https://github.com/brave/brave-browser/issues/17451
+    "rb_clickid",
+    // https://github.com/brave/brave-browser/issues/17452
+    "s_cid",
+    // https://github.com/brave/brave-browser/issues/17507
+    "ml_subscriber", "ml_subscriber_hash",
+    // https://github.com/brave/brave-browser/issues/9019
+    "_hsenc", "__hssc", "__hstc", "__hsfp", "hsCtaTracking",
+    // https://github.com/jparise/chrome-utm-stripper
+    "mkt_tok", "igshid"
+  ];
+
+const runQueryParameterTests = async (driver, paramNames) => {
+  let secret = Math.random().toString().slice(2);
+  let baseURL = "https://arthuredelstein.net/browser-privacy-params/";
+  let queryString = "?controlParam=controlValue";
+  for (let param of paramNames) {
+    queryString += `&${param}=${secret}`;
+  }
+  let reported = await loadAndGetResults(driver, baseURL + queryString);
+  let result = {};
+  for (let param of paramNames) {
+    result[param] = {
+      value: reported[param],
+      passed: (reported[param] === undefined)
+    };
+  }
+  return result;
+};
+
+const runNavigationTests = async (driver) => {
+  return runSupercookieTests(driver, false);
+};
+
 // Tests if a top-level page that can be upgraded to https is upgraded.
 // The argument getOrNavigate should be "get" or "navigate".
-const testUpgrade = async (driver, getOrNavigate) => {
+const testHttpsUpgrade = async (driver, getOrNavigate) => {
   await driver[getOrNavigate]("http://upgradable.arthuredelstein.net/");
   let resultingUrl = await driver.getCurrentUrl();
   let upgraded = resultingUrl.startsWith("https");
@@ -118,8 +172,8 @@ const testHttpsOnlyMode = async (driver) => {
 const runHttpsTests = async (driver) => {
   let results = await loadAndGetResults(
     driver, 'https://arthuredelstein.net/browser-privacy/tests/https.html');
-  results["Upgradable address"] = await testUpgrade(driver, "get");
-  results["Upgradable link"] = await testUpgrade(driver, "navigate");
+  results["Upgradable address"] = await testHttpsUpgrade(driver, "get");
+  results["Upgradable link"] = await testHttpsUpgrade(driver, "navigate");
   results["Insecure website"] = await testHttpsOnlyMode(driver);
   return results;
 };
@@ -136,6 +190,7 @@ const runMiscTests = async (driver) => {
 // { "fingerprinting" : { "window.screen.width" : { /* results */ }, ... },
 //   "misc" : { ... },
 //   "https" : { ... },
+//   "navigation" : { ... },
 //   "supercookies" : { ... } }
 const runTests = async (driver) => {
   try {
@@ -144,11 +199,12 @@ const runTests = async (driver) => {
       let https = await runHttpsTests(driver);
       let misc = await runMiscTests(driver);
     let supercookies = await runSupercookieTests(driver, true);
-    let navigation = await runSupercookieTests(driver, false);
+    let navigation = await runNavigationTests(driver);
+    let query = await runQueryParameterTests(driver, TRACKING_QUERY_PARAMETERS);
     // Move ServiceWorker from supercookies to navigation :P
     supercookies["ServiceWorker"] = navigation["ServiceWorker"];
     delete navigation["ServiceWorker"];
-    return { fingerprinting, misc, https, supercookies, navigation };
+    return { fingerprinting, misc, https, supercookies, navigation, query };
   } catch (e) {
     console.log(e);
     return null;
