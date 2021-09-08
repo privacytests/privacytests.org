@@ -91,6 +91,27 @@ let passed = testFailed ? undefined : ((readSameFirstParty !== readDifferentFirs
   return jointResult;
 };
 
+// Tests if a top-level page that can be upgraded to https is upgraded.
+// The argument getOrNavigate should be "get" or "navigate".
+let testUpgrade = async function (driver, getOrNavigate) {
+  await driver[getOrNavigate]("http://upgradable.arthuredelstein.net/");
+  let resultingUrl = await driver.getCurrentUrl();
+  let upgraded = resultingUrl.startsWith("https");
+  let passed = upgraded === true;
+  return { passed, upgraded };
+}
+
+// Run all of our network privacy tests.
+let runNetworkTests = async function (driver) {
+  let results = await loadAndGetResults(
+    driver, 'https://arthuredelstein.net/browser-privacy/tests/network.html');
+
+  results["Upgradable address"] = await testUpgrade(driver, "get");
+  results["Upgradable link"] = await testUpgrade(driver, "navigate");
+  return results;
+};
+
+
 // Run all of our privacy tests using selenium. Returns
 // a map of test types to test result maps. Such as:
 // `
@@ -101,8 +122,7 @@ let runTests = async function (driver) {
   try {
     let fingerprinting = await loadAndGetResults(
       driver, 'https://arthuredelstein.net/browser-privacy/tests/fingerprinting.html');
-    let network = await loadAndGetResults(
-      driver, 'https://arthuredelstein.net/browser-privacy/tests/network.html');
+    let network = await runNetworkTests(driver);
     let supercookies = await runSupercookieTests(driver, true);
     let navigation = await runSupercookieTests(driver, false);
     // Move ServiceWorker from supercookies to navigation :P
@@ -158,6 +178,7 @@ let writeDataSync = function (data) {
   console.log(`Wrote results to "${filePath}".`);
 };
 
+// Takes a list of browser configs, and repeats or removes them as needed.
 let expandConfigList = async (configList, repeat) => {
   let results = [];
   for (let config of configList) {
