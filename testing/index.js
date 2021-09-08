@@ -114,34 +114,41 @@ const testHttpsOnlyMode = async (driver) => {
   }
 };
 
-// Run all of our network privacy tests.
-const runNetworkTests = async (driver) => {
+// Run all of our https privacy tests.
+const runHttpsTests = async (driver) => {
   let results = await loadAndGetResults(
-    driver, 'https://arthuredelstein.net/browser-privacy/tests/network.html');
+    driver, 'https://arthuredelstein.net/browser-privacy/tests/https.html');
   results["Upgradable address"] = await testUpgrade(driver, "get");
   results["Upgradable link"] = await testUpgrade(driver, "navigate");
   results["Insecure website"] = await testHttpsOnlyMode(driver);
   return results;
 };
 
+// Run all of our miscellaneous privacy tests.
+const runMiscTests = async (driver) => {
+  return await loadAndGetResults(
+    driver, 'https://arthuredelstein.net/browser-privacy/tests/misc.html');
+};
 
 // Run all of our privacy tests using selenium. Returns
 // a map of test types to test result maps. Such as:
 // `
-// { "fingerprinting" : { "window.screen.width" : { /* results */ }, ... }
-//   "network" : { ... }
+// { "fingerprinting" : { "window.screen.width" : { /* results */ }, ... },
+//   "misc" : { ... },
+//   "https" : { ... },
 //   "supercookies" : { ... } }
 const runTests = async (driver) => {
   try {
     let fingerprinting = await loadAndGetResults(
       driver, 'https://arthuredelstein.net/browser-privacy/tests/fingerprinting.html');
-    let network = await runNetworkTests(driver);
+      let https = await runHttpsTests(driver);
+      let misc = await runMiscTests(driver);
     let supercookies = await runSupercookieTests(driver, true);
     let navigation = await runSupercookieTests(driver, false);
     // Move ServiceWorker from supercookies to navigation :P
     supercookies["ServiceWorker"] = navigation["ServiceWorker"];
     delete navigation["ServiceWorker"];
-    return { fingerprinting, network, supercookies, navigation };
+    return { fingerprinting, misc, https, supercookies, navigation };
   } catch (e) {
     console.log(e);
     return null;

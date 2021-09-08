@@ -1,5 +1,4 @@
-/*jshint: esnext true */
-
+// # Miscellaneous tests
 
 const fetchJSON = async (...fetchArgs) => {
   let response = await fetch(...fetchArgs);
@@ -45,38 +44,11 @@ const testGPC = async () => {
   return { "sec-gpc": requestHeaders["sec-gpc"], passed };
 };
 
-const loadSubresource = async(tagName, url) => {
-  const element = document.createElement(tagName);
-  document.body.appendChild(element);
-  let resultPromise = new Promise((resolve, reject) => {
-    element.addEventListener("load", resolve, { once: true });
-    element.addEventListener("error", reject, { once: true });
-  });
-  element.src = url;
-  try {
-    return await resultPromise;
-  } catch (e) {
-    // some sort of loading error happened
-    return e;
-  }
-};
-
-const insecureSubresourceTest = async (tag, fileName) => {
-  let upgradableEvent = await loadSubresource(tag, `http://upgradable.arthuredelstein.net/${fileName}`);
-  let insecureEvent = await loadSubresource(tag, `http://insecure.arthuredelstein.net/${fileName}`);
-  let passed = insecureEvent.type === "error";
-  let putativeUpgradeHandling = upgradableEvent.type === "load" ? "upgraded" : "blocked";
-  let handling = passed ? putativeUpgradeHandling : "loaded insecurely";
-  return { passed, handling };
-};
-
-let runTests = async () => {
+const runTests = async () => {
   let resultsJSON = {
     "Tor enabled": await testTor(),
     "DoH enabled": await testDoH(),
     "GPC enabled": await testGPC(),
-    "Insecure passive subresource": await insecureSubresourceTest("img", "image.png"),
-    "Insecure active subresource": await insecureSubresourceTest("script", "test.js")
   };
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
 };
