@@ -101,13 +101,24 @@ let testUpgrade = async function (driver, getOrNavigate) {
   return { passed, upgraded };
 }
 
+// See if the browser blocks visits to HTTP sites (aka HTTPS-Only Mode)
+let testHttpsOnlyMode = async (driver) => {
+  try {
+    await driver.get("http://insecure.arthuredelstein.net/");
+    return { passed: false, result: "allowed" };
+  } catch (e) {
+    // Error page
+    return { passed: true, result: "error page" };
+  }
+};
+
 // Run all of our network privacy tests.
 let runNetworkTests = async function (driver) {
   let results = await loadAndGetResults(
     driver, 'https://arthuredelstein.net/browser-privacy/tests/network.html');
-
   results["Upgradable address"] = await testUpgrade(driver, "get");
   results["Upgradable link"] = await testUpgrade(driver, "navigate");
+  results["Insecure website"] = await testHttpsOnlyMode(driver);
   return results;
 };
 
