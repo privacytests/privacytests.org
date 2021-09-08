@@ -1,173 +1,62 @@
-/* jshint esversion: 6 */
+// # index.js: Runs privacy tests on browsers
+// 
+// Define a set of browsers to test in a YAML file.
+// Usage: `node index config/production.yaml`
 
 // ## imports
 
-const homeDir = require('os').homedir();
 const fs = require('fs');
-const {Builder, By, Key, logging, until} = require('selenium-webdriver');
-const firefox = require('selenium-webdriver/firefox');
-const chrome = require('selenium-webdriver/chrome');
-const edge = require('selenium-webdriver/edge');
-const memoize = require('memoizee');
-const fetch = require('node-fetch');
-const dateFormat = require('dateformat');
-const util = require('util');
-const { spawn, exec } = require('child_process');
-const execAsync = util.promisify(exec);
-const { installDriver } = require('ms-chromium-edge-driver');
+const { exec } = require('child_process');
+const execAsync = require('util').promisify(exec);
 const minimist = require('minimist');
+const dateFormat = require('dateformat');
+const YAML = require('yaml');
+
+const { createDriver, navigate, openNewTab, waitForAttribute, quit } = require('./webdriver_utils.js');
 const render = require('./render');
 
 const DEFAULT_TIMEOUT_MS = 30000;
 
-require('geckodriver');
-require('chromedriver');
+// ## Utility functions
 
-// ## Selenium setup
+// Returns a promise that sleeps for the given millseconds.
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Read a file called .browserstack.json. The file should contain a JSON
-// object that looks like:
-// `
-// {
-//   "user": "my_username",
-//   "key": "my_api_key"
-// }
-// `
-let browserstackCredentials = memoize(
-  () => JSON.parse(fs.readFileSync(homeDir + "/" + ".browserstack.json")),
-  { promise: true });
+// Returns a deep copy of a JSON object.
+const deepCopy = (x) => JSON.parse(JSON.stringify(x));
 
-// Returns a browserstack capabilities object. Required
-// for producing a browserstack driver.
-let fetchBrowserstackCapabilities = async () => {
-  let { user, key } = await browserstackCredentials();
-  let results = (await fetch(`https://${user}:${key}@api.browserstack.com/automate/browsers.json`)).json();
-//  console.log(await results);
-  return results;
-};
-
-// Takes a long capability list from browserstack.com, and
-// returns a selection of these. We choose the most recent browsers
-// and OS versions.
-const selectRecentBrowserstackBrowsers = (allCapabilities) => {
-  let OSs = new Set();
-  let browsers = new Set();
-  // Get names of all operating systems and browsers
-  for (let { os, browser } of allCapabilities) {
-    OSs.add(os);
-    browsers.add(browser);
+// Reads the current git commit hash for this program in a string. Used
+// when reporting results, to make them easier to reproduce.
+const gitHash = async () => {
+  const { stdout, stderr } = await execAsync(
+    'git rev-parse HEAD', { cwd: __dirname});
+  if (stderr) {
+    throw new Error(stderr);
+  } else {
+    return stdout.trim();
   }
-  let selectedCapabilities = [];
-  for (let os of OSs) {
-    for (let browser of browsers) {
-      let capabilities = allCapabilities
-          .filter(c => c.os === os && c.browser === browser)
-          .filter(c => c.browser !== "opera" && c.browser !== "ie");
-      // Find recent versions of operating system
-      let os_versions_set = new Set();
-      for (let { os_version } of capabilities) {
-        os_versions_set.add(os_version);
-      }
-      let os_versions = [... os_versions_set];
-      let mobile = os === "android" || os === "ios";
-      // Use most recent os versions.
-      let recent_os_versions = (mobile ? os_versions.sort() : os_versions).slice(-1);
-      if (recent_os_versions.length > 0) {
-        for (let os_version of recent_os_versions) {
-          let capabilities2 = capabilities.filter(c => c.os_version === os_version);
-          // Use most recent browser version or representative device
-          selectedCapabilities = selectedCapabilities.concat(capabilities2.slice(-1));
-        }
-      }
-    }
-  }
-  console.log(selectedCapabilities);
-  return selectedCapabilities;
-};
-
-// Produces a selenium driver to run tests on browserstack.com,
-// with the given capabilities object.
-let browserstackDriver = async (capabilities) => {
-  let { user, key } = await browserstackCredentials();
-  capabilitiesWithCred = Object.assign(
-    {},
-    capabilities,
-    { "browserstack.user": user,
-      "browserstack.key": key });
-  let driver = new Builder()
-      .usingServer('http://hub-cloud.browserstack.com/wd/hub')
-      .withCapabilities(capabilitiesWithCred)
-      .setLoggingPrefs({ 'browser':'ALL' })
-      .build();
-  return driver;
-};
-
-// Produces a selenium driver to run tests on a local browser,
-// using the given capabilities object.
-let localDriver = async (capabilities) => {
-  let chromeOptions = new chrome.Options();
-  if (capabilities.chromeOptions && capabilities.chromeOptions.binary) {
-    chromeOptions.setChromeBinaryPath(capabilities.chromeOptions.binary);
-  }
-  let edgeOptions = new edge.Options();
-  const edgePaths = await installDriver();
-  edgeOptions.setEdgeChromium(true);
-  if (capabilities.path) {
-    edgeOptions.setBinaryPath(capabilities.path);
-  }
-  let builder = new Builder();
-  if (capabilities.server) {
-    builder = builder.usingServer(capabilities.server);
-  }
-  let driver = builder.withCapabilities(capabilities)
-    .forBrowser(capabilities["browser"])
-  //    .setFirefoxOptions(options)
-      .setChromeOptions(chromeOptions)
-      .setEdgeOptions(edgeOptions)
-      .setEdgeService(new edge.ServiceBuilder(edgePaths.driverPath))
-      .build();
-//  console.log("driver made:", driver);
-  return driver;
 };
 
 // ## Testing
 
-// Tell the selenium driver to look at a particular elements's
-// attribute and wait for it to have a value. Returns a promise.
-let waitForAttribute = (driver, element, attrName, timeout) =>
-    driver.wait(async () => element.getAttribute(attrName), timeout);
-
-let openNewTab = async (driver) => {
-  let tabsBefore = await driver.getAllWindowHandles();
-  await driver.switchTo().window(tabsBefore[0]);
-  await driver.get("https://example.com");
-  await driver.executeScript(`
-    document.body.addEventListener("click", () => window.open("https://example.com", "_blank"));
-  `);
-  await driver.findElement(By.tagName('body')).click();
-  let tabsAfter = await driver.getAllWindowHandles();
-  return tabsAfter.filter(x => !tabsBefore.includes(x))[0];
-};
-
 // Tell the selenium driver to visit a url, wait for the attribute
 // "data-test-results" to have a value, and resolve that value
 // in a promise. Rejects if timeout elapses first.
-let loadAndGetResults = async (driver, url, newTab = false, timeout = DEFAULT_TIMEOUT_MS) => {
+const loadAndGetResults = async (driver, url, newTab = false, timeout = DEFAULT_TIMEOUT_MS) => {
   if (newTab) {
     let tab = await openNewTab(driver);
     await driver.switchTo().window(tab);
   }
   console.log(`loading ${url}`);
-  await driver.get(url);
-  let body = await driver.findElement(By.tagName('body'));
+  await navigate(driver, url);
   let testResultsString =
-      await waitForAttribute(driver, body, "data-test-results", timeout);
+      await waitForAttribute(driver, "body", "data-test-results", timeout);
   return testResultsString === "undefined" ? undefined : JSON.parse(testResultsString);
 };
 
 // Causes driver to connect to our supercookie tests. Returns
 // a map of test names to test results.
-let runSupercookieTests = async (driver, newTabs) => {
+const runSupercookieTests = async (driver, newTabs) => {
   let stem = newTabs ? "supercookies" : "navigation";
   let secret = Math.random().toString().slice(2);
   let iframe_root_same = false ? "http://localhost:8080" : "https://arthuredelstein.net/browser-privacy";
@@ -181,91 +70,116 @@ let runSupercookieTests = async (driver, newTabs) => {
       readParams += `&${test}=${encodeURIComponent(data["result"])}`;
     }
   }
-//  console.log(readParams);
+  //  console.log(readParams);
+//  await sleep(5000);
   let readResultsSameFirstParty = await loadAndGetResults(
     driver, `${iframe_root_same}/tests/${stem}.html?mode=read${readParams}`, newTabs);
-//  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
+  //  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
+  //await sleep(5000);
   let readResultsDifferentFirstParty = await loadAndGetResults(
     driver, `${iframe_root_different}/tests/${stem}.html?mode=read${readParams}`, newTabs);
   let jointResult = {};
   for (let test in readResultsDifferentFirstParty) {
     let { write, read, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
     let { result: readSameFirstParty } = readResultsSameFirstParty[test];
-    let passed = (readSameFirstParty !== readDifferentFirstParty);
-    let testFailed = !readSameFirstParty || readSameFirstParty.startsWith("Error:");
+    let readSameFirstPartyFailedToFetch = readSameFirstParty ? readSameFirstParty.startsWith("Error: Failed to fetch") : false;
+    let readDifferentFirstPartyFailedToFetch = readDifferentFirstParty ? readDifferentFirstParty.startsWith("Error: Failed to fetch") : false;
+    let testFailed = !readSameFirstParty || (readSameFirstParty.startsWith("Error:") && !readSameFirstPartyFailedToFetch);
+    let passed = testFailed ? undefined : ((readSameFirstParty !== readDifferentFirstParty) ||
+                                           (readSameFirstPartyFailedToFetch && readDifferentFirstPartyFailedToFetch));
     jointResult[test] = { write, read, readSameFirstParty, readDifferentFirstParty, passed, testFailed };
   }
 //  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
   return jointResult;
 };
 
+// Tests if a top-level page that can be upgraded to https is upgraded.
+// The argument getOrNavigate should be "get" or "navigate".
+const testUpgrade = async (driver, getOrNavigate) => {
+  await driver[getOrNavigate]("http://upgradable.arthuredelstein.net/");
+  let resultingUrl = await driver.getCurrentUrl();
+  let upgraded = resultingUrl.startsWith("https");
+  let passed = upgraded === true;
+  return { passed, upgraded };
+}
+
+// See if the browser blocks visits to HTTP sites (aka HTTPS-Only Mode)
+const testHttpsOnlyMode = async (driver) => {
+  try {
+    await driver.get("http://insecure.arthuredelstein.net/");
+    return { passed: false, result: "allowed" };
+  } catch (e) {
+    // Error page
+    return { passed: true, result: "error page" };
+  }
+};
+
+// Run all of our https privacy tests.
+const runHttpsTests = async (driver) => {
+  let results = await loadAndGetResults(
+    driver, 'https://arthuredelstein.net/browser-privacy/tests/https.html');
+  results["Upgradable address"] = await testUpgrade(driver, "get");
+  results["Upgradable link"] = await testUpgrade(driver, "navigate");
+  results["Insecure website"] = await testHttpsOnlyMode(driver);
+  return results;
+};
+
+// Run all of our miscellaneous privacy tests.
+const runMiscTests = async (driver) => {
+  return await loadAndGetResults(
+    driver, 'https://arthuredelstein.net/browser-privacy/tests/misc.html');
+};
+
 // Run all of our privacy tests using selenium. Returns
 // a map of test types to test result maps. Such as:
 // `
-// { "fingerprinting" : { "window.screen.width" : { /* results */ }, ... }
-//   "tor" : { ... }
+// { "fingerprinting" : { "window.screen.width" : { /* results */ }, ... },
+//   "misc" : { ... },
+//   "https" : { ... },
 //   "supercookies" : { ... } }
-let runTests = async function (driver) {
+const runTests = async (driver) => {
   try {
     let fingerprinting = await loadAndGetResults(
-      driver, 'https://arthuredelstein.github.io/browser-privacy/tests/fingerprinting.html');
-    let tor = await loadAndGetResults(
-      driver, 'https://arthuredelstein.github.io/browser-privacy/tests/tor.html');
+      driver, 'https://arthuredelstein.net/browser-privacy/tests/fingerprinting.html');
+      let https = await runHttpsTests(driver);
+      let misc = await runMiscTests(driver);
     let supercookies = await runSupercookieTests(driver, true);
     let navigation = await runSupercookieTests(driver, false);
-    return { fingerprinting, tor,
-             supercookies: Object.assign({}, supercookies, navigation)};
+    // Move ServiceWorker from supercookies to navigation :P
+    supercookies["ServiceWorker"] = navigation["ServiceWorker"];
+    delete navigation["ServiceWorker"];
+    return { fingerprinting, misc, https, supercookies, navigation };
   } catch (e) {
     console.log(e);
     return null;
   }
 };
 
-// Reads the current git commit hash for this program in a string. Used
-// when reporting results, to make them easier to reproduce.
-let gitHash = async function () {
-  const { stdout, stderr } = await execAsync('git rev-parse HEAD');
-  if (stderr) {
-    throw new Error(stderr);
-  } else {
-    return stdout.trim();
-  }
-};
-
 // Runs a batch of tests (multiple browsers) for a given driver.
 // Returns results in a JSON object.
-let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}) {
+const runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
   let git = await gitHash();
-  for (let { browser, driverType, capabilities, prefs } of configData) {
+  for (let config of configList) {
     try {
-      let driverConstructor = { browserstack: browserstackDriver,
-                                firefox: localDriver,
-                                chrome: localDriver,
-                                electron: localDriver,
-                                safari: localDriver,
-                                opera: localDriver,
-                                MicrosoftEdge: localDriver,
-                              }[driverType];
-      if (!driverConstructor) {
-        throw new Error(`unknown driver type ${driverType}`);
-      }
-      capabilities.browserName = capabilities.browser;
-      console.log(capabilities);
-      let driver = await driverConstructor(capabilities);
-      console.log(driver);
+      let { browser, prefs, incognito, tor_mode } = config;
+      console.log("\ncreating driver:", config);
+      let driver = await createDriver(config);
+//      console.log("driver", driver);
       let fullCapabilitiesMap = (await driver.getCapabilities())["map_"];
       let fullCapabilities = Object.fromEntries(fullCapabilitiesMap.entries());
-      console.log(fullCapabilities);
+//      console.log('fullCapabilities', fullCapabilities);
       let timeStarted = new Date().toISOString();
       let testResults = await runTests(driver);
+//      console.log({shouldQuit});
+      all_tests.push({ browser, capabilities: fullCapabilities, testResults, timeStarted,
+                       prefs, incognito, tor_mode });
       if (shouldQuit) {
-        await driver.quit();
+        await quit(driver);
       }
-      all_tests.push({ browser, driverType, capabilities: fullCapabilities, testResults, timeStarted, prefs });
     } catch (e) {
-      console.log(e, browser, driverType, capabilities, prefs);
+      console.log(e);
     }
   }
   let timeStopped = new Date().toISOString();
@@ -275,107 +189,56 @@ let runTestsBatch = async function (configData, {shouldQuit} = {shouldQuit:true}
 // ## Writing results
 
 // Takes our results in a JSON object and writes them to disk.
-// The file name looks like `results_yyyymmdd__HHMMss.json`.
-let writeDataSync = function (data) {
+// The file name looks like `yyyymmdd__HHMMss.json`.
+const writeDataSync = (data) => {
   let dateStub = dateFormat(new Date(), "yyyymmdd_HHMMss", true);
-  let filePath = `out/results_${dateStub}.json`;
+  let filePath = `out/results/${dateStub}.json`;
+  fs.mkdirSync("out/results", { recursive: true });
   fs.writeFileSync(filePath, JSON.stringify(data));
   console.log(`Wrote results to "${filePath}".`);
 };
 
-// Reads the command line, sets up requested selenium driver(s),
-// runs our browser privacy tests, and writes the result to disk.
-let setup_tests = async function () {
-  let driverType = process.argv[2];
-};
-
-let expandConfig = async (configData) => {
+// Takes a list of browser configs, and repeats or removes them as needed.
+const expandConfigList = async (configList, repeat) => {
   let results = [];
-  let driverType;
-  let capabilities;
-  for (let { browser, service, path, disable, prefs } of configData) {
-    if (!disable) {
-      if (service) {
-        driverType = "browserstack";
-        let capabilitiesList = selectRecentBrowserstackBrowsers(
-          await fetchBrowserstackCapabilities());
-        capability = capabilitiesList[0];
-      } else if (browser === "chromium" || browser === "chrome") {
-        driverType = "chrome";
-        capabilities = {"browser": "chrome"};
-      } else if (browser === "safari") {
-        driverType = "safari";
-        capabilities = {"browser": "safari",
-                      "safariAllowPopups": "true"};
-      } else if (browser === "edge") {
-        driverType = "MicrosoftEdge";
-        capabilities = {"browser": "MicrosoftEdge"};
-      } else if (browser === "opera") {
-        driverType = "chrome";
-        capabilities = {
-          browser: "chrome",
-          chromeOptions: {  binary: path,
-                            args: ['no-sandbox'] }
-        };
-      } else if (browser === "brave") {
-        driverType = "chrome";
-        capabilities = {
-          browser: "chrome",
-          chromeOptions: {  binary: path,
-                            args: ['no-sandbox'] }
-        };
-      } else if (browser === "cliqz" ||
-                 browser === "firefox" ||
-                 browser === "tor browser") {
-        driverType = "firefox";
-        capabilities = {"browser": "firefox",
-                      "moz:firefoxOptions": {}};
-        if (path) {
-          capabilities["moz:firefoxOptions"]["binary"] = path;
-        }
-        if (browser === "tor browser") {
-          if (!prefs) {
-            prefs = {};
-          }
-          prefs["extensions.torlauncher.prompt_at_startup"] = false;
-        }
-        if (prefs) {
-          capabilities["moz:firefoxOptions"]["prefs"] = prefs;
-        }
-      } else {
-        throw new Error(`Unknown browser or service '${browser || service}'.`);
-      }
-      results.push({ browser, driverType, service, path, capabilities, prefs });
+  for (let config of configList) {
+    if (!config.disable) {
+      config2 = deepCopy(config);
+      delete config2["repeat"];
+      results = [].concat(results, Array((config.repeat ?? 1) * (repeat ?? 1)).fill(config2));
     }
   }
   return results;
-}
+};
 
-// Returns a promise that sleeps for the given millseconds.
-let sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+// Read config file in YAML or JSON.
+const parseConfigFile = (configFile) => {
+  let configFileContents = fs.readFileSync(configFile, 'utf8');
+  return YAML.parse(configFileContents);
+};
 
 // The main program
-let main = async () => {
+const main = async () => {
   // Read config file and flags from command line
 //  logging.installConsoleHandler();
 //  logging.getLogger().setLevel(logging.Level.ALL);
 //  logging.getLogger("browser").setLevel(logging.Level.ALL);
-  let { _ : [configFile], stayOpen, only, list } = minimist(process.argv.slice(2));
+  let { _ : [configFile], stayOpen, only, list, repeat } = minimist(process.argv.slice(2));
   if (list) {
     let capabilityList = await fetchBrowserstackCapabilities();
     for (let capability of capabilityList) {
       console.log(capability);
     }
   } else {
-    let configData = JSON.parse(fs.readFileSync(configFile));
-    let expandedConfigData = await expandConfig(configData);
-    let filteredExpandedConfigData = expandedConfigData.filter(
+    let configList = parseConfigFile(configFile);
+    let expandedConfigList = await expandConfigList(configList, repeat);
+    let filteredExpandedConfigList = expandedConfigList.filter(
       d => only ? d.browser.startsWith(only) : true);
-    console.log(filteredExpandedConfigData);
-    writeDataSync(await runTestsBatch(filteredExpandedConfigData,
+    console.log("List of browsers to run:", filteredExpandedConfigList);
+    writeDataSync(await runTestsBatch(filteredExpandedConfigList,
                                       { shouldQuit: !stayOpen }));
     render.main();
   }
-}
+};
 
 main();

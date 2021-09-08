@@ -1,3 +1,5 @@
+/* jshint evil: true */
+
 // A namespace object.
 var __API = __API || {};
 
@@ -84,7 +86,7 @@ __API.value = function(name) {
 // Returns a list of names and values of items in the global window object.
 __API.values = function(names) {
   return names.map(function (name) { return name + ": " + __API.value(name); });
-}
+};
 
 // Returns a list of unique types found in the given list of api names.
 __API.apiTypes = function (apiNames) {
