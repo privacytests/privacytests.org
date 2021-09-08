@@ -110,12 +110,12 @@ ${ worker ? "[Worker]" : "" }
   `.trim();
 };
 
-// For network tests, creates a tooltip that shows detailed results.
-const simpleToolTip = networkItem => {
+// For simple tests, creates a tooltip that shows detailed results.
+const simpleToolTip = item => {
   let text = "";
-  console.log(networkItem);
-  for (let key in networkItem) {
-    text += `${key}: ${networkItem[key]}\n`;
+  console.log(item);
+  for (let key in item) {
+    text += `${key}: ${item[key]}\n`;
   }
   return text.trim();
 };
@@ -173,11 +173,14 @@ const resultsToTable = (results, title) => {
   }
   body.push([{subheading:"State Partitioning tests"}]);
   body = body.concat(resultsSection({bestResults, category:"supercookies", tooltipFunction: crossSiteTooltip}));
-  body.push([{subheading:"Navigation tests"}]);
-  body = body.concat(resultsSection({bestResults, category:"navigation", tooltipFunction: crossSiteTooltip}));
   body.push([{subheading:"HTTPS tests"}]);
   body = body.concat(resultsSection({bestResults, category:"https", tooltipFunction: simpleToolTip}));
-  body.push([{subheading:"Miscellaneous tests"}]);
+  body.push([{subheading:"Misc tests"}]);
+  body = body.concat(resultsSection({bestResults, category:"misc", tooltipFunction: simpleToolTip}));
+  body.push([{subheading:"Navigation tests"}]);
+  body = body.concat(resultsSection({bestResults, category:"navigation", tooltipFunction: crossSiteTooltip}));
+  body.push([{subheading:"Tracking query parameter tests"}]);
+  body = body.concat(resultsSection({bestResults, category:"query", tooltipFunction: simpleToolTip}));
   body.push([{subheading:"Fingerprinting resistance tests"}]);
   body = body.concat(resultsSection({bestResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
   return { headers, body };
@@ -224,7 +227,7 @@ const aggregateRepeatedTrials = (results) => {
     let key = resultsToDescription(test);
     console.log(test, key);
     if (aggregatedResults.has(key)) {
-      for (let subcategory of ["supercookies", "fingerprinting", "https", "misc"]) {
+      for (let subcategory of ["supercookies", "fingerprinting", "https", "misc", "navigation", "query"]) {
         let someTests = aggregatedResults.get(key).testResults[subcategory];
         for (let testName in someTests) {
           for (let value of resultsKeys) {
@@ -254,6 +257,7 @@ const main = async () => {
 //  fs.copyFile(resultsFile, "./out/results/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
   console.log(`Reading from raw results file: ${resultsFileJSON}`);
   let results = await readJSONFile(resultsFileJSON);
+  console.log(results.all_tests.length);
   let processedResults = aggregate ? aggregateRepeatedTrials(results) : results;
 //  console.log(results.all_tests[0]);
 //  console.log(JSON.stringify(results));
