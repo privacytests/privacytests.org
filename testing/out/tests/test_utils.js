@@ -23,6 +23,10 @@ let queryParams = (urlString) => {
   return Object.fromEntries(searchParams.entries());
 };
 
+export let sleepMs = (timeMs) => new Promise(
+  (resolve, reject) => setTimeout(resolve, timeMs)
+);
+
 export let runAllTests = async (tests) => {
   let params = queryParams(document.URL);
   let results = await runTests(tests, params["mode"], params);

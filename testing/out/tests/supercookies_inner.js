@@ -1,19 +1,15 @@
-import { runAllTests} from "./test_utils.js"
+import { runAllTests, sleepMs } from "./test_utils.js";
 import * as IdbKeyVal from 'https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs';
 
 let testURI = (path, type, key) =>
     `https://arthuredelstein.net/browser-privacy-live/${path}?type=${type}&key=${key}`;
-
-let sleepMs = (timeMs) => new Promise(
-  (resolve, reject) => setTimeout(resolve, timeMs)
-);
 
 let tests = {
   "cookie": {
     write: (secret) => {
       let expiry = new Date();
       expiry.setFullYear(expiry.getFullYear() + 1);
-      document.cookie = `secret=${secret};expires=${expiry.toUTCString()}`;
+      document.cookie = `secret=${secret}; SameSite=None; Secure`;
     },
     read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null,
    },
@@ -56,7 +52,7 @@ let tests = {
         if (event.data === "request") {
           bc.postMessage(secret);
         }
-      }
+      };
     },
     read: () =>
       new Promise((resolve, reject) => {
@@ -80,7 +76,7 @@ let tests = {
       let response = await fetch(testURI("resource", "fetch", key),
                                  {cache: "force-cache"});
       let countResponse = await fetch(testURI("count", "fetch", key),
-                                      {cache: "reload"})
+                                      {cache: "reload"});
       return (await countResponse.text()).trim();
     }
   },
@@ -170,8 +166,12 @@ let tests = {
       }, "*");
       await sleepMs(500);
       let response = await fetch(
-        testURI("count", "image", key), {"cache": "reload"});
-      return (await response.text()).trim();
+        testURI("count", "favicon", key), {"cache": "reload"});
+      let count = (await response.text()).trim();
+      if (count === "0") {
+        throw new Error("favicons never requested");
+      }
+      return count;
     }
   },
   "font": {
@@ -338,7 +338,7 @@ let tests = {
           "SELECT value FROM cache WHERE name=?",
           ["secret"],
           (tx, rs) => resolve(rs),
-          (tx, err) => reject(err))
+          (tx, err) => reject(err));
       }));
       return result.rows.item(0).value;
     }
@@ -352,27 +352,6 @@ let tests = {
       return (await response.json()).password;
     }
     },*/
-  "ServiceWorker": {
-    write: async (key) => {
-      let registration = await navigator.serviceWorker.register(
-        'serviceWorker.js');
-      console.log(registration);
-      await navigator.serviceWorker.ready;
-      console.log("service worker ready");
-      await sleepMs(100);
-      await fetch(`serviceworker-write?secret=${key}`);
-    },
-    read: async () => {
-      let registration = await navigator.serviceWorker.register(
-        'serviceWorker.js');
-      console.log(registration);
-      await navigator.serviceWorker.ready;
-      console.log("service worker ready");
-      await sleepMs(100);
-      let response = await fetch("serviceworker-read");
-      return await response.text();
-    }
-  },
   "h2_connection": {
     write: async (secret) => {
       await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`);

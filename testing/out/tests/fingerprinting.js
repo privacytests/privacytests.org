@@ -10,7 +10,7 @@
 //  can be useful for browser makers to patch their browsers. Also
 //  we can potentially make an automated scorecard using browserstack.com.
 
-/* jshint esversion: 6 */
+/* jshint evil: true */
 
 const dual_tests = function dual_tests () {
 
@@ -145,7 +145,7 @@ const screen_tests = [
 ];
 
 let navigator_tests = [
-  [`navigator.buildID`, `"20100101"`],
+  [`navigator.buildID === undefined || navigator.buildID === "20181001000000"`, true],
   [`navigator.getBattery`, undefined],
   [`try {
       navigator.getBattery();
@@ -172,7 +172,7 @@ if (navigator.getGamepads) {
     [`Array.isArray(navigator.getGamepads())`, true],
     [`Navigator.prototype.getGamepads.call(navigator).length`, 0],
   ]);
-};
+}
 
 const mouse_event_tests = [
   [`mouseEvent.screenX`, `mouseEvent.clientX`],
@@ -198,7 +198,7 @@ const list_to_map = (list, keyFn) => {
   for (let item of list) {
     let key = keyFn(item);
     obj[key] = item;
-  };
+  }
   return obj;
 };
 

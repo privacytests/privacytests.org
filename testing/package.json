@@ -1,31 +1,36 @@
 {
-  "name": "selenium",
+  "name": "browser-privacy",
   "version": "0.0.2",
-  "description": "",
+  "description": "measure and compare the privacy of different browsers",
   "main": "index.js",
   "dependencies": {
-    "chromedriver": "^83.0.0",
+    "chromedriver": "^92.0.1",
     "dateformat": "^3.0.3",
-    "electron-chromedriver": "^3.0.0-beta.1",
-    "geckodriver": "^1.12.2",
+    "electron-chromedriver": "^13.0.0",
+    "geckodriver": "^2.0.1",
     "gh-pages": "^2.0.0",
     "memoizee": "^0.4.12",
     "minimist": "^1.2.5",
-    "ms-chromium-edge-driver": "^0.2.4",
-    "node-fetch": "2.6.0",
-    "open": "^7.0.4",
-    "selenium-webdriver": "^4.0.0-alpha.1"
+    "ms-chromium-edge-driver": "^0.4.3",
+    "node-fetch": "^2.6.1",
+    "open": "^7.3.0",
+    "selenium-webdriver": "^4.0.0-beta.4",
+    "yaml": "^1.10.2"
   },
   "devDependencies": {
+    "@compodoc/live-server": "^1.2.2",
     "file-url": "^2.0.2",
-    "live-server": "^1.2.1",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "gh-pages -d out",
-    "publish": "cp out/results_latest.html out/results.html && gh-pages -d out",
-    "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render --live\" & ./node_modules/live-server/live-server.js --open=results_latest.html out"
+    "publish": "cp out/results/latest.html out/results/index.html && gh-pages -d out",
+    "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render --live\" & ./node_modules/@compodoc/live-server/live-server.js --open=results/latest.html out"
+  },
+  "jshintConfig": {
+    "esversion": 11,
+    "sub": true
   },
   "author": "Arthur Edelstein",
   "license": "MIT"
