@@ -25,7 +25,7 @@ const deepCopy = (x) => JSON.parse(JSON.stringify(x));
 
 // Reads the current git commit hash for this program in a string. Used
 // when reporting results, to make them easier to reproduce.
-let gitHash = async function () {
+let gitHash = async () => {
   const { stdout, stderr } = await execAsync(
     'git rev-parse HEAD', { cwd: __dirname});
   if (stderr) {
@@ -93,7 +93,7 @@ let passed = testFailed ? undefined : ((readSameFirstParty !== readDifferentFirs
 
 // Tests if a top-level page that can be upgraded to https is upgraded.
 // The argument getOrNavigate should be "get" or "navigate".
-let testUpgrade = async function (driver, getOrNavigate) {
+let testUpgrade = async (driver, getOrNavigate) => {
   await driver[getOrNavigate]("http://upgradable.arthuredelstein.net/");
   let resultingUrl = await driver.getCurrentUrl();
   let upgraded = resultingUrl.startsWith("https");
@@ -113,7 +113,7 @@ let testHttpsOnlyMode = async (driver) => {
 };
 
 // Run all of our network privacy tests.
-let runNetworkTests = async function (driver) {
+let runNetworkTests = async (driver) => {
   let results = await loadAndGetResults(
     driver, 'https://arthuredelstein.net/browser-privacy/tests/network.html');
   results["Upgradable address"] = await testUpgrade(driver, "get");
@@ -129,7 +129,7 @@ let runNetworkTests = async function (driver) {
 // { "fingerprinting" : { "window.screen.width" : { /* results */ }, ... }
 //   "network" : { ... }
 //   "supercookies" : { ... } }
-let runTests = async function (driver) {
+let runTests = async (driver) => {
   try {
     let fingerprinting = await loadAndGetResults(
       driver, 'https://arthuredelstein.net/browser-privacy/tests/fingerprinting.html');
@@ -148,7 +148,7 @@ let runTests = async function (driver) {
 
 // Runs a batch of tests (multiple browsers) for a given driver.
 // Returns results in a JSON object.
-let runTestsBatch = async function (configList, {shouldQuit} = {shouldQuit:true}) {
+let runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
   let git = await gitHash();
@@ -181,7 +181,7 @@ let runTestsBatch = async function (configList, {shouldQuit} = {shouldQuit:true}
 
 // Takes our results in a JSON object and writes them to disk.
 // The file name looks like `yyyymmdd__HHMMss.json`.
-let writeDataSync = function (data) {
+let writeDataSync = (data) => {
   let dateStub = dateFormat(new Date(), "yyyymmdd_HHMMss", true);
   let filePath = `out/results/${dateStub}.json`;
   fs.mkdirSync("out/results", { recursive: true });
