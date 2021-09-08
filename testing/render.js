@@ -8,7 +8,7 @@ const minimist = require('minimist');
 const faviconURI = "data:image/png;base64,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";
 
 // The basic structure of the HTML page
-let htmlPage = ({ title, content, style, faviconURI }) => `
+const htmlPage = ({ title, content, style, faviconURI }) => `
 <!DOCTYPE html>
 <html>
   <head>
@@ -27,7 +27,7 @@ let htmlPage = ({ title, content, style, faviconURI }) => `
 const deepCopy = (json) => JSON.parse(JSON.stringify(json));
 
 // An empty HTML table with styling
-let htmlTable = ({ headers, body, className }) => {
+const htmlTable = ({ headers, body, className }) => {
   elements = [];
   elements.push(`<table class="${className}">`);
   elements.push("<tr>");
@@ -56,7 +56,7 @@ const pageStylePromise = fs.readFile("./inline.css");
 // Takes the results for tests on a specific browser,
 // and returns an HTML fragment that will serve as
 // the header for the column showing thoses tests.
-let resultsToDescription = ({
+const resultsToDescription = ({
   browser,
   capabilities: { os, os_version, browser: browser2, browserName, browserVersion, version,
                   browser_version, device, platformVersion, platformName, platform },
@@ -86,7 +86,7 @@ let resultsToDescription = ({
 // Generates a table cell which indicates whether
 // a test passed, and includes the tooltip with
 // more information.
-let itemBody = ({passed, testFailed, tooltip}) => {
+const itemBody = ({passed, testFailed, tooltip}) => {
   let allTestsFailed = Array.isArray(testFailed) ? testFailed.every(x => x === true) : testFailed;
   let anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : !passed;
   return `<div class='${allTestsFailed ? "na" : (anyDidntPass ? "bad" : "good")}'
@@ -97,7 +97,7 @@ title = '${ tooltip.replace(/'/g, "&#39;") }'> &nbsp;
 // Creates a tooltip with fingerprinting test results
 // including the test expressions, the actual
 // and desired values, and whether the test passed.
-let fingerprintingTooltip = fingerprintingItem => {
+const fingerprintingTooltip = fingerprintingItem => {
   let { expression, spoof_expression, actual_value,
         desired_value, passed, worker } = fingerprintingItem;
   return `
@@ -111,7 +111,7 @@ ${ worker ? "[Worker]" : "" }
 };
 
 // For network tests, creates a tooltip that shows detailed results.
-let networkToolTip = networkItem => {
+const networkToolTip = networkItem => {
   let text = "";
   console.log(networkItem);
   for (let key in networkItem) {
@@ -120,9 +120,9 @@ let networkToolTip = networkItem => {
   return text.trim();
 };
 
-let joinIfArray = x => Array.isArray(x) ? x.join(", ") : x;
+const joinIfArray = x => Array.isArray(x) ? x.join(", ") : x;
 
-let crossSiteTooltip = (
+const crossSiteTooltip = (
   { write, read, readSameFirstParty, readDifferentFirstParty, passed, testFailed }
 ) => {
   return `
@@ -140,7 +140,7 @@ test failed: ${ joinIfArray(testFailed) }
 `.trim();
 };
 
-let resultsSection = ({bestResults, category, tooltipFunction}) => {
+const resultsSection = ({bestResults, category, tooltipFunction}) => {
 //  console.log(results);
   let rowNames = Object.keys(bestResults[0]["testResults"][category])
       .sort(Intl.Collator().compare);
@@ -160,7 +160,7 @@ let resultsSection = ({bestResults, category, tooltipFunction}) => {
   return section;
 };
 
-let resultsToTable = (results, title) => {
+const resultsToTable = (results, title) => {
   let bestResults = results
       .filter(m => m["testResults"])
       .filter(m => m["testResults"]["fingerprinting"])
@@ -182,7 +182,7 @@ let resultsToTable = (results, title) => {
   return { headers, body };
 };
 
-let content = (results, jsonFilename) => {
+const content = (results, jsonFilename) => {
   let { headers, body } = resultsToTable(results.all_tests, "Browser Privacy Tests");
   return '' + // `<h1 class="title">Browser Privacy Tests</h1>` +
 //    `<pre>${JSON.stringify(results[0].testResults)}</pre>` +
@@ -195,10 +195,10 @@ let content = (results, jsonFilename) => {
     </p>`;
 };
 
-let readJSONFile = async (file) =>
+const readJSONFile = async (file) =>
     JSON.parse(await fs.readFile(file));
 
-let latestResultsFile = async (path) => {
+const latestResultsFile = async (path) => {
   let files = await fs.readdir(path);
   let stem = files
       .filter(f => f.match("^(.*?)\.json$"))
@@ -217,7 +217,7 @@ const resultsKeys = [
 
 // Finds any repeated trials of tests and aggregate the results
 // for a simpler rendering.
-let aggregateRepeatedTrials = (results) => {
+const aggregateRepeatedTrials = (results) => {
   let aggregatedResults = new Map();
   for (let test of results.all_tests) {
     let key = resultsToDescription(test);
@@ -243,7 +243,7 @@ let aggregateRepeatedTrials = (results) => {
   return resultsCopy;
 };
 
-let main = async () => {
+const main = async () => {
   let { live, aggregate } = minimist(process.argv.slice(2),
                                      opts = { default: { aggregate: true }});
   console.log("aggregate:", aggregate);
