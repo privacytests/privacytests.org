@@ -6,12 +6,15 @@
 
 const homeDir = require('os').homedir();
 const fs = require('fs');
+const YAML = require('yaml');
+
+const memoize = require('memoizee');
+const fetch = require('node-fetch');
+
 const {Builder, until} = require('selenium-webdriver');
 const firefox = require('selenium-webdriver/firefox');
 const chrome = require('selenium-webdriver/chrome');
 const edge = require('selenium-webdriver/edge');
-const memoize = require('memoizee');
-const fetch = require('node-fetch');
 const { installDriver: installEdgeDriver } = require('ms-chromium-edge-driver');
 
 require('geckodriver');
@@ -237,4 +240,31 @@ let quit = async (driver) => {
   }
 };
 
-module.exports = { createDriver, waitForAttribute, navigate, openNewTab, quit };
+// ## Reading and parsing config files
+
+// Returns a deep copy of a JSON object.
+const deepCopy = (x) => JSON.parse(JSON.stringify(x));
+
+// Takes a list of browser configs, and repeats or removes them as needed.
+const expandConfigList = (configList, repeat = 1) => {
+  let results = [];
+  for (let config of configList) {
+    if (!config.disable) {
+      config2 = deepCopy(config);
+      delete config2["repeat"];
+      results = [].concat(results, Array((config.repeat ?? 1) * (repeat ?? 1)).fill(config2));
+    }
+  }
+  return results;
+};
+
+// Read config file in YAML or JSON.
+const parseConfigFile = (configFile, repeat = 1) => {
+  let configFileContents = fs.readFileSync(configFile, 'utf8');
+  let rawConfigs = YAML.parse(configFileContents);
+  return expandConfigList(rawConfigs, repeat);
+};
+
+module.exports = {
+  createDriver, waitForAttribute, navigate, openNewTab, quit, parseConfigFile
+};

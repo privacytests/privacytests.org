@@ -10,9 +10,9 @@ const { exec } = require('child_process');
 const execAsync = require('util').promisify(exec);
 const minimist = require('minimist');
 const dateFormat = require('dateformat');
-const YAML = require('yaml');
 
-const { createDriver, navigate, openNewTab, waitForAttribute, quit } = require('./webdriver_utils.js');
+const { createDriver, navigate, openNewTab,
+        waitForAttribute, quit, parseConfigFile } = require('./webdriver_utils.js');
 const render = require('./render');
 
 const DEFAULT_TIMEOUT_MS = 30000;
@@ -21,9 +21,6 @@ const DEFAULT_TIMEOUT_MS = 30000;
 
 // Returns a promise that sleeps for the given millseconds.
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-// Returns a deep copy of a JSON object.
-const deepCopy = (x) => JSON.parse(JSON.stringify(x));
 
 // Reads the current git commit hash for this program in a string. Used
 // when reporting results, to make them easier to reproduce.
@@ -254,25 +251,6 @@ const writeDataSync = (data) => {
   console.log(`Wrote results to "${filePath}".`);
 };
 
-// Takes a list of browser configs, and repeats or removes them as needed.
-const expandConfigList = async (configList, repeat) => {
-  let results = [];
-  for (let config of configList) {
-    if (!config.disable) {
-      config2 = deepCopy(config);
-      delete config2["repeat"];
-      results = [].concat(results, Array((config.repeat ?? 1) * (repeat ?? 1)).fill(config2));
-    }
-  }
-  return results;
-};
-
-// Read config file in YAML or JSON.
-const parseConfigFile = (configFile) => {
-  let configFileContents = fs.readFileSync(configFile, 'utf8');
-  return YAML.parse(configFileContents);
-};
-
 // The main program
 const main = async () => {
   // Read config file and flags from command line
@@ -286,12 +264,11 @@ const main = async () => {
       console.log(capability);
     }
   } else {
-    let configList = parseConfigFile(configFile);
-    let expandedConfigList = await expandConfigList(configList, repeat);
-    let filteredExpandedConfigList = expandedConfigList.filter(
+    let configList = parseConfigFile(configFile, repeat);
+    let filteredConfigList = configList.filter(
       d => only ? d.browser.startsWith(only) : true);
-    console.log("List of browsers to run:", filteredExpandedConfigList);
-    writeDataSync(await runTestsBatch(filteredExpandedConfigList,
+    console.log("List of browsers to run:", filteredConfigList);
+    writeDataSync(await runTestsBatch(filteredConfigList,
                                       { shouldQuit: !stayOpen }));
     render.main();
   }
