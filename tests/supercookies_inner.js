@@ -315,6 +315,9 @@ let tests = {
   "web_sql_database": {
     // Borrowed from https://github.com/samyk/evercookie
     write: async (key) => {
+      if (!window.openDatabase) {
+        return new Error("Unsupported");
+      }
       let database = window.openDatabase("sqlite_supercookie", "", "supercookie", 1024 * 1024);
       let tx = new Promise((resolve) => database.transaction(tx => {
         tx.executeSql(
