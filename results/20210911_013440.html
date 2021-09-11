@@ -90,11 +90,9 @@ read: async (url) => {
       }
     }
 
-result, same first party: 12958662757164952
+result, same first party: 8625868208517755
 
-result, different first party: 12958662757164952
-
-unsupported: false
+result, different first party: 8625868208517755
 
 passed: false
 
@@ -121,11 +119,9 @@ read: () =>
         setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
       })
 
-result, same first party: 12958662757164952
+result, same first party: 8625868208517755
 
-result, different first party: 12958662757164952
-
-unsupported: false
+result, different first party: 8625868208517755
 
 passed: false
 
@@ -143,11 +139,9 @@ read: async () => {
       return (new URL(url)).searchParams.get("key");
     }
 
-result, same first party: 12958662757164952
+result, same first party: 8625868208517755
 
-result, different first party: 12958662757164952
-
-unsupported: false
+result, different first party: 8625868208517755
 
 passed: false
 
@@ -161,11 +155,9 @@ title = 'write: (secret) => {
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 12958662757164952
+result, same first party: 8625868208517755
 
-result, different first party: 12958662757164952
-
-unsupported: false
+result, different first party: 8625868208517755
 
 passed: false
 
@@ -194,8 +186,6 @@ result, same first party: 1
 
 result, different first party: 2
 
-unsupported: false
-
 passed: true
 
 test failed: false'> &nbsp;
@@ -216,11 +206,9 @@ read: async (key) => {
       }
     }
 
-result, same first party: W/"1c-eQ5sQwbzbvUSpiENJG/EtjN8f6M"
+result, same first party: W/"1b-jQmyRqzzQzFOV5FRX0jlcO7fMtc"
 
 result, different first party: undefined
-
-unsupported: false
 
 passed: true
 
@@ -251,8 +239,6 @@ result, same first party: 1
 
 result, different first party: 2
 
-unsupported: false
-
 passed: true
 
 test failed: false'> &nbsp;
@@ -274,8 +260,6 @@ read: async (key) => {
 result, same first party: 1
 
 result, different first party: 2
-
-unsupported: false
 
 passed: true
 
@@ -306,8 +290,6 @@ result, same first party: 1
 
 result, different first party: 2
 
-unsupported: false
-
 passed: true
 
 test failed: false'> &nbsp;
@@ -321,11 +303,9 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 12958662757164952
+result, same first party: 8625868208517755
 
 result, different first party: 
-
-unsupported: false
 
 passed: true
 
@@ -340,11 +320,9 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 12958662757164952
+result, same first party: 8625868208517755
 
 result, different first party: 
-
-unsupported: false
 
 passed: true
 
@@ -365,8 +343,6 @@ read: () => new Promise((resolve, reject) => {
 result, same first party: image load succeeded
 
 result, different first party: Error: image load failed
-
-unsupported: false
 
 passed: true
 
@@ -397,8 +373,6 @@ result, same first party: 1
 
 result, different first party: 2
 
-unsupported: false
-
 passed: true
 
 test failed: false'> &nbsp;
@@ -427,8 +401,6 @@ result, same first party: 1
 
 result, different first party: 2
 
-unsupported: false
-
 passed: true
 
 test failed: false'> &nbsp;
@@ -437,11 +409,9 @@ title = 'write: (secret) => IdbKeyVal.set("secret", secret)
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: 12958662757164952
+result, same first party: 8625868208517755
 
-result, different first party: 12958662757164952
-
-unsupported: false
+result, different first party: 8625868208517755
 
 passed: false
 
@@ -451,11 +421,9 @@ title = 'write: (secret) => localStorage.setItem("secret", secret)
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 12958662757164952
+result, same first party: 8625868208517755
 
-result, different first party: 12958662757164952
-
-unsupported: false
+result, different first party: 8625868208517755
 
 passed: false
 
@@ -479,8 +447,6 @@ read: async () => {
 result, same first party: undefined
 
 result, different first party: undefined
-
-unsupported: false
 
 passed: undefined
 
@@ -513,8 +479,6 @@ result, same first party: 1
 
 result, different first party: 2
 
-unsupported: false
-
 passed: true
 
 test failed: false'> &nbsp;
@@ -540,11 +504,9 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 4030069513617607
+result, same first party: 24753492665428012
 
-result, different first party: 4030069513617607
-
-unsupported: false
+result, different first party: 24753492665428012
 
 passed: false
 
@@ -565,11 +527,9 @@ read: () =>
         setTimeout(() => reject("no SharedWorker message received"), 1000);
       })
 
-result, same first party: 12958662757164952
+result, same first party: 8625868208517755
 
-result, different first party: 12958662757164952
-
-unsupported: false
+result, different first party: 8625868208517755
 
 passed: false
 
@@ -585,11 +545,9 @@ read: async () => {
       return (await results.json()).sessionId;
     }
 
-result, same first party: e9629f11202a372f5feb6a27deb38260315f94a5d3359f52e415408b76b69ca6
+result, same first party: b908f85bc9e144c588d568dc08cff728c16c29d195956293aabd0f31d37bef5f
 
-result, different first party: 017a22ee70e48f4bd5c09e6041052db5b0b1c0ee90539e0b3bea4aab479d812a
-
-unsupported: false
+result, different first party: 727a41a15ca8cca8a39f97002fbd1ce06976bffdc2202e5f262a6446797d16e1
 
 passed: true
 
@@ -632,8 +590,6 @@ result, same first party: Error: window.openDatabase is not a function
 
 result, different first party: Error: window.openDatabase is not a function
 
-unsupported: true
-
 passed: true
 
 test failed: false'> &nbsp;
@@ -658,11 +614,9 @@ read: () => new Promise((resolve, reject) => {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
 
-result, same first party: Sat, 11 Sep 2021 01:35:20 GMT
+result, same first party: Sat, 11 Sep 2021 01:34:28 GMT
 
-result, different first party: Sat, 11 Sep 2021 01:35:26 GMT
-
-unsupported: false
+result, different first party: Sat, 11 Sep 2021 01:34:33 GMT
 
 passed: true
 
@@ -681,8 +635,6 @@ result, same first party: https://arthuredelstein.net/
 
 result, different first party: https://arthuredelstein.net/
 
-unsupported: false
-
 passed: false
 
 test failed: false'> &nbsp;
@@ -691,11 +643,9 @@ title = 'write: (secret) => sessionStorage.setItem("secret", secret)
 
 read: () => sessionStorage.getItem("secret")
 
-result, same first party: 4030069513617607
+result, same first party: 24753492665428012
 
-result, different first party: 4030069513617607
-
-unsupported: false
+result, different first party: 24753492665428012
 
 passed: false
 
@@ -710,11 +660,9 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 4030069513617607
+result, same first party: 24753492665428012
 
-result, different first party: 4030069513617607
-
-unsupported: false
+result, different first party: 24753492665428012
 
 passed: false
 
@@ -744,76 +692,76 @@ title = 'passed: false'> &nbsp;
 title = 'IsTorExit: false
 passed: false'> &nbsp;
 </div></td></tr><tr><th colspan="4">Tracking query parameter tests</th></tr><tr><td>__hsfp</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>__hssc</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>__hstc</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>__s</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>_hsenc</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>_openstat</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>dclid</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>fbclid</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>gclid</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>hsCtaTracking</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>igshid</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>mc_eid</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>mkt_tok</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>ml_subscriber</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>ml_subscriber_hash</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>msclkid</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>oly_anon_id</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>oly_enc_id</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>rb_clickid</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>s_cid</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>vero_conv</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>vero_id</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>wickedid</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><td>yclid</td><td><div class='bad'
-title = 'value: 08957258654477407
+title = 'value: 9973493948895427
 passed: false'> &nbsp;
 </div></td></tr><tr><th colspan="4">Fingerprinting resistance tests</th></tr><tr><td>devicePixelRatio</td><td><div class='good'
 title = 'expression: devicePixelRatio
@@ -836,7 +784,7 @@ passed: false'> &nbsp;
 </div></td></tr><tr><td>mouseEvent.timeStamp % 100</td><td><div class='bad'
 title = 'expression: mouseEvent.timeStamp % 100
 spoof expression: 0
-actual value: 64
+actual value: 7
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>navigator.buildID === undefined || navigator.buildID === "20181001000000"</td><td><div class='good'
@@ -879,13 +827,13 @@ passed: true'> &nbsp;
 </div></td></tr><tr><td>new Event("test").timeStamp % 100</td><td><div class='bad'
 title = 'expression: new Event("test").timeStamp % 100
 spoof expression: 0
-actual value: 28
+actual value: 26
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><td>new Event("test").timeStamp % 100 [Worker]</td><td><div class='bad'
 title = 'expression: new Event("test").timeStamp % 100
 spoof expression: 0
-actual value: 35
+actual value: 78
 desired value: 0
 passed: false
 [Worker]'> &nbsp;
@@ -904,13 +852,13 @@ passed: true'> &nbsp;
 </div></td></tr><tr><td>performance.now()</td><td><div class='bad'
 title = 'expression: performance.now()
 spoof expression: Math.floor(performance.now() / 100) * 100
-actual value: 328
-desired value: 300
+actual value: 426
+desired value: 400
 passed: false'> &nbsp;
 </div></td></tr><tr><td>performance.now() [Worker]</td><td><div class='bad'
 title = 'expression: performance.now()
 spoof expression: Math.floor(performance.now() / 100) * 100
-actual value: 35
+actual value: 78
 desired value: 0
 passed: false
 [Worker]'> &nbsp;
@@ -954,10 +902,10 @@ spoof expression: false
 actual value: false
 desired value: false
 passed: true'> &nbsp;
-</div></td></tr></table><p>Tests ran at 2021-09-11T01:35:13.396Z.
+</div></td></tr></table><p>Tests ran at 2021-09-11T01:34:19.251Z.
          Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/00f5d7ff5cff52acaea82297e33ce2d9cc438b5b"
     >00f5d7ff</a>.
-    Raw data in <a href="20210911_013532.json">JSON</a>.
+    Raw data in <a href="20210911_013440.json">JSON</a>.
     </p>
   </body>
 </html>

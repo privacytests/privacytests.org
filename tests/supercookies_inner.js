@@ -23,9 +23,13 @@ let tests = {
   },
   "SharedWorker": {
     write: (secret) => {
-      let worker = new SharedWorker("supercookies_sharedworker.js");
-      worker.port.start();
-      worker.port.postMessage(secret);
+      try {
+        let worker = new SharedWorker("supercookies_sharedworker.js");
+        worker.port.start();
+        worker.port.postMessage(secret);
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
     },
     read: () =>
       new Promise((resolve, reject) => {
@@ -37,7 +41,13 @@ let tests = {
       })
   },
   "blob": {
-    write: (secret) => URL.createObjectURL(new Blob([secret])),
+    write: (secret) => {
+      try {
+        return URL.createObjectURL(new Blob([secret]));
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
+    },
     read: async (url) => {
       if (url) {
         let response = await fetch(url);
@@ -47,12 +57,16 @@ let tests = {
   },
   "BroadcastChannel": {
     write: (secret) => {
-      let bc = new BroadcastChannel("secrets");
-      bc.onmessage = (event) => {
-        if (event.data === "request") {
-          bc.postMessage(secret);
-        }
-      };
+      try {
+        let bc = new BroadcastChannel("secrets");
+        bc.onmessage = (event) => {
+          if (event.data === "request") {
+            bc.postMessage(secret);
+          }
+        };
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
     },
     read: () =>
       new Promise((resolve, reject) => {
@@ -242,6 +256,8 @@ let tests = {
         navigator.locks.request(key, lock => new Promise((f,r) => {}));
         let queryResult = await navigator.locks.query();
         return queryResult.held[0].clientId;
+      } else {
+        throw new Error("Unsupported");
       }
     },
     read: async () => {
