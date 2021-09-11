@@ -138,7 +138,7 @@ const simpleToolTip = item => {
 const joinIfArray = x => Array.isArray(x) ? x.join(", ") : x;
 
 const crossSiteTooltip = (
-  { write, read, readSameFirstParty, readDifferentFirstParty, passed, testFailed }
+  { write, read, readSameFirstParty, readDifferentFirstParty, passed, testFailed, unsupported }
 ) => {
   return `
 write: ${ write }
@@ -148,6 +148,8 @@ read: ${ read }
 result, same first party: ${ joinIfArray(readSameFirstParty) }
 
 result, different first party: ${ joinIfArray(readDifferentFirstParty) }
+
+unsupported: ${ joinIfArray(unsupported) }
 
 passed: ${ joinIfArray(passed) }
 
@@ -202,7 +204,7 @@ const resultsToTable = (results, title) => {
 };
 
 const content = (results, jsonFilename) => {
-  let { headers, body } = resultsToTable(results.all_tests, "B");
+  let { headers, body } = resultsToTable(results.all_tests, "Browser Privacy Tests");
   return '' + // `<h1 class="title">Browser Privacy Tests</h1>` +
 //    `<pre>${JSON.stringify(results[0].testResults)}</pre>` +
     htmlTable({headers, body,

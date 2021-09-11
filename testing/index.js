@@ -60,13 +60,13 @@ const runSupercookieTests = async (driver, newTabs) => {
   let iframe_root_different = false ? "http://localhost:8080" : "https://arthuredelstein.github.io/browser-privacy";
   let writeResults = await loadAndGetResults(
     driver, `${iframe_root_same}/tests/${stem}.html?mode=write&default=${secret}`, true);
-//  console.log("writeResults:", writeResults, typeof(writeResults));
   let readParams = "";
   for (let [test, data] of Object.entries(writeResults)) {
     if ((typeof data["result"]) === "string") {
       readParams += `&${test}=${encodeURIComponent(data["result"])}`;
     }
   }
+  console.log({writeResults});
   //  console.log(readParams);
 //  await sleep(5000);
   let readResultsSameFirstParty = await loadAndGetResults(
@@ -79,12 +79,15 @@ const runSupercookieTests = async (driver, newTabs) => {
   for (let test in readResultsDifferentFirstParty) {
     let { write, read, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
     let { result: readSameFirstParty } = readResultsSameFirstParty[test];
+    let { result: writeResult } = writeResults[test];
+    let unsupported = (writeResult === "Error: Unsupported");
     let readSameFirstPartyFailedToFetch = readSameFirstParty ? readSameFirstParty.startsWith("Error: Failed to fetch") : false;
     let readDifferentFirstPartyFailedToFetch = readDifferentFirstParty ? readDifferentFirstParty.startsWith("Error: Failed to fetch") : false;
-    let testFailed = !readSameFirstParty || (readSameFirstParty.startsWith("Error:") && !readSameFirstPartyFailedToFetch);
-    let passed = testFailed ? undefined : ((readSameFirstParty !== readDifferentFirstParty) ||
+    let testFailed = !unsupported && (!readSameFirstParty || (readSameFirstParty.startsWith("Error:") && !readSameFirstPartyFailedToFetch));
+    let passed = testFailed ? undefined : (unsupported ||
+                                           (readSameFirstParty !== readDifferentFirstParty) ||
                                            (readSameFirstPartyFailedToFetch && readDifferentFirstPartyFailedToFetch));
-    jointResult[test] = { write, read, readSameFirstParty, readDifferentFirstParty, passed, testFailed };
+    jointResult[test] = { write, read, unsupported, readSameFirstParty, readDifferentFirstParty, passed, testFailed };
   }
 //  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
   return jointResult;
@@ -152,7 +155,7 @@ const testHttpsUpgrade = async (driver, getOrNavigate) => {
   let upgraded = resultingUrl.startsWith("https");
   let passed = upgraded === true;
   return { passed, upgraded };
-}
+};
 
 // See if the browser blocks visits to HTTP sites (aka HTTPS-Only Mode)
 const testHttpsOnlyMode = async (driver) => {

@@ -106,28 +106,6 @@ let setChromeOptions = (builder, {edge, incognito, path, tor_mode}) => {
     .forBrowser("chrome");
 };
 
-// Sets Edge options for the Builder.
-let setEdgeOptions = async (builder, {incognito, path, local}) => {
-  let options = new edge.Options();
-  if (path) {
-    options.setBinaryPath(path);
-  }
-  if (incognito) {
-//    options.addArguments("incognito");
-//    options.addArguments("--incognito");
-    options.addArguments("-inprivate");
-//    options.set("ms:inPrivate", true);
-  }
-  if (local) {
-    const edgePaths = await installEdgeDriver();
-    //options.setEdgeChromium(true);
-    builder.setEdgeService(new edge.ServiceBuilder(edgePaths.driverPath));
-  }
-  return builder
-    .setEdgeOptions(options)
-    .forBrowser("edge");
-};
-
 // Set Firefox options for the Builder.
 let setFirefoxOptions = (builder, {incognito, path, tor, prefs}) => {
   if (!path && tor) {
@@ -167,6 +145,11 @@ let setSafariOptions = (builder, {incognito, path}) => {
 
 // ## High-level webdriver utility functions
 
+const chromiumBrowsers = [
+  "chrome", "chromium", "android", "samsung", "opera", "brave",
+  "edge", "microsoft-edge"
+];
+
 // Produces a selenium driver to run tests,
 // using the given config object.
 let createDriver = async ({browser, browser_version,
@@ -178,10 +161,8 @@ let createDriver = async ({browser, browser_version,
     if (browserstack) {
     await setToBrowserstack(builder, { browser, browser_version, os, os_version });
   }
-  if (browser === "chrome" || browser === "chromium" || browser === "android" || browser === "samsung" || browser === "opera" || browser === "brave" || browser=== "edge") {
+  if (chromiumBrowsers.includes(browser)) {
     setChromeOptions(builder, { edge: browser === "edge", incognito, path, tor_mode });
-  /*} else if (browser === "edge") {
-    await setEdgeOptions(builder, { incognito, path, local: !browserstack });*/
   } else if (browser === "firefox" || browser === "tor browser") {
     setFirefoxOptions(builder, { incognito, path, prefs, tor: browser === "tor browser" });
   } else if (browser === "safari") {
