@@ -392,7 +392,7 @@ let tests = {
   "h3_connection": {
     write: async (secret) => {
       await fetch(`https://h3.arthuredelstein.net:4433/`);
-      await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
+      await fetch(`https://h3.arthuredelstein.net:4433/`);
     },
     read: async () => {
       let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
