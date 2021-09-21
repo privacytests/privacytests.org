@@ -183,7 +183,7 @@ let tests = {
         testURI("count", "favicon", key), {"cache": "reload"});
       let count = (await response.text()).trim();
       if (count === "0") {
-        throw new Error("favicons never requested");
+        throw new Error("No requests received");
       }
       return count;
     }
@@ -323,7 +323,7 @@ let tests = {
         testURI("count", "prefetch", key), {"cache": "reload"});
       let countString = (await response.text()).trim();
       if (parseInt(countString) === 0) {
-        throw new Error("prefetch isn't being used");
+        throw new Error("No requests received");
       }
       return countString;
     }
@@ -386,6 +386,16 @@ let tests = {
     },
     read: async () => {
       let response = await fetch(`https://h1.arthuredelstein.net:8901/?mode=read`);
+      return await response.text();
+    }
+  },
+  "h3_connection": {
+    write: async (secret) => {
+      await fetch(`https://h3.arthuredelstein.net:4433/`);
+      await fetch(`https://h3.arthuredelstein.net:4433/`);
+    },
+    read: async () => {
+      let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
       return await response.text();
     }
   },

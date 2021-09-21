@@ -83,6 +83,8 @@ const runSupercookieTests = async (driver, newTabs) => {
     let unsupported = (writeResult === "Error: Unsupported");
     let readSameFirstPartyFailedToFetch = readSameFirstParty ? readSameFirstParty.startsWith("Error: Failed to fetch") : false;
     let readDifferentFirstPartyFailedToFetch = readDifferentFirstParty ? readDifferentFirstParty.startsWith("Error: Failed to fetch") : false;
+    unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith("Error: No requests received") : false);
+    unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith("Error: image load failed") : false);
     let testFailed = !unsupported && (!readSameFirstParty || (readSameFirstParty.startsWith("Error:") && !readSameFirstPartyFailedToFetch));
     let passed = testFailed ? undefined : (unsupported ||
                                            (readSameFirstParty !== readDifferentFirstParty) ||
