@@ -389,6 +389,15 @@ let tests = {
       return await response.text();
     }
   },
+  "h3_connection": {
+    write: async (secret) => {
+      await fetch(`https://h3.arthuredelstein.net:4433/`);
+    },
+    read: async () => {
+      let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
+      return await response.text();
+    }
+  },
 };
 
 runAllTests(tests);
