@@ -58,7 +58,7 @@ app.get('/etag', (req, res) => {
   let { key } = req.query;
   requestIfNoneMatch = req.headers["if-none-match"];
   if (requestIfNoneMatch) {
-    res.set( { "etag": requestIfNoneMatch } );
+    res.set( { "x-received-if-none-match": requestIfNoneMatch } );
   }
   res.set( {"Cache-Control": "max-age=0" });
   res.send(key);
