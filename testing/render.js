@@ -265,11 +265,11 @@ const aggregateRepeatedTrials = (results) => {
 };
 
 const main = async () => {
-  let { live, aggregate } = minimist(process.argv.slice(2),
+  let { _: [ dataFile], live, aggregate } = minimist(process.argv.slice(2),
                                      opts = { default: { aggregate: true }});
   console.log("aggregate:", aggregate);
   await loadBrowserLogos();
-  let resultsFileJSON = await latestResultsFile("./out/results");
+  let resultsFileJSON = dataFile ?? await latestResultsFile("./out/results");
   let resultsFileHTMLLatest = "./out/results/latest.html";
   let resultsFileHTML = resultsFileJSON.replace(/\.json$/, ".html");
 //  fs.copyFile(resultsFile, "./out/results/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
