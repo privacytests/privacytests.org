@@ -276,12 +276,8 @@ let tests = {
     },
     read: async (key) => {
       let response = await fetch(testURI("etag", "", key));
-      let etagHeader = response.headers.get("etag");
-      if (etagHeader === "undefined") {
-        return undefined;
-      } else {
-        return etagHeader;
-      }
+      let ifNoneMatchReceived = response.headers.get("x-received-if-none-match");
+      return ifNoneMatchReceived ?? undefined;
     }
   },
   "HSTS": {
