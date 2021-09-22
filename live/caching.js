@@ -24,6 +24,7 @@ let resourceFiles = {
 };
 
 app.get('/', (req, res) => res.send('Hello World!'));
+
 app.get('/resource', (req, res) => {
   let { key, type } = req.query;
   let countMap = countMaps[type];
@@ -32,7 +33,7 @@ app.get('/resource', (req, res) => {
   } else {
     countMap[key] = 1;
   }
-  console.log(key, type, countMap[key]);
+  console.log(`Requested: ${req.url} ; Count: ${countMap[key]}`);
   res.set({
     "Cache-Control": "public, max-age=604800, immutable"
   });
@@ -40,7 +41,7 @@ app.get('/resource', (req, res) => {
 });
 app.get('/count', (req, res) => {
   let { key, type } = req.query;
-  console.log(type, key, "count:", countMaps[type][key]);
+  console.log(`                                                         Count checked for ${type}, ${key}: ${countMaps[type][key]}`);
   res.send(`${countMaps[type][key] || 0}`);
 });
 app.get('/altsvc', (req, res) => {
@@ -53,14 +54,14 @@ app.get('/altsvc', (req, res) => {
 let ifNoneMatchValues = {};
 
 app.get('/etag', (req, res) => {
-  let { key, type } = req.query;
-  res.set({ "Cache-Control": "max-age=0" });
-  if (type === "request") {
-    ifNoneMatchValues[key] = req.headers['if-none-match'];
-    res.send(`etag test: ${key}`);
-  } else if (type === "value") {
-    res.send(`${ifNoneMatchValues[key]}`);
+  console.log(req.url);
+  let { key } = req.query;
+  requestIfNoneMatch = req.headers["if-none-match"];
+  if (requestIfNoneMatch) {
+    res.set( { "etag": requestIfNoneMatch } );
   }
+  res.set( {"Cache-Control": "max-age=0" });
+  res.send(key);
 });
 
 app.get('/set_hsts.png', (req, res) => {
@@ -100,4 +101,11 @@ app.get('/auth', (req, res) => {
   }
 });
 
+app.get('/headers', (req, res) => {
+  console.log("/headers requested: sending", JSON.stringify(req.headers, null, 2));
+  res.json(req.headers);
+});
+
 app.listen(port, () => console.log(`listening for file requests on ${port}`));
+
+app.set("etag", true);
