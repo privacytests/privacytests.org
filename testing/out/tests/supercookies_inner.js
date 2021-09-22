@@ -1,8 +1,9 @@
 import { runAllTests, sleepMs } from "./test_utils.js";
 import * as IdbKeyVal from 'https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs';
 
-let testURI = (path, type, key) =>
-    `https://arthuredelstein.net/browser-privacy-live/${path}?type=${type}&key=${key}`;
+const baseURI = "https://arthuredelstein.net/browser-privacy-live/";
+
+let testURI = (path, type, key) => `${baseURI}${path}?type=${type}&key=${key}`;
 
 let tests = {
   "cookie": {
@@ -269,17 +270,22 @@ let tests = {
   },
   "etag": {
     write: async (key) => {
-      await fetch(testURI("etag", "request", key));
-      return key;
-    },
-    read: async (key) => {
-      await fetch(testURI("etag", "request", key));
-      let response = await fetch(testURI("etag", "value", key));
-      let responseText = await response.text();
-      if (responseText === "undefined") {
+      let prime = await fetch(testURI("etag", "", key));
+      let response = await fetch(testURI("etag", "", key));
+      let etagHeader = response.headers.get("etag");
+      if (etagHeader === "undefined") {
         return undefined;
       } else {
-        return responseText;
+        return etagHeader;
+      }
+    },
+    read: async (key) => {
+      let response = await fetch(testURI("etag", "", key));
+      let etagHeader = response.headers.get("etag");
+      if (etagHeader === "undefined") {
+        return undefined;
+      } else {
+        return etagHeader;
       }
     }
   },
