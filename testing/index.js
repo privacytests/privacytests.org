@@ -254,6 +254,7 @@ const writeDataSync = (data) => {
   fs.mkdirSync("out/results", { recursive: true });
   fs.writeFileSync(filePath, JSON.stringify(data));
   console.log(`Wrote results to "${filePath}".`);
+  return filePath;
 };
 
 // The main program
@@ -273,9 +274,9 @@ const main = async () => {
     let filteredConfigList = configList.filter(
       d => only ? d.browser.startsWith(only) : true);
     console.log("List of browsers to run:", filteredConfigList);
-    writeDataSync(await runTestsBatch(filteredConfigList,
-                                      { shouldQuit: !stayOpen }));
-    render.main();
+    let dataFile = writeDataSync(await runTestsBatch(filteredConfigList,
+                                                     { shouldQuit: !stayOpen }));
+    render.render({ dataFile });
   }
 };
 

@@ -264,9 +264,7 @@ const aggregateRepeatedTrials = (results) => {
   return resultsCopy;
 };
 
-const main = async () => {
-  let { _: [ dataFile], live, aggregate } = minimist(process.argv.slice(2),
-                                     opts = { default: { aggregate: true }});
+const render = async ({ dataFile, live, aggregate }) => {
   console.log("aggregate:", aggregate);
   await loadBrowserLogos();
   let resultsFileJSON = dataFile ?? await latestResultsFile("./out/results");
@@ -293,8 +291,14 @@ const main = async () => {
   }
 };
 
+const main = async () => {
+  let { _: [ dataFile], live, aggregate } = minimist(process.argv.slice(2),
+                                     opts = { default: { aggregate: true }});
+  render({ dataFile, live, aggregate });
+};
+
 if (require.main === module) {
   main();
 }
 
-module.exports = { main };
+module.exports = { render };
