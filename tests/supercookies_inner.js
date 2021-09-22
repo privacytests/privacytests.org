@@ -270,7 +270,7 @@ let tests = {
   },
   "etag": {
     write: async (key) => {
-      let response = await fetch(testURI("etag", "", key);
+      let response = await fetch(testURI("etag", "", key));
       let etagHeader = response.headers["etag"];
       if (etagHeader === "undefined") {
         return undefined;
@@ -279,7 +279,7 @@ let tests = {
       }
     },
     read: async () => {
-      let response = await fetch(testURI("etag", "", key);
+      let response = await fetch(testURI("etag", "", key));
       let etagHeader = response.headers["etag"];
       if (etagHeader === "undefined") {
         return undefined;
