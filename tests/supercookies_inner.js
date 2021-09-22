@@ -269,22 +269,22 @@ let tests = {
     }
   },
   "etag": {
-    write: async () => {
-      let response = await fetch(baseURI + "etag");
-      let responseText = await response.text();
-      if (responseText === "undefined") {
+    write: async (key) => {
+      let response = await fetch(testURI("etag", "", key);
+      let etagHeader = response.headers["etag"];
+      if (etagHeader === "undefined") {
         return undefined;
       } else {
-        return responseText;
+        return etagHeader;
       }
     },
-    read: async (key) => {
-      let response = await fetch(baseURI + "etag");
-      let responseText = await response.text();
-      if (responseText === "undefined") {
+    read: async () => {
+      let response = await fetch(testURI("etag", "", key);
+      let etagHeader = response.headers["etag"];
+      if (etagHeader === "undefined") {
         return undefined;
       } else {
-        return responseText;
+        return etagHeader;
       }
     }
   },
