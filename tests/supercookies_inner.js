@@ -270,6 +270,7 @@ let tests = {
   },
   "etag": {
     write: async (key) => {
+      let prime = await fetch(testURI("etag", "", key));
       let response = await fetch(testURI("etag", "", key));
       let etagHeader = response.headers["etag"];
       if (etagHeader === "undefined") {
