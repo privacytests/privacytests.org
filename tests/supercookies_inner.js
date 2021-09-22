@@ -278,7 +278,7 @@ let tests = {
         return etagHeader;
       }
     },
-    read: async () => {
+    read: async (key) => {
       let response = await fetch(testURI("etag", "", key));
       let etagHeader = response.headers["etag"];
       if (etagHeader === "undefined") {
