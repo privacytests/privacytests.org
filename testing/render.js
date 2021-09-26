@@ -5,10 +5,9 @@ const fileUrl = require('file-url');
 const open = require('open');
 const minimist = require('minimist');
 const datauri = require('datauri');
+const htmlUtils = require('./html-utils.js');
 
 let browserLogos = {};
-
-const faviconURI = "data:image/png;base64,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";
 
 const browserLogoDataUri = async (browserName) => 
   datauri(`node_modules/browser-logos/src/${browserName}/${browserName}_128x128.png`);
@@ -19,22 +18,6 @@ const loadBrowserLogos = async () => {
   }
   browserLogos["tor browser"] = browserLogos["tor"];
 };
-
-// The basic structure of the HTML page
-const htmlPage = ({ title, content, style, faviconURI }) => `
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset='utf8'/>
-    <link href="${faviconURI}" rel="icon" type="image/x-icon" />
-    <title>${title}</title>
-    <style>${style}</style>
-  </head>
-  <body>
-    ${content}
-  </body>
-</html>
-`;
 
 // Deep-copy a JSON structure (by value)
 const deepCopy = (json) => JSON.parse(JSON.stringify(json));
@@ -62,9 +45,6 @@ const htmlTable = ({ headers, body, className }) => {
   elements.push("</table>");
   return elements.join("");
 };
-
-// Inline CSS for our page
-const pageStylePromise = fs.readFile("./inline.css");
 
 const dropMicroVersion = (version) =>
   version.split(".").slice(0,2).join(".");
@@ -99,13 +79,18 @@ const resultsToDescription = ({
   return finalText;
 };
 
+const allHaveValue = (x, value) => {
+  return Array.isArray(x) ? x.every(item => item === value) : x === value;
+};
+
 // Generates a table cell which indicates whether
 // a test passed, and includes the tooltip with
 // more information.
-const itemBody = ({passed, testFailed, tooltip}) => {
-  let allTestsFailed = Array.isArray(testFailed) ? testFailed.every(x => x === true) : testFailed;
+const itemBody = ({passed, testFailed, tooltip, unsupported}) => {  
+  let allTestsFailed = allHaveValue(testFailed, true);
+  let allUnsupported = allHaveValue(unsupported, true);
   let anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : !passed;
-  return `<div class='${allTestsFailed ? "na" : (anyDidntPass ? "bad" : "good")}'
+  return `<div class='${(allTestsFailed || allUnsupported) ? "na" : (anyDidntPass ? "bad" : "good")}'
 title = '${ tooltip.replace(/'/g, "&#39;") }'> &nbsp;
 </div>`;
 };
@@ -169,8 +154,8 @@ const resultsSection = ({bestResults, category, tooltipFunction}) => {
     row.push(rowName);
     for (let resultMap of resultMaps) {
       let tooltip = tooltipFunction(resultMap[rowName]);
-      let { passed, testFailed } = resultMap[rowName];
-      row.push(itemBody({ passed, testFailed, tooltip }));
+      let { passed, testFailed, unsupported } = resultMap[rowName];
+      row.push(itemBody({ passed, testFailed, tooltip, unsupported }));
     }
     section.push(row);
   }
@@ -277,11 +262,9 @@ const render = async ({ dataFile, live, aggregate }) => {
   let processedResults = aggregate ? aggregateRepeatedTrials(results) : results;
 //  console.log(results.all_tests[0]);
 //  console.log(JSON.stringify(results));
-  await fs.writeFile(resultsFileHTMLLatest, htmlPage({
+  await fs.writeFile(resultsFileHTMLLatest, htmlUtils.htmlPage({
     title: "Browser Privacy Project",
     content: content(processedResults, path.basename(resultsFileJSON)),
-    style: await pageStylePromise,
-    faviconURI
   }));
   console.log(`Wrote out ${fileUrl(resultsFileHTMLLatest)}`);
   await fs.copyFile(resultsFileHTMLLatest, resultsFileHTML);
