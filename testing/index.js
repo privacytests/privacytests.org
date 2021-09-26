@@ -1,5 +1,5 @@
 // # index.js: Runs privacy tests on browsers
-// 
+//
 // Define a set of browsers to test in a YAML file.
 // Usage: `node index config/production.yaml`
 
@@ -86,9 +86,10 @@ const runSupercookieTests = async (driver, newTabs) => {
     unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith("Error: No requests received") : false);
     unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith("Error: image load failed") : false);
     let testFailed = !unsupported && (!readSameFirstParty || (readSameFirstParty.startsWith("Error:") && !readSameFirstPartyFailedToFetch));
-    let passed = testFailed ? undefined : (unsupported ||
-                                           (readSameFirstParty !== readDifferentFirstParty) ||
-                                           (readSameFirstPartyFailedToFetch && readDifferentFirstPartyFailedToFetch));
+    let passed = (testFailed || unsupported)
+        ? undefined
+        : (readSameFirstParty !== readDifferentFirstParty) ||
+          (readSameFirstPartyFailedToFetch && readDifferentFirstPartyFailedToFetch);
     jointResult[test] = { write, read, unsupported, readSameFirstParty, readDifferentFirstParty, passed, testFailed };
   }
 //  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
