@@ -18,16 +18,20 @@ const server = https.createServer(options, (request, response) => {
   let parsedURL = url.parse(request.url, true);
   let query = parsedURL.query;
   let socket = request.socket;
+  //console.log(socket);
   if (query["mode"] === "write") {
     socketTags.set(socket, query["secret"]);
+    response.end();
+  } else {
+    let tagFound = socketTags.get(socket);
+    console.log("h1 read request. socket tag found:", tagFound);
+    response.setHeader('Content-Type', 'text/plain');
+    response.setHeader('Cache-Control', 'no-store');
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    response.setHeader('Connection', 'Keep-Alive');
+    response.setHeader('Keep-Alive', 'timeout=300, max=1000');
+    response.end(tagFound);
   }
-  console.log("h1 request. socket tag found:", socketTags.get(socket));
-  response.setHeader('Content-Type', 'text/plain');
-  response.setHeader('Cache-Control', 'no-store');
-  response.setHeader('Access-Control-Allow-Origin', '*');
-  response.setHeader('Connection', 'Keep-Alive');
-  response.setHeader('Keep-Alive', 'timeout=300, max=1000');
-  response.end(socketTags.get(socket));
 });
 
 server.listen(8901);
