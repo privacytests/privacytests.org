@@ -19,9 +19,9 @@ let tests = {
     read: () => localStorage.getItem("secret"),
   },
   "indexedDB": {
-    write: (secret) => {
+    write: async (secret) => {
       try {
-        return IdbKeyVal.set("secret", secret);
+        return await IdbKeyVal.set("secret", secret);
       } catch (e) {
         throw new Error("Unsupported");
       }
