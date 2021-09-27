@@ -410,7 +410,7 @@ let tests = {
       let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
       let text = await response.text();
       // Empty response text indicates we are not connecting over h3:
-      if (result.trim() === "") {
+      if (text.trim() === "") {
         throw new Error("Unsupported");
       }
     },
