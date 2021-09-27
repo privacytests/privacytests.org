@@ -25,6 +25,9 @@ let tests = {
   },
   "ServiceWorker": {
     write: async (key) => {
+      if (!navigator.serviceWorker) {
+        throw new Error("Unsupported");
+      }
       let registration = await navigator.serviceWorker.register(
         'serviceWorker.js');
       console.log(registration);
