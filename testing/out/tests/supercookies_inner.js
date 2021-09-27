@@ -19,7 +19,13 @@ let tests = {
     read: () => localStorage.getItem("secret"),
   },
   "indexedDB": {
-    write: (secret) => IdbKeyVal.set("secret", secret),
+    write: async (secret) => {
+      try {
+        return await IdbKeyVal.set("secret", secret);
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
+    },
     read: () => IdbKeyVal.get("secret")
   },
   "SharedWorker": {
@@ -158,8 +164,12 @@ let tests = {
   },
   "CacheStorage": {
     write: async (key) => {
-      let cache = await caches.open("supercookies");
-      cache.addAll([`test.css?key=${key}`]);
+      try {
+        let cache = await caches.open("supercookies");
+        cache.addAll([`test.css?key=${key}`]);
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
     },
     read: async () => {
       let cache = await caches.open("supercookies");
@@ -394,8 +404,15 @@ let tests = {
   },
   "h3_connection": {
     write: async (secret) => {
+      // Ensure that we can switch over to h3 via alt-svc:
       await fetch(`https://h3.arthuredelstein.net:4433/`);
-      await fetch(`https://h3.arthuredelstein.net:4433/`);
+      // Are we now connecting over h3?
+      let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
+      let text = await response.text();
+      // Empty response text indicates we are not connecting over h3:
+      if (text.trim() === "") {
+        throw new Error("Unsupported");
+      }
     },
     read: async () => {
       let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
