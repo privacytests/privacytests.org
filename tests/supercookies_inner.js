@@ -19,7 +19,13 @@ let tests = {
     read: () => localStorage.getItem("secret"),
   },
   "indexedDB": {
-    write: (secret) => IdbKeyVal.set("secret", secret),
+    write: (secret) => {
+      try {
+        return IdbKeyVal.set("secret", secret);
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
+    },
     read: () => IdbKeyVal.get("secret")
   },
   "SharedWorker": {
@@ -158,8 +164,12 @@ let tests = {
   },
   "CacheStorage": {
     write: async (key) => {
-      let cache = await caches.open("supercookies");
-      cache.addAll([`test.css?key=${key}`]);
+      try {
+        let cache = await caches.open("supercookies");
+        cache.addAll([`test.css?key=${key}`]);
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
     },
     read: async () => {
       let cache = await caches.open("supercookies");
