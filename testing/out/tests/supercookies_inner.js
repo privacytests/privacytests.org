@@ -38,7 +38,7 @@ let tests = {
         worker.port.start();
         worker.port.postMessage("request");
         worker.port.onmessage = (e) => resolve(e.data);
-        setTimeout(() => reject("no SharedWorker message received"), 1000);
+        setTimeout(() => reject("no SharedWorker message received"), 100);
       })
   },
   "blob": {
@@ -276,11 +276,11 @@ let tests = {
     },
     read: async (key) => {
       let response = await fetch(testURI("etag", "", key));
-      let etagHeader = response.headers.get("etag");
-      if (etagHeader === "undefined") {
+      let receivedIfNoneMatch = response.headers.get("x-received-if-none-match");
+      if (receivedIfNoneMatch === "undefined") {
         return undefined;
       } else {
-        return etagHeader;
+        return receivedIfNoneMatch;
       }
     }
   },
