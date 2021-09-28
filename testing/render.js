@@ -9,7 +9,7 @@ const htmlUtils = require('./html-utils.js');
 
 let browserLogos = {};
 
-const browserLogoDataUri = async (browserName) => 
+const browserLogoDataUri = async (browserName) =>
   datauri(`node_modules/browser-logos/src/${browserName}/${browserName}_128x128.png`);
 
 const loadBrowserLogos = async () => {
@@ -86,12 +86,12 @@ const allHaveValue = (x, value) => {
 // Generates a table cell which indicates whether
 // a test passed, and includes the tooltip with
 // more information.
-const itemBody = ({passed, testFailed, tooltip, unsupported}) => {  
+const itemBody = ({passed, testFailed, tooltip, unsupported}) => {
   let allTestsFailed = allHaveValue(testFailed, true);
   let allUnsupported = allHaveValue(unsupported, true);
   let anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : !passed;
-  return `<div class='${(allTestsFailed || allUnsupported) ? "na" : (anyDidntPass ? "bad" : "good")}'
-title = '${ tooltip.replace(/'/g, "&#39;") }'> &nbsp;
+  return `<div class='${(allUnsupported) ? "na" : (anyDidntPass ? "bad" : "good")}'
+title = '${ tooltip.replace(/'/g, "&#39;") }'> ${allUnsupported ? "&ndash;" : "&nbsp;"}
 </div>`;
 };
 

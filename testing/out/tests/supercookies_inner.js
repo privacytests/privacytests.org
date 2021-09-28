@@ -19,7 +19,13 @@ let tests = {
     read: () => localStorage.getItem("secret"),
   },
   "indexedDB": {
-    write: (secret) => IdbKeyVal.set("secret", secret),
+    write: async (secret) => {
+      try {
+        return await IdbKeyVal.set("secret", secret);
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
+    },
     read: () => IdbKeyVal.get("secret")
   },
   "SharedWorker": {
@@ -38,7 +44,7 @@ let tests = {
         worker.port.start();
         worker.port.postMessage("request");
         worker.port.onmessage = (e) => resolve(e.data);
-        setTimeout(() => reject("no SharedWorker message received"), 1000);
+        setTimeout(() => reject("no SharedWorker message received"), 100);
       })
   },
   "blob": {
@@ -158,8 +164,12 @@ let tests = {
   },
   "CacheStorage": {
     write: async (key) => {
-      let cache = await caches.open("supercookies");
-      cache.addAll([`test.css?key=${key}`]);
+      try {
+        let cache = await caches.open("supercookies");
+        cache.addAll([`test.css?key=${key}`]);
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
     },
     read: async () => {
       let cache = await caches.open("supercookies");
@@ -276,11 +286,11 @@ let tests = {
     },
     read: async (key) => {
       let response = await fetch(testURI("etag", "", key));
-      let etagHeader = response.headers.get("etag");
-      if (etagHeader === "undefined") {
+      let receivedIfNoneMatch = response.headers.get("x-received-if-none-match");
+      if (receivedIfNoneMatch === "undefined") {
         return undefined;
       } else {
-        return etagHeader;
+        return receivedIfNoneMatch;
       }
     }
   },
@@ -394,8 +404,17 @@ let tests = {
   },
   "h3_connection": {
     write: async (secret) => {
-      await fetch(`https://h3.arthuredelstein.net:4433/`);
-      await fetch(`https://h3.arthuredelstein.net:4433/`);
+      // Ensure that we can switch over to h3 via alt-svc:
+      for (let i = 0; i<3; ++i) {
+        await fetch(`https://h3.arthuredelstein.net:4433/`);
+      }
+      // Are we now connecting over h3?
+      let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
+      let text = await response.text();
+      // Empty response text indicates we are not connecting over h3:
+      if (text.trim() === "") {
+        throw new Error("Unsupported");
+      }
     },
     read: async () => {
       let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
