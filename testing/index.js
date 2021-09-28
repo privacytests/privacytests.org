@@ -15,7 +15,7 @@ const { createDriver, navigate, openNewTab,
         waitForAttribute, quit, parseConfigFile } = require('./webdriver_utils.js');
 const render = require('./render');
 
-const DEFAULT_TIMEOUT_MS = 30000;
+const DEFAULT_TIMEOUT_MS = 60000;
 
 // ## Utility functions
 
