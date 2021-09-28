@@ -405,7 +405,9 @@ let tests = {
   "h3_connection": {
     write: async (secret) => {
       // Ensure that we can switch over to h3 via alt-svc:
-      await fetch(`https://h3.arthuredelstein.net:4433/`);
+      for (let i = 0; i<3; ++i) {
+        await fetch(`https://h3.arthuredelstein.net:4433/`);
+      }
       // Are we now connecting over h3?
       let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
       let text = await response.text();
