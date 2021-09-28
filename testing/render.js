@@ -91,7 +91,7 @@ const itemBody = ({passed, testFailed, tooltip, unsupported}) => {
   let allUnsupported = allHaveValue(unsupported, true);
   let anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : !passed;
   return `<div class='${(allUnsupported) ? "na" : (anyDidntPass ? "bad" : "good")}'
-title = '${ tooltip.replace(/'/g, "&#39;") }'> ${allUnsupported?"&ndash;":"&nbsp;"}
+title = '${ tooltip.replace(/'/g, "&#39;") }'> ${allUnsupported ? "&ndash;" : "&nbsp;"}
 </div>`;
 };
 
