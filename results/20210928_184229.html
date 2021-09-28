@@ -115,7 +115,7 @@ read: async (url) => {
       }
     }
 
-result, same first party: 19068303372499074
+result, same first party: 9147280412418357
 
 result, different first party: Error: NetworkError when attempting to fetch resource.
 
@@ -150,7 +150,7 @@ read: () =>
         setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
       })
 
-result, same first party: 19068303372499074
+result, same first party: 9147280412418357
 
 result, different first party: Error: The operation is insecure.
 
@@ -194,7 +194,7 @@ title = 'write: (secret) => {
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 19068303372499074
+result, same first party: 9147280412418357
 
 result, different first party: null
 
@@ -249,7 +249,7 @@ read: async (key) => {
       }
     }
 
-result, same first party: W/"11-62KTTxSTekXorJP77UzfbN7McnQ"
+result, same first party: W/"10-6Nsbr1+PXNsICI0zsQmx66Kn7B0"
 
 result, different first party: null
 
@@ -375,7 +375,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 19068303372499074
+result, same first party: 9147280412418357
 
 result, different first party: 
 
@@ -413,7 +413,7 @@ unsupported: true
 passed: undefined
 
 test failed: false'> &ndash;
-</div></td></tr><tr><td>HSTS</td><td><div class='good'
+</div></td></tr><tr><td>HSTS</td><td><div class='na'
 title = 'write: () => {
       let image = document.getElementById("hsts-image");
       image.src = "https://hsts.arthuredelstein.net/set_hsts.png";
@@ -426,15 +426,15 @@ read: () => new Promise((resolve, reject) => {
       image.src = "http://hsts.arthuredelstein.net/test_hsts.png";
     })
 
-result, same first party: image load succeeded
+result, same first party: Error: image load failed
 
 result, different first party: Error: image load failed
 
-unsupported: false
+unsupported: true
 
-passed: true
+passed: undefined
 
-test failed: false'> &nbsp;
+test failed: false'> &ndash;
 </div></td></tr><tr><td>iframe</td><td><div class='good'
 title = 'write: (key) => new Promise((resolve, reject) => {
       let iframe = document.createElement("iframe");
@@ -521,7 +521,7 @@ title = 'write: (secret) => localStorage.setItem("secret", secret)
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 19068303372499074
+result, same first party: 9147280412418357
 
 result, different first party: Error: The operation is insecure.
 
@@ -644,7 +644,7 @@ read: () =>
         setTimeout(() => reject("no SharedWorker message received"), 100);
       })
 
-result, same first party: 19068303372499074
+result, same first party: 9147280412418357
 
 result, different first party: Error: The operation is insecure.
 
@@ -664,9 +664,9 @@ read: async () => {
       return (await results.json()).sessionId;
     }
 
-result, same first party: ddfe46666ed47cdd19b2adaafc3832ff32d761fe0ce3c3bf342e2366262f34e4
+result, same first party: 5ae55c0a5c81a5280d1baa5cd36f23be5e1944123838309cdfadda3625c24273
 
-result, different first party: f0540e9319ef82f8e8e8b1abff04720484599817f0ac25ab57ff660caba4254b
+result, different first party: d6d3d9fc6c52334c4f544c0805ce091ad03923c11f2a65b98ca6675db72734d2
 
 unsupported: false
 
@@ -737,9 +737,9 @@ read: () => new Promise((resolve, reject) => {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
 
-result, same first party: Tue, 28 Sep 2021 18:58:52 GMT
+result, same first party: Tue, 28 Sep 2021 18:40:20 GMT
 
-result, different first party: Tue, 28 Sep 2021 18:59:29 GMT
+result, different first party: Tue, 28 Sep 2021 18:41:53 GMT
 
 unsupported: false
 
@@ -770,7 +770,7 @@ title = 'write: (secret) => sessionStorage.setItem("secret", secret)
 
 read: () => sessionStorage.getItem("secret")
 
-result, same first party: 3518397792665331
+result, same first party: 030478237684183007
 
 result, different first party: null
 
@@ -789,9 +789,9 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 3518397792665331
+result, same first party: 030478237684183007
 
-result, different first party: 3518397792665331
+result, different first party: 030478237684183007
 
 unsupported: false
 
@@ -823,76 +823,76 @@ title = 'passed: false'> &nbsp;
 title = 'IsTorExit: true
 passed: true'> &nbsp;
 </div></td></tr><tr><th colspan="4">Tracking query parameter tests</th></tr><tr><td>__hsfp</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>__hssc</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>__hstc</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>__s</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>_hsenc</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>_openstat</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>dclid</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>fbclid</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>gclid</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>hsCtaTracking</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>igshid</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>mc_eid</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>mkt_tok</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>ml_subscriber</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>ml_subscriber_hash</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>msclkid</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>oly_anon_id</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>oly_enc_id</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>rb_clickid</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>s_cid</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>vero_conv</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>vero_id</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>wickedid</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><td>yclid</td><td><div class='bad'
-title = 'value: 9553944609765477
+title = 'value: 6916723684261139
 passed: false'> &nbsp;
 </div></td></tr><tr><th colspan="4">Fingerprinting resistance tests</th></tr><tr><td>devicePixelRatio</td><td><div class='good'
 title = 'expression: devicePixelRatio
@@ -983,8 +983,8 @@ passed: true'> &nbsp;
 </div></td></tr><tr><td>performance.now()</td><td><div class='good'
 title = 'expression: performance.now()
 spoof expression: Math.floor(performance.now() / 100) * 100
-actual value: 3700
-desired value: 3700
+actual value: 4900
+desired value: 4900
 passed: true'> &nbsp;
 </div></td></tr><tr><td>performance.now() [Worker]</td><td><div class='good'
 title = 'expression: performance.now()
@@ -1033,10 +1033,10 @@ spoof expression: false
 actual value: false
 desired value: false
 passed: true'> &nbsp;
-</div></td></tr></table><p>Tests ran at 2021-09-28T18:58:15.193Z.
+</div></td></tr></table><p>Tests ran at 2021-09-28T18:39:38.089Z.
          Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/b8220dad7d5c5a400a11975425a6dd166c10e0b5"
     >b8220dad</a>.
-    Raw data in <a href="20210928_185951.json">JSON</a>.
+    Raw data in <a href="20210928_184229.json">JSON</a>.
     </p>
   </body>
 </html>
