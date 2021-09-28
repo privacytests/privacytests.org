@@ -19,20 +19,25 @@ const server = https.createServer(options, (request, response) => {
   let query = parsedURL.query;
   let socket = request.socket;
   //console.log(socket);
+  response.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  response.setHeader('Cache-Control', 'no-store');
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Connection', 'Keep-Alive');
+  response.setHeader('Keep-Alive', 'timeout=300, max=1000');
   if (query["mode"] === "write") {
     socketTags.set(socket, query["secret"]);
-    response.end();
-  } else {
+    response.end("empty");
+  } else if (query["mode"] === "read") {
     let tagFound = socketTags.get(socket);
     console.log("h1 read request. socket tag found:", tagFound);
-    response.setHeader('Content-Type', 'text/plain');
-    response.setHeader('Cache-Control', 'no-store');
-    response.setHeader('Access-Control-Allow-Origin', '*');
-    response.setHeader('Connection', 'Keep-Alive');
-    response.setHeader('Keep-Alive', 'timeout=300, max=1000');
     response.end(tagFound);
+  } else {
+    response.end();
   }
 });
+
+server.keepAliveTimeout = 300000;
+console.log("server.keepAliveTimeout:", server.keepAliveTimeout);
 
 server.listen(8901);
 console.log("listening for h1 connections on 8901");
