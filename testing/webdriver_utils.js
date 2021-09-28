@@ -38,7 +38,7 @@ let browserstackCredentials = memoize(
 // for producing a browserstack driver.
 let fetchBrowserstackCapabilities = async ({user, key}) => {
   let results = (await fetch(`https://${user}:${key}@api.browserstack.com/automate/browsers.json`)).json();
-//  console.log(await results);
+  console.log(JSON.stringify([...(new Set((await results).map(x => x["browser"])))]));
   return results;
 };
 
@@ -64,6 +64,7 @@ const selectMatchingBrowsers = (allCapabilities, selectionMap) =>
 // browser, browser_version, os, and os_version.
 let getBestBrowserstackCapabilities =
     async ({ user, key, browser, browser_version, os, os_version }) => {
+      console.log(browser, browser_version, os, os_version);
       let browserstackCapabilities = await fetchBrowserstackCapabilities({user, key});
       //    console.log(JSON.stringify([...new Set(browserstackCapabilities.map(x => x["browser"]))], null, "  "));
       if (browser_version === "latest") {
@@ -72,9 +73,13 @@ let getBestBrowserstackCapabilities =
       }
       let capabilitiesList = selectMatchingBrowsers(
         browserstackCapabilities, { browser, os, browser_version, os_version });
+      console.log(capabilitiesList);
       if (latest_browser_version) {
-        capabilitiesList = capabilitiesList.filter(x => !(x["browser_version"].includes("beta")));
+        capabilitiesList = capabilitiesList.filter(x => !isNaN(parseFloat(x["browser_version"])));
         capabilitiesList.sort((a, b) => parseFloat(b["browser_version"]) - parseFloat(a["browser_version"]));
+      }
+      if (capabilitiesList.length === 0) {
+        throw new Error("No matching browser found.");
       }
       return capabilitiesList[0];
     };
