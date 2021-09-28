@@ -63,13 +63,21 @@ const selectMatchingBrowsers = (allCapabilities, selectionMap) =>
 // Find the best browserstack capabilities that match the specified
 // browser, browser_version, os, and os_version.
 let getBestBrowserstackCapabilities =
-  async ({ user, key, browser, browser_version, os, os_version }) => {
+    async ({ user, key, browser, browser_version, os, os_version }) => {
       let browserstackCapabilities = await fetchBrowserstackCapabilities({user, key});
-//    console.log(JSON.stringify([...new Set(browserstackCapabilities.map(x => x["browser"]))], null, "  "));
-  let capabilitiesList = selectMatchingBrowsers(
-    browserstackCapabilities, { browser, os, browser_version, os_version });
-  return capabilitiesList[0];
-};
+      //    console.log(JSON.stringify([...new Set(browserstackCapabilities.map(x => x["browser"]))], null, "  "));
+      if (browser_version === "latest") {
+        browser_version = undefined;
+        latest_browser_version = true;
+      }
+      let capabilitiesList = selectMatchingBrowsers(
+        browserstackCapabilities, { browser, os, browser_version, os_version });
+      if (latest_browser_version) {
+        capabilitiesList = capabilitiesList.filter(x => !(x["browser_version"].includes("beta")));
+        capabilitiesList.sort((a, b) => parseFloat(b["browser_version"]) - parseFloat(a["browser_version"]));
+      }
+      return capabilitiesList[0];
+    };
 
 // Takes the given Builder and sets it up for the specified
 // browser, browser_version, os, and os_version on browserstack.
