@@ -394,8 +394,6 @@ let tests = {
   "h1_connection": {
     write: async (secret) => {
       await fetch(`https://h1.arthuredelstein.net:8901/?mode=write&secret=${secret}`);
-      // Keep pinging so we don't drop the connection.
-      //setInterval(() => fetch(`https://h1.arthuredelstein.net:8901/?mode=write&s\secret=${secret}`), 1000);
     },
     read: async () => {
       let response = await fetch(`https://h1.arthuredelstein.net:8901/?mode=read`);
