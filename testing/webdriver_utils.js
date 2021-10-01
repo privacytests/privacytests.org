@@ -73,10 +73,9 @@ let getBestBrowserstackCapabilities =
       }
       let capabilitiesList = selectMatchingBrowsers(
         browserstackCapabilities, { browser, os, browser_version, os_version });
-      console.log(capabilitiesList);
       if (latest_browser_version) {
-        capabilitiesList = capabilitiesList.filter(x => !isNaN(parseFloat(x["browser_version"])));
-        capabilitiesList.sort((a, b) => parseFloat(b["browser_version"]) - parseFloat(a["browser_version"]));
+        capabilitiesList = capabilitiesList.filter(x => !isNaN(Number(x["browser_version"])));
+        capabilitiesList.sort((a, b) => Number(b["browser_version"]) - Number(a["browser_version"]));
       }
       if (capabilitiesList.length === 0) {
         throw new Error("No matching browser found.");
@@ -92,6 +91,7 @@ let setToBrowserstack =
   builder.usingServer(`http://${user}:${key}@hub-cloud.browserstack.com/wd/hub`);
   let capabilities = await getBestBrowserstackCapabilities(
     { user, key, browser, browser_version, os, os_version });
+  console.log(capabilities);
   builder.withCapabilities(capabilities);
 };
 
