@@ -47,7 +47,7 @@ const testGPC = async () => {
 const runTests = async () => {
   let resultsJSON = {
     "Tor enabled": await testTor(),
-    "DoH enabled": await testDoH(),
+//    "DoH enabled": await testDoH(),
     "GPC enabled": await testGPC(),
   };
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
