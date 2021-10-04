@@ -4,7 +4,10 @@ const faviconURI = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAA
 const header = `
 <div class="header">
 <div class="title">
-  <!--<img height="50px" src="/check-mark.png">-->PrivacyTests.org
+  <!--<img height="50px" src="/check-mark.png">--><a href="/">PrivacyTests.org</a>
+</div>
+<div class="version">
+v. 0.5
 </div>
 <div class="links">
 <div class="link-header">

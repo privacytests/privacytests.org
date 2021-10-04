@@ -271,7 +271,7 @@ const render = async ({ dataFile, live, aggregate }) => {
   await fs.writeFile(resultsFileHTMLLatest, htmlUtils.htmlPage({
     title: "PrivacyTests.org",
     content: content(processedResults, path.basename(resultsFileJSON)),
-    cssFiles: ["./inline.css"]
+    cssFiles: ["./template.css", "./inline.css"]
   }));
   console.log(`Wrote out ${fileUrl(resultsFileHTMLLatest)}`);
   await fs.copyFile(resultsFileHTMLLatest, resultsFileHTML);
