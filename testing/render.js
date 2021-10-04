@@ -190,21 +190,6 @@ const resultsToTable = (results, title) => {
   return { headers, body };
 };
 
-const header = `
-<div class="header">
-<div class="title">
-  <!--<img height="50px" src="/check-mark.png">-->PrivacyTests.org
-</div>
-<div class="links">
-<div class="link-header">
-<a href="/about.html">About</a>
-</div>
-<div class="link-header">
-News
-</div>
-</div>
-  </div>`;
-
 const tableTitle = (results) => {
   let timeStarted = new Date(results.timeStarted);
   return `<div class="table-title">Desktop Browsers</div>
@@ -213,9 +198,8 @@ const tableTitle = (results) => {
 
 const content = (results, jsonFilename) => {
   let { headers, body } = resultsToTable(results.all_tests,  tableTitle(results));
-  return header + 
-    htmlTable({headers, body,
-               className:"comparison-table"}) +
+  return htmlTable({headers, body,
+                    className:"comparison-table"}) +
 	`<p>Tests ran at ${results.timeStarted}.
          Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/${results.git}"
     >${results.git.slice(0,8)}</a>.
@@ -287,6 +271,7 @@ const render = async ({ dataFile, live, aggregate }) => {
   await fs.writeFile(resultsFileHTMLLatest, htmlUtils.htmlPage({
     title: "PrivacyTests.org",
     content: content(processedResults, path.basename(resultsFileJSON)),
+    cssFiles: ["./inline.css"]
   }));
   console.log(`Wrote out ${fileUrl(resultsFileHTMLLatest)}`);
   await fs.copyFile(resultsFileHTMLLatest, resultsFileHTML);

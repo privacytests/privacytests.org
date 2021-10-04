@@ -11,7 +11,8 @@ const generateFile = (filename) => {
   const newFilename = filename.replace(".md", ".html");
   const htmlOutput = htmlUtils.htmlPage( {
     title: "PrivacyTests.org",
-    content: wrapCopy(marked(copy))
+    content: wrapCopy(marked(copy)),
+    cssFiles: ["template.css"]
   });
   console.log(htmlOutput);
   fs.writeFileSync(`out/${newFilename}`, htmlOutput, "utf8");
