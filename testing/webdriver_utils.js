@@ -176,8 +176,8 @@ let createDriver = async ({browser, browser_version,
   }
   if (chromiumBrowsers.includes(browser)) {
     setChromeOptions(builder, { edge: browser === "edge", incognito, path, tor_mode });
-  } else if (browser === "firefox" || browser === "tor browser") {
-    setFirefoxOptions(builder, { incognito, path, prefs, tor: browser === "tor browser" });
+  } else if (browser === "firefox" || browser === "tor") {
+    setFirefoxOptions(builder, { incognito, path, prefs, tor: browser === "tor" });
   } else if (browser === "safari") {
     setSafariOptions(builder, { incognito, path });
   } else {
