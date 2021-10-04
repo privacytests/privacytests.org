@@ -9,7 +9,6 @@
     "dateformat": "^3.0.3",
     "electron-chromedriver": "^14.0.0",
     "geckodriver": "^2.0.4",
-    "gh-pages": "^2.0.0",
     "marked": "^3.0.4",
     "memoizee": "^0.4.12",
     "minimist": "^1.2.5",
@@ -23,13 +22,14 @@
     "@compodoc/live-server": "^1.2.2",
     "browser-logos": "github:alrra/browser-logos",
     "file-url": "^2.0.2",
+    "gh-pages": "^3.2.3",
     "nodemon": "^2.0.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "gh-pages -d out",
     "publish": "cp out/results/latest.html out/results/index.html && gh-pages -d out",
-    "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render --live\" & ./node_modules/@compodoc/live-server/live-server.js --open=results/latest.html out"
+    "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render --live\" -e css,js,md & ./node_modules/@compodoc/live-server/live-server.js --open=results/latest.html out"
   },
   "jshintConfig": {
     "esversion": 11,

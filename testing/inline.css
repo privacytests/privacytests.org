@@ -1,5 +1,46 @@
 body {
   font-family: sans-serif;
+  margin:0px;
+ /* color:rgb(48, 48, 48);*/
+}
+
+.header {
+  background-color: #eee;
+ /* border-bottom: darkgreen 1px solid; */
+  color: rgb(83, 34, 34);
+  /*display:table-cell;*/
+  display: flex;
+  /*flex-flow: row wrap;*/
+  flex-direction: row;
+  font-family: sans-serif;
+  align-items: center;
+  overflow:hidden;
+  padding: 20px 18px;
+  position: relative;
+  top: 0px;
+  /*margin: 0px auto;*/
+  vertical-align: top;
+ /* z-index: 4;*/
+}
+
+.header div.links {
+  flex-grow: 1;
+  display:flex;
+  justify-content: right;
+  padding: 0px 30px;
+}
+
+.header div.link-header {
+  display: table-cell;
+  font-weight: bold;
+  padding: 0px 30px;
+  font-size: 16px;
+}
+
+.header div.title {
+  font-size: 28px;
+  font-weight:bold;
+  font-family: sans-serif;
 }
 
 .title {
@@ -10,11 +51,14 @@ body {
 }
 table.comparison-table {
   border-collapse:collapse;
+  margin-top: 10px;
+  position: relative;
+  margin: 10px 10px;
 }
-table.comparison-table tr:first-child th {
-  background-color: white;
+table.comparison-table tr th.table-header {
+  background-color:white;
   text-align: center;
-  word-break: break-all;
+  word-break: break-all;  
   vertical-align: top;
   top: 0px;
   font-size: 12px;
@@ -34,14 +78,18 @@ table.comparison-table tr:nth-child(2n) td {
   background-color: white;
 }
 table.comparison-table tr td {
-  min-width: 100px;
+  min-width: 50px;
   padding: 4px 0px;
   text-align: center;
 }
-table.comparison-table tr th:first-child {
-  font-size: 20px;
-  padding-top: 20px;
-  padding-bottom: 6px;
+table.comparison-table .subheading {
+  font-size: 18px;
+  padding-top: 30px;
+  padding-bottom: 5px;
+  color:#222;
+}
+table.comparison-table .first.subheading {
+  padding-top: 10px;
 }
 table.comparison-table tr td div {
   font-size: 16px;
@@ -67,17 +115,24 @@ table.comparison-table tr td:first-child,th:first-child {
   text-align: left;
   left: 0px;
   padding-left: 8px;
-  position: sticky;
-  position: -webkit-sticky;
+/*  position: sticky;
+  position: -webkit-sticky;*/
 }
 table.comparison-table tr td:first-child {
-  max-width: 220px;
-  min-width: 220px;
+  max-width: 150px;
+  min-width: 150px;
   word-break: break-all;
 }
-h1 {
+table.comparison-table .title {
   word-break: normal;
-  font-size: 32px;
+  font-size: 22px;
+  text-align: left;
+}
+table.comparison-table .date {
+  text-align: center;
+  font-size: 14px;
+  padding-top: 6px;
+  color: darkslategray;
 }
 blockquote {
   font-style: italic;

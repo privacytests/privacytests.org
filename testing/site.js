@@ -10,7 +10,7 @@ const generateFile = (filename) => {
   const copy = fs.readFileSync(`copy/${filename}`, "utf8");
   const newFilename = filename.replace(".md", ".html");
   const htmlOutput = htmlUtils.htmlPage( {
-    title: "Browser Privacy Tests",
+    title: "PrivacyTests.org",
     content: wrapCopy(marked(copy))
   });
   console.log(htmlOutput);

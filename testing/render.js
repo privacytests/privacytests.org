@@ -16,7 +16,6 @@ const loadBrowserLogos = async () => {
   for (let browser of ["brave", "firefox", "tor", "edge", "chrome", "opera", "chromium", "safari"]) {
     browserLogos[browser] = await browserLogoDataUri(browser);
   }
-  browserLogos["tor browser"] = browserLogos["tor"];
 };
 
 // Deep-copy a JSON structure (by value)
@@ -28,14 +27,17 @@ const htmlTable = ({ headers, body, className }) => {
   elements.push(`<table class="${className}">`);
   elements.push("<tr>");
   for (let header of headers) {
-    elements.push(`<th  style="text-transform: capitalize;">${header}</th>`);
+    elements.push(`<th class="table-header" style="text-transform: capitalize;">${header}</th>`);
   }
   elements.push("</tr>");
+  let firstSubheading = true;
   for (let row of body) {
     elements.push("<tr>");
     for (let item of row) {
       if (item.subheading) {
-        elements.push(`<th colspan="4">${item.subheading}</th>`);
+        className = firstSubheading ? "first subheading" : "subheading";
+        elements.push(`<th colspan="4" class="${className}">${item.subheading}</th>`);
+        firstSubheading = false;
       } else {
         elements.push(`<td>${item}</td>`);
       }
@@ -62,7 +64,7 @@ const resultsToDescription = ({
   let browserVersionFinal =  dropMicroVersion(browserVersion || version) || "(version unknown)";
   let platformFinal = platformName || os || platform;
   let platformVersionFinal = platformVersion || "";
-  let finalText = `<img src=${browserLogos[browser]} width="48" height="48"></img><br>${browserFinal} ${browserVersionFinal}<br>${platformFinal} ${platformVersionFinal}`;
+  let finalText = `<img src=${browserLogos[browser]} width="32" height="32"></img><br>${browserFinal}<br>${browserVersionFinal}`;//<br>${platformFinal} ${platformVersionFinal}`;
   if (prefs) {
     for (let key of Object.keys(prefs).sort()) {
       if (key !== "extensions.torlauncher.prompt_at_startup") {
@@ -71,10 +73,10 @@ const resultsToDescription = ({
     }
   }
   if (incognito === true) {
-    finalText += "<br>(incognito)";
+    finalText += "<br>private";
   }
   if (tor_mode === true) {
-    finalText += "<br>(Tor window)";
+    finalText += "<br>Tor";
   }
   return finalText;
 };
@@ -188,10 +190,30 @@ const resultsToTable = (results, title) => {
   return { headers, body };
 };
 
+const header = `
+<div class="header">
+<div class="title">
+  <!--<img height="50px" src="/check-mark.png">-->PrivacyTests.org
+</div>
+<div class="links">
+<div class="link-header">
+<a href="/about.html">About</a>
+</div>
+<div class="link-header">
+News
+</div>
+</div>
+  </div>`;
+
+const tableTitle = (results) => {
+  let timeStarted = new Date(results.timeStarted);
+  return `<div class="title">Desktop Browsers</div>
+  <div class="date">${timeStarted.toISOString().split("T")[0]}</div>`;
+};
+
 const content = (results, jsonFilename) => {
-  let { headers, body } = resultsToTable(results.all_tests, "Browser Privacy Tests");
-  return '' + // `<h1 class="title">Browser Privacy Tests</h1>` +
-//    `<pre>${JSON.stringify(results[0].testResults)}</pre>` +
+  let { headers, body } = resultsToTable(results.all_tests,  tableTitle(results));
+  return header + 
     htmlTable({headers, body,
                className:"comparison-table"}) +
 	`<p>Tests ran at ${results.timeStarted}.
@@ -227,7 +249,7 @@ const aggregateRepeatedTrials = (results) => {
   let aggregatedResults = new Map();
   for (let test of results.all_tests) {
     let key = resultsToDescription(test);
-    console.log(test, key);
+    //console.log(test, key);
     if (aggregatedResults.has(key)) {
       for (let subcategory of ["supercookies", "fingerprinting", "https", "misc", "navigation", "query"]) {
         let someTests = aggregatedResults.get(key).testResults[subcategory];
@@ -263,7 +285,7 @@ const render = async ({ dataFile, live, aggregate }) => {
 //  console.log(results.all_tests[0]);
 //  console.log(JSON.stringify(results));
   await fs.writeFile(resultsFileHTMLLatest, htmlUtils.htmlPage({
-    title: "Browser Privacy Project",
+    title: "PrivacyTests.org",
     content: content(processedResults, path.basename(resultsFileJSON)),
   }));
   console.log(`Wrote out ${fileUrl(resultsFileHTMLLatest)}`);
