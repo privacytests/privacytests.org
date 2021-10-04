@@ -207,7 +207,7 @@ News
 
 const tableTitle = (results) => {
   let timeStarted = new Date(results.timeStarted);
-  return `<div class="title">Desktop Browsers</div>
+  return `<div class="table-title">Desktop Browsers</div>
   <div class="date">${timeStarted.toISOString().split("T")[0]}</div>`;
 };
 
