@@ -176,7 +176,7 @@ const runHttpsTests = async (driver) => {
   let results = await loadAndGetResults(
     driver, 'https://arthuredelstein.net/browser-privacy/tests/https.html');
   results["Upgradable address"] = await testHttpsUpgrade(driver, "get");
-  results["Upgradable link"] = await testHttpsUpgrade(driver, "navigate");
+  results["Upgradable hyperlink"] = await testHttpsUpgrade(driver, "navigate");
   results["Insecure website"] = await testHttpsOnlyMode(driver);
   return results;
 };
