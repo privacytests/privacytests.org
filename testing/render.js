@@ -200,7 +200,7 @@ const content = (results, jsonFilename) => {
   let { headers, body } = resultsToTable(results.all_tests,  tableTitle(results));
   return htmlTable({headers, body,
                     className:"comparison-table"}) +
-	`<p>Tests ran at ${results.timeStarted}.
+	`<p class="footer">Tests ran at ${results.timeStarted}.
          Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/${results.git}"
     >${results.git.slice(0,8)}</a>.
     Raw data in <a href="${jsonFilename}">JSON</a>.
