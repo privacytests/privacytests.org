@@ -230,7 +230,7 @@ let quit = async (driver) => {
   try {
     await driver.quit();
   } catch (e) {
-    console.log(e);
+    // Ignore this error; we may already have caused browser to close.
   }
 };
 
