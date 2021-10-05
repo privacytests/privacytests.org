@@ -308,6 +308,7 @@ let tests = {
       image.src = "http://hsts.arthuredelstein.net/test_hsts.png";
     })
   },
+  /*
   "TLS_Session_Id": {
     write: async () => {
       let results = await fetch("https://tls.arthuredelstein.net:8900/");
@@ -318,6 +319,7 @@ let tests = {
       return (await results.json()).sessionId;
     }
   },
+  */
   "prefetch": {
     write: async (key) => {
       let link = document.createElement("link");
