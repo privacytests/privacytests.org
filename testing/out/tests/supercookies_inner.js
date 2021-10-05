@@ -278,6 +278,7 @@ let tests = {
       }
     }
   },
+/*
   "etag": {
     write: async (key) => {
       let prime = await fetch(testURI("etag", "", key));
@@ -294,6 +295,7 @@ let tests = {
       }
     }
   },
+*/
   "HSTS": {
     write: () => {
       let image = document.getElementById("hsts-image");
