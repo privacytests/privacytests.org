@@ -15,8 +15,8 @@
 const dual_tests = function dual_tests () {
 
 const performance_now_tests = [
-  [`performance.now()`,
-   `Math.floor(performance.now() / 100) * 100`],
+//  [`performance.now()`,
+//   `Math.floor(performance.now() / 100) * 100`],
 ];
 
 // ## Intl object
@@ -26,7 +26,7 @@ const dual_navigator_tests = [
 ];
 
 const event_tests = [
-  [`new Event("test").timeStamp % 100`, `0`],
+//  [`new Event("test").timeStamp % 100`, `0`],
 ];
 
 const test_pairs = (pairs) => pairs.map(
@@ -73,7 +73,7 @@ const window_property_tests = [
   [`screenY`, 0],
   [`outerWidth`, `innerWidth`],
   [`outerHeight`, `innerHeight`],
-  [`devicePixelRatio`, 1]
+//  [`devicePixelRatio`, 1]
 ];
 
 const screen_tests = [
@@ -82,23 +82,23 @@ const screen_tests = [
 ];
 
 let navigator_tests = [
-  [`navigator.buildID === undefined || navigator.buildID === "20181001000000"`, true],
-  [`navigator.getBattery`, undefined],
-  [`try {
+//  [`navigator.buildID === undefined || navigator.buildID === "20181001000000"`, true],
+//  [`navigator.getBattery`, undefined],
+/*  [`try {
       navigator.getBattery();
       true;
     } catch (e) {
       false;
    }`,
-   `false`],
-  [`navigator.mimeTypes.length`, 0],
-  [`navigator.plugins.length`, 0],
+   `false`],*/
+//  [`navigator.mimeTypes.length`, 0],
+//  [`navigator.plugins.length`, 0],
 ];
 
 const mouse_event_tests = [
   [`mouseEvent.screenX`, `mouseEvent.clientX`],
   [`mouseEvent.screenY`, `mouseEvent.clientY`],
-  [`mouseEvent.timeStamp % 100`, `0`],
+//  [`mouseEvent.timeStamp % 100`, `0`],
 ];
 
 const run_in_worker = function (aFunction) {
