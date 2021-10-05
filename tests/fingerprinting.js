@@ -22,7 +22,7 @@ const performance_now_tests = [
 // ## Intl object
 
 const dual_navigator_tests = [
-  [`navigator.hardwareConcurrency`, 2],
+//  [`navigator.hardwareConcurrency`, 2],
 ];
 
 const event_tests = [
