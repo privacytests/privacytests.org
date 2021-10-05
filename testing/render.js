@@ -88,7 +88,7 @@ const allHaveValue = (x, value) => {
 // Generates a table cell which indicates whether
 // a test passed, and includes the tooltip with
 // more information.
-const itemBody = ({passed, testFailed, tooltip, unsupported}) => {
+const testBody = ({passed, testFailed, tooltip, unsupported}) => {
   let allTestsFailed = allHaveValue(testFailed, true);
   let allUnsupported = allHaveValue(unsupported, true);
   let anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : !passed;
@@ -144,7 +144,7 @@ test failed: ${ joinIfArray(testFailed) }
 `.trim();
 };
 
-const resultsSection = ({bestResults, category, tooltipFunction}) => {
+const resultsSection = ({bestResults, category, tooltipFunction, wordBreak}) => {
 //  console.log(results);
   let rowNames = Object.keys(bestResults[0]["testResults"][category])
       .sort(Intl.Collator().compare);
@@ -153,11 +153,11 @@ const resultsSection = ({bestResults, category, tooltipFunction}) => {
   let section = [];
   for (let rowName of rowNames) {
     let row = [];
-    row.push(rowName);
+    row.push(`<div style="word-break: ${wordBreak ?? "break-word"}">${rowName}</div>`);
     for (let resultMap of resultMaps) {
       let tooltip = tooltipFunction(resultMap[rowName]);
       let { passed, testFailed, unsupported } = resultMap[rowName];
-      row.push(itemBody({ passed, testFailed, tooltip, unsupported }));
+      row.push(testBody({ passed, testFailed, tooltip, unsupported }));
     }
     section.push(row);
   }
@@ -183,10 +183,10 @@ const resultsToTable = (results, title) => {
   body = body.concat(resultsSection({bestResults, category:"https", tooltipFunction: simpleToolTip}));
   body.push([{subheading:"Misc tests"}]);
   body = body.concat(resultsSection({bestResults, category:"misc", tooltipFunction: simpleToolTip}));
+  body.push([{subheading:"Fingerprinting resistance tests"}]);
+  body = body.concat(resultsSection({bestResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip, wordBreak: "break-all"} ));
   body.push([{subheading:"Tracking query parameter tests"}]);
   body = body.concat(resultsSection({bestResults, category:"query", tooltipFunction: simpleToolTip}));
-  body.push([{subheading:"Fingerprinting resistance tests"}]);
-  body = body.concat(resultsSection({bestResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
   return { headers, body };
 };
 
