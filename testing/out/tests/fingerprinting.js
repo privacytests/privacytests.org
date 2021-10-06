@@ -64,10 +64,6 @@ return { test_results: run_all_tests(),
          test_pairs: self.Window ? test_pairs : undefined };
 };
 
-const prelude = `
-  window.mouseEvent = new MouseEvent("click", { clientX: 10, clientY: 20 });
-`;
-
 const window_property_tests = [
   [`screenX`, 0],
   [`screenY`, 0],
@@ -96,8 +92,8 @@ let navigator_tests = [
 ];
 
 const mouse_event_tests = [
-  [`mouseEvent.screenX`, `mouseEvent.clientX`],
-  [`mouseEvent.screenY`, `mouseEvent.clientY`],
+//  [`mouseEvent.screenX`, `mouseEvent.clientX`],
+//  [`mouseEvent.screenY`, `mouseEvent.clientY`],
 //  [`mouseEvent.timeStamp % 100`, `0`],
 ];
 
@@ -124,10 +120,12 @@ const list_to_map = (list, keyFn) => {
 };
 
 const run_all_tests = async function () {
+  //window.mouseEvent = await new Promise((resolve, reject) => document.addEventListener("click", resolve, {once:true}));
+
   let { test_pairs, test_results } = dual_tests();
   let { test_results: test_results_worker } = await run_in_worker(dual_tests);
   test_results_worker.map(t => Object.assign(t, {worker: true}));
-  eval(prelude);
+  //eval(prelude);
   let all_tests = test_results.concat(
     ...test_results_worker,
     test_pairs(window_property_tests),
