@@ -125,7 +125,7 @@ const run_all_tests = async function () {
   let { test_pairs, test_results } = dual_tests();
   let { test_results: test_results_worker } = await run_in_worker(dual_tests);
   test_results_worker.map(t => Object.assign(t, {worker: true}));
-  eval(prelude);
+  //eval(prelude);
   let all_tests = test_results.concat(
     ...test_results_worker,
     test_pairs(window_property_tests),
