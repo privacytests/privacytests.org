@@ -6,11 +6,13 @@ const githubDataURI = datauri("./out/github.svg").content;
 
 const header = `
 <div class="header">
+<div class="title-wrapper">
 <div class="title">
   <!--<img height="50px" src="/check-mark.png">--><a href="/">PrivacyTests.org</a>
 </div>
 <div class="version">
 v. 0.5
+</div>
 </div>
 <div class="links">
 <div class="link-header">
