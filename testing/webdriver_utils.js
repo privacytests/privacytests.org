@@ -259,6 +259,59 @@ const parseConfigFile = (configFile, repeat = 1) => {
   return expandConfigList(rawConfigs, repeat);
 };
 
+// Instructions for finding and extracting the version number
+// for each browser type.
+const versionPaths = {
+  "firefox": {
+    url: "about:support",
+    cssPath: "#version-box"
+  },
+  "tor": {
+    url: "about:tor",
+    cssPath: "#torbrowser-version",
+    regex: "\\s[0-9,\\.]+"
+  },
+  "brave": {
+    url: "brave://version",
+    cssPath: "#version span",
+    regex: "^[0-9,\\.]+"
+  },
+  "edge": {
+    url: "edge://version",
+    cssPath: "#version span",
+    regex: "^[0-9,\\.]+"
+  },
+  "chrome": {
+    url: "chrome://version",
+    cssPath: "#version span",
+    regex: "^[0-9,\\.]+"
+  },
+  "opera": {
+    url: "https://example.com",
+    expression: () => navigator.userAgent.match("OPR\/([0-9,\\.]+)")[1]
+  },
+  "safari": undefined // Couldn't find an approach that works.
+};
+
+// Read the version number for each browser.
+const readVersion = async (driver, browser) => {
+  if (!versionPaths[browser]) {
+    return undefined;
+  }
+  let { url, cssPath, regex, expression } = versionPaths[browser];
+  await driver.get(url);
+  let result;
+  if (cssPath) {
+    let element = driver.findElement({css: cssPath});
+    let content = await element.getText();
+    result = regex ? content.match(regex)[0] : content;
+  } else {
+    result = await driver.executeScript(expression);
+  }
+  return result.trim();
+};
+
 module.exports = {
-  createDriver, waitForAttribute, navigate, openNewTab, quit, parseConfigFile
+  createDriver, waitForAttribute, navigate, openNewTab, quit,
+  parseConfigFile, readVersion
 };
