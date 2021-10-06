@@ -40,31 +40,36 @@ const gitHash = async () => {
 // Tell the selenium driver to visit a url, wait for the attribute
 // "data-test-results" to have a value, and resolve that value
 // in a promise. Rejects if timeout elapses first.
-const loadAndGetResults = async (driver, url, newTab = false, timeout = DEFAULT_TIMEOUT_MS, click = undefined) => {
+const loadAndGetResults = async (driver, url, { newTab, timeout, click } = {}) => {
   if (newTab) {
     let tab = await openNewTab(driver);
     await driver.switchTo().window(tab);
   }
   console.log(`loading ${url}`);
   await navigate(driver, url);
-  if (click) {
+  await sleep(1000);
+  if (false) { // (click) {
     let actions = driver.actions();
-    await actions.move({origin: Origin.VIEWPORT, x: click.x, y:click.y}).click();
+    let body = await driver.findElement({css:"body"});
+    await driver.executeScript(`document.body.innerHTML += "<a id='clickLink'>click</a>"`);
+    await driver.findElement({id:"clickLink"}).click();
+    //await actions.move({origin: body, x: click.x, y:click.y}).click();
+    console.log("clicked", click);
   }
   let testResultsString =
-      await waitForAttribute(driver, "body", "data-test-results", timeout);
+      await waitForAttribute(driver, "body", "data-test-results", timeout ?? DEFAULT_TIMEOUT_MS);
   return testResultsString === "undefined" ? undefined : JSON.parse(testResultsString);
 };
 
 // Causes driver to connect to our supercookie tests. Returns
 // a map of test names to test results.
-const runSupercookieTests = async (driver, newTabs) => {
-  let stem = newTabs ? "supercookies" : "navigation";
+const runSupercookieTests = async (driver, newTab) => {
+  let stem = newTab ? "supercookies" : "navigation";
   let secret = Math.random().toString().slice(2);
   let iframe_root_same = false ? "http://localhost:8080" : "https://arthuredelstein.net/browser-privacy";
   let iframe_root_different = false ? "http://localhost:8080" : "https://arthuredelstein.github.io/privacytests.org";
   let writeResults = await loadAndGetResults(
-    driver, `${iframe_root_same}/tests/${stem}.html?mode=write&default=${secret}`, true);
+    driver, `${iframe_root_same}/tests/${stem}.html?mode=write&default=${secret}`, {newTab: true});
   let readParams = "";
   for (let [test, data] of Object.entries(writeResults)) {
     if ((typeof data["result"]) === "string") {
@@ -75,11 +80,11 @@ const runSupercookieTests = async (driver, newTabs) => {
   //  console.log(readParams);
 //  await sleep(5000);
   let readResultsSameFirstParty = await loadAndGetResults(
-    driver, `${iframe_root_same}/tests/${stem}.html?mode=read${readParams}`, newTabs);
+    driver, `${iframe_root_same}/tests/${stem}.html?mode=read${readParams}`, { newTab });
   //  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
   //await sleep(5000);
   let readResultsDifferentFirstParty = await loadAndGetResults(
-    driver, `${iframe_root_different}/tests/${stem}.html?mode=read${readParams}`, newTabs);
+    driver, `${iframe_root_different}/tests/${stem}.html?mode=read${readParams}`, { newTab });
   let jointResult = {};
   for (let test in readResultsDifferentFirstParty) {
     let { write, read, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
@@ -179,7 +184,7 @@ const testHttpsOnlyMode = async (driver) => {
 // Run all of our https privacy tests.
 const runHttpsTests = async (driver) => {
   let results = await loadAndGetResults(
-    driver, 'https://arthuredelstein.net/browser-privacy/tests/https.html');
+    driver, 'https://arthuredelstein.net/browser-privacy/tests/https.html', {newTab: true});
   results["Upgradable address"] = await testHttpsUpgrade(driver, "get");
   results["Upgradable hyperlink"] = await testHttpsUpgrade(driver, "navigate");
   results["Insecure website"] = await testHttpsOnlyMode(driver);
@@ -189,7 +194,7 @@ const runHttpsTests = async (driver) => {
 // Run all of our miscellaneous privacy tests.
 const runMiscTests = async (driver) => {
   return await loadAndGetResults(
-    driver, 'https://arthuredelstein.net/browser-privacy/tests/misc.html');
+    driver, 'https://arthuredelstein.net/browser-privacy/tests/misc.html', {newTab: true});
 };
 
 // Run all of our privacy tests using selenium. Returns
@@ -203,7 +208,7 @@ const runMiscTests = async (driver) => {
 const runTests = async (driver) => {
   try {
     let fingerprinting = await loadAndGetResults(
-      driver, 'https://arthuredelstein.net/browser-privacy/tests/fingerprinting.html', click = {x: 10, y: 10});
+      driver, 'https://arthuredelstein.net/browser-privacy/tests/fingerprinting.html', { newTab: true, click: {x: 10, y: 10}});
     let https = await runHttpsTests(driver);
     let misc = await runMiscTests(driver);
     let supercookies = await runSupercookieTests(driver, true);
