@@ -12,7 +12,8 @@ const minimist = require('minimist');
 const dateFormat = require('dateformat');
 
 const { createDriver, navigate, openNewTab,
-        waitForAttribute, quit, parseConfigFile } = require('./webdriver_utils.js');
+        waitForAttribute, quit, parseConfigFile,
+        readVersion } = require('./webdriver_utils.js');
 const render = require('./render');
 const { Origin } = require('selenium-webdriver');
 const { result } = require('lodash');
@@ -198,51 +199,6 @@ const runMiscTests = async (driver) => {
     driver, 'https://arthuredelstein.net/browser-privacy/tests/misc.html', {newTab: true});
 };
 
-const versionPaths = {
-  "firefox": {
-    url: "about:support",
-    cssPath: "#version-box"
-  },
-  "tor": {
-    url: "about:tor",
-    cssPath: "#torbrowser-version",
-    regex: "\\s[0-9,\\.]+"
-  },
-  "brave": {
-    url: "brave://version",
-    cssPath: "#version span",
-    regex: "^[0-9,\\.]+"
-  },
-  "edge": {
-    url: "edge://version",
-    cssPath: "#version span",
-    regex: "^[0-9,\\.]+"
-  },
-  "chrome": {
-    url: "chrome://version",
-    cssPath: "#version span",
-    regex: "^[0-9,\\.]+"
-  },
-  "opera": {
-    url: "https://example.com",
-    expression: () => navigator.userAgent.match("OPR\/([0-9,\\.]+)")[1]
-  }
-};
-
-const readVersion = async (driver, browser) => {
-  let { url, cssPath, regex, expression } = versionPaths[browser];
-  await driver.get(url);
-  let result;
-  if (cssPath) {
-    let element = driver.findElement({css: cssPath});
-    let content = await element.getText();
-    result = regex ? content.match(regex)[0] : content;
-  } else {
-    result = await driver.executeScript(expression);
-  }
-  return result.trim();
-};
-
 // Run all of our privacy tests using selenium. Returns
 // a map of test types to test result maps. Such as
 // `
@@ -287,9 +243,9 @@ const runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
 //      console.log('fullCapabilities', fullCapabilities);
       let timeStarted = new Date().toISOString();
       let reportedVersion = await readVersion(driver, browser);
-      console.log("${browser} version found:", reportedVersion);
+      console.log(`${browser} version found: ${reportedVersion}`);
       let testResults = await runTests(driver);
-//      console.log({shouldQuit});
+      //      console.log({shouldQuit});
       all_tests.push({ browser, reportedVersion, capabilities: fullCapabilities,
                        testResults, timeStarted,
                        prefs, incognito, tor_mode });
