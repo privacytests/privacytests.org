@@ -14,6 +14,7 @@ const dateFormat = require('dateformat');
 const { createDriver, navigate, openNewTab,
         waitForAttribute, quit, parseConfigFile } = require('./webdriver_utils.js');
 const render = require('./render');
+const { Origin } = require('selenium-webdriver');
 
 const DEFAULT_TIMEOUT_MS = 60000;
 
@@ -39,13 +40,17 @@ const gitHash = async () => {
 // Tell the selenium driver to visit a url, wait for the attribute
 // "data-test-results" to have a value, and resolve that value
 // in a promise. Rejects if timeout elapses first.
-const loadAndGetResults = async (driver, url, newTab = false, timeout = DEFAULT_TIMEOUT_MS) => {
+const loadAndGetResults = async (driver, url, newTab = false, timeout = DEFAULT_TIMEOUT_MS, click = undefined) => {
   if (newTab) {
     let tab = await openNewTab(driver);
     await driver.switchTo().window(tab);
   }
   console.log(`loading ${url}`);
   await navigate(driver, url);
+  if (click) {
+    let actions = driver.actions();
+    await actions.move({origin: Origin.VIEWPORT, x: click.x, y:click.y}).click();
+  }
   let testResultsString =
       await waitForAttribute(driver, "body", "data-test-results", timeout);
   return testResultsString === "undefined" ? undefined : JSON.parse(testResultsString);
@@ -57,7 +62,7 @@ const runSupercookieTests = async (driver, newTabs) => {
   let stem = newTabs ? "supercookies" : "navigation";
   let secret = Math.random().toString().slice(2);
   let iframe_root_same = false ? "http://localhost:8080" : "https://arthuredelstein.net/browser-privacy";
-  let iframe_root_different = false ? "http://localhost:8080" : "https://arthuredelstein.github.io/browser-privacy";
+  let iframe_root_different = false ? "http://localhost:8080" : "https://arthuredelstein.github.io/privacytests.org";
   let writeResults = await loadAndGetResults(
     driver, `${iframe_root_same}/tests/${stem}.html?mode=write&default=${secret}`, true);
   let readParams = "";
@@ -66,7 +71,7 @@ const runSupercookieTests = async (driver, newTabs) => {
       readParams += `&${test}=${encodeURIComponent(data["result"])}`;
     }
   }
-  console.log({writeResults});
+//  console.log({writeResults});
   //  console.log(readParams);
 //  await sleep(5000);
   let readResultsSameFirstParty = await loadAndGetResults(
@@ -198,9 +203,9 @@ const runMiscTests = async (driver) => {
 const runTests = async (driver) => {
   try {
     let fingerprinting = await loadAndGetResults(
-      driver, 'https://arthuredelstein.net/browser-privacy/tests/fingerprinting.html');
-      let https = await runHttpsTests(driver);
-      let misc = await runMiscTests(driver);
+      driver, 'https://arthuredelstein.net/browser-privacy/tests/fingerprinting.html', click = {x: 10, y: 10});
+    let https = await runHttpsTests(driver);
+    let misc = await runMiscTests(driver);
     let supercookies = await runSupercookieTests(driver, true);
     let navigation = await runNavigationTests(driver);
     let query = await runQueryParameterTests(driver, TRACKING_QUERY_PARAMETERS);
