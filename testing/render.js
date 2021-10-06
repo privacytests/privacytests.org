@@ -49,12 +49,13 @@ const dropMicroVersion = (version) =>
 // the header for the column showing thoses tests.
 const resultsToDescription = ({
   browser,
+  reportedVersion,
   capabilities: { os, os_version, browser: browser2, browserName, browserVersion, version,
                   browser_version, device, platformVersion, platformName, platform },
   prefs, incognito, tor_mode
 }) => {
   let browserFinal = browser || browserName || browser2;
-  let browserVersionFinal =  dropMicroVersion(browserVersion || version) || "(version unknown)";
+  let browserVersionFinal =  dropMicroVersion(reportedVersion || browserVersion || version) || "(version unknown)";
   let platformFinal = platformName || os || platform;
   let platformVersionFinal = platformVersion || "";
   let finalText = `<img src=${browserLogoDataUri(browser)} width="32" height="32"></img><br>${browserFinal}<br>${browserVersionFinal}`;//<br>${platformFinal} ${platformVersionFinal}`;
