@@ -4,19 +4,12 @@ const path = require('path');
 const fileUrl = require('file-url');
 const open = require('open');
 const minimist = require('minimist');
-const datauri = require('datauri');
+const datauri = require('datauri/sync');
 const template = require('./template.js');
+const _ = require('lodash');
 
-let browserLogos = {};
-
-const browserLogoDataUri = async (browserName) =>
-  datauri(`node_modules/browser-logos/src/${browserName}/${browserName}_128x128.png`);
-
-const loadBrowserLogos = async () => {
-  for (let browser of ["brave", "firefox", "tor", "edge", "chrome", "opera", "chromium", "safari"]) {
-    browserLogos[browser] = await browserLogoDataUri(browser);
-  }
-};
+const browserLogoDataUri = _.memoize((browserName) =>
+  datauri(`node_modules/browser-logos/src/${browserName}/${browserName}_128x128.png`).content);
 
 // Deep-copy a JSON structure (by value)
 const deepCopy = (json) => JSON.parse(JSON.stringify(json));
@@ -64,7 +57,7 @@ const resultsToDescription = ({
   let browserVersionFinal =  dropMicroVersion(browserVersion || version) || "(version unknown)";
   let platformFinal = platformName || os || platform;
   let platformVersionFinal = platformVersion || "";
-  let finalText = `<img src=${browserLogos[browser]} width="32" height="32"></img><br>${browserFinal}<br>${browserVersionFinal}`;//<br>${platformFinal} ${platformVersionFinal}`;
+  let finalText = `<img src=${browserLogoDataUri(browser)} width="32" height="32"></img><br>${browserFinal}<br>${browserVersionFinal}`;//<br>${platformFinal} ${platformVersionFinal}`;
   if (prefs) {
     for (let key of Object.keys(prefs).sort()) {
       if (key !== "extensions.torlauncher.prompt_at_startup") {
@@ -257,7 +250,6 @@ const aggregateRepeatedTrials = (results) => {
 
 const render = async ({ dataFile, live, aggregate }) => {
   console.log("aggregate:", aggregate);
-  await loadBrowserLogos();
   let resultsFileJSON = dataFile ?? await latestResultsFile("./out/results");
   let resultsFileHTMLLatest = "./out/results/latest.html";
   let resultsFileHTML = resultsFileJSON.replace(/\.json$/, ".html");
