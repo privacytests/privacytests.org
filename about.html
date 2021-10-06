@@ -21,6 +21,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  padding: 0px;
 }
 
 .header {
@@ -33,7 +34,7 @@
   flex-direction: row;
   font-family: sans-serif;
   align-items: center;
-  overflow:hidden;
+  overflow: hidden;
   padding: 20px 18px;
   position: relative;
   top: 0px;
@@ -42,11 +43,22 @@
  /* z-index: 4;*/
 }
 
+.header div.title-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
 .header div.title {
   font-size: 28px;
   font-weight:bold;
   font-family: sans-serif;
   flex-grow: 0;
+}
+
+.header .title-wrapper div.version {
+  font-size: 14px;
+  padding: 4px;
 }
 
 .header div.links {
@@ -79,9 +91,7 @@
   padding-right: 20px;
 }
 
-.version {
-  font-size: 14px;
-}
+
 
 blockquote {
   font-style: italic;
@@ -92,18 +102,23 @@ blockquote {
   padding: 20px 50px;
   margin: auto;
 }
-</style>
+
+p.footer {
+  padding: 0px 20px;
+}</style>
   </head>
   <body>
     <div class="gutter"></div>
     <div class="wrapper">
     
 <div class="header">
+<div class="title-wrapper">
 <div class="title">
   <!--<img height="50px" src="/check-mark.png">--><a href="/">PrivacyTests.org</a>
 </div>
 <div class="version">
 v. 0.5
+</div>
 </div>
 <div class="links">
 <div class="link-header">
@@ -119,26 +134,26 @@ v. 0.5
 </div>
     
   <div class="copy"><h1 id="what-is-privacytestsorg">What is PrivacyTests.org?</h1>
-<p><em>Arthur Edelstein, October 4, 2021</em></p>
-<p>All web browsers leak, but some are more leaky than others. Most browsers leak your identity and your browser history. This website reports the results of an ongoing audit of the privacy characteristics of web browsers.</p>
-<h2 id="why-web-privacy-matters">Why web privacy matters</h2>
+<p><em>Arthur Edelstein</em></p>
+<p>All web browsers leak, but some are more leaky than others. Most browsers leak your identity and your browser history. This website reports the results of an ongoing audit of the privacy characteristics of several important web browsers.</p>
+<h2 id="why-privacy-matters">Why privacy matters</h2>
 <p>The web has rapidly developed into one of the primary ways that billions of people interact with the world. Reading the news, communicating with friends and colleagues, watching movies, participating in political discourse, and searching for information all take place largely through the web.</p>
 <p>Despite the crucial importance of the web, it has been designed in a fashion that historically has not respected individuals&#39; human right to privacy. Numerous web standards are actively hostile to preserving users&#39; anonymity.</p>
 <p>Why is this a problem? Because it violates your privacy, and allows you to be discriminated against. This is not merely creepy, but a danger to our human rights and the structure of free societies.</p>
 <blockquote>
 <p>&quot;We are creating an architecture of surveillance that is so good that if it gets taken over by a bad government we are in serious trouble because it will be impossible to resist.&quot; -- <a href="https://www.youtube.com/watch?v=6q5WAyZDLgo">Carissa Véliz</a>.</p>
 </blockquote>
-<h2 id="why-browsers-are-crucial">Why browsers are crucial</h2>
-<p>Once data has left your laptop, tablet or phone, there is not much you can do to control it. Companies are happy to hold on to data for years or decades. But how did it leave your device? More often than not, that data has leaked through a web browser.</p>
-<p>Web browsers, sometimes inadvertently and but often by design, let tracking companies know what you read, what you write, where you live, what you search for and what you buy. And this information is assembled by those companies into detailed individual profiles of every person on the internet: these companies know all about your ethnicity, your religion, your politic views, your sexual orientation, your gender, your family, your friends, your colleagues, your health history, your relationships, your educational records, and so on -- all data leaked through web browsers.</p>
-<p>Fortunately, most browser makers have recognized their responsibility to protect users&#39; privacy, and are working on improving their privacy protections. But the default behavior for browsers used by billions of people remains highly leaky. For most people using the web, massive amounts of data continues to be silently leaked by their web browsers.</p>
+<h2 id="why-web-browsers-are-critical-to-online-privacy">Why web browsers are critical to online privacy</h2>
+<p>Once private data has left your laptop, tablet or phone, there is not much you can do to control it. Companies are happy to hold on to your data for years or decades. But how did that data leave your device? More often than not, that data has leaked through a web browser.</p>
+<p>Web browsers, sometimes inadvertently but often by design, leak data about what websites you have visited. This information lets tracking companies know what you read, what you write, where you are located, what you search for and what you buy. And this highly personal information is assembled by those companies into detailed individual profiles of every person on the internet. These companies know all about your ethnicity, your religion, your politic views, your sexual orientation, your gender, your family, your friends, your colleagues, your health history, your habits, your relationships, your educational records, and so on. And companies often will sell and share the data to third parties.</p>
+<p>Fortunately, some browser makers have recognized their responsibility to stop users&#39; private information from leaking out in the first place. All browser teams are working on improving their privacy protections. But the default behavior for browsers used by billions of people remains highly leaky. For most people using the web, massive amounts of data continues to be silently leaked by their web browsers.</p>
 <h2 id="how-the-tests-work">How the tests work</h2>
-<p>I wanted to understand in detail: what data is each browser leaking? What browsers are best for privacy?</p>
-<p>In order to understand and compare what the privacy characteristics of browsers are, I subject each browser to the same suite of open source automated tests. Each privacy test emulates a different method of tracking. After each tracking test runs, it records whether that tracking attempt succeeded in each browser. For example, our testing apparatus will tell a browser to visit two test websites that embed the same third-party cookie. If that cookie allows information to be shared between the two websites, we know the browser is not protecting you against generic third-party cookie tracking.</p>
+<p>The goal of PrivacyTests.org is to understand in detail: what data is each browser leaking? What browsers are best for privacy?</p>
+<p>In order to understand and compare what the privacy characteristics of browsers are, we subject each browser to the same suite of open-source automated tests. Each privacy test emulates a different method of tracking. After each tracking test runs, it records whether that tracking attempt succeeded in each browser. For example, our testing system will instruct a browser to visit two test websites that embed the same third-party cookie. If the browser allows that cookie to be shared between the two websites, we know the browser is failing to protect its users against third-party cookie tracking.</p>
 <p>If a browser is found to protect users from the data leak, it gets a green <img src="/check-mark.png" width=16 height=16>, but if it leaks user data, it gets a red <img src="/x-mark.png" width=16 height=16>.</p>
-<p>For more technical details are available in the technical section.</p>
 <p>It is my hope that these comparative tests will help you decide which browser to use. And I hope it will encourage browser makers to continue to improve the privacy protections of their browsers. The tests will continue to run with the latest version of each browser and the results will be updated on the homepage.</p>
-<p>This project is a work in progress! Not all tracking vectors are included in our tests. In the future I expect to add more missing tracking vectors. I plan to include more browsers and browser extensions in our tests. <a href="https://twitter.com/browserprivacy">Feedback</a>, <a href="https://github.com/arthuredelstein/browser-privacy/issues">bug reports</a> and <a href="https://github.com/arthuredelstein/browser-privacy/pulls">pull requests</a> are welcome.</p>
+<h2 id="work-in-progress">Work in progress</h2>
+<p>This project is a work in progress! Not all tracking vectors are included in our tests. In the future I expect to add more many more privacy tests. <a href="https://twitter.com/browserprivacy">Feedback</a>, <a href="https://github.com/arthuredelstein/browser-privacy/issues">bug reports</a> and <a href="https://github.com/arthuredelstein/browser-privacy/pulls">pull requests</a> are welcome.</p>
 <p><em>Arthur Edelstein was previously a Tor Browser developer with the Tor Project and a Product Manager for Firefox Privacy and Security at Mozilla. This website and the browser privacy tests are an independent project.</em></p>
 </div>
 

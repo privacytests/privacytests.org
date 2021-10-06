@@ -21,6 +21,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  padding: 0px;
 }
 
 .header {
@@ -33,7 +34,7 @@
   flex-direction: row;
   font-family: sans-serif;
   align-items: center;
-  overflow:hidden;
+  overflow: hidden;
   padding: 20px 18px;
   position: relative;
   top: 0px;
@@ -42,11 +43,22 @@
  /* z-index: 4;*/
 }
 
+.header div.title-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
 .header div.title {
   font-size: 28px;
   font-weight:bold;
   font-family: sans-serif;
   flex-grow: 0;
+}
+
+.header .title-wrapper div.version {
+  font-size: 14px;
+  padding: 4px;
 }
 
 .header div.links {
@@ -79,9 +91,7 @@
   padding-right: 20px;
 }
 
-.version {
-  font-size: 14px;
-}
+
 
 blockquote {
   font-style: italic;
@@ -92,18 +102,23 @@ blockquote {
   padding: 20px 50px;
   margin: auto;
 }
-</style>
+
+p.footer {
+  padding: 0px 20px;
+}</style>
   </head>
   <body>
     <div class="gutter"></div>
     <div class="wrapper">
     
 <div class="header">
+<div class="title-wrapper">
 <div class="title">
   <!--<img height="50px" src="/check-mark.png">--><a href="/">PrivacyTests.org</a>
 </div>
 <div class="version">
 v. 0.5
+</div>
 </div>
 <div class="links">
 <div class="link-header">
