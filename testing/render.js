@@ -5,7 +5,7 @@ const fileUrl = require('file-url');
 const open = require('open');
 const minimist = require('minimist');
 const datauri = require('datauri');
-const htmlUtils = require('./html-utils.js');
+const template = require('./template.js');
 
 let browserLogos = {};
 
@@ -268,7 +268,7 @@ const render = async ({ dataFile, live, aggregate }) => {
   let processedResults = aggregate ? aggregateRepeatedTrials(results) : results;
 //  console.log(results.all_tests[0]);
 //  console.log(JSON.stringify(results));
-  await fs.writeFile(resultsFileHTMLLatest, htmlUtils.htmlPage({
+  await fs.writeFile(resultsFileHTMLLatest, template.htmlPage({
     title: "PrivacyTests.org",
     content: content(processedResults, path.basename(resultsFileJSON)),
     cssFiles: ["./template.css", "./inline.css"]
