@@ -22,7 +22,7 @@ v. 0.5
 <a href="https://twitter.com/privacytests"><img src="${twitterDataURI}"></a>
 </div>
 <div class="link-header">
-<a href="https://github.com/arthuredelstein/browser-privacy"><img src="${githubDataURI}"></a>
+<a href="https://github.com/arthuredelstein/privacytests.org"><img src="${githubDataURI}"></a>
 </div>
 </div>
 </div>`;
