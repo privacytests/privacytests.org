@@ -6,4 +6,4 @@ We gratefully acknowledge the support of BrowserStack for providing excellent fr
 
 [<img src="./testing/out/Browserstack-logo.svg" width="150">](https://browserstack.com)
 
-PrivacyTests.org is open source, under the MIT license.
+PrivacyTests.org uses the MIT license.
