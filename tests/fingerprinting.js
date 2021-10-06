@@ -92,8 +92,8 @@ let navigator_tests = [
 ];
 
 const mouse_event_tests = [
-  [`mouseEvent.screenX`, `mouseEvent.clientX`],
-  [`mouseEvent.screenY`, `mouseEvent.clientY`],
+//  [`mouseEvent.screenX`, `mouseEvent.clientX`],
+//  [`mouseEvent.screenY`, `mouseEvent.clientY`],
 //  [`mouseEvent.timeStamp % 100`, `0`],
 ];
 
@@ -120,7 +120,7 @@ const list_to_map = (list, keyFn) => {
 };
 
 const run_all_tests = async function () {
-  window.mouseEvent = await new Promise((resolve, reject) => document.addEventListener("click", resolve, {once:true}));
+  //window.mouseEvent = await new Promise((resolve, reject) => document.addEventListener("click", resolve, {once:true}));
 
   let { test_pairs, test_results } = dual_tests();
   let { test_results: test_results_worker } = await run_in_worker(dual_tests);
