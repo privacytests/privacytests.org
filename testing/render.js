@@ -55,10 +55,16 @@ const resultsToDescription = ({
   prefs, incognito, tor_mode
 }) => {
   let browserFinal = browser || browserName || browser2;
-  let browserVersionFinal =  dropMicroVersion(reportedVersion || browserVersion || version) || "(version unknown)";
+  let browserVersionLong =  reportedVersion || browserVersion || version;
+  let browserVersionShort =  dropMicroVersion(browserVersionLong) || "???";
   let platformFinal = platformName || os || platform;
   let platformVersionFinal = platformVersion || "";
-  let finalText = `<img src=${browserLogoDataUri(browser)} width="32" height="32"></img><br>${browserFinal}<br>${browserVersionFinal}`;//<br>${platformFinal} ${platformVersionFinal}`;
+  let finalText = `
+  <span title="${browserFinal} ${browserVersionLong}">
+    <img src=${browserLogoDataUri(browser)} width="32" height="32"><br>
+    ${browserFinal}<br>
+    ${browserVersionShort}
+  </span>`;
   if (prefs) {
     for (let key of Object.keys(prefs).sort()) {
       if (key !== "extensions.torlauncher.prompt_at_startup") {
