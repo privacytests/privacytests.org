@@ -190,12 +190,14 @@ const resultsToTable = (results, title) => {
   return { headers, body };
 };
 
+// Create the title HTML for a results table.
 const tableTitle = (results) => {
   let timeStarted = new Date(results.timeStarted);
   return `<div class="table-title">Desktop Browsers</div>
   <div class="date">${timeStarted.toISOString().split("T")[0]}</div>`;
 };
 
+// Creates the table content for a page.
 const content = (results, jsonFilename) => {
   let { headers, body } = resultsToTable(results.all_tests,  tableTitle(results));
   return htmlTable({headers, body,
@@ -207,16 +209,19 @@ const content = (results, jsonFilename) => {
     </p>`;
 };
 
+// Reads in a file and parses it to a JSON object.
 const readJSONFile = async (file) =>
     JSON.parse(await fs.readFile(file));
 
-const latestResultsFile = async (path) => {
-  let files = await fs.readdir(path);
+// Returns the path to the latest results file in
+// the given directory.
+const latestResultsFile = async (dir) => {
+  let files = await fs.readdir(dir);
   let stem = files
       .filter(f => f.match("^(.*?)\.json$"))
       .sort()
       .pop();
-  return path + "/" + stem;
+  return dir + "/" + stem;
 };
 
 // List of results keys that should be collected in an array
@@ -270,11 +275,13 @@ const render = async ({ dataFile, live, aggregate }) => {
   await fs.writeFile(resultsFileHTMLLatest, template.htmlPage({
     title: "PrivacyTests.org",
     content: content(processedResults, path.basename(resultsFileJSON)),
-    cssFiles: ["./template.css", "./inline.css"]
+    cssFiles: ["./template.css", "./inline.css"],
+    previewImageUrl: "/preview1.png"
   }));
   console.log(`Wrote out ${fileUrl(resultsFileHTMLLatest)}`);
   await fs.copyFile(resultsFileHTMLLatest, resultsFileHTML);
   console.log(`Wrote out ${fileUrl(resultsFileHTML)}`);
+
   if (!live) {
     open(fileUrl(resultsFileHTML));
   }
