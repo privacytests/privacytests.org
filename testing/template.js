@@ -30,15 +30,24 @@ const header = `
 </div>`;
 
 // The basic structure of an HTML page
-const htmlPage = ({ content, cssFiles }) => {
+const htmlPage = ({ content, cssFiles, previewImageUrl }) => {
   let inlineCSS = "";
   for (let cssFile of cssFiles) {
     inlineCSS += fs.readFileSync(cssFile);
   }
+  let ogImageIfNeeded = previewImageUrl ?
+   `
+     <meta name="twitter:card" content="summary_large_image"/>
+     <meta property="og:image" content="https://privacytests.org/preview1.png"/>
+     <meta property="og:title" content="Which browsers are best for privacy?"/>
+     <meta property="og:description" content="An open-source privacy audit of popular web browsers."/>
+     <meta property="og:type" content="website"/>
+` : "";
   return `<!DOCTYPE html>
 <html>
   <head>
     <meta charset='utf8'/>
+    ${ogImageIfNeeded}
     <link href="${faviconDataURI}" rel="icon" type="image/x-icon" />
     <title>PrivacyTests.org</title>
     <style>${inlineCSS}</style>
