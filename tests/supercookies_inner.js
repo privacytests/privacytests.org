@@ -48,7 +48,7 @@ let tests = {
       })
   },
   "blob": {
-    description: "A 'blob URL' is a local reference to some raw data. Trackers can use a blob URL to transmit that raw data between websites.",
+    description: "A 'blob URL' is a local reference to some raw data. Trackers can use a blob URL to share data between websites.",
     write: (secret) => {
       try {
         return URL.createObjectURL(new Blob([secret]));
@@ -64,6 +64,7 @@ let tests = {
     },
   },
   "BroadcastChannel": {
+    description: "A BroadcastChannel is designed to send messages between tabs. In some browsers it can be used for cross-site communication in your browser.",
     write: (secret) => {
       try {
         let bc = new BroadcastChannel("secrets");
