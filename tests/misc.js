@@ -6,7 +6,7 @@ const fetchJSON = async (...fetchArgs) => {
 };
 
 const testTor = async () => {
-  const description = "The Tor network uses sophisticated technology to hide a user's IP address, thereby helping to mask their identity and location. This test checks to see if the Tor network is being used by default.";
+  const description = "The Tor network sends the browser's web requests through a series of relays to hide a user's IP address, thereby helping to mask their identity and location. This test checks to see if the Tor network is being used by default.";
   let wtfJSON = await fetchJSON("https://wtfismyip.com/json");
   console.log(wtfJSON);
   let onionooJSON = await fetchJSON(`https://onionoo.torproject.org/details?limit=1&search=${wtfJSON["YourFuckingIPAddress"]}`);
@@ -42,7 +42,7 @@ const testDoH = async () => {
 
 const testGPC = async () => {
   // Ask the server what headers it sees.
-  const description = "The Global Privacy Control is a referrer header that can be sent by a users' browser to instruct a website not to sell their personal data to third parties. This test checks to see if the GPC header is sent by default.";
+  const description = "The Global Privacy Control is a referrer header that can be sent by a browser to instruct a website not to sell the user's personal data to third parties. This test checks to see if the GPC header is sent by default.";
   const requestHeaders = await fetchJSON("https://arthuredelstein.net/browser-privacy-live/headers");
   const passed = requestHeaders["sec-gpc"] === "1";
   return { "sec-gpc": requestHeaders["sec-gpc"], passed, description };
