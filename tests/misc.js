@@ -11,11 +11,12 @@ const testTor = async () => {
   console.log(wtfJSON);
   let onionooJSON = await fetchJSON(`https://onionoo.torproject.org/details?limit=1&search=${wtfJSON["YourFuckingIPAddress"]}`);
   console.log(onionooJSON);
-  let resultJSON = {};
-  resultJSON["IsTorExit"] = (onionooJSON.relays.length > 0);
-  resultJSON["passed"] = resultJSON["IsTorExit"];
-  resultsJSON["description"] = description;
-  return resultJSON;
+  let IsTorExit = (onionooJSON.relays.length > 0);
+  return {
+    IsTorExit,
+    passed: IsTorExit,
+    description
+  };
 };
 
 const testDoH = async () => {
