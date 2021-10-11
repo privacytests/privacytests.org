@@ -6,14 +6,14 @@ const twitterDataURI = datauri("./out/twitter.svg").content;
 const githubDataURI = datauri("./out/github.svg").content;
 
 // The header common to all pages on the site.
-const header = `
+const header = (version) => `
 <div class="header">
   <div class="title-wrapper">
     <div class="title">
       <!--<img height="50px" src="/check-mark.png">--><a href="/">PrivacyTests.org</a>
     </div>
     <div class="version">
-      v. 0.5
+      v. ${version}
     </div>
   </div>
   <div class="links">
@@ -28,6 +28,10 @@ const header = `
     </div>
   </div>
 </div>`;
+
+// Read the version of PrivacyTests.org
+const version = () =>
+  fs.readFileSync("./version").toString().trim();
 
 // The basic structure of an HTML page
 const htmlPage = ({ content, cssFiles, previewImageUrl }) => {
@@ -55,7 +59,7 @@ const htmlPage = ({ content, cssFiles, previewImageUrl }) => {
   <body>
     <div class="gutter"></div>
     <div class="wrapper">
-    ${header}
+    ${header(version())}
     ${content}
     </div>
     <div class="gutter"></div>
