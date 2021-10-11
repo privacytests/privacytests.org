@@ -12,7 +12,7 @@ let runTests = async (tests, mode, params) => {
     results[test] = {
       write: tests[test].write.toString(),
       read: tests[test].read.toString(),
-      description, tests[test].description,
+      description: tests[test].description,
       result,
     };
   }
