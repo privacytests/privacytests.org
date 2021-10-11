@@ -101,11 +101,11 @@ title = '${ tooltip.replace(/'/g, "&#39;") }'> ${allUnsupported ? "&ndash;" : "&
 // including the test expressions, the actual
 // and desired values, and whether the test passed.
 const fingerprintingTooltip = fingerprintingItem => {
-  let { expression, spoof_expression, actual_value,
+  let { expression, desired_expression, actual_value,
         desired_value, passed, worker } = fingerprintingItem;
   return `
 expression: ${ expression }
-spoof expression: ${ spoof_expression }
+desired expression: ${ desired_expression }
 actual value: ${ actual_value }
 desired value: ${ desired_value }
 passed: ${ passed }
