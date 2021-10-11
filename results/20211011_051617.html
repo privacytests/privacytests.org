@@ -252,9 +252,9 @@ read: async (url) => {
       }
     }
 
-result, same first party: 509519394292338
+result, same first party: 12631342304985171
 
-result, different first party: 509519394292338
+result, different first party: 12631342304985171
 
 unsupported: false
 
@@ -287,9 +287,9 @@ read: () =>
         setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
       })
 
-result, same first party: 509519394292338
+result, same first party: 12631342304985171
 
-result, different first party: 509519394292338
+result, different first party: 12631342304985171
 
 unsupported: false
 
@@ -313,9 +313,9 @@ read: async () => {
       return (new URL(url)).searchParams.get("key");
     }
 
-result, same first party: 509519394292338
+result, same first party: 12631342304985171
 
-result, different first party: 509519394292338
+result, different first party: 12631342304985171
 
 unsupported: false
 
@@ -331,9 +331,9 @@ title = 'write: (secret) => {
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 509519394292338
+result, same first party: 12631342304985171
 
-result, different first party: 509519394292338
+result, different first party: 12631342304985171
 
 unsupported: false
 
@@ -465,7 +465,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 509519394292338
+result, same first party: 12631342304985171
 
 result, different first party: 
 
@@ -484,7 +484,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 509519394292338
+result, same first party: 12631342304985171
 
 result, different first party: 
 
@@ -493,7 +493,7 @@ unsupported: false
 passed: true
 
 test failed: false'> &nbsp;
-</div></td></tr><tr><td><div style="word-break: break-word">H3 connection</div></td><td><div class='good'
+</div></td></tr><tr><td><div style="word-break: break-word">H3 connection</div></td><td><div class='na'
 title = 'write: async (secret) => {
       // Ensure that we can switch over to h3 via alt-svc:
       for (let i = 0; i<3; ++i) {
@@ -513,15 +513,15 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: a198860227d109ddfae4b7d34c4a3d58
+result, same first party: 6eff10aee6a67adba2f4320daf7f218f
 
 result, different first party:  
 
-unsupported: false
+unsupported: true
 
-passed: true
+passed: undefined
 
-test failed: false'> &nbsp;
+test failed: false'> &ndash;
 </div></td></tr><tr><td><div style="word-break: break-word">HSTS cache</div></td><td><div class='good'
 title = 'write: () => {
       let image = document.getElementById("hsts-image");
@@ -616,9 +616,9 @@ title = 'write: async (secret) => {
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: 509519394292338
+result, same first party: 12631342304985171
 
-result, different first party: 509519394292338
+result, different first party: 12631342304985171
 
 unsupported: false
 
@@ -630,9 +630,9 @@ title = 'write: (secret) => localStorage.setItem("secret", secret)
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 509519394292338
+result, same first party: 12631342304985171
 
-result, different first party: 509519394292338
+result, different first party: 12631342304985171
 
 unsupported: false
 
@@ -724,9 +724,9 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 6429561463390263
+result, same first party: 44350047413399185
 
-result, different first party: 6429561463390263
+result, different first party: 44350047413399185
 
 unsupported: false
 
@@ -753,9 +753,9 @@ read: () =>
         setTimeout(() => reject("no SharedWorker message received"), 100);
       })
 
-result, same first party: 509519394292338
+result, same first party: 12631342304985171
 
-result, different first party: 509519394292338
+result, different first party: 12631342304985171
 
 unsupported: false
 
@@ -826,9 +826,9 @@ read: () => new Promise((resolve, reject) => {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
 
-result, same first party: Mon, 11 Oct 2021 05:18:47 GMT
+result, same first party: Mon, 11 Oct 2021 05:16:03 GMT
 
-result, different first party: Mon, 11 Oct 2021 05:18:52 GMT
+result, different first party: Mon, 11 Oct 2021 05:16:09 GMT
 
 unsupported: false
 
@@ -859,9 +859,9 @@ title = 'write: (secret) => sessionStorage.setItem("secret", secret)
 
 read: () => sessionStorage.getItem("secret")
 
-result, same first party: 6429561463390263
+result, same first party: 44350047413399185
 
-result, different first party: 6429561463390263
+result, different first party: 44350047413399185
 
 unsupported: false
 
@@ -878,9 +878,9 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 6429561463390263
+result, same first party: 44350047413399185
 
-result, different first party: 6429561463390263
+result, different first party: 44350047413399185
 
 unsupported: false
 
@@ -944,81 +944,81 @@ actual value: 77
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><th colspan="4" class="subheading">Tracking query parameter tests</th></tr><tr><td><div style="word-break: break-word">__hsfp</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">__hssc</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">__hstc</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">__s</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">_hsenc</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">_openstat</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">dclid</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">fbclid</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">gclid</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">hsCtaTracking</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">igshid</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">mc_eid</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">mkt_tok</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">ml_subscriber</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">ml_subscriber_hash</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">msclkid</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">oly_anon_id</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">oly_enc_id</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">rb_clickid</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">s_cid</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">vero_conv</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">vero_id</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">wickedid</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word">yclid</div></td><td><div class='bad'
-title = 'value: 9276804679748099
+title = 'value: 927960721924715
 passed: false'> &nbsp;
-</div></td></tr></table><p class="footer">Tests ran at 2021-10-11T05:18:39.526Z.
+</div></td></tr></table><p class="footer">Tests ran at 2021-10-11T05:15:55.971Z.
          Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/947448d14730114ee37a8ababfde1a6d28c80d5f"
     >947448d1</a>.
-    Raw data in <a href="20211011_051901.json">JSON</a>.
+    Raw data in <a href="20211011_051617.json">JSON</a>.
     </p>
     </div>
     <div class="gutter"></div>
