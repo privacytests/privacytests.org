@@ -30,7 +30,7 @@ const event_tests = [
 ];
 
 const test_pairs = (pairs) => pairs.map(
-  ({expression, desired_expression}) => {
+  ({expression, desired_expression, description }) => {
     let actual_value, desired_value;
     let failure = false;
     try {
@@ -48,7 +48,8 @@ const test_pairs = (pairs) => pairs.map(
       console.log(e);
     }
     const passed = !failure && (actual_value === desired_value);
-    return { expression, desired_expression, actual_value, desired_value, passed };
+    return { expression, desired_expression, actual_value, desired_value,
+             passed, description };
   });
 
 const run_all_tests = function () {
