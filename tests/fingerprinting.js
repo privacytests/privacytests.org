@@ -30,7 +30,7 @@ const event_tests = [
 ];
 
 const test_pairs = (pairs) => pairs.map(
-  ([expression, spoof_expression]) => {
+  ({expression, desired_expression}) => {
     let actual_value, desired_value;
     let failure = false;
     try {
@@ -41,14 +41,14 @@ const test_pairs = (pairs) => pairs.map(
       console.log(e);
     }
     try {
-      desired_value = eval(spoof_expression);
+      desired_value = eval(desired_expression);
     } catch (e) {
       desired_value = e.message;
       failure = true;
       console.log(e);
     }
     const passed = !failure && (actual_value === desired_value);
-    return { expression, spoof_expression, actual_value, desired_value, passed };
+    return { expression, desired_expression, actual_value, desired_value, passed };
   });
 
 const run_all_tests = function () {
@@ -65,16 +65,23 @@ return { test_results: run_all_tests(),
 };
 
 const window_property_tests = [
-  [`screenX`, 0],
-  [`screenY`, 0],
-  [`outerWidth`, `innerWidth`],
-  [`outerHeight`, `innerHeight`],
-//  [`devicePixelRatio`, 1]
+  { expression: `screenX`,
+    desired_expression: 0 },
+  { expression: `screenY`,
+    desired_expression: 0},
+  { expression: `outerWidth`,
+    desired_expression: `innerWidth`},
+  { expression: `outerHeight`,
+    desired_expression: `innerHeight`},
+// { expression: `devicePixelRatio`,
+//    desired_expression: 1 }
 ];
 
 const screen_tests = [
-  [`screen.width`, `innerWidth`],
-  [`screen.height`, `innerHeight`],
+  { expression: `screen.width`,
+    desired_expression: `innerWidth` },
+  { expression: `screen.height`,
+    desired_expression: `innerHeight` },
 ];
 
 let navigator_tests = [
