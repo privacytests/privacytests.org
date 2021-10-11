@@ -252,9 +252,9 @@ read: async (url) => {
       }
     }
 
-result, same first party: 2876154373881057
+result, same first party: 7672359099759176
 
-result, different first party: 2876154373881057
+result, different first party: 7672359099759176
 
 unsupported: false
 
@@ -287,9 +287,9 @@ read: () =>
         setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
       })
 
-result, same first party: 2876154373881057
+result, same first party: 7672359099759176
 
-result, different first party: 2876154373881057
+result, different first party: 7672359099759176
 
 unsupported: false
 
@@ -313,9 +313,9 @@ read: async () => {
       return (new URL(url)).searchParams.get("key");
     }
 
-result, same first party: 2876154373881057
+result, same first party: 7672359099759176
 
-result, different first party: 2876154373881057
+result, different first party: 7672359099759176
 
 unsupported: false
 
@@ -331,9 +331,9 @@ title = 'write: (secret) => {
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 2876154373881057
+result, same first party: 7672359099759176
 
-result, different first party: 2876154373881057
+result, different first party: 7672359099759176
 
 unsupported: false
 
@@ -465,7 +465,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 2876154373881057
+result, same first party: 7672359099759176
 
 result, different first party: 
 
@@ -484,7 +484,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 2876154373881057
+result, same first party: 7672359099759176
 
 result, different first party: 
 
@@ -513,7 +513,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 479b22295125bf09f30c0492fc165b5c
+result, same first party: 43142698e81fd0fa504a27da5a88bfc8
 
 result, different first party:  
 
@@ -616,9 +616,9 @@ title = 'write: async (secret) => {
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: 2876154373881057
+result, same first party: 7672359099759176
 
-result, different first party: 2876154373881057
+result, different first party: 7672359099759176
 
 unsupported: false
 
@@ -630,9 +630,9 @@ title = 'write: (secret) => localStorage.setItem("secret", secret)
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 2876154373881057
+result, same first party: 7672359099759176
 
-result, different first party: 2876154373881057
+result, different first party: 7672359099759176
 
 unsupported: false
 
@@ -724,9 +724,9 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 25647163899863235
+result, same first party: 6895125436889389
 
-result, different first party: 25647163899863235
+result, different first party: 6895125436889389
 
 unsupported: false
 
@@ -753,9 +753,9 @@ read: () =>
         setTimeout(() => reject("no SharedWorker message received"), 100);
       })
 
-result, same first party: 2876154373881057
+result, same first party: 7672359099759176
 
-result, different first party: 2876154373881057
+result, different first party: 7672359099759176
 
 unsupported: false
 
@@ -826,9 +826,9 @@ read: () => new Promise((resolve, reject) => {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
 
-result, same first party: Mon, 11 Oct 2021 17:46:28 GMT
+result, same first party: Mon, 11 Oct 2021 16:54:18 GMT
 
-result, different first party: Mon, 11 Oct 2021 17:46:34 GMT
+result, different first party: Mon, 11 Oct 2021 16:54:23 GMT
 
 unsupported: false
 
@@ -859,9 +859,9 @@ title = 'write: (secret) => sessionStorage.setItem("secret", secret)
 
 read: () => sessionStorage.getItem("secret")
 
-result, same first party: 25647163899863235
+result, same first party: 6895125436889389
 
-result, different first party: 25647163899863235
+result, different first party: 6895125436889389
 
 unsupported: false
 
@@ -878,9 +878,9 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 25647163899863235
+result, same first party: 6895125436889389
 
-result, different first party: 25647163899863235
+result, different first party: 6895125436889389
 
 unsupported: false
 
@@ -910,8 +910,8 @@ passed: false'> &nbsp;
 </div></td></tr><tr><th colspan="4" class="subheading">Fingerprinting resistance tests</th></tr><tr><td><div style="word-break: break-all" title="">outerHeight</div></td><td><div class='bad'
 title = 'expression: outerHeight
 spoof expression: innerHeight
-actual value: 1040
-desired value: 955
+actual value: 947
+desired value: 862
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-all" title="">outerWidth</div></td><td><div class='good'
 title = 'expression: outerWidth
@@ -922,13 +922,13 @@ passed: true'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-all" title="">screen.height</div></td><td><div class='bad'
 title = 'expression: screen.height
 spoof expression: innerHeight
-actual value: 1440
-desired value: 955
+actual value: 1080
+desired value: 862
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-all" title="">screen.width</div></td><td><div class='bad'
 title = 'expression: screen.width
 spoof expression: innerWidth
-actual value: 2560
+actual value: 1920
 desired value: 1280
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-all" title="">screenX</div></td><td><div class='bad'
@@ -944,81 +944,81 @@ actual value: 77
 desired value: 0
 passed: false'> &nbsp;
 </div></td></tr><tr><th colspan="4" class="subheading">Tracking query parameter tests</th></tr><tr><td><div style="word-break: break-word" title="">__hsfp</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">__hssc</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">__hstc</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">__s</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">_hsenc</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">_openstat</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">dclid</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">fbclid</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">gclid</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">hsCtaTracking</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">igshid</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">mc_eid</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">mkt_tok</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">ml_subscriber</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">ml_subscriber_hash</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">msclkid</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">oly_anon_id</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">oly_enc_id</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">rb_clickid</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">s_cid</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">vero_conv</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">vero_id</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">wickedid</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="">yclid</div></td><td><div class='bad'
-title = 'value: 3218032542658653
+title = 'value: 35855295468431647
 passed: false'> &nbsp;
-</div></td></tr></table><p class="footer">Tests ran at 2021-10-11T17:46:19.248Z.
-         Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/bd6666110e3c917cd3af21d681d91d93712340d0"
-    >bd666611</a>.
-    Raw data in <a href="20211011_174642.json">JSON</a>.
+</div></td></tr></table><p class="footer">Tests ran at 2021-10-11T16:54:09.542Z.
+         Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/9b675d394380194b1af6d00e95b8f7aa0e1e179b"
+    >9b675d39</a>.
+    Raw data in <a href="20211011_165432.json">JSON</a>.
     </p>
     </div>
     <div class="gutter"></div>

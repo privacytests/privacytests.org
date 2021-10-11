@@ -29,7 +29,6 @@ const testDoH = async () => {
   try {
     // TODO: Get this working correctly.
     let nextDoHResponse = await fetchJSON("https://test.nextdns.io/");
-    nextDoH = nextDoHResponse["status"] === "unconfigured";
   } catch (e) {
     nextDoH = false;
   }
@@ -46,9 +45,15 @@ const testGPC = async () => {
 
 const runTests = async () => {
   let resultsJSON = {
-    "Tor enabled": await testTor(),
-//    "DoH enabled": await testDoH(),
-    "GPC enabled": await testGPC(),
+    "Tor enabled": {
+      description: "The Tor network uses sophisticated technology to hide a user's IP address, thereby helping to mask their identity and location. This test checks to see if the Tor network is being used by default.",
+      result: await testTor(),
+    },
+    //    "DoH enabled": { description: "DNS over HTTPS", result: await testDoH() },
+    "GPC enabled": {
+      description: "The Global Privacy Control is a referrer header that can be sent by a users' browser to instruct a website not to sell their personal data to third parties. This test checks to see if the GPC header is sent by default.",
+      result: await testGPC(),
+    }
   };
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
 };
