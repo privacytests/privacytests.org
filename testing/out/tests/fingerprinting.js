@@ -30,7 +30,7 @@ const event_tests = [
 ];
 
 const test_pairs = (pairs) => pairs.map(
-  ({expression, desired_expression}) => {
+  ({expression, desired_expression, description }) => {
     let actual_value, desired_value;
     let failure = false;
     try {
@@ -48,7 +48,8 @@ const test_pairs = (pairs) => pairs.map(
       console.log(e);
     }
     const passed = !failure && (actual_value === desired_value);
-    return { expression, desired_expression, actual_value, desired_value, passed };
+    return { expression, desired_expression, actual_value, desired_value,
+             passed, description };
   });
 
 const run_all_tests = function () {
@@ -65,22 +66,28 @@ return { test_results: run_all_tests(),
 };
 
 const window_property_tests = [
-  { expression: `screenX`,
+  { description: "Position, in pixels, of the left edge of the browser window on screen.",
+    expression: `screenX`,
     desired_expression: 0 },
-  { expression: `screenY`,
+  { description: "Position, in pixels, of the top edge of the browser window on screen.",
+    expression: `screenY`,
     desired_expression: 0},
-  { expression: `outerWidth`,
+  { description: "Width of the browser window in pixels, including browser chrome.",
+    expression: `outerWidth`,
     desired_expression: `innerWidth`},
-  { expression: `outerHeight`,
+  { description: "Height of the browser window in pixels, including browser chrome.",
+    expression: `outerHeight`,
     desired_expression: `innerHeight`},
 // { expression: `devicePixelRatio`,
 //    desired_expression: 1 }
 ];
 
 const screen_tests = [
-  { expression: `screen.width`,
+  { description: "Width of the user's screen, in pixels.",
+    expression: `screen.width`,
     desired_expression: `innerWidth` },
-  { expression: `screen.height`,
+  { description: "Height of the user's screen, in pixels.",
+    expression: `screen.height`,
     desired_expression: `innerHeight` },
 ];
 
