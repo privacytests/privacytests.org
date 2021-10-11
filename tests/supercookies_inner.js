@@ -173,7 +173,7 @@ let tests = {
     }
   },
   "CacheStorage": {
-
+    description: "The Cache API is a content storage mechanism originally introduced to support ServiceWorkers. If the same Cache object is accessible to multiple websites, it can be abused to track users.",
     write: async (key) => {
       try {
         let cache = await caches.open("supercookies");
