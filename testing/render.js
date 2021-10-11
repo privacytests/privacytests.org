@@ -153,7 +153,8 @@ const resultsSection = ({bestResults, category, tooltipFunction, wordBreak}) => 
   let section = [];
   for (let rowName of rowNames) {
     let row = [];
-    row.push(`<div style="word-break: ${wordBreak ?? "break-word"}">${rowName}</div>`);
+    let description = bestResults[0]["testResults"][category][rowName]["description"] ?? "";
+    row.push(`<div style="word-break: ${wordBreak ?? "break-word"}" title=${JSON.stringify(description)}>${rowName}</div>`);
     for (let resultMap of resultMaps) {
       let tooltip = tooltipFunction(resultMap[rowName]);
       let { passed, testFailed, unsupported } = resultMap[rowName];
