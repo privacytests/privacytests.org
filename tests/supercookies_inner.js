@@ -87,7 +87,7 @@ let tests = {
         setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
       })
   },
-  "fetch": {
+  "fetch cache": {
     write: async (key) => {
       let response = await fetch(testURI("resource", "fetch", key),
                                  {cache: "force-cache"});
@@ -101,7 +101,7 @@ let tests = {
       return (await countResponse.text()).trim();
     }
   },
-  "XMLHttpRequest": {
+  "XMLHttpRequest cache": {
     write: () => new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
       xhr.addEventListener("load", () => resolve(
@@ -121,7 +121,7 @@ let tests = {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
   },
-  "iframe": {
+  "iframe cache": {
     write: (key) => new Promise((resolve, reject) => {
       let iframe = document.createElement("iframe");
       document.body.appendChild(iframe);
@@ -142,7 +142,7 @@ let tests = {
       return (await response.text()).trim();
     }
   },
-  "image": {
+  "image cache": {
     write: (key) => new Promise((resolve, reject) => {
       let img = document.createElement("img");
       document.body.appendChild(img);
@@ -178,7 +178,7 @@ let tests = {
       return (new URL(url)).searchParams.get("key");
     }
   },
-  "favicon": {
+  "favicon cache": {
     write: (key) => {
       parent.postMessage({
         faviconURI: testURI("resource", "favicon", key)
@@ -199,7 +199,7 @@ let tests = {
       return count;
     }
   },
-  "font": {
+  "font cache": {
     write: async (key) => {
       let style = document.createElement("style");
       style.type='text/css';
@@ -220,7 +220,7 @@ let tests = {
       return (await response.text()).trim();
     }
   },
-  "css": {
+  "CSS cache": {
     write: async (key) => {
       let link = document.createElement("link");
       link.rel = "stylesheet";
@@ -296,7 +296,7 @@ let tests = {
     }
   },
 */
-  "HSTS": {
+  "HSTS cache": {
     write: () => {
       let image = document.getElementById("hsts-image");
       image.src = "https://hsts.arthuredelstein.net/set_hsts.png";
@@ -320,7 +320,7 @@ let tests = {
     }
   },
   */
-  "prefetch": {
+  "prefetch cache": {
     write: async (key) => {
       let link = document.createElement("link");
       link.rel = "prefetch";
@@ -386,7 +386,7 @@ let tests = {
       return (await response.json()).password;
     }
     },*/
-  "h2_connection": {
+  "H2 connection": {
     write: async (secret) => {
       await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`);
     },
@@ -395,7 +395,7 @@ let tests = {
       return await response.text();
     }
   },
-  "h1_connection": {
+  "H1 connection": {
     write: async (secret) => {
       await fetch(`https://h1.arthuredelstein.net:8901/?mode=write&secret=${secret}`);
     },
@@ -404,7 +404,7 @@ let tests = {
       return await response.text();
     }
   },
-  "h3_connection": {
+  "H3 connection": {
     write: async (secret) => {
       // Ensure that we can switch over to h3 via alt-svc:
       for (let i = 0; i<3; ++i) {
