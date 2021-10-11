@@ -165,21 +165,26 @@ const runNavigationTests = async (driver) => {
 // Tests if a top-level page that can be upgraded to https is upgraded.
 // The argument getOrNavigate should be "get" or "navigate".
 const testHttpsUpgrade = async (driver, getOrNavigate) => {
+  const descriptions = {
+    "get" : "Checks to see if an insecure address pasted into the browser's address bar is upgraded to HTTPS whenever possible.",
+    "navigate": "Checks to see if the user has clicked on a hyperlink to an insecure address, if the browser upgrades that address to HTTPS whenever possible.",
+  };
   await driver[getOrNavigate]("http://upgradable.arthuredelstein.net/");
   let resultingUrl = await driver.getCurrentUrl();
   let upgraded = resultingUrl.startsWith("https");
   let passed = upgraded === true;
-  return { passed, upgraded };
+  return { passed, upgraded, description: descriptions[getOrNavigate] };
 };
 
 // See if the browser blocks visits to HTTP sites (aka HTTPS-Only Mode)
 const testHttpsOnlyMode = async (driver) => {
+  const description = "Checks to see if the browser stops loading an insecure website and warns the user before giving them the option to continue. Known as HTTPS-Only Mode in some browsers.";
   try {
     await driver.get("http://insecure.arthuredelstein.net/");
-    return { passed: false, result: "allowed" };
+    return { passed: false, result: "allowed", description };
   } catch (e) {
     // Error page
-    return { passed: true, result: "error page" };
+    return { passed: true, result: "error page", description };
   }
 };
 

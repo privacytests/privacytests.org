@@ -17,18 +17,20 @@ const loadSubresource = async(tagName, url) => {
 };
 
 const insecureSubresourceTest = async (tag, fileName) => {
+  let fileTypeNames = { "img": "image", "script": "script" };
+  const description = `Checks to see if the browser attempts to upgrade an insecure address for an ${fileTypeNames[tag]} to HTTPS whenever possible.`;
   let upgradableEvent = await loadSubresource(tag, `http://upgradable.arthuredelstein.net/${fileName}`);
   let insecureEvent = await loadSubresource(tag, `http://insecure.arthuredelstein.net/${fileName}`);
   let passed = insecureEvent.type === "error";
   let putativeUpgradeHandling = upgradableEvent.type === "load" ? "upgraded" : "blocked";
   let result = passed ? putativeUpgradeHandling : "loaded insecurely";
-  return { passed, result };
+  return { passed, result, description };
 };
 
 const runTests = async () => {
   let resultsJSON = {
     "Upgradable image": await insecureSubresourceTest("img", "image.png"),
-    "Upgradable script": await insecureSubresourceTest("script", "test.js")
+    "Upgradable script": await insecureSubresourceTest("script", "test.js"),
   };
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
 };

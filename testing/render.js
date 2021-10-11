@@ -114,10 +114,12 @@ ${ worker ? "[Worker]" : "" }
 };
 
 // For simple tests, creates a tooltip that shows detailed results.
-const simpleToolTip = item => {
+const simpleToolTip = (result) => {
   let text = "";
-  for (let key in item) {
-    text += `${key}: ${item[key]}\n`;
+  for (let key in result) {
+    if (key !== "description") {
+      text += `${key}: ${result[key]}\n`;
+    }
   }
   return text.trim();
 };
