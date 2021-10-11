@@ -111,48 +111,60 @@ const runSupercookieTests = async (driver, newTab) => {
 // Borrowed from https://github.com/brave/brave-core/blob/50df76971db6a6023b3db9aead0827606162dc9c/browser/net/brave_site_hacks_network_delegate_helper.cc#L29
 // and https://github.com/jparise/chrome-utm-stripper:
 const TRACKING_QUERY_PARAMETERS =
-  [
+  {
     // https://github.com/brave/brave-browser/issues/4239
-    "fbclid", "gclid", "msclkid", "mc_eid",
+    "fbclid": "Facebook Click Identifier",
+    "gclid": "Google Click Identifier",
+    "msclkid": "Microsoft Click ID",
+    "mc_eid": "Mailchimp Email ID (email recipient's address)",
     // https://github.com/brave/brave-browser/issues/9879
-    "dclid",
+    "dclid": "DoubleClick Click ID (Google)",
     // https://github.com/brave/brave-browser/issues/13644
-    "oly_anon_id", "oly_enc_id",
+    "oly_anon_id": "Omeda marketing 'anonymous' customer id",
+    "oly_enc_id": "Omeda marketing 'known' customer id",
     // https://github.com/brave/brave-browser/issues/11579
-    "_openstat",
+    "_openstat": "Yandex tracking parameter",
     // https://github.com/brave/brave-browser/issues/11817
-    "vero_conv", "vero_id",
+    "vero_conv": "Vero tracking parameter",
+    "vero_id": "Vero tracking parameter",
     // https://github.com/brave/brave-browser/issues/13647
-    "wickedid",
+    "wickedid": "Wicked Reports e-commerce tracking",
     // https://github.com/brave/brave-browser/issues/11578
-    "yclid",
+    "yclid": "Yandex Click ID",
     // https://github.com/brave/brave-browser/issues/8975
-    "__s",
+    "__s": "Drip.com email address tracking parameter",
     // https://github.com/brave/brave-browser/issues/17451
-    "rb_clickid",
+    "rb_clickid": "Unknown high-entropy tracking parameter",
     // https://github.com/brave/brave-browser/issues/17452
-    "s_cid",
+    "s_cid": "Adobe Site Catalyst tracking parameter",
     // https://github.com/brave/brave-browser/issues/17507
-    "ml_subscriber", "ml_subscriber_hash",
+    "ml_subscriber": "MailerLite email tracking",
+    "ml_subscriber_hash": "MailerLite email tracking",
     // https://github.com/brave/brave-browser/issues/9019
-    "_hsenc", "__hssc", "__hstc", "__hsfp", "hsCtaTracking",
+    "_hsenc": "HubSpot tracking parameter",
+    "__hssc": "HubSpot tracking parameter",
+    "__hstc": "HubSpot tracking parameter",
+    "__hsfp": "HubSpot tracking parameter",
+    "hsCtaTracking": "HubSpot tracking parameter",
     // https://github.com/jparise/chrome-utm-stripper
-    "mkt_tok", "igshid"
-  ];
+    "mkt_tok": "Adobe Marketo tracking parameter",
+    "igshid": "Instragram tracking parameter",
+  };
 
-const runQueryParameterTests = async (driver, paramNames) => {
+const runQueryParameterTests = async (driver, parameters) => {
   let secret = Math.random().toString().slice(2);
   let baseURL = "https://arthuredelstein.net/browser-privacy-params/";
   let queryString = "?controlParam=controlValue";
-  for (let param of paramNames) {
+  for (let param of Object.keys(parameters)) {
     queryString += `&${param}=${secret}`;
   }
   let reported = await loadAndGetResults(driver, baseURL + queryString);
   let result = {};
-  for (let param of paramNames) {
+  for (let param of Object.keys(parameters)) {
     result[param] = {
       value: reported[param],
-      passed: (reported[param] === undefined)
+      passed: (reported[param] === undefined),
+      description: parameters[param],
     };
   }
   return result;
