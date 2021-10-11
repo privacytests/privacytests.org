@@ -48,7 +48,7 @@ let tests = {
       })
   },
   "blob": {
-    description: 'A "blob URL" is a local reference to some raw data. Trackers can use a blob URL to transmit that raw data between websites.',
+    description: "A 'blob URL' is a local reference to some raw data. Trackers can use a blob URL to transmit that raw data between websites.",
     write: (secret) => {
       try {
         return URL.createObjectURL(new Blob([secret]));
