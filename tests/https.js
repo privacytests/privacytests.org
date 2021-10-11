@@ -27,8 +27,14 @@ const insecureSubresourceTest = async (tag, fileName) => {
 
 const runTests = async () => {
   let resultsJSON = {
-    "Upgradable image": await insecureSubresourceTest("img", "image.png"),
-    "Upgradable script": await insecureSubresourceTest("script", "test.js")
+    "Upgradable image": {
+      description: "Checks to see if an insecurely loaded image is upgraded to HTTPS whenever possible.",
+      result: await insecureSubresourceTest("img", "image.png")
+    },
+    "Upgradable script": {
+      description: "Checks to see if an insecurely loaded script is upgraded to HTTPS or blocked whenever possible.",
+      result: await insecureSubresourceTest("script", "test.js")
+    }
   };
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
 };
