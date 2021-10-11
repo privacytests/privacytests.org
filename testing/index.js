@@ -89,7 +89,7 @@ const runSupercookieTests = async (driver, newTab) => {
     driver, `${iframe_root_different}/tests/${stem}.html?mode=read${readParams}`, { newTab });
   let jointResult = {};
   for (let test in readResultsDifferentFirstParty) {
-    let { write, read, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
+    let { write, read, description, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
     let { result: readSameFirstParty } = readResultsSameFirstParty[test];
     let { result: writeResult } = writeResults[test];
     let unsupported = (writeResult === "Error: Unsupported");
@@ -102,7 +102,7 @@ const runSupercookieTests = async (driver, newTab) => {
         ? undefined
         : (readSameFirstParty !== readDifferentFirstParty) ||
           (readSameFirstPartyFailedToFetch && readDifferentFirstPartyFailedToFetch);
-    jointResult[test] = { write, read, unsupported, readSameFirstParty, readDifferentFirstParty, passed, testFailed };
+    jointResult[test] = { write, read, unsupported, readSameFirstParty, readDifferentFirstParty, passed, testFailed, description };
   }
 //  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
   return jointResult;
