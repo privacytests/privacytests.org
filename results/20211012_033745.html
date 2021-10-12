@@ -265,9 +265,9 @@ read: async (url) => {
       }
     }
 
-result, same first party: 8673065924782963
+result, same first party: 5008028535161648
 
-result, different first party: 8673065924782963
+result, different first party: 5008028535161648
 
 unsupported: false
 
@@ -300,7 +300,7 @@ read: () =>
         setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
       })
 
-result, same first party: 8673065924782963
+result, same first party: 5008028535161648
 
 result, different first party: Error: no BroadcastChannel message
 
@@ -326,7 +326,7 @@ read: async () => {
       return (new URL(url)).searchParams.get("key");
     }
 
-result, same first party: 8673065924782963
+result, same first party: 5008028535161648
 
 result, different first party: Error: An attempt was made to break through the security policy of the user agent.
 
@@ -344,7 +344,7 @@ title = 'write: (secret) => {
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 8673065924782963
+result, same first party: 5008028535161648
 
 result, different first party: null
 
@@ -478,9 +478,9 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 8673065924782963
+result, same first party: 5008028535161648
 
-result, different first party: 8673065924782963
+result, different first party: 5008028535161648
 
 unsupported: false
 
@@ -497,9 +497,9 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 8673065924782963
+result, same first party: 5008028535161648
 
-result, different first party: 8673065924782963
+result, different first party: 5008028535161648
 
 unsupported: false
 
@@ -526,9 +526,9 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 89bea87e39add3c017de6b0c268bcad8
+result, same first party: 832ed15ca9524f1a7ca9c4d278708bb0
 
-result, different first party: 89bea87e39add3c017de6b0c268bcad8
+result, different first party: 832ed15ca9524f1a7ca9c4d278708bb0
 
 unsupported: false
 
@@ -629,7 +629,7 @@ title = 'write: async (secret) => {
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: 8673065924782963
+result, same first party: 5008028535161648
 
 result, different first party: Error: The user denied permission to access the database.
 
@@ -643,7 +643,7 @@ title = 'write: (secret) => localStorage.setItem("secret", secret)
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 8673065924782963
+result, same first party: 5008028535161648
 
 result, different first party: null
 
@@ -670,7 +670,7 @@ read: async () => {
       }
     }
 
-result, same first party: 8673065924782963
+result, same first party: 5008028535161648
 
 result, different first party: Error: Failed to execute &#39;query&#39; on &#39;LockManager&#39;: Access to the Locks API is denied in this context.
 
@@ -737,7 +737,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 9608078171841621
+result, same first party: 9300459100007039
 
 result, different first party: Error: Failed to register a ServiceWorker for scope (&#39;https://arthuredelstein.net/browser-privacy/tests/&#39;) with script (&#39;https://arthuredelstein.net/browser-privacy/tests/serviceWorker.js&#39;): The user denied permission to use Service Worker.
 
@@ -766,7 +766,7 @@ read: () =>
         setTimeout(() => reject("no SharedWorker message received"), 100);
       })
 
-result, same first party: 8673065924782963
+result, same first party: 5008028535161648
 
 result, different first party: Error: undefined
 
@@ -809,7 +809,7 @@ read: async () => {
       return result.rows.item(0).value;
     }
 
-result, same first party: 8673065924782963
+result, same first party: 5008028535161648
 
 result, different first party: Error: An attempt was made to break through the security policy of the user agent.
 
@@ -839,9 +839,9 @@ read: () => new Promise((resolve, reject) => {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
 
-result, same first party: Tue, 12 Oct 2021 03:39:26 GMT
+result, same first party: Tue, 12 Oct 2021 03:37:29 GMT
 
-result, different first party: Tue, 12 Oct 2021 03:39:34 GMT
+result, different first party: Tue, 12 Oct 2021 03:37:38 GMT
 
 unsupported: false
 
@@ -872,7 +872,7 @@ title = 'write: (secret) => sessionStorage.setItem("secret", secret)
 
 read: () => sessionStorage.getItem("secret")
 
-result, same first party: 9608078171841621
+result, same first party: 9300459100007039
 
 result, different first party: null
 
@@ -891,9 +891,9 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 9608078171841621
+result, same first party: 9300459100007039
 
-result, different first party: 9608078171841621
+result, different first party: 9300459100007039
 
 unsupported: false
 
@@ -978,12 +978,12 @@ title = 'passed: true'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="HubSpot tracking parameter">hsCtaTracking</div></td><td><div class='good'
 title = 'passed: true'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Instragram tracking parameter">igshid</div></td><td><div class='bad'
-title = 'value: 7032980471759396
+title = 'value: 04193966305929098
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Mailchimp Email ID (email recipient's address)">mc_eid</div></td><td><div class='good'
 title = 'passed: true'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Adobe Marketo tracking parameter">mkt_tok</div></td><td><div class='bad'
-title = 'value: 7032980471759396
+title = 'value: 04193966305929098
 passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="MailerLite email tracking">ml_subscriber</div></td><td><div class='good'
 title = 'passed: true'> &nbsp;
@@ -1007,10 +1007,10 @@ title = 'passed: true'> &nbsp;
 title = 'passed: true'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Yandex Click ID">yclid</div></td><td><div class='good'
 title = 'passed: true'> &nbsp;
-</div></td></tr></table><p class="footer">Tests ran at 2021-10-12 03:39:19 UTC.
+</div></td></tr></table><p class="footer">Tests ran at 2021-10-12 03:37:18 UTC.
          Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/7743b94517f937b994fc4f43fa78938024810b0c"
     >7743b945</a>.
-    Raw data in <a href="20211012_033941.json">JSON</a>.
+    Raw data in <a href="20211012_033745.json">JSON</a>.
     </p>
     </div>
     <div class="gutter"></div>
