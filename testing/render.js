@@ -28,8 +28,9 @@ const htmlTable = ({ headers, body, className }) => {
     elements.push("<tr>");
     for (let item of row) {
       if (item.subheading) {
+        let description = (item.description ?? "").replaceAll(/\s+/g, " ").trim();
         className = firstSubheading ? "first subheading" : "subheading";
-        elements.push(`<th colspan="4" class="${className}">${item.subheading}</th>`);
+        elements.push(`<th colspan="4" class="${className}" title="${description}">${item.subheading}</th>`);
         firstSubheading = false;
       } else {
         elements.push(`<td>${item}</td>`);
@@ -167,6 +168,41 @@ const resultsSection = ({bestResults, category, tooltipFunction, wordBreak}) => 
   return section;
 };
 
+const sectionDescription = {
+  statePartitioning: `
+    A common vulnerability of web browsers is that they allow tracking companies
+    to 'tag' your browser with some data ('state') that identifies you. When third-party trackers
+    are embedded in websites, they can see this identifying data as you browse to different
+    websites. Fortunately, it is possible for this category of leaks to be fixed by partitioning
+    all data stored in the browser that no data is allowed to be shared between websites.`,
+  navigation: `
+    When you click a hyperlink to travel from one site to another, certain browser APIs
+    allow the first site to communicate to the second site. These privacy vulnerabilities
+    can be fixed by introducing new limits on how much data is transfered between sites.`,
+  https: `
+    HTTPS is the protocol that web browsers use to connect securely to websites. When
+    HTTPS is being used, the connection is encrypted so
+    that third parties on the network cannot read content being sent between the
+    server and your browser. In the past, insecure connections were the default and websites
+    would need to actively request that a browser use HTTPS. Now the status quo is shifting,
+    and browser makers are moving toward a world where HTTPS is the default protocol.`,
+  misc: `This category includes tests for the presence of miscellaneous privacy features.`,
+  fingerprinting: `
+    Fingerprinting is a technique trackers use to uniquely identify you as you browse the web.
+    A fingerprinting script will measure several characteristics of your browser and, combining
+    this data, will build a fingerprint that may uniquely identify you among web users.
+    Browsers can introduce countermeasures, such as minimizing the distinguishing information
+    disclosed by certain web APIs so your browser is harder to pick out from the crowd
+    (so-called 'fingerprinting resistance').`,
+  queryParameters: `
+    When you browse from one web page to another, tracking companies will frequently attach
+    a 'tracking query parameter' to the address of the second web page. That query parameter
+    may contain a unique identifier that tracks you individually as you browse the web. And
+    these query parameters are frequently synchronized with cookies, making them a powerful
+    tracking vector. Web browsers can protect you from known tracking query parameters by
+    stripping them from web addresses before your browser sends them. (The following list of
+    tracking query parameters was largely borrowed from Brave.)`};
+
 const resultsToTable = (results, title) => {
   let bestResults = results
       .filter(m => m["testResults"])
@@ -178,17 +214,17 @@ const resultsToTable = (results, title) => {
   if (bestResults.length === 0) {
     return [];
   }
-  body.push([{subheading:"State Partitioning tests"}]);
+  body.push([{subheading:"State Partitioning tests", description: sectionDescription.statePartitioning}]);
   body = body.concat(resultsSection({bestResults, category:"supercookies", tooltipFunction: crossSiteTooltip}));
-  body.push([{subheading:"Navigation tests"}]);
+  body.push([{subheading:"Navigation tests", description: sectionDescription.navigation}]);
   body = body.concat(resultsSection({bestResults, category:"navigation", tooltipFunction: crossSiteTooltip}));
-  body.push([{subheading:"HTTPS tests"}]);
+  body.push([{subheading:"HTTPS tests", description: sectionDescription.https }]);
   body = body.concat(resultsSection({bestResults, category:"https", tooltipFunction: simpleToolTip}));
-  body.push([{subheading:"Misc tests"}]);
+  body.push([{subheading:"Misc tests", description: sectionDescription.misc}]);
   body = body.concat(resultsSection({bestResults, category:"misc", tooltipFunction: simpleToolTip}));
-  body.push([{subheading:"Fingerprinting resistance tests"}]);
+  body.push([{subheading:"Fingerprinting resistance tests", description: sectionDescription.fingerprinting}]);
   body = body.concat(resultsSection({bestResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip, wordBreak: "break-all"} ));
-  body.push([{subheading:"Tracking query parameter tests"}]);
+  body.push([{subheading:"Tracking query parameter tests", description: sectionDescription.queryParameters}]);
   body = body.concat(resultsSection({bestResults, category:"query", tooltipFunction: simpleToolTip}));
   return { headers, body };
 };
