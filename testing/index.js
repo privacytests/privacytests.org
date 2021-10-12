@@ -12,9 +12,11 @@ const minimist = require('minimist');
 const dateFormat = require('dateformat');
 
 const { createDriver, navigate, openNewTab,
-        waitForAttribute, quit, parseConfigFile } = require('./webdriver_utils.js');
+        waitForAttribute, quit, parseConfigFile,
+        readVersion } = require('./webdriver_utils.js');
 const render = require('./render');
 const { Origin } = require('selenium-webdriver');
+const { result } = require('lodash');
 
 const DEFAULT_TIMEOUT_MS = 60000;
 
@@ -40,31 +42,36 @@ const gitHash = async () => {
 // Tell the selenium driver to visit a url, wait for the attribute
 // "data-test-results" to have a value, and resolve that value
 // in a promise. Rejects if timeout elapses first.
-const loadAndGetResults = async (driver, url, newTab = false, timeout = DEFAULT_TIMEOUT_MS, click = undefined) => {
+const loadAndGetResults = async (driver, url, { newTab, timeout, click } = {}) => {
   if (newTab) {
     let tab = await openNewTab(driver);
     await driver.switchTo().window(tab);
   }
   console.log(`loading ${url}`);
   await navigate(driver, url);
-  if (click) {
+  await sleep(1000);
+  if (false) { // (click) {
     let actions = driver.actions();
-    await actions.move({origin: Origin.VIEWPORT, x: click.x, y:click.y}).click();
+    let body = await driver.findElement({css:"body"});
+    await driver.executeScript(`document.body.innerHTML += "<a id='clickLink'>click</a>"`);
+    await driver.findElement({id:"clickLink"}).click();
+    //await actions.move({origin: body, x: click.x, y:click.y}).click();
+    console.log("clicked", click);
   }
   let testResultsString =
-      await waitForAttribute(driver, "body", "data-test-results", timeout);
+      await waitForAttribute(driver, "body", "data-test-results", timeout ?? DEFAULT_TIMEOUT_MS);
   return testResultsString === "undefined" ? undefined : JSON.parse(testResultsString);
 };
 
 // Causes driver to connect to our supercookie tests. Returns
 // a map of test names to test results.
-const runSupercookieTests = async (driver, newTabs) => {
-  let stem = newTabs ? "supercookies" : "navigation";
+const runSupercookieTests = async (driver, newTab) => {
+  let stem = newTab ? "supercookies" : "navigation";
   let secret = Math.random().toString().slice(2);
   let iframe_root_same = false ? "http://localhost:8080" : "https://arthuredelstein.net/browser-privacy";
   let iframe_root_different = false ? "http://localhost:8080" : "https://arthuredelstein.github.io/privacytests.org";
   let writeResults = await loadAndGetResults(
-    driver, `${iframe_root_same}/tests/${stem}.html?mode=write&default=${secret}`, true);
+    driver, `${iframe_root_same}/tests/${stem}.html?mode=write&default=${secret}`, {newTab: true});
   let readParams = "";
   for (let [test, data] of Object.entries(writeResults)) {
     if ((typeof data["result"]) === "string") {
@@ -75,14 +82,14 @@ const runSupercookieTests = async (driver, newTabs) => {
   //  console.log(readParams);
 //  await sleep(5000);
   let readResultsSameFirstParty = await loadAndGetResults(
-    driver, `${iframe_root_same}/tests/${stem}.html?mode=read${readParams}`, newTabs);
+    driver, `${iframe_root_same}/tests/${stem}.html?mode=read${readParams}`, { newTab });
   //  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
   //await sleep(5000);
   let readResultsDifferentFirstParty = await loadAndGetResults(
-    driver, `${iframe_root_different}/tests/${stem}.html?mode=read${readParams}`, newTabs);
+    driver, `${iframe_root_different}/tests/${stem}.html?mode=read${readParams}`, { newTab });
   let jointResult = {};
   for (let test in readResultsDifferentFirstParty) {
-    let { write, read, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
+    let { write, read, description, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
     let { result: readSameFirstParty } = readResultsSameFirstParty[test];
     let { result: writeResult } = writeResults[test];
     let unsupported = (writeResult === "Error: Unsupported");
@@ -95,7 +102,7 @@ const runSupercookieTests = async (driver, newTabs) => {
         ? undefined
         : (readSameFirstParty !== readDifferentFirstParty) ||
           (readSameFirstPartyFailedToFetch && readDifferentFirstPartyFailedToFetch);
-    jointResult[test] = { write, read, unsupported, readSameFirstParty, readDifferentFirstParty, passed, testFailed };
+    jointResult[test] = { write, read, unsupported, readSameFirstParty, readDifferentFirstParty, passed, testFailed, description };
   }
 //  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
   return jointResult;
@@ -104,48 +111,60 @@ const runSupercookieTests = async (driver, newTabs) => {
 // Borrowed from https://github.com/brave/brave-core/blob/50df76971db6a6023b3db9aead0827606162dc9c/browser/net/brave_site_hacks_network_delegate_helper.cc#L29
 // and https://github.com/jparise/chrome-utm-stripper:
 const TRACKING_QUERY_PARAMETERS =
-  [
+  {
     // https://github.com/brave/brave-browser/issues/4239
-    "fbclid", "gclid", "msclkid", "mc_eid",
+    "fbclid": "Facebook Click Identifier",
+    "gclid": "Google Click Identifier",
+    "msclkid": "Microsoft Click ID",
+    "mc_eid": "Mailchimp Email ID (email recipient's address)",
     // https://github.com/brave/brave-browser/issues/9879
-    "dclid",
+    "dclid": "DoubleClick Click ID (Google)",
     // https://github.com/brave/brave-browser/issues/13644
-    "oly_anon_id", "oly_enc_id",
+    "oly_anon_id": "Omeda marketing 'anonymous' customer id",
+    "oly_enc_id": "Omeda marketing 'known' customer id",
     // https://github.com/brave/brave-browser/issues/11579
-    "_openstat",
+    "_openstat": "Yandex tracking parameter",
     // https://github.com/brave/brave-browser/issues/11817
-    "vero_conv", "vero_id",
+    "vero_conv": "Vero tracking parameter",
+    "vero_id": "Vero tracking parameter",
     // https://github.com/brave/brave-browser/issues/13647
-    "wickedid",
+    "wickedid": "Wicked Reports e-commerce tracking",
     // https://github.com/brave/brave-browser/issues/11578
-    "yclid",
+    "yclid": "Yandex Click ID",
     // https://github.com/brave/brave-browser/issues/8975
-    "__s",
+    "__s": "Drip.com email address tracking parameter",
     // https://github.com/brave/brave-browser/issues/17451
-    "rb_clickid",
+    "rb_clickid": "Unknown high-entropy tracking parameter",
     // https://github.com/brave/brave-browser/issues/17452
-    "s_cid",
+    "s_cid": "Adobe Site Catalyst tracking parameter",
     // https://github.com/brave/brave-browser/issues/17507
-    "ml_subscriber", "ml_subscriber_hash",
+    "ml_subscriber": "MailerLite email tracking",
+    "ml_subscriber_hash": "MailerLite email tracking",
     // https://github.com/brave/brave-browser/issues/9019
-    "_hsenc", "__hssc", "__hstc", "__hsfp", "hsCtaTracking",
+    "_hsenc": "HubSpot tracking parameter",
+    "__hssc": "HubSpot tracking parameter",
+    "__hstc": "HubSpot tracking parameter",
+    "__hsfp": "HubSpot tracking parameter",
+    "hsCtaTracking": "HubSpot tracking parameter",
     // https://github.com/jparise/chrome-utm-stripper
-    "mkt_tok", "igshid"
-  ];
+    "mkt_tok": "Adobe Marketo tracking parameter",
+    "igshid": "Instragram tracking parameter",
+  };
 
-const runQueryParameterTests = async (driver, paramNames) => {
+const runQueryParameterTests = async (driver, parameters) => {
   let secret = Math.random().toString().slice(2);
   let baseURL = "https://arthuredelstein.net/browser-privacy-params/";
   let queryString = "?controlParam=controlValue";
-  for (let param of paramNames) {
+  for (let param of Object.keys(parameters)) {
     queryString += `&${param}=${secret}`;
   }
   let reported = await loadAndGetResults(driver, baseURL + queryString);
   let result = {};
-  for (let param of paramNames) {
+  for (let param of Object.keys(parameters)) {
     result[param] = {
       value: reported[param],
-      passed: (reported[param] === undefined)
+      passed: (reported[param] === undefined),
+      description: parameters[param],
     };
   }
   return result;
@@ -158,28 +177,33 @@ const runNavigationTests = async (driver) => {
 // Tests if a top-level page that can be upgraded to https is upgraded.
 // The argument getOrNavigate should be "get" or "navigate".
 const testHttpsUpgrade = async (driver, getOrNavigate) => {
+  const descriptions = {
+    "get" : "Checks to see if an insecure address pasted into the browser's address bar is upgraded to HTTPS whenever possible.",
+    "navigate": "Checks to see if the user has clicked on a hyperlink to an insecure address, if the browser upgrades that address to HTTPS whenever possible.",
+  };
   await driver[getOrNavigate]("http://upgradable.arthuredelstein.net/");
   let resultingUrl = await driver.getCurrentUrl();
   let upgraded = resultingUrl.startsWith("https");
   let passed = upgraded === true;
-  return { passed, upgraded };
+  return { passed, upgraded, description: descriptions[getOrNavigate] };
 };
 
 // See if the browser blocks visits to HTTP sites (aka HTTPS-Only Mode)
 const testHttpsOnlyMode = async (driver) => {
+  const description = "Checks to see if the browser stops loading an insecure website and warns the user before giving them the option to continue. Known as HTTPS-Only Mode in some browsers.";
   try {
     await driver.get("http://insecure.arthuredelstein.net/");
-    return { passed: false, result: "allowed" };
+    return { passed: false, result: "allowed", description };
   } catch (e) {
     // Error page
-    return { passed: true, result: "error page" };
+    return { passed: true, result: "error page", description };
   }
 };
 
 // Run all of our https privacy tests.
 const runHttpsTests = async (driver) => {
   let results = await loadAndGetResults(
-    driver, 'https://arthuredelstein.net/browser-privacy/tests/https.html');
+    driver, 'https://arthuredelstein.net/browser-privacy/tests/https.html', {newTab: true});
   results["Upgradable address"] = await testHttpsUpgrade(driver, "get");
   results["Upgradable hyperlink"] = await testHttpsUpgrade(driver, "navigate");
   results["Insecure website"] = await testHttpsOnlyMode(driver);
@@ -189,11 +213,11 @@ const runHttpsTests = async (driver) => {
 // Run all of our miscellaneous privacy tests.
 const runMiscTests = async (driver) => {
   return await loadAndGetResults(
-    driver, 'https://arthuredelstein.net/browser-privacy/tests/misc.html');
+    driver, 'https://arthuredelstein.net/browser-privacy/tests/misc.html', {newTab: true});
 };
 
 // Run all of our privacy tests using selenium. Returns
-// a map of test types to test result maps. Such as:
+// a map of test types to test result maps. Such as
 // `
 // { "fingerprinting" : { "window.screen.width" : { /* results */ }, ... },
 //   "misc" : { ... },
@@ -203,7 +227,7 @@ const runMiscTests = async (driver) => {
 const runTests = async (driver) => {
   try {
     let fingerprinting = await loadAndGetResults(
-      driver, 'https://arthuredelstein.net/browser-privacy/tests/fingerprinting.html', click = {x: 10, y: 10});
+      driver, 'https://arthuredelstein.net/browser-privacy/tests/fingerprinting.html', { newTab: true, click: {x: 10, y: 10}});
     let https = await runHttpsTests(driver);
     let misc = await runMiscTests(driver);
     let supercookies = await runSupercookieTests(driver, true);
@@ -235,9 +259,12 @@ const runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
       let fullCapabilities = Object.fromEntries(fullCapabilitiesMap.entries());
 //      console.log('fullCapabilities', fullCapabilities);
       let timeStarted = new Date().toISOString();
+      let reportedVersion = await readVersion(driver, browser);
+      console.log(`${browser} version found: ${reportedVersion}`);
       let testResults = await runTests(driver);
-//      console.log({shouldQuit});
-      all_tests.push({ browser, capabilities: fullCapabilities, testResults, timeStarted,
+      //      console.log({shouldQuit});
+      all_tests.push({ browser, reportedVersion, capabilities: fullCapabilities,
+                       testResults, timeStarted,
                        prefs, incognito, tor_mode });
       if (shouldQuit) {
         await quit(driver);

@@ -4,19 +4,12 @@ const path = require('path');
 const fileUrl = require('file-url');
 const open = require('open');
 const minimist = require('minimist');
-const datauri = require('datauri');
-const htmlUtils = require('./html-utils.js');
+const datauri = require('datauri/sync');
+const template = require('./template.js');
+const _ = require('lodash');
 
-let browserLogos = {};
-
-const browserLogoDataUri = async (browserName) =>
-  datauri(`node_modules/browser-logos/src/${browserName}/${browserName}_128x128.png`);
-
-const loadBrowserLogos = async () => {
-  for (let browser of ["brave", "firefox", "tor", "edge", "chrome", "opera", "chromium", "safari"]) {
-    browserLogos[browser] = await browserLogoDataUri(browser);
-  }
-};
+const browserLogoDataUri = _.memoize((browserName) =>
+  datauri(`node_modules/browser-logos/src/${browserName}/${browserName}_128x128.png`).content);
 
 // Deep-copy a JSON structure (by value)
 const deepCopy = (json) => JSON.parse(JSON.stringify(json));
@@ -35,8 +28,9 @@ const htmlTable = ({ headers, body, className }) => {
     elements.push("<tr>");
     for (let item of row) {
       if (item.subheading) {
+        let description = (item.description ?? "").replaceAll(/\s+/g, " ").trim();
         className = firstSubheading ? "first subheading" : "subheading";
-        elements.push(`<th colspan="4" class="${className}">${item.subheading}</th>`);
+        elements.push(`<th colspan="4" class="${className}" title="${description}">${item.subheading}</th>`);
         firstSubheading = false;
       } else {
         elements.push(`<td>${item}</td>`);
@@ -56,15 +50,22 @@ const dropMicroVersion = (version) =>
 // the header for the column showing thoses tests.
 const resultsToDescription = ({
   browser,
+  reportedVersion,
   capabilities: { os, os_version, browser: browser2, browserName, browserVersion, version,
                   browser_version, device, platformVersion, platformName, platform },
   prefs, incognito, tor_mode
 }) => {
   let browserFinal = browser || browserName || browser2;
-  let browserVersionFinal =  dropMicroVersion(browserVersion || version) || "(version unknown)";
+  let browserVersionLong =  reportedVersion || browserVersion || version;
+  let browserVersionShort =  dropMicroVersion(browserVersionLong) || "???";
   let platformFinal = platformName || os || platform;
   let platformVersionFinal = platformVersion || "";
-  let finalText = `<img src=${browserLogos[browser]} width="32" height="32"></img><br>${browserFinal}<br>${browserVersionFinal}`;//<br>${platformFinal} ${platformVersionFinal}`;
+  let finalText = `
+  <span title="${browserFinal} ${browserVersionLong}">
+    <img src=${browserLogoDataUri(browser)} width="32" height="32"><br>
+    ${browserFinal}<br>
+    ${browserVersionShort}
+  </span>`;
   if (prefs) {
     for (let key of Object.keys(prefs).sort()) {
       if (key !== "extensions.torlauncher.prompt_at_startup") {
@@ -101,11 +102,11 @@ title = '${ tooltip.replace(/'/g, "&#39;") }'> ${allUnsupported ? "&ndash;" : "&
 // including the test expressions, the actual
 // and desired values, and whether the test passed.
 const fingerprintingTooltip = fingerprintingItem => {
-  let { expression, spoof_expression, actual_value,
+  let { expression, desired_expression, actual_value,
         desired_value, passed, worker } = fingerprintingItem;
   return `
 expression: ${ expression }
-spoof expression: ${ spoof_expression }
+desired expression: ${ desired_expression }
 actual value: ${ actual_value }
 desired value: ${ desired_value }
 passed: ${ passed }
@@ -114,10 +115,12 @@ ${ worker ? "[Worker]" : "" }
 };
 
 // For simple tests, creates a tooltip that shows detailed results.
-const simpleToolTip = item => {
+const simpleToolTip = (result) => {
   let text = "";
-  for (let key in item) {
-    text += `${key}: ${item[key]}\n`;
+  for (let key in result) {
+    if (key !== "description") {
+      text += `${key}: ${result[key]}\n`;
+    }
   }
   return text.trim();
 };
@@ -153,7 +156,8 @@ const resultsSection = ({bestResults, category, tooltipFunction, wordBreak}) => 
   let section = [];
   for (let rowName of rowNames) {
     let row = [];
-    row.push(`<div style="word-break: ${wordBreak ?? "break-word"}">${rowName}</div>`);
+    let description = bestResults[0]["testResults"][category][rowName]["description"] ?? "";
+    row.push(`<div style="word-break: ${wordBreak ?? "break-word"}" title=${JSON.stringify(description)}>${rowName}</div>`);
     for (let resultMap of resultMaps) {
       let tooltip = tooltipFunction(resultMap[rowName]);
       let { passed, testFailed, unsupported } = resultMap[rowName];
@@ -163,6 +167,41 @@ const resultsSection = ({bestResults, category, tooltipFunction, wordBreak}) => 
   }
   return section;
 };
+
+const sectionDescription = {
+  statePartitioning: `
+    A common vulnerability of web browsers is that they allow tracking companies
+    to 'tag' your browser with some data ('state') that identifies you. When third-party trackers
+    are embedded in websites, they can see this identifying data as you browse to different
+    websites. Fortunately, it is possible for this category of leaks to be fixed by partitioning
+    all data stored in the browser that no data is allowed to be shared between websites.`,
+  navigation: `
+    When you click a hyperlink to travel from one site to another, certain browser APIs
+    allow the first site to communicate to the second site. These privacy vulnerabilities
+    can be fixed by introducing new limits on how much data is transfered between sites.`,
+  https: `
+    HTTPS is the protocol that web browsers use to connect securely to websites. When
+    HTTPS is being used, the connection is encrypted so
+    that third parties on the network cannot read content being sent between the
+    server and your browser. In the past, insecure connections were the default and websites
+    would need to actively request that a browser use HTTPS. Now the status quo is shifting,
+    and browser makers are moving toward a world where HTTPS is the default protocol.`,
+  misc: `This category includes tests for the presence of miscellaneous privacy features.`,
+  fingerprinting: `
+    Fingerprinting is a technique trackers use to uniquely identify you as you browse the web.
+    A fingerprinting script will measure several characteristics of your browser and, combining
+    this data, will build a fingerprint that may uniquely identify you among web users.
+    Browsers can introduce countermeasures, such as minimizing the distinguishing information
+    disclosed by certain web APIs so your browser is harder to pick out from the crowd
+    (so-called 'fingerprinting resistance').`,
+  queryParameters: `
+    When you browse from one web page to another, tracking companies will frequently attach
+    a 'tracking query parameter' to the address of the second web page. That query parameter
+    may contain a unique identifier that tracks you individually as you browse the web. And
+    these query parameters are frequently synchronized with cookies, making them a powerful
+    tracking vector. Web browsers can protect you from known tracking query parameters by
+    stripping them from web addresses before your browser sends them. (The following list of
+    tracking query parameters was largely borrowed from Brave.)`};
 
 const resultsToTable = (results, title) => {
   let bestResults = results
@@ -175,48 +214,53 @@ const resultsToTable = (results, title) => {
   if (bestResults.length === 0) {
     return [];
   }
-  body.push([{subheading:"State Partitioning tests"}]);
+  body.push([{subheading:"State Partitioning tests", description: sectionDescription.statePartitioning}]);
   body = body.concat(resultsSection({bestResults, category:"supercookies", tooltipFunction: crossSiteTooltip}));
-  body.push([{subheading:"Navigation tests"}]);
+  body.push([{subheading:"Navigation tests", description: sectionDescription.navigation}]);
   body = body.concat(resultsSection({bestResults, category:"navigation", tooltipFunction: crossSiteTooltip}));
-  body.push([{subheading:"HTTPS tests"}]);
+  body.push([{subheading:"HTTPS tests", description: sectionDescription.https }]);
   body = body.concat(resultsSection({bestResults, category:"https", tooltipFunction: simpleToolTip}));
-  body.push([{subheading:"Misc tests"}]);
+  body.push([{subheading:"Misc tests", description: sectionDescription.misc}]);
   body = body.concat(resultsSection({bestResults, category:"misc", tooltipFunction: simpleToolTip}));
-  body.push([{subheading:"Fingerprinting resistance tests"}]);
+  body.push([{subheading:"Fingerprinting resistance tests", description: sectionDescription.fingerprinting}]);
   body = body.concat(resultsSection({bestResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip, wordBreak: "break-all"} ));
-  body.push([{subheading:"Tracking query parameter tests"}]);
+  body.push([{subheading:"Tracking query parameter tests", description: sectionDescription.queryParameters}]);
   body = body.concat(resultsSection({bestResults, category:"query", tooltipFunction: simpleToolTip}));
   return { headers, body };
 };
 
+// Create the title HTML for a results table.
 const tableTitle = (results) => {
   let timeStarted = new Date(results.timeStarted);
   return `<div class="table-title">Desktop Browsers</div>
   <div class="date">${timeStarted.toISOString().split("T")[0]}</div>`;
 };
 
+// Creates the table content for a page.
 const content = (results, jsonFilename) => {
   let { headers, body } = resultsToTable(results.all_tests,  tableTitle(results));
   return htmlTable({headers, body,
                     className:"comparison-table"}) +
-	`<p class="footer">Tests ran at ${results.timeStarted}.
+	`<p class="footer">Tests ran at ${results.timeStarted.replace("T"," ").replace(/\.[0-9]{0,3}Z/, " UTC")}.
          Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/${results.git}"
     >${results.git.slice(0,8)}</a>.
     Raw data in <a href="${jsonFilename}">JSON</a>.
     </p>`;
 };
 
+// Reads in a file and parses it to a JSON object.
 const readJSONFile = async (file) =>
     JSON.parse(await fs.readFile(file));
 
-const latestResultsFile = async (path) => {
-  let files = await fs.readdir(path);
+// Returns the path to the latest results file in
+// the given directory.
+const latestResultsFile = async (dir) => {
+  let files = await fs.readdir(dir);
   let stem = files
       .filter(f => f.match("^(.*?)\.json$"))
       .sort()
       .pop();
-  return path + "/" + stem;
+  return dir + "/" + stem;
 };
 
 // List of results keys that should be collected in an array
@@ -257,7 +301,6 @@ const aggregateRepeatedTrials = (results) => {
 
 const render = async ({ dataFile, live, aggregate }) => {
   console.log("aggregate:", aggregate);
-  await loadBrowserLogos();
   let resultsFileJSON = dataFile ?? await latestResultsFile("./out/results");
   let resultsFileHTMLLatest = "./out/results/latest.html";
   let resultsFileHTML = resultsFileJSON.replace(/\.json$/, ".html");
@@ -268,14 +311,16 @@ const render = async ({ dataFile, live, aggregate }) => {
   let processedResults = aggregate ? aggregateRepeatedTrials(results) : results;
 //  console.log(results.all_tests[0]);
 //  console.log(JSON.stringify(results));
-  await fs.writeFile(resultsFileHTMLLatest, htmlUtils.htmlPage({
+  await fs.writeFile(resultsFileHTMLLatest, template.htmlPage({
     title: "PrivacyTests.org",
     content: content(processedResults, path.basename(resultsFileJSON)),
-    cssFiles: ["./template.css", "./inline.css"]
+    cssFiles: ["./template.css", "./inline.css"],
+    previewImageUrl: "/preview1.png"
   }));
   console.log(`Wrote out ${fileUrl(resultsFileHTMLLatest)}`);
   await fs.copyFile(resultsFileHTMLLatest, resultsFileHTML);
   console.log(`Wrote out ${fileUrl(resultsFileHTML)}`);
+
   if (!live) {
     open(fileUrl(resultsFileHTML));
   }
