@@ -296,7 +296,8 @@ const main = async () => {
 //  logging.installConsoleHandler();
 //  logging.getLogger().setLevel(logging.Level.ALL);
 //  logging.getLogger("browser").setLevel(logging.Level.ALL);
-  let { _ : [configFile], stayOpen, only, list, repeat } = minimist(process.argv.slice(2));
+  let { _ : [configFile], debug, only, list, repeat, aggregate } =
+    minimist(process.argv.slice(2), opts = { default: { aggregate: true }});
   if (list) {
     let capabilityList = await fetchBrowserstackCapabilities();
     for (let capability of capabilityList) {
@@ -308,8 +309,8 @@ const main = async () => {
       d => only ? d.browser.startsWith(only) : true);
     console.log("List of browsers to run:", filteredConfigList);
     let dataFile = writeDataSync(await runTestsBatch(filteredConfigList,
-                                                     { shouldQuit: !stayOpen }));
-    render.render({ dataFile });
+                                                     { shouldQuit: !debug }));
+    render.render({ dataFile, aggregate });
   }
 };
 
