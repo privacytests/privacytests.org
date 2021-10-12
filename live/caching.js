@@ -39,9 +39,10 @@ app.get('/resource', (req, res) => {
   });
   res.sendFile(resourceFiles[type], { root: __dirname });
 });
-app.get('/count', (req, res) => {
+app.get('/ctr', (req, res) => {
   let { key, type } = req.query;
   console.log(`                                                         Count checked for ${type}, ${key}: ${countMaps[type][key]}`);
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.send(`${countMaps[type][key] || 0}`);
 });
 app.get('/altsvc', (req, res) => {
@@ -57,6 +58,7 @@ app.get('/etag', (req, res) => {
   console.log(req.url);
   let { key } = req.query;
   requestIfNoneMatch = req.headers["if-none-match"];
+  console.log("requestIfNoneMatch:", requestIfNoneMatch);
   if (requestIfNoneMatch) {
     res.set( { "x-received-if-none-match": requestIfNoneMatch } );
   }
