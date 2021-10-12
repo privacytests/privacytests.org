@@ -46,19 +46,29 @@
 .header div.title-wrapper {
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .header div.title {
+  display: flex;
   font-size: 28px;
   font-weight:bold;
   font-family: sans-serif;
   flex-grow: 0;
+  align-items: center;
+}
+
+.header div.title a {
+  display: flex;
+  align-items: center;
+}
+.header div.title img {
+  padding-right: 16px;
 }
 
 .header .title-wrapper div.version {
   font-size: 14px;
-  padding: 4px;
+  padding-top: 8px;
 }
 
 .header div.links {
@@ -118,10 +128,13 @@ p.footer {
 <div class="header">
   <div class="title-wrapper">
     <div class="title">
-      <!--<img height="50px" src="/check-mark.png">--><a href="/">PrivacyTests.org</a>
+      <a href="/">
+        <img height="48px" src="data:image/png;base64,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">
+        <span>PrivacyTests.org</span>
+      </a>
     </div>
     <div class="version">
-      v. 0.5
+      v. 0.1.0
     </div>
   </div>
   <div class="links">
@@ -140,7 +153,7 @@ p.footer {
   <div class="copy"><h1 id="what-is-privacytestsorg">What is PrivacyTests.org?</h1>
 <p>All web browsers leak, but some browsers are more leaky than others. Most web browsers leak your identity and your browsing history.</p>
 <p>The goal of PrivacyTests.org is to understand in detail: what data is each web browser leaking? Which web browsers offer the best privacy protections?</p>
-<p>PrivacyTests.org is an open-source initiatve that regularly subjects popular web browsers to a suite of automated tests designed to compare their privacy properties. The results of these tests are made public to help users make an informed choice about which browser to use, and to encourage browser makers to fix the leaks of private user data.</p>
+<p>PrivacyTests.org is an open-source initiatve that regularly subjects popular web browsers to a suite of automated tests. These tests are designed to audit web browsers&#39; privacy properties in an unbiased manner. The results of the tests are made public to help users make an informed choice about which browser to use, and to encourage browser makers to fix leaks of private user data.</p>
 <h2 id="why-privacy-on-the-web-matters">Why privacy on the web matters</h2>
 <p>The web has rapidly developed into one of the primary ways that billions of people interact with the world. Reading the news, communicating with friends and colleagues, watching movies, participating in political discourse, and searching for information all take place heavily through the web.</p>
 <p>Despite the crucial importance of the web, it has been designed in a fashion that historically has not respected users&#39; privacy. Advertising companies have taken advantage of this design to collect tremendous quantities of private data, using it to show ads targeted to specific groups of consumers. Governments have also seized the opportunity to surveill people en masse without their knowledge.</p>
@@ -149,14 +162,13 @@ p.footer {
 <p>&quot;We are creating an architecture of surveillance that is so good that if it gets taken over by a bad government we are in serious trouble because it will be impossible to resist.&quot; — Carissa Véliz.</p>
 </blockquote>
 <h2 id="why-web-browsers-are-critical-to-online-privacy">Why web browsers are critical to online privacy</h2>
-<p>Once private data has leaked from your computer, phone or tablet, there is not much you can do to control it. But how did that data leave your device? Very often your data was quietly leaked by the web browser you are using.</p>
-<p>Web browsers commonly leak data revealing what web pages you have visited to third parties. This information lets tracking companies know what you read, what you write, where you are located, what you search for and what you buy. And this highly personal information is assembled by those companies into detailed individual profiles of every person on the internet, containing <a href="https://assets.wordstream.com/s3fs-public/styles/simple_image/public/images/media/images/facebook_ad_targeting_options_infographic_update.png?26LWxETqnc01Oo7_PuvplhKTsNHCC0gA&amp;itok=67flVdty">data on</a> your ethnicity, your religious views, your politic views, your sexual orientation, your gender, your family, your friends, your colleagues, your health history, your habits, your relationships, your educational records, your income, and so on. These companies often retain your data for years or decades, frequently sharing it with third parties, including other companies or governments.</p>
-<p>Fortunately, some browser makers have recognized their responsibility to stop users&#39; private information from leaking out in the first place. But the default behavior for browsers used by billions of people remains highly leaky. For most people using the web, massive quantities of data continue to be leaked by their web browsers.</p>
+<p>Once private data has leaked from your computer, phone or tablet, there is not much you can do to control it. But how did that data leave your device in the first place? Frequently your data is quietly leaked by your web browser.</p>
+<p>Web browsers commonly leak data revealing what web pages you have visited to third parties. This information lets tracking companies know what you read, what you write, where you are located, what you search for and what you buy. And this highly personal information is assembled by those companies into detailed individual profiles of every person on the internet, containing <a href="https://assets.wordstream.com/s3fs-public/styles/simple_image/public/images/media/images/facebook_ad_targeting_options_infographic_update.png?26LWxETqnc01Oo7_PuvplhKTsNHCC0gA&amp;itok=67flVdty">data on</a> your ethnicity, your religious views, your politic views, your sexual orientation, your gender, your family, your friends, your colleagues, your health history, your habits, your relationships, your educational records, your income, and so on. These companies often retain your data for years or decades, and sometimes sharing it with third parties, including other companies or governments.</p>
+<p>Fortunately, most browser makers have acknowledged their responsibility to stop users&#39; private information from leaking out in the first place. But the default behavior for browsers used by billions of people remains highly leaky. Browsers continue to leak massive quantities of user data.</p>
 <h2 id="how-the-tests-work">How the tests work</h2>
 <p>In order to understand and compare what the privacy characteristics of browsers are, we subject each browser to the same suite of rigorous automated tests. Each privacy test examines whether the browser protects against a specific kind of data leak.</p>
-<p>The results for all browsers and tests are combined in a single table. If a browser is found to protect users from a given data leak, it gets a green <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);">, but if it leaks user data, it gets a red <img src="/x-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);">.</p>
-<p>We plan to run these tests on a regular basis, to monitor the latest version of each browser. As browser developers fix a privacy vulnerability, it will be reflected in the latest results.</p>
-<p>It is my hope that these comparative tests will help you decide which browser to use. And I hope it will encourage browser makers to fix their browsers&#39; data leaks. The tests will continue to run with the latest version of each browser and the results will be updated on the homepage.</p>
+<p>The results for all browsers and tests are presented in a unified table. If a browser is found to protect users from a given data leak, it gets a green <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);">, but if it leaks user data, it gets a red <img src="/x-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);">.</p>
+<p>We plan to run these tests on a regular basis, to monitor the privacy improvements of each browser. As browser developers fix a privacy vulnerability, it will be reflected in the latest results.</p>
 <h2 id="work-in-progress">Work in progress</h2>
 <p>This project is a work in progress and is under active development! We plan to cover more browsers and more tracking vulnerabilities in the future. <a href="https://twitter.com/browserprivacy">Feedback</a>, <a href="https://github.com/arthuredelstein/browser-privacy/issues">bug reports</a> and <a href="https://github.com/arthuredelstein/browser-privacy/pulls">pull requests</a> are welcome.</p>
 <p><em>This website and the browser privacy tests are an independent project by Arthur Edelstein.</em></p>
