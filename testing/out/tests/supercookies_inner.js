@@ -238,17 +238,19 @@ let tests = {
     write: async (key) => {
       let link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = testURI("resource", "css", key);
       document.getElementsByTagName("head")[0].appendChild(link);
+      let cssLoadPromise = new Promise((resolve, reject) => link.addEventListener("load", resolve, {once:true}));
+      link.href = testURI("resource", "css", key);
+      await cssLoadPromise;
       return key;
     },
     read: async (key) => {
       let link = document.createElement("link");
       link.rel = "stylesheet";
       document.getElementsByTagName("head")[0].appendChild(link);
+      let cssLoadPromise = new Promise((resolve, reject) => link.addEventListener("load", resolve, {once:true}));
       link.href = testURI("resource", "css", key);
-      await new Promise((resolve, reject) => link.addEventListener("load", resolve, {once:true}));
-      //await sleepMs(500);
+      await cssLoadPromise;
       let response = await fetch(
         testURI("ctr", "css", key), {"cache": "reload"});
       return (await response.text()).trim();
