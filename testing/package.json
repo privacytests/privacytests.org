@@ -9,6 +9,7 @@
     "dateformat": "^3.0.3",
     "electron-chromedriver": "^14.0.0",
     "geckodriver": "^2.0.4",
+    "lodash": "^4.17.21",
     "marked": "^3.0.4",
     "memoizee": "^0.4.12",
     "minimist": "^1.2.5",
@@ -29,7 +30,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "gh-pages -d out",
     "publish": "cp out/results/latest.html out/results/index.html && gh-pages -d out",
-    "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render --live\" -e css,js,md & ./node_modules/@compodoc/live-server/live-server.js --open=results/latest.html out"
+    "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render --live\" -e css,js,md & ./node_modules/@compodoc/live-server/live-server.js --open=results/latest.html out",
+    "copy-dev": "./node_modules/nodemon/bin/nodemon.js --exec \"node copy\" --watch copy --watch . -e js,md,css & ./node_modules/@compodoc/live-server/live-server.js out"
   },
   "jshintConfig": {
     "esversion": 11,

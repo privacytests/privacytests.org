@@ -30,7 +30,7 @@ const event_tests = [
 ];
 
 const test_pairs = (pairs) => pairs.map(
-  ([expression, spoof_expression]) => {
+  ({expression, desired_expression, description }) => {
     let actual_value, desired_value;
     let failure = false;
     try {
@@ -41,14 +41,15 @@ const test_pairs = (pairs) => pairs.map(
       console.log(e);
     }
     try {
-      desired_value = eval(spoof_expression);
+      desired_value = eval(desired_expression);
     } catch (e) {
       desired_value = e.message;
       failure = true;
       console.log(e);
     }
     const passed = !failure && (actual_value === desired_value);
-    return { expression, spoof_expression, actual_value, desired_value, passed };
+    return { expression, desired_expression, actual_value, desired_value,
+             passed, description };
   });
 
 const run_all_tests = function () {
@@ -64,21 +65,30 @@ return { test_results: run_all_tests(),
          test_pairs: self.Window ? test_pairs : undefined };
 };
 
-const prelude = `
-  window.mouseEvent = new MouseEvent("click", { clientX: 10, clientY: 20 });
-`;
-
 const window_property_tests = [
-  [`screenX`, 0],
-  [`screenY`, 0],
-  [`outerWidth`, `innerWidth`],
-  [`outerHeight`, `innerHeight`],
-//  [`devicePixelRatio`, 1]
+  { description: "Position, in pixels, of the left edge of the browser window on screen.",
+    expression: `screenX`,
+    desired_expression: 0 },
+  { description: "Position, in pixels, of the top edge of the browser window on screen.",
+    expression: `screenY`,
+    desired_expression: 0},
+  { description: "Width of the browser window in pixels, including browser chrome.",
+    expression: `outerWidth`,
+    desired_expression: `innerWidth`},
+  { description: "Height of the browser window in pixels, including browser chrome.",
+    expression: `outerHeight`,
+    desired_expression: `innerHeight`},
+// { expression: `devicePixelRatio`,
+//    desired_expression: 1 }
 ];
 
 const screen_tests = [
-  [`screen.width`, `innerWidth`],
-  [`screen.height`, `innerHeight`],
+  { description: "Width of the user's screen, in pixels.",
+    expression: `screen.width`,
+    desired_expression: `innerWidth` },
+  { description: "Height of the user's screen, in pixels.",
+    expression: `screen.height`,
+    desired_expression: `innerHeight` },
 ];
 
 let navigator_tests = [
@@ -96,8 +106,8 @@ let navigator_tests = [
 ];
 
 const mouse_event_tests = [
-  [`mouseEvent.screenX`, `mouseEvent.clientX`],
-  [`mouseEvent.screenY`, `mouseEvent.clientY`],
+//  [`mouseEvent.screenX`, `mouseEvent.clientX`],
+//  [`mouseEvent.screenY`, `mouseEvent.clientY`],
 //  [`mouseEvent.timeStamp % 100`, `0`],
 ];
 
@@ -124,10 +134,12 @@ const list_to_map = (list, keyFn) => {
 };
 
 const run_all_tests = async function () {
+  //window.mouseEvent = await new Promise((resolve, reject) => document.addEventListener("click", resolve, {once:true}));
+
   let { test_pairs, test_results } = dual_tests();
   let { test_results: test_results_worker } = await run_in_worker(dual_tests);
   test_results_worker.map(t => Object.assign(t, {worker: true}));
-  eval(prelude);
+  //eval(prelude);
   let all_tests = test_results.concat(
     ...test_results_worker,
     test_pairs(window_property_tests),

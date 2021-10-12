@@ -7,6 +7,7 @@ let testURI = (path, type, key) => `${baseURI}${path}?type=${type}&key=${key}`;
 
 let tests = {
   "cookie": {
+    description: "The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website's behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.",
     write: (secret) => {
       let expiry = new Date();
       expiry.setFullYear(expiry.getFullYear() + 1);
@@ -15,10 +16,12 @@ let tests = {
     read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null,
    },
   "localStorage": {
+    description: "The localStorage API gives websites access to a key-value database that will remain available across visits. If the localStorage API is not partitioned or blocked, it can also be used to track users across websites.",
     write: (secret) => localStorage.setItem("secret", secret),
     read: () => localStorage.getItem("secret"),
   },
   "indexedDB": {
+    description: "The IndexedDB API exposes a transactional database to web pages. That database can be used to track users across websites, unless it is partitioned.",
     write: async (secret) => {
       try {
         return await IdbKeyVal.set("secret", secret);
@@ -29,6 +32,7 @@ let tests = {
     read: () => IdbKeyVal.get("secret")
   },
   "SharedWorker": {
+    description: "The SharedWorker API allows scripts from multiple tabs to share a background thread of computation. If SharedWorker is not partitioned, then it can be abused to shared data between websites in your browser.",
     write: (secret) => {
       try {
         let worker = new SharedWorker("supercookies_sharedworker.js");
@@ -48,6 +52,7 @@ let tests = {
       })
   },
   "blob": {
+    description: "A 'blob URL' is a local reference to some raw data. Trackers can use a blob URL to share data between websites.",
     write: (secret) => {
       try {
         return URL.createObjectURL(new Blob([secret]));
@@ -63,6 +68,7 @@ let tests = {
     },
   },
   "BroadcastChannel": {
+    description: "A BroadcastChannel is designed to send messages between tabs. In some browsers it can be used for cross-site communication and tracking.",
     write: (secret) => {
       try {
         let bc = new BroadcastChannel("secrets");
@@ -87,7 +93,8 @@ let tests = {
         setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
       })
   },
-  "fetch": {
+  "fetch cache": {
+    description: "When a resource is received via the Fetch API, it is frequently cached. That cache can potentially be abused for cross-site tracking.",
     write: async (key) => {
       let response = await fetch(testURI("resource", "fetch", key),
                                  {cache: "force-cache"});
@@ -96,12 +103,13 @@ let tests = {
     read: async (key) => {
       let response = await fetch(testURI("resource", "fetch", key),
                                  {cache: "force-cache"});
-      let countResponse = await fetch(testURI("count", "fetch", key),
+      let countResponse = await fetch(testURI("ctr", "fetch", key),
                                       {cache: "reload"});
       return (await countResponse.text()).trim();
     }
   },
-  "XMLHttpRequest": {
+  "XMLHttpRequest cache": {
+    description: "Similar to the newer Fetch API, any resource received may be cached by the browser. The cache is potentially vulnerable to cross-site tracking attack.",
     write: () => new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
       xhr.addEventListener("load", () => resolve(
@@ -121,7 +129,8 @@ let tests = {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
   },
-  "iframe": {
+  "iframe cache": {
+    description: "An iframe is an element in a web page than allows websites to embed a second web page. Caching of this web page could be abused for cross-site tracking.",
     write: (key) => new Promise((resolve, reject) => {
       let iframe = document.createElement("iframe");
       document.body.appendChild(iframe);
@@ -138,11 +147,12 @@ let tests = {
       iframe.src = address;
       await iframeLoadPromise;
       let response = await fetch(
-        testURI("count", "page", key), {"cache": "reload"});
+        testURI("ctr", "page", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
   },
-  "image": {
+  "image cache": {
+    description: "Caching of images in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.",
     write: (key) => new Promise((resolve, reject) => {
       let img = document.createElement("img");
       document.body.appendChild(img);
@@ -158,11 +168,12 @@ let tests = {
       img.src = testURI("resource", "image", key);
       await imgLoadPromise;
       let response = await fetch(
-        testURI("count", "image", key), {"cache": "reload"});
+        testURI("ctr", "image", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
   },
   "CacheStorage": {
+    description: "The Cache API is a content storage mechanism originally introduced to support ServiceWorkers. If the same Cache object is accessible to multiple websites, it can be abused to track users.",
     write: async (key) => {
       try {
         let cache = await caches.open("supercookies");
@@ -178,7 +189,8 @@ let tests = {
       return (new URL(url)).searchParams.get("key");
     }
   },
-  "favicon": {
+  "favicon cache": {
+    description: "A favicon is an icon that represents a website, typically shown in browser tab and bookmarks menu. If the favicon cache is not partitioned, it can be used to track users across websites.",
     write: (key) => {
       parent.postMessage({
         faviconURI: testURI("resource", "favicon", key)
@@ -191,7 +203,7 @@ let tests = {
       }, "*");
       await sleepMs(500);
       let response = await fetch(
-        testURI("count", "favicon", key), {"cache": "reload"});
+        testURI("ctr", "favicon", key), {"cache": "reload"});
       let count = (await response.text()).trim();
       if (count === "0") {
         throw new Error("No requests received");
@@ -199,7 +211,8 @@ let tests = {
       return count;
     }
   },
-  "font": {
+  "font cache": {
+    description: "Web fonts are sometimes stored in their own cache, which is vulnerable to being abused for cross-site tracking.",
     write: async (key) => {
       let style = document.createElement("style");
       style.type='text/css';
@@ -216,11 +229,12 @@ let tests = {
       document.getElementsByTagName("head")[0].appendChild(style);
       await sleepMs(500);
       let response = await fetch(
-        testURI("count", "font", key), {"cache": "reload"});
+        testURI("ctr", "font", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
   },
-  "css": {
+  "CSS cache": {
+    description: "CSS stylesheets are cached, and if that cache is shared between websites, it can be used to track users across sites.",
     write: async (key) => {
       let link = document.createElement("link");
       link.rel = "stylesheet";
@@ -231,11 +245,12 @@ let tests = {
     read: async (key) => {
       let link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = testURI("resource", "css", key);
       document.getElementsByTagName("head")[0].appendChild(link);
-      await sleepMs(500);
+      link.href = testURI("resource", "css", key);
+      await new Promise((resolve, reject) => link.addEventListener("load", resolve, {once:true}));
+      //await sleepMs(500);
       let response = await fetch(
-        testURI("count", "css", key), {"cache": "reload"});
+        testURI("ctr", "css", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
   },
@@ -257,11 +272,12 @@ let tests = {
       video.src = testURI("resource", "video", key);
       await videoLoadPromise;
       let response = await fetch(
-        testURI("count", "video", key), {"cache": "reload"});
+        testURI("ctr", "video", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
   },*/
   "locks": {
+    description: "navigator.locks (only supported in some browsers) allows scripts on multiple tabs to coordinate. If this API is not partitioned, it can be used for cross-site tracking.",
     write: async (key) => {
       if (navigator.locks) {
         navigator.locks.request(key, lock => new Promise((f,r) => {}));
@@ -296,7 +312,8 @@ let tests = {
     }
   },
 */
-  "HSTS": {
+  "HSTS cache": {
+    description: "The HTTP Strict-Transport-Security response header allows a website to signal that it should only be accessed via HTTPS. The browser remembers this directive in a database, but if this database is not partitioned, then it can be used to track users across websites.",
     write: () => {
       let image = document.getElementById("hsts-image");
       image.src = "https://hsts.arthuredelstein.net/set_hsts.png";
@@ -320,7 +337,8 @@ let tests = {
     }
   },
   */
-  "prefetch": {
+  "prefetch cache": {
+    description: "A <link rel='prefetch'...> suggests to browsers they should fetch a resource ahead of time and cache it. But if browsers don't partition this cache, it can be used to track users across websites.",
     write: async (key) => {
       let link = document.createElement("link");
       link.rel = "prefetch";
@@ -335,7 +353,7 @@ let tests = {
       document.getElementsByTagName("head")[0].appendChild(link);
       await sleepMs(500);
       let response = await fetch(
-        testURI("count", "prefetch", key), {"cache": "reload"});
+        testURI("ctr", "prefetch", key), {"cache": "reload"});
       let countString = (await response.text()).trim();
       if (parseInt(countString) === 0) {
         throw new Error("No requests received");
@@ -343,7 +361,8 @@ let tests = {
       return countString;
     }
   },
-  "web_sql_database": {
+  "Web SQL Database": {
+    description: "The Web SQL Database is a deprecated web API for storing data in an SQL database.",
     // Borrowed from https://github.com/samyk/evercookie
     write: async (key) => {
       if (!window.openDatabase) {
@@ -386,7 +405,8 @@ let tests = {
       return (await response.json()).password;
     }
     },*/
-  "h2_connection": {
+  "H2 connection": {
+    description: "HTTP/2 is a web connection protocol introduced in 2015. Some browsers re-use HTTP/2 connections across websites and can thus be used to track users.",
     write: async (secret) => {
       await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`);
     },
@@ -395,7 +415,8 @@ let tests = {
       return await response.text();
     }
   },
-  "h1_connection": {
+  "H1 connection": {
+    description: "HTTP/1.x are the classic web connection protocols. If these connections are re-used across websites, they can be used to track users.",
     write: async (secret) => {
       await fetch(`https://h1.arthuredelstein.net:8901/?mode=write&secret=${secret}`);
     },
@@ -404,7 +425,8 @@ let tests = {
       return await response.text();
     }
   },
-  "h3_connection": {
+  "H3 connection": {
+    description: "HTTP/3 is a new standard HTTP connection protocol, still in draft but widely supported by browsers. If it is not partitioned, it can be used to track users across websites.",
     write: async (secret) => {
       // Ensure that we can switch over to h3 via alt-svc:
       for (let i = 0; i<3; ++i) {
