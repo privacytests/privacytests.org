@@ -245,9 +245,10 @@ let tests = {
     read: async (key) => {
       let link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = testURI("resource", "css", key);
       document.getElementsByTagName("head")[0].appendChild(link);
-      await sleepMs(500);
+      link.href = testURI("resource", "css", key);
+      await new Promise((resolve, reject) => link.addEventListener("load", resolve, {once:true}));
+      //await sleepMs(500);
       let response = await fetch(
         testURI("ctr", "css", key), {"cache": "reload"});
       return (await response.text()).trim();
