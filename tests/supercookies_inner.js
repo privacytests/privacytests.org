@@ -248,8 +248,8 @@ let tests = {
       let link = document.createElement("link");
       link.rel = "stylesheet";
       document.getElementsByTagName("head")[0].appendChild(link);
-      cssLoadPromise = new Promise((resolve, reject) => link.addEventListener("load", resolve, {once:true}));
-      let link.href = testURI("resource", "css", key);
+      let cssLoadPromise = new Promise((resolve, reject) => link.addEventListener("load", resolve, {once:true}));
+      link.href = testURI("resource", "css", key);
       await cssLoadPromise;
       let response = await fetch(
         testURI("ctr", "css", key), {"cache": "reload"});
