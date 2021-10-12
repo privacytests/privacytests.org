@@ -103,7 +103,7 @@ let tests = {
     read: async (key) => {
       let response = await fetch(testURI("resource", "fetch", key),
                                  {cache: "force-cache"});
-      let countResponse = await fetch(testURI("count", "fetch", key),
+      let countResponse = await fetch(testURI("ctr", "fetch", key),
                                       {cache: "reload"});
       return (await countResponse.text()).trim();
     }
@@ -147,7 +147,7 @@ let tests = {
       iframe.src = address;
       await iframeLoadPromise;
       let response = await fetch(
-        testURI("count", "page", key), {"cache": "reload"});
+        testURI("ctr", "page", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
   },
@@ -168,7 +168,7 @@ let tests = {
       img.src = testURI("resource", "image", key);
       await imgLoadPromise;
       let response = await fetch(
-        testURI("count", "image", key), {"cache": "reload"});
+        testURI("ctr", "image", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
   },
@@ -203,7 +203,7 @@ let tests = {
       }, "*");
       await sleepMs(500);
       let response = await fetch(
-        testURI("count", "favicon", key), {"cache": "reload"});
+        testURI("ctr", "favicon", key), {"cache": "reload"});
       let count = (await response.text()).trim();
       if (count === "0") {
         throw new Error("No requests received");
@@ -229,7 +229,7 @@ let tests = {
       document.getElementsByTagName("head")[0].appendChild(style);
       await sleepMs(500);
       let response = await fetch(
-        testURI("count", "font", key), {"cache": "reload"});
+        testURI("ctr", "font", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
   },
@@ -249,7 +249,7 @@ let tests = {
       document.getElementsByTagName("head")[0].appendChild(link);
       await sleepMs(500);
       let response = await fetch(
-        testURI("count", "css", key), {"cache": "reload"});
+        testURI("ctr", "css", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
   },
@@ -271,7 +271,7 @@ let tests = {
       video.src = testURI("resource", "video", key);
       await videoLoadPromise;
       let response = await fetch(
-        testURI("count", "video", key), {"cache": "reload"});
+        testURI("ctr", "video", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
   },*/
@@ -352,7 +352,7 @@ let tests = {
       document.getElementsByTagName("head")[0].appendChild(link);
       await sleepMs(500);
       let response = await fetch(
-        testURI("count", "prefetch", key), {"cache": "reload"});
+        testURI("ctr", "prefetch", key), {"cache": "reload"});
       let countString = (await response.text()).trim();
       if (parseInt(countString) === 0) {
         throw new Error("No requests received");
