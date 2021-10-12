@@ -6,6 +6,28 @@ const baseURI = "https://arthuredelstein.net/browser-privacy-live/";
 let testURI = (path, type, key) => `${baseURI}${path}?type=${type}&key=${key}`;
 
 let tests = {
+  "font cache": {
+    description: "Web fonts are sometimes stored in their own cache, which is vulnerable to being abused for cross-site tracking.",
+    write: async (key) => {
+      let style = document.createElement("style");
+      style.type='text/css';
+      let fontURI = testURI("resource", "font", key);
+      style.innerHTML = `@font-face {font-family: "myFont"; src: url("${fontURI}"); } body { font-family: "myFont" }`;
+      document.getElementsByTagName("head")[0].appendChild(style);
+      return key;
+    },
+    read: async (key) => {
+      let style = document.createElement("style");
+      style.type='text/css';
+      let fontURI = testURI("resource", "font", key);
+      style.innerHTML = `@font-face {font-family: "myFont"; src: url("${fontURI}"); } body { font-family: "myFont" }`;
+      document.getElementsByTagName("head")[0].appendChild(style);
+      await sleepMs(500);
+      let response = await fetch(
+        testURI("count", "font", key), {"cache": "reload"});
+      return (await response.text()).trim();
+    }
+  },
   "cookie": {
     description: "The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website's behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.",
     write: (secret) => {
@@ -209,28 +231,6 @@ let tests = {
         throw new Error("No requests received");
       }
       return count;
-    }
-  },
-  "font cache": {
-    description: "Web fonts are sometimes stored in their own cache, which is vulnerable to being abused for cross-site tracking.",
-    write: async (key) => {
-      let style = document.createElement("style");
-      style.type='text/css';
-      let fontURI = testURI("resource", "font", key);
-      style.innerHTML = `@font-face {font-family: "myFont"; src: url("${fontURI}"); } body { font-family: "myFont" }`;
-      document.getElementsByTagName("head")[0].appendChild(style);
-      return key;
-    },
-    read: async (key) => {
-      let style = document.createElement("style");
-      style.type='text/css';
-      let fontURI = testURI("resource", "font", key);
-      style.innerHTML = `@font-face {font-family: "myFont"; src: url("${fontURI}"); } body { font-family: "myFont" }`;
-      document.getElementsByTagName("head")[0].appendChild(style);
-      await sleepMs(500);
-      let response = await fetch(
-        testURI("count", "font", key), {"cache": "reload"});
-      return (await response.text()).trim();
     }
   },
   "CSS cache": {
