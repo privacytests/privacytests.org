@@ -50,5 +50,6 @@ theServer.on('secureConnection', (tlsSocket) => {
 //  console.log(tlsSocket.getTLSTicket());
 });
 
+theServer.keepAliveTimeout = 300000;
 theServer.listen(8900);
 console.log("listening for tls connections on 8900");

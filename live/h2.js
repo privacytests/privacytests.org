@@ -30,5 +30,6 @@ server.on('request', (request, response) => {
   response.end(sessionTags.get(session));
 });
 
+server.timeout = 300000;
 server.listen(8902);
 console.log("listening for h2 connections on 8902");
