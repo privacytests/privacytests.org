@@ -174,11 +174,12 @@ const sectionDescription = {
     to 'tag' your browser with some data ('state') that identifies you. When third-party trackers
     are embedded in websites, they can see this identifying data as you browse to different
     websites. Fortunately, it is possible for this category of leaks to be fixed by partitioning
-    all data stored in the browser that no data is allowed to be shared between websites.`,
+    all data stored in the browser such that no data can be shared between websites.`,
   navigation: `
-    When you click a hyperlink to travel from one site to another, certain browser APIs
-    allow the first site to communicate to the second site. These privacy vulnerabilities
-    can be fixed by introducing new limits on how much data is transfered between sites.`,
+    When you click a hyperlink to navigate your browser from one site to another, certain
+    browser APIs allow the first site to communicate to the second site. These privacy
+    vulnerabilities can be fixed by introducing new limits on how much data is transfered
+    between sites.`,
   https: `
     HTTPS is the protocol that web browsers use to connect securely to websites. When
     HTTPS is being used, the connection is encrypted so
@@ -200,8 +201,8 @@ const sectionDescription = {
     may contain a unique identifier that tracks you individually as you browse the web. And
     these query parameters are frequently synchronized with cookies, making them a powerful
     tracking vector. Web browsers can protect you from known tracking query parameters by
-    stripping them from web addresses before your browser sends them. (The following list of
-    tracking query parameters was largely borrowed from Brave.)`};
+    stripping them from web addresses before your browser sends them. (The set of
+    tracking query parameters tested here was largely borrowed from Brave.)`};
 
 const resultsToTable = (results, title) => {
   let bestResults = results
