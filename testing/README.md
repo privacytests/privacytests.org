@@ -11,11 +11,12 @@ To run tests, point to a .yaml file:
 
 `node index chromium.yaml`
 
-There are a few optional flags:
+You can use a few optional flags after the yaml file:
 
 * `--repeat 10`: repeat the whole set of tests 10 times
-* `--stayOpen`: Don't close browser(s) after test is done
-* `--only brave`: Only run a single browser with the name given
+* `--debug`: Don't close browser(s) after test is done
+* `--only brave`: Only run a single browser in the config file with the name given
+* `--aggregate`: Combine results from the same browser into a single column (enabled by default)
 
 Config files are YAML arrays. Each item in the array is an object
 that describes what should go into a single test. All parameters
@@ -23,7 +24,7 @@ are optional, except `browser`:
 
 ```
 - browser: chrome          # Possible values include chrome, firefox, brave, opera, edge, etc.
-  browser_version: '92.0'  # A string, the version of the browser (for remote).
+  browser_version: '92.0'  # A string, the version of the browser (for remote). Can be 'latest'.
   os: windows              # Operating system: windows, macOS, iOS, linux (for remote).
   os_version: '10'         # A string, the version of the OS we want (for remote).
   incognito: true,         # Set incognito to true for private browsing windows.
