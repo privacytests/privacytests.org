@@ -233,13 +233,15 @@ const resultsToTable = (results, title) => {
 const tableTitle = (results) => {
   let timeStarted = new Date(results.timeStarted);
   return `<div class="table-title">Desktop Browsers</div>
-  <div class="date">${timeStarted.toISOString().split("T")[0]}</div>`;
+  <div class="instructions">(point anywhere for more info)</a>
+  <!-- <div class="date">${timeStarted.toISOString().split("T")[0]}</div>-->`;
 };
 
 // Creates the table content for a page.
 const content = (results, jsonFilename) => {
   let { headers, body } = resultsToTable(results.all_tests,  tableTitle(results));
-  return htmlTable({headers, body,
+  return `<div id="banner"><div>Open-source tests of web browser privacy.</div><div>Updated 2021-10-12</div></div>` +
+  htmlTable({headers, body,
                     className:"comparison-table"}) +
 	`<p class="footer">Tests ran at ${results.timeStarted.replace("T"," ").replace(/\.[0-9]{0,3}Z/, " UTC")}.
          Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/${results.git}"
