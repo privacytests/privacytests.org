@@ -32,7 +32,7 @@ const header = (version) => `
       <a href="https://twitter.com/privacytests" title="@privacytests on Twitter"><img src="${twitterDataURI}"></a>
     </div>
     <div class="link-header">
-      <a href="mailto:contact@privacytests.org" title="Email us"><img src="${emailDataURI}"></a>
+      <a href="mailto:contact@privacytests.org" title="Email"><img src="${emailDataURI}"></a>
     </div>
   </div>
 </div>`;
