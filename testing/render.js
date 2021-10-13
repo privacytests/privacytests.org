@@ -271,7 +271,7 @@ const resultsKeys = [
   "passed", "testFailed",
   "readSameFirstParty", "readDifferentFirstParty",
   "actual_value", "desired_value",
-  "IsTorExit", "cloudflareDoH", "nextDoH", "result", "unsupported"
+  "IsTorExit", "cloudflareDoH", "nextDoH", "result", "unsupported", "upgraded"
 ];
 
 // Finds any repeated trials of tests and aggregate the results
