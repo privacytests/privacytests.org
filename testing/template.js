@@ -26,13 +26,13 @@ const header = (version) => `
       <a href="/about.html">About</a>
     </div>
     <div class="link-header">
-      <a href="https://github.com/arthuredelstein/privacytests.org" title="Github"><img src="${githubDataURI}"></a>
+      <a href="https://github.com/arthuredelstein/privacytests.org" title="Github"><img src="${githubDataURI}" width=20></a>
     </div>
     <div class="link-header">
-      <a href="https://twitter.com/privacytests" title="@privacytests on Twitter"><img src="${twitterDataURI}"></a>
+      <a href="https://twitter.com/privacytests" title="@privacytests on Twitter"><img src="${twitterDataURI}" width=20></a>
     </div>
     <div class="link-header">
-      <a href="mailto:contact@privacytests.org" title="Email"><img src="${emailDataURI}"></a>
+      <a href="mailto:contact@privacytests.org" title="Email"><img src="${emailDataURI}" width=20></a>
     </div>
   </div>
 </div>`;
