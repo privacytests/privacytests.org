@@ -11,8 +11,8 @@ let parseSession = (buf) => ({
 });
 
 const options = {
-  key: fs.readFileSync('/home/arthur/certs/tls.arthuredelstein.net/privkey2.pem'),
-  cert: fs.readFileSync('/home/arthur/certs/tls.arthuredelstein.net/cert2.pem')
+  key: fs.readFileSync('/etc/letsencrypt/live/tls.arthuredelstein.net/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/tls.arthuredelstein.net/fullchain.pem')
 };
 
 let lastRequest = null;
