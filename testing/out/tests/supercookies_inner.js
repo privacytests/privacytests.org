@@ -327,8 +327,8 @@ let tests = {
       image.src = "http://hsts.arthuredelstein.net/test_hsts.png";
     })
   },
-  /*
-  "TLS_Session_Id": {
+  "TLS Session ID": {
+    description: "The TLS protocol is used by HTTPS to make connections secure. If the browser were to re-use a TLS session, then the session ID could be used to track users across websites.",
     write: async () => {
       let results = await fetch("https://tls.arthuredelstein.net:8900/");
       return (await results.json()).sessionId;
@@ -338,7 +338,6 @@ let tests = {
       return (await results.json()).sessionId;
     }
   },
-  */
   "prefetch cache": {
     description: "A <link rel='prefetch'...> suggests to browsers they should fetch a resource ahead of time and cache it. But if browsers don't partition this cache, it can be used to track users across websites.",
     write: async (key) => {
