@@ -61,7 +61,7 @@ const resultsToDescription = ({
   let platformFinal = platformName || os || platform;
   let platformVersionFinal = platformVersion || "";
   let finalText = `
-  <span title="${browserFinal} ${browserVersionLong}">
+  <span>
     <img src=${browserLogoDataUri(browser)} width="32" height="32"><br>
     ${browserFinal}<br>
     ${browserVersionShort}
@@ -282,23 +282,28 @@ const aggregateRepeatedTrials = (results) => {
   let aggregatedResults = new Map();
   for (let test of results.all_tests) {
     let key = resultsToDescription(test);
-    //console.log(test, key);
+    //console.log(key);
     if (aggregatedResults.has(key)) {
-      for (let subcategory of ["supercookies", "fingerprinting", "https", "misc", "navigation", "query"]) {
-        let someTests = aggregatedResults.get(key).testResults[subcategory];
-        for (let testName in someTests) {
-          for (let value in someTests[testName]) {
-            if (resultsKeys.includes(value)) {
-              if (!Array.isArray(someTests[testName][value])) {
-                someTests[testName][value] = [someTests[testName][value]];
+      let theseTestResults = aggregatedResults.get(key).testResults;
+      if (theseTestResults) {
+        for (let subcategory of ["supercookies", "fingerprinting", "https", "misc", "navigation", "query"]) {
+          let someTests = theseTestResults[subcategory];
+          for (let testName in someTests) {
+            for (let value in someTests[testName]) {
+              if (resultsKeys.includes(value)) {
+                if (!Array.isArray(someTests[testName][value])) {
+                  someTests[testName][value] = [someTests[testName][value]];
+                }
+                someTests[testName][value].push(test.testResults[subcategory][testName][value]);
               }
-              someTests[testName][value].push(test.testResults[subcategory][testName][value]);
             }
           }
         }
       }
     } else {
-      aggregatedResults.set(key, deepCopy(test));
+      if (test.testResults) {
+        aggregatedResults.set(key, deepCopy(test));
+      }
     }
   }
   let resultsCopy = deepCopy(results);
