@@ -231,17 +231,19 @@ const resultsToTable = (results, title) => {
 };
 
 // Create the title HTML for a results table.
-const tableTitle = (results) => {
-  let timeStarted = new Date(results.timeStarted);
-  return `<div class="table-title">Desktop Browsers</div>
-  <div class="instructions">(point anywhere for more info)</a>
-  <!-- <div class="date">${timeStarted.toISOString().split("T")[0]}</div>-->`;
+const tableTitle = `<div class="table-title">Desktop Browsers</div>
+  <div class="instructions">(point anywhere for more info)</a>`;
+
+// Create dateString from the given date and time string.
+const dateString = (dateTime) => {
+  let dateTimeObject = new Date(dateTime);
+  return dateTimeObject.toISOString().split("T")[0];
 };
 
 // Creates the table content for a page.
 const content = (results, jsonFilename) => {
-  let { headers, body } = resultsToTable(results.all_tests,  tableTitle(results));
-  return `<div id="banner"><div>Open-source tests of web browser privacy.</div><div>Updated 2021-10-12</div></div>` +
+  let { headers, body } = resultsToTable(results.all_tests,  tableTitle);
+  return `<div id="banner"><div>Open-source tests of web browser privacy.</div><div>Updated ${dateString(results.timeStarted)}</div></div>` +
   htmlTable({headers, body,
                     className:"comparison-table"}) +
 	`<p class="footer">Tests ran at ${results.timeStarted.replace("T"," ").replace(/\.[0-9]{0,3}Z/, " UTC")}.
