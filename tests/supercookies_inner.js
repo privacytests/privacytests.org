@@ -432,6 +432,7 @@ let tests = {
       // Ensure that we can switch over to h3 via alt-svc:
       for (let i = 0; i<3; ++i) {
         await fetch(`https://h3.arthuredelstein.net:4433/`);
+        await sleepMs(500);
       }
       // Are we now connecting over h3?
       let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
