@@ -271,7 +271,7 @@ const resultsKeys = [
   "passed", "testFailed",
   "readSameFirstParty", "readDifferentFirstParty",
   "actual_value", "desired_value",
-  "IsTorExit", "cloudflareDoH", "nextDoH"
+  "IsTorExit", "cloudflareDoH", "nextDoH", "result", "unsupported"
 ];
 
 // Finds any repeated trials of tests and aggregate the results
@@ -285,11 +285,13 @@ const aggregateRepeatedTrials = (results) => {
       for (let subcategory of ["supercookies", "fingerprinting", "https", "misc", "navigation", "query"]) {
         let someTests = aggregatedResults.get(key).testResults[subcategory];
         for (let testName in someTests) {
-          for (let value of resultsKeys) {
-            if (!Array.isArray(someTests[testName][value])) {
-              someTests[testName][value] = [someTests[testName][value]];
+          for (let value in someTests[testName]) {
+            if (resultsKeys.includes(value)) {
+              if (!Array.isArray(someTests[testName][value])) {
+                someTests[testName][value] = [someTests[testName][value]];
+              }
+              someTests[testName][value].push(test.testResults[subcategory][testName][value]);
             }
-            someTests[testName][value].push(test.testResults[subcategory][testName][value]);
           }
         }
       }
