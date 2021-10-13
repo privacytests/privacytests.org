@@ -92,7 +92,7 @@ const allHaveValue = (x, value) => {
 const testBody = ({passed, testFailed, tooltip, unsupported}) => {
   let allTestsFailed = allHaveValue(testFailed, true);
   let allUnsupported = allHaveValue(unsupported, true);
-  let anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : !passed;
+  let anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : (passed === true);
   return `<div class='${(allUnsupported) ? "na" : (anyDidntPass ? "bad" : "good")}'
 title = '${ tooltip.replace(/'/g, "&#39;") }'> ${allUnsupported ? "&ndash;" : "&nbsp;"}
 </div>`;
@@ -288,8 +288,8 @@ const aggregateRepeatedTrials = (results) => {
       if (theseTestResults) {
         for (let subcategory of ["supercookies", "fingerprinting", "https", "misc", "navigation", "query"]) {
           let someTests = theseTestResults[subcategory];
-          for (let testName in someTests) {
-            for (let value in someTests[testName]) {
+          for (let testName in test.testResults[subcategory]) {
+            for (let value in test.testResults[subcategory][testName]) {
               if (resultsKeys.includes(value)) {
                 if (!Array.isArray(someTests[testName][value])) {
                   someTests[testName][value] = [someTests[testName][value]];
