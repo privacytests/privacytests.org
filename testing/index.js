@@ -216,7 +216,7 @@ const runMiscTests = async (driver) => {
     driver, 'https://arthuredelstein.net/browser-privacy/tests/misc.html', {newTab: true});
 };
 
-// Run all of our privacy tests using selenium. Returns
+// Run all of our privacy tests using selenium for a given driver. Returns
 // a map of test types to test result maps. Such as
 // `
 // { "fingerprinting" : { "window.screen.width" : { /* results */ }, ... },
@@ -226,6 +226,8 @@ const runMiscTests = async (driver) => {
 //   "supercookies" : { ... } }
 const runTests = async (driver) => {
   try {
+    // Some browsers are happier if I add an "empty" tab first:
+    driver.get("https://example.com");
     let fingerprinting = await loadAndGetResults(
       driver, 'https://arthuredelstein.net/browser-privacy/tests/fingerprinting.html', { newTab: true, click: {x: 10, y: 10}});
     let https = await runHttpsTests(driver);
@@ -243,7 +245,7 @@ const runTests = async (driver) => {
   }
 };
 
-// Runs a batch of tests (multiple browsers) for a given driver.
+// Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
 const runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
   let all_tests = [];

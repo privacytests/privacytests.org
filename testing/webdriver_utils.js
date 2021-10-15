@@ -160,7 +160,7 @@ let setSafariOptions = (builder, {incognito, path}) => {
 
 const chromiumBrowsers = [
   "chrome", "chromium", "android", "samsung", "opera", "brave",
-  "edge", "microsoft-edge"
+  "edge", "microsoft-edge", "vivaldi"
 ];
 
 // Produces a selenium driver to run tests,
@@ -183,7 +183,9 @@ let createDriver = async ({browser, browser_version,
   } else {
     throw new Error("unknown browser");
   }
-  return builder.build();
+  let driver = await builder.build();
+  driver.__browser = browser;
+  return driver;
 };
 
 // Tell the selenium driver to look at a particular element's
@@ -206,31 +208,36 @@ let navigate = async (driver, url) => {
 // Returns a promise containing a handle to the new tab window.
 let openNewTab = async (driver) => {
   let tabsBefore = await driver.getAllWindowHandles();
-  await driver.switchTo().window(tabsBefore[0]);
-  await driver.get("https://example.com");
   await driver.executeScript(`
-    document.body.addEventListener("click", () => window.open("https://example.com", "_blank"));
+    let button = document.createElement("button");
+    button.setAttribute("id","newTab");
+    document.body.appendChild(button);
+    button.addEventListener("click", () => window.open("https://example.com", "_blank"));
   `);
-  await driver.findElement({css:"body"}).click();
+  await driver.findElement({css:"body #newTab"}).click();
   let tabsAfter = await driver.getAllWindowHandles();
   return tabsAfter.filter(x => !tabsBefore.includes(x))[0];
 };
 
 // Get the browser to quit.
 let quit = async (driver) => {
-  let windowHandles = await driver.getAllWindowHandles();
-  for (let windowHandle of windowHandles) {
-    try {
-      await driver.switchTo().window(windowHandle);
-      await driver.close();
-    } catch (e) {
-      console.log(e);
+  if (driver.__browser === "brave") {
+    // This browser refuses to quit! Try closing windows instead:
+    let windowHandles = await driver.getAllWindowHandles();
+    for (let windowHandle of windowHandles) {
+      try {
+        await driver.switchTo().window(windowHandle);
+        await driver.close();
+      } catch (e) {
+        console.log(e);
+      }
     }
-  }
-  try {
-    await driver.quit();
-  } catch (e) {
-    // Ignore this error; we may already have caused browser to close.
+  } else {
+    try {
+      await driver.quit();
+    } catch (e) {
+    console.log(e);
+    }
   }
 };
 
@@ -285,6 +292,11 @@ const versionPaths = {
     url: "chrome://version",
     cssPath: "#version span",
     regex: "^[0-9,\\.]+"
+  },
+  "vivaldi": {
+    url: "vivaldi://version",
+    cssPath: "#version span",
+    regex: "^[0-9,\\.]+",
   },
   "opera": {
     url: "https://example.com",
