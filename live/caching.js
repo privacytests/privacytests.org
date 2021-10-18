@@ -1,6 +1,6 @@
-const express = require('express')
-const app = express()
-const port = 3333
+const express = require('express');
+const app = express();
+const port = 3333;
 
 let countMaps = {
   "css": {},
