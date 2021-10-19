@@ -6,6 +6,7 @@
     <meta name="referrer" content="origin">
   </head>
   <body>
+    <script src="./post_data.js"></src>
     <script>
      addEventListener("message", ({data}) => {
        console.log("navigation.html received message:", data);
@@ -19,6 +20,7 @@
          console.log("send document.referrer:", document.referrer);
        } else {
          document.body.setAttribute("data-test-results", JSON.stringify(data));
+         postData(data);
        }
      }, false);
      let iframe = document.createElement("iframe");
