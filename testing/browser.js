@@ -23,7 +23,10 @@ const macOSdefaultBrowserSettings = {
   brave: {
     name: "Brave Browser",
     privateFlag: "incognito",
-    torFlag: "tor"
+    torFlag: "tor",
+    killFunction: () => {
+      robot.keyTap("q", ["command"]);
+    }
   },
   chrome: {
     name: "Google Chrome",
