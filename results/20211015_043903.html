@@ -286,15 +286,15 @@ read: async (url) => {
       }
     }
 
-result, same first party: Error: Failed to fetch, Error: Failed to fetch, Error: Failed to fetch, Error: Failed to fetch, Error: Failed to fetch
+result, same first party: Error: Failed to fetch
 
-result, different first party: Error: Failed to fetch, Error: Failed to fetch, Error: Failed to fetch, Error: Failed to fetch, Error: Failed to fetch
+result, different first party: Error: Failed to fetch
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="A BroadcastChannel is designed to send messages between tabs. In some browsers it can be used for cross-site communication and tracking.">BroadcastChannel</div></td><td><div class='good'
 title = 'write: (secret) => {
       try {
@@ -321,15 +321,15 @@ read: () =>
         setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
       })
 
-result, same first party: Error: no BroadcastChannel message, Error: no BroadcastChannel message, Error: no BroadcastChannel message, Error: no BroadcastChannel message, Error: no BroadcastChannel message
+result, same first party: Error: no BroadcastChannel message
 
-result, different first party: Error: no BroadcastChannel message, Error: no BroadcastChannel message, Error: no BroadcastChannel message, Error: no BroadcastChannel message, Error: no BroadcastChannel message
+result, different first party: Error: no BroadcastChannel message
 
-unsupported: false, false, false, false, false
+unsupported: false
 
 passed: undefined
 
-test failed: true, true, true, true, true'> &nbsp;
+test failed: true'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="The Cache API is a content storage mechanism originally introduced to support ServiceWorkers. If the same Cache object is accessible to multiple websites, it can be abused to track users.">CacheStorage</div></td><td><div class='bad'
 title = 'write: async (key) => {
       try {
@@ -347,15 +347,15 @@ read: async () => {
       return (new URL(url)).searchParams.get("key");
     }
 
-result, same first party: 9083377969098774, 04835273026793652, 6869236154784584, 7424494504054839, 2996237477525545
+result, same first party: 6386025874478674
 
-result, different first party: 9083377969098774, 04835273026793652, 6869236154784584, 7424494504054839, 2996237477525545
+result, different first party: 6386025874478674
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website's behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.">cookie</div></td><td><div class='bad'
 title = 'write: (secret) => {
       let expiry = new Date();
@@ -365,15 +365,15 @@ title = 'write: (secret) => {
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 9083377969098774, 04835273026793652, 6869236154784584, 7424494504054839, 2996237477525545
+result, same first party: 6386025874478674
 
-result, different first party: 9083377969098774, 04835273026793652, 6869236154784584, 7424494504054839, 2996237477525545
+result, different first party: 6386025874478674
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="CSS stylesheets are cached, and if that cache is shared between websites, it can be used to track users across sites.">CSS cache</div></td><td><div class='good'
 title = 'write: async (key) => {
       let link = document.createElement("link");
@@ -397,15 +397,15 @@ read: async (key) => {
       return (await response.text()).trim();
     }
 
-result, same first party: 1, 1, 1, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="A favicon is an icon that represents a website, typically shown in browser tab and bookmarks menu. If the favicon cache is not partitioned, it can be used to track users across websites.">favicon cache</div></td><td><div class='bad'
 title = 'write: (key) => {
       parent.postMessage({
@@ -428,15 +428,15 @@ read: async (key) => {
       return count;
     }
 
-result, same first party: 1, 1, 1, 1, 1
+result, same first party: 1
 
-result, different first party: 1, 1, 1, 1, 1
+result, different first party: 1
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="When a resource is received via the Fetch API, it is frequently cached. That cache can potentially be abused for cross-site tracking.">fetch cache</div></td><td><div class='good'
 title = 'write: async (key) => {
       let response = await fetch(testURI("resource", "fetch", key),
@@ -452,15 +452,15 @@ read: async (key) => {
       return (await countResponse.text()).trim();
     }
 
-result, same first party: 1, 1, 1, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Web fonts are sometimes stored in their own cache, which is vulnerable to being abused for cross-site tracking.">font cache</div></td><td><div class='good'
 title = 'write: async (key) => {
       let style = document.createElement("style");
@@ -483,15 +483,15 @@ read: async (key) => {
       return (await response.text()).trim();
     }
 
-result, same first party: 1, 1, 1, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="HTTP/1.x are the classic web connection protocols. If these connections are re-used across websites, they can be used to track users.">H1 connection</div></td><td><div class='bad'
 title = 'write: async (secret) => {
       await fetch(`https://h1.arthuredelstein.net:8901/?mode=write&secret=${secret}`);
@@ -502,15 +502,15 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 9083377969098774, 04835273026793652, 6869236154784584, 7424494504054839, 2996237477525545
+result, same first party: 6386025874478674
 
-result, different first party: 9083377969098774, 04835273026793652, 6869236154784584, 7424494504054839, 2996237477525545
+result, different first party: 6386025874478674
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="HTTP/2 is a web connection protocol introduced in 2015. Some browsers re-use HTTP/2 connections across websites and can thus be used to track users.">H2 connection</div></td><td><div class='bad'
 title = 'write: async (secret) => {
       await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`);
@@ -521,15 +521,15 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 9083377969098774, 04835273026793652, 6869236154784584, 7424494504054839, 2996237477525545
+result, same first party: 6386025874478674
 
-result, different first party: 9083377969098774, 04835273026793652, 6869236154784584, 7424494504054839, 2996237477525545
+result, different first party: 6386025874478674
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="HTTP/3 is a new standard HTTP connection protocol, still in draft but widely supported by browsers. If it is not partitioned, it can be used to track users across websites.">H3 connection</div></td><td><div class='bad'
 title = 'write: async (secret) => {
       // Ensure that we can switch over to h3 via alt-svc:
@@ -551,15 +551,15 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: d81c017cb8ad6d539e691fc3bd35f5d2, 46d7bf2cbe91ded1de0c7ab52d62c8ad, 359b3afab6f48cb073e9b7f6eb640c31, efe6da08600e70c1c6fca598f6ba173f, 657a31af353a60bcc565278b9baf582e
+result, same first party: 2c8a3592e4ca572107e33c08ab53aa55
 
-result, different first party: d81c017cb8ad6d539e691fc3bd35f5d2, 46d7bf2cbe91ded1de0c7ab52d62c8ad, 359b3afab6f48cb073e9b7f6eb640c31, efe6da08600e70c1c6fca598f6ba173f, 657a31af353a60bcc565278b9baf582e
+result, different first party: 2c8a3592e4ca572107e33c08ab53aa55
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="The HTTP Strict-Transport-Security response header allows a website to signal that it should only be accessed via HTTPS. The browser remembers this directive in a database, but if this database is not partitioned, then it can be used to track users across websites.">HSTS cache</div></td><td><div class='bad'
 title = 'write: () => {
       let image = document.getElementById("hsts-image");
@@ -573,15 +573,15 @@ read: () => new Promise((resolve, reject) => {
       image.src = "http://hsts.arthuredelstein.net/test_hsts.png";
     })
 
-result, same first party: image load succeeded, image load succeeded, image load succeeded, image load succeeded, image load succeeded
+result, same first party: image load succeeded
 
-result, different first party: image load succeeded, image load succeeded, image load succeeded, image load succeeded, image load succeeded
+result, different first party: image load succeeded
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="An iframe is an element in a web page than allows websites to embed a second web page. Caching of this web page could be abused for cross-site tracking.">iframe cache</div></td><td><div class='good'
 title = 'write: (key) => new Promise((resolve, reject) => {
       let iframe = document.createElement("iframe");
@@ -604,15 +604,15 @@ read: async (key) => {
       return (await response.text()).trim();
     }
 
-result, same first party: 1, 1, 1, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Caching of images in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.">image cache</div></td><td><div class='good'
 title = 'write: (key) => new Promise((resolve, reject) => {
       let img = document.createElement("img");
@@ -634,15 +634,15 @@ read: async (key) => {
       return (await response.text()).trim();
     }
 
-result, same first party: 1, 1, 1, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="The IndexedDB API exposes a transactional database to web pages. That database can be used to track users across websites, unless it is partitioned.">indexedDB</div></td><td><div class='bad'
 title = 'write: async (secret) => {
       try {
@@ -654,29 +654,29 @@ title = 'write: async (secret) => {
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: 9083377969098774, 04835273026793652, 6869236154784584, 7424494504054839, 2996237477525545
+result, same first party: 6386025874478674
 
-result, different first party: 9083377969098774, 04835273026793652, 6869236154784584, 7424494504054839, 2996237477525545
+result, different first party: 6386025874478674
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="The localStorage API gives websites access to a key-value database that will remain available across visits. If the localStorage API is not partitioned or blocked, it can also be used to track users across websites.">localStorage</div></td><td><div class='bad'
 title = 'write: (secret) => localStorage.setItem("secret", secret)
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 9083377969098774, 04835273026793652, 6869236154784584, 7424494504054839, 2996237477525545
+result, same first party: 6386025874478674
 
-result, different first party: 9083377969098774, 04835273026793652, 6869236154784584, 7424494504054839, 2996237477525545
+result, different first party: 6386025874478674
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="navigator.locks (only supported in some browsers) allows scripts on multiple tabs to coordinate. If this API is not partitioned, it can be used for cross-site tracking.">locks</div></td><td><div class='good'
 title = 'write: async (key) => {
       if (navigator.locks) {
@@ -695,15 +695,15 @@ read: async () => {
       }
     }
 
-result, same first party: Error: Cannot read properties of undefined (reading &#39;name&#39;), Error: Cannot read properties of undefined (reading &#39;name&#39;), Error: Cannot read properties of undefined (reading &#39;name&#39;), Error: Cannot read properties of undefined (reading &#39;name&#39;), Error: Cannot read properties of undefined (reading &#39;name&#39;)
+result, same first party: Error: Cannot read properties of undefined (reading &#39;name&#39;)
 
-result, different first party: Error: Cannot read properties of undefined (reading &#39;name&#39;), Error: Cannot read properties of undefined (reading &#39;name&#39;), Error: Cannot read properties of undefined (reading &#39;name&#39;), Error: Cannot read properties of undefined (reading &#39;name&#39;), Error: Cannot read properties of undefined (reading &#39;name&#39;)
+result, different first party: Error: Cannot read properties of undefined (reading &#39;name&#39;)
 
-unsupported: false, false, false, false, false
+unsupported: false
 
 passed: undefined
 
-test failed: true, true, true, true, true'> &nbsp;
+test failed: true'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="A <link rel='prefetch'...> suggests to browsers they should fetch a resource ahead of time and cache it. But if browsers don't partition this cache, it can be used to track users across websites.">prefetch cache</div></td><td><div class='good'
 title = 'write: async (key) => {
       let link = document.createElement("link");
@@ -728,15 +728,15 @@ read: async (key) => {
       return countString;
     }
 
-result, same first party: 1, 1, 1, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="The ServiceWorker API allows websites to run code in the background and store content in the browser for offline use. If a ServiceWorker can be accessed from multiple websites, it can be abused to track users across sites.">ServiceWorker</div></td><td><div class='bad'
 title = 'write: async (key) => {
       if (!navigator.serviceWorker) {
@@ -762,15 +762,15 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 6896384404298637, 65616918303004, 9217918681279258, 5417132411989973, 4695956521960658
+result, same first party: 220397192192489
 
-result, different first party: 6896384404298637, 65616918303004, 9217918681279258, 5417132411989973, 4695956521960658
+result, different first party: 220397192192489
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="The SharedWorker API allows scripts from multiple tabs to share a background thread of computation. If SharedWorker is not partitioned, then it can be abused to shared data between websites in your browser.">SharedWorker</div></td><td><div class='good'
 title = 'write: (secret) => {
       try {
@@ -795,11 +795,11 @@ result, same first party: undefined
 
 result, different first party: undefined
 
-unsupported: false, false, false, false, false
+unsupported: false
 
 passed: undefined
 
-test failed: true, true, true, true, true'> &nbsp;
+test failed: true'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="The TLS protocol is used by HTTPS to make connections secure. If the browser were to re-use a TLS session, then the session ID could be used to track users across websites.">TLS Session ID</div></td><td><div class='good'
 title = 'write: async () => {
       let results = await fetch("https://tls.arthuredelstein.net:8900/");
@@ -811,15 +811,15 @@ read: async () => {
       return (await results.json()).sessionId;
     }
 
-result, same first party: 70053ef85b22eab62d3bb2d8a1995ef6ffe34a35489a58f22bc63992d85eeb80, f7ca1b83c8edaffa44e3d8ef27bcfce822ae1ae2adb677d45285194ff0f55564, e349c7b7680ca1d2d42670a153c15cad4c78363e704c4f10c5ddff68369bf213, 146f1839e975d04d1fa95e931f55c7825909c94da1ebac6f6c15aa67220e2736, 9847d9dc124753627cb09917dde000b9e1c87daf937ecd59f9ec9047cde05173
+result, same first party: b776ba4bc52a2c03892e1b3b8caead2bef905cb050da0bf81f1b3b9048c7ee07
 
-result, different first party: ddbc3e22f7246abd89507e5573b1565da065e7e3bfc0f4841b9677f72a0e36ec, d5e339aec72680413120db13994a0bc841b8cab963d71621ef86b320bcfd628e, a84bd493b5488c56f8b56dc410282327422d52add9731e39460793e0acfb0bb5, 785e0da6122e5ffb98989d772911cb59005b13031590a78612771d6af79052a5, 29d2feb3afb1474c44072e6a7449320c9dd76ebb313572da4c0a2a0e7dd49079
+result, different first party: fdceeaee02d1516832e4c984f29ddb0aee617517cc139e96f31fd12b60749895
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="The Web SQL Database is a deprecated web API for storing data in an SQL database.">Web SQL Database</div></td><td><div class='bad'
 title = 'write: async (key) => {
       if (!window.openDatabase) {
@@ -854,15 +854,15 @@ read: async () => {
       return result.rows.item(0).value;
     }
 
-result, same first party: 9083377969098774, 04835273026793652, 6869236154784584, 7424494504054839, 2996237477525545
+result, same first party: 6386025874478674
 
-result, different first party: 9083377969098774, 04835273026793652, 6869236154784584, 7424494504054839, 2996237477525545
+result, different first party: 6386025874478674
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Similar to the newer Fetch API, any resource received may be cached by the browser. The cache is potentially vulnerable to cross-site tracking attack.">XMLHttpRequest cache</div></td><td><div class='good'
 title = 'write: () => new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
@@ -884,15 +884,15 @@ read: () => new Promise((resolve, reject) => {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
 
-result, same first party: Fri, 15 Oct 2021 18:15:51 GMT, Fri, 15 Oct 2021 18:16:15 GMT, Fri, 15 Oct 2021 18:16:38 GMT, Fri, 15 Oct 2021 18:17:01 GMT, Fri, 15 Oct 2021 18:17:24 GMT
+result, same first party: Fri, 15 Oct 2021 04:38:46 GMT
 
-result, different first party: Fri, 15 Oct 2021 18:16:00 GMT, Fri, 15 Oct 2021 18:16:24 GMT, Fri, 15 Oct 2021 18:16:47 GMT, Fri, 15 Oct 2021 18:17:10 GMT, Fri, 15 Oct 2021 18:17:33 GMT
+result, different first party: Fri, 15 Oct 2021 04:38:55 GMT
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><th colspan="4" class="subheading" title="When you click a hyperlink to navigate your browser from one site to another, certain browser APIs allow the first site to communicate to the second site. These privacy vulnerabilities can be fixed by introducing new limits on how much data is transfered between sites.">Navigation tests</th></tr><tr><td><div style="word-break: break-word" title="The Referer [sic] request header is a mechanism used by browsers to let a website know where the user is visiting from. This header is inherently tracking users across websites. In recent times, browsers have switched to a policy of trimming a referrer to convey less tracking information, but Referer continues to convey cross-site tracking data by default.">document.referrer</div></td><td><div class='bad'
 title = 'write: (secret) => { /* do nothing */ }
 
@@ -903,29 +903,29 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: https://arthuredelstein.net/, https://arthuredelstein.net/, https://arthuredelstein.net/, https://arthuredelstein.net/, https://arthuredelstein.net/
+result, same first party: https://arthuredelstein.net/
 
-result, different first party: https://arthuredelstein.net/, https://arthuredelstein.net/, https://arthuredelstein.net/, https://arthuredelstein.net/, https://arthuredelstein.net/
+result, different first party: https://arthuredelstein.net/
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="The sessionStorage API is similar to the localStorage API, but it does not persist across tabs or across browser sessions. Nonetheless, it can be used to track users if they navigate from one website to another. This tracking can be thwarted by partitioning sessionStorage between websites.">sessionStorage</div></td><td><div class='bad'
 title = 'write: (secret) => sessionStorage.setItem("secret", secret)
 
 read: () => sessionStorage.getItem("secret")
 
-result, same first party: 6896384404298637, 65616918303004, 9217918681279258, 5417132411989973, 4695956521960658
+result, same first party: 220397192192489
 
-result, different first party: 6896384404298637, 65616918303004, 9217918681279258, 5417132411989973, 4695956521960658
+result, different first party: 220397192192489
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="The window.name API allows websites to store data that will persist after the user has navigated the tab to a different website. This mechanism could be partitioned so that data is not allowed to persist between websites.">window.name</div></td><td><div class='bad'
 title = 'write: (secret) => parent.postMessage({"write window.name": secret})
 
@@ -936,147 +936,147 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 6896384404298637, 65616918303004, 9217918681279258, 5417132411989973, 4695956521960658
+result, same first party: 220397192192489
 
-result, different first party: 6896384404298637, 65616918303004, 9217918681279258, 5417132411989973, 4695956521960658
+result, different first party: 220397192192489
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false'> &nbsp;
+test failed: false'> &nbsp;
 </div></td></tr><tr><th colspan="4" class="subheading" title="HTTPS is the protocol that web browsers use to connect securely to websites. When HTTPS is being used, the connection is encrypted so that third parties on the network cannot read content being sent between the server and your browser. In the past, insecure connections were the default and websites would need to actively request that a browser use HTTPS. Now the status quo is shifting, and browser makers are moving toward a world where HTTPS is the default protocol.">HTTPS tests</th></tr><tr><td><div style="word-break: break-word" title="Checks to see if the browser stops loading an insecure website and warns the user before giving them the option to continue. Known as HTTPS-Only Mode in some browsers.">Insecure website</div></td><td><div class='bad'
-title = 'passed: false,false,false,false,false
-result: allowed,allowed,allowed,allowed,allowed'> &nbsp;
+title = 'passed: false
+result: allowed'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Checks to see if an insecure address pasted into the browser's address bar is upgraded to HTTPS whenever possible.">Upgradable address</div></td><td><div class='bad'
-title = 'passed: false,false,false,false,false
-upgraded: false,false,false,false,false'> &nbsp;
+title = 'passed: false
+upgraded: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Checks to see if the user has clicked on a hyperlink to an insecure address, if the browser upgrades that address to HTTPS whenever possible.">Upgradable hyperlink</div></td><td><div class='bad'
-title = 'passed: false,false,false,false,false
-upgraded: false,false,false,false,false'> &nbsp;
+title = 'passed: false
+upgraded: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Checks to see if the browser attempts to upgrade an insecure address for an image to HTTPS whenever possible.">Upgradable image</div></td><td><div class='good'
-title = 'passed: true,true,true,true,true
-result: upgraded,upgraded,upgraded,upgraded,upgraded'> &nbsp;
+title = 'passed: true
+result: upgraded'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Checks to see if the browser attempts to upgrade an insecure address for an script to HTTPS whenever possible.">Upgradable script</div></td><td><div class='good'
-title = 'passed: true,true,true,true,true
-result: blocked,blocked,blocked,blocked,blocked'> &nbsp;
+title = 'passed: true
+result: blocked'> &nbsp;
 </div></td></tr><tr><th colspan="4" class="subheading" title="This category includes tests for the presence of miscellaneous privacy features.">Misc tests</th></tr><tr><td><div style="word-break: break-word" title="The Global Privacy Control is a referrer header that can be sent by a browser to instruct a website not to sell the user's personal data to third parties. This test checks to see if the GPC header is sent by default.">GPC enabled</div></td><td><div class='bad'
-title = 'passed: false,false,false,false,false'> &nbsp;
+title = 'passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="The Tor network sends the browser's web requests through a series of relays to hide a user's IP address, thereby helping to mask their identity and location. This test checks to see if the Tor network is being used by default.">Tor enabled</div></td><td><div class='bad'
-title = 'IsTorExit: false,false,false,false,false
-passed: false,false,false,false,false'> &nbsp;
+title = 'IsTorExit: false
+passed: false'> &nbsp;
 </div></td></tr><tr><th colspan="4" class="subheading" title="Fingerprinting is a technique trackers use to uniquely identify you as you browse the web. A fingerprinting script will measure several characteristics of your browser and, combining this data, will build a fingerprint that may uniquely identify you among web users. Browsers can introduce countermeasures, such as minimizing the distinguishing information disclosed by certain web APIs so your browser is harder to pick out from the crowd (so-called 'fingerprinting resistance').">Fingerprinting resistance tests</th></tr><tr><td><div style="word-break: break-all" title="Height of the browser window in pixels, including browser chrome.">outerHeight</div></td><td><div class='bad'
 title = 'expression: outerHeight
 desired expression: innerHeight
-actual value: 1376,1376,1376,1376,1376
-desired value: 1256,1256,1256,1256,1256
-passed: false,false,false,false,false'> &nbsp;
+actual value: 1376
+desired value: 1256
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-all" title="Width of the browser window in pixels, including browser chrome.">outerWidth</div></td><td><div class='good'
 title = 'expression: outerWidth
 desired expression: innerWidth
-actual value: 1265,1265,1265,1265,1265
-desired value: 1265,1265,1265,1265,1265
-passed: true,true,true,true,true'> &nbsp;
+actual value: 1265
+desired value: 1265
+passed: true'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-all" title="Height of the user's screen, in pixels.">screen.height</div></td><td><div class='bad'
 title = 'expression: screen.height
 desired expression: innerHeight
-actual value: 1440,1440,1440,1440,1440
-desired value: 1256,1256,1256,1256,1256
-passed: false,false,false,false,false'> &nbsp;
+actual value: 1440
+desired value: 1256
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-all" title="Width of the user's screen, in pixels.">screen.width</div></td><td><div class='bad'
 title = 'expression: screen.width
 desired expression: innerWidth
-actual value: 2560,2560,2560,2560,2560
-desired value: 1265,1265,1265,1265,1265
-passed: false,false,false,false,false'> &nbsp;
+actual value: 2560
+desired value: 1265
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-all" title="Position, in pixels, of the left edge of the browser window on screen.">screenX</div></td><td><div class='bad'
 title = 'expression: screenX
 desired expression: 0
-actual value: 10,10,10,10,10
-desired value: 0,0,0,0,0
-passed: false,false,false,false,false'> &nbsp;
+actual value: 10
+desired value: 0
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-all" title="Position, in pixels, of the top edge of the browser window on screen.">screenY</div></td><td><div class='bad'
 title = 'expression: screenY
 desired expression: 0
-actual value: 64,64,64,64,64
-desired value: 0,0,0,0,0
-passed: false,false,false,false,false'> &nbsp;
+actual value: 64
+desired value: 0
+passed: false'> &nbsp;
 </div></td></tr><tr><th colspan="4" class="subheading" title="When you browse from one web page to another, tracking companies will frequently attach a 'tracking query parameter' to the address of the second web page. That query parameter may contain a unique identifier that tracks you individually as you browse the web. And these query parameters are frequently synchronized with cookies, making them a powerful tracking vector. Web browsers can protect you from known tracking query parameters by stripping them from web addresses before your browser sends them. (The set of tracking query parameters tested here was largely borrowed from Brave.)">Tracking query parameter tests</th></tr><tr><td><div style="word-break: break-word" title="HubSpot tracking parameter">__hsfp</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="HubSpot tracking parameter">__hssc</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="HubSpot tracking parameter">__hstc</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Drip.com email address tracking parameter">__s</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="HubSpot tracking parameter">_hsenc</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Yandex tracking parameter">_openstat</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="DoubleClick Click ID (Google)">dclid</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Facebook Click Identifier">fbclid</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Google Click Identifier">gclid</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="HubSpot tracking parameter">hsCtaTracking</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Instragram tracking parameter">igshid</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Mailchimp Email ID (email recipient's address)">mc_eid</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Adobe Marketo tracking parameter">mkt_tok</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="MailerLite email tracking">ml_subscriber</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="MailerLite email tracking">ml_subscriber_hash</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Microsoft Click ID">msclkid</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Omeda marketing 'anonymous' customer id">oly_anon_id</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Omeda marketing 'known' customer id">oly_enc_id</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Unknown high-entropy tracking parameter">rb_clickid</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Adobe Site Catalyst tracking parameter">s_cid</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Vero tracking parameter">vero_conv</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Vero tracking parameter">vero_id</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Wicked Reports e-commerce tracking">wickedid</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
 </div></td></tr><tr><td><div style="word-break: break-word" title="Yandex Click ID">yclid</div></td><td><div class='bad'
-title = 'value: 6464061725383037
-passed: false,false,false,false,false'> &nbsp;
-</div></td></tr></table><p class="footer">Tests ran at 2021-10-15 18:15:44 UTC.
+title = 'value: 16739555531720018
+passed: false'> &nbsp;
+</div></td></tr></table><p class="footer">Tests ran at 2021-10-15 04:38:35 UTC.
          Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/ee915349c09301692acaf6d8ba65c443879c40b5"
     >ee915349</a>.
-    Raw data in <a href="20211015_181740.json">JSON</a>.
+    Raw data in <a href="20211015_043903.json">JSON</a>.
     </p>
     </div>
     <div class="gutter"></div>
