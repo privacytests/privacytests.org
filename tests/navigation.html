@@ -13,13 +13,14 @@
        if (searchParams.get("mode") === "write") {
          searchParams.set("mode", "read");
          window.location.search = "?" + searchParams.toString();
-       } else {
+       } else if (window.location.host === "arthuredelstein.net") {
          const currentUrl = window.location.href;
          const desinationUrl = currentUrl.replace(
            "^https://arthuredelstein.net/browser-privacy/",
            "https://privacytests.org/");
          window.location.href = destinationUrl;
        }
+       // Otherwise, do nothing.
      };
 
      addEventListener("message", async ({data}) => {
