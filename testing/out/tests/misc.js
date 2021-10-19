@@ -55,6 +55,7 @@ const runTests = async () => {
     "GPC enabled": await testGPC(),
   };
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
+  await postData(resultsJSON);
 };
 
 runTests();
