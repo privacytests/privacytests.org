@@ -66,7 +66,10 @@ const macOSdefaultBrowserSettings = {
   tor: {
     name: "Tor Browser",
     binaryName: "firefox",
-    useAppToOpenUrls: true
+    useAppToOpenUrls: true,
+    killFunction: () => {
+      robot.keyTap("q", ["command"]);
+    }
   },
   vivaldi: {
     name: "Vivaldi",
@@ -101,7 +104,7 @@ class Browser {
   // Launch the browser.
   async launch() {
     this._process = exec(this._command);
-    await sleepMs(10000);
+    await sleepMs(5000);
     if (this.incognito && this._defaults.incognitoFunction) {
       await this._defaults.incognitoFunction();
     }
