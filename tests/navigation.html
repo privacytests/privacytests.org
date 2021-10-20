@@ -6,8 +6,24 @@
     <meta name="referrer" content="origin">
   </head>
   <body>
+    <script src="./post_data.js"></script>
     <script>
-     addEventListener("message", ({data}) => {
+     const navigateToNextPage = () => {
+       let searchParams = new URLSearchParams(window.location.search);
+       if (searchParams.get("mode") === "write") {
+         searchParams.set("mode", "read");
+         window.location.search = "?" + searchParams.toString();
+       } else if (window.location.host === "arthuredelstein.net") {
+         const currentUrl = window.location.href;
+         const destinationUrl = currentUrl.replace(
+           "https://arthuredelstein.net/browser-privacy/",
+           "https://privacytests.org/");
+         window.location.href = destinationUrl;
+       }
+       // Otherwise, do nothing.
+     };
+
+     addEventListener("message", async ({data}) => {
        console.log("navigation.html received message:", data);
        if (data["write window.name"]) {
          window.name = data["write window.name"];
@@ -19,6 +35,8 @@
          console.log("send document.referrer:", document.referrer);
        } else {
          document.body.setAttribute("data-test-results", JSON.stringify(data));
+         await postData(data);
+         navigateToNextPage();
        }
      }, false);
      let iframe = document.createElement("iframe");
