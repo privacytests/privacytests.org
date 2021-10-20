@@ -30,7 +30,11 @@ const macOSdefaultBrowserSettings = {
   },
   chrome: {
     name: "Google Chrome",
-    privateFlag: "incognito"
+    privateFlag: "incognito",
+    killFunction: () => {
+      robot.keyTap("q", ["command"]);
+      robot.keyTap("q", ["command"]);
+    }
   },
   firefox: {
     name: "firefox",
@@ -42,13 +46,17 @@ const macOSdefaultBrowserSettings = {
   },
   opera: {
     name: "Opera",
-    privateFlag: "private"
+    privateFlag: "private",
+    killFunction: () => {
+      robot.keyTap("q", ["command"]);
+      robot.keyTap("q", ["command"]);
+//      robot.keyTap("enter");
+    }
   },
   safari: {
     name: "Safari",
     command: "open -a Safari",
     incognitoFunction: async () => {
-      robot.keyTap("w", ["command"]);
       robot.keyTap("n", ["command","shift"]);
     },
     killFunction: () => {
@@ -86,6 +94,7 @@ class Browser {
     this._path = path ?? browserPath(browser);
     this._version = undefined;
     this._command = this._defaults.command ?? browserCommand({browser, path: this._path, incognito, tor});
+    this._openTabs = 0;
   }
   // Launch the browser.
   async launch() {
@@ -106,9 +115,14 @@ class Browser {
   // Open the url in a new tab. 
   openUrl(url) {
     exec(`${this._command} "${url}"`);
+    this._openTabs++;
   }
-  // Close the browser.
-  kill() {
+  // Clean up and close the browser.
+  async kill() {
+    for (let i = 0; i<this._openTabs; ++i) {
+      robot.keyTap("w", "command");
+      await sleepMs(100);
+    }
     if (this._defaults.killFunction) {
       this._defaults.killFunction();
     } else {

@@ -1,5 +1,3 @@
-
-
 // # test.js: Runs privacy tests on browsers
 //
 // Define a set of browsers to test in a YAML file.
@@ -13,10 +11,10 @@ const minimist = require('minimist');
 const dateFormat = require('dateformat');
 const YAML = require('yaml');
 const os = require('os');
+const { connect } = require("it-ws/client");
 
 const render = require('./render');
 const { Browser } = require("./browser.js");
-const { connect } = require("it-ws/client");
 
 const DEFAULT_TIMEOUT_MS = 60000;
 
@@ -53,59 +51,6 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const gitHash = () => execSync('git rev-parse HEAD', { cwd: __dirname}).toString().trim();
 
 // ## Testing
-
-// Tell the selenium driver to visit a url, wait for the attribute
-// "data-test-results" to have a value, and resolve that value
-// in a promise. Rejects if timeout elapses first.
-const loadAndGetResults = async (browser, url) => {
-  browser.openUrl(url);
-  return {};
-};
-
-// Causes driver to connect to our supercookie tests. Returns
-// a map of test names to test results.
-const runSupercookieTests = async (driver, newTab) => {
-  let stem = newTab ? "supercookies" : "navigation";
-  let secret = Math.random().toString().slice(2);
-  let iframe_root_same = false ? "http://localhost:8080" : "https://arthuredelstein.net/browser-privacy";
-  let iframe_root_different = false ? "http://localhost:8080" : "https://arthuredelstein.github.io/privacytests.org";
-  let writeResults = await loadAndGetResults(
-    driver, `${iframe_root_same}/tests/${stem}.html?mode=write&default=${secret}`, {newTab: true});
-  let readParams = "";
-  for (let [test, data] of Object.entries(writeResults)) {
-    if ((typeof data["result"]) === "string") {
-      readParams += `&${test}=${encodeURIComponent(data["result"])}`;
-    }
-  }
-//  console.log({writeResults});
-  //  console.log(readParams);
-//  await sleep(5000);
-  let readResultsSameFirstParty = await loadAndGetResults(
-    driver, `${iframe_root_same}/tests/${stem}.html?mode=read${readParams}`, { newTab });
-  //  console.log("readResultsSameFirstParty:", readResultsSameFirstParty);
-  //await sleep(5000);
-  let readResultsDifferentFirstParty = await loadAndGetResults(
-    driver, `${iframe_root_different}/tests/${stem}.html?mode=read${readParams}`, { newTab });
-  let jointResult = {};
-  for (let test in readResultsDifferentFirstParty) {
-    let { write, read, description, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
-    let { result: readSameFirstParty } = readResultsSameFirstParty[test];
-    let { result: writeResult } = writeResults[test];
-    let unsupported = (writeResult === "Error: Unsupported");
-    let readSameFirstPartyFailedToFetch = readSameFirstParty ? readSameFirstParty.startsWith("Error: Failed to fetch") : false;
-    let readDifferentFirstPartyFailedToFetch = readDifferentFirstParty ? readDifferentFirstParty.startsWith("Error: Failed to fetch") : false;
-    unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith("Error: No requests received") : false);
-    unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith("Error: image load failed") : false);
-    let testFailed = !unsupported && (!readSameFirstParty || (readSameFirstParty.startsWith("Error:") && !readSameFirstPartyFailedToFetch));
-    let passed = (testFailed || unsupported)
-        ? undefined
-        : (readSameFirstParty !== readDifferentFirstParty) ||
-          (readSameFirstPartyFailedToFetch && readDifferentFirstPartyFailedToFetch);
-    jointResult[test] = { write, read, unsupported, readSameFirstParty, readDifferentFirstParty, passed, testFailed, description };
-  }
-//  console.log("readResultsDifferentFirstParty:", readResultsDifferentFirstParty);
-  return jointResult;
-};
 
 // Borrowed from https://github.com/brave/brave-core/blob/50df76971db6a6023b3db9aead0827606162dc9c/browser/net/brave_site_hacks_network_delegate_helper.cc#L29
 // and https://github.com/jparise/chrome-utm-stripper:
@@ -160,10 +105,6 @@ const queryParameterTestUrl = (sessionId, parameters) => {
   return baseURL + queryString;
 };
 
-const runNavigationTests = async (driver) => {
-  return runSupercookieTests(driver, false);
-};
-
 // Tests if a top-level page that can be upgraded to https is upgraded.
 // The argument getOrNavigate should be "get" or "navigate".
 const testHttpsUpgrade = async (driver, getOrNavigate) => {
@@ -200,12 +141,6 @@ const runHttpsTests = async (driver) => {
   return results;
 };
 
-// Run all of our miscellaneous privacy tests.
-const runMiscTests = async (driver) => {
-  return await loadAndGetResults(
-    driver, 'https://arthuredelstein.net/browser-privacy/tests/misc.html', {newTab: true});
-};
-
 const nextValue = async(websocket, expectedSessionId) => {
   const message = await websocket.source.next();
   const { sessionId, data } = JSON.parse(message.value);
@@ -214,6 +149,28 @@ const nextValue = async(websocket, expectedSessionId) => {
   }
   return data;
 };
+
+
+const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty) => {
+  let jointResult = {};
+  for (let test in readResultsDifferentFirstParty) {
+    let { write, read, description, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
+    let { result: readSameFirstParty } = readResultsSameFirstParty[test];
+    let { result: writeResult } = writeResults[test];
+    let unsupported = (writeResult === "Error: Unsupported");
+    let readSameFirstPartyFailedToFetch = readSameFirstParty ? readSameFirstParty.startsWith("Error: Failed to fetch") : false;
+    let readDifferentFirstPartyFailedToFetch = readDifferentFirstParty ? readDifferentFirstParty.startsWith("Error: Failed to fetch") : false;
+    unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith("Error: No requests received") : false);
+    unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith("Error: image load failed") : false);
+    let testFailed = !unsupported && (!readSameFirstParty || (readSameFirstParty.startsWith("Error:") && !readSameFirstPartyFailedToFetch));
+    let passed = (testFailed || unsupported)
+      ? undefined
+      : (readSameFirstParty !== readDifferentFirstParty) ||
+      (readSameFirstPartyFailedToFetch && readDifferentFirstPartyFailedToFetch);
+    jointResult[test] = { write, read, unsupported, readSameFirstParty, readDifferentFirstParty, passed, testFailed, description };
+  }
+  return jointResult;
+}
 
 // Run all of our privacy tests using selenium for a given driver. Returns
 // a map of test types to test result maps. Such as
@@ -235,7 +192,6 @@ const runTests = async (browser) => {
     browser.openUrl(`https://arthuredelstein.net/browser-privacy/tests/misc.html?sessionId=${sessionId}`);
     const misc = await nextValue(resultsWebSocket, sessionId);
     
-    console.log("https");
     browser.openUrl(`https://arthuredelstein.net/browser-privacy/tests/https.html?sessionId=${sessionId}`);
     const https = await nextValue(resultsWebSocket, sessionId);
 
@@ -253,31 +209,30 @@ const runTests = async (browser) => {
     let secret = Math.random().toString().slice(2);
     let iframe_root_same = "https://arthuredelstein.net/browser-privacy";
     let iframe_root_different = "https://arthuredelstein.github.io/privacytests.org";
-    let stem = "supercookies";
+
+    // Supercookies
+    const stem = "supercookies";
     browser.openUrl(`${iframe_root_same}/tests/${stem}.html?mode=write&default=${secret}&sessionId=${sessionId}`);
     let writeResults = await nextValue(resultsWebSocket, sessionId);
-    console.log(writeResults);
     let readParams = "";
     for (let [test, data] of Object.entries(writeResults)) {
       if ((typeof data["result"]) === "string") {
         readParams += `&${test}=${encodeURIComponent(data["result"])}`;
       }
     }
-    console.log("AAAAAA");
     browser.openUrl(`${iframe_root_same}/tests/${stem}.html?mode=read&sessionId=${sessionId}${readParams}`);
     let readResultsSameFirstParty = await nextValue(resultsWebSocket, sessionId);
-    console.log("BBBBBB");
     browser.openUrl(`${iframe_root_different}/tests/${stem}.html?mode=read&sessionId=${sessionId}${readParams}`);
     let readResultsDifferentFirstParty = await nextValue(resultsWebSocket, sessionId);
-    console.log("CCCCCC");
-    console.log("_________________________________________", Object.keys(writeResults));
-    console.log("_________________________________________", Object.keys(readResultsSameFirstParty));
-    console.log("_________________________________________", Object.keys(readResultsDifferentFirstParty));
-    
-    //console.log("results received...", fingerprintingResult);
-    //console.log(fingerprintingResult["screen.width"].actual_value);
-    //await sleep(10000);
-    
+    let supercookies = getJointResult(writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty);
+
+    // Navigation
+    browser.openUrl(`${iframe_root_same}/tests/navigation.html?mode=write&default=${secret}&sessionId=${sessionId}`);
+    let writeResults2 = await nextValue(resultsWebSocket, sessionId);
+    let readResultsSameFirstParty2 = await nextValue(resultsWebSocket, sessionId);
+    let readResultsDifferentFirstParty2 = await nextValue(resultsWebSocket, sessionId);
+    let navigation = getJointResult(writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2);
+
    // let fingerprinting = await loadAndGetResults(
    //   browser, 'https://arthuredelstein.net/browser-privacy/tests/fingerprinting.html');
     //let https = await runHttpsTests(driver);
@@ -288,11 +243,12 @@ const runTests = async (browser) => {
     // Move ServiceWorker from supercookies to navigation :P
     //supercookies["ServiceWorker"] = navigation["ServiceWorker"];
     //delete navigation["ServiceWorker"];
-    return { fingerprinting, misc, query, https }; //, supercookies, navigation };
+    return { fingerprinting, misc, query, https, supercookies, navigation };
   } catch (e) {
     console.log(e);
     return null;
   }
+
 };
 
 // Runs a batch of tests (multiple browsers).
@@ -306,19 +262,19 @@ const runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
       let { browser, prefs, incognito, tor } = config;
       console.log("\ncreating driver:", config);
       let browserObject = new Browser(config);
-      browserObject.launch();
+      await browserObject.launch();
       let timeStarted = new Date().toISOString();
       let reportedVersion = browserObject.version;
       console.log(`${browser} version found: ${reportedVersion}`);
       let testResults = await runTests(browserObject);
       //      console.log({shouldQuit});
-      console.log(testResults);
+      //console.log(testResults);
       all_tests.push({ browser, reportedVersion,
                        testResults, timeStarted,
                        capabilities: {os: os.type(), os_version: os.version() },
                        incognito, tor });
       if (shouldQuit) {
-        browserObject.kill();
+        await browserObject.kill();
       }
     } catch (e) {
       console.log(e);
