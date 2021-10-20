@@ -6,7 +6,6 @@
     <link id="favicon" rel="shortcut icon" type="image/png" href="" />
   </head>
   <body>
-    <script src="./post_data.js"></script>
     <script>
      addEventListener("message", ({data}) => {
        console.log("message received in supercookies.html:", data);
@@ -15,7 +14,6 @@
          favicon.setAttribute("href", data["faviconURI"]);
        } else {
          document.body.setAttribute("data-test-results", JSON.stringify(data));
-         postData(data);
        }
      }, false);
      let iframe = document.createElement("iframe");
