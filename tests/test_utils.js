@@ -3,7 +3,7 @@ let runTests = async (tests, mode, params) => {
   for (let test of Object.keys(tests)) {
     let result;
     try {
-      let input = params[test] || params["default"];
+      let input = decodeURIComponent(params[test] || params["default"]);
       console.log("input", input);
       result = await tests[test][mode](input);
     } catch (e) {
