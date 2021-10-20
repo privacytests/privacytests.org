@@ -76,8 +76,8 @@ const macOSdefaultBrowserSettings = {
 const browserPath = (browser) => {
   const { appDirectory, binaryPath } = macOSdefaultBrowserSettings.defaultValues;
   const browserValues = macOSdefaultBrowserSettings[browser];
-  const name = browserValues.binaryName ?? browserValues.name;
-  return `${appDirectory}/${name}.app/${binaryPath}/${name}`;
+  const binaryName = browserValues.binaryName ?? browserValues.name;
+  return `${appDirectory}/${browserValues.name}.app/${binaryPath}/${binaryName}`;
 };
 
 const browserCommand = ({browser, path, incognito, tor}) => {
