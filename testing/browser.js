@@ -65,7 +65,8 @@ const macOSdefaultBrowserSettings = {
   },
   tor: {
     name: "Tor Browser",
-    binaryName: "firefox"
+    binaryName: "firefox",
+    useAppToOpenUrls: true
   },
   vivaldi: {
     name: "Vivaldi",
@@ -95,11 +96,12 @@ class Browser {
     this._version = undefined;
     this._command = this._defaults.command ?? browserCommand({browser, path: this._path, incognito, tor});
     this._openTabs = 0;
+    this._appPath = this._path.split(".app")[0] + ".app";
   }
   // Launch the browser.
   async launch() {
     this._process = exec(this._command);
-    await sleepMs(3000);
+    await sleepMs(10000);
     if (this.incognito && this._defaults.incognitoFunction) {
       await this._defaults.incognitoFunction();
     }
@@ -107,14 +109,18 @@ class Browser {
   // Get the browser version.
   get version() {
     if (!this._version) {
-      const shortPath = this._path.split(".app")[0] + ".app";
-      this._version = execSync(`mdls -name kMDItemVersion -raw "${shortPath}"`).toString();
+      this._version = execSync(`mdls -name kMDItemVersion -raw "${this._appPath}"`).toString();
     }
     return this._version;
   }
   // Open the url in a new tab. 
   openUrl(url) {
-    exec(`${this._command} "${url}"`);
+    if (!this._defaults.useAppToOpenUrls) {
+      exec(`${this._command} "${url}"`);
+    } else {
+      console.log(`open -a "${this._appPath}" "${url}`);
+      exec(`open -a "${this._appPath}" "${url}"`);
+    }
     this._openTabs++;
   }
   // Clean up and close the browser.
