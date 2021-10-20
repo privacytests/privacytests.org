@@ -53,7 +53,7 @@ const resultsToDescription = ({
   reportedVersion,
   capabilities: { os, os_version, browser: browser2, browserName, browserVersion, version,
                   browser_version, device, platformVersion, platformName, platform },
-  prefs, incognito, tor_mode
+  prefs, incognito, tor,
 }) => {
   let browserFinal = browser || browserName || browser2;
   let browserVersionLong =  reportedVersion || browserVersion || version;
@@ -76,7 +76,7 @@ const resultsToDescription = ({
   if (incognito === true) {
     finalText += "<br>private";
   }
-  if (tor_mode === true) {
+  if (tor === true) {
     finalText += "<br>Tor";
   }
   return finalText;
