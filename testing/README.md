@@ -1,15 +1,18 @@
-This project runs browser privacy tests (fingerprinting resistance, partitioning between websites, etc.) using selenium and saves the results to a JSON file.
+This project runs browser privacy tests (fingerprinting resistance, partitioning between websites, etc.) and saves the results to a JSON file.
+
+**NOTE**: privacytests.org no longer uses selenium because it is incompatible with some privacy protections such as Safari's ITP. The code is undergoing many changes and currently only works on macOS. There is no longer
+browserstack support.
 
 To set up:
 
 `npm install`
 
-* index.js runs the browser tests.
+* test.js runs the browser tests.
 * render.js takes the results of the browser tests and renders them to a web page.
 
 To run tests, point to a .yaml file:
 
-`node index chromium.yaml`
+`node test chromium.yaml`
 
 You can use a few optional flags after the yaml file:
 
@@ -23,13 +26,9 @@ that describes what should go into a single test. All parameters
 are optional, except `browser`:
 
 ```
-- browser: chrome          # Possible values include chrome, firefox, brave, opera, edge, etc.
-  browser_version: '92.0'  # A string, the version of the browser (for remote). Can be 'latest'.
-  os: windows              # Operating system: windows, macOS, iOS, linux (for remote).
-  os_version: '10'         # A string, the version of the OS we want (for remote).
+- browser: chrome          # Possible values include chrome, firefox, brave, opera, edge, vivaldi, etc.
   incognito: true,         # Set incognito to true for private browsing windows.
-  tor_mode: true           # Set tor_mode to true for 'Brave Private Window with Tor.'
-  service: browserstack    # Use remote selenium service (currently browserstack is supported).
+  tor: true                # Set tor to true for 'Brave Private Window with Tor.'
   repeat: 1                # Integer, how many times we should repeat this test.
   disable: false           # If true, this test won't be run.
 - browser: firefox         # On to the next test item in the array...
