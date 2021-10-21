@@ -128,6 +128,11 @@ class Browser {
     if (!this._version) {
       this._version = execSync(`mdls -name kMDItemVersion -raw "${this._appPath}"`).toString();
     }
+    if (this.browser === "brave") {
+      // Weird brave thing. When the version is 1.31.87, kMDItemVersion is 95.1.31.87,
+      // where "95" refers to the Chromium major version.
+      this._version = this._version.split('.').slice(1).join('.');
+    }
     return this._version;
   }
   // Open the url in a new tab. 
