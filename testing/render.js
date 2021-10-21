@@ -53,7 +53,7 @@ const resultsToDescription = ({
   reportedVersion,
   capabilities: { os, os_version, browser: browser2, browserName, browserVersion, version,
                   browser_version, device, platformVersion, platformName, platform },
-  prefs, incognito, tor_mode
+  prefs, incognito, tor,
 }) => {
   let browserFinal = browser || browserName || browser2;
   let browserVersionLong =  reportedVersion || browserVersion || version;
@@ -76,7 +76,7 @@ const resultsToDescription = ({
   if (incognito === true) {
     finalText += "<br>private";
   }
-  if (tor_mode === true) {
+  if (tor === true) {
     finalText += "<br>Tor";
   }
   return finalText;
@@ -149,14 +149,18 @@ test failed: ${ joinIfArray(testFailed) }
 
 const resultsSection = ({bestResults, category, tooltipFunction, wordBreak}) => {
 //  console.log(results);
-  let rowNames = Object.keys(bestResults[0]["testResults"][category])
+let section = [];
+let bestResultsForCategory = bestResults[0]["testResults"][category];
+if (!bestResultsForCategory) {
+  return [];
+}
+let rowNames = Object.keys(bestResultsForCategory)
       .sort(Intl.Collator().compare);
   let resultMaps = bestResults
       .map(m => m["testResults"][category]);
-  let section = [];
   for (let rowName of rowNames) {
     let row = [];
-    let description = bestResults[0]["testResults"][category][rowName]["description"] ?? "";
+    let description = bestResultsForCategory[rowName]["description"] ?? "";
     row.push(`<div style="word-break: ${wordBreak ?? "break-word"}" title=${JSON.stringify(description)}>${rowName}</div>`);
     for (let resultMap of resultMaps) {
       let tooltip = tooltipFunction(resultMap[rowName]);
@@ -205,10 +209,12 @@ const sectionDescription = {
     tracking query parameters tested here was largely borrowed from Brave.)`};
 
 const resultsToTable = (results, title) => {
+  console.log(results);
   let bestResults = results
       .filter(m => m["testResults"])
       .filter(m => m["testResults"]["fingerprinting"])
       .sort((m1, m2) => m1["browser"] ? m1["browser"].localeCompare(m2["browser"]) : -1);
+      console.log(bestResults[0]);
   let headers = bestResults.map(resultsToDescription);
   headers.unshift(`<h1 class="title">${title}</h1>`);
   let body = [];
