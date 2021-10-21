@@ -1,4 +1,5 @@
-This project runs browser privacy tests (fingerprinting resistance, partitioning between websites, etc.) and saves the results to a JSON file.
+# PrivacyTests.org tests and website
+This project runs browser privacy tests (fingerprinting resistance, partitioning between websites, etc.), saves the results to a JSON file, and renders those results in a website.
 
 **NOTE**: privacytests.org no longer uses selenium because it is incompatible with some privacy protections such as Safari's ITP. The code is undergoing many changes and currently only works on macOS. There is no longer
 browserstack support.
