@@ -212,7 +212,7 @@ const resultsToTable = (results, title) => {
   console.log(results);
   let bestResults = results
       .filter(m => m["testResults"])
-      .filter(m => m["testResults"]["fingerprinting"])
+      .filter(m => m["testResults"]["supercookies"])
       .sort((m1, m2) => m1["browser"] ? m1["browser"].localeCompare(m2["browser"]) : -1);
       console.log(bestResults[0]);
   let headers = bestResults.map(resultsToDescription);
@@ -287,27 +287,27 @@ const resultsKeys = [
 const aggregateRepeatedTrials = (results) => {
   let aggregatedResults = new Map();
   for (let test of results.all_tests) {
-    let key = resultsToDescription(test);
-    //console.log(key);
-    if (aggregatedResults.has(key)) {
-      let theseTestResults = aggregatedResults.get(key).testResults;
-      if (theseTestResults) {
-        for (let subcategory of ["supercookies", "fingerprinting", "https", "misc", "navigation", "query"]) {
-          let someTests = theseTestResults[subcategory];
-          for (let testName in test.testResults[subcategory]) {
-            for (let value in test.testResults[subcategory][testName]) {
-              if (resultsKeys.includes(value)) {
-                if (!Array.isArray(someTests[testName][value])) {
-                  someTests[testName][value] = [someTests[testName][value]];
+    if (test.testResults) {
+      let key = resultsToDescription(test);
+      //console.log(key);
+      if (aggregatedResults.has(key)) {
+        let theseTestResults = aggregatedResults.get(key).testResults;
+        if (theseTestResults) {
+          for (let subcategory of ["supercookies", "fingerprinting", "https", "misc", "navigation", "query"]) {
+            let someTests = theseTestResults[subcategory];
+            for (let testName in test.testResults[subcategory]) {
+              for (let value in test.testResults[subcategory][testName]) {
+                if (resultsKeys.includes(value)) {
+                  if (!Array.isArray(someTests[testName][value])) {
+                    someTests[testName][value] = [someTests[testName][value]];
+                  }
+                  someTests[testName][value].push(test.testResults[subcategory][testName][value]);
                 }
-                someTests[testName][value].push(test.testResults[subcategory][testName][value]);
               }
             }
           }
         }
-      }
-    } else {
-      if (test.testResults) {
+      } else {
         aggregatedResults.set(key, deepCopy(test));
       }
     }
