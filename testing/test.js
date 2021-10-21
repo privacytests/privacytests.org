@@ -11,7 +11,6 @@ const minimist = require('minimist');
 const dateFormat = require('dateformat');
 const YAML = require('yaml');
 const os = require('os');
-const { connect } = require("it-ws/client");
 
 const render = require('./render');
 const { Browser } = require("./browser.js");
@@ -95,10 +94,10 @@ const TRACKING_QUERY_PARAMETERS =
     "igshid": "Instagram tracking parameter",
   };
 
-const queryParameterTestUrl = (sessionId, parameters) => {
+const queryParameterTestUrl = (parameters) => {
   let secret = Math.random().toString().slice(2);
   let baseURL = "https://arthuredelstein.net/browser-privacy/tests/query.html";
-  let queryString = `?sessionId=${sessionId}&controlParam=controlValue`;
+  let queryString = `?controlParam=controlValue`;
   for (let param of Object.keys(parameters)) {
     queryString += `&${param}=${secret}`;
   }
@@ -141,19 +140,6 @@ const runHttpsTests = async (driver) => {
   return results;
 };
 
-const nextValue = async(websocket, expectedSessionId) => {
-  const message = await websocket.source.next();
-  if (message.value === undefined) {
-    throw new Error(`Unexpected message: ${JSON.stringify(message)}`);
-  }
-  const { sessionId, data } = JSON.parse(message.value);
-  if (sessionId !== expectedSessionId) {
-    throw new Error("Unexpected sessionId");
-  }
-  return data;
-};
-
-
 const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty) => {
   let jointResult = {};
   for (let test in readResultsDifferentFirstParty) {
@@ -175,6 +161,18 @@ const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDiff
   return jointResult;
 }
 
+const annotateQueryParameters = (queryParametersRaw) => {
+  let query = {};
+  for (let param of Object.keys(TRACKING_QUERY_PARAMETERS)) {
+    query[param] = {
+      value: queryParametersRaw[param],
+      passed: (queryParametersRaw[param] === undefined),
+      description: TRACKING_QUERY_PARAMETERS[param],
+    };
+  }
+  return query;
+};
+
 // Run all of our privacy tests using selenium for a given driver. Returns
 // a map of test types to test result maps. Such as
 // `
@@ -184,69 +182,33 @@ const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDiff
 //   "navigation" : { ... },
 //   "supercookies" : { ... } }
 const runTests = async (browser) => {
-  try {
-    const resultsWebSocket = connect("wss://results.privacytests.org/ws");
-    const firstMessage = await resultsWebSocket.source.next();
-    const { sessionId } = JSON.parse(firstMessage.value);
-    
-    browser.openUrl(`https://arthuredelstein.net/browser-privacy/tests/fingerprinting.html?sessionId=${sessionId}`);
-    const fingerprinting = await nextValue(resultsWebSocket, sessionId);
-    
-    browser.openUrl(`https://arthuredelstein.net/browser-privacy/tests/misc.html?sessionId=${sessionId}`);
-    const misc = await nextValue(resultsWebSocket, sessionId);
-    
-    browser.openUrl(`https://arthuredelstein.net/browser-privacy/tests/https.html?sessionId=${sessionId}`);
-    const https = await nextValue(resultsWebSocket, sessionId);
-
-    browser.openUrl(queryParameterTestUrl(sessionId, TRACKING_QUERY_PARAMETERS));
-    const queryParametersFound = await nextValue(resultsWebSocket, sessionId);
-    const query = {};
-    for (let param of Object.keys(TRACKING_QUERY_PARAMETERS)) {
-      query[param] = {
-        value: queryParametersFound[param],
-        passed: (queryParametersFound[param] === undefined),
-        description: TRACKING_QUERY_PARAMETERS[param],
-      };
-    }
-
-    let secret = Math.random().toString().slice(2);
-    let iframe_root_same = "https://arthuredelstein.net/browser-privacy";
-    let iframe_root_different = "https://arthuredelstein.github.io/privacytests.org";
-
+  try { 
+    const secret = Math.random().toString().slice(2);
+    const iframe_root_same = "https://arthuredelstein.net/browser-privacy/tests";
+    const iframe_root_different = "https://arthuredelstein.github.io/privacytests.org/tests";
     // Supercookies
-    const stem = "supercookies";
-    browser.openUrl(`${iframe_root_same}/tests/${stem}.html?mode=write&default=${secret}&sessionId=${sessionId}`);
-    let writeResults = await nextValue(resultsWebSocket, sessionId);
+    const writeResults = await browser.runTest(`${iframe_root_same}/supercookies.html?mode=write&default=${secret}`);
     let readParams = "";
     for (let [test, data] of Object.entries(writeResults)) {
       if ((typeof data["result"]) === "string") {
         readParams += `&${test}=${encodeURIComponent(data["result"])}`;
       }
     }
-    browser.openUrl(`${iframe_root_same}/tests/${stem}.html?mode=read&sessionId=${sessionId}${readParams}`);
-    let readResultsSameFirstParty = await nextValue(resultsWebSocket, sessionId);
-    browser.openUrl(`${iframe_root_different}/tests/${stem}.html?mode=read&sessionId=${sessionId}${readParams}`);
-    let readResultsDifferentFirstParty = await nextValue(resultsWebSocket, sessionId);
-    let supercookies = getJointResult(writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty);
-
+    const readResultsSameFirstParty = await browser.runTest(`${iframe_root_same}/supercookies.html?mode=read${readParams}`);
+    const readResultsDifferentFirstParty = await browser.runTest(`${iframe_root_different}/supercookies.html?mode=read${readParams}`);
+    const supercookies = getJointResult(writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty);
     // Navigation
-    browser.openUrl(`${iframe_root_same}/tests/navigation.html?mode=write&default=${secret}&sessionId=${sessionId}`);
-    let writeResults2 = await nextValue(resultsWebSocket, sessionId);
-    let readResultsSameFirstParty2 = await nextValue(resultsWebSocket, sessionId);
-    let readResultsDifferentFirstParty2 = await nextValue(resultsWebSocket, sessionId);
-    let navigation = getJointResult(writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2);
-
-   // let fingerprinting = await loadAndGetResults(
-   //   browser, 'https://arthuredelstein.net/browser-privacy/tests/fingerprinting.html');
-    //let https = await runHttpsTests(driver);
-    //let misc = await runMiscTests(driver);
-    //let supercookies = await runSupercookieTests(driver, true);
-    //let navigation = await runNavigationTests(driver);
-    //let query = await runQueryParameterTests(driver, TRACKING_QUERY_PARAMETERS);
-    // Move ServiceWorker from supercookies to navigation :P
-    //supercookies["ServiceWorker"] = navigation["ServiceWorker"];
-    //delete navigation["ServiceWorker"];
-    return { fingerprinting, misc, query, https, supercookies, navigation };
+    const [writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2] =
+      await browser.runTest(`${iframe_root_same}/navigation.html?mode=write&default=${secret}`, 3);
+    const navigation = getJointResult(writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2);
+    // Fingerprinting, Misc, HTTPS
+    const fingerprinting = await browser.runTest(`${iframe_root_same}/fingerprinting.html`);
+    const misc = await browser.runTest(`${iframe_root_same}/misc.html`);
+    const https = await browser.runTest(`${iframe_root_same}/https.html`)
+    // Query
+    const queryParametersRaw = await browser.runTest(queryParameterTestUrl(TRACKING_QUERY_PARAMETERS));
+    const query = annotateQueryParameters(queryParametersRaw);
+    return { supercookies, fingerprinting, misc, query, https, navigation };
   } catch (e) {
     console.log(e);
     return null;
@@ -325,3 +287,5 @@ const main = async () => {
 };
 
 main();
+
+
