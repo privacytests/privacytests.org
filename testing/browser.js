@@ -1,6 +1,7 @@
 const { exec, execSync } = require('child_process');
 const robot = require("robotjs");
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
+const { connect } = require("it-ws/client");
 
 /*
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --incognito "https://example.com"
@@ -74,6 +75,26 @@ const browserCommand = ({browser, path, incognito, tor}) => {
   return `"${path}" ${flags}`.trim();
 };
 
+
+const nextValue = async(websocket, expectedSessionId) => {
+  const message = await websocket.source.next();
+  if (message.value === undefined) {
+    throw new Error(`Unexpected message: ${JSON.stringify(message)}`);
+  }
+  const { sessionId, data } = JSON.parse(message.value);
+  if (sessionId !== expectedSessionId) {
+    throw new Error("Unexpected sessionId");
+  }
+  return data;
+};
+
+// Accepts a url string and a key and val to add search parameter.
+const addSearchParam = (url, key, val) => {
+  let urlObject = new URL(url);
+  urlObject.searchParams.set(key, val);
+  return urlObject.href;
+};
+
 // A Browser object represents a browser we run tests on.
 class Browser {
   constructor({browser, path, incognito, tor}) {
@@ -84,6 +105,8 @@ class Browser {
     this._command = this._defaults.command ?? browserCommand({browser, path: this._path, incognito, tor});
     this._openTabs = 0;
     this._appPath = this._path.split(".app")[0] + ".app";
+    this._sessionId = null;
+    this._resultsWebSocket = null;
   }
   // Launch the browser.
   async launch() {
@@ -92,6 +115,11 @@ class Browser {
     if (this.incognito && this._defaults.incognitoFunction) {
       await this._defaults.incognitoFunction();
     }
+    this._resultsWebSocket = await connect("wss://results.privacytests.org/ws");
+    const firstMessage = await this._resultsWebSocket.source.next();
+    console.log(firstMessage);
+    const { sessionId } = JSON.parse(firstMessage.value);
+    this._sessionId = sessionId;
   }
   // Get the browser version.
   get version() {
@@ -108,6 +136,24 @@ class Browser {
       exec(`open -a "${this._appPath}" "${url}"`);
     }
     this._openTabs++;
+  }
+  async nextTestResult() {
+    return await nextValue(this._resultsWebSocket, this._sessionId);
+  }
+  // Run a test where we open a tab at url and wait for 1 or more
+  // results to come back.
+  async runTest(url, resultCountExpected = 1) {
+    const url2 = addSearchParam(url, "sessionId", this._sessionId);
+    this.openUrl(url2);
+    if (resultCountExpected === 1) {
+      return this.nextTestResult();
+    } else {
+      let results = [];
+      for (let i = 0; i<resultCountExpected; ++i) {
+        results.push(await this.nextTestResult());
+      }
+      return results;
+    }
   }
   // Clean up and close the browser.
   async kill() {
