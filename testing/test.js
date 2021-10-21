@@ -204,7 +204,7 @@ const runTests = async (browser) => {
     // Fingerprinting, Misc, HTTPS
     const fingerprinting = await browser.runTest(`${iframe_root_same}/fingerprinting.html`);
     const misc = await browser.runTest(`${iframe_root_same}/misc.html`);
-    const https = await browser.runTest(`${iframe_root_same}/https.html`)
+    const https = await browser.runTest(`${iframe_root_same}/https.html`);
     // Query
     const queryParametersRaw = await browser.runTest(queryParameterTestUrl(TRACKING_QUERY_PARAMETERS));
     const query = annotateQueryParameters(queryParametersRaw);

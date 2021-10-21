@@ -1,7 +1,9 @@
 const { exec, execSync } = require('child_process');
-const robot = require("robotjs");
-const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 const { connect } = require("it-ws/client");
+const robot = require("robotjs");
+
+const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
+
 
 /*
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --incognito "https://example.com"
