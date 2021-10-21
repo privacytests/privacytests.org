@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Upgradable https privacy tests</title>
+    <meta charset="utf8">
+    <link rel="stylesheet" href="test.css">
+  </head>
+  <body>
+    <script src="./post_data.js"></script>
+    <script>
+
+      const runTests = async () => {
+        let resultsJSON = {
+          "Upgradable image": await insecureSubresourceTest("img", "image.png"),
+          "Upgradable script": await insecureSubresourceTest("script", "test.js"),
+        };
+        document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
+        await postData(resultsJSON);
+      };
+};
+    </script>
+  </body>
+</html>
+
+
+const runTests = async () => {
+  let resultsJSON = {
+    "Upgradable image": await insecureSubresourceTest("img", "image.png"),
+    "Upgradable script": await insecureSubresourceTest("script", "test.js"),
+  };
+  document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
+  await postData(resultsJSON);
+};
