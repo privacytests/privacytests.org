@@ -24,17 +24,11 @@ const macOSdefaultBrowserSettings = {
     name: "Brave Browser",
     privateFlag: "incognito",
     torFlag: "tor",
-    killFunction: () => {
-      robot.keyTap("q", ["command"]);
-    }
   },
   chrome: {
     name: "Google Chrome",
     privateFlag: "incognito",
-    killFunction: () => {
-      robot.keyTap("q", ["command"]);
-      robot.keyTap("q", ["command"]);
-    }
+    doubleTapKill: true
   },
   firefox: {
     name: "firefox",
@@ -47,11 +41,6 @@ const macOSdefaultBrowserSettings = {
   opera: {
     name: "Opera",
     privateFlag: "private",
-    killFunction: () => {
-      robot.keyTap("q", ["command"]);
-      robot.keyTap("q", ["command"]);
-//      robot.keyTap("enter");
-    }
   },
   safari: {
     name: "Safari",
@@ -59,17 +48,12 @@ const macOSdefaultBrowserSettings = {
     incognitoFunction: async () => {
       robot.keyTap("n", ["command","shift"]);
     },
-    killFunction: () => {
-      robot.keyTap("q", ["command"]);
-    }
+    doubleTapKill: true
   },
   tor: {
     name: "Tor Browser",
     binaryName: "firefox",
     useAppToOpenUrls: true,
-    killFunction: () => {
-      robot.keyTap("q", ["command"]);
-    }
   },
   vivaldi: {
     name: "Vivaldi",
@@ -121,7 +105,6 @@ class Browser {
     if (!this._defaults.useAppToOpenUrls) {
       exec(`${this._command} "${url}"`);
     } else {
-      console.log(`open -a "${this._appPath}" "${url}`);
       exec(`open -a "${this._appPath}" "${url}"`);
     }
     this._openTabs++;
@@ -132,10 +115,9 @@ class Browser {
       robot.keyTap("w", "command");
       await sleepMs(100);
     }
-    if (this._defaults.killFunction) {
-      this._defaults.killFunction();
-    } else {
-      this._process.kill();
+    robot.keyTap("q", "command");
+    if (this._defaults.doubleTapKill) {
+      robot.keyTap("q", "command");
     }
   }
 }
