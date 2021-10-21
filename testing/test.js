@@ -143,6 +143,9 @@ const runHttpsTests = async (driver) => {
 
 const nextValue = async(websocket, expectedSessionId) => {
   const message = await websocket.source.next();
+  if (message.value === undefined) {
+    throw new Error(`Unexpected message: ${JSON.stringify(message)}`);
+  }
   const { sessionId, data } = JSON.parse(message.value);
   if (sessionId !== expectedSessionId) {
     throw new Error("Unexpected sessionId");
@@ -260,7 +263,7 @@ const runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
   for (let config of configList) {
     try {
       let { browser, prefs, incognito, tor } = config;
-      console.log("\ncreating driver:", config);
+      console.log("\nnext test:", config);
       let browserObject = new Browser(config);
       await browserObject.launch();
       let timeStarted = new Date().toISOString();
