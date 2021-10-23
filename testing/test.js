@@ -182,10 +182,10 @@ const annotateQueryParameters = (queryParametersRaw) => {
 //   "navigation" : { ... },
 //   "supercookies" : { ... } }
 const runTests = async (browser) => {
-  try { 
+  try {
     const secret = Math.random().toString().slice(2);
     const iframe_root_same = "https://arthuredelstein.net/browser-privacy/tests";
-    const iframe_root_different = "https://arthuredelstein.github.io/privacytests.org/tests";
+    const iframe_root_different = "https://test-pages.privacytests.org";
     // Supercookies
     const writeResults = await browser.runTest(`${iframe_root_same}/supercookies.html?mode=write&default=${secret}`);
     let readParams = "";
