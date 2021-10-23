@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Upgradable http privacy tests</title>
+    <meta charset="utf8">
+    <link rel="stylesheet" href="test.css">
+  </head>
+  <body>
+    <script src="./post_data.js"></script>
+    <script>
+     const runTests = async () => {
+       const urlParams = new URLSearchParams(window.location.search);
+       const source = urlParams.get("source");
+       const upgraded = window.location.protocol === "https:";
+       const resultKey = `Upgradable ${source}`;
+       let resultsJSON = {};
+       resultsJSON[resultKey] = { upgraded, passed: upgraded };
+       console.log(resultsJSON);
+       document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
+       await postData(resultsJSON);
+       if (source === "address") {
+         urlParams.set("source", "navigate");
+         window.location.search = urlParams.toString();
+       }
+     };
+     runTests();
+    </script>
+  </body>
+</html>
