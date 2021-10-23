@@ -184,7 +184,7 @@ const annotateQueryParameters = (queryParametersRaw) => {
 const runTests = async (browser) => {
   try {
     const secret = Math.random().toString().slice(2);
-    const iframe_root_same = "https://arthuredelstein.net/browser-privacy/tests";
+    const iframe_root_same = "https://arthuredelstein.net/browser-privacy/test-pages";
     const iframe_root_different = "https://test-pages.privacytests.org";
     // Supercookies
     const writeResults = await browser.runTest(`${iframe_root_same}/supercookies.html?mode=write&default=${secret}`);
@@ -201,10 +201,15 @@ const runTests = async (browser) => {
     const [writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2] =
       await browser.runTest(`${iframe_root_same}/navigation.html?mode=write&default=${secret}`, 3);
     const navigation = getJointResult(writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2);
-    // Fingerprinting, Misc, HTTPS
+    // Fingerprinting
     const fingerprinting = await browser.runTest(`${iframe_root_same}/fingerprinting.html`);
+    // Misc
     const misc = await browser.runTest(`${iframe_root_same}/misc.html`);
-    const https = await browser.runTest(`${iframe_root_same}/https.html`);
+    // HTTPS
+    const https1 = await browser.runTest(`${iframe_root_same}/https.html`);
+    const [https2, https3] = await browser.runTest(
+      `http://upgradable.arthuredelstein.net/upgradable.html?source=address`, 2);
+    const https = Object.assign({}, https1, https2, https3); // Merge results
     // Query
     const queryParametersRaw = await browser.runTest(queryParameterTestUrl(TRACKING_QUERY_PARAMETERS));
     const query = annotateQueryParameters(queryParametersRaw);
