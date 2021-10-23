@@ -96,7 +96,7 @@ const TRACKING_QUERY_PARAMETERS =
 
 const queryParameterTestUrl = (parameters) => {
   let secret = Math.random().toString().slice(2);
-  let baseURL = "https://arthuredelstein.net/browser-privacy/tests/query.html";
+  let baseURL = "https://arthuredelstein.net/test-pages/query.html";
   let queryString = `?controlParam=controlValue`;
   for (let param of Object.keys(parameters)) {
     queryString += `&${param}=${secret}`;
@@ -133,7 +133,7 @@ const testHttpsOnlyMode = async (driver) => {
 // Run all of our https privacy tests.
 const runHttpsTests = async (driver) => {
   let results = await loadAndGetResults(
-    driver, 'https://arthuredelstein.net/browser-privacy/tests/https.html', {newTab: true});
+    driver, 'https://arthuredelstein.net/test-pages/https.html', {newTab: true});
   results["Upgradable address"] = await testHttpsUpgrade(driver, "get");
   results["Upgradable hyperlink"] = await testHttpsUpgrade(driver, "navigate");
   results["Insecure website"] = await testHttpsOnlyMode(driver);
