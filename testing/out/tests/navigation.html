@@ -16,8 +16,8 @@
        } else if (window.location.host === "arthuredelstein.net") {
          const currentUrl = window.location.href;
          const destinationUrl = currentUrl.replace(
-           "https://arthuredelstein.net/browser-privacy/",
-           "https://privacytests.org/");
+           "https://arthuredelstein.net/test-pages/",
+           "https://test-pages.privacytests.org/");
          window.location.href = destinationUrl;
        }
        // Otherwise, do nothing.
@@ -44,7 +44,7 @@
      iframe_root = (location.hostname === "localhost" ||
                     location.hostname === "127.0.0.1" ||
                     location.hostname === "")
-                 ? "" : "https://arthuredelstein.net/browser-privacy";
+                 ? "" : "https://arthuredelstein.net/test-pages";
      iframe.src = `${iframe_root}/tests/navigation_inner.html${window.location.search}`;
     </script>
   </body>
