@@ -20,6 +20,9 @@ const header = () => `
   </div>
   <div class="links">
     <div class="link-header">
+      <a href="/news.html">News</a>
+    </div>
+    <div class="link-header">
       <a href="/about.html">About</a>
     </div>
     <div class="link-header">
