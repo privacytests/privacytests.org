@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Insecure http privacy test</title>
+    <meta charset="utf8">
+    <link rel="stylesheet" href="test.css">
+  </head>
+  <body>
+    <script src="./post_data.js"></script>
+    <script>
+     const runTests = async () => {
+       const resultsJSON = {
+          "Insecure website": {
+            passed: false,
+            result: "Insecure website loaded",
+            description: "Checks to see if the browser stops loading an insecure website and warns the user before giving them the option to continue. Known as HTTPS-Only Mode in some browsers."
+          }
+       };
+       document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
+       await postData(resultsJSON);
+     };
+     runTests();
+    </script>
+  </body>
+</html>
