@@ -8,7 +8,7 @@ const emailDataURI = datauri("./out/email.svg").content;
 const logoDataURI = datauri("./out/privacyTestsLogo.png").content;
 
 // The header common to all pages on the site.
-const header = (version) => `
+const header = () => `
 <div class="header">
   <div class="title-wrapper">
     <div class="title">
@@ -16,9 +16,6 @@ const header = (version) => `
         <img height="48px" src="${logoDataURI}">
         <span>PrivacyTests.org</span>
       </a>
-    </div>
-    <div class="version">
-      v. ${version}
     </div>
   </div>
   <div class="links">
@@ -36,10 +33,6 @@ const header = (version) => `
     </div>
   </div>
 </div>`;
-
-// Read the version of PrivacyTests.org
-const version = () =>
-  fs.readFileSync("./version").toString().trim();
 
 // The basic structure of an HTML page
 const htmlPage = ({ content, cssFiles, previewImageUrl }) => {
@@ -67,7 +60,7 @@ const htmlPage = ({ content, cssFiles, previewImageUrl }) => {
   <body>
     <div class="gutter"></div>
     <div class="wrapper">
-    ${header(version())}
+    ${header()}
     ${content}
     </div>
     <div class="gutter"></div>

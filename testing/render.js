@@ -249,7 +249,12 @@ const dateString = (dateTime) => {
 // Creates the table content for a page.
 const content = (results, jsonFilename) => {
   let { headers, body } = resultsToTable(results.all_tests,  tableTitle);
-  return `<div id="banner"><div>Open-source tests of web browser privacy.</div><div>Updated ${dateString(results.timeStarted)}</div></div>` +
+  return `
+    <div id="banner">
+      <div class="banner1">No. 2</div>
+      <div class="banner2">Open-source tests of web browser privacy.</div>
+      <div class="banner3">Updated ${dateString(results.timeStarted)}</div>
+    </div>` +
   htmlTable({headers, body,
                     className:"comparison-table"}) +
 	`<p class="footer">Tests ran at ${results.timeStarted.replace("T"," ").replace(/\.[0-9]{0,3}Z/, " UTC")}.
