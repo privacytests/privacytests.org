@@ -55,6 +55,7 @@ const htmlPage = ({ content, cssFiles, previewImageUrl }) => {
     ${ogImageIfNeeded}
     <link href="${faviconDataURI}" rel="icon" type="image/x-icon" />
     <title>PrivacyTests.org: open-source tests of web browser privacy</title>
+    <meta name="description" content="PrivacyTests.org subjects major web browsers to a suite of automated tests to find out: which web browsers offer the best privacy protections?"/>
     <style>${inlineCSS}</style>
   </head>
   <body>
