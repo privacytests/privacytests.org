@@ -19,7 +19,7 @@
        document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
        await postData(resultsJSON);
        if (source === "address") {
-         urlParams.set("source", "navigate");
+         urlParams.set("source", "hyperlink");
          window.location.search = urlParams.toString();
        }
      };
