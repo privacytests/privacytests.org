@@ -39,11 +39,13 @@ const macOSdefaultBrowserSettings = {
   },
   edge: {
     name: "Microsoft Edge",
-    privateFlag: "inprivate"
+    privateFlag: "inprivate",
+    doubleTapKill: true
   },
   opera: {
     name: "Opera",
     privateFlag: "private",
+    doubleTapKill: true
   },
   safari: {
     name: "Safari",
