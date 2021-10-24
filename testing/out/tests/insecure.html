@@ -10,8 +10,10 @@
     <script>
      const runTests = async () => {
        const resultsJSON = {
-         passed: false,
-         result: "Insecure page loaded"
+          "Insecure website": {
+            passed: false,
+            result: "Insecure page loaded"
+          }
        };
        document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
        await postData(resultsJSON);
