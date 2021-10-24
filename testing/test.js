@@ -165,6 +165,9 @@ const runTests = async (browser) => {
     const [writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2] =
       await browser.runTest(`${iframe_root_same}/navigation.html?mode=write&default=${secret}`, 3);
     const navigation = getJointResult(writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2);
+    // Move ServiceWorker from navigation to supercookies:
+    supercookies["ServiceWorker"] = navigation["ServiceWorker"];
+    delete navigation["ServiceWorker"];
     // Fingerprinting
     const fingerprinting = await browser.runTest(`${iframe_root_same}/fingerprinting.html`);
     // Misc
@@ -187,7 +190,6 @@ const runTests = async (browser) => {
     console.log(e);
     return null;
   }
-
 };
 
 // Runs a batch of tests (multiple browsers).
