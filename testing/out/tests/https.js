@@ -33,6 +33,7 @@ const runTests = async () => {
     "Upgradable script": await insecureSubresourceTest("script", "test.js"),
   };
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
+  console.log(resultsJSON);
   await postData(resultsJSON);
 };
 

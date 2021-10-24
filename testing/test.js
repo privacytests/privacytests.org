@@ -104,42 +104,6 @@ const queryParameterTestUrl = (parameters) => {
   return baseURL + queryString;
 };
 
-// Tests if a top-level page that can be upgraded to https is upgraded.
-// The argument getOrNavigate should be "get" or "navigate".
-const testHttpsUpgrade = async (driver, getOrNavigate) => {
-  const descriptions = {
-    "get" : "Checks to see if an insecure address pasted into the browser's address bar is upgraded to HTTPS whenever possible.",
-    "navigate": "Checks to see if the user has clicked on a hyperlink to an insecure address, if the browser upgrades that address to HTTPS whenever possible.",
-  };
-  await driver[getOrNavigate]("http://upgradable.arthuredelstein.net/");
-  let resultingUrl = await driver.getCurrentUrl();
-  let upgraded = resultingUrl.startsWith("https");
-  let passed = upgraded === true;
-  return { passed, upgraded, description: descriptions[getOrNavigate] };
-};
-
-// See if the browser blocks visits to HTTP sites (aka HTTPS-Only Mode)
-const testHttpsOnlyMode = async (driver) => {
-  const description = "Checks to see if the browser stops loading an insecure website and warns the user before giving them the option to continue. Known as HTTPS-Only Mode in some browsers.";
-  try {
-    await driver.get("http://insecure.arthuredelstein.net/");
-    return { passed: false, result: "allowed", description };
-  } catch (e) {
-    // Error page
-    return { passed: true, result: "error page", description };
-  }
-};
-
-// Run all of our https privacy tests.
-const runHttpsTests = async (driver) => {
-  let results = await loadAndGetResults(
-    driver, 'https://arthuredelstein.net/test-pages/https.html', {newTab: true});
-  results["Upgradable address"] = await testHttpsUpgrade(driver, "get");
-  results["Upgradable hyperlink"] = await testHttpsUpgrade(driver, "navigate");
-  results["Insecure website"] = await testHttpsOnlyMode(driver);
-  return results;
-};
-
 const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty) => {
   let jointResult = {};
   for (let test in readResultsDifferentFirstParty) {
@@ -201,24 +165,31 @@ const runTests = async (browser) => {
     const [writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2] =
       await browser.runTest(`${iframe_root_same}/navigation.html?mode=write&default=${secret}`, 3);
     const navigation = getJointResult(writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2);
+    // Move ServiceWorker from navigation to supercookies:
+    supercookies["ServiceWorker"] = navigation["ServiceWorker"];
+    delete navigation["ServiceWorker"];
     // Fingerprinting
     const fingerprinting = await browser.runTest(`${iframe_root_same}/fingerprinting.html`);
     // Misc
     const misc = await browser.runTest(`${iframe_root_same}/misc.html`);
+    // Query
+    const queryParametersRaw = await browser.runTest(queryParameterTestUrl(TRACKING_QUERY_PARAMETERS));
+    const query = annotateQueryParameters(queryParametersRaw);
     // HTTPS
     const https1 = await browser.runTest(`${iframe_root_same}/https.html`);
     const [https2, https3] = await browser.runTest(
       `http://upgradable.arthuredelstein.net/upgradable.html?source=address`, 2);
-    const https = Object.assign({}, https1, https2, https3); // Merge results
-    // Query
-    const queryParametersRaw = await browser.runTest(queryParameterTestUrl(TRACKING_QUERY_PARAMETERS));
-    const query = annotateQueryParameters(queryParametersRaw);
+    const https4Promise = browser.runTest(`http://insecure.arthuredelstein.net/insecure.html`);
+    const result = await Promise.race([sleep(10000), https4Promise]);
+    const https4 = result === undefined ?
+      { "Insecure website": { passed: true, result: "Insecure website never loaded" } }:
+      await https4Promise;
+    const https = Object.assign({}, https1, https2, https3, https4); // Merge results
     return { supercookies, fingerprinting, misc, query, https, navigation };
   } catch (e) {
     console.log(e);
     return null;
   }
-
 };
 
 // Runs a batch of tests (multiple browsers).
