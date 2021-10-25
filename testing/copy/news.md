@@ -4,9 +4,9 @@
 
 ### Correction
 
-Our first issue of PrivacyTests.org had an important error in the results, incorrectly indicating that Safari does not stop tracking via third-party cookies. This incorrect result (Safari cookie protections were assigned an <img src="/x-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="fail"> when it should have been a <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="pass">) seems to have happened because the Selenium Webdriver library I had been using to launch and control the various web browsers [apparently disables Safari's Intelligent Tracking Protection feature](https://bugs.webkit.org/show_bug.cgi?id=222583). I am sorry for the error. 
+The first issue of PrivacyTests.org had an important error in the results, incorrectly indicating that Safari does not stop tracking via third-party cookies. Safari cookie protections were assigned an <img src="/x-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="fail"> when it should have been a <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="pass">. This incorrect results seems to have happened because the Selenium Webdriver library I had been using to launch and control the various web browsers [likely disables Safari's Intelligent Tracking Protection feature](https://bugs.webkit.org/show_bug.cgi?id=222583). This new issue of PrivacyTests.org results shows the correct <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="pass"> for cookie protections in Safari.
 
-Thanks to John Wilander and Steven Englehardt for bringing this issue to my attention. This new issue of PrivacyTests.org results shows the correct <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="pass"> for cookie protections in Safari.
+My apologies for the error. Thanks to John Wilander and Steven Englehardt for bringing this issue to my attention. 
 
 ### Code updates
 
