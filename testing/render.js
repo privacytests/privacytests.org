@@ -250,10 +250,15 @@ const dateString = (dateTime) => {
 const content = (results, jsonFilename) => {
   let { headers, body } = resultsToTable(results.all_tests,  tableTitle);
   return `
-    <div id="banner">
-      <div class="banner1">No. 2</div>
-      <div class="banner2">Open-source tests of web browser privacy.</div>
-      <div class="banner3">Updated ${dateString(results.timeStarted)}</div>
+    <div class="banner" id="issueBanner">
+      <div class="left-heading">No. 2</div>
+      <div class="middle-heading">Open-source tests of web browser privacy.</div>
+      <div class="right-heading">Updated ${dateString(results.timeStarted)}</div>
+    </div>
+    <div class="banner" id="legend">
+      <div class="right-heading"><span class="good">&nbsp;</span>= Passed privacy test</div>
+      <div class="middle-heading"><span class="bad">&nbsp;</span>= Failed privacy test</div>
+      <div class="left-heading"><span class="na">–</span>= No such feature</div>
     </div>` +
   htmlTable({headers, body,
                     className:"comparison-table"}) +
