@@ -29,26 +29,34 @@ const event_tests = [
 //  [`new Event("test").timeStamp % 100`, `0`],
 ];
 
+const evaluate = (script) => {
+  if (typeof script === "function") {
+    return script();
+  } else {
+    return eval(script);
+  }
+};
+
 const test_pairs = (pairs) => pairs.map(
-  ({expression, desired_expression, description }) => {
+  ({name, expression, desired_expression, description }) => {
     let actual_value, desired_value;
     let failure = false;
     try {
-      actual_value = eval(expression);
+      actual_value = evaluate(expression);
     } catch (e) {
       actual_value = e.message;
       failure = true;
       console.log(e);
     }
     try {
-      desired_value = eval(desired_expression);
+      desired_value = evaluate(desired_expression);
     } catch (e) {
       desired_value = e.message;
       failure = true;
       console.log(e);
     }
     const passed = !failure && (actual_value === desired_value);
-    return { expression, desired_expression, actual_value, desired_value,
+    return { name, expression, desired_expression, actual_value, desired_value,
              passed, description };
   });
 
@@ -124,6 +132,26 @@ const run_in_worker = function (aFunction) {
   });
 };
 
+const font_tests = [
+  { name: "System font detection",
+    description: "Detecting the presence of a font installed on the user's system.",
+    expression: () => {
+      let div1 = document.createElement("div1");
+      div1.innerText = "font fingerprinting";
+      document.body.appendChild(div1);
+      div1.setAttribute("style", "font-family: Monoton1, monospace");
+      let div2 = document.createElement("div2");
+      div2.innerText = "font fingerprinting";
+      document.body.appendChild(div2);
+      div2.setAttribute("style", "font-family: Monoton1, sans-serif");
+      let width1 = div1.getBoundingClientRect().width;
+      let width2 = div2.getBoundingClientRect().width;
+      let diff = width2-width1;
+      return Math.abs(diff) > 0.01;
+    },
+    desired_expression: `true` }
+];
+
 const list_to_map = (list, keyFn) => {
   let obj = {};
   for (let item of list) {
@@ -146,7 +174,8 @@ const run_all_tests = async function () {
     test_pairs(navigator_tests),
     test_pairs(screen_tests),
     test_pairs(mouse_event_tests),
+    test_pairs(font_tests)
   );
   return list_to_map(all_tests,
-                     x => x.expression + (x.worker ? " [Worker]" : ""));
+                     x => x.name ?? (x.expression + (x.worker ? " [Worker]" : "")));
 };
