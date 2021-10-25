@@ -138,12 +138,12 @@ const font_tests = [
     expression: () => {
       let div1 = document.createElement("div1");
       div1.innerText = "font fingerprinting";
-      document.body.appendChild(div1);
       div1.setAttribute("style", "font-family: Monoton, monospace");
       let div2 = document.createElement("div2");
       div2.innerText = "font fingerprinting";
-      document.body.appendChild(div2);
       div2.setAttribute("style", "font-family: Monoton, sans-serif");
+      document.body.appendChild(div1);
+      document.body.appendChild(div2);
       let width1 = div1.getBoundingClientRect().width;
       let width2 = div2.getBoundingClientRect().width;
       let diff = width2-width1;
