@@ -256,9 +256,9 @@ const content = (results, jsonFilename) => {
       <div class="right-heading">Updated ${dateString(results.timeStarted)}</div>
     </div>
     <div class="banner" id="legend">
-      <div class="right-heading"><span class="good">&nbsp;</span>= Passed privacy test</div>
-      <div class="middle-heading"><span class="bad">&nbsp;</span>= Failed privacy test</div>
-      <div class="left-heading"><span class="na">–</span>= No such feature</div>
+      <div><span class="good">&nbsp;</span>= Passed privacy test</div>
+      <div><span class="bad">&nbsp;</span>= Failed privacy test</div>
+      <div><span class="na">–</span>= No such feature</div>
     </div>` +
   htmlTable({headers, body,
                     className:"comparison-table"}) +
