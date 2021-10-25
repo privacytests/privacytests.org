@@ -157,11 +157,20 @@ p.footer {
   </div>
 </div>
     
-  <div class="copy"><h1 id="privacytestsorg-faq">PrivacyTests.org FAQ</h1>
-<h2 id="how-do-we-know-these-results-are-correct">How do we know these results are correct?</h2>
-<p>We attempt to be as objective as possible -- the same tests are run on every browser.</p>
-<h2 id="isnt-web-privacy-an-arms-race-that-will-never-end">Isn&#39;t web privacy an arms race that will never end?</h2>
-<p>We won&#39;t know until we try! If browsers can raise the cost of web tracking so that mass surveillance is no longer economical, then perhaps the arms race will come to an end.</p>
+  <div class="copy"><h1 id="news">News</h1>
+<h2 id="issue-2-2021-10-25"><a href="/">Issue 2</a> (2021-10-25)</h2>
+<h3 id="correction">Correction</h3>
+<p>Our first issue of PrivacyTests.org had an important error in the results, incorrectly indicating that Safari does not stop tracking via third-party cookies. This incorrect result (Safari cookie protections were assigned an <img src="/x-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="fail"> when it should have been a <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="pass">) seems to have happened because the Selenium Webdriver library I had been using to launch and control the various web browsers <a href="https://bugs.webkit.org/show_bug.cgi?id=222583">apparently disables Safari&#39;s Intelligent Tracking Protection feature</a>. I am sorry for the error. </p>
+<p>Thanks to John Wilander and Steven Englehardt for bringing this issue to my attention. This new issue of PrivacyTests.org results shows the correct <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="pass"> for cookie protections in Safari.</p>
+<h3 id="code-updates">Code updates</h3>
+<p>Major updates have been made to the <a href="https://github.com/arthuredelstein/privacytests.org">testing code</a>. Because of the error mentioned above, I decided to discontinue the use of Selenium Webdriver altogether in the PrivacyTests.org. Instead, the code has now been extensively rewritten to launch each web browser by executing a shell command, and to direct the web browsers to testing pages via shell commands as well. This new approach has the advantage of more closely mimicking a web browser in its &quot;natural&quot; state. The new code also makes it possible to launch Safari in both standard windows and Private Windows.</p>
+<p>Follwing this rewrite, the PrivacyTests.org testing code now runs on macOS only. I plan to extend the new code to be compatible with Linux and Windows in the future.</p>
+<h3 id="new-results">New results</h3>
+<p>Due to popular request, I have added Vivaldi (currently version 4.3) to the roster of tested browsers. In addition, since Issue 1, some browsers have been updated to the latest release versions, including Brave 1.31, Edge 95.0, and Safari 15.0.</p>
+<h3 id="thank-you">Thank you</h3>
+<p>Thanks to everyone who gave feedback following the launch. Everyone&#39;s comments and suggestions for future improvements are much appreciated!</p>
+<h2 id="issue-1-2021-10-13"><a href="/archive/issue1.html">Issue 1</a> (2021-10-13)</h2>
+<p>PrivacyTests.org went live for the first time, presenting desktop browser privacy test results for Brave 1.30, Chrome 94.0, Edge 94.0, Firefox 93.0, Opera 80.0, Safari 14.1, and Tor 10.5.</p>
 </div>
 
     </div>
