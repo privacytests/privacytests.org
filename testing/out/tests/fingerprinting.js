@@ -80,9 +80,9 @@ const window_property_tests = [
   { description: "Position, in pixels, of the top edge of the browser window on screen.",
     expression: `screenY`,
     desired_expression: 0},
-  { description: "Width of the browser window in pixels, including browser chrome.",
+ /* { description: "Width of the browser window in pixels, including browser chrome.",
     expression: `outerWidth`,
-    desired_expression: `innerWidth`},
+    desired_expression: `innerWidth`},*/
   { description: "Height of the browser window in pixels, including browser chrome.",
     expression: `outerHeight`,
     desired_expression: `innerHeight`},
@@ -134,7 +134,7 @@ const run_in_worker = function (aFunction) {
 
 const font_tests = [
   { name: "System font detection",
-    description: "Detecting the presence of a font installed on the user's system.",
+    description: "Web pages can detect the presence of a font installed on the user's system. The presence of absence of various fonts is commonly used to fingerprint users.",
     expression: () => {
       let div1 = document.createElement("div1");
       div1.innerText = "font fingerprinting";
