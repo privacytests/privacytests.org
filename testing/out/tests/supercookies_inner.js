@@ -453,6 +453,19 @@ let tests = {
       return await response.text();
     }
   },
+  "Stream isolation": {
+    description: "Browsers that use Tor can use a different Tor circuit per top-level website.",
+    write: () => {},
+    read: async () => {
+      let response = await fetch("https://wtfismyip.com/json");
+      let wtfJSON = await response.json();
+      if (wtfJSON["YourFuckingTorExit"]) {
+        return json["YourFuckingIPAddress"];
+      } else {
+        throw new Error("Unsupported");
+      }
+    }
+  }
 };
 
 runAllTests(tests);
