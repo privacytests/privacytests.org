@@ -6,7 +6,6 @@ const fetchJSON = async (...fetchArgs) => {
 };
 
 const testTorAndIp = async () => {
-  const description = ;
   let wtfJSON = await fetchJSON("https://wtfismyip.com/json");
   const ipAddress = wtfJSON["YourFuckingIPAddress"];
   console.log(wtfJSON);
