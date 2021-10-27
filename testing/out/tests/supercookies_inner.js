@@ -447,6 +447,17 @@ let tests = {
       return await response.text();
     }
   },
+  "AltSvc": {
+    description: "AltSvc allows the server to indicate to the web browser that a resource should be loaded on a different server. Because this is a persistent setting, it could be used to track users across websites if it is not correctly partitioned.",
+    write: async () => {
+      for (let i = 0; i < 10; ++i) {
+        await fetch("https://h3.arthuredelstein.net/protocol");
+      }
+    },
+    read: async () => {
+      return await fetch("https://h3.arthuredelstein.net/protocol");
+    }
+  }
 };
 
 runAllTests(tests);
