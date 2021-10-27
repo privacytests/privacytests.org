@@ -134,7 +134,7 @@ const run_in_worker = function (aFunction) {
 
 const font_tests = [
   { name: "System font detection",
-    description: "Web pages can detect the presence of a font installed on the user's system. The presence of absence of various fonts is commonly used to fingerprint users.",
+    description: "Web pages can detect the presence of a font installed on the user's system. The presence or absence of various fonts is commonly used to fingerprint users.",
     expression: () => {
       let div1 = document.createElement("div1");
       div1.innerText = "font fingerprinting";
