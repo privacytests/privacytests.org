@@ -205,7 +205,12 @@ const runTests = async (browser) => {
     // Misc
     const ipAddress = await fetch_ipAddress();
     console.log({ipAddress});
-    const misc = await browser.runTest(`${iframe_root_same}/misc.html?ipAddress=${ipAddress}`);
+    const misc = await browser.runTest(`${iframe_root_same}/misc.html`);
+    const misc_ipAddressLeak = misc["IP address leak"];
+    let browser_ipAddress = misc_ipAddressLeak["ipAddress"];
+    delete misc_ipAddressLeak["ipAddress"];
+    misc_ipAddressLeak["IP addressed masked"] = ipAddress !== browser_ipAddress;
+    misc_ipAddressLeak["passed"] = misc_ipAddressLeak["IP addressed masked"];
     // Query
     const queryParametersRaw = await browser.runTest(queryParameterTestUrl(TRACKING_QUERY_PARAMETERS));
     const query = annotateQueryParameters(queryParametersRaw);
