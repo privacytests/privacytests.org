@@ -406,15 +406,18 @@ let tests = {
       return (await response.json()).password;
     }
     },*/
-  "H2 connection": {
-    description: "HTTP/2 is a web connection protocol introduced in 2015. Some browsers re-use HTTP/2 connections across websites and can thus be used to track users.",
-    write: async (secret) => {
-      await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`);
-    },
-    read: async () => {
-      let response = await fetch(`https://h2.arthuredelstein.net:8902/?mode=read`);
-      return await response.text();
-    }
+  "AltSvc": {
+      description: "AltSvc allows the server to indicate to the web browser that a resource should be loaded on a different server. Because this is a persistent setting, it could be used to track users across websites if it is not correctly partitioned.",
+      write: async () => {
+        for (let i = 0; i < 4; ++i) {
+          await fetch("https://h3.arthuredelstein.net:4433/protocol");
+          await sleepMs(500);
+        }
+      },
+      read: async () => {
+        let response = await fetch("https://h3.arthuredelstein.net:4433/protocol");
+        return await response.text();
+      }
   },
   "H1 connection": {
     description: "HTTP/1.x are the classic web connection protocols. If these connections are re-used across websites, they can be used to track users.",
@@ -426,12 +429,22 @@ let tests = {
       return await response.text();
     }
   },
+  "H2 connection": {
+    description: "HTTP/2 is a web connection protocol introduced in 2015. Some browsers re-use HTTP/2 connections across websites and can thus be used to track users.",
+    write: async (secret) => {
+      await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`);
+    },
+    read: async () => {
+      let response = await fetch(`https://h2.arthuredelstein.net:8902/?mode=read`);
+      return await response.text();
+    }
+  },
   "H3 connection": {
     description: "HTTP/3 is a new standard HTTP connection protocol, still in draft but widely supported by browsers. If it is not partitioned, it can be used to track users across websites.",
     write: async (secret) => {
       // Ensure that we can switch over to h3 via alt-svc:
       for (let i = 0; i<3; ++i) {
-        await fetch(`https://h3.arthuredelstein.net:4433/`);
+        await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
         await sleepMs(500);
       }
       // Are we now connecting over h3?
