@@ -4,12 +4,20 @@ This project runs browser privacy tests (fingerprinting resistance, partitioning
 **NOTE**: privacytests.org no longer uses selenium because it is incompatible with some privacy protections such as Safari's ITP. The code is undergoing many changes and currently only works on macOS. There is no longer
 browserstack support.
 
-To set up:
+## Set up
+
+First on Linux (for when it is supported in the future):
+
+`sudo apt-get install libpng-dev libxtst-dev libx11-dev`
+
+Then, on all platforms:
 
 `npm install`
 
 * test.js runs the browser tests.
 * render.js takes the results of the browser tests and renders them to a web page.
+
+## Usage
 
 To run tests, point to a .yaml file:
 
@@ -35,6 +43,8 @@ are optional, except `browser`:
 - browser: firefox         # On to the next test item in the array...
   ...
 ```
+
+## Development
 
 To hack on the code, and get fast feedback, use:
 
