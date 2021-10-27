@@ -49,6 +49,16 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // when reporting results, to make them easier to reproduce.
 const gitHash = () => execSync('git rev-parse HEAD', { cwd: __dirname}).toString().trim();
 
+// ## Prepare system
+
+const installTestFont = () => {
+  const homedir = os.homedir();
+  const fontDestination = `${homedir}/Library/Fonts/Monoton-Regular.ttf`;
+  if (!fs.existsSync(fontDestination)) {
+    fs.copyFileSync(`${__dirname}/Monoton-Regular.ttf`, fontDestination);
+  }
+};
+
 // ## Testing
 
 // Borrowed from https://github.com/brave/brave-core/blob/50df76971db6a6023b3db9aead0827606162dc9c/browser/net/brave_site_hacks_network_delegate_helper.cc#L29
@@ -244,6 +254,7 @@ const main = async () => {
 //  logging.installConsoleHandler();
 //  logging.getLogger().setLevel(logging.Level.ALL);
 //  logging.getLogger("browser").setLevel(logging.Level.ALL);
+  installTestFont();
   let { _ : [configFile], debug, only, list, repeat, aggregate } =
     minimist(process.argv.slice(2), opts = { default: { aggregate: true }});
   if (list) {
