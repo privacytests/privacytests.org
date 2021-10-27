@@ -8,10 +8,10 @@
   <body>
     <script src="./post_data.js"></script>
     <script>
-     const default = new URLSearchParams(window.location.search).get("default");
+     const secret = new URLSearchParams(window.location.search).get("default");
      let favicon = document.getElementById("favicon");
      const baseURI = "https://arthuredelstein.net/browser-privacy-live";
-     favicon.setAttribute("href", `${baseURI}/resource?type=favicon&key=${default}`);
+     favicon.setAttribute("href", `${baseURI}/resource?type=favicon&key=${secret}`);
      addEventListener("message", ({data}) => {
        document.body.setAttribute("data-test-results", JSON.stringify(data));
        postData(data);
