@@ -460,7 +460,7 @@ let tests = {
       const response = await fetch("https://wtfismyip.com/json");
       const wtfJSON = await response.json();
       const ipAddress = wtfJSON["YourFuckingIPAddress"];
-      const onionooResponse = await fetch(`https://onionoo.torproject.org/details?limit=1&search=2001:67c:289c::20`);
+      const onionooResponse = await fetch(`https://onionoo.torproject.org/details?limit=1&search=${ipAddress}`);
       const onionooJSON = await onionooResponse.json();
       if (onionooJSON.relays.length > 0) {
         return ipAddress;
