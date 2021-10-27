@@ -12,7 +12,7 @@ const dateFormat = require('dateformat');
 const YAML = require('yaml');
 const os = require('os');
 const process = require('process');
-
+const fetch = require('node-fetch');
 const render = require('./render');
 const { Browser } = require("./browser.js");
 
@@ -50,8 +50,22 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // when reporting results, to make them easier to reproduce.
 const gitHash = () => execSync('git rev-parse HEAD', { cwd: __dirname}).toString().trim();
 
+// Fetch results from a json API.
+const fetchJSON = async (...fetchArgs) => {
+  let response = await fetch(...fetchArgs);
+  return response.json();
+};
+
+// Fetch server reflexive IP address
+const fetch_ipAddress = async () => {
+  const wtfismyip = await fetchJSON("https://wtfismyip.com/json");
+  return wtfismyip["YourFuckingIPAddress"];
+};
+
 // ## Prepare system
 
+// Install Monoton as a system font so that we can see if
+// it is leaked by browsers.
 const installTestFont = () => {
   const homedir = os.homedir();
   const userFontDir = {
@@ -189,7 +203,9 @@ const runTests = async (browser) => {
     // Fingerprinting
     const fingerprinting = await browser.runTest(`${iframe_root_same}/fingerprinting.html`);
     // Misc
-    const misc = await browser.runTest(`${iframe_root_same}/misc.html`);
+    const ipAddress = await fetch_ipAddress();
+    console.log({ipAddress});
+    const misc = await browser.runTest(`${iframe_root_same}/misc.html?ipAddress=${ipAddress}`);
     // Query
     const queryParametersRaw = await browser.runTest(queryParameterTestUrl(TRACKING_QUERY_PARAMETERS));
     const query = annotateQueryParameters(queryParametersRaw);
