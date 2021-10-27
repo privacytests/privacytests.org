@@ -191,16 +191,9 @@ let tests = {
   },
   "favicon cache": {
     description: "A favicon is an icon that represents a website, typically shown in browser tab and bookmarks menu. If the favicon cache is not partitioned, it can be used to track users across websites.",
-    write: (key) => {
-      parent.postMessage({
-        faviconURI: testURI("resource", "favicon", key)
-      }, "*");
-      return key;
-    },
+    write: (key) => key,
     read: async (key) => {
-      parent.postMessage({
-        faviconURI: testURI("resource", "favicon", key)
-      }, "*");
+      // Wait for the favicon to load (defined in supercookies.html)
       await sleepMs(500);
       let response = await fetch(
         testURI("ctr", "favicon", key), {"cache": "reload"});
