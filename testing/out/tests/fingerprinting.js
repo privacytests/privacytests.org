@@ -90,6 +90,15 @@ const window_property_tests = [
 //    desired_expression: 1 }
 ];
 
+const integerFromMediaQuery = (key, unit, maxValue) => {
+  for (let i = 0; i <= maxValue; ++i) {
+    if (window.matchMedia(`(${key}: ${i}${unit})`).matches) {
+      return i;
+    }
+  }
+  return undefined;
+};
+
 const screen_tests = [
   { description: "Width of the user's screen, in pixels.",
     expression: `screen.width`,
@@ -97,6 +106,14 @@ const screen_tests = [
   { description: "Height of the user's screen, in pixels.",
     expression: `screen.height`,
     desired_expression: `innerHeight` },
+  { description: "Width of the user's screen in pixels.",
+    name: "Media query screen width",
+    expression: () => integerFromMediaQuery("device-width", "px", 5000),
+    desired_expression: `innerWidth`},
+  { description: "Height of the user's screen in pixels.",
+    name: "Media query screen height",
+    expression: () => integerFromMediaQuery("device-height", "px", 5000),
+    desired_expression: `innerHeight`},
 ];
 
 let navigator_tests = [
