@@ -9,7 +9,7 @@ const testTorAndIp = async () => {
   let wtfJSON = await fetchJSON("https://wtfismyip.com/json");
   const ipAddress = wtfJSON["YourFuckingIPAddress"];
   console.log(wtfJSON);
-  let onionooJSON = await fetchJSON(`https://onionoo.torproject.org/details?limit=1&search=${ipAddress}}`);
+  let onionooJSON = await fetchJSON(`https://onionoo.torproject.org/details?limit=1&search=${ipAddress}`);
   console.log(onionooJSON);
   let IsTorExit = (onionooJSON.relays.length > 0);
   return {
