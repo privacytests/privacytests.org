@@ -11,6 +11,7 @@ const minimist = require('minimist');
 const dateFormat = require('dateformat');
 const YAML = require('yaml');
 const os = require('os');
+const process = require('process');
 
 const render = require('./render');
 const { Browser } = require("./browser.js");
@@ -53,7 +54,14 @@ const gitHash = () => execSync('git rev-parse HEAD', { cwd: __dirname}).toString
 
 const installTestFont = () => {
   const homedir = os.homedir();
-  const fontDestination = `${homedir}/Library/Fonts/Monoton-Regular.ttf`;
+  const userFontDir = {
+    "darwin": `${homedir}/Library/Fonts`,
+    "linux": `${homedir}/.local/share/fonts`
+  }[process.platform];
+  if (!fs.existsSync(userFontDir)) {
+    fs.mkdirSync(userFontDir, {recursive: true});
+  }
+  const fontDestination = `${userFontDir}/Monoton-Regular.ttf`;
   if (!fs.existsSync(fontDestination)) {
     fs.copyFileSync(`${__dirname}/Monoton-Regular.ttf`, fontDestination);
   }
