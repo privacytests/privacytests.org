@@ -415,7 +415,8 @@ let tests = {
         }
       },
       read: async () => {
-        return await fetch("https://h3.arthuredelstein.net:4433/protocol");
+        let response = await fetch("https://h3.arthuredelstein.net:4433/protocol");
+        return await response.text();
       }
   },
   "H1 connection": {
