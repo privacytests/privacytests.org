@@ -457,10 +457,13 @@ let tests = {
     description: "Browsers that use Tor can use a different Tor circuit per top-level website.",
     write: () => {},
     read: async () => {
-      let response = await fetch("https://wtfismyip.com/json");
-      let wtfJSON = await response.json();
-      if (wtfJSON["YourFuckingTorExit"]) {
-        return json["YourFuckingIPAddress"];
+      const response = await fetch("https://wtfismyip.com/json");
+      const wtfJSON = await response.json();
+      const ipAddress = wtfJSON["YourFuckingIPAddress"];
+      const onionooResponse = await fetch(`https://onionoo.torproject.org/details?limit=1&search=2001:67c:289c::20`);
+      const onionooJSON = await onionooResponse.json();
+      if (onionooJSON.relays.length > 0) {
+        return ipAddress;
       } else {
         throw new Error("Unsupported");
       }
