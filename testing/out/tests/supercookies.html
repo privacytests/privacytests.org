@@ -9,7 +9,7 @@
     <script src="./post_data.js"></script>
     <script>
      const param = (key) => new URLSearchParams(window.location.search).get(key);
-     const secret = param("default") ?? param("favicon cache");
+     const secret =  param("favicon cache") ?? param("default");
      let favicon = document.getElementById("favicon");
      const baseURI = "https://arthuredelstein.net/browser-privacy-live";
      favicon.setAttribute("href", `${baseURI}/resource?type=favicon&key=${secret}`);
