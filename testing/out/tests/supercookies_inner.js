@@ -402,9 +402,13 @@ let tests = {
   "AltSvc": {
       description: "AltSvc allows the server to indicate to the web browser that a resource should be loaded on a different server. Because this is a persistent setting, it could be used to track users across websites if it is not correctly partitioned.",
       write: async () => {
+        let response;
         for (let i = 0; i < 4; ++i) {
-          await fetch("https://h3.arthuredelstein.net:4433/protocol");
-          await sleepMs(500);
+          response = await fetch("https://h3.arthuredelstein.net:4433/protocol");
+          await sleepMs(100);
+        }
+        if ((await response.text()) === "h2") {
+          throw new Error("Unsupported");
         }
       },
       read: async () => {
