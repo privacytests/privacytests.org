@@ -123,9 +123,9 @@ const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDiff
     unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith("Error: No requests received") : false);
     unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith("Error: image load failed") : false);
     let testFailed = !unsupported && (!readSameFirstParty || (readSameFirstParty.startsWith("Error:") && !readSameFirstPartyFailedToFetch));
-    let passed = (testFailed || unsupported)
-      ? undefined
-      : (readSameFirstParty !== readDifferentFirstParty) ||
+    let passed = (testFailed || unsupported) ?
+      undefined :
+      (readSameFirstParty !== readDifferentFirstParty) ||
       (readSameFirstPartyFailedToFetch && readDifferentFirstPartyFailedToFetch);
     jointResult[test] = { write, read, unsupported, readSameFirstParty, readDifferentFirstParty, passed, testFailed, description };
   }
@@ -248,7 +248,6 @@ const runTests = async (browser) => {
 const runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
-  let git = await gitHash();
   for (let config of configList) {
     try {
       console.log("\nnext test:", config);
@@ -270,8 +269,8 @@ const runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
       console.log(e);
     }
   }
-  let timeStopped = new Date().toISOString();
-  return { all_tests, git, timeStarted, timeStopped };
+  const timeStopped = new Date().toISOString();
+  return { all_tests, git: gitHash(), timeStarted, timeStopped };
 };
 
 // ## Writing results
@@ -294,7 +293,7 @@ const expandConfigList = (configList, repeat = 1) => {
   let results = [];
   for (let config of configList) {
     if (!config.disable) {
-      config2 = deepCopy(config);
+      const config2 = deepCopy(config);
       delete config2["repeat"];
       results = [].concat(results, Array((config.repeat ?? 1) * (repeat ?? 1)).fill(config2));
     }
