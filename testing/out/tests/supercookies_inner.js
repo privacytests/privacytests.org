@@ -5,6 +5,16 @@ const baseURI = "https://arthuredelstein.net/browser-privacy-live/";
 
 let testURI = (path, type, key) => `${baseURI}${path}?type=${type}&key=${key}`;
 
+const { ipAddress, usingTor } = await (async () => {
+  const response = await fetch("https://wtfismyip.com/json");
+  const wtfJSON = await response.json();
+  const ipAddress = wtfJSON["YourFuckingIPAddress"];
+  const onionooResponse = await fetch(`https://onionoo.torproject.org/details?limit=1&search=${ipAddress}`);
+  const onionooJSON = await onionooResponse.json();
+  const usingTor = onionooJSON.relays.length > 0;
+  return { ipAddress, usingTor };
+})();
+
 let tests = {
   "cookie": {
     description: "The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website's behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.",
@@ -459,14 +469,13 @@ let tests = {
   },
   "Stream isolation": {
     description: "Browsers that use Tor can use a different Tor circuit per top-level website.",
-    write: () => {},
+    write: () => {
+      if (!usingTor) {
+        throw new Error("Unsupported");
+      }
+    },
     read: async () => {
-      const response = await fetch("https://wtfismyip.com/json");
-      const wtfJSON = await response.json();
-      const ipAddress = wtfJSON["YourFuckingIPAddress"];
-      const onionooResponse = await fetch(`https://onionoo.torproject.org/details?limit=1&search=${ipAddress}`);
-      const onionooJSON = await onionooResponse.json();
-      if (onionooJSON.relays.length > 0) {
+      if (usingTor) {
         return ipAddress;
       } else {
         throw new Error("Unsupported");
