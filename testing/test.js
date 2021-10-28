@@ -251,20 +251,18 @@ const runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
   let git = await gitHash();
   for (let config of configList) {
     try {
-      let { browser, prefs, incognito, tor } = config;
       console.log("\nnext test:", config);
-      let browserObject = new Browser(config);
+      const { browser, incognito, tor } = config;
+      const timeStarted = new Date().toISOString();
+      const browserObject = new Browser(config);
       await browserObject.launch();
-      let timeStarted = new Date().toISOString();
-      let reportedVersion = browserObject.version;
-      console.log(`${browser} version found: ${reportedVersion}`);
-      let testResults = await runTests(browserObject);
-      //      console.log({shouldQuit});
-      //console.log(testResults);
-      all_tests.push({ browser, reportedVersion,
-                       testResults, timeStarted,
-                       capabilities: {os: os.type(), os_version: os.version() },
-                       incognito, tor });
+      const testResults = await runTests(browserObject);
+      all_tests.push({
+        browser, incognito, tor,
+        testResults, timeStarted,
+        reportedVersion: browserObject.version,
+        capabilities: {os: os.type(), os_version: os.version() },
+      });
       if (shouldQuit) {
         await browserObject.kill();
       }
