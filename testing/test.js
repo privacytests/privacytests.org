@@ -1,6 +1,5 @@
 // # test.js: Runs privacy tests on browsers
 //
-// Define a set of browsers to test in a YAML file.
 // Usage: `node index config/production.yaml`
 
 // ## imports
@@ -16,32 +15,10 @@ const fetch = require('node-fetch');
 const render = require('./render');
 const { Browser } = require("./browser.js");
 
-const DEFAULT_TIMEOUT_MS = 60000;
-
 // ## Utility functions
 
 // Returns a deep copy of a JSON object.
 const deepCopy = (x) => JSON.parse(JSON.stringify(x));
-
-// Read config file in YAML or JSON.
-const parseConfigFile = (configFile, repeat = 1) => {
-  let configFileContents = fs.readFileSync(configFile, 'utf8');
-  let rawConfigs = YAML.parse(configFileContents);
-  return expandConfigList(rawConfigs, repeat);
-};
-
-// Takes a list of browser configs, and repeats or removes them as needed.
-const expandConfigList = (configList, repeat = 1) => {
-  let results = [];
-  for (let config of configList) {
-    if (!config.disable) {
-      config2 = deepCopy(config);
-      delete config2["repeat"];
-      results = [].concat(results, Array((config.repeat ?? 1) * (repeat ?? 1)).fill(config2));
-    }
-  }
-  return results;
-};
 
 // Returns a promise that sleeps for the given millseconds.
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -65,8 +42,8 @@ const fetch_ipAddress = async () => {
 // ## Prepare system
 
 // Install Monoton as a system font so that we can see if
-// it is leaked by browsers.
-const installTestFont = () => {
+// it is leaked by browsers. NOTE: Only works in macOS currently.
+const installTestFontIfNeeded = () => {
   const homedir = os.homedir();
   const userFontDir = {
     "darwin": `${homedir}/Library/Fonts`,
@@ -82,6 +59,13 @@ const installTestFont = () => {
 };
 
 // ## Testing
+
+// We use two domains for supercookies and navigation tests.
+// The "same" domain is the one that is used for simluated third-party tracker
+// and one of the two first parties. The "different" domain is the other
+// first party we use.
+const iframe_root_same = "https://arthuredelstein.net/test-pages";
+const iframe_root_different = "https://test-pages.privacytests.org";
 
 // Borrowed from https://github.com/brave/brave-core/blob/50df76971db6a6023b3db9aead0827606162dc9c/browser/net/brave_site_hacks_network_delegate_helper.cc#L29
 // and https://github.com/jparise/chrome-utm-stripper:
@@ -126,16 +110,7 @@ const TRACKING_QUERY_PARAMETERS =
     "igshid": "Instagram tracking parameter",
   };
 
-const queryParameterTestUrl = (parameters) => {
-  let secret = Math.random().toString().slice(2);
-  let baseURL = "https://arthuredelstein.net/test-pages/query.html";
-  let queryString = `?controlParam=controlValue`;
-  for (let param of Object.keys(parameters)) {
-    queryString += `&${param}=${secret}`;
-  }
-  return baseURL + queryString;
-};
-
+// Takes the results of supercookie or navigation tests
 const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty) => {
   let jointResult = {};
   for (let test in readResultsDifferentFirstParty) {
@@ -155,18 +130,91 @@ const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDiff
     jointResult[test] = { write, read, unsupported, readSameFirstParty, readDifferentFirstParty, passed, testFailed, description };
   }
   return jointResult;
-}
+};
 
-const annotateQueryParameters = (queryParametersRaw) => {
-  let query = {};
+// Supercookie tests. Returns { "test1": { results1 }, "test2": ... }
+const runSupercookieTests = async (browser) => {
+  const secret = Math.random().toString().slice(2);
+  const writeResults = await browser.runTest(`${iframe_root_same}/supercookies.html?mode=write&default=${secret}`);
+  let readParams = "";
+  for (let [test, data] of Object.entries(writeResults)) {
+    if ((typeof data["result"]) === "string") {
+      readParams += `&${test}=${encodeURIComponent(data["result"])}`;
+    }
+  }
+  const readResultsSameFirstParty = await browser.runTest(`${iframe_root_same}/supercookies.html?mode=read${readParams}`);
+  const readResultsDifferentFirstParty = await browser.runTest(`${iframe_root_different}/supercookies.html?mode=read${readParams}`);
+  const supercookies = getJointResult(writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty);
+  return supercookies;
+};
+
+// Navigation tests. Returns { "test1": { results1 }, "test2": ... }
+const runNavigationTests = async (browser) => {
+  const secret = Math.random().toString().slice(2);
+  const [writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2] = await browser.runTest(`${iframe_root_same}/navigation.html?mode=write&default=${secret}`, 3);
+  const navigation = getJointResult(writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2);
+  return navigation;
+};
+
+// Fingerprinting tests. Returns { "test1": { results1 }, "test2": ... }
+const runFingerprintingTests = async (browser) => {
+  return await browser.runTest(`${iframe_root_same}/fingerprinting.html`);
+};
+
+// Misc tests. Returns { "test1": { results1 }, "test2": ... }
+const runMiscTests = async (browser) => {
+  const ipAddress = await fetch_ipAddress();
+  console.log({ ipAddress });
+  const misc = await browser.runTest(`${iframe_root_same}/misc.html`);
+  // Complete the IP address leak test. Do websites see the same IP address that
+  // this script does?
+  const misc_ipAddressLeak = misc["IP address leak"];
+  let browser_ipAddress = misc_ipAddressLeak["ipAddress"];
+  delete misc_ipAddressLeak["ipAddress"];
+  misc_ipAddressLeak["IP addressed masked"] = ipAddress !== browser_ipAddress;
+  misc_ipAddressLeak["passed"] = misc_ipAddressLeak["IP addressed masked"];
+  return misc;
+};
+
+// Generate the test URL for our tracking query parameter tests.
+// Takes each of the parameters in the form { k1: v1, ... } and
+// return a string URL with query string.
+const queryParameterTestUrl = (parameters) => {
+  let secret = Math.random().toString().slice(2);
+  let baseURL = "https://arthuredelstein.net/test-pages/query.html";
+  let queryString = `?controlParam=controlValue`;
+  for (let param of Object.keys(parameters)) {
+    queryString += `&${param}=${secret}`;
+  }
+  return baseURL + queryString;
+};
+
+// Tracking query parameter tests. Returns { "test1": { results1 }, "test2": ... }
+const runQueryTests = async (browser) => {
+  const queryParametersRaw = await browser.runTest(queryParameterTestUrl(TRACKING_QUERY_PARAMETERS));
+  let queryParameters = {};
   for (let param of Object.keys(TRACKING_QUERY_PARAMETERS)) {
-    query[param] = {
+      queryParameters[param] = {
       value: queryParametersRaw[param],
       passed: (queryParametersRaw[param] === undefined),
       description: TRACKING_QUERY_PARAMETERS[param],
     };
   }
-  return query;
+  return queryParameters;
+};
+
+// HTTPS tests. Returns { "test1": { results1 }, "test2": ... }
+const runHttpsTests = async (browser) => {
+  const https1 = await browser.runTest(`${iframe_root_same}/https.html`);
+  const [https2, https3] = await browser.runTest(
+    `http://upgradable.arthuredelstein.net/upgradable.html?source=address`, 2);
+  const https4Promise = browser.runTest(`http://insecure.arthuredelstein.net/insecure.html`);
+  const result = await Promise.race([sleep(10000), https4Promise]);
+  const https4 = result === undefined ?
+    { "Insecure website": { passed: true, result: "Insecure website never loaded" } } :
+    await https4Promise;
+  const https = Object.assign({}, https1, https2, https3, https4); // Merge results
+  return https;
 };
 
 // Run all of our privacy tests using selenium for a given driver. Returns
@@ -179,52 +227,16 @@ const annotateQueryParameters = (queryParametersRaw) => {
 //   "supercookies" : { ... } }
 const runTests = async (browser) => {
   try {
-    const secret = Math.random().toString().slice(2);
-    const iframe_root_same = "https://arthuredelstein.net/test-pages";
-    const iframe_root_different = "https://test-pages.privacytests.org";
-    // Supercookies
-    const writeResults = await browser.runTest(`${iframe_root_same}/supercookies.html?mode=write&default=${secret}`);
-    let readParams = "";
-    for (let [test, data] of Object.entries(writeResults)) {
-      if ((typeof data["result"]) === "string") {
-        readParams += `&${test}=${encodeURIComponent(data["result"])}`;
-      }
-    }
-    const readResultsSameFirstParty = await browser.runTest(`${iframe_root_same}/supercookies.html?mode=read${readParams}`);
-    const readResultsDifferentFirstParty = await browser.runTest(`${iframe_root_different}/supercookies.html?mode=read${readParams}`);
-    const supercookies = getJointResult(writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty);
-    // Navigation
-    const [writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2] =
-      await browser.runTest(`${iframe_root_same}/navigation.html?mode=write&default=${secret}`, 3);
-    const navigation = getJointResult(writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2);
+    const supercookies = await runSupercookieTests(browser);
+    const navigation = await runNavigationTests(browser);
+    const fingerprinting = await runFingerprintingTests(browser);
+    const misc = await runMiscTests(browser);
+    const query = await runQueryTests(browser);
+    const https = await runHttpsTests(browser); // Merge results
     // Move ServiceWorker from navigation to supercookies:
     supercookies["ServiceWorker"] = navigation["ServiceWorker"];
     delete navigation["ServiceWorker"];
-    // Fingerprinting
-    const fingerprinting = await browser.runTest(`${iframe_root_same}/fingerprinting.html`);
-    // Misc
-    const ipAddress = await fetch_ipAddress();
-    console.log({ipAddress});
-    const misc = await browser.runTest(`${iframe_root_same}/misc.html`);
-    const misc_ipAddressLeak = misc["IP address leak"];
-    let browser_ipAddress = misc_ipAddressLeak["ipAddress"];
-    delete misc_ipAddressLeak["ipAddress"];
-    misc_ipAddressLeak["IP addressed masked"] = ipAddress !== browser_ipAddress;
-    misc_ipAddressLeak["passed"] = misc_ipAddressLeak["IP addressed masked"];
-    // Query
-    const queryParametersRaw = await browser.runTest(queryParameterTestUrl(TRACKING_QUERY_PARAMETERS));
-    const query = annotateQueryParameters(queryParametersRaw);
-    // HTTPS
-    const https1 = await browser.runTest(`${iframe_root_same}/https.html`);
-    const [https2, https3] = await browser.runTest(
-      `http://upgradable.arthuredelstein.net/upgradable.html?source=address`, 2);
-    const https4Promise = browser.runTest(`http://insecure.arthuredelstein.net/insecure.html`);
-    const result = await Promise.race([sleep(10000), https4Promise]);
-    const https4 = result === undefined ?
-      { "Insecure website": { passed: true, result: "Insecure website never loaded" } }:
-      await https4Promise;
-    const https = Object.assign({}, https1, https2, https3, https4); // Merge results
-    return { supercookies, fingerprinting, misc, query, https, navigation };
+    return { supercookies, navigation, fingerprinting, misc, query, https };
   } catch (e) {
     console.log(e);
     return null;
@@ -277,31 +289,45 @@ const writeDataSync = (data) => {
   return filePath;
 };
 
-// The main program
-const main = async () => {
-  // Read config file and flags from command line
-//  logging.installConsoleHandler();
-//  logging.getLogger().setLevel(logging.Level.ALL);
-//  logging.getLogger("browser").setLevel(logging.Level.ALL);
-  installTestFont();
-  let { _ : [configFile], debug, only, list, repeat, aggregate } =
-    minimist(process.argv.slice(2), opts = { default: { aggregate: true }});
-  if (list) {
-    let capabilityList = await fetchBrowserstackCapabilities();
-    for (let capability of capabilityList) {
-      console.log(capability);
+// ## Config files
+
+// Takes a list of browser configs, and repeats or removes them as needed.
+const expandConfigList = (configList, repeat = 1) => {
+  let results = [];
+  for (let config of configList) {
+    if (!config.disable) {
+      config2 = deepCopy(config);
+      delete config2["repeat"];
+      results = [].concat(results, Array((config.repeat ?? 1) * (repeat ?? 1)).fill(config2));
     }
-  } else {
-    let configList = parseConfigFile(configFile, repeat);
-    let filteredConfigList = configList.filter(
-      d => only ? d.browser.startsWith(only) : true);
-    console.log("List of browsers to run:", filteredConfigList);
-    let dataFile = writeDataSync(await runTestsBatch(filteredConfigList,
-                                                     { shouldQuit: !debug }));
-    render.render({ dataFile, aggregate });
   }
+  return results;
+};
+
+// Read config file in YAML or JSON.
+const parseConfigFile = (configFile, repeat = 1) => {
+  let configFileContents = fs.readFileSync(configFile, 'utf8');
+  let rawConfigs = YAML.parse(configFileContents);
+  return expandConfigList(rawConfigs, repeat);
+};
+
+// ## Main program
+
+// Reads in command-line arguments, config file, runs the required
+// tests, writes them to a JSON data file, and then renders results to
+// a human-readable web page.
+const main = async () => {
+  installTestFontIfNeeded();
+  // Read config file and flags from command line
+  let { _ : [configFile], debug, only, repeat, aggregate } =
+    minimist(process.argv.slice(2), opts = { default: { aggregate: true }});
+  let configList = parseConfigFile(configFile, repeat);
+  let filteredConfigList = configList.filter(
+    d => only ? d.browser.startsWith(only) : true);
+  console.log("List of browsers to run:", filteredConfigList);
+  let dataFile = writeDataSync(await runTestsBatch(filteredConfigList,
+                                                     { shouldQuit: !debug }));
+  render.render({ dataFile, aggregate });
 };
 
 main();
-
-
