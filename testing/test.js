@@ -170,6 +170,7 @@ const runMiscTests = async (browser) => {
   // this script does?
   const misc_ipAddressLeak = misc["IP address leak"];
   let browser_ipAddress = misc_ipAddressLeak["ipAddress"];
+  // Don't record the actual IP address (for privacy)
   delete misc_ipAddressLeak["ipAddress"];
   misc_ipAddressLeak["IP addressed masked"] = ipAddress !== browser_ipAddress;
   misc_ipAddressLeak["passed"] = misc_ipAddressLeak["IP addressed masked"];
@@ -217,6 +218,12 @@ const runHttpsTests = async (browser) => {
   return https;
 };
 
+// Move a test from a source map to a destination map. (Mutates both maps.)
+const moveTestBetweenCategories = (testName, src, dest) => {
+  dest[testName] = src[testName];
+  delete src[testName];
+};
+
 // Run all of our privacy tests using selenium for a given driver. Returns
 // a map of test types to test result maps. Such as
 // `
@@ -233,9 +240,9 @@ const runTests = async (browser) => {
     const misc = await runMiscTests(browser);
     const query = await runQueryTests(browser);
     const https = await runHttpsTests(browser); // Merge results
-    // Move ServiceWorker from navigation to supercookies:
-    supercookies["ServiceWorker"] = navigation["ServiceWorker"];
-    delete navigation["ServiceWorker"];
+    // Move tests around to better categories:
+    moveTestBetweenCategories("ServiceWorker", navigation, supercookies);
+    moveTestBetweenCategories("Stream isolation", supercookies, misc);
     return { supercookies, navigation, fingerprinting, misc, query, https };
   } catch (e) {
     console.log(e);
