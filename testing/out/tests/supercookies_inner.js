@@ -1,6 +1,9 @@
 import { runAllTests, sleepMs } from "./test_utils.js";
 import * as IdbKeyVal from 'https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs';
 
+// Wrap the code for any browsers that don't support top-level await.
+(async () => {
+
 const baseURI = "https://arthuredelstein.net/browser-privacy-live/";
 
 let testURI = (path, type, key) => `${baseURI}${path}?type=${type}&key=${key}`;
@@ -487,3 +490,5 @@ let tests = {
 runAllTests(tests);
 
 console.log("hello from supercookies_inner.js");
+
+})();
