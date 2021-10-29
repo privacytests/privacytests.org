@@ -31,7 +31,7 @@ table.comparison-table tr:nth-child(2n) td {
 table.comparison-table tr td {
   min-width: 50px;
   max-width: 50px;
-  padding: 4px 0px;
+  padding: 0px;
   text-align: center;
 }
 table.comparison-table .subheading {
@@ -115,10 +115,15 @@ table.comparison-table .instructions {
   padding: 0px 10px;
   vertical-align: top;
 }
-#legend div .good, .na, .bad {
+#legend .marker {
   display: inline-block;
-  width:16px;
+  width: 20px;
+}
+.dataPoint {
+  display: inline-block;
+  width:100%;
   height:18px;
+  padding: 4px 0px;
 }
 .left-heading {
   text-align: start;
@@ -131,4 +136,28 @@ table.comparison-table .instructions {
 .right-heading {
   text-align: end;
   width: 25%
+}
+.tooltipParent .tooltipText {
+  background-color: black;
+  border-radius: 4px;
+  color: white;
+  font-size: 14px;
+  font-weight: normal;
+  max-width: 400px;
+  opacity: 0.85;
+  padding: 5px;
+  position:absolute;
+  text-align: start;
+  transform: translate(-10px, 30px);
+  visibility: hidden;
+  white-space: pre-wrap;
+  width: max-content;
+  z-index: 1;
+}
+.tooltipParent:hover {
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+}
+.tooltipParent:hover .tooltipText {
+  visibility: visible;
 }
