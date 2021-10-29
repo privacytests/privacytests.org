@@ -30,7 +30,7 @@ const htmlTable = ({ headers, body, className }) => {
       if (item.subheading) {
         let description = (item.description ?? "").replaceAll(/\s+/g, " ").trim();
         className = firstSubheading ? "first subheading" : "subheading";
-        elements.push(`<th colspan="4" class="${className}" title="${description}">${item.subheading}</th>`);
+        elements.push(`<th colspan="4" class="${className} tooltipParent">${item.subheading}<span class="tooltipText">${description}</span></th>`);
         firstSubheading = false;
       } else {
         elements.push(`<td>${item}</td>`);
@@ -86,6 +86,8 @@ const allHaveValue = (x, value) => {
   return Array.isArray(x) ? x.every(item => item === value) : x === value;
 };
 
+const htmlEscape = (s) => s.replace(/'/g, "&#39;");
+
 // Generates a table cell which indicates whether
 // a test passed, and includes the tooltip with
 // more information.
@@ -93,8 +95,9 @@ const testBody = ({passed, testFailed, tooltip, unsupported}) => {
   let allTestsFailed = allHaveValue(testFailed, true);
   let allUnsupported = allHaveValue(unsupported, true);
   let anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : (passed === false);
-  return `<div class='${(allUnsupported) ? "na" : (anyDidntPass ? "bad" : "good")}'
-title = '${ tooltip.replace(/'/g, "&#39;") }'> ${allUnsupported ? "&ndash;" : "&nbsp;"}
+  return `<div class='dataPoint tooltipParent ${(allUnsupported) ? "na" : (anyDidntPass ? "bad" : "good")}'
+> ${allUnsupported ? "&ndash;" : "&nbsp;"}
+<span class="tooltipText">${htmlEscape(tooltip)}</span>
 </div>`;
 };
 
@@ -161,7 +164,7 @@ let rowNames = Object.keys(bestResultsForCategory)
   for (let rowName of rowNames) {
     let row = [];
     let description = bestResultsForCategory[rowName]["description"] ?? "";
-    row.push(`<div style="word-break: ${wordBreak ?? "break-word"}" title=${JSON.stringify(description)}>${rowName}</div>`);
+    row.push(`<div class="tooltipParent" style="word-break: ${wordBreak ?? "break-word"}">${rowName}<span class="tooltipText">${description}</span></div>`);
     for (let resultMap of resultMaps) {
       let tooltip = tooltipFunction(resultMap[rowName]);
       let { passed, testFailed, unsupported } = resultMap[rowName];
@@ -256,9 +259,9 @@ const content = (results, jsonFilename) => {
       <div class="right-heading">Updated ${dateString(results.timeStarted)}</div>
     </div>
     <div class="banner" id="legend">
-      <div><span class="good">&nbsp;</span>= Passed privacy test</div>
-      <div><span class="bad">&nbsp;</span>= Failed privacy test</div>
-      <div><span class="na">–</span>= No such feature</div>
+      <div><span class="marker good">&nbsp;</span>= Passed privacy test</div>
+      <div><span class="marker bad">&nbsp;</span>= Failed privacy test</div>
+      <div><span class="marker na">–</span>= No such feature</div>
     </div>` +
   htmlTable({headers, body,
                     className:"comparison-table"}) +
