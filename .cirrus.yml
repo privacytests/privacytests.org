@@ -3,7 +3,7 @@ container:
 
 check_task:
   node_modules_cache:
-    folder: node_modules
-    fingerprint_script: cat package.json
-    populate_script: npm install
-  test_script: node test config/firefox.yaml
+    folder: testing/node_modules
+    fingerprint_script: cat testing/package.json
+    populate_script: cd testing && npm install
+  test_script: cd testing && node test config/firefox.yaml
