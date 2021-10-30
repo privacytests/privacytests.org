@@ -1,9 +1,9 @@
-container:
-  image: node:latest
+macos_instance:
+  image: big-sur-xcode
 
 check_task:
   node_modules_cache:
     folder: testing/node_modules
     fingerprint_script: cat testing/package.json
     populate_script: cd testing && npm install
-  test_script: cd testing && node test config/firefox.yaml
+  test_script: cd testing && node test config/safari.yaml
