@@ -45,6 +45,45 @@ const htmlTable = ({ headers, body, className }) => {
 const dropMicroVersion = (version) =>
   version.split(".").slice(0,2).join(".");
 
+// An inline script that shows a tooltip if the user clicks on any table element
+const tooltipScript = `
+  let visibleTooltip = null;
+  const hide = () => {
+    if (visibleTooltip) {
+      visibleTooltip.style.display = "none";
+      visibleTooltip.parentElement.style.backgroundColor = "";
+      visibleTooltip = null;
+    }
+  }
+  const show = (tooltip) => {
+    hide();
+    tooltip.style.display = "block";
+    tooltip.parentElement.style.backgroundColor = "yellow";
+    //console.log(tooltip.getBoundingClientRect());
+    //console.log(tooltip);
+    const rect = tooltip.getBoundingClientRect();
+    const overflowX = rect.right - document.documentElement.clientWidth + 8;
+    if (overflowX > 0) {
+      tooltip.style.transform="translate(" + (-overflowX) +"px, 0px)";
+    }
+    visibleTooltip = tooltip;
+  }
+  const table = document.querySelector(".comparison-table");
+  document.addEventListener("mouseover", e => {
+    if (e.target.classList.contains("tooltipParent")) {
+      const tooltip = e.target.querySelector(".tooltipText");
+      if (tooltip) {
+        show(tooltip);
+      }
+    } else if (e.target.classList.contains("tooltipText")) {
+      // do nothing
+    } else {
+      hide();
+    }
+  });
+  document.addEventListener("scroll", hide);
+`;
+
 // Takes the results for tests on a specific browser,
 // and returns an HTML fragment that will serve as
 // the header for the column showing thoses tests.
@@ -241,7 +280,7 @@ const resultsToTable = (results, title) => {
 
 // Create the title HTML for a results table.
 const tableTitle = `<div class="table-title">Desktop Browsers</div>
-  <div class="instructions">(point anywhere for more info)</a>`;
+  <div class="instructions">(hover/tap anywhere for info)</a>`;
 
 // Create dateString from the given date and time string.
 const dateString = (dateTime) => {
@@ -249,7 +288,7 @@ const dateString = (dateTime) => {
   return dateTimeObject.toISOString().split("T")[0];
 };
 
-// Creates the table content for a page.
+// Creates the content for a page.
 const content = (results, jsonFilename) => {
   let { headers, body } = resultsToTable(results.all_tests,  tableTitle);
   return `
@@ -269,7 +308,7 @@ const content = (results, jsonFilename) => {
          Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/${results.git}"
     >${results.git.slice(0,8)}</a>.
     Raw data in <a href="${jsonFilename}">JSON</a>.
-    </p>`;
+    </p>` + `<script type="module">${tooltipScript}</script>`;
 };
 
 // Reads in a file and parses it to a JSON object.
