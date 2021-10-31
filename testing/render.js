@@ -47,6 +47,7 @@ const dropMicroVersion = (version) =>
 
 // An inline script that shows a tooltip if the user clicks on any table element
 const tooltipScript = `
+  const table = document.querySelector(".comparison-table");
   let visibleTooltip = null;
   const hide = () => {
     if (visibleTooltip) {
@@ -57,31 +58,30 @@ const tooltipScript = `
   }
   const show = (tooltip) => {
     hide();
+    const viewportWidth = document.documentElement.clientWidth;
     tooltip.style.display = "block";
     tooltip.parentElement.style.backgroundColor = "yellow";
-    //console.log(tooltip.getBoundingClientRect());
-    //console.log(tooltip);
-    const rect = tooltip.getBoundingClientRect();
-    const overflowX = rect.right - document.documentElement.clientWidth + 8;
+    const tooltipRight = tooltip.getClientRects()[0].right;
+    const tableRight = table.getClientRects()[0].right;
+    const overflowX = tooltipRight- tableRight + 8;
     if (overflowX > 0) {
       tooltip.style.transform="translate(" + (-overflowX) +"px, 0px)";
     }
     visibleTooltip = tooltip;
   }
-  const table = document.querySelector(".comparison-table");
-  document.addEventListener("mouseover", e => {
+  document.addEventListener("mousedown", e => {
     if (e.target.classList.contains("tooltipParent")) {
       const tooltip = e.target.querySelector(".tooltipText");
       if (tooltip) {
-        show(tooltip);
+        tooltip === visibleTooltip ? hide() : show(tooltip);
       }
     } else if (e.target.classList.contains("tooltipText")) {
-      // do nothing
+      hide();
     } else {
       hide();
     }
   });
-  document.addEventListener("scroll", hide);
+  //document.addEventListener("scroll", hide);
 `;
 
 // Takes the results for tests on a specific browser,
@@ -280,7 +280,7 @@ const resultsToTable = (results, title) => {
 
 // Create the title HTML for a results table.
 const tableTitle = `<div class="table-title">Desktop Browsers</div>
-  <div class="instructions">(hover/tap anywhere for info)</a>`;
+  <div class="instructions">(click anywhere for more info)</a>`;
 
 // Create dateString from the given date and time string.
 const dateString = (dateTime) => {
