@@ -50,9 +50,7 @@ const macOSdefaultBrowserSettings = {
   safari: {
     name: "Safari",
     command: "open -a Safari",
-    incognitoFunction: async () => {
-      execSync("osascript safariPBM.scpt");
-    },
+    incognitoCommand: "osascript safariPBM.scpt"
     doubleTapKill: true
   },
   tor: {
@@ -116,8 +114,8 @@ class Browser {
   async launch() {
     this._process = exec(this._command);
     await sleepMs(5000);
-    if (this.incognito && this._defaults.incognitoFunction) {
-      await this._defaults.incognitoFunction();
+    if (this.incognito && this._defaults.incognitoCommand) {
+      execSync(this._defaults.incognitoCommand);
     }
     this._resultsWebSocket = await connect("wss://results.privacytests.org/ws");
     const firstMessage = await this._resultsWebSocket.source.next();
@@ -137,7 +135,7 @@ class Browser {
     }
     return this._version;
   }
-  // Open the url in a new tab. 
+  // Open the url in a new tab.
   openUrl(url) {
     if (!this._defaults.useAppToOpenUrls) {
       exec(`${this._command} "${url}"`);
