@@ -2,6 +2,7 @@ let runTests = async (tests, mode, params) => {
   let results = {};
   for (let test of Object.keys(tests)) {
     let result;
+    console.log(`running ${test}...`);
     try {
       let input = decodeURIComponent(params[test] || params["default"]);
       console.log("input", input);
@@ -9,6 +10,7 @@ let runTests = async (tests, mode, params) => {
     } catch (e) {
       result = "Error: " + e.message;
     }
+    console.log(`  ... finished ${test} with result: ${result}.`);
     results[test] = {
       write: tests[test].write.toString(),
       read: tests[test].read.toString(),
