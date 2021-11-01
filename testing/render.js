@@ -189,7 +189,7 @@ test failed: ${ joinIfArray(testFailed) }
 `.trim();
 };
 
-const resultsSection = ({bestResults, category, tooltipFunction, wordBreak}) => {
+const resultsSection = ({bestResults, category, tooltipFunction}) => {
 //  console.log(results);
 let section = [];
 let bestResultsForCategory = bestResults[0]["testResults"][category];
@@ -203,7 +203,7 @@ let rowNames = Object.keys(bestResultsForCategory)
   for (let rowName of rowNames) {
     let row = [];
     let description = bestResultsForCategory[rowName]["description"] ?? "";
-    row.push(`<div class="tooltipParent" style="word-break: ${wordBreak ?? "break-word"}">${rowName}<span class="tooltipText">${description}</span></div>`);
+    row.push(`<div class="tooltipParent">${rowName}<span class="tooltipText">${description}</span></div>`);
     for (let resultMap of resultMaps) {
       let tooltip = tooltipFunction(resultMap[rowName]);
       let { passed, testFailed, unsupported } = resultMap[rowName];
@@ -272,7 +272,7 @@ const resultsToTable = (results, title) => {
   body.push([{subheading:"Misc tests", description: sectionDescription.misc}]);
   body = body.concat(resultsSection({bestResults, category:"misc", tooltipFunction: simpleToolTip}));
   body.push([{subheading:"Fingerprinting resistance tests", description: sectionDescription.fingerprinting}]);
-  body = body.concat(resultsSection({bestResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip, wordBreak: "break-all"} ));
+  body = body.concat(resultsSection({bestResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
   body.push([{subheading:"Tracking query parameter tests", description: sectionDescription.queryParameters}]);
   body = body.concat(resultsSection({bestResults, category:"query", tooltipFunction: simpleToolTip}));
   return { headers, body };
