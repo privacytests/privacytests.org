@@ -293,7 +293,7 @@ const content = (results, jsonFilename) => {
   let { headers, body } = resultsToTable(results.all_tests,  tableTitle);
   return `
     <div class="banner" id="issueBanner">
-      <div class="left-heading">No. 2</div>
+      <div class="left-heading">No. 3</div>
       <div class="middle-heading">Open-source tests of web browser privacy.</div>
       <div class="right-heading">Updated ${dateString(results.timeStarted)}</div>
     </div>
