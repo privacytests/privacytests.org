@@ -50,7 +50,7 @@ const macOSdefaultBrowserSettings = {
   safari: {
     name: "Safari",
     command: "open -a Safari",
-    incognitoCommand: "osascript safariPBM.scpt"
+    incognitoCommand: "osascript safariPBM.scpt",
     doubleTapKill: true
   },
   tor: {
