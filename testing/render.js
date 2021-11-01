@@ -60,7 +60,7 @@ const tooltipScript = `
     hide();
     const viewportWidth = document.documentElement.clientWidth;
     tooltip.style.display = "block";
-    tooltip.parentElement.style.backgroundColor = "yellow";
+    tooltip.parentElement.style.backgroundColor = "lightyellow";
     const tooltipRight = tooltip.getClientRects()[0].right;
     const tableRight = table.getClientRects()[0].right;
     const overflowX = tooltipRight- tableRight + 8;
