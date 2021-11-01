@@ -1,6 +1,21 @@
 # News
 
-## [Issue 2](/) (2021-10-25)
+## [Issue 3](/) (2021-11-02)
+
+### New browser versions
+
+Since Issue 2, new browser releases include Chrome 95.0, Edge 95.0, and Safari 15.1.
+
+### New tests, new results
+
+Three new tests have been added. These are:
+1. **Alt-Svc.** When you visit a website for the first time, an [Alt-Svc header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Alt-Svc) can indicate that the same website can be fetched in another location or using another protocol. For subsequent, visits, the browser may use that Alternate Service instead of the one it originally used on the first connection. A common use of Alternative Service is to upgrade website connections from HTTP/2 to HTTP/3. Unfortunately, the very act of remembering the altnernate, if not done carefully, can leak information about which websites you have visited in the past and even be abused to track you across sites.
+
+2. **Stream isolation.** In Tor Browser, [every website gets its own circuit](https://tor.stackexchange.com/questions/14634/does-tor-browser-open-a-new-circuit-for-each-unique-website) such that all first-party requests and third-party embedded requests for that website are on a separate stream from those of any other website. This helps to reduce the ability of adversaries to correlate a browser's connection to two different websites.
+
+3. **System Font fingerprinting.** If you install a new font on your computer, most browsers will helpfully use that font if it is ever requested by a website you visit. Unfortunately, that reveals to the website that you have installed the font. That information leak turns out to be quite an [important source of fingerprinting entropy](https://dl.acm.org/doi/pdf/10.1145/3178876.3186097), making it easier to track you on the web Today's results show that Safari and Tor Browser protect against this type of fingerprinting.
+
+## [Issue 2](/archive/issue2.html) (2021-10-25)
 
 ### Correction
 
