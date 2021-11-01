@@ -51,7 +51,7 @@ const macOSdefaultBrowserSettings = {
     name: "Safari",
     command: "open -a Safari",
     incognitoFunction: async () => {
-      robot.keyTap("n", ["command","shift"]);
+      execSync("osascript safariPBM.scpt");
     },
     doubleTapKill: true
   },
