@@ -31,7 +31,6 @@ const macOSdefaultBrowserSettings = {
   chrome: {
     name: "Google Chrome",
     privateFlag: "incognito",
-    doubleTapKill: true
   },
   firefox: {
     name: "firefox",
@@ -40,18 +39,15 @@ const macOSdefaultBrowserSettings = {
   edge: {
     name: "Microsoft Edge",
     privateFlag: "inprivate",
-    doubleTapKill: true
   },
   opera: {
     name: "Opera",
     privateFlag: "private",
-    doubleTapKill: true
   },
   safari: {
     name: "Safari",
     command: "open -a Safari",
     incognitoCommand: "osascript safariPBM.scpt",
-    doubleTapKill: true
   },
   tor: {
     name: "Tor Browser",
@@ -168,10 +164,7 @@ class Browser {
       robot.keyTap("w", "command");
       await sleepMs(100);
     }
-    robot.keyTap("q", "command");
-    if (this._defaults.doubleTapKill) {
-      robot.keyTap("q", "command");
-    }
+    execSync(`osascript -e 'quit app "${this._defaults.name}"'`);
   }
 }
 
