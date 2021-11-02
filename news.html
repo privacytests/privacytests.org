@@ -158,7 +158,20 @@ p.footer {
 </div>
     
   <div class="copy"><h1 id="news">News</h1>
-<h2 id="issue-2-2021-10-25"><a href="/">Issue 2</a> (2021-10-25)</h2>
+<h2 id="issue-3-2021-11-02"><a href="/">Issue 3</a> (2021-11-02)</h2>
+<h3 id="new-browser-versions">New browser versions</h3>
+<p>Since Issue 2, new browser releases include Chrome 95.0, Edge 95.0, and Safari 15.1.</p>
+<h3 id="new-tests-new-results">New tests, new results</h3>
+<p>Three new tests have been added. These are:</p>
+<ol>
+<li><p><strong>Alt-Svc.</strong> When you visit a website for the first time, an <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Alt-Svc">Alt-Svc header</a> may be sent to your browser to indicate that the same website can be fetched in another location or using another protocol. For subsequent, visits, the browser may use that alternate location or protocol instead of the one it originally used on the first connection. A common use of Alter-Svc is to suggest to the browser to upgrade the website connection from HTTP/2 to HTTP/3. Unfortunately, when browsers store this new information from the Alt-Svc header, if this storage is not property confined, can leak information about which websites you have visited in the past and even be abused to track you across sites.</p>
+</li>
+<li><p><strong>Stream isolation.</strong> In Tor Browser, <a href="https://tor.stackexchange.com/questions/14634/does-tor-browser-open-a-new-circuit-for-each-unique-website">every website gets its own circuit</a> such that all first-party requests and third-party embedded requests for that website are on a separate stream from those of any other website. This helps to reduce the ability of adversaries to correlate a browser&#39;s connection to two different websites.</p>
+</li>
+<li><p><strong>System Font fingerprinting.</strong> If you install a new font on your computer, most browsers will helpfully use that font if it is ever requested by a website you visit. Unfortunately, that reveals to the website that you have installed the font. That information leak turns out to be quite an <a href="https://dl.acm.org/doi/pdf/10.1145/3178876.3186097">important source of fingerprinting entropy</a>, making it easier to track you on the web Today&#39;s results show that Safari and Tor Browser protect against this type of fingerprinting.</p>
+</li>
+</ol>
+<h2 id="issue-2-2021-10-25"><a href="/archive/issue2.html">Issue 2</a> (2021-10-25)</h2>
 <h3 id="correction">Correction</h3>
 <p>The first issue of PrivacyTests.org had an important error in the results, incorrectly indicating that Safari does not stop tracking via third-party cookies. Safari cookie protections were assigned an <img src="/x-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="fail"> when it should have been a <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="pass">. This incorrect results seems to have happened because the Selenium Webdriver library I had been using to launch and control the various web browsers <a href="https://bugs.webkit.org/show_bug.cgi?id=222583">likely disables Safari&#39;s Intelligent Tracking Protection feature</a>. This new issue of PrivacyTests.org results shows the correct <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="pass"> for cookie protections in Safari.</p>
 <p>My apologies for the error. Thanks to John Wilander and Steven Englehardt for bringing this issue to my attention. </p>
