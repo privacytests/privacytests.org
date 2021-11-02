@@ -5,18 +5,23 @@ const fetchJSON = async (...fetchArgs) => {
   return response.json();
 };
 
-const testTor = async () => {
-  const description = "The Tor network sends the browser's web requests through a series of relays to hide a user's IP address, thereby helping to mask their identity and location. This test checks to see if the Tor network is being used by default.";
+const testTorAndIp = async () => {
   let wtfJSON = await fetchJSON("https://wtfismyip.com/json");
+  const ipAddress = wtfJSON["YourFuckingIPAddress"];
   console.log(wtfJSON);
-  let onionooJSON = await fetchJSON(`https://onionoo.torproject.org/details?limit=1&search=${wtfJSON["YourFuckingIPAddress"]}`);
+  let onionooJSON = await fetchJSON(`https://onionoo.torproject.org/details?limit=1&search=${ipAddress}`);
   console.log(onionooJSON);
   let IsTorExit = (onionooJSON.relays.length > 0);
   return {
-    IsTorExit,
-    passed: IsTorExit,
-    description
-  };
+    "Tor enabled" : {
+      IsTorExit,
+      passed: IsTorExit,
+      description: "The Tor network sends the browser's web requests through a series of relays to hide a user's IP address, thereby helping to mask their identity and location. This test checks to see if the Tor network is being used by default."
+    },
+    "IP address leak" : {
+      ipAddress,
+      description: "IP addresses can be used to uniquely identify a large percentage of users. A proxy, VPN, or Tor can mask a user's IP address."
+    }};
 };
 
 const testDoH = async () => {
@@ -42,18 +47,14 @@ const testDoH = async () => {
 
 const testGPC = async () => {
   // Ask the server what headers it sees.
-  const description = "The Global Privacy Control is a referrer header that can be sent by a browser to instruct a website not to sell the user's personal data to third parties. This test checks to see if the GPC header is sent by default.";
+  const description = "The Global Privacy Control is an HTTP header that can be sent by a browser to instruct a website not to sell the user's personal data to third parties. This test checks to see if the GPC header is sent by default.";
   const requestHeaders = await fetchJSON("https://arthuredelstein.net/browser-privacy-live/headers");
   const passed = requestHeaders["sec-gpc"] === "1";
-  return { "sec-gpc": requestHeaders["sec-gpc"], passed, description };
+  return { "GPC enabled": { "sec-gpc": requestHeaders["sec-gpc"], passed, description }};
 };
 
 const runTests = async () => {
-  let resultsJSON = {
-    "Tor enabled": await testTor(),
-    //"DoH enabled": await testDoH(),
-    "GPC enabled": await testGPC(),
-  };
+  let resultsJSON = Object.assign({}, await testTorAndIp(), await testGPC());
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
   await postData(resultsJSON);
 };

@@ -1,9 +1,22 @@
 import { runAllTests, sleepMs } from "./test_utils.js";
 import * as IdbKeyVal from 'https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs';
 
+// Wrap the code for any browsers that don't support top-level await.
+(async () => {
+
 const baseURI = "https://arthuredelstein.net/browser-privacy-live/";
 
 let testURI = (path, type, key) => `${baseURI}${path}?type=${type}&key=${key}`;
+
+const { ipAddress, usingTor } = await (async () => {
+  const response = await fetch("https://wtfismyip.com/json");
+  const wtfJSON = await response.json();
+  const ipAddress = wtfJSON["YourFuckingIPAddress"];
+  const onionooResponse = await fetch(`https://onionoo.torproject.org/details?limit=1&search=${ipAddress}`);
+  const onionooJSON = await onionooResponse.json();
+  const usingTor = onionooJSON.relays.length > 0;
+  return { ipAddress, usingTor };
+})();
 
 let tests = {
   "cookie": {
@@ -191,16 +204,9 @@ let tests = {
   },
   "favicon cache": {
     description: "A favicon is an icon that represents a website, typically shown in browser tab and bookmarks menu. If the favicon cache is not partitioned, it can be used to track users across websites.",
-    write: (key) => {
-      parent.postMessage({
-        faviconURI: testURI("resource", "favicon", key)
-      }, "*");
-      return key;
-    },
+    write: (key) => key,
     read: async (key) => {
-      parent.postMessage({
-        faviconURI: testURI("resource", "favicon", key)
-      }, "*");
+      // Wait for the favicon to load (defined in supercookies.html)
       await sleepMs(500);
       let response = await fetch(
         testURI("ctr", "favicon", key), {"cache": "reload"});
@@ -406,15 +412,22 @@ let tests = {
       return (await response.json()).password;
     }
     },*/
-  "H2 connection": {
-    description: "HTTP/2 is a web connection protocol introduced in 2015. Some browsers re-use HTTP/2 connections across websites and can thus be used to track users.",
-    write: async (secret) => {
-      await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`);
-    },
-    read: async () => {
-      let response = await fetch(`https://h2.arthuredelstein.net:8902/?mode=read`);
-      return await response.text();
-    }
+  "AltSvc": {
+      description: "AltSvc allows the server to indicate to the web browser that a resource should be loaded on a different server. Because this is a persistent setting, it could be used to track users across websites if it is not correctly partitioned.",
+      write: async () => {
+        let response;
+        for (let i = 0; i < 4; ++i) {
+          response = await fetch("https://h3.arthuredelstein.net:4433/protocol");
+          await sleepMs(100);
+        }
+        if ((await response.text()) === "h2") {
+          throw new Error("Unsupported");
+        }
+      },
+      read: async () => {
+        let response = await fetch("https://h3.arthuredelstein.net:4433/protocol");
+        return await response.text();
+      }
   },
   "H1 connection": {
     description: "HTTP/1.x are the classic web connection protocols. If these connections are re-used across websites, they can be used to track users.",
@@ -426,12 +439,22 @@ let tests = {
       return await response.text();
     }
   },
+  "H2 connection": {
+    description: "HTTP/2 is a web connection protocol introduced in 2015. Some browsers re-use HTTP/2 connections across websites and can thus be used to track users.",
+    write: async (secret) => {
+      await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`);
+    },
+    read: async () => {
+      let response = await fetch(`https://h2.arthuredelstein.net:8902/?mode=read`);
+      return await response.text();
+    }
+  },
   "H3 connection": {
     description: "HTTP/3 is a new standard HTTP connection protocol, still in draft but widely supported by browsers. If it is not partitioned, it can be used to track users across websites.",
     write: async (secret) => {
       // Ensure that we can switch over to h3 via alt-svc:
       for (let i = 0; i<3; ++i) {
-        await fetch(`https://h3.arthuredelstein.net:4433/`);
+        await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
         await sleepMs(500);
       }
       // Are we now connecting over h3?
@@ -447,8 +470,25 @@ let tests = {
       return await response.text();
     }
   },
+  "Stream isolation": {
+    description: "Browsers that use Tor can use a different Tor circuit per top-level website.",
+    write: () => {
+      if (!usingTor) {
+        throw new Error("Unsupported");
+      }
+    },
+    read: async () => {
+      if (usingTor) {
+        return ipAddress;
+      } else {
+        throw new Error("Unsupported");
+      }
+    }
+  }
 };
 
 runAllTests(tests);
 
 console.log("hello from supercookies_inner.js");
+
+})();
