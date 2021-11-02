@@ -421,7 +421,7 @@ let tests = {
     description: "Alt-Svc allows the server to indicate to the web browser that a resource should be loaded on a different server. Because this is a persistent setting, it could be used to track users across websites if it is not correctly partitioned.",
     write: async () => {
       // Clear Alt-Svc caching first.
-      let responseText === "";
+      let responseText == "";
       for (let i = 0; i < 100 || responseText !== "h2", ++i) {
         responseText = await fetchText("https://h3.arthuredelstein.net:4433/clear");
         await sleepMs(10);
