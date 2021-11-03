@@ -1,6 +1,7 @@
 const child_process = require('child_process');
 const { connect } = require("it-ws/client");
 const robot = require("robotjs");
+const { existsSync } = require("fs");
 
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
@@ -52,14 +53,15 @@ const macOSdefaultBrowserSettings = {
   safari: {
     name: "Safari",
     nightly: "Safari Technology Preview",
-    command: "open -a Safari",
-    incognitoCommand: "osascript safariPBM.scpt",
+    useOpen: true,
+    incognitoCommand: "osascript safariPBM.applescript",
   },
   tor: {
     name: "Tor Browser",
     nightly: "Tor Browser Nightly",
     binaryName: "firefox",
     useAppToOpenUrls: true,
+    useOpen: true,
   },
   vivaldi: {
     name: "Vivaldi",
@@ -68,19 +70,30 @@ const macOSdefaultBrowserSettings = {
   }
 };
 
-const browserPath = (browser) => {
+const browserPath = ({browser, nightly}) => {
   const { appDirectory, binaryPath } = macOSdefaultBrowserSettings.defaultValues;
   const browserValues = macOSdefaultBrowserSettings[browser];
   const binaryName = browserValues.binaryName ?? browserValues.name;
-  return `${appDirectory}/${browserValues.name}.app/${binaryPath}/${binaryName}`;
+  const appName = nightly ? browserValues.nightly : browserValues.name;
+  const fullBinaryPath = `${appDirectory}/${appName}.app/${binaryPath}`;
+  const executablePath1 = `${fullBinaryPath}/${binaryName}`;
+  const executablePath2 = `${fullBinaryPath}/${appName}`;
+  if (existsSync(executablePath1)) {
+    return executablePath1;
+  } else {
+    return executablePath2;
+  }
 };
 
-const browserCommand = ({browser, path, incognito, tor}) => {
-  const { privateFlag, torFlag } = macOSdefaultBrowserSettings[browser];
-  const flags = `${incognito ? "--" + privateFlag : ""} ${tor ? "--" + torFlag : ""}`;
-  return `"${path}" ${flags}`.trim();
+const browserCommand = ({browser, path, incognito, tor, appPath}) => {
+  const { privateFlag, torFlag, useOpen } = macOSdefaultBrowserSettings[browser];
+  if (useOpen) {
+    return `open -a "${appPath}"`;
+  } else {
+    const flags = `${incognito ? "--" + privateFlag : ""} ${tor ? "--" + torFlag : ""}`;
+    return `"${path}" ${flags}`.trim();
+  }
 };
-
 
 const nextValue = async(websocket, expectedSessionId) => {
   const message = await websocket.source.next();
@@ -113,14 +126,14 @@ const exec = command => {
 
 // A Browser object represents a browser we run tests on.
 class Browser {
-  constructor({browser, path, incognito, tor}) {
-    Object.assign(this, {browser, incognito, tor});
+  constructor({browser, path, incognito, tor, nightly}) {
+    Object.assign(this, {browser, incognito, tor, nightly});
     this._defaults = macOSdefaultBrowserSettings[browser];
-    this._path = path ?? browserPath(browser);
+    this._path = path ?? browserPath({browser, nightly});
     this._version = undefined;
-    this._command = this._defaults.command ?? browserCommand({browser, path: this._path, incognito, tor});
-    this._openTabs = 0;
     this._appPath = this._path.split(".app")[0] + ".app";
+    this._command = browserCommand({browser, path: this._path, incognito, tor, appPath: this._appPath});
+    this._openTabs = 0;
     this._sessionId = null;
     this._resultsWebSocket = null;
   }
@@ -129,7 +142,9 @@ class Browser {
     this._process = exec(this._command);
     await sleepMs(5000);
     if (this.incognito && this._defaults.incognitoCommand) {
-      execSync(this._defaults.incognitoCommand);
+      const { name, nightly  } = this._defaults;
+      const appName = this.nightly ? nightly : name;
+      execSync(`${this._defaults.incognitoCommand} "${appName}"`);
     }
     this._resultsWebSocket = await connect("wss://results.privacytests.org/ws");
     const firstMessage = await this._resultsWebSocket.source.next();
@@ -151,11 +166,7 @@ class Browser {
   }
   // Open the url in a new tab.
   openUrl(url) {
-    if (!this._defaults.useAppToOpenUrls) {
-      exec(`${this._command} "${url}"`);
-    } else {
-      exec(`open -a "${this._appPath}" "${url}"`);
-    }
+    exec(`${this._command} "${url}"`);
     this._openTabs++;
   }
   async nextTestResult() {
@@ -182,7 +193,7 @@ class Browser {
       robot.keyTap("w", "command");
       await sleepMs(100);
     }
-    execSync(`osascript -e 'quit app "${this._defaults.name}"'`);
+    execSync(`osascript -e 'quit app "${this._appPath}"'`);
   }
 }
 

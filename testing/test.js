@@ -323,11 +323,12 @@ const parseConfigFile = (configFile, repeat = 1) => {
 const main = async () => {
   installTestFontIfNeeded();
   // Read config file and flags from command line
-  let { _ : [configFile], debug, only, repeat, aggregate } =
+  let { _ : [configFile], debug, only, repeat, aggregate, nightly } =
     minimist(process.argv.slice(2), opts = { default: { aggregate: true }});
   let configList = parseConfigFile(configFile, repeat);
-  let filteredConfigList = configList.filter(
-    d => only ? d.browser.startsWith(only) : true);
+  let filteredConfigList = configList
+      .filter(d => only ? d.browser.startsWith(only) : true)
+      .map(d => Object.assign({}, d, {nightly}));
   console.log("List of browsers to run:", filteredConfigList);
   let dataFile = writeDataSync(await runTestsBatch(filteredConfigList,
                                                      { shouldQuit: !debug }));
