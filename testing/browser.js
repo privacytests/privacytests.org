@@ -25,37 +25,45 @@ const macOSdefaultBrowserSettings = {
   },
   brave: {
     name: "Brave Browser",
+    nightly: "Brave Browser Nightly",
     privateFlag: "incognito",
     torFlag: "tor",
   },
   chrome: {
     name: "Google Chrome",
+    nightly: "Google Chrome Canary",
     privateFlag: "incognito",
   },
   firefox: {
     name: "firefox",
+    nightly: "Firefox Nightly",
     privateFlag: "private-window"
   },
   edge: {
     name: "Microsoft Edge",
+    nightly: "Microsoft Edge Canary",
     privateFlag: "inprivate",
   },
   opera: {
     name: "Opera",
+    nightly: "Opera Developer",
     privateFlag: "private",
   },
   safari: {
     name: "Safari",
+    nightly: "Safari Technology Preview",
     command: "open -a Safari",
     incognitoCommand: "osascript safariPBM.scpt",
   },
   tor: {
     name: "Tor Browser",
+    nightly: "Tor Browser Nightly",
     binaryName: "firefox",
     useAppToOpenUrls: true,
   },
   vivaldi: {
     name: "Vivaldi",
+    nightly: "Vivaldi Snapshot",
     privateFlag: "incognito"
   }
 };
