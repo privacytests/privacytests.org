@@ -279,7 +279,10 @@ const resultsToTable = (results, title) => {
 };
 
 // Create the title HTML for a results table.
-const tableTitle = `<div class="table-title">Desktop Browsers</div>
+const tableTitle = (nightly) => `
+  <div class="table-title">
+    ${nightly ? "Nightly" : "Desktop"} Browsers
+  </div>
   <div class="instructions">(click anywhere for more info)</a>`;
 
 // Create dateString from the given date and time string.
@@ -290,7 +293,8 @@ const dateString = (dateTime) => {
 
 // Creates the content for a page.
 const content = (results, jsonFilename) => {
-  let { headers, body } = resultsToTable(results.all_tests,  tableTitle);
+  const nightly = results.all_tests.every(t => (t.nightly === true));
+  let { headers, body } = resultsToTable(results.all_tests, tableTitle(nightly));
   return `
     <div class="banner" id="issueBanner">
       <div class="left-heading">No. 3</div>

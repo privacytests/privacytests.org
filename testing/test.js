@@ -264,10 +264,10 @@ const runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
       await browserObject.launch();
       const testResults = await runTests(browserObject);
       all_tests.push({
-        browser, incognito, tor,
+        browser, incognito, tor, nightly,
         testResults, timeStarted,
         reportedVersion: browserObject.version,
-        capabilities: {os: os.type(), os_version: os.version() },
+        os: os.type(), os_version: os.version(),
       });
       if (shouldQuit) {
         await browserObject.kill();
