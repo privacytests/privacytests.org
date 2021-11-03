@@ -1,4 +1,4 @@
-const { exec, execSync } = require('child_process');
+const child_process = require('child_process');
 const { connect } = require("it-ws/client");
 const robot = require("robotjs");
 
@@ -99,6 +99,16 @@ const addSearchParam = (url, key, val) => {
   let urlObject = new URL(url);
   urlObject.searchParams.set(key, val);
   return urlObject.href;
+};
+
+const execSync = command => {
+  console.log(command);
+  return child_process.execSync(command);
+};
+
+const exec = command => {
+  console.log(command);
+  return child_process.exec(command);
 };
 
 // A Browser object represents a browser we run tests on.
