@@ -60,7 +60,6 @@ const macOSdefaultBrowserSettings = {
     name: "Tor Browser",
     nightly: "Tor Browser Nightly",
     binaryName: "firefox",
-    useAppToOpenUrls: true,
     useOpen: true,
   },
   vivaldi: {
