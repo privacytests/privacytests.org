@@ -28,9 +28,10 @@ const setProxyState = (networkService, type, enabled) => {
   return run(`networksetup -set${type}proxystate ${networkService} ${state}`);
 };
 
-const setProxy = (networkService, type, { enabled = undefined, domain = undefined, port = undefined,
-                                          authenticated = undefined, username = "", password = ""}) => {
+const setProxy = (networkService, type, { enabled, domain, port, authenticated, username, password }) => {
   let authenticatedString = authenticated === undefined ? "" : (authenticated ? "on" : "off");
+  let usernameString = username === undefined ? "" : username;
+  let passwordString = password === undefined ? "" : password;
   if (domain !== undefined && port !== undefined) {
     run(`networksetup -set${type}proxy ${networkService} ${domain} ${port} ${authenticatedString} ${username} ${password}`);
   }
@@ -93,7 +94,7 @@ const runTests = () => {
       console.log(getProxies(networkService));
     }, 5000);
   }
-}
+};
 
 if (require.main === module) {
   runTests();
