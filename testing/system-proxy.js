@@ -33,7 +33,7 @@ const setProxy = (networkService, type, { enabled, domain, port, authenticated, 
   let usernameString = username === undefined ? "" : username;
   let passwordString = password === undefined ? "" : password;
   if (domain !== undefined && port !== undefined) {
-    run(`networksetup -set${type}proxy ${networkService} ${domain} ${port} ${authenticatedString} ${username} ${password}`);
+    run(`networksetup -set${type}proxy ${networkService} ${domain} ${port} ${authenticatedString} ${usernameString} ${passwordString}`);
   }
   if (enabled !== undefined) {
     setProxyState(networkService, type, enabled);
