@@ -8,6 +8,11 @@ const baseURI = "https://arthuredelstein.net/browser-privacy-live/";
 
 let testURI = (path, type, key) => `${baseURI}${path}?type=${type}&key=${key}`;
 
+let fetchText = async (...args) => {
+  let response = await fetch(...args);
+  return await response.text();
+};
+
 const { ipAddress, usingTor } = await (async () => {
   const response = await fetch("https://wtfismyip.com/json");
   const wtfJSON = await response.json();
@@ -412,22 +417,32 @@ let tests = {
       return (await response.json()).password;
     }
     },*/
-  "AltSvc": {
-      description: "AltSvc allows the server to indicate to the web browser that a resource should be loaded on a different server. Because this is a persistent setting, it could be used to track users across websites if it is not correctly partitioned.",
-      write: async () => {
-        let response;
-        for (let i = 0; i < 4; ++i) {
-          response = await fetch("https://h3.arthuredelstein.net:4433/protocol");
-          await sleepMs(100);
-        }
-        if ((await response.text()) === "h2") {
-          throw new Error("Unsupported");
-        }
-      },
-      read: async () => {
-        let response = await fetch("https://h3.arthuredelstein.net:4433/protocol");
-        return await response.text();
+  "Alt-Svc": {
+    description: "Alt-Svc allows the server to indicate to the web browser that a resource should be loaded on a different server. Because this is a persistent setting, it could be used to track users across websites if it is not correctly partitioned.",
+    write: async () => {
+      // Clear Alt-Svc caching first.
+      let responseText = "";
+      for (let i = 0; i < 20 && responseText !== "h2"; ++i) {
+        responseText = await fetchText("https://h3.arthuredelstein.net:4433/clear");
+        console.log("clear", responseText, i);
+        await sleepMs(10);
       }
+      if (responseText !== "h2") {
+        // Clearing failed.
+        throw new Error("Unsupported");
+      }
+      // Store "h3" state in Alt-Svc cache
+      for (let i = 0; i < 20 && responseText !== "h3"; ++i) {
+        responseText = await fetchText("https://h3.arthuredelstein.net:4433/protocol");
+        console.log("protocol", responseText, i);
+        await sleepMs(10);
+      }
+      if (responseText !== "h3") {
+        // Storage failed.
+        throw new Error("Unsupported");
+      }
+    },
+    read: () => fetchText("https://h3.arthuredelstein.net:4433/protocol")
   },
   "H1 connection": {
     description: "HTTP/1.x are the classic web connection protocols. If these connections are re-used across websites, they can be used to track users.",
