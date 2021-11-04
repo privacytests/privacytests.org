@@ -90,15 +90,14 @@ const tooltipScript = `
 const resultsToDescription = ({
   browser,
   reportedVersion,
-  capabilities: { os, os_version, browser: browser2, browserName, browserVersion, version,
-                  browser_version, device, platformVersion, platformName, platform },
+  os, os_version,
   prefs, incognito, tor,
 }) => {
-  let browserFinal = browser || browserName || browser2;
-  let browserVersionLong =  reportedVersion || browserVersion || version;
-  let browserVersionShort =  dropMicroVersion(browserVersionLong) || "???";
-  let platformFinal = platformName || os || platform;
-  let platformVersionFinal = platformVersion || "";
+  let browserFinal = browser;
+  let browserVersionLong = reportedVersion;
+  let browserVersionShort = dropMicroVersion(browserVersionLong) || "???";
+  let platformFinal = os;
+//  let platformVersionFinal = platformVersion || "";
   let finalText = `
   <span>
     <img src=${browserLogoDataUri(browser)} width="32" height="32"><br>

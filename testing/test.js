@@ -258,7 +258,7 @@ const runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
   for (let config of configList) {
     try {
       console.log("\nnext test:", config);
-      const { browser, incognito, tor } = config;
+      const { browser, incognito, tor, nightly } = config;
       const timeStarted = new Date().toISOString();
       const browserObject = new Browser(config);
       await browserObject.launch();
