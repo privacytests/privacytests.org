@@ -78,18 +78,25 @@ const getProxies = (networkService) => {
   return result;
 };
 
-console.log(parseNetworkServiceList(exampleOutput));
-let networkServices = getNetworkServices();
-
-for (const networkService of networkServices) {
-  let oldSettings = getProxies(networkService);
-  console.log(oldSettings);
-  setProxies(networkService, {"web": { enabled: true, domain: "127.0.0.1", port: 8080 },
-                              "secureweb": { enabled: true, domain: "127.0.0.1", port: 8080 }});
-  console.log(getProxies(networkService));
-  setTimeout(() => {
-    setProxies(networkService, oldSettings);
+const runTests = () => {
+  console.log("Fake:", parseNetworkServiceList(exampleOutput));
+  let networkServices = getNetworkServices();
+  console.log(networkServices);
+  for (const networkService of networkServices) {
+    let oldSettings = getProxies(networkService);
+    console.log(oldSettings);
+    setProxies(networkService, {"web": { enabled: true, domain: "127.0.0.1", port: 8080 },
+                                "secureweb": { enabled: true, domain: "127.0.0.1", port: 8080 }});
     console.log(getProxies(networkService));
-  }, 5000);
+    setTimeout(() => {
+      setProxies(networkService, oldSettings);
+      console.log(getProxies(networkService));
+    }, 5000);
+  }
 }
 
+if (require.main === module) {
+  runTests();
+}
+
+module.exports = { setProxies, getProxies, getNetworkServices };
