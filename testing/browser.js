@@ -2,6 +2,7 @@ const child_process = require('child_process');
 const { connect } = require("it-ws/client");
 const robot = require("robotjs");
 const { existsSync } = require("fs");
+const path = require("path");
 
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
@@ -29,26 +30,35 @@ const macOSdefaultBrowserSettings = {
     nightly: "Brave Browser Nightly",
     privateFlag: "incognito",
     torFlag: "tor",
+    dataDir: "BraveSoftware/Brave-Browser",
+    nightlyDataDir: "BraveSoftware/Brave-Browser-Nightly"
   },
   chrome: {
     name: "Google Chrome",
     nightly: "Google Chrome Canary",
     privateFlag: "incognito",
+    dataDir: "Google/Chrome",
+    nightlyDataDir: "Google/Chrome Canary"
   },
   firefox: {
     name: "firefox",
     nightly: "Firefox Nightly",
-    privateFlag: "private-window"
+    privateFlag: "private-window",
+    dataDir: "Firefox/Profiles/"
   },
   edge: {
     name: "Microsoft Edge",
     nightly: "Microsoft Edge Canary",
     privateFlag: "inprivate",
+    dataDir: "Microsoft Edge",
+    nightlyDataDir: "Microsoft Edge Canary"
   },
   opera: {
     name: "Opera",
     nightly: "Opera Developer",
     privateFlag: "private",
+    dataDir: "com.operasoftware.Opera",
+    nightlyDataDir: "com.operasoftware.OperaDeveloper"
   },
   safari: {
     name: "Safari",
@@ -61,11 +71,14 @@ const macOSdefaultBrowserSettings = {
     nightly: "Tor Browser Nightly",
     binaryName: "firefox",
     useOpen: true,
+    dataDir: "TorBrowser-Data"
   },
   vivaldi: {
     name: "Vivaldi",
     nightly: "Vivaldi Snapshot",
-    privateFlag: "incognito"
+    privateFlag: "incognito",
+    dataDir: "Vivaldi",
+    nightlyDataDir: "Vivaldi Snapshot"
   }
 };
 
@@ -143,7 +156,7 @@ class Browser {
     if (this.incognito && this._defaults.incognitoCommand) {
       const { name, nightly  } = this._defaults;
       const appName = this.nightly ? nightly : name;
-      execSync(`${this._defaults.incognitoCommand} "${appName}"`);
+//      execSync(`${this._defaults.incognitoCommand} "${appName}"`);
     }
     this._resultsWebSocket = await connect("wss://results.privacytests.org/ws");
     const firstMessage = await this._resultsWebSocket.source.next();
@@ -190,9 +203,14 @@ class Browser {
   async kill() {
     for (let i = 0; i<this._openTabs; ++i) {
       robot.keyTap("w", "command");
-      await sleepMs(100);
     }
+    // Wait for the tabs to close
+    await sleepMs(500 * this._openTabs);
+    this._resultsWebSocket.destroy();
     execSync(`killall "${path.basename(this._path)}"`);
+    // An extra sleep helps prevent Safari from launching when Safari Tech Preview
+    // is desired.
+    await sleepMs(4000);
   }
 }
 
