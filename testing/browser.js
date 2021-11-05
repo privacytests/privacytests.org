@@ -192,7 +192,7 @@ class Browser {
       robot.keyTap("w", "command");
       await sleepMs(100);
     }
-    execSync(`osascript -e 'quit app "${this._appPath}"'`);
+    execSync(`killall "${path.basename(this._path)}"`);
   }
 }
 
