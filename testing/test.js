@@ -14,6 +14,7 @@ const process = require('process');
 const fetch = require('node-fetch');
 const render = require('./render');
 const { Browser } = require("./browser.js");
+const proxy = require("./system-proxy");
 
 // ## Utility functions
 
@@ -57,6 +58,23 @@ const installTestFontIfNeeded = () => {
     fs.copyFileSync(`${__dirname}/Monoton-Regular.ttf`, fontDestination);
   }
 };
+
+let originalProxyState = {};
+const disableProxies = () => {
+  const networkServices = proxy.getNetworkServices();
+  for (let networkService of networkServices) {
+    originalProxyState[networkService] = proxy.getProxies(networkService);
+    proxy.setProxies(networkService, {"web":{enabled:false},
+                                      "secureweb":{enabled:false}});
+  }
+};
+
+const restoreProxies = () => {
+  const networkServices = proxy.getNetworkServices();
+  for (let networkService of networkServices) {
+    proxy.setProxies(networkService, originalProxyState[networkService]);
+  }
+}
 
 // ## Testing
 
@@ -256,11 +274,11 @@ const runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
   for (let config of configList) {
+    console.log("\nnext test:", config);
+    const { browser, incognito, tor, nightly } = config;
+    const timeStarted = new Date().toISOString();
+    const browserObject = new Browser(config);
     try {
-      console.log("\nnext test:", config);
-      const { browser, incognito, tor, nightly } = config;
-      const timeStarted = new Date().toISOString();
-      const browserObject = new Browser(config);
       await browserObject.launch();
       const testResults = await runTests(browserObject);
       all_tests.push({
@@ -269,11 +287,11 @@ const runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
         reportedVersion: browserObject.version,
         os: os.type(), os_version: os.version(),
       });
-      if (shouldQuit) {
-        await browserObject.kill();
-      }
     } catch (e) {
       console.log(e);
+    }
+    if (shouldQuit) {
+      await browserObject.kill();
     }
   }
   const timeStopped = new Date().toISOString();
@@ -322,6 +340,7 @@ const parseConfigFile = (configFile, repeat = 1) => {
 // a human-readable web page.
 const main = async () => {
   installTestFontIfNeeded();
+  disableProxies();
   // Read config file and flags from command line
   let { _ : [configFile], debug, only, repeat, aggregate, nightly } =
     minimist(process.argv.slice(2), opts = { default: { aggregate: true }});
@@ -331,7 +350,8 @@ const main = async () => {
       .map(d => Object.assign({}, d, {nightly}));
   console.log("List of browsers to run:", filteredConfigList);
   let dataFile = writeDataSync(await runTestsBatch(filteredConfigList,
-                                                     { shouldQuit: !debug }));
+                                                   { shouldQuit: !debug }));
+  restoreProxies();
   render.render({ dataFile, aggregate });
 };
 
