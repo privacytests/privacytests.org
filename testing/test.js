@@ -24,6 +24,13 @@ const deepCopy = (x) => JSON.parse(JSON.stringify(x));
 // Returns a promise that sleeps for the given millseconds.
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// Wraps a promise. If the promise resolves before timeMs, then
+// resolves to the promise's result. Otherwise rejects with a timeout error.
+const deadlinePromise = (promise, timeMs) => {
+  timeoutPromise = new Promise((_r, rej) => setTimeout(() => rej("Timed out"), timeMs));
+  return Promise.race([promise, timeoutPromise]);
+};
+
 // Reads the current git commit hash for this program in a string. Used
 // when reporting results, to make them easier to reproduce.
 const gitHash = () => execSync('git rev-parse HEAD', { cwd: __dirname}).toString().trim();
@@ -250,14 +257,14 @@ const moveTestBetweenCategories = (testName, src, dest) => {
 //   "https" : { ... },
 //   "navigation" : { ... },
 //   "supercookies" : { ... } }
-const runTests = async (browser) => {
+const runTests = async (browserObject) => {
   try {
-    const supercookies = await runSupercookieTests(browser);
-    const navigation = await runNavigationTests(browser);
-    const fingerprinting = await runFingerprintingTests(browser);
-    const misc = await runMiscTests(browser);
-    const query = await runQueryTests(browser);
-    const https = await runHttpsTests(browser); // Merge results
+    const supercookies = await runSupercookieTests(browserObject);
+    const navigation = await runNavigationTests(browserObject);
+    const fingerprinting = await runFingerprintingTests(browserObject);
+    const misc = await runMiscTests(browserObject);
+    const query = await runQueryTests(browserObject);
+    const https = await runHttpsTests(browserObject); // Merge results
     // Move tests around to better categories:
     moveTestBetweenCategories("ServiceWorker", navigation, supercookies);
     moveTestBetweenCategories("Stream isolation", supercookies, misc);
@@ -270,7 +277,7 @@ const runTests = async (browser) => {
 
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
-const runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
+const runTestsBatch = async (configList, { shouldQuit } = { shouldQuit: true }) => {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
   for (let config of configList) {
@@ -280,7 +287,7 @@ const runTestsBatch = async (configList, {shouldQuit} = {shouldQuit:true}) => {
     const browserObject = new Browser(config);
     try {
       await browserObject.launch();
-      const testResults = await runTests(browserObject);
+      const testResults = await deadlinePromise(runTests(browserObject), 300000);
       all_tests.push({
         browser, incognito, tor, nightly,
         testResults, timeStarted,
