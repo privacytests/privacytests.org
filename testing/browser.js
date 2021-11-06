@@ -6,6 +6,15 @@ const path = require("path");
 
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
+const execSync = command => {
+  console.log(command);
+  return child_process.execSync(command);
+};
+
+const exec = command => {
+  console.log(command);
+  return child_process.exec(command);
+};
 
 /*
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --incognito "https://example.com"
@@ -126,16 +135,6 @@ const addSearchParam = (url, key, val) => {
   return urlObject.href;
 };
 
-const execSync = command => {
-  console.log(command);
-  return child_process.execSync(command);
-};
-
-const exec = command => {
-  console.log(command);
-  return child_process.exec(command);
-};
-
 // A Browser object represents a browser we run tests on.
 class Browser {
   constructor({browser, path, incognito, tor, nightly}) {
@@ -201,16 +200,24 @@ class Browser {
   }
   // Clean up and close the browser.
   async kill() {
-    for (let i = 0; i<this._openTabs; ++i) {
-      robot.keyTap("w", "command");
+    try {
+      for (let i = 0; i<this._openTabs; ++i) {
+        robot.keyTap("w", "command");
+      }
+      // Wait for the tabs to close
+      await sleepMs(500 * this._openTabs);
+      this._resultsWebSocket.destroy();
+    } catch (e) {
+      console.log(e);
     }
-    // Wait for the tabs to close
-    await sleepMs(500 * this._openTabs);
-    this._resultsWebSocket.destroy();
-    execSync(`killall "${path.basename(this._path)}"`);
+    try {
+      execSync(`killall "${path.basename(this._path)}"`);
+    } catch (e) {
+      console.log(e);
+    }
     // An extra sleep helps prevent Safari from launching when Safari Tech Preview
     // is desired.
-    await sleepMs(4000);
+    await sleepMs(12000);
   }
 }
 
