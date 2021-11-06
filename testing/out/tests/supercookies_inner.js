@@ -422,7 +422,7 @@ let tests = {
     write: async () => {
       // Clear Alt-Svc caching first.
       let responseText = "";
-      for (let i = 0; i < 20 && responseText !== "h2"; ++i) {
+      for (let i = 0; i < 10 && responseText !== "h2"; ++i) {
         responseText = await fetchText("https://h3.arthuredelstein.net:4433/clear");
         console.log("clear", responseText, i);
         await sleepMs(10);
@@ -432,7 +432,7 @@ let tests = {
         throw new Error("Unsupported");
       }
       // Store "h3" state in Alt-Svc cache
-      for (let i = 0; i < 20 && responseText !== "h3"; ++i) {
+      for (let i = 0; i < 10 && responseText !== "h3"; ++i) {
         responseText = await fetchText("https://h3.arthuredelstein.net:4433/protocol");
         console.log("protocol", responseText, i);
         await sleepMs(10);
