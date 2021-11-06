@@ -147,6 +147,7 @@ class Browser {
     this._openTabs = 0;
     this._sessionId = null;
     this._resultsWebSocket = null;
+    this._keepAlivePingId = null;
   }
   // Launch the browser.
   async launch() {
@@ -159,6 +160,8 @@ class Browser {
     }
     this._resultsWebSocket = await connect("wss://results.privacytests.org/ws");
     const firstMessage = await this._resultsWebSocket.source.next();
+    this._keepAlivePingId = setInterval(() => this._resultsWebSocket.socket.send("ping", 30000));
+    console.log("message received", (new Date()).toISOString());
     console.log(firstMessage);
     const { sessionId } = JSON.parse(firstMessage.value);
     this._sessionId = sessionId;
@@ -212,6 +215,7 @@ class Browser {
     }
     try {
       execSync(`killall "${path.basename(this._path)}"`);
+      clearInterval(this._keepAlivePingId);
     } catch (e) {
       console.log(e);
     }
