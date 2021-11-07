@@ -26,9 +26,12 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Wraps a promise. If the promise resolves before timeMs, then
 // resolves to the promise's result. Otherwise rejects with a timeout error.
-const deadlinePromise = (promise, timeMs) => {
-  timeoutPromise = new Promise((_r, rej) => setTimeout(() => rej("Timed out"), timeMs));
-  return Promise.race([promise, timeoutPromise]);
+const deadlinePromise = async (promise, timeMs) => {
+  let timeoutId;
+  const timeoutPromise = new Promise((_r, rej) => { timeoutId = setTimeout(() => rej("Timed out"), timeMs); });
+  const result = await Promise.race([promise, timeoutPromise]);
+  clearTimeout(timeoutId);
+  return result;
 };
 
 // Reads the current git commit hash for this program in a string. Used
@@ -81,7 +84,7 @@ const restoreProxies = () => {
   for (let networkService of networkServices) {
     proxy.setProxies(networkService, originalProxyState[networkService]);
   }
-}
+};
 
 // ## Testing
 
@@ -354,7 +357,7 @@ const main = async () => {
   let configList = parseConfigFile(configFile, repeat);
   let filteredConfigList = configList
       .filter(d => only ? d.browser.startsWith(only) : true)
-      .map(d => Object.assign({}, d, {nightly}));
+      .map(d => Object.assign({}, d, nightly ? {nightly} : null));
   console.log("List of browsers to run:", filteredConfigList);
   let dataFile = writeDataSync(await runTestsBatch(filteredConfigList,
                                                    { shouldQuit: !debug }));
