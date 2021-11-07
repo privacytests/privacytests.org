@@ -53,7 +53,8 @@ const macOSdefaultBrowserSettings = {
     name: "firefox",
     nightly: "Firefox Nightly",
     privateFlag: "private-window",
-    dataDir: "Firefox/Profiles/"
+    dataDir: "Firefox/Profiles/",
+    preLaunchDelay: 10000,
   },
   edge: {
     name: "Microsoft Edge",
@@ -74,20 +75,25 @@ const macOSdefaultBrowserSettings = {
     nightly: "Safari Technology Preview",
     useOpen: true,
     incognitoCommand: "osascript safariPBM.applescript",
+    postLaunchDelay: 6000
   },
   tor: {
     name: "Tor Browser",
     nightly: "Tor Browser Nightly",
     binaryName: "firefox",
     useOpen: true,
-    dataDir: "TorBrowser-Data"
+    dataDir: "TorBrowser-Data",
+    preLaunchDelay: 10000,
+    postLaunchDelay: 10000
   },
   vivaldi: {
     name: "Vivaldi",
     nightly: "Vivaldi Snapshot",
     privateFlag: "incognito",
     dataDir: "Vivaldi",
-    nightlyDataDir: "Vivaldi Snapshot"
+    nightlyDataDir: "Vivaldi Snapshot",
+    preLaunchDelay: 10000,
+    postLaunchDelay: 10000
   }
 };
 
@@ -151,7 +157,9 @@ class Browser {
   }
   // Launch the browser.
   async launch() {
+    await sleepMs(this._defaults.preLaunchDelay ?? 0);
     this._process = exec(this._command);
+    await sleepMs(this._defaults.postLaunchDelay ?? 0);
     await sleepMs(5000);
     if (this.incognito && this._defaults.incognitoCommand) {
       const { name, nightly  } = this._defaults;
@@ -160,7 +168,7 @@ class Browser {
     }
     this._resultsWebSocket = await connect("wss://results.privacytests.org/ws");
     const firstMessage = await this._resultsWebSocket.source.next();
-    this._keepAlivePingId = setInterval(() => this._resultsWebSocket.socket.send("ping", 30000));
+    this._keepAlivePingId = setInterval(() => this._resultsWebSocket.socket.send("ping"), 30000);
     console.log("message received", (new Date()).toISOString());
     console.log(firstMessage);
     const { sessionId } = JSON.parse(firstMessage.value);
@@ -204,24 +212,26 @@ class Browser {
   // Clean up and close the browser.
   async kill() {
     try {
-      for (let i = 0; i<this._openTabs; ++i) {
-        robot.keyTap("w", "command");
-      }
-      // Wait for the tabs to close
-      await sleepMs(500 * this._openTabs);
       this._resultsWebSocket.destroy();
     } catch (e) {
       console.log(e);
     }
     try {
-      execSync(`killall "${path.basename(this._path)}"`);
-      clearInterval(this._keepAlivePingId);
+      for (let i = 0; i<this._openTabs; ++i) {
+        robot.keyTap("w", "command");
+      }
+      // Wait for the tabs to close
+      await sleepMs(500 * this._openTabs);
     } catch (e) {
       console.log(e);
     }
-    // An extra sleep helps prevent Safari from launching when Safari Tech Preview
-    // is desired.
-    await sleepMs(12000);
+    try {
+      clearInterval(this._keepAlivePingId);
+      execSync(`killall "${path.basename(this._path)}"`);
+      await sleepMs(5000);
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 
