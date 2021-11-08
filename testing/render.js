@@ -8,8 +8,24 @@ const datauri = require('datauri/sync');
 const template = require('./template.js');
 const _ = require('lodash');
 
-const browserLogoDataUri = _.memoize((browserName) =>
-  datauri(`node_modules/browser-logos/src/${browserName}/${browserName}_128x128.png`).content);
+// The names used by browser-logos for nightly browsers.
+const nightlyIconNames = {
+  brave: "brave-nightly",
+  chrome: "chrome-canary",
+  edge: "edge-canary",
+  firefox: "firefox-nightly",
+  opera: "opera-developer",
+  safari: "safari-technology-preview",
+  tor: "tor-nightly",
+  vivaldi: "vivaldi-snapshot",
+};
+
+// Returns a data: URI browser logo for the given browser.
+const browserLogoDataUri = _.memoize((browserName, nightly) => {
+  const browserIconName = nightly ? nightlyIconNames[browserName] : browserName;
+  console.log(browserName, browserIconName);
+  return datauri(`node_modules/browser-logos/src/${browserIconName}/${browserIconName}_128x128.png`).content;
+});
 
 // Deep-copy a JSON structure (by value)
 const deepCopy = (json) => JSON.parse(JSON.stringify(json));
@@ -91,7 +107,7 @@ const resultsToDescription = ({
   browser,
   reportedVersion,
   os, os_version,
-  prefs, incognito, tor,
+  prefs, incognito, tor, nightly
 }) => {
   let browserFinal = browser;
   let browserVersionLong = reportedVersion;
@@ -100,7 +116,7 @@ const resultsToDescription = ({
 //  let platformVersionFinal = platformVersion || "";
   let finalText = `
   <span>
-    <img src=${browserLogoDataUri(browser)} width="32" height="32"><br>
+    <img src=${browserLogoDataUri(browser, nightly)} width="32" height="32"><br>
     ${browserFinal}<br>
     ${browserVersionShort}
   </span>`;
