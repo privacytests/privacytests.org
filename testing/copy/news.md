@@ -2,9 +2,9 @@
 
 ## [Issue 4](/) (2021-11-09)
 
-### Nightly builds
+### Testing of nightly builds added
 
-I have now added testing of the Nightly build channel (or the nearest equivalent) for all tested desktop browers. These include:
+I have now added testing of the Nightly build channel (or the nearest equivalent) for all monitored desktop browers. These include:
 * Brave Nightly
 * Chrome Canary
 * Edge Canary
