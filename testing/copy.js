@@ -24,7 +24,7 @@ const generateHtmlFile = (filename) => {
 // The main program. Read all the Markdown files in the "copy" directory and
 // generate an html file for each of them in the "out" directory.
 const main = async () => {
-  const filenames = fs.readdirSync("copy").filter(x => x.endsWith(".md"));
+  const filenames = fs.readdirSync("copy").filter(x => x.endsWith(".md") && !x.startsWith("."));
   for (let filename of filenames) {
     generateHtmlFile(filename);
   }
