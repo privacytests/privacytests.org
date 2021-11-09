@@ -1,6 +1,26 @@
 # News
 
-## [Issue 3](/) (2021-11-02)
+## [Issue 4](/) (2021-11-09)
+
+### Nightly builds
+
+I have now added testing of the Nightly build channel (or the nearest equivalent) for all tested desktop browers. These include:
+* Brave Nightly
+* Chrome Canary
+* Edge Canary
+* Firefox Nightly
+* Opera Developer
+* Safari Technology Preview
+* Tor Browser Nightly
+* Vivaldi Snapshot
+
+These tests give a preview of future privacy developments in these browsers. And I hope it offers faster feedback for browser development teams as they land patches for new privacy protections.
+
+### New browser versions
+
+Since Issue 3, Firefox has updated to v. 94.0.
+
+## [Issue 3](/archive/issue3.html) (2021-11-02)
 
 ### New browser versions
 
