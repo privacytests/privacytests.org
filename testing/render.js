@@ -296,7 +296,7 @@ const resultsToTable = (results, title) => {
 // Create the title HTML for a results table.
 const tableTitle = (nightly) => `
   <div class="table-title">
-    ${nightly ? "Nightly" : "Desktop"} Browsers
+    ${nightly ? "Nightly builds" : "Desktop Browsers"}
   </div>
   <div class="instructions">(click anywhere for more info)</a>`;
 
@@ -312,9 +312,16 @@ const content = (results, jsonFilename) => {
   let { headers, body } = resultsToTable(results.all_tests, tableTitle(nightly));
   return `
     <div class="banner" id="issueBanner">
-      <div class="left-heading">No. 3</div>
+      <div class="left-heading">No. 4</div>
       <div class="middle-heading">Open-source tests of web browser privacy.</div>
       <div class="right-heading">Updated ${dateString(results.timeStarted)}</div>
+    </div>
+    <div class="banner" id="navBanner">
+      <div class="navItem">
+        ${nightly ?
+          '<a href="/">Desktop browsers ›</a>' :
+          '<a href="nightly.html"><span style="color:red">New</span> Nightly builds ›</a>'}
+      </div>
     </div>
     <div class="banner" id="legend">
       <div><span class="marker good">&nbsp;</span>= Passed privacy test</div>
