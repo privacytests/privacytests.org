@@ -252,7 +252,8 @@ let tests = {
       document.getElementsByTagName("head")[0].appendChild(link);
       let cssLoadPromise = new Promise((resolve, reject) => link.addEventListener("load", resolve, {once:true}));
       link.href = testURI("resource", "css", key);
-      await cssLoadPromise;
+      let cssLoad = await cssLoadPromise;
+      console.log(cssLoad);
       return key;
     },
     read: async (key) => {
@@ -261,7 +262,8 @@ let tests = {
       document.getElementsByTagName("head")[0].appendChild(link);
       let cssLoadPromise = new Promise((resolve, reject) => link.addEventListener("load", resolve, {once:true}));
       link.href = testURI("resource", "css", key);
-      await cssLoadPromise;
+      let cssLoad = await cssLoadPromise;
+      console.log(cssLoad);
       let response = await fetch(
         testURI("ctr", "css", key), {"cache": "reload"});
       return (await response.text()).trim();
