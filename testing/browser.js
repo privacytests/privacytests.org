@@ -167,7 +167,7 @@ class Browser {
     }
     this._resultsWebSocket = await connect("wss://results.privacytests.org/ws");
     const firstMessage = await this._resultsWebSocket.source.next();
-    this._keepAlivePingId = setInterval(() => this._resultsWebSocket.socket.send("ping"), 30000);
+    this._keepAlivePingId = setInterval(() => this._resultsWebSocket.socket.send('{message:"ping"}'), 30000);
     console.log("message received", (new Date()).toISOString());
     console.log(firstMessage);
     const { sessionId } = JSON.parse(firstMessage.value);
