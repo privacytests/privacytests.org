@@ -54,7 +54,6 @@ const macOSdefaultBrowserSettings = {
     nightly: "Firefox Nightly",
     privateFlag: "private-window",
     dataDir: "Firefox/Profiles/",
-    preLaunchDelay: 10000,
   },
   edge: {
     name: "Microsoft Edge",
