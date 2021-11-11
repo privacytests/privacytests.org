@@ -13,7 +13,6 @@ let countMaps = {
   "prefetch": {},
 };
 let resourceFiles = {
-  "css": "stylesheet.css",
   "favicon": "favicon.png",
   "fetch": "page.html",
   "font": "font.woff",
@@ -21,6 +20,21 @@ let resourceFiles = {
   "page": "page.html",
   "preload": "page.html",
   "prefetch": "page.html",
+};
+
+let fileGenerators = {
+  "css": () => `#css { font-family: fake_${Math.random().toString().slice(2)}; }`,
+};
+
+let mimeTypes = {
+  "favicon": "image/png",
+  "fetch": "text/html",
+  "font": "font/woff",
+  "image": "image.png",
+  "page": "text/html",
+  "preload": "text/html",
+  "prefetch": "text/html",
+  "css": "text/css",
 };
 
 app.get('/', (req, res) => res.send('Hello World!'));
@@ -37,7 +51,13 @@ app.get('/resource', (req, res) => {
   res.set({
     "Cache-Control": "public, max-age=604800, immutable"
   });
-  res.sendFile(resourceFiles[type], { root: __dirname });
+  res.setHeader('content-type', mimeTypes[type]);
+  const file = resourceFiles[type];
+  if (file) {
+    res.sendFile(file, { root: __dirname });
+  } else {
+    res.send(fileGenerators[type]());
+  }
 });
 app.get('/ctr', (req, res) => {
   let { key, type } = req.query;

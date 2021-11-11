@@ -247,26 +247,36 @@ let tests = {
   "CSS cache": {
     description: "CSS stylesheets are cached, and if that cache is shared between websites, it can be used to track users across sites.",
     write: async (key) => {
-      let link = document.createElement("link");
-      link.rel = "stylesheet";
-      document.getElementsByTagName("head")[0].appendChild(link);
-      let cssLoadPromise = new Promise((resolve, reject) => link.addEventListener("load", resolve, {once:true}));
-      link.href = testURI("resource", "css", key);
-      let cssLoad = await cssLoadPromise;
-      console.log(cssLoad);
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
       return key;
     },
     read: async (key) => {
-      let link = document.createElement("link");
-      link.rel = "stylesheet";
-      document.getElementsByTagName("head")[0].appendChild(link);
-      let cssLoadPromise = new Promise((resolve, reject) => link.addEventListener("load", resolve, {once:true}));
-      link.href = testURI("resource", "css", key);
-      let cssLoad = await cssLoadPromise;
-      console.log(cssLoad);
-      let response = await fetch(
-        testURI("ctr", "css", key), {"cache": "reload"});
-      return (await response.text()).trim();
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return fontFamily;
     }
   },
 /*  "video": {
