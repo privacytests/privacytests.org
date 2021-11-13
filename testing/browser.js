@@ -54,6 +54,8 @@ const macOSdefaultBrowserSettings = {
     nightly: "Firefox Nightly",
     privateFlag: "private-window",
     dataDir: "Firefox/Profiles/",
+    createProfile: "-CreateProfile",
+    profile: "pto",
   },
   edge: {
     name: "Microsoft Edge",
@@ -111,12 +113,12 @@ const browserPath = ({browser, nightly}) => {
   }
 };
 
-const browserCommand = ({browser, path, incognito, tor, appPath}) => {
-  const { privateFlag, torFlag, useOpen } = macOSdefaultBrowserSettings[browser];
+const browserCommand = ({browser, path, incognito, tor, appPath }) => {
+  const { privateFlag, torFlag, useOpen, profile } = macOSdefaultBrowserSettings[browser];
   if (useOpen) {
     return `open -a "${appPath}"`;
   } else {
-    const flags = `${incognito ? "--" + privateFlag : ""} ${tor ? "--" + torFlag : ""}`;
+    const flags = `${incognito ? "--" + privateFlag : ""} ${tor ? "--" + torFlag : ""} ${profile ? "-P " + profile : ""}`;
     return `"${path}" ${flags}`.trim();
   }
 };
@@ -154,9 +156,24 @@ class Browser {
     this._resultsWebSocket = null;
     this._keepAlivePingId = null;
   }
+  // Set up websocket.
+  async connectWebsocket() {
+    this._resultsWebSocket = await connect("wss://results.privacytests.org/ws");
+    const firstMessage = await this._resultsWebSocket.source.next();
+    console.log("message received", (new Date()).toISOString());
+    console.log(firstMessage);
+    const { sessionId } = JSON.parse(firstMessage.value);
+    this._sessionId = sessionId;
+    this._keepAlivePingId = setInterval(() => this._resultsWebSocket.socket.send('{"message":"ping"}'), 30000);
+  }
   // Launch the browser.
   async launch() {
     await sleepMs(this._defaults.preLaunchDelay ?? 0);
+    console.log(this._defaults);
+    const { createProfile, profile } = this._defaults;
+    if (createProfile) {
+    //  exec(`${this._command} ${createProfile} ${"pto"}`);
+    }
     this._process = exec(this._command);
     await sleepMs(this._defaults.postLaunchDelay ?? 0);
     await sleepMs(5000);
@@ -165,13 +182,7 @@ class Browser {
       const appName = this.nightly ? nightly : name;
 //      execSync(`${this._defaults.incognitoCommand} "${appName}"`);
     }
-    this._resultsWebSocket = await connect("wss://results.privacytests.org/ws");
-    const firstMessage = await this._resultsWebSocket.source.next();
-    this._keepAlivePingId = setInterval(() => this._resultsWebSocket.socket.send('{message:"ping"}'), 30000);
-    console.log("message received", (new Date()).toISOString());
-    console.log(firstMessage);
-    const { sessionId } = JSON.parse(firstMessage.value);
-    this._sessionId = sessionId;
+    await this.connectWebsocket();
   }
   // Get the browser version.
   get version() {
@@ -226,7 +237,11 @@ class Browser {
     }
     try {
       clearInterval(this._keepAlivePingId);
-      execSync(`killall "${path.basename(this._path)}"`);
+      if (this._defaults.useOpen) {
+        execSync(`killall "${path.basename(this._path)}"`);
+      } else {
+        this._process.kill();
+      }
       await sleepMs(5000);
     } catch (e) {
       console.log(e);
