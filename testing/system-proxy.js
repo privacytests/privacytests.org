@@ -25,7 +25,7 @@ const getNetworkServices = () => {
 
 const setProxyState = (networkService, type, enabled) => {
   const state = enabled ? "on" : "off";
-  return run(`networksetup -set${type}proxystate ${networkService} ${state}`);
+  return run(`networksetup -set${type}proxystate "${networkService}" "${state}"`);
 };
 
 const setProxy = (networkService, type, { enabled, domain, port, authenticated, username, password }) => {
@@ -33,7 +33,7 @@ const setProxy = (networkService, type, { enabled, domain, port, authenticated, 
   let usernameString = username === undefined ? "" : username;
   let passwordString = password === undefined ? "" : password;
   if (domain !== undefined && port !== undefined) {
-    run(`networksetup -set${type}proxy ${networkService} ${domain} ${port} ${authenticatedString} ${usernameString} ${passwordString}`);
+    run(`networksetup -set${type}proxy "${networkService}" "${domain}" "${port}" "${authenticatedString}" "${usernameString} ${passwordString}"`);
   }
   if (enabled !== undefined) {
     setProxyState(networkService, type, enabled);
@@ -60,7 +60,7 @@ const parseGetterResult = raw => {
 };
 
 const getProxy = (networkService, type) => {
-  const raw = run(`networksetup -get${type}proxy ${networkService}`);
+  const raw = run(`networksetup -get${type}proxy "${networkService}"`);
   return parseGetterResult(raw);
 };
 
