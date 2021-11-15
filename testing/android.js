@@ -1,8 +1,10 @@
+const { default: WebDriver}  = require("webdriver");
+
 const browserInfo = {
   baidu: {
     packageName: "com.baidu.searchbox",
-    urlBarClick: "com.baidu.searchbox (package)",
-    urlBarKeys: "com.baidu.searchbox:id/SearchTextInput"
+    urlBarClick: "baidu_searchbox",
+    urlBarKeys: "SearchTextInput"
   },
   brave: {
     packageName: "com.brave.browser",
@@ -32,7 +34,7 @@ const browserInfo = {
   },
   focus: {
     packageName: "org.mozilla.focus",
-    urlBarClick: "mozac_browser_toolbar_url_view",
+    urlBarClick: "mozac_browser_toolbar_edit_url_view",
     urlBarKeys: "mozac_browser_toolbar_edit_url_view"
   },
   mi: {
@@ -47,6 +49,7 @@ const browserInfo = {
   },
   tor: {
     packageName: "org.torproject.torbrowser",
+    startupClick: "tor_bootstrap_connect_button",
     urlBarClick: "toolbar",
     urlBarKeys: "mozac_browser_toolbar_edit_url_view"
   },
@@ -67,7 +70,54 @@ const browserInfo = {
   },
   yandex: {
     packageName: "com.yandex.browser",
-    urlBarClick: "bro_omnibar_address_title_text",
+    urlBarClick: "bro_sentry_bar_fake_text",
     urlBarKeys: "suggest_omnibox_query_edit"
   }
 }
+
+const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
+
+const findElementWithId = async (client, packageName, id) => {
+  const elementObject = await client.findElement("id", `${packageName}:id/${id}`);
+  return elementObject.ELEMENT;
+};
+
+const demoBrowser = async (client, browserName, url) => {
+  const { startupClick, packageName, urlBarClick, urlBarKeys } = browserInfo[browserName];
+  await client.activateApp(packageName);
+  await sleepMs(2000);
+  if (startupClick) {
+    const startupButton = await findElementWithId(client, packageName, startupClick);
+    await client.elementClick(startupButton)
+    await sleepMs(3000);
+  }
+  const urlBarToClick = await findElementWithId(client, packageName, urlBarClick);
+  await client.elementClick(urlBarToClick);
+  await sleepMs(1000);
+  const urlBarToSendKeys = await findElementWithId(client, packageName, urlBarKeys);
+  await client.elementSendKeys(urlBarToSendKeys, url + "\\n");
+  await sleepMs(8000);
+  await client.terminateApp(packageName);
+};
+
+async function main() {
+  console.log(WebDriver);
+  const client = await WebDriver.newSession({
+    port: 4723,
+    hostname: "0.0.0.0",
+    path: "/wd/hub",
+    capabilities: { platformName: "Android"}
+  });
+  await demoBrowser(client, "yandex", "https://torpat.ch");
+  /*
+  for (let browser of Object.keys(browserInfo)) {
+    try {
+      console.log(`running ${browser} demo`)
+      await demoBrowser(client, browser, "https://privacytests.org");
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  */
+}
+main();
