@@ -1,6 +1,15 @@
 # News
 
-## [Issue 4](/) (2021-11-09)
+## [Issue 5](/) (2021-11-17)
+
+### New browser versions
+
+Since Issue 4, browsers have updated:
+* Brave 1.32
+* Opera 81.0
+* Tor Browser 11.0
+
+## [Issue 4](/archive/issue4.html) (2021-11-09)
 
 ### Testing of nightly builds added
 
