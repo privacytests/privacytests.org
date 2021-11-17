@@ -247,24 +247,36 @@ let tests = {
   "CSS cache": {
     description: "CSS stylesheets are cached, and if that cache is shared between websites, it can be used to track users across sites.",
     write: async (key) => {
-      let link = document.createElement("link");
-      link.rel = "stylesheet";
-      document.getElementsByTagName("head")[0].appendChild(link);
-      let cssLoadPromise = new Promise((resolve, reject) => link.addEventListener("load", resolve, {once:true}));
-      link.href = testURI("resource", "css", key);
-      await cssLoadPromise;
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
       return key;
     },
     read: async (key) => {
-      let link = document.createElement("link");
-      link.rel = "stylesheet";
-      document.getElementsByTagName("head")[0].appendChild(link);
-      let cssLoadPromise = new Promise((resolve, reject) => link.addEventListener("load", resolve, {once:true}));
-      link.href = testURI("resource", "css", key);
-      await cssLoadPromise;
-      let response = await fetch(
-        testURI("ctr", "css", key), {"cache": "reload"});
-      return (await response.text()).trim();
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return fontFamily;
     }
   },
 /*  "video": {
@@ -447,20 +459,20 @@ let tests = {
   "H1 connection": {
     description: "HTTP/1.x are the classic web connection protocols. If these connections are re-used across websites, they can be used to track users.",
     write: async (secret) => {
-      await fetch(`https://h1.arthuredelstein.net:8901/?mode=write&secret=${secret}`);
+      await fetch(`https://h1.arthuredelstein.net:8901/?mode=write&secret=${secret}`, {cache: "no-store"});
     },
     read: async () => {
-      let response = await fetch(`https://h1.arthuredelstein.net:8901/?mode=read`);
+      let response = await fetch(`https://h1.arthuredelstein.net:8901/?mode=read`, {cache: "no-store"});
       return await response.text();
     }
   },
   "H2 connection": {
     description: "HTTP/2 is a web connection protocol introduced in 2015. Some browsers re-use HTTP/2 connections across websites and can thus be used to track users.",
     write: async (secret) => {
-      await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`);
+      await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`, {cache: "no-store"});
     },
     read: async () => {
-      let response = await fetch(`https://h2.arthuredelstein.net:8902/?mode=read`);
+      let response = await fetch(`https://h2.arthuredelstein.net:8902/?mode=read`, {cache: "no-store"});
       return await response.text();
     }
   },
@@ -469,11 +481,11 @@ let tests = {
     write: async (secret) => {
       // Ensure that we can switch over to h3 via alt-svc:
       for (let i = 0; i<3; ++i) {
-        await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
+        await fetch(`https://h3.arthuredelstein.net:4433/connection_id`, {cache: "no-store"});
         await sleepMs(500);
       }
       // Are we now connecting over h3?
-      let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
+      let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`, {cache: "no-store"});
       let text = await response.text();
       // Empty response text indicates we are not connecting over h3:
       if (text.trim() === "") {
