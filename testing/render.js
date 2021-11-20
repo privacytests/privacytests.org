@@ -312,7 +312,7 @@ const content = (results, jsonFilename) => {
   let { headers, body } = resultsToTable(results.all_tests, tableTitle(nightly));
   return `
     <div class="banner" id="issueBanner">
-      <div class="left-heading">No. 4</div>
+      <div class="left-heading">No. 5</div>
       <div class="middle-heading">Open-source tests of web browser privacy.</div>
       <div class="right-heading">Updated ${dateString(results.timeStarted)}</div>
     </div>
@@ -320,7 +320,7 @@ const content = (results, jsonFilename) => {
       <div class="navItem">
         ${nightly ?
           '<a href="/">Desktop browsers ›</a>' :
-          '<a href="nightly.html"><span style="color:red">New</span> Nightly builds ›</a>'}
+          '<a href="nightly.html">Nightly builds ›</a>'}
       </div>
     </div>
     <div class="banner" id="legend">
