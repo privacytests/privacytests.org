@@ -42,7 +42,7 @@ wss.on('connection', function connection(ws) {
     try {
       console.log('received: %s', JSON.parse(message));
     } catch (e) {
-      console.log(e);
+      console.log(e, message);
     }
   });
 
