@@ -4,7 +4,7 @@
 
 ### New browser versions
 
-Since Issue 4, browsers have updated:
+Since Issue 4, three browsers have updates:
 * Brave 1.32
 * Opera 81.0
 * Tor Browser 11.0
