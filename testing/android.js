@@ -100,6 +100,17 @@ const demoBrowser = async (client, browserName, url) => {
   await client.terminateApp(packageName);
 };
 
+const demoAllBrowsers = async (client, url) => {
+  for (let browser of Object.keys(browserInfo)) {
+    try {
+      console.log(`running ${browser} demo`)
+      await demoBrowser(client, browser, url);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+};
+
 async function main() {
   console.log(WebDriver);
   const client = await WebDriver.newSession({
@@ -108,16 +119,7 @@ async function main() {
     path: "/wd/hub",
     capabilities: { platformName: "Android"}
   });
-  await demoBrowser(client, "yandex", "https://torpat.ch");
-  /*
-  for (let browser of Object.keys(browserInfo)) {
-    try {
-      console.log(`running ${browser} demo`)
-      await demoBrowser(client, browser, "https://privacytests.org");
-    } catch (e) {
-      console.log(e);
-    }
-  }
-  */
+  await demoAllBrowsers(client, "https://arthuredelstein.net");
+  //await demoBrowser(client, "yandex", "https://torpat.ch");
 }
 main();
