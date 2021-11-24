@@ -42,6 +42,11 @@ const browserInfo = {
     urlBarClick: "search_hint",
     urlBarKeys: "url"
   },
+  opera: {
+    packageName: "com.opera.browser",
+    urlBarClick: "url_field",
+    urlBarKeys: "url_field"
+  },
   samsung: {
     packageName: "com.sec.android.app.sbrowser",
     urlBarClick: "location_bar_edit_text",
@@ -85,7 +90,7 @@ const findElementWithId = async (client, packageName, id) => {
 const demoBrowser = async (client, browserName, url) => {
   const { startupClick, packageName, urlBarClick, urlBarKeys } = browserInfo[browserName];
   await client.activateApp(packageName);
-  await sleepMs(2000);
+  await sleepMs(5000);
   if (startupClick) {
     const startupButton = await findElementWithId(client, packageName, startupClick);
     await client.elementClick(startupButton)
@@ -119,7 +124,7 @@ async function main() {
     path: "/wd/hub",
     capabilities: { platformName: "Android"}
   });
-  await demoAllBrowsers(client, "https://arthuredelstein.net");
-  //await demoBrowser(client, "yandex", "https://torpat.ch");
+  await demoBrowser(client, "edge", "https://edge.com");
+//  await demoAllBrowsers(client, "https://arthuredelstein.net");
 }
 main();
