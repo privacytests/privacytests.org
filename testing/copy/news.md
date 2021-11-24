@@ -6,11 +6,11 @@
 
 Since Issue 5, Edge has updated to version 96.0
 
-## A privacy improvement in Brave
+### A privacy improvement in Brave
 
 Brave has introduced an important new partitioning behavior. HTTP1, HTTP2, and HTTP3 connections are now partitioned by first party. That means your web connections can no longer be used to correlate your visits between different websites.
 
-Congratulations to the Brave team for this fix!
+Thanks and congratulations to the Brave team for this fix!
 
 ## [Issue 5](/archive/issue5.html) (2021-11-17)
 
