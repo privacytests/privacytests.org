@@ -172,7 +172,7 @@ class Browser {
     console.log(this._defaults);
     const { createProfile, profile } = this._defaults;
     if (createProfile) {
-    //  exec(`${this._command} ${createProfile} ${"pto"}`);
+      execSync(`"${this._path}" ${createProfile} ${"pto"}`);
     }
     this._process = exec(this._command);
     await sleepMs(this._defaults.postLaunchDelay ?? 0);
@@ -180,7 +180,8 @@ class Browser {
     if (this.incognito && this._defaults.incognitoCommand) {
       const { name, nightly  } = this._defaults;
       const appName = this.nightly ? nightly : name;
-//      execSync(`${this._defaults.incognitoCommand} "${appName}"`);
+        exec(`${this._defaults.incognitoCommand} "${appName}"`);
+        await sleepMs(5000);
     }
     await this.connectWebsocket();
   }
