@@ -312,7 +312,7 @@ const content = (results, jsonFilename) => {
   let { headers, body } = resultsToTable(results.all_tests, tableTitle(nightly));
   return `
     <div class="banner" id="issueBanner">
-      <div class="left-heading">No. 5</div>
+      <div class="left-heading">No. 6</div>
       <div class="middle-heading">Open-source tests of web browser privacy.</div>
       <div class="right-heading">Updated ${dateString(results.timeStarted)}</div>
     </div>
