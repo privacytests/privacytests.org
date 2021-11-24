@@ -307,8 +307,7 @@ const dateString = (dateTime) => {
 };
 
 // Creates the content for a page.
-const content = (results, jsonFilename) => {
-  const nightly = results.all_tests.every(t => (t.nightly === true));
+const content = (results, jsonFilename, nightly) => {
   let { headers, body } = resultsToTable(results.all_tests, tableTitle(nightly));
   return `
     <div class="banner" id="issueBanner">
@@ -407,11 +406,12 @@ const render = async ({ dataFile, live, aggregate }) => {
   let processedResults = aggregate ? aggregateRepeatedTrials(results) : results;
 //  console.log(results.all_tests[0]);
 //  console.log(JSON.stringify(results));
+  const nightly = results.all_tests.every(t => (t.nightly === true));
   await fs.writeFile(resultsFileHTMLLatest, template.htmlPage({
     title: "PrivacyTests.org",
-    content: content(processedResults, path.basename(resultsFileJSON)),
+      content: content(processedResults, path.basename(resultsFileJSON), nightly),
     cssFiles: ["./template.css", "./inline.css"],
-    previewImageUrl: "/preview1.png"
+    previewImageUrl: nightly ? "nightlyPreview.png" : "desktopPreview.png"
   }));
   console.log(`Wrote out ${fileUrl(resultsFileHTMLLatest)}`);
   await fs.copyFile(resultsFileHTMLLatest, resultsFileHTML);
