@@ -14,18 +14,6 @@ const postData = async (results) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({sessionId, url: window.location.href, "data": results})
+    body: JSON.stringify({sessionId, "data": results})
   });
-  return await response.json();
 };
-
-const postDataAndFollowInstructions = async (results, type) => {
-  const { newTabUrl, navigateUrl } = await postData(results, type);
-  if (newTabUrl) {
-    window.open(newTabUrl, "_blank");
-  }
-  if (navigateUrl) {
-    window.location.href = navigateUrl;
-  }
-};
-    
