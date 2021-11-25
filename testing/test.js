@@ -15,6 +15,7 @@ const fetch = require('node-fetch');
 const render = require('./render');
 const { Browser } = require("./browser.js");
 const proxy = require("./system-proxy");
+const { connect } = require("it-ws/client");
 
 // ## Utility functions
 
@@ -37,6 +38,13 @@ const deadlinePromise = async (promise, timeMs) => {
 // Reads the current git commit hash for this program in a string. Used
 // when reporting results, to make them easier to reproduce.
 const gitHash = () => execSync('git rev-parse HEAD', { cwd: __dirname}).toString().trim();
+
+// Accepts a url string and a key and val to add search parameter.
+const addSearchParam = (url, key, val) => {
+  let urlObject = new URL(url);
+  urlObject.searchParams.set(key, val);
+  return urlObject.href;
+};
 
 // Fetch results from a json API.
 const fetchJSON = async (...fetchArgs) => {
@@ -85,6 +93,60 @@ const restoreProxies = () => {
     proxy.setProxies(networkService, originalProxyState[networkService]);
   }
 };
+
+// ## Websocket setup
+
+  // Set up websocket.
+const createWebsocket = async () => {
+  const websocket = await connect("wss://results.privacytests.org/ws");
+  const firstMessage = await websocket.source.next();
+  console.log("message received", (new Date()).toISOString());
+  console.log(firstMessage);
+  const { sessionId } = JSON.parse(firstMessage.value);
+  websocket._sessionId = sessionId;
+  websocket._keepAlivePingId = setInterval(() => websocket.socket.send('{"message":"ping"}'), 30000);
+  return websocket;
+}
+
+
+const nextValue = async (websocket) => {
+  const message = await websocket.source.next();
+  if (message.value === undefined) {
+    throw new Error(`Unexpected message: ${JSON.stringify(message)}`);
+  }
+  const { sessionId, data } = JSON.parse(message.value);
+  if (sessionId !== websocket._sessionId) {
+    throw new Error("Unexpected sessionId");
+  }
+  return data;
+};
+
+  // Run a test where we open a tab at url and wait for 1 or more
+  // results to come back.
+const runTest = async (browser, url, resultCountExpected = 1) => {
+  const websocket = browser._websocket;
+  const url2 = addSearchParam(url, "sessionId", websocket._sessionId);
+  browser.openUrl(url2);
+  if (resultCountExpected === 1) {
+    return await nextValue(websocket);
+  } else {
+    let results = [];
+    for (let i = 0; i<resultCountExpected; ++i) {
+      results.push(await nextValue(websocket));
+    }
+    return results;
+  }
+}
+
+const destroyWebSocket = (websocket) => {
+  try {
+    clearInterval(websocket._keepAlivePingId);
+    websocket.destroy();
+  } catch (e) {
+    console.log(e);
+  }
+
+}
 
 // ## Testing
 
@@ -163,15 +225,15 @@ const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDiff
 // Supercookie tests. Returns { "test1": { results1 }, "test2": ... }
 const runSupercookieTests = async (browser) => {
   const secret = Math.random().toString().slice(2);
-  const writeResults = await browser.runTest(`${iframe_root_same}/supercookies.html?mode=write&default=${secret}`);
+  const writeResults = await runTest(browser, `${iframe_root_same}/supercookies.html?mode=write&default=${secret}`);
   let readParams = "";
   for (let [test, data] of Object.entries(writeResults)) {
     if ((typeof data["result"]) === "string") {
       readParams += `&${test}=${encodeURIComponent(data["result"])}`;
     }
   }
-  const readResultsSameFirstParty = await browser.runTest(`${iframe_root_same}/supercookies.html?mode=read${readParams}`);
-  const readResultsDifferentFirstParty = await browser.runTest(`${iframe_root_different}/supercookies.html?mode=read${readParams}`);
+  const readResultsSameFirstParty = await runTest(browser, `${iframe_root_same}/supercookies.html?mode=read${readParams}`);
+  const readResultsDifferentFirstParty = await runTest(browser, `${iframe_root_different}/supercookies.html?mode=read${readParams}`);
   const supercookies = getJointResult(writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty);
   return supercookies;
 };
@@ -179,21 +241,21 @@ const runSupercookieTests = async (browser) => {
 // Navigation tests. Returns { "test1": { results1 }, "test2": ... }
 const runNavigationTests = async (browser) => {
   const secret = Math.random().toString().slice(2);
-  const [writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2] = await browser.runTest(`${iframe_root_same}/navigation.html?mode=write&default=${secret}`, 3);
+  const [writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2] = await runTest(browser, `${iframe_root_same}/navigation.html?mode=write&default=${secret}`, 3);
   const navigation = getJointResult(writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2);
   return navigation;
 };
 
 // Fingerprinting tests. Returns { "test1": { results1 }, "test2": ... }
 const runFingerprintingTests = async (browser) => {
-  return await browser.runTest(`${iframe_root_same}/fingerprinting.html`);
+  return await runTest(browser, `${iframe_root_same}/fingerprinting.html`);
 };
 
 // Misc tests. Returns { "test1": { results1 }, "test2": ... }
 const runMiscTests = async (browser) => {
   const ipAddress = await fetch_ipAddress();
   console.log({ ipAddress });
-  const misc = await browser.runTest(`${iframe_root_same}/misc.html`);
+  const misc = await runTest(browser, `${iframe_root_same}/misc.html`);
   // Complete the IP address leak test. Do websites see the same IP address that
   // this script does?
   const misc_ipAddressLeak = misc["IP address leak"];
@@ -220,7 +282,7 @@ const queryParameterTestUrl = (parameters) => {
 
 // Tracking query parameter tests. Returns { "test1": { results1 }, "test2": ... }
 const runQueryTests = async (browser) => {
-  const queryParametersRaw = await browser.runTest(queryParameterTestUrl(TRACKING_QUERY_PARAMETERS));
+  const queryParametersRaw = await runTest(browser, queryParameterTestUrl(TRACKING_QUERY_PARAMETERS));
   let queryParameters = {};
   for (let param of Object.keys(TRACKING_QUERY_PARAMETERS)) {
       queryParameters[param] = {
@@ -234,10 +296,10 @@ const runQueryTests = async (browser) => {
 
 // HTTPS tests. Returns { "test1": { results1 }, "test2": ... }
 const runHttpsTests = async (browser) => {
-  const https1 = await browser.runTest(`${iframe_root_same}/https.html`);
-  const [https2, https3] = await browser.runTest(
+  const https1 = await runTest(browser, `${iframe_root_same}/https.html`);
+  const [https2, https3] = await runTest(browser,
     `http://upgradable.arthuredelstein.net/upgradable.html?source=address`, 2);
-  const https4Promise = browser.runTest(`http://insecure.arthuredelstein.net/insecure.html`);
+  const https4Promise = runTest(browser, `http://insecure.arthuredelstein.net/insecure.html`);
   const result = await Promise.race([sleep(10000), https4Promise]);
   const https4 = result === undefined ?
     { "Insecure website": { passed: true, result: "Insecure website never loaded" } } :
@@ -288,6 +350,7 @@ const runTestsBatch = async (configList, { shouldQuit } = { shouldQuit: true }) 
     const { browser, incognito, tor, nightly } = config;
     const timeStarted = new Date().toISOString();
     const browserObject = new Browser(config);
+    browserObject._websocket = await createWebsocket();
     try {
       await browserObject.launch();
       const testResults = await deadlinePromise(runTests(browserObject), 300000);
@@ -301,6 +364,7 @@ const runTestsBatch = async (configList, { shouldQuit } = { shouldQuit: true }) 
       console.log(e);
     }
     if (shouldQuit) {
+      await destroyWebSocket(browserObject._websocket);
       await browserObject.kill();
     }
   }

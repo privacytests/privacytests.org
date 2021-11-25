@@ -1,5 +1,4 @@
 const child_process = require('child_process');
-const { connect } = require("it-ws/client");
 const robot = require("robotjs");
 const { existsSync } = require("fs");
 const path = require("path");
@@ -123,25 +122,6 @@ const browserCommand = ({browser, path, incognito, tor, appPath }) => {
   }
 };
 
-const nextValue = async(websocket, expectedSessionId) => {
-  const message = await websocket.source.next();
-  if (message.value === undefined) {
-    throw new Error(`Unexpected message: ${JSON.stringify(message)}`);
-  }
-  const { sessionId, data } = JSON.parse(message.value);
-  if (sessionId !== expectedSessionId) {
-    throw new Error("Unexpected sessionId");
-  }
-  return data;
-};
-
-// Accepts a url string and a key and val to add search parameter.
-const addSearchParam = (url, key, val) => {
-  let urlObject = new URL(url);
-  urlObject.searchParams.set(key, val);
-  return urlObject.href;
-};
-
 // A Browser object represents a browser we run tests on.
 class Browser {
   constructor({browser, path, incognito, tor, nightly}) {
@@ -152,19 +132,7 @@ class Browser {
     this._appPath = this._path.split(".app")[0] + ".app";
     this._command = browserCommand({browser, path: this._path, incognito, tor, appPath: this._appPath});
     this._openTabs = 0;
-    this._sessionId = null;
-    this._resultsWebSocket = null;
     this._keepAlivePingId = null;
-  }
-  // Set up websocket.
-  async connectWebsocket() {
-    this._resultsWebSocket = await connect("wss://results.privacytests.org/ws");
-    const firstMessage = await this._resultsWebSocket.source.next();
-    console.log("message received", (new Date()).toISOString());
-    console.log(firstMessage);
-    const { sessionId } = JSON.parse(firstMessage.value);
-    this._sessionId = sessionId;
-    this._keepAlivePingId = setInterval(() => this._resultsWebSocket.socket.send('{"message":"ping"}'), 30000);
   }
   // Launch the browser.
   async launch() {
@@ -183,7 +151,6 @@ class Browser {
         exec(`${this._defaults.incognitoCommand} "${appName}"`);
         await sleepMs(5000);
     }
-    await this.connectWebsocket();
   }
   // Get the browser version.
   get version() {
@@ -202,31 +169,8 @@ class Browser {
     exec(`${this._command} "${url}"`);
     this._openTabs++;
   }
-  async nextTestResult() {
-    return await nextValue(this._resultsWebSocket, this._sessionId);
-  }
-  // Run a test where we open a tab at url and wait for 1 or more
-  // results to come back.
-  async runTest(url, resultCountExpected = 1) {
-    const url2 = addSearchParam(url, "sessionId", this._sessionId);
-    this.openUrl(url2);
-    if (resultCountExpected === 1) {
-      return this.nextTestResult();
-    } else {
-      let results = [];
-      for (let i = 0; i<resultCountExpected; ++i) {
-        results.push(await this.nextTestResult());
-      }
-      return results;
-    }
-  }
   // Clean up and close the browser.
   async kill() {
-    try {
-      this._resultsWebSocket.destroy();
-    } catch (e) {
-      console.log(e);
-    }
     try {
       for (let i = 0; i<this._openTabs; ++i) {
         robot.keyTap("w", "command");
