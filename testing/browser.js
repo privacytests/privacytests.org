@@ -172,21 +172,15 @@ class Browser {
   // Clean up and close the browser.
   async kill() {
     try {
-      for (let i = 0; i<this._openTabs; ++i) {
-        robot.keyTap("w", "command");
-      }
-      // Wait for the tabs to close
-      await sleepMs(500 * this._openTabs);
+      await sleepMs(1000);
+      execSync(`osascript closeAllWindows.applescript "${this._defaults.name}"`);
+      await sleepMs(1000);
     } catch (e) {
       console.log(e);
     }
     try {
       clearInterval(this._keepAlivePingId);
-      if (this._defaults.useOpen) {
-        execSync(`killall "${path.basename(this._path)}"`);
-      } else {
-        this._process.kill();
-      }
+      execSync(`osascript -e 'quit app "${this._defaults.name}"'`);
       await sleepMs(5000);
     } catch (e) {
       console.log(e);
