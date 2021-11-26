@@ -131,7 +131,6 @@ class Browser {
     this._version = undefined;
     this._appPath = this._path.split(".app")[0] + ".app";
     this._command = browserCommand({browser, path: this._path, incognito, tor, appPath: this._appPath});
-    this._openTabs = 0;
     this._keepAlivePingId = null;
   }
   // Launch the browser.
@@ -167,7 +166,6 @@ class Browser {
   // Open the url in a new tab.
   openUrl(url) {
     exec(`${this._command} "${url}"`);
-    this._openTabs++;
   }
   // Clean up and close the browser.
   async kill() {
