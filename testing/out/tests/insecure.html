@@ -17,7 +17,7 @@
           }
        };
        document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
-       await postData(resultsJSON);
+       await postDataAndCarryOn(resultsJSON, "insecure");
      };
      runTests();
     </script>

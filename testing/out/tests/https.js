@@ -34,7 +34,7 @@ const runTests = async () => {
   };
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
   console.log(resultsJSON);
-  await postData(resultsJSON);
+  await postDataAndCarryOn(resultsJSON, "https");
 };
 
 runTests();

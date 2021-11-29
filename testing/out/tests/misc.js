@@ -56,7 +56,7 @@ const testGPC = async () => {
 const runTests = async () => {
   let resultsJSON = Object.assign({}, await testTorAndIp(), await testGPC());
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
-  await postData(resultsJSON);
+  await postDataAndCarryOn(resultsJSON, "misc");
 };
 
 runTests();

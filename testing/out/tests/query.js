@@ -8,7 +8,7 @@ const runTests = async () => {
   for (const param of paramsFound) {
     results[param] = urlParams.get(param);
   }
-  await postData(results);
+  await postDataAndCarryOn(results, "query");
 };
 
 runTests();
