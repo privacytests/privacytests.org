@@ -24,7 +24,13 @@ const nightlyIconNames = {
 const browserLogoDataUri = _.memoize((browserName, nightly) => {
   const browserIconName = nightly ? nightlyIconNames[browserName] : browserName;
   console.log(browserName, browserIconName);
-  return datauri(`node_modules/browser-logos/src/${browserIconName}/${browserIconName}_128x128.png`).content;
+  let iconUri;
+  try {
+    iconUri = datauri(`node_modules/browser-logos/src/${browserIconName}/${browserIconName}_128x128.png`).content;
+  } catch (e) {
+    console.log(e);
+  }
+  return "";
 });
 
 // Deep-copy a JSON structure (by value)
