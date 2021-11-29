@@ -35,7 +35,7 @@
          console.log("send document.referrer:", document.referrer);
        } else {
          document.body.setAttribute("data-test-results", JSON.stringify(data));
-         await postData(data);
+         await postDataAndGetNextSteps(data);
          navigateToNextPage();
        }
      }, false);
