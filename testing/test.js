@@ -96,7 +96,7 @@ const restoreProxies = () => {
 
 // ## Websocket setup
 
-  // Set up websocket.
+// Set up websocket.
 const createWebsocket = async () => {
   const websocket = await connect("wss://results.privacytests.org/ws");
   const firstMessage = await websocket.source.next();
@@ -108,7 +108,7 @@ const createWebsocket = async () => {
   return websocket;
 }
 
-
+// Get the next value from the websocket.
 const nextValue = async (websocket) => {
   const message = await websocket.source.next();
   if (message.value === undefined) {
@@ -121,23 +121,7 @@ const nextValue = async (websocket) => {
   return data;
 };
 
-  // Run a test where we open a tab at url and wait for 1 or more
-  // results to come back.
-const runTest = async (browser, url, resultCountExpected = 1) => {
-  const websocket = browser._websocket;
-  const url2 = addSearchParam(url, "sessionId", websocket._sessionId);
-  browser.openUrl(url2);
-  if (resultCountExpected === 1) {
-    return await nextValue(websocket);
-  } else {
-    let results = [];
-    for (let i = 0; i<resultCountExpected; ++i) {
-      results.push(await nextValue(websocket));
-    }
-    return results;
-  }
-}
-
+// Close the websocket (stopping its keepalive ping)
 const destroyWebSocket = (websocket) => {
   try {
     clearInterval(websocket._keepAlivePingId);
@@ -145,7 +129,6 @@ const destroyWebSocket = (websocket) => {
   } catch (e) {
     console.log(e);
   }
-
 }
 
 // ## Testing
@@ -159,46 +142,62 @@ const iframe_root_different = "https://test-pages.privacytests.org";
 
 // Borrowed from https://github.com/brave/brave-core/blob/50df76971db6a6023b3db9aead0827606162dc9c/browser/net/brave_site_hacks_network_delegate_helper.cc#L29
 // and https://github.com/jparise/chrome-utm-stripper:
-const TRACKING_QUERY_PARAMETERS =
-  {
-    // https://github.com/brave/brave-browser/issues/4239
-    "fbclid": "Facebook Click Identifier",
-    "gclid": "Google Click Identifier",
-    "msclkid": "Microsoft Click ID",
-    "mc_eid": "Mailchimp Email ID (email recipient's address)",
-    // https://github.com/brave/brave-browser/issues/9879
-    "dclid": "DoubleClick Click ID (Google)",
-    // https://github.com/brave/brave-browser/issues/13644
-    "oly_anon_id": "Omeda marketing 'anonymous' customer id",
-    "oly_enc_id": "Omeda marketing 'known' customer id",
-    // https://github.com/brave/brave-browser/issues/11579
-    "_openstat": "Yandex tracking parameter",
-    // https://github.com/brave/brave-browser/issues/11817
-    "vero_conv": "Vero tracking parameter",
-    "vero_id": "Vero tracking parameter",
-    // https://github.com/brave/brave-browser/issues/13647
-    "wickedid": "Wicked Reports e-commerce tracking",
-    // https://github.com/brave/brave-browser/issues/11578
-    "yclid": "Yandex Click ID",
-    // https://github.com/brave/brave-browser/issues/8975
-    "__s": "Drip.com email address tracking parameter",
-    // https://github.com/brave/brave-browser/issues/17451
-    "rb_clickid": "Unknown high-entropy tracking parameter",
-    // https://github.com/brave/brave-browser/issues/17452
-    "s_cid": "Adobe Site Catalyst tracking parameter",
-    // https://github.com/brave/brave-browser/issues/17507
-    "ml_subscriber": "MailerLite email tracking",
-    "ml_subscriber_hash": "MailerLite email tracking",
-    // https://github.com/brave/brave-browser/issues/9019
-    "_hsenc": "HubSpot tracking parameter",
-    "__hssc": "HubSpot tracking parameter",
-    "__hstc": "HubSpot tracking parameter",
-    "__hsfp": "HubSpot tracking parameter",
-    "hsCtaTracking": "HubSpot tracking parameter",
-    // https://github.com/jparise/chrome-utm-stripper
-    "mkt_tok": "Adobe Marketo tracking parameter",
-    "igshid": "Instagram tracking parameter",
-  };
+const TRACKING_QUERY_PARAMETERS = {
+  // https://github.com/brave/brave-browser/issues/4239
+  "fbclid": "Facebook Click Identifier",
+  "gclid": "Google Click Identifier",
+  "msclkid": "Microsoft Click ID",
+  "mc_eid": "Mailchimp Email ID (email recipient's address)",
+  // https://github.com/brave/brave-browser/issues/9879
+  "dclid": "DoubleClick Click ID (Google)",
+  // https://github.com/brave/brave-browser/issues/13644
+  "oly_anon_id": "Omeda marketing 'anonymous' customer id",
+  "oly_enc_id": "Omeda marketing 'known' customer id",
+  // https://github.com/brave/brave-browser/issues/11579
+  "_openstat": "Yandex tracking parameter",
+  // https://github.com/brave/brave-browser/issues/11817
+  "vero_conv": "Vero tracking parameter",
+  "vero_id": "Vero tracking parameter",
+  // https://github.com/brave/brave-browser/issues/13647
+  "wickedid": "Wicked Reports e-commerce tracking",
+  // https://github.com/brave/brave-browser/issues/11578
+  "yclid": "Yandex Click ID",
+  // https://github.com/brave/brave-browser/issues/8975
+  "__s": "Drip.com email address tracking parameter",
+  // https://github.com/brave/brave-browser/issues/17451
+  "rb_clickid": "Unknown high-entropy tracking parameter",
+  // https://github.com/brave/brave-browser/issues/17452
+  "s_cid": "Adobe Site Catalyst tracking parameter",
+  // https://github.com/brave/brave-browser/issues/17507
+  "ml_subscriber": "MailerLite email tracking",
+  "ml_subscriber_hash": "MailerLite email tracking",
+  // https://github.com/brave/brave-browser/issues/9019
+  "_hsenc": "HubSpot tracking parameter",
+  "__hssc": "HubSpot tracking parameter",
+  "__hstc": "HubSpot tracking parameter",
+  "__hsfp": "HubSpot tracking parameter",
+  "hsCtaTracking": "HubSpot tracking parameter",
+  // https://github.com/jparise/chrome-utm-stripper
+  "mkt_tok": "Adobe Marketo tracking parameter",
+  "igshid": "Instagram tracking parameter",
+};
+
+// Run a test where we open a tab at url and wait for 1 or more
+// results to come back.
+const runTest = async (browser, url, resultCountExpected = 1) => {
+  const websocket = browser._websocket;
+  const urlWithSession = addSearchParam(url, "sessionId", websocket._sessionId);
+  browser.openUrl(urlWithSession);
+  if (resultCountExpected === 1) {
+    return await nextValue(websocket);
+  } else {
+    let results = [];
+    for (let i = 0; i<resultCountExpected; ++i) {
+      results.push(await nextValue(websocket));
+    }
+    return results;
+  }
+}
 
 // Takes the results of supercookie or navigation tests
 const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty) => {
