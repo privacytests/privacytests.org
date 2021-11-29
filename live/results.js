@@ -16,7 +16,7 @@ app.use(cors());
 app.get('/', (req, res) => res.send('Hello World!'));
 
 app.post('/post', (req, res) => {
-  console.log("post>>:", req.body);
+  console.log("post received.");
   let { sessionId, data } = req.body;
   if (!sessionId || !websockets[sessionId]) {
     // We don't recognized this as an existing sessionId.
@@ -26,7 +26,7 @@ app.post('/post', (req, res) => {
     // We received some data for a valid session. Forward
     // that data to the websocket assigned to the same sessionId.
     const message = JSON.stringify({sessionId, data});
-    console.log("sending to ws:", message);
+    console.log("received posted data. sending to ws:", message.substr(0, 100) + "...");
     websockets[sessionId].send(message);
     // Send an acknowledgment to the client that posted.
     res.send({sent: true, sessionId});
