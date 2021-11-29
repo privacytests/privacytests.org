@@ -78,7 +78,7 @@ const browserInfo = {
     urlBarClick: "bro_sentry_bar_fake_text",
     urlBarKeys: "suggest_omnibox_query_edit"
   }
-}
+};
 
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
