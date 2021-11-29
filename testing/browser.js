@@ -24,7 +24,6 @@ const exec = command => {
 /Applications/Opera.app/Contents/MacOS/Opera --private "https://example.com"
 /Applications/Vivaldi.app/Contents/MacOS/Vivaldi --incognito "https://arthuredelstein.net"
 open -a Safari "https://example.com"
-// Todo:: Investigate osascript for launching Safari/incognito mode instead
 */
 
 // macOS parts of the browser launch command
@@ -53,6 +52,13 @@ const macOSdefaultBrowserSettings = {
     nightly: "Firefox Nightly",
     privateFlag: "private-window",
     dataDir: "Firefox/Profiles/",
+    createProfile: "-CreateProfile",
+    profile: "pto",
+  },
+  librewolf: {
+    name: "librewolf",
+    privateFlag: "private-window",
+    dataDir: "LibreWolf/Profiles/",
     createProfile: "-CreateProfile",
     profile: "pto",
   },
