@@ -15,7 +15,7 @@
      favicon.setAttribute("href", `${baseURI}/resource?type=favicon&key=${secret}`);
      addEventListener("message", ({data}) => {
        document.body.setAttribute("data-test-results", JSON.stringify(data));
-	     postDataAndCarryOn(data);
+	     postDataAndCarryOn(data, "supercookies");
      }, false);
      let iframe = document.createElement("iframe");
      document.body.appendChild(iframe);
