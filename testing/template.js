@@ -46,7 +46,7 @@ const htmlPage = ({ content, cssFiles, previewImageUrl }) => {
   let ogImageIfNeeded = previewImageUrl ?
    `
      <meta name="twitter:card" content="summary_large_image"/>
-     <meta property="og:image" content="https://privacytests.org/preview2.png"/>
+     <meta property="og:image" content="https://privacytests.org/${previewImageUrl}"/>
      <meta property="og:title" content="Which browsers are best for privacy?"/>
      <meta property="og:description" content="An open-source privacy audit of popular web browsers."/>
      <meta property="og:type" content="website"/>
