@@ -83,9 +83,8 @@ const queryParameterTestUrl = (parameters) => {
 const getNextStepIndex = (sessionId) => {
   if (stepCounters[sessionId] === undefined) {
     stepCounters[sessionId] = 0;
-  } else {
-    ++stepCounters[sessionId];
   }
+  ++stepCounters[sessionId];
   return stepCounters[sessionId];
 };
 
@@ -93,16 +92,16 @@ const pageSequence = [
   `${iframe_root_same}/supercookies.html?mode=write&thirdparty=same`,
   `${iframe_root_same}/supercookies.html?mode=read&thirdparty=same`,
   `${iframe_root_different}/supercookies.html?mode=read&thirdparty=different`,
-  `${iframe_root_same}/navigation.html?mode=write`,
-  `${iframe_root_same}/navigation.html?mode=read`,
-  `${iframe_root_different}/navigation.html?mode=read`,
+  `${iframe_root_same}/navigation.html?mode=write&thirdparty=same`,
+  `${iframe_root_same}/navigation.html?mode=read&thirdparty=same`,
+  `${iframe_root_different}/navigation.html?mode=read&thirdparty=different`,
   `${iframe_root_same}/fingerprinting.html`,
   `${iframe_root_same}/misc.html`,
   queryParameterTestUrl(TRACKING_QUERY_PARAMETERS),
   `${iframe_root_same}/https.html`,
-  `http://upgradable.arthuredelstein.net/upgradable.html?source=address`,
   `http://upgradable.arthuredelstein.net/upgradable.html?source=hyperlink`,
-  `http://insecure.arthuredelstein.net/insecure.html`
+  `http://insecure.arthuredelstein.net/insecure.html`,
+  `${iframe_root_same}/done.html`
 ];
 
 const nextUrl = (sessionId, nextStepIndex) => {
@@ -144,9 +143,11 @@ const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDiff
 };
 
 const processQueryResults = (queryParametersRaw) => {
+  console.log(queryParametersRaw);
   let queryParameters = {};
   for (let param of Object.keys(TRACKING_QUERY_PARAMETERS)) {
-      queryParameters[param] = {
+    console.log(queryParametersRaw[param])
+    queryParameters[param] = {
       value: queryParametersRaw[param],
       passed: (queryParametersRaw[param] === undefined),
       description: TRACKING_QUERY_PARAMETERS[param],
@@ -177,7 +178,7 @@ const processResults = (rawResults) => {
     https: Object.assign({}, https, insecure, upgradable),
     fingerprinting,
     navigation,
-    supercookies, 
+    supercookies,
   }
 };
 
@@ -187,8 +188,12 @@ app.use(cors());
 app.get('/', (req, res) => res.send('Hello World!'));
 
 app.get('/results', (req, res) => {
-  const {sessionId} = req.query;
-  res.json(processResults(sessionResults[sessionId]));
+  const {raw, sessionId} = req.query;
+  if (raw) {
+    res.json(sessionResults[sessionId]);
+  } else {
+    res.json(processResults(sessionResults[sessionId]));
+  }
 });
 
 app.post('/post', (req, res) => {
@@ -206,12 +211,14 @@ app.post('/post', (req, res) => {
     //console.log("received posted data. ", message.substr(0, 100) + "...");
     // Send an acknowledgment to the client that posted, and instructions
     // for the next step.
-    accumulateResultData(sessionId, category, data);
+    if (data !== undefined) {
+      accumulateResultData(sessionId, category, data);
+    }
     const nextStepIndex = getNextStepIndex(sessionId);
     console.log({nextStepIndex, pageSequenceLength: pageSequence.length});
-    if (nextStepIndex >= pageSequence.length) {
+    if (nextStepIndex >= pageSequence.length - 1) {
       if (websockets[sessionId]) {
-        websockets[sessionId].send(JSON.stringify(sessionResults[sessionId]));
+        websockets[sessionId].send(JSON.stringify({sessionId, data: processResults(sessionResults[sessionId])}));
       }
       console.log(Object.keys(sessionResults[sessionId]));
     }
