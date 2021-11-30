@@ -27,10 +27,11 @@ const browserLogoDataUri = _.memoize((browserName, nightly) => {
   let iconUri;
   try {
     iconUri = datauri(`node_modules/browser-logos/src/${browserIconName}/${browserIconName}_128x128.png`).content;
+    return iconUri;
   } catch (e) {
     console.log(e);
+    return "";
   }
-  return "";
 });
 
 // Deep-copy a JSON structure (by value)
