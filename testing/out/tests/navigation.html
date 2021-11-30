@@ -8,20 +8,9 @@
   <body>
     <script src="./post_data.js"></script>
     <script>
-     const navigateToNextPage = () => {
-       let searchParams = new URLSearchParams(window.location.search);
-       if (searchParams.get("mode") === "write") {
-         searchParams.set("mode", "read");
-         window.location.search = "?" + searchParams.toString();
-       } else if (window.location.host === "arthuredelstein.net") {
-         const currentUrl = window.location.href;
-         const destinationUrl = currentUrl.replace(
-           "https://arthuredelstein.net/test-pages/",
-           "https://test-pages.privacytests.org/");
-         window.location.href = destinationUrl;
-       }
-       // Otherwise, do nothing.
-     };
+     const searchParams = new URLSearchParams(window.location.search);
+     const thirdparty = searchParams.get("thirdparty");
+     const mode = searchParams.get("mode");
 
      addEventListener("message", async ({data}) => {
        console.log("navigation.html received message:", data);
@@ -35,8 +24,7 @@
          console.log("send document.referrer:", document.referrer);
        } else {
          document.body.setAttribute("data-test-results", JSON.stringify(data));
-         await postDataAndCarryOn(data, "navigation");
-         navigateToNextPage();
+         await postDataAndCarryOn(data, `navigation_${mode}_${thirdparty}`);
        }
      }, false);
      let iframe = document.createElement("iframe");
