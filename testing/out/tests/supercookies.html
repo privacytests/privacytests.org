@@ -9,10 +9,10 @@
     <script src="./post_data.js"></script>
     <script>
      const param = (key) => new URLSearchParams(window.location.search).get(key);
-     const secret =  param("favicon cache") ?? param("default");
+     const sessionId = param("sessionId");
      let favicon = document.getElementById("favicon");
      const baseURI = "https://arthuredelstein.net/browser-privacy-live";
-     favicon.setAttribute("href", `${baseURI}/resource?type=favicon&key=${secret}`);
+     favicon.setAttribute("href", `${baseURI}/resource?type=favicon&key=${sessionId}`);
      addEventListener("message", ({data}) => {
        document.body.setAttribute("data-test-results", JSON.stringify(data));
        const mode = param("mode");
