@@ -15,7 +15,14 @@
      favicon.setAttribute("href", `${baseURI}/resource?type=favicon&key=${secret}`);
      addEventListener("message", ({data}) => {
        document.body.setAttribute("data-test-results", JSON.stringify(data));
-	     postDataAndCarryOn(data, `supercookies_${param("mode")}_${param("thirdparty")}`);
+       const mode = param("mode");
+       const thirdparty = param("thirdparty");
+       const category = `supercookies_${mode}_${thirdparty}`;
+       if (mode === "read") {
+	 postDataAndCarryOn(data, category);
+       } else {
+         postData(data, category);
+       }
      }, false);
      let iframe = document.createElement("iframe");
      document.body.appendChild(iframe);
