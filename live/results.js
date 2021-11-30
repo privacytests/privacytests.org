@@ -120,8 +120,65 @@ const accumulateResultData = (sessionId, category, data) => {
     sessionResults[sessionId][category] = data;
 };
 
-const processResults = (results) => {
-  return results;
+
+// Takes the results of supercookie or navigation tests
+const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty) => {
+  let jointResult = {};
+  for (let test in readResultsDifferentFirstParty) {
+    let { write, read, description, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
+    let { result: readSameFirstParty } = readResultsSameFirstParty[test];
+    let { result: writeResult } = writeResults[test];
+    let unsupported = (writeResult === "Error: Unsupported");
+    let readSameFirstPartyFailedToFetch = readSameFirstParty ? readSameFirstParty.startsWith("Error: Failed to fetch") : false;
+    let readDifferentFirstPartyFailedToFetch = readDifferentFirstParty ? readDifferentFirstParty.startsWith("Error: Failed to fetch") : false;
+    unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith("Error: No requests received") : false);
+    unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith("Error: image load failed") : false);
+    let testFailed = !unsupported && (!readSameFirstParty || (readSameFirstParty.startsWith("Error:") && !readSameFirstPartyFailedToFetch));
+    let passed = (testFailed || unsupported) ?
+      undefined :
+      (readSameFirstParty !== readDifferentFirstParty) ||
+      (readSameFirstPartyFailedToFetch && readDifferentFirstPartyFailedToFetch);
+    jointResult[test] = { write, read, unsupported, readSameFirstParty, readDifferentFirstParty, passed, testFailed, description };
+  }
+  return jointResult;
+};
+
+const processQueryResults = (queryParametersRaw) => {
+  let queryParameters = {};
+  for (let param of Object.keys(TRACKING_QUERY_PARAMETERS)) {
+      queryParameters[param] = {
+      value: queryParametersRaw[param],
+      passed: (queryParametersRaw[param] === undefined),
+      description: TRACKING_QUERY_PARAMETERS[param],
+    };
+  }
+  return queryParameters;
+};
+
+// Move a test from a source map to a destination map. (Mutates both maps.)
+const moveTestBetweenCategories = (testName, src, dest) => {
+  dest[testName] = src[testName];
+  delete src[testName];
+};
+
+const processResults = (rawResults) => {
+  const {
+    misc, https, insecure, upgradable, fingerprinting, query,
+    navigation_write_same, navigation_read_same, navigation_read_different,
+    supercookies_write_same, supercookies_read_same, supercookies_read_different
+  } = rawResults;
+  let supercookies = getJointResult(supercookies_write_same, supercookies_read_same, supercookies_read_different);
+  let navigation = getJointResult(navigation_write_same, navigation_read_same, navigation_read_different);
+  moveTestBetweenCategories("ServiceWorker", navigation, supercookies);
+  moveTestBetweenCategories("Stream isolation", supercookies, misc);
+  return {
+    misc,
+    query: processQueryResults(query),
+    https: Object.assign({}, https, insecure, upgradable),
+    fingerprinting,
+    navigation,
+    supercookies, 
+  }
 };
 
 app.use(express.json());
