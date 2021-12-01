@@ -12,6 +12,11 @@ let countMaps = {
   "preload": {},
   "prefetch": {},
 };
+
+let blobs = {
+
+};
+
 let resourceFiles = {
   "favicon": "favicon.png",
   "fetch": "page.html",
@@ -126,6 +131,15 @@ app.get('/auth', (req, res) => {
 app.get('/headers', (req, res) => {
   console.log("/headers requested: sending", JSON.stringify(req.headers, null, 2));
   res.json(req.headers);
+});
+
+app.get('/blob', (req, res) => {
+  let { key, mode, blobUrl } = req.query;
+  if (mode === "write") {
+    blobs[key] = blobUrl;
+  } else {
+    res.json({blobUrl: blobs[key]});
+  }
 });
 
 app.listen(port, () => console.log(`listening for file requests on ${port}`));
