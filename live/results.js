@@ -222,6 +222,11 @@ app.post('/post', (req, res) => {
       }
       console.log(Object.keys(sessionResults[sessionId]));
     }
+    if (nextStepIndex === 1) {
+      if (websockets[sessionId]) {
+        websockets[sessionId].send(JSON.stringify({sessionId, data: { supercookie_write_finished: true }}));
+      }
+    }
     res.send({received: true, sessionId, navigateUrl: nextUrl(sessionId, nextStepIndex)});
   }
 });
