@@ -73,16 +73,18 @@ let tests = {
     description: "A 'blob URL' is a local reference to some raw data. Trackers can use a blob URL to share data between websites.",
     write: (secret) => {
       try {
-        return URL.createObjectURL(new Blob([secret]));
+        let blobURL = URL.createObjectURL(new Blob([secret]));
+        fetch(`${baseURI}/blob?mode=write&key=${secret}&blobUrl=${encodeURIComponent(blobURL)}`);
       } catch (e) {
         throw new Error("Unsupported");
       }
     },
-    read: async (url) => {
-      if (url) {
-        let response = await fetch(url);
-        return response.text();
-      }
+    read: async (secret) => {
+      let response = await fetch(`${baseURI}/blob?mode=read&key=${secret}`);
+      let result = await response.json();
+      let blobUrl = decodeURIComponent(result.blobUrl);
+      let blobResponse = await fetch(blobUrl);
+      return blobResponse.text();
     },
   },
   "BroadcastChannel": {
