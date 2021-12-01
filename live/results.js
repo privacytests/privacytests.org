@@ -71,7 +71,7 @@ const stepCounters = {};
 // return a string URL with query string.
 const queryParameterTestUrl = (parameters) => {
   let secret = Math.random().toString().slice(2);
-  let baseURL = `${iframe_root_same}/query.html`;
+  let baseURL = `${iframe_root_different}/query.html`;
   let queryString = `?controlParam=controlValue`;
   for (let param of Object.keys(parameters)) {
     queryString += `&${param}=${secret}`;
