@@ -111,6 +111,7 @@ const createWebsocket = async () => {
 // Get the next value from the websocket.
 const nextValue = async (websocket) => {
   const message = await websocket.source.next();
+  console.log({message});
   if (message.value === undefined) {
     throw new Error(`Unexpected message: ${JSON.stringify(message)}`);
   }
@@ -133,184 +134,16 @@ const destroyWebSocket = (websocket) => {
 
 // ## Testing
 
-// We use two domains for supercookies and navigation tests.
-// The "same" domain is the one that is used for simluated third-party tracker
-// and one of the two first parties. The "different" domain is the other
-// first party we use.
-const iframe_root_same = "https://arthuredelstein.net/test-pages";
-const iframe_root_different = "https://test-pages.privacytests.org";
-
-// Borrowed from https://github.com/brave/brave-core/blob/50df76971db6a6023b3db9aead0827606162dc9c/browser/net/brave_site_hacks_network_delegate_helper.cc#L29
-// and https://github.com/jparise/chrome-utm-stripper:
-const TRACKING_QUERY_PARAMETERS = {
-  // https://github.com/brave/brave-browser/issues/4239
-  "fbclid": "Facebook Click Identifier",
-  "gclid": "Google Click Identifier",
-  "msclkid": "Microsoft Click ID",
-  "mc_eid": "Mailchimp Email ID (email recipient's address)",
-  // https://github.com/brave/brave-browser/issues/9879
-  "dclid": "DoubleClick Click ID (Google)",
-  // https://github.com/brave/brave-browser/issues/13644
-  "oly_anon_id": "Omeda marketing 'anonymous' customer id",
-  "oly_enc_id": "Omeda marketing 'known' customer id",
-  // https://github.com/brave/brave-browser/issues/11579
-  "_openstat": "Yandex tracking parameter",
-  // https://github.com/brave/brave-browser/issues/11817
-  "vero_conv": "Vero tracking parameter",
-  "vero_id": "Vero tracking parameter",
-  // https://github.com/brave/brave-browser/issues/13647
-  "wickedid": "Wicked Reports e-commerce tracking",
-  // https://github.com/brave/brave-browser/issues/11578
-  "yclid": "Yandex Click ID",
-  // https://github.com/brave/brave-browser/issues/8975
-  "__s": "Drip.com email address tracking parameter",
-  // https://github.com/brave/brave-browser/issues/17451
-  "rb_clickid": "Unknown high-entropy tracking parameter",
-  // https://github.com/brave/brave-browser/issues/17452
-  "s_cid": "Adobe Site Catalyst tracking parameter",
-  // https://github.com/brave/brave-browser/issues/17507
-  "ml_subscriber": "MailerLite email tracking",
-  "ml_subscriber_hash": "MailerLite email tracking",
-  // https://github.com/brave/brave-browser/issues/9019
-  "_hsenc": "HubSpot tracking parameter",
-  "__hssc": "HubSpot tracking parameter",
-  "__hstc": "HubSpot tracking parameter",
-  "__hsfp": "HubSpot tracking parameter",
-  "hsCtaTracking": "HubSpot tracking parameter",
-  // https://github.com/jparise/chrome-utm-stripper
-  "mkt_tok": "Adobe Marketo tracking parameter",
-  "igshid": "Instagram tracking parameter",
-};
-
-// Run a test where we open a tab at url and wait for 1 or more
-// results to come back.
-const runTest = async (browser, url, resultCountExpected = 1) => {
-  const websocket = browser._websocket;
-  const urlWithSession = addSearchParam(url, "sessionId", websocket._sessionId);
-  browser.openUrl(urlWithSession);
-  if (resultCountExpected === 1) {
-    return await nextValue(websocket);
-  } else {
-    let results = [];
-    for (let i = 0; i<resultCountExpected; ++i) {
-      results.push(await nextValue(websocket));
+const ipAddressTest = async (supplementaryResults) => {
+  const myIpAddress = await fetch_ipAddress();
+  let { description, ipAddress } = supplementaryResults["IP address leak"];
+  console.log(myIpAddress, ipAddress);
+  return {
+    "IP address leak": {
+      description: description,
+      passed: ipAddress !== myIpAddress
     }
-    return results;
-  }
-}
-
-// Takes the results of supercookie or navigation tests
-const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty) => {
-  let jointResult = {};
-  for (let test in readResultsDifferentFirstParty) {
-    let { write, read, description, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
-    let { result: readSameFirstParty } = readResultsSameFirstParty[test];
-    let { result: writeResult } = writeResults[test];
-    let unsupported = (writeResult === "Error: Unsupported");
-    let readSameFirstPartyFailedToFetch = readSameFirstParty ? readSameFirstParty.startsWith("Error: Failed to fetch") : false;
-    let readDifferentFirstPartyFailedToFetch = readDifferentFirstParty ? readDifferentFirstParty.startsWith("Error: Failed to fetch") : false;
-    unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith("Error: No requests received") : false);
-    unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith("Error: image load failed") : false);
-    let testFailed = !unsupported && (!readSameFirstParty || (readSameFirstParty.startsWith("Error:") && !readSameFirstPartyFailedToFetch));
-    let passed = (testFailed || unsupported) ?
-      undefined :
-      (readSameFirstParty !== readDifferentFirstParty) ||
-      (readSameFirstPartyFailedToFetch && readDifferentFirstPartyFailedToFetch);
-    jointResult[test] = { write, read, unsupported, readSameFirstParty, readDifferentFirstParty, passed, testFailed, description };
-  }
-  return jointResult;
-};
-
-// Supercookie tests. Returns { "test1": { results1 }, "test2": ... }
-const runSupercookieTests = async (browser) => {
-  const secret = Math.random().toString().slice(2);
-  const writeResults = await runTest(browser, `${iframe_root_same}/supercookies.html?mode=write&default=${secret}`);
-  let readParams = "";
-  for (let [test, data] of Object.entries(writeResults)) {
-    if ((typeof data["result"]) === "string") {
-      readParams += `&${test}=${encodeURIComponent(data["result"])}`;
-    }
-  }
-  const readResultsSameFirstParty = await runTest(browser, `${iframe_root_same}/supercookies.html?mode=read${readParams}`);
-  const readResultsDifferentFirstParty = await runTest(browser, `${iframe_root_different}/supercookies.html?mode=read${readParams}`);
-  const supercookies = getJointResult(writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty);
-  return supercookies;
-};
-
-// Navigation tests. Returns { "test1": { results1 }, "test2": ... }
-const runNavigationTests = async (browser) => {
-  const secret = Math.random().toString().slice(2);
-  const [writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2] = await runTest(browser, `${iframe_root_same}/navigation.html?mode=write&default=${secret}`, 3);
-  const navigation = getJointResult(writeResults2, readResultsSameFirstParty2, readResultsDifferentFirstParty2);
-  return navigation;
-};
-
-// Fingerprinting tests. Returns { "test1": { results1 }, "test2": ... }
-const runFingerprintingTests = async (browser) => {
-  return await runTest(browser, `${iframe_root_same}/fingerprinting.html`);
-};
-
-// Misc tests. Returns { "test1": { results1 }, "test2": ... }
-const runMiscTests = async (browser) => {
-  const ipAddress = await fetch_ipAddress();
-  console.log({ ipAddress });
-  const misc = await runTest(browser, `${iframe_root_same}/misc.html`);
-  // Complete the IP address leak test. Do websites see the same IP address that
-  // this script does?
-  const misc_ipAddressLeak = misc["IP address leak"];
-  let browser_ipAddress = misc_ipAddressLeak["ipAddress"];
-  // Don't record the actual IP address (for privacy)
-  delete misc_ipAddressLeak["ipAddress"];
-  misc_ipAddressLeak["IP addressed masked"] = ipAddress !== browser_ipAddress;
-  misc_ipAddressLeak["passed"] = misc_ipAddressLeak["IP addressed masked"];
-  return misc;
-};
-
-// Generate the test URL for our tracking query parameter tests.
-// Takes each of the parameters in the form { k1: v1, ... } and
-// return a string URL with query string.
-const queryParameterTestUrl = (parameters) => {
-  let secret = Math.random().toString().slice(2);
-  let baseURL = "https://arthuredelstein.net/test-pages/query.html";
-  let queryString = `?controlParam=controlValue`;
-  for (let param of Object.keys(parameters)) {
-    queryString += `&${param}=${secret}`;
-  }
-  return baseURL + queryString;
-};
-
-// Tracking query parameter tests. Returns { "test1": { results1 }, "test2": ... }
-const runQueryTests = async (browser) => {
-  const queryParametersRaw = await runTest(browser, queryParameterTestUrl(TRACKING_QUERY_PARAMETERS));
-  let queryParameters = {};
-  for (let param of Object.keys(TRACKING_QUERY_PARAMETERS)) {
-      queryParameters[param] = {
-      value: queryParametersRaw[param],
-      passed: (queryParametersRaw[param] === undefined),
-      description: TRACKING_QUERY_PARAMETERS[param],
-    };
-  }
-  return queryParameters;
-};
-
-// HTTPS tests. Returns { "test1": { results1 }, "test2": ... }
-const runHttpsTests = async (browser) => {
-  const https1 = await runTest(browser, `${iframe_root_same}/https.html`);
-  const [https2, https3] = await runTest(browser,
-    `http://upgradable.arthuredelstein.net/upgradable.html?source=address`, 2);
-  const https4Promise = runTest(browser, `http://insecure.arthuredelstein.net/insecure.html`);
-  const result = await Promise.race([sleep(10000), https4Promise]);
-  const https4 = result === undefined ?
-    { "Insecure website": { passed: true, result: "Insecure website never loaded" } } :
-    await https4Promise;
-  const https = Object.assign({}, https1, https2, https3, https4); // Merge results
-  return https;
-};
-
-// Move a test from a source map to a destination map. (Mutates both maps.)
-const moveTestBetweenCategories = (testName, src, dest) => {
-  dest[testName] = src[testName];
-  delete src[testName];
+  };
 };
 
 // Run all of our privacy tests using selenium for a given driver. Returns
@@ -323,16 +156,35 @@ const moveTestBetweenCategories = (testName, src, dest) => {
 //   "supercookies" : { ... } }
 const runTests = async (browserObject) => {
   try {
-    const supercookies = await runSupercookieTests(browserObject);
-    const navigation = await runNavigationTests(browserObject);
-    const fingerprinting = await runFingerprintingTests(browserObject);
-    const misc = await runMiscTests(browserObject);
-    const query = await runQueryTests(browserObject);
-    const https = await runHttpsTests(browserObject); // Merge results
-    // Move tests around to better categories:
-    moveTestBetweenCategories("ServiceWorker", navigation, supercookies);
-    moveTestBetweenCategories("Stream isolation", supercookies, misc);
-    return { supercookies, navigation, fingerprinting, misc, query, https };
+    const websocket = browserObject._websocket;
+    const sessionId = websocket._sessionId
+    browserObject.openUrl(`${iframe_root_same}/supercookies.html?mode=write&thirdparty=same&sessionId=${sessionId}`);
+    let signal = await nextValue(websocket);
+    if (!signal.supercookie_write_finished) {
+      throw new Error("failed to get signal that the supercookie write finished");
+    }
+    browserObject.openUrl(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`)
+    let mainResults = await nextValue(websocket);
+    browserObject.openUrl(`${iframe_root_same}/supplementary.html?sessionId=${sessionId}`);
+    let supplementaryResults = await nextValue(websocket);
+    let results = Object.assign({}, mainResults);
+    Object.assign(results["fingerprinting"], {"System font detection": supplementaryResults["System font detection"]});
+    const ipAddressLeak = await ipAddressTest(supplementaryResults);
+    Object.assign(results["misc"], ipAddressLeak);
+    browserObject.openUrl(`http://upgradable.arthuredelstein.net/upgradable.html?source=address&sessionId=${sessionId}`);
+    console.log("upgradable...");
+    const upgradableAddressResult = await nextValue(websocket);
+    console.log("upgradable received.");
+    Object.assign(results["https"], upgradableAddressResult);
+    browserObject.openUrl(`http://insecure.arthuredelstein.net/insecure.html?sessionId=${sessionId}`);
+    let insecureResult;
+    try {
+      insecureResult = await deadlinePromise(nextValue(websocket), 5000);
+    } catch (e) {
+      insecureResult =  { "Insecure website": { passed: true, result: "Insecure website never loaded" } };
+    }
+    Object.assign(results["https"], insecureResult);
+    return results;
   } catch (e) {
     console.log(e);
     return null;
