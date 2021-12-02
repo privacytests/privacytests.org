@@ -1,4 +1,6 @@
 const { default: WebDriver}  = require("webdriver");
+const _ = require('lodash');
+const child_process = require('child_process');
 
 const browserInfo = {
   baidu: {
@@ -116,8 +118,66 @@ const demoAllBrowsers = async (client, url) => {
   }
 };
 
+const webdriverSession = _.memoize(async () => {
+  const client = await WebDriver.newSession({
+    port: 4723,
+    hostname: "0.0.0.0",
+    path: "/wd/hub",
+    capabilities: { platformName: "Android"}
+  });
+  return client;
+});
+
+class AndroidBrowser {
+  constructor({browser, incognito, tor, nightly}) {
+    const { startupClick, packageName, urlBarClick, urlBarKeys } = browserInfo[browser];
+    Object.assign(this, {
+      browser, incognito, tor, nightly,
+      startupClick, packageName, urlBarClick, urlBarKeys
+    });
+  }
+  // Launch the browser.
+  async launch() {
+    const client = await webdriverSession();
+    this.client = client;
+    await this.client.activateApp(this.packageName);
+    await sleepMs(5000);
+    console.log("this.startupClick:",this.startupClick);
+    if (this.startupClick) {
+      const startupButton = await findElementWithId(client, this.packageName, this.startupClick);
+      if (startupButton) {
+        await this.client.elementClick(startupButton)
+        await sleepMs(20000);
+      }
+    }
+  }
+  // Get the browser version.
+  get version() {
+    const cmd = `adb shell dumpsys package ${this.packageName} | grep versionName`;
+    const raw = child_process.execSync(cmd).toString();
+    return raw.match(/versionName=(\S+)/)[1];
+  }
+  // Open the url in a new tab.
+  async openUrl(url) {
+    let urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarClick);
+    if (urlBarToClick === undefined) {
+       await sleepMs(1000);
+       urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarClick);
+    }
+    await this.client.elementClick(urlBarToClick);
+    await sleepMs(1000);
+    const urlBarToSendKeys = await findElementWithId(this.client, this.packageName, this.urlBarKeys);
+    await this.client.elementSendKeys(urlBarToSendKeys, url + "\\n");
+  }
+  // Clean up and close the browser.
+  async kill() {
+    await this.client.terminateApp(this.packageName);
+  }
+}
+
+module.exports = { AndroidBrowser };
+
 async function main() {
-  console.log(WebDriver);
   const client = await WebDriver.newSession({
     port: 4723,
     hostname: "0.0.0.0",
@@ -127,4 +187,7 @@ async function main() {
   await demoBrowser(client, "edge", "https://edge.com");
 //  await demoAllBrowsers(client, "https://arthuredelstein.net");
 }
-main();
+
+if (require.main === module) {
+  main();
+}

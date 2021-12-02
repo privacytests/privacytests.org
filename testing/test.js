@@ -14,6 +14,7 @@ const process = require('process');
 const fetch = require('node-fetch');
 const render = require('./render');
 const { Browser } = require("./browser.js");
+const { AndroidBrowser } = require("./android.js");
 const proxy = require("./system-proxy");
 const { connect } = require("it-ws/client");
 
@@ -134,6 +135,13 @@ const destroyWebSocket = (websocket) => {
 
 // ## Testing
 
+// We use two domains for supercookies and navigation tests.
+// The "same" domain is the one that is used for simluated third-party tracker
+// and one of the two first parties. The "different" domain is the other
+// first party we use.
+const iframe_root_same = "https://arthuredelstein.net/test-pages";
+const iframe_root_different = "https://test-pages.privacytests.org";
+
 const ipAddressTest = async (supplementaryResults) => {
   const myIpAddress = await fetch_ipAddress();
   let { description, ipAddress } = supplementaryResults["IP address leak"];
@@ -179,7 +187,7 @@ const runTests = async (browserObject) => {
     browserObject.openUrl(`http://insecure.arthuredelstein.net/insecure.html?sessionId=${sessionId}`);
     let insecureResult;
     try {
-      insecureResult = await deadlinePromise(nextValue(websocket), 5000);
+      insecureResult = await deadlinePromise(nextValue(websocket), 8000);
     } catch (e) {
       insecureResult =  { "Insecure website": { passed: true, result: "Insecure website never loaded" } };
     }
@@ -200,7 +208,7 @@ const runTestsBatch = async (configList, { shouldQuit } = { shouldQuit: true }) 
     console.log("\nnext test:", config);
     const { browser, incognito, tor, nightly } = config;
     const timeStarted = new Date().toISOString();
-    const browserObject = new Browser(config);
+    const browserObject = new AndroidBrowser(config);
     browserObject._websocket = await createWebsocket();
     try {
       await browserObject.launch();
