@@ -100,7 +100,7 @@ const pageSequence = [
   queryParameterTestUrl(TRACKING_QUERY_PARAMETERS),
   `${iframe_root_same}/https.html`,
   `http://upgradable.arthuredelstein.net/upgradable.html?source=hyperlink`,
-  `http://insecure.arthuredelstein.net/insecure.html`,
+//  `http://insecure.arthuredelstein.net/insecure.html`,
   `${iframe_root_same}/done.html`
 ];
 
@@ -164,7 +164,7 @@ const moveTestBetweenCategories = (testName, src, dest) => {
 
 const processResults = (rawResults) => {
   const {
-    misc, https, insecure, upgradable, fingerprinting, query,
+    misc, https, upgradable_hyperlink, fingerprinting, query,
     navigation_write_same, navigation_read_same, navigation_read_different,
     supercookies_write_same, supercookies_read_same, supercookies_read_different
   } = rawResults;
@@ -175,7 +175,7 @@ const processResults = (rawResults) => {
   return {
     misc,
     query: processQueryResults(query),
-    https: Object.assign({}, https, insecure, upgradable),
+    https: Object.assign({}, https, upgradable_hyperlink),
     fingerprinting,
     navigation,
     supercookies,
@@ -196,6 +196,10 @@ app.get('/results', (req, res) => {
   }
 });
 
+const websocketSend = (sessionId, data) => {
+  websockets[sessionId].send(JSON.stringify({sessionId, data}));
+};
+
 app.post('/post', (req, res) => {
   console.log("post received.");
   let { sessionId, data, category } = req.body;
@@ -204,6 +208,9 @@ app.post('/post', (req, res) => {
     // We don't recognized this as an existing sessionId.
     console.log(`Unknown sessionId '${sessionId}'; Sending 404.`);
     res.sendStatus(404);
+  } else if (category === "supplementary" || category === "insecure" || category === "upgradable_address") {
+    websocketSend(sessionId, data);
+    res.json({}); // No instructions for page
   } else {
     // We received some data for a valid session. Forward
     // that data to the websocket assigned to the same sessionId.
@@ -218,16 +225,16 @@ app.post('/post', (req, res) => {
     console.log({nextStepIndex, pageSequenceLength: pageSequence.length});
     if (nextStepIndex >= pageSequence.length - 1) {
       if (websockets[sessionId]) {
-        websockets[sessionId].send(JSON.stringify({sessionId, data: processResults(sessionResults[sessionId])}));
+        websocketSend(sessionId, processResults(sessionResults[sessionId]));
       }
       console.log(Object.keys(sessionResults[sessionId]));
     }
     if (nextStepIndex === 1) {
       if (websockets[sessionId]) {
-        websockets[sessionId].send(JSON.stringify({sessionId, data: { supercookie_write_finished: true }}));
+        websocketSend(sessionId, { supercookie_write_finished: true });
       }
     }
-    res.send({received: true, sessionId, navigateUrl: nextUrl(sessionId, nextStepIndex)});
+    res.json({received: true, sessionId, navigateUrl: nextUrl(sessionId, nextStepIndex)});
   }
 });
 
