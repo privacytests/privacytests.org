@@ -21,14 +21,10 @@
          upgraded,
          passed: upgraded,
          description
-       }; 
+       };
        console.log(resultsJSON);
        document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
        await postDataAndCarryOn(resultsJSON, `upgradable_${source}`);
-       if (source === "address") {
-         urlParams.set("source", "hyperlink");
-         window.location.search = urlParams.toString();
-       }
      };
      runTests();
     </script>
