@@ -138,6 +138,8 @@ class Browser {
     this._appPath = this._path.split(".app")[0] + ".app";
     this._command = browserCommand({browser, path: this._path, incognito, tor, appPath: this._appPath});
     this._keepAlivePingId = null;
+    const { name, nightly  } = this._defaults;
+    this._appName = this.nightly ? nightly : name;
   }
   // Launch the browser.
   async launch() {
@@ -151,9 +153,7 @@ class Browser {
     await sleepMs(this._defaults.postLaunchDelay ?? 0);
     await sleepMs(5000);
     if (this.incognito && this._defaults.incognitoCommand) {
-      const { name, nightly  } = this._defaults;
-      const appName = this.nightly ? nightly : name;
-        exec(`${this._defaults.incognitoCommand} "${appName}"`);
+        exec(`${this._defaults.incognitoCommand} "${this._appName}"`);
         await sleepMs(5000);
     }
   }
@@ -177,14 +177,14 @@ class Browser {
   async kill() {
     try {
       await sleepMs(1000);
-      execSync(`osascript closeAllWindows.applescript "${this._defaults.name}"`);
+      execSync(`osascript closeAllWindows.applescript "${this._appName}"`);
       await sleepMs(1000);
     } catch (e) {
       console.log(e);
     }
     try {
       clearInterval(this._keepAlivePingId);
-      execSync(`osascript -e 'quit app "${this._defaults.name}"'`);
+      execSync(`osascript -e 'quit app "${this._appName}"'`);
       await sleepMs(5000);
     } catch (e) {
       console.log(e);
