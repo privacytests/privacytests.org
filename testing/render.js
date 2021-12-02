@@ -29,8 +29,8 @@ const browserLogoDataUri = _.memoize((browserName, nightly) => {
     iconUri = datauri(`node_modules/browser-logos/src/${browserIconName}/${browserIconName}_128x128.png`).content;
     return iconUri;
   } catch (e) {
-    console.log(e);
-    return "";
+    console.log("!!!!!!!", browserIconName);
+    return datauri(`icons/${browserIconName}.png`).content;
   }
 });
 
@@ -123,7 +123,7 @@ const resultsToDescription = ({
 //  let platformVersionFinal = platformVersion || "";
   let finalText = `
   <span>
-    <img src=${browserLogoDataUri(browser, nightly)} width="32" height="32"><br>
+    <img class="browser-logo-image" src="${browserLogoDataUri(browser, nightly)}" width="32" height="32"><br>
     ${browserFinal}<br>
     ${browserVersionShort}
   </span>`;
