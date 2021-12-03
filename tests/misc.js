@@ -5,7 +5,7 @@ const fetchJSON = async (...fetchArgs) => {
   return response.json();
 };
 
-const testTorAndIp = async () => {
+const testTor = async () => {
   let wtfJSON = await fetchJSON("https://wtfismyip.com/json");
   const ipAddress = wtfJSON["YourFuckingIPAddress"];
   console.log(wtfJSON);
@@ -17,11 +17,8 @@ const testTorAndIp = async () => {
       IsTorExit,
       passed: IsTorExit,
       description: "The Tor network sends the browser's web requests through a series of relays to hide a user's IP address, thereby helping to mask their identity and location. This test checks to see if the Tor network is being used by default."
-    },
-    "IP address leak" : {
-      ipAddress,
-      description: "IP addresses can be used to uniquely identify a large percentage of users. A proxy, VPN, or Tor can mask a user's IP address."
-    }};
+    }
+  }
 };
 
 const testDoH = async () => {
@@ -54,9 +51,9 @@ const testGPC = async () => {
 };
 
 const runTests = async () => {
-  let resultsJSON = Object.assign({}, await testTorAndIp(), await testGPC());
+  let resultsJSON = Object.assign({}, await testTor(), await testGPC());
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
-  await postData(resultsJSON);
+  await postDataAndCarryOn(resultsJSON, "misc");
 };
 
 runTests();

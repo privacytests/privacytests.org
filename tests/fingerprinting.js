@@ -149,26 +149,6 @@ const run_in_worker = function (aFunction) {
   });
 };
 
-const font_tests = [
-  { name: "System font detection",
-    description: "Web pages can detect the presence of a font installed on the user's system. The presence or absence of various fonts is commonly used to fingerprint users.",
-    expression: () => {
-      let div1 = document.createElement("div1");
-      div1.innerText = "font fingerprinting";
-      div1.setAttribute("style", "font-family: Monoton, monospace");
-      let div2 = document.createElement("div2");
-      div2.innerText = "font fingerprinting";
-      div2.setAttribute("style", "font-family: Monoton, sans-serif");
-      document.body.appendChild(div1);
-      document.body.appendChild(div2);
-      let width1 = div1.getBoundingClientRect().width;
-      let width2 = div2.getBoundingClientRect().width;
-      let diff = width2-width1;
-      return Math.abs(diff) > 0.01;
-    },
-    desired_expression: `true` }
-];
-
 const list_to_map = (list, keyFn) => {
   let obj = {};
   for (let item of list) {
@@ -190,8 +170,7 @@ const run_all_tests = async function () {
     test_pairs(window_property_tests),
     test_pairs(navigator_tests),
     test_pairs(screen_tests),
-    test_pairs(mouse_event_tests),
-    test_pairs(font_tests)
+    test_pairs(mouse_event_tests)
   );
   return list_to_map(all_tests,
                      x => x.name ?? (x.expression + (x.worker ? " [Worker]" : "")));

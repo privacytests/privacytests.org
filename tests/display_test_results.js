@@ -14,7 +14,7 @@ const run_and_display_all_tests = async function (testResultsDiv) {
       testResultsDiv.insertBefore(div, testResultsDiv.childNodes[0]);
     }
   }
-  await postData(results);
+  await postDataAndCarryOn(results, "fingerprinting");
 };
 
 run_and_display_all_tests(document.getElementById("test_results"));

@@ -4,7 +4,7 @@ let runTests = async (tests, mode, params) => {
     let result;
     console.log(`running ${test}...`);
     try {
-      let input = decodeURIComponent(params[test] || params["default"]);
+      let input = params["sessionId"];
       console.log("input", input);
       result = await tests[test][mode](input);
     } catch (e) {
