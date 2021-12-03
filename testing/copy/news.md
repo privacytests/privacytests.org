@@ -2,9 +2,13 @@
 
 ## [Issue 7](/) (2021-12-02)
 
-### New browser version
+### New browser versions
 
 Since Issue 6, Opera has updated to 82.0 and Vivaldi to 5.0.
+
+### Known issue
+
+Because of a crash in Firefox Nightly, it is not included in this week's testing.
 
 ## [Issue 6](/archive/issue6.html) (2021-11-24)
 
