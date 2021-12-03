@@ -1,6 +1,12 @@
 # News
 
-## [Issue 6](/) (2021-11-24)
+## [Issue 7](/) (2021-11-24)
+
+### New browser version
+
+Since Issue 6, Opera has updated to 82.0 and Vivaldi to 5.0.
+
+## [Issue 6](/archive/issue6.html) (2021-11-24)
 
 ### New browser version
 

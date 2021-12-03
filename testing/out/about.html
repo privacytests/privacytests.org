@@ -157,66 +157,25 @@ p.footer {
   </div>
 </div>
     
-  <div class="copy"><h1 id="news">News</h1>
-<h2 id="issue-7-2021-11-24"><a href="/">Issue 7</a> (2021-11-24)</h2>
-<h3 id="new-browser-version">New browser version</h3>
-<p>Since Issue 6, Opera has updated to 82.0 and Vivaldi to 5.0.</p>
-<h2 id="issue-6-2021-11-24"><a href="/archive/issue6.html">Issue 6</a> (2021-11-24)</h2>
-<h3 id="new-browser-version-1">New browser version</h3>
-<p>Since Issue 5, Edge has updated to version 96.0</p>
-<h3 id="a-privacy-improvement-in-brave">A privacy improvement in Brave</h3>
-<p>Brave has introduced an important new partitioning behavior. HTTP1, HTTP2, and HTTP3 connections are now partitioned by first party. That means your web connections can no longer be used to correlate your visits between different websites.</p>
-<p>Thanks and congratulations to the Brave team for this fix!</p>
-<h2 id="issue-5-2021-11-17"><a href="/archive/issue5.html">Issue 5</a> (2021-11-17)</h2>
-<h3 id="new-browser-versions">New browser versions</h3>
-<p>Since Issue 4, three browsers have updates:</p>
-<ul>
-<li>Brave 1.32</li>
-<li>Opera 81.0</li>
-<li>Tor Browser 11.0</li>
-</ul>
-<h2 id="issue-4-2021-11-09"><a href="/archive/issue4.html">Issue 4</a> (2021-11-09)</h2>
-<h3 id="testing-of-nightly-builds-added">Testing of nightly builds added</h3>
-<p>I have now added testing of the Nightly build channel (or the nearest equivalent) for all monitored desktop browers. These include:</p>
-<ul>
-<li>Brave Nightly</li>
-<li>Chrome Canary</li>
-<li>Edge Canary</li>
-<li>Firefox Nightly</li>
-<li>Opera Developer</li>
-<li>Safari Technology Preview</li>
-<li>Tor Browser Nightly</li>
-<li>Vivaldi Snapshot</li>
-</ul>
-<p>These tests give a preview of future privacy developments in these browsers. And I hope it offers faster feedback for browser development teams as they land patches for new privacy protections.</p>
-<h3 id="new-browser-versions-1">New browser versions</h3>
-<p>Since Issue 3, Firefox has updated to v. 94.0.</p>
-<h2 id="issue-3-2021-11-02"><a href="/archive/issue3.html">Issue 3</a> (2021-11-02)</h2>
-<h3 id="new-browser-versions-2">New browser versions</h3>
-<p>Since Issue 2, new browser releases include Chrome 95.0, Edge 95.0, and Safari 15.1.</p>
-<h3 id="new-tests-new-results">New tests, new results</h3>
-<p>Three new tests have been added. These are:</p>
-<ol>
-<li><p><strong>Alt-Svc.</strong> When you visit a website for the first time, an <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Alt-Svc">Alt-Svc header</a> may be sent to your browser to indicate that the same website can be fetched in another location or using another protocol. For subsequent, visits, the browser may use that alternate location or protocol instead of the one it originally used on the first connection. A common use of Alt-Svc is for the website suggest to the browser to upgrade the connection from HTTP/2 to HTTP/3. Unfortunately this protocol can leak information about which websites you have visited in the past and even be abused to track you across sites.</p>
-</li>
-<li><p><strong>Stream isolation.</strong> In Tor Browser, <a href="https://tor.stackexchange.com/questions/14634/does-tor-browser-open-a-new-circuit-for-each-unique-website">every website gets its own circuit</a> such that all first-party requests and third-party embedded requests for that website are on a separate stream from those of any other website. This helps to reduce the ability of adversaries to correlate a browser&#39;s connection to two different websites.</p>
-</li>
-<li><p><strong>System Font fingerprinting.</strong> If you install a new font on your computer, most browsers will helpfully use that font if it is ever requested by a website you visit. Unfortunately, that reveals to the website that you have installed the font. That information leak turns out to be quite an <a href="https://dl.acm.org/doi/pdf/10.1145/3178876.3186097">important source of fingerprinting entropy</a>, making it easier to track you on the web Today&#39;s results show that Safari and Tor Browser protect against this type of fingerprinting.</p>
-</li>
-</ol>
-<h2 id="issue-2-2021-10-25"><a href="/archive/issue2.html">Issue 2</a> (2021-10-25)</h2>
-<h3 id="correction">Correction</h3>
-<p>The first issue of PrivacyTests.org had an important error in the results, incorrectly indicating that Safari does not stop tracking via third-party cookies. Safari cookie protections were assigned an <img src="/x-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="fail"> when it should have been a <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="pass">. This incorrect results seems to have happened because the Selenium Webdriver library I had been using to launch and control the various web browsers <a href="https://bugs.webkit.org/show_bug.cgi?id=222583">likely disables Safari&#39;s Intelligent Tracking Protection feature</a>. This new issue of PrivacyTests.org results shows the correct <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="pass"> for cookie protections in Safari.</p>
-<p>My apologies for the error. Thanks to John Wilander and Steven Englehardt for bringing this issue to my attention. </p>
-<h3 id="code-updates">Code updates</h3>
-<p>Major updates have been made to the <a href="https://github.com/arthuredelstein/privacytests.org">testing code</a>. Because of the error mentioned above, I decided to discontinue the use of Selenium Webdriver altogether in the PrivacyTests.org. Instead, the code has now been extensively rewritten to launch each web browser by executing a shell command, and to direct the web browsers to testing pages via shell commands as well. This new approach has the advantage of more closely mimicking a web browser in its &quot;natural&quot; state. The new code also makes it possible to launch Safari in both standard windows and Private Windows.</p>
-<p>Follwing this rewrite, the PrivacyTests.org testing code now runs on macOS only. I plan to extend the new code to be compatible with Linux and Windows in the future.</p>
-<h3 id="new-results">New results</h3>
-<p>Due to popular request, I have added Vivaldi (currently version 4.3) to the roster of tested browsers. In addition, since Issue 1, some browsers have been updated to the latest release versions, including Brave 1.31, Edge 95.0, and Safari 15.0.</p>
-<h3 id="thank-you">Thank you</h3>
-<p>Thanks to everyone who gave feedback following the launch. Everyone&#39;s comments and suggestions for future improvements are much appreciated!</p>
-<h2 id="issue-1-2021-10-13"><a href="/archive/issue1.html">Issue 1</a> (2021-10-13)</h2>
-<p>PrivacyTests.org went live for the first time, presenting desktop browser privacy test results for Brave 1.30, Chrome 94.0, Edge 94.0, Firefox 93.0, Opera 80.0, Safari 14.1, and Tor 10.5.</p>
+  <div class="copy"><h1 id="what-is-privacytestsorg">What is PrivacyTests.org?</h1>
+<p>Most web browsers leak your identity and your browsing history, but some browsers are more leaky than others.</p>
+<p>The goal of PrivacyTests.org is to understand in detail: what data is each web browser leaking? Which web browsers offer the best privacy protections?</p>
+<p>PrivacyTests.org is an open-source initiative that subjects popular web browsers to a suite of automated tests. These tests are designed to audit web browsers&#39; privacy properties in an unbiased manner. The results of the tests are made public to help users make an informed choice about which browser to use, and to encourage browser makers to fix leaks of private user data.</p>
+<h2 id="why-privacy-on-the-web-matters">Why privacy on the web matters</h2>
+<p>The web has rapidly developed into one of the primary mediums used by billions of people to interact with the world. Reading the news, communicating with friends and colleagues, watching movies, participating in political discourse, and searching for information all take place through the web.</p>
+<p>Despite the crucial importance of the web, it has been designed in a fashion that historically has not respected users&#39; privacy. Advertising companies have taken advantage of this design to collect tremendous amounts of private data, using it to show ads targeted to specific groups of consumers. Governments have also seized the opportunity to surveill people en masse without their knowledge.</p>
+<p>Why are these privacy violations a problem? Privacy is a fundamental human right because it is necessary for preserving the autonomy, safety, and dignity of human beings. Individuals whose privacy is violated are vulnerable to <a href="https://www.nber.org/system/files/working_papers/w24551/w24551.pdf">discrimination</a> and <a href="https://www.channel4.com/news/revealed-trump-campaign-strategy-to-deter-millions-of-black-americans-from-voting-in-2016">manipulation</a>. <a href="https://www.theengineroom.org/dangerous-data-the-role-of-data-collection-in-genocides/">Examples from history</a> show that mass surveillance can facilitate enormous harm.</p>
+<h2 id="why-web-browsers-are-critical-to-online-privacy">Why web browsers are critical to online privacy</h2>
+<p>Once private data has leaked from your computer, phone or tablet, there is not much you can do to control it. But how does data leave your device in the first place?</p>
+<p>Your web browser is a likely route: browsers commonly leak data to third parties, revealing what web pages you have visited. This information lets tracking companies know what you read, what you write, where you are located, what you search for, and what you buy. And this highly personal information is assembled by those companies into detailed individual profiles of every person on the internet, containing <a href="https://assets.wordstream.com/s3fs-public/styles/simple_image/public/images/media/images/facebook_ad_targeting_options_infographic_update.png?26LWxETqnc01Oo7_PuvplhKTsNHCC0gA&amp;itok=67flVdty">data on</a> your ethnicity, religious views, political views, sexual orientation, gender, family, friends, colleagues, health history, habits, relationships, educational records, income, and so on. These companies often retain your data for years or decades, and sometimes share it with third parties, including other companies or governments.</p>
+<p>Fortunately, most browser makers have acknowledged their responsibility to stop users&#39; private information from leaking out. But the default behavior for browsers used by billions of people remains highly leaky.</p>
+<h2 id="how-the-tests-work">How the tests work</h2>
+<p>To understand and compare the privacy characteristics of popular web browsers, each browser is subjected to the same suite of rigorous automated tests. Each privacy test examines whether the browser protects against a specific kind of data leak.</p>
+<p>The results for all browsers and tests are presented in a <a href="https://privacytests.org">unified table</a>. If a browser is found to protect users from a given data leak, it receives a green <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);">, but if it leaks user data, it receives a red <img src="/x-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);">.</p>
+<p>These tests will be run on a regular basis, to monitor the privacy improvements of each browser. As browser developers fix a privacy vulnerability, it will be reflected in the latest results.</p>
+<h2 id="work-in-progress">Work in progress</h2>
+<p>This project is a work in progress and is under active development! I plan to cover more browsers and more tracking vulnerabilities in the future. <a href="https://twitter.com/privacytests">Feedback</a>, <a href="https://github.com/arthuredelstein/privacytests.org/issues">bug reports</a> and <a href="https://github.com/arthuredelstein/privacytests.org/pulls">pull requests</a> are welcome.</p>
+<p><em>This website and the browser privacy tests are an independent project by Arthur Edelstein.</em></p>
 </div>
 
     </div>
