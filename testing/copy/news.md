@@ -1,6 +1,6 @@
 # News
 
-## [Issue 7](/) (2021-11-24)
+## [Issue 7](/) (2021-12-02)
 
 ### New browser version
 
