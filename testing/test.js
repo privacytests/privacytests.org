@@ -233,7 +233,15 @@ const runTestsBatch = async (configList, { shouldQuit, android, iOS } = { should
     }
   }
   const timeStopped = new Date().toISOString();
-  return { all_tests, git: gitHash(), timeStarted, timeStopped };
+  let platform;
+  if (android) {
+    platform = "Android";
+  } else if (iOS) {
+    platform = "iOS";
+  } else {
+    platform = "Desktop;"
+  }
+  return { all_tests, git: gitHash(), timeStarted, timeStopped, platform };
 };
 
 // ## Writing results
