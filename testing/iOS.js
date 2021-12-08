@@ -10,8 +10,9 @@ const browserInfo = {
   chrome: {
 		name: "Chrome",
     bundleId: "com.google.chrome.ios",
-		urlBarClick: "Search or type URL",
-		urlBarKeys: "Search or type URL",
+		urlBarClick: "Address and search bar",
+		urlBarClick2: "NTPHomeFakeOmniboxAccessibilityID",
+		urlBarKeys: "Address",
   },
   duckduckgo: {
 		name: "DuckDuckGo",
@@ -130,7 +131,7 @@ class iOSBrowser {
 				}
 			}
 		} else {
-			await clickElementWithName(this.client,  `App:${appName}`);
+			await clickElementWithName(this.client,  `App:${this.name}`);
 		}
 		await sleepMs(1000);
 		const infoElement = await findElementWithName(this.client, "Info");
