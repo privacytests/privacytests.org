@@ -15,6 +15,7 @@ const fetch = require('node-fetch');
 const render = require('./render');
 const { Browser } = require("./browser.js");
 const { AndroidBrowser } = require("./android.js");
+const { iOSBrowser } = require("./iOS.js");
 const proxy = require("./system-proxy");
 const { connect } = require("it-ws/client");
 
@@ -166,25 +167,29 @@ const runTests = async (browserObject) => {
   try {
     const websocket = browserObject._websocket;
     const sessionId = websocket._sessionId
-    browserObject.openUrl(`${iframe_root_same}/supercookies.html?mode=write&thirdparty=same&sessionId=${sessionId}`);
+    await browserObject.openUrl(`${iframe_root_same}/supercookies.html?mode=write&thirdparty=same&sessionId=${sessionId}`);
     let signal = await nextValue(websocket);
     if (!signal.supercookie_write_finished) {
       throw new Error("failed to get signal that the supercookie write finished");
     }
-    browserObject.openUrl(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`)
+    if (browserObject instanceof AndroidBrowser || browserObject instanceof iOSBrowser) {
+      await browserObject.clickContent();
+    } else {
+      await browserObject.openUrl(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`);
+    }
     let mainResults = await nextValue(websocket);
-    browserObject.openUrl(`${iframe_root_same}/supplementary.html?sessionId=${sessionId}`);
+    await browserObject.openUrl(`${iframe_root_same}/supplementary.html?sessionId=${sessionId}`);
     let supplementaryResults = await nextValue(websocket);
     let results = Object.assign({}, mainResults);
     Object.assign(results["fingerprinting"], {"System font detection": supplementaryResults["System font detection"]});
     const ipAddressLeak = await ipAddressTest(supplementaryResults);
     Object.assign(results["misc"], ipAddressLeak);
-    browserObject.openUrl(`http://upgradable.arthuredelstein.net/upgradable.html?source=address&sessionId=${sessionId}`);
+    await browserObject.openUrl(`http://upgradable.arthuredelstein.net/upgradable.html?source=address&sessionId=${sessionId}`);
     console.log("upgradable...");
     const upgradableAddressResult = await nextValue(websocket);
     console.log("upgradable received.");
     Object.assign(results["https"], upgradableAddressResult);
-    browserObject.openUrl(`http://insecure.arthuredelstein.net/insecure.html?sessionId=${sessionId}`);
+    await browserObject.openUrl(`http://insecure.arthuredelstein.net/insecure.html?sessionId=${sessionId}`);
     let insecureResult;
     try {
       insecureResult = await deadlinePromise(nextValue(websocket), 8000);
@@ -201,14 +206,14 @@ const runTests = async (browserObject) => {
 
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
-const runTestsBatch = async (configList, { shouldQuit } = { shouldQuit: true }) => {
+const runTestsBatch = async (configList, { shouldQuit, android, iOS } = { shouldQuit: true }) => {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
   for (let config of configList) {
     console.log("\nnext test:", config);
     const { browser, incognito, tor, nightly } = config;
     const timeStarted = new Date().toISOString();
-    const browserObject = new AndroidBrowser(config);
+    const browserObject = android ? new AndroidBrowser(config) : (iOS ? new iOSBrowser(config) : new Browser(config));
     browserObject._websocket = await createWebsocket();
     try {
       await browserObject.launch();
@@ -216,7 +221,7 @@ const runTestsBatch = async (configList, { shouldQuit } = { shouldQuit: true }) 
       all_tests.push({
         browser, incognito, tor, nightly,
         testResults, timeStarted,
-        reportedVersion: browserObject.version,
+        reportedVersion: await browserObject.version(),
         os: os.type(), os_version: os.version(),
       });
     } catch (e) {
@@ -272,20 +277,24 @@ const parseConfigFile = (configFile, repeat = 1) => {
 // tests, writes them to a JSON data file, and then renders results to
 // a human-readable web page.
 const main = async () => {
-  installTestFontIfNeeded();
-  disableProxies();
-  // Read config file and flags from command line
-  let { _ : [configFile], debug, only, repeat, aggregate, nightly } =
-    minimist(process.argv.slice(2), opts = { default: { aggregate: true }});
-  let configList = parseConfigFile(configFile, repeat);
-  let filteredConfigList = configList
-      .filter(d => only ? d.browser.startsWith(only) : true)
-      .map(d => Object.assign({}, d, nightly ? {nightly} : null));
-  console.log("List of browsers to run:", filteredConfigList);
-  let dataFile = writeDataSync(await runTestsBatch(filteredConfigList,
-                                                   { shouldQuit: !debug }));
-  restoreProxies();
-  render.render({ dataFile, aggregate });
+  try {
+    installTestFontIfNeeded();
+    disableProxies();
+    // Read config file and flags from command line
+    let { _ : [configFile], debug, only, repeat, aggregate, nightly, android, iOS } =
+      minimist(process.argv.slice(2), opts = { default: { aggregate: true }});
+    let configList = parseConfigFile(configFile, repeat);
+    let filteredConfigList = configList
+        .filter(d => only ? d.browser.startsWith(only) : true)
+        .map(d => Object.assign({}, d, nightly ? {nightly} : null));
+    console.log("List of browsers to run:", filteredConfigList);
+    let dataFile = writeDataSync(await runTestsBatch(filteredConfigList,
+                                                    { shouldQuit: !debug, android, iOS }));
+    restoreProxies();
+    render.render({ dataFile, aggregate });
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 main();
