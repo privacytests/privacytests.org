@@ -15,8 +15,12 @@ const browserInfo = {
   },
   chrome: {
     packageName: "com.android.chrome",
-    urlBarClick: "url_bar",
-    urlBarClick2: "search_box_text",
+    urlBarClick: "search_box_text",
+    urlBarKeys: "url_bar"
+  },
+  coccoc: {
+    packageName: "com.coccoc.trinhduyet",
+    urlBarClick: "omnibox_container",
     urlBarKeys: "url_bar"
   },
   duckduckgo: {
@@ -26,12 +30,13 @@ const browserInfo = {
   },
   edge: {
     packageName: "com.microsoft.emmx",
-    urlBarClick: "url_bar",
+    urlBarClick: "search_box_text",
     urlBarKeys: "url_bar"
   },
   firefox: {
     packageName: "org.mozilla.firefox",
     urlBarClick: "mozac_browser_toolbar_url_view",
+    urlBarClick2: "toolbar_wrapper",
     urlBarKeys: "mozac_browser_toolbar_edit_url_view"
   },
   focus: {
@@ -52,7 +57,8 @@ const browserInfo = {
   samsung: {
     packageName: "com.sec.android.app.sbrowser",
     urlBarClick: "location_bar_edit_text",
-    urlBarKeys: "location_bar_edit_text"
+    urlBarKeys: "location_bar_edit_text",
+    contentElement: "content_layout"
   },
   tor: {
     packageName: "org.torproject.torbrowser",
@@ -77,7 +83,7 @@ const browserInfo = {
   },
   yandex: {
     packageName: "com.yandex.browser",
-    urlBarClick: "bro_sentry_bar_fake_text",
+    urlBarClick: "bro_omnibar_address_title_text",
     urlBarKeys: "suggest_omnibox_query_edit"
   }
 };
@@ -86,6 +92,11 @@ const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
 const findElementWithId = async (client, packageName, id) => {
   const elementObject = await client.findElement("id", `${packageName}:id/${id}`);
+  return elementObject.ELEMENT;
+};
+
+const findElementWithClass = async (client, packageName, className) => {
+  const elementObject = await client.findElement("class name", className);
   return elementObject.ELEMENT;
 };
 
@@ -123,18 +134,14 @@ const webdriverSession = _.memoize(async () => {
     port: 4723,
     hostname: "0.0.0.0",
     path: "/wd/hub",
-    capabilities: { platformName: "Android"}
+    capabilities: { platformName: "Android", "newCommandTimeout": 300 }
   });
   return client;
 });
 
 class AndroidBrowser {
   constructor({browser, incognito, tor, nightly}) {
-    const { startupClick, packageName, urlBarClick, urlBarKeys } = browserInfo[browser];
-    Object.assign(this, {
-      browser, incognito, tor, nightly,
-      startupClick, packageName, urlBarClick, urlBarKeys
-    });
+    Object.assign(this, { browser, incognito, tor, nightly }, browserInfo[browser]);
   }
   // Launch the browser.
   async launch() {
@@ -152,7 +159,7 @@ class AndroidBrowser {
     }
   }
   // Get the browser version.
-  get version() {
+  async version() {
     const cmd = `adb shell dumpsys package ${this.packageName} | grep versionName`;
     const raw = child_process.execSync(cmd).toString();
     return raw.match(/versionName=(\S+)/)[1];
@@ -161,8 +168,14 @@ class AndroidBrowser {
   async openUrl(url) {
     let urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarClick);
     if (urlBarToClick === undefined) {
-       await sleepMs(1000);
-       urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarClick);
+      if (this.urlBarClick2) {
+        urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarClick2);
+      }
+      if (urlBarToClick === undefined) {
+        urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarKeys);
+//      await sleepMs(1000);
+//      urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarClick);
+      }
     }
     await this.client.elementClick(urlBarToClick);
     await sleepMs(1000);
@@ -173,6 +186,16 @@ class AndroidBrowser {
   async kill() {
     await this.client.terminateApp(this.packageName);
   }
+  async clickContent() {
+    let theWebView;
+    if (this.contentElement) {
+      theWebView = await findElementWithId(this.client, this.packageName, this.contentElement);
+    } else { 
+      // Most browsers use a WebView
+      theWebView = await findElementWithClass(this.client, this.packageName, "android.webkit.WebView");
+    }
+    await this.client.elementClick(theWebView);
+  }
 }
 
 module.exports = { AndroidBrowser };
@@ -182,7 +205,7 @@ async function main() {
     port: 4723,
     hostname: "0.0.0.0",
     path: "/wd/hub",
-    capabilities: { platformName: "Android"}
+    capabilities: { platformName: "Android", "newCommandTimeout": 300}
   });
   await demoBrowser(client, "edge", "https://edge.com");
 //  await demoAllBrowsers(client, "https://arthuredelstein.net");
