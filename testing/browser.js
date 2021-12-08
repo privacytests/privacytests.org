@@ -138,8 +138,7 @@ class Browser {
     this._appPath = this._path.split(".app")[0] + ".app";
     this._command = browserCommand({browser, path: this._path, incognito, tor, appPath: this._appPath});
     this._keepAlivePingId = null;
-    const { name, nightly  } = this._defaults;
-    this._appName = this.nightly ? nightly : name;
+    this._appName = nightly ? this._defaults.nightly : this._defaults.name;
   }
   // Launch the browser.
   async launch() {
@@ -158,7 +157,7 @@ class Browser {
     }
   }
   // Get the browser version.
-  get version() {
+  async version() {
     if (!this._version) {
       this._version = execSync(`mdls -name kMDItemVersion -raw "${this._appPath}"`).toString();
     }
@@ -170,7 +169,7 @@ class Browser {
     return this._version;
   }
   // Open the url in a new tab.
-  openUrl(url) {
+  async openUrl(url) {
     exec(`${this._command} "${url}"`);
   }
   // Clean up and close the browser.
