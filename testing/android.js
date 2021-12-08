@@ -84,6 +84,7 @@ const browserInfo = {
   yandex: {
     packageName: "com.yandex.browser",
     urlBarClick: "bro_omnibar_address_title_text",
+    urlBarClick2: "bro_sentry_bar_fake_text",
     urlBarKeys: "suggest_omnibox_query_edit"
   }
 };

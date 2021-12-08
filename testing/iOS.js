@@ -18,7 +18,6 @@ const browserInfo = {
 		name: "DuckDuckGo",
     bundleId: "com.duckduckgo.mobile.ios",
 		urlBarClick: "searchEntry",
-		urlBarClear: "Clear Text",
 		urlBarKeys: "searchEntry",
   },
   edge: {
@@ -43,14 +42,15 @@ const browserInfo = {
   onion: {
 		name: "Onion Browser",
     bundleId: "com.miketigas.OnionBrowser",
-		urlBarClickElement: "XCUIElementTypeTextField",
-		urlBarKeysElement: "XCUIElementTypeTextField",
+		urlBarClickClass: "XCUIElementTypeTextField", // Hoping this is the only one present
+		urlBarKeys: "Onion Browser", // application element
+		postLaunchDelay: 10000
   },
   opera: {
 		name: "Opera",
     bundleId: "com.opera.OperaTouch",
-		urlBarClickElement: "XCUIElementTypeTextField", // Search or enter an address
-		urlBarKeysElement: "XCUIElementTypeTextField", // Search or enter an address
+		urlBarClickClass: "XCUIElementTypeTextField", // Hoping this is the only one present
+		urlBarKeys: "addressBar", // parent element
   },
   safari: {
 		name: "Safari",
@@ -61,9 +61,10 @@ const browserInfo = {
   yandex: {
 		name: "Yandex",
     bundleId: "ru.yandex.mobile.search",
-		urlBarClick: "Enter a search query or URL",
-		urlBarKeysSibling: "Clear the input field",
-		// //XCUIElementTypeApplication[@name="Yandex"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther[4]/XCUIElementTypeOther/XCUIElementTypeTextView
+		urlBarClick: "Address bar",
+		urlBarClick2: "Enter a search query or URL",
+		urlBarClear: "Clear the input field",
+		urlBarKeys: "Yandex", // Just send keys to the application and hope our focus is correct
   }
 };
 
@@ -108,6 +109,9 @@ class iOSBrowser {
 			}
 		});
     this.client = client;
+		if (this.postLaunchDelay) {
+			await sleepMs(this.postLaunchDelay);
+		}
   }
   // Get the browser version.
   async version() {
@@ -144,19 +148,27 @@ class iOSBrowser {
   }
   // Open the url in a new tab.
   async openUrl(url) {
-    let urlBarToClick = await findElementWithName(this.client, this.urlBarClick);
-    if (urlBarToClick === undefined) {
-      if (this.urlBarClick2) {
-        urlBarToClick = await findElementWithName(this.client, this.urlBarClick2);
-      }
-      if (urlBarToClick === undefined) {
-        urlBarToClick = await findElementWithName(this.client, this.urlBarKeys);
-//      await sleepMs(1000);
-//      urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarClick);
-      }
-    }
+		let urlBarToClick;
+		if (this.urlBarClickClass) {
+			urlBarToClick = await findElementWithClass(this.client, this.urlBarClickClass);
+		} else {
+			urlBarToClick = await findElementWithName(this.client, this.urlBarClick);
+			if (urlBarToClick === undefined) {
+				if (this.urlBarClick2) {
+					urlBarToClick = await findElementWithName(this.client, this.urlBarClick2);
+				}
+				if (urlBarToClick === undefined) {
+					urlBarToClick = await findElementWithName(this.client, this.urlBarKeys);
+	//      await sleepMs(1000);
+	//      urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarClick);
+				}
+			}
+		}	
     await this.client.elementClick(urlBarToClick);
     await sleepMs(1000);
+		if (this.urlBarClear) {
+			await clickElementWithName(this.client, this.urlBarClear);
+		}
     const urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys);
     await this.client.elementSendKeys(urlBarToSendKeys, url);
 		const goButton = await findElementWithName(this.client, "Go");

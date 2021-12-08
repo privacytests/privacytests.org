@@ -23,13 +23,11 @@ const nightlyIconNames = {
 // Returns a data: URI browser logo for the given browser.
 const browserLogoDataUri = _.memoize((browserName, nightly) => {
   const browserIconName = nightly ? nightlyIconNames[browserName] : browserName;
-  console.log(browserName, browserIconName);
   let iconUri;
   try {
     iconUri = datauri(`node_modules/browser-logos/src/${browserIconName}/${browserIconName}_128x128.png`).content;
     return iconUri;
   } catch (e) {
-    console.log("!!!!!!!", browserIconName);
     return datauri(`icons/${browserIconName}.png`).content;
   }
 });
@@ -66,7 +64,7 @@ const htmlTable = ({ headers, body, className }) => {
 };
 
 const dropMicroVersion = (version) =>
-  version.split(".").slice(0,2).join(".");
+  version ? version.split(".").slice(0,2).join(".") : version;
 
 // An inline script that shows a tooltip if the user clicks on any table element
 const tooltipScript = `
@@ -301,10 +299,8 @@ const resultsToTable = (results, title) => {
 };
 
 // Create the title HTML for a results table.
-const tableTitle = (nightly) => `
-  <div class="table-title">
-    ${nightly ? "Nightly builds" : "Desktop Browsers"}
-  </div>
+const tableTitleHTML = (title) => `
+  <div class="table-title">${title}</div>
   <div class="instructions">(click anywhere for more info)</a>`;
 
 // Create dateString from the given date and time string.
@@ -314,8 +310,8 @@ const dateString = (dateTime) => {
 };
 
 // Creates the content for a page.
-const content = (results, jsonFilename, nightly) => {
-  let { headers, body } = resultsToTable(results.all_tests, tableTitle(nightly));
+const content = (results, jsonFilename, title) => {
+  let { headers, body } = resultsToTable(results.all_tests, tableTitleHTML(title));
   return `
     <div class="banner" id="issueBanner">
       <div class="left-heading">No. 7</div>
@@ -324,9 +320,8 @@ const content = (results, jsonFilename, nightly) => {
     </div>
     <div class="banner" id="navBanner">
       <div class="navItem">
-        ${nightly ?
-          '<a href="/">Desktop browsers ›</a>' :
-          '<a href="nightly.html">Nightly builds ›</a>'}
+          <a href="/">Desktop browsers ›</a> 
+          <a href="nightly.html">Nightly builds ›</a>
       </div>
     </div>
     <div class="banner" id="legend">
@@ -414,9 +409,19 @@ const render = async ({ dataFile, live, aggregate }) => {
 //  console.log(results.all_tests[0]);
 //  console.log(JSON.stringify(results));
   const nightly = results.all_tests.every(t => (t.nightly === true));
+  let tableTitle;
+  if (nightly) {
+    tableTitle = "Nightly Builds";
+  } else if (results.platform === "Android") {
+    tableTitle = "Android Browsers";
+  } else if (results.platform === "iOS") {
+    tableTitle = "iOS Browsers";
+  } else {
+    tableTitle = "Desktop Browsers";
+  }
   await fs.writeFile(resultsFileHTMLLatest, template.htmlPage({
     title: "PrivacyTests.org",
-      content: content(processedResults, path.basename(resultsFileJSON), nightly),
+      content: content(processedResults, path.basename(resultsFileJSON), tableTitle),
     cssFiles: ["./template.css", "./inline.css"],
     previewImageUrl: nightly ? "nightlyPreview.png" : "desktopPreview.png"
   }));
