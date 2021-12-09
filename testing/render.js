@@ -319,9 +319,11 @@ const content = (results, jsonFilename, title) => {
       <div class="right-heading">Updated ${dateString(results.timeStarted)}</div>
     </div>
     <div class="banner" id="navBanner">
-      <div class="navItem">
-          <a href="/">Desktop browsers ›</a> 
-          <a href="nightly.html">Nightly builds ›</a>
+      <div class="navItem ${results.nightly ? "" : "selectedItem"}">
+        <a href="/">Desktop browsers</a>
+      </div>
+      <div class="navItem ${results.nightly ? "selectedItem" : ""}">
+        <a href="nightly.html">Nightly builds</a>
       </div>
     </div>
     <div class="banner" id="legend">
