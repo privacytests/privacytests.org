@@ -1,6 +1,16 @@
 # News
 
-## [Issue 7](/) (2021-12-02)
+## [Issue 8](/) (2021-12-09)
+
+### New browser versions
+
+Since Issue 7, Firefox has updated to version 95.0.
+
+### Known issue
+
+Because of a crash in Firefox Nightly, it is not included in this week's Nightly browser testing.
+
+## [Issue 7](/archive/issue7.html) (2021-12-02)
 
 ### New browser versions
 
