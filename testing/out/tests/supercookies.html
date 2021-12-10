@@ -8,6 +8,7 @@
   <body>
     <script src="./post_data.js"></script>
     <script>
+     const iframe_root_same = "https://arthuredelstein.net/test-pages";
      const param = (key) => new URLSearchParams(window.location.search).get(key);
      const sessionId = param("sessionId");
      let favicon = document.getElementById("favicon");
@@ -22,6 +23,9 @@
 	 postDataAndCarryOn(data, category);
        } else {
          postData(data, category);
+         document.addEventListener("click", () => {
+           window.open(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`, "_blank", "noopener");
+         });
        }
      }, false);
      let iframe = document.createElement("iframe");
