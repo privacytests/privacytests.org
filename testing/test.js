@@ -178,6 +178,7 @@ const runTests = async (browserObject) => {
       await browserObject.openUrl(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`);
     }
     let mainResults = await nextValue(websocket);
+    await sleep(1000);
     await browserObject.openUrl(`${iframe_root_same}/supplementary.html?sessionId=${sessionId}`);
     let supplementaryResults = await nextValue(websocket);
     let results = Object.assign({}, mainResults);
