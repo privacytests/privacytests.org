@@ -96,6 +96,7 @@ const pageSequence = [
   `${iframe_root_same}/navigation.html?mode=read&thirdparty=same`,
   `${iframe_root_different}/navigation.html?mode=read&thirdparty=different`,
   `${iframe_root_same}/fingerprinting.html`,
+  `${iframe_root_same}/tracking_content.html`,
   `${iframe_root_same}/misc.html`,
   queryParameterTestUrl(TRACKING_QUERY_PARAMETERS),
   `${iframe_root_same}/https.html`,
@@ -164,7 +165,7 @@ const moveTestBetweenCategories = (testName, src, dest) => {
 
 const processResults = (rawResults) => {
   const {
-    misc, https, upgradable_hyperlink, fingerprinting, query,
+    misc, https, upgradable_hyperlink, fingerprinting, query, trackers,
     navigation_write_same, navigation_read_same, navigation_read_different,
     supercookies_write_same, supercookies_read_same, supercookies_read_different
   } = rawResults;
@@ -179,6 +180,7 @@ const processResults = (rawResults) => {
     fingerprinting,
     navigation,
     supercookies,
+    trackers,
   }
 };
 
