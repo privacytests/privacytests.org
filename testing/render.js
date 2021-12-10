@@ -268,7 +268,15 @@ const sectionDescription = {
     these query parameters are frequently synchronized with cookies, making them a powerful
     tracking vector. Web browsers can protect you from known tracking query parameters by
     stripping them from web addresses before your browser sends them. (The set of
-    tracking query parameters tested here was largely borrowed from Brave.)`};
+    tracking query parameters tested here was largely borrowed from Brave.)`,
+  trackers: `
+    When you visit a web page, it frequently has third-party embedded tracking content, such
+    as scripts and tracking pixels. These embedded components spy on you. Some browsers and
+    browser extensions maintain list of tracking companies and block their content from
+    being loaded.
+    
+    This section checks to see if a browser blocks 20 of the largest trackers, as reported
+    by https://whotracks.me.`};
 
 const resultsToTable = (results, title) => {
   console.log(results);
@@ -295,6 +303,8 @@ const resultsToTable = (results, title) => {
   body = body.concat(resultsSection({bestResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
   body.push([{subheading:"Tracking query parameter tests", description: sectionDescription.queryParameters}]);
   body = body.concat(resultsSection({bestResults, category:"query", tooltipFunction: simpleToolTip}));
+  body.push([{subheading:"Tracker content blocking", description: sectionDescription.trackers}]);
+  body = body.concat(resultsSection({bestResults, category:"trackers", tooltipFunction: simpleToolTip}));
   return { headers, body };
 };
 
@@ -310,19 +320,19 @@ const dateString = (dateTime) => {
 };
 
 // Creates the content for a page.
-const content = (results, jsonFilename, title) => {
+const content = (results, jsonFilename, title, nightly) => {
   let { headers, body } = resultsToTable(results.all_tests, tableTitleHTML(title));
   return `
     <div class="banner" id="issueBanner">
-      <div class="left-heading">No. 7</div>
+      <div class="left-heading">No. 8</div>
       <div class="middle-heading">Open-source tests of web browser privacy.</div>
       <div class="right-heading">Updated ${dateString(results.timeStarted)}</div>
     </div>
     <div class="banner" id="navBanner">
-      <div class="navItem ${results.nightly ? "" : "selectedItem"}">
+      <div class="navItem ${nightly ? "" : "selectedItem"}">
         <a href="/">Desktop browsers</a>
       </div>
-      <div class="navItem ${results.nightly ? "selectedItem" : ""}">
+      <div class="navItem ${nightly ? "selectedItem" : ""}">
         <a href="nightly.html">Nightly builds</a>
       </div>
     </div>
@@ -423,7 +433,7 @@ const render = async ({ dataFile, live, aggregate }) => {
   }
   await fs.writeFile(resultsFileHTMLLatest, template.htmlPage({
     title: "PrivacyTests.org",
-      content: content(processedResults, path.basename(resultsFileJSON), tableTitle),
+      content: content(processedResults, path.basename(resultsFileJSON), tableTitle, nightly),
     cssFiles: ["./template.css", "./inline.css"],
     previewImageUrl: nightly ? "nightlyPreview.png" : "desktopPreview.png"
   }));
