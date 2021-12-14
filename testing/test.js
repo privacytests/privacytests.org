@@ -13,7 +13,7 @@ const os = require('os');
 const process = require('process');
 const fetch = require('node-fetch');
 const render = require('./render');
-const { Browser } = require("./browser.js");
+const { DesktopBrowser } = require("./browser.js");
 const { AndroidBrowser } = require("./android.js");
 const { iOSBrowser } = require("./iOS.js");
 const proxy = require("./system-proxy");
@@ -56,7 +56,7 @@ const fetchJSON = async (...fetchArgs) => {
 
 // Fetch server reflexive IP address
 const fetch_ipAddress = async () => {
-  const wtfismyip = await fetchJSON("https://wtfismyip.com/json");
+  const wtfismyip = await fetchJSON("https://ipv4.wtfismyip.com/json");
   return wtfismyip["YourFuckingIPAddress"];
 };
 
@@ -172,7 +172,10 @@ const runTests = async (browserObject) => {
     if (!signal.supercookie_write_finished) {
       throw new Error("failed to get signal that the supercookie write finished");
     }
-    if (browserObject instanceof AndroidBrowser || browserObject instanceof iOSBrowser) {
+    if (browserObject.browser === "onion") {
+      await browserObject.clickContent();
+      await browserObject.openUrl(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`);
+    } else if (browserObject instanceof AndroidBrowser || browserObject instanceof iOSBrowser) {
       await browserObject.clickContent();
     } else {
       await browserObject.openUrl(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`);
@@ -182,7 +185,10 @@ const runTests = async (browserObject) => {
     await browserObject.openUrl(`${iframe_root_same}/supplementary.html?sessionId=${sessionId}`);
     let supplementaryResults = await nextValue(websocket);
     let results = Object.assign({}, mainResults);
-    Object.assign(results["fingerprinting"], {"System font detection": supplementaryResults["System font detection"]});
+    // For now, don't include system font detection test in mobile
+    if (browserObject instanceof DesktopBrowser) {
+      Object.assign(results["fingerprinting"], {"System font detection": supplementaryResults["System font detection"]});
+    }
     const ipAddressLeak = await ipAddressTest(supplementaryResults);
     Object.assign(results["misc"], ipAddressLeak);
     await browserObject.openUrl(`http://upgradable.arthuredelstein.net/upgradable.html?source=address&sessionId=${sessionId}`);
@@ -214,7 +220,7 @@ const runTestsBatch = async (configList, { shouldQuit, android, iOS } = { should
     console.log("\nnext test:", config);
     const { browser, incognito, tor, nightly } = config;
     const timeStarted = new Date().toISOString();
-    const browserObject = android ? new AndroidBrowser(config) : (iOS ? new iOSBrowser(config) : new Browser(config));
+    const browserObject = android ? new AndroidBrowser(config) : (iOS ? new iOSBrowser(config) : new DesktopBrowser(config));
     browserObject._websocket = await createWebsocket();
     try {
       await browserObject.launch();

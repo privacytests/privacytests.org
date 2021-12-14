@@ -68,8 +68,11 @@ const browserInfo = {
   },
   uc: {
     packageName: "com.UCMobile.intl",
-    urlBarClick: "TextView between content-desc='data saving' and content-desc='refresh' ",
-    urlBarKeys: "//android.widget.LinearLayout[@content-desc=\"Search or Enter URL edit box\"]/android.widget.EditText"
+    urlBarClick: `//android.widget.ImageView[@content-desc="data saving"]/following-sibling::android.widget.TextView`,
+    urlBarClick2: `//android.widget.TextView[@content-desc="Search or Enter URL edit box"]`,
+    urlBarKeys: `//android.widget.LinearLayout[@content-desc="Search or Enter URL edit box"]/android.widget.EditText`,
+    urlBarClear: "btn_clear_or_voice",
+    contentElement: "//com.uc.webview.export.WebView"
   },
   vivaldi: {
     packageName: "com.vivaldi.browser",
@@ -96,7 +99,20 @@ const findElementWithId = async (client, packageName, id) => {
   return elementObject.ELEMENT;
 };
 
-const findElementWithClass = async (client, packageName, className) => {
+const findElementWithXPath = async (client, xpath) => {
+  const elementObject = await client.findElement("xpath", xpath);
+  return elementObject.ELEMENT;
+};
+
+const findElement = async (client, packageName, selector) => {
+  if (selector.startsWith("/")) {
+    return findElementWithXPath(client, selector);
+  } else {
+    return findElementWithId(client, packageName, selector);
+  }
+}
+
+const findElementWithClass = async (client, className) => {
   const elementObject = await client.findElement("class name", className);
   return elementObject.ELEMENT;
 };
@@ -106,28 +122,17 @@ const demoBrowser = async (client, browserName, url) => {
   await client.activateApp(packageName);
   await sleepMs(5000);
   if (startupClick) {
-    const startupButton = await findElementWithId(client, packageName, startupClick);
+    const startupButton = await findElement(client, packageName, startupClick);
     await client.elementClick(startupButton)
     await sleepMs(3000);
   }
-  const urlBarToClick = await findElementWithId(client, packageName, urlBarClick);
+  const urlBarToClick = await findElement(client, packageName, urlBarClick);
   await client.elementClick(urlBarToClick);
   await sleepMs(1000);
-  const urlBarToSendKeys = await findElementWithId(client, packageName, urlBarKeys);
+  const urlBarToSendKeys = await findElement(client, packageName, urlBarKeys);
   await client.elementSendKeys(urlBarToSendKeys, url + "\\n");
   await sleepMs(8000);
   await client.terminateApp(packageName);
-};
-
-const demoAllBrowsers = async (client, url) => {
-  for (let browser of Object.keys(browserInfo)) {
-    try {
-      console.log(`running ${browser} demo`)
-      await demoBrowser(client, browser, url);
-    } catch (e) {
-      console.log(e);
-    }
-  }
 };
 
 const webdriverSession = _.memoize(async () => {
@@ -152,7 +157,7 @@ class AndroidBrowser {
     await sleepMs(5000);
     console.log("this.startupClick:",this.startupClick);
     if (this.startupClick) {
-      const startupButton = await findElementWithId(client, this.packageName, this.startupClick);
+      const startupButton = await findElement(client, this.packageName, this.startupClick);
       if (startupButton) {
         await this.client.elementClick(startupButton)
         await sleepMs(20000);
@@ -167,20 +172,24 @@ class AndroidBrowser {
   }
   // Open the url in a new tab.
   async openUrl(url) {
-    let urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarClick);
+    let urlBarToClick = await findElement(this.client, this.packageName, this.urlBarClick);
     if (urlBarToClick === undefined) {
       if (this.urlBarClick2) {
-        urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarClick2);
+        urlBarToClick = await findElement(this.client, this.packageName, this.urlBarClick2);
       }
       if (urlBarToClick === undefined) {
-        urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarKeys);
+        urlBarToClick = await findElement(this.client, this.packageName, this.urlBarKeys);
 //      await sleepMs(1000);
 //      urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarClick);
       }
     }
     await this.client.elementClick(urlBarToClick);
     await sleepMs(1000);
-    const urlBarToSendKeys = await findElementWithId(this.client, this.packageName, this.urlBarKeys);
+		if (this.urlBarClear) {
+			const clearButton = await findElement(this.client, this.packageName, this.urlBarClear);
+      await this.client.elementClick(clearButton);
+		}
+    const urlBarToSendKeys = await findElement(this.client, this.packageName, this.urlBarKeys);
     await this.client.elementSendKeys(urlBarToSendKeys, url + "\\n");
   }
   // Clean up and close the browser.
@@ -190,10 +199,10 @@ class AndroidBrowser {
   async clickContent() {
     let theWebView;
     if (this.contentElement) {
-      theWebView = await findElementWithId(this.client, this.packageName, this.contentElement);
+      theWebView = await findElement(this.client, this.packageName, this.contentElement);
     } else { 
       // Most browsers use a WebView
-      theWebView = await findElementWithClass(this.client, this.packageName, "android.webkit.WebView");
+      theWebView = await findElementWithClass(this.client, "android.webkit.WebView");
     }
     await this.client.elementClick(theWebView);
   }
@@ -209,7 +218,6 @@ async function main() {
     capabilities: { platformName: "Android", "newCommandTimeout": 300}
   });
   await demoBrowser(client, "edge", "https://edge.com");
-//  await demoAllBrowsers(client, "https://arthuredelstein.net");
 }
 
 if (require.main === module) {

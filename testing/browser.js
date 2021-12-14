@@ -129,7 +129,7 @@ const browserCommand = ({browser, path, incognito, tor, appPath }) => {
 };
 
 // A Browser object represents a browser we run tests on.
-class Browser {
+class DesktopBrowser {
   constructor({browser, path, incognito, tor, nightly}) {
     Object.assign(this, {browser, incognito, tor, nightly});
     this._defaults = macOSdefaultBrowserSettings[browser];
@@ -191,4 +191,4 @@ class Browser {
   }
 }
 
-module.exports = { Browser };
+module.exports = { DesktopBrowser };

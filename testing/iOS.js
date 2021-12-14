@@ -44,6 +44,7 @@ const browserInfo = {
     bundleId: "com.miketigas.OnionBrowser",
 		urlBarClickClass: "XCUIElementTypeTextField", // Hoping this is the only one present
 		urlBarKeys: "Onion Browser", // application element
+		urlBarClear: "Clear text",
 		postLaunchDelay: 10000
   },
   opera: {
