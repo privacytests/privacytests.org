@@ -322,6 +322,7 @@ const dateString = (dateTime) => {
 // Creates the content for a page.
 const content = (results, jsonFilename, title, nightly) => {
   let { headers, body } = resultsToTable(results.all_tests, tableTitleHTML(title));
+  console.log(results.platform);
   return `
     <div class="banner" id="issueBanner">
       <div class="left-heading">No. 8</div>
@@ -329,10 +330,16 @@ const content = (results, jsonFilename, title, nightly) => {
       <div class="right-heading">Updated ${dateString(results.timeStarted)}</div>
     </div>
     <div class="banner" id="navBanner">
-      <div class="navItem ${nightly ? "" : "selectedItem"}">
+      <div class="navItem ${!(nightly || results.platform === "Android" || results.platform === "iOS") ? "selectedItem" : ""}">
         <a href="/">Desktop browsers</a>
       </div>
       <div class="navItem ${nightly ? "selectedItem" : ""}">
+        <a href="nightly.html">iOS browsers</a>
+      </div>
+      <div class="navItem ${results.platform === "Android" ? "selectedItem" : ""}">
+        <a href="nightly.html">Android browsers</a>
+      </div>
+      <div class="navItem ${results.platform === "iOS" ? "selectedItem" : ""}">
         <a href="nightly.html">Nightly builds</a>
       </div>
     </div>
