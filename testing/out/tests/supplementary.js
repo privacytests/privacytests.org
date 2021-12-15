@@ -4,7 +4,7 @@ const fetchJSON = async (...fetchArgs) => {
 };
 
 const testIp = async () => {
-  const wtfJSON = await fetchJSON("https://wtfismyip.com/json");
+  const wtfJSON = await fetchJSON("https://ipv4.wtfismyip.com/json");
   console.log(wtfJSON);
   const ipAddress = wtfJSON["YourFuckingIPAddress"];
   return {
@@ -15,12 +15,13 @@ const testIp = async () => {
 };
 
 const testFontFingerprinting = () => {
+  // (The Algerian font installed through the iFont app on Android.)
   let div1 = document.createElement("div1");
   div1.innerText = "font fingerprinting";
-  div1.setAttribute("style", "font-family: Monoton, monospace");
+  div1.setAttribute("style", "font-family: Monoton, Rosemary, monospace");
   let div2 = document.createElement("div2");
   div2.innerText = "font fingerprinting";
-  div2.setAttribute("style", "font-family: Monoton, sans-serif");
+  div2.setAttribute("style", "font-family: Monoton, Rosemary, sans-serif");
   document.body.appendChild(div1);
   document.body.appendChild(div2);
   let width1 = div1.getBoundingClientRect().width;
