@@ -20,12 +20,14 @@
        const thirdparty = param("thirdparty");
        const category = `supercookies_${mode}_${thirdparty}`;
        if (mode === "read") {
+//         document.body.style.backgroundColor = "green";
 	 postDataAndCarryOn(data, category);
+//         document.body.style.backgroundColor = "red";
        } else {
-         postData(data, category);
-         document.addEventListener("click", () => {
+         document.documentElement.addEventListener("click", () => {
            window.open(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`, "_blank", "noopener");
          });
+         postData(data, category);
        }
      }, false);
      let iframe = document.createElement("iframe");
