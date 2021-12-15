@@ -26,15 +26,16 @@
        },
        {
          name: "Amazon adsystem",
-         url: "https://aax.amazon-adsystem.com/e/ir?t=&l=&o="
+         url: "https://aax-us-east.amazon-adsystem.com/x/px"
        },
        {
          name: "Google Syndication",
-         url: "https://tpc.googlesyndication.com/safeframe/1-0-35/html/container.html"
+         url: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",
+         //url: "https://tpc.googlesyndication.com/safeframe/1-0-35/html/container.html"
        },
        {
          name: "Scorecard Research Beacon",
-         url: "https://sb.scorecardresearch.com/b?c1=2"
+         url: "https://sb.scorecardresearch.com/beacon.js"
        },
        {
          name: "New Relic",
@@ -54,7 +55,7 @@
        },
        {
          name: "AppNext",
-         url: "https://ib.adnxs.com/bounce"
+         url: "https://acdn.adnxs.com/dmp/up/pixie.js"
        },
        {
          name: "Google Ad Services",
@@ -70,7 +71,7 @@
        },
        {
          name: "Taboola",
-         url: "https://trc-events.taboola.com/"
+         url: "https://cdn.taboola.com/libtrc/UNIQUEID/tfa.js"
        },
        {
          name: "Yandex Ads",
@@ -89,14 +90,26 @@
          url: "https://js-sec.indexww.com/ht/p/182254-63191772774302.js"
        },
      ];
+     const objectToJSON = (obj) => {
+       let result = {};
+       for (let prop of Object.getOwnPropertyNames(Object.getPrototypeOf(obj))) {
+         result[prop] = obj[prop];
+       }
+       return result;
+     };
+     const log = (item, passed) => {
+       console.log(item, {passed});
+       document.body.innerHTML += `<br>${JSON.stringify(objectToJSON(item))}: ${JSON.stringify({passed})}`;
+     };
      const testUrl = async (url) => {
        let passed;
        try {
          const response = await fetch(url, {mode:"no-cors", cache:"no-store"});
-         passed = false;
-         console.log(response);
+         passed = !response.ok;
+         log(response, passed);
        } catch (err) {
          passed = true;
+         log(err, passed);
        }
        return passed;
      };
