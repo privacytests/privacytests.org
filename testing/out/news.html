@@ -159,15 +159,27 @@ h1.title {
 </div>
     
   <div class="copy"><h1 id="news">News</h1>
-<h2 id="issue-8-2021-12-09"><a href="/">Issue 8</a> (2021-12-09)</h2>
+<h2 id="issue-9-desktop-nightly-android-ios-2021-12-16">Issue 9 (<a href="/">Desktop</a>, <a href="/nightly.html">Nightly</a>, <a href="/android.html">Android</a>, <a href="/ios.html">iOS</a>: 2021-12-16)</h2>
+<h3 id="introducing-mobile-web-browser-testing">Introducing mobile web browser testing</h3>
+<p>This issue adds two additional platforms for browser testing: Android and iOS. The new browsers are:</p>
+<ul>
+<li><strong>Android:</strong> Brave, Chrome, DuckDuckGo, Microsoft Edge, Firefox, Opera, Samsung, Tor, Vivaldi, Yandex</li>
+<li><strong>iOS:</strong> Brave, Chrome, DuckDuckGo, Edge, Firefox, Firefox Focus, Opera, Safari, Yandex</li>
+</ul>
+<h3 id="a-new-suite-of-tests-for-tracker-content-blocking">A new suite of tests for tracker content blocking</h3>
+<p>Some web browsers maintain a blocklist of tracking domains. Third-party content (such as tracking pixels and tracking scripts) from these domains are blocked by the browser so that they are not loaded into the page. To see which browsers carry out this form of blocking, and what domains they block, Issue 9 introduces tracker content blocking tests. For 20 of the most common tracking domains reported by <a href="https://whotracks.me">whotracks.me</a>, the tests attempt to load a tracking script or image. A browser passes the test if it blocks the script or image from being loaded.</p>
+<p>In this first run: Brave, DuckDuckGo, Firefox Private Mode and Firefox Focus were found to do substantial tracking content blocking.</p>
+<h3 id="known-issue">Known issue</h3>
+<p>Again we have skipped testing of Firefox Nightly because of the browser crash.</p>
+<h2 id="issue-8-desktop-nightly-2021-12-09">Issue 8 (<a href="/archive/issue8.html">Desktop</a>, <a href="/archive/issue8.nightly.html">Nightly</a>: 2021-12-09)</h2>
 <h3 id="new-browser-versions">New browser versions</h3>
 <p>Since Issue 7, Firefox has updated to version 95.0.</p>
-<h3 id="known-issue">Known issue</h3>
+<h3 id="known-issue-1">Known issue</h3>
 <p>Because of a crash in Firefox Nightly, it is not included in this week&#39;s Nightly browser testing.</p>
 <h2 id="issue-7-2021-12-02"><a href="/archive/issue7.html">Issue 7</a> (2021-12-02)</h2>
 <h3 id="new-browser-versions-1">New browser versions</h3>
 <p>Since Issue 6, Opera has updated to 82.0 and Vivaldi to 5.0.</p>
-<h3 id="known-issue-1">Known issue</h3>
+<h3 id="known-issue-2">Known issue</h3>
 <p>Because of a crash in Firefox Nightly, it is not included in this week&#39;s testing.</p>
 <h2 id="issue-6-2021-11-24"><a href="/archive/issue6.html">Issue 6</a> (2021-11-24)</h2>
 <h3 id="new-browser-version">New browser version</h3>
