@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8"/>
+    <link rel="shortcut icon" href="#">
+  </head>
+  <body>
+    <script id="testScript"></script>
+    <script src="./post_data.js"></script>
+    <script>
+     const tests = [
+       {
+         name: "Google Tag Manager",
+         url: "https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL"
+       },
+       {
+         name: "DoubleClick (Google)",
+         url: "https://securepubads.g.doubleclick.net/static/glade.js"
+       },
+       {
+         name: "Google Analytics",
+         url: "https://google-analytics.com/urchin.js"
+       },
+       {
+         name: "Facebook Pixel",
+         url: "https://www.facebook.com/tr?id=123"
+       },
+       {
+         name: "Amazon adsystem",
+         url: "https://aax-us-east.amazon-adsystem.com/x/px"
+       },
+       {
+         name: "Google Syndication",
+         url: "https://tpc.googlesyndication.com/sodar/UFYwWwmt.js",
+       },
+       {
+         name: "Scorecard Research Beacon",
+         url: "https://sb.scorecardresearch.com/internal-c2/default/cs.js"
+       },
+       {
+         name: "New Relic",
+         url: "https://js-agent.newrelic.com/nr-1212.min.js"
+       },
+       {
+         name: "Criteo",
+         url: "https://csm.da.us.criteo.net/iev",
+       },
+       {
+         name: "Adobe",
+         url: "https://munchkin.marketo.net/munchkin.js"
+       },
+       {
+         name: "Yandex Metrika",
+         url: "https://mc.yandex.ru/metrika/tag.js"
+       },
+       {
+         name: "AppNext",
+         url: "https://acdn.adnxs.com/dmp/up/pixie.js"
+       },
+       {
+         name: "Google Ad Services",
+         url: "https://www.googleadservices.com/pagead/conversion.js"
+       },
+       {
+         name: "Twitter Ads",
+         url: "https://static.ads-twitter.com/uwt.js"
+       },
+       {
+         name: "Bing Ads",
+         url: "https://bat.bing.com/bat.js"
+       },
+       {
+         name: "Taboola",
+         url: "https://cdn.taboola.com/libtrc/UNIQUEID/tfa.js"
+       },
+       {
+         name: "Index Exchange",
+         url: "https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&external_user_id=629685505537&C=1"
+       },
+       {
+         name: "Yandex Ads",
+         url: "https://yandex.ru/ads/system/header-bidding.js"
+       },
+       {
+         name: "Quantcast",
+         url: "https://pixel.quantserve.com/pixel"
+       },
+       {
+         name: "Chartbeat",
+         url: "https://pdev.chartbeat.net/ping?h=x&p=x&r=&b=",
+       },
+     ];
+
+     const testUrl = async (url) => {
+       let passed;
+       try {
+         const testElement = document.createElement(url.includes(".js") ? "script" : "img");
+         document.body.appendChild(testElement);
+         const resultPromise = new Promise((resolve, reject) => {
+           testElement.addEventListener("load", e => resolve(e), { once: true});
+           testElement.addEventListener("error", e => reject(e), { once: true});
+         });
+         testElement.src = url;
+         let result = await resultPromise;
+         passed = false;
+         console.log(url, result);
+       } catch (err) {
+         passed = true;
+         console.log(url, err);
+       }
+       document.body.innerHTML += `<br>${url}: ${passed ? "passed" : "failed"}`;
+       return passed;
+     };
+
+     const runTest = async () => {
+       let results = {};
+       for (const {name, url} of tests) {
+         const passed = await testUrl(url);
+         const description = `Tests whether the browser blocks the page from loading the tracker at ${url}`;
+         results[name] = { url, passed, description };
+       }
+       console.log(results);
+       document.body.innerHTML += `<br>Done.<br><br>${JSON.stringify(results)}`;
+       try {
+         await postDataAndCarryOn(results, "trackers");
+       } catch (e) {
+         document.body.innerHTML += `${e.stack}`;
+       }
+       document.body.innerHTML += "<br> postDataAndCarryOn complete.";
+     };
+     runTest();
+    </script>
+  </body>
+</html>

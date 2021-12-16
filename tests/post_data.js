@@ -20,7 +20,12 @@ const postData = async (results, category) => {
 };
 
 const postDataAndCarryOn = async (results, category) => {
-  const { newTabUrl, navigateUrl } = await postData(results, category);
+  const response = await postData(results, category);
+  document.body.innerHTML += "<br>response: " + JSON.stringify(response);
+  if (!response) {
+    return;
+  }
+  const { newTabUrl, navigateUrl } = response;
   if (newTabUrl) {
     window.open(newTabUrl, "_blank");
   }
