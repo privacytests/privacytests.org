@@ -74,6 +74,10 @@
          url: "https://cdn.taboola.com/libtrc/UNIQUEID/tfa.js"
        },
        {
+         name: "Index Exchange",
+         url: "https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&external_user_id=629685505537&C=1"
+       },
+       {
          name: "Yandex Ads",
          url: "https://yandex.ru/ads/system/header-bidding.js"
        },
@@ -84,10 +88,6 @@
        {
          name: "Chartbeat",
          url: "https://pdev.chartbeat.net/ping?h=x&p=x&r=&b=",
-       },
-       {
-         name: "Index Exchange",
-         url: "https://js-sec.indexww.com/ht/p/182254-63191772774302.js"
        },
      ];
 
@@ -108,6 +108,7 @@
          passed = true;
          console.log(url, err);
        }
+       document.body.innerHTML += `<br>${url}: ${passed ? "passed" : "failed"}`;
        return passed;
      };
 
@@ -119,7 +120,13 @@
          results[name] = { url, passed, description };
        }
        console.log(results);
-       await postDataAndCarryOn(results, "trackers");
+       document.body.innerHTML += `<br>Done.<br><br>${JSON.stringify(results)}`;
+       try {
+         await postDataAndCarryOn(results, "trackers");
+       } catch (e) {
+         document.body.innerHTML += `${e.stack}`;
+       }
+       document.body.innerHTML += "<br> postDataAndCarryOn complete.";
      };
      runTest();
     </script>
