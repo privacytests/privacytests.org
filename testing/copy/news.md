@@ -1,6 +1,25 @@
 # News
 
-## [Issue 8](/) (2021-12-09)
+## Issue 9 ([Desktop](/), [Nightly](/nightly.html), [Android](/android.html), [iOS](/ios.html): 2021-12-16)
+
+### Introducing mobile web browser testing
+
+This issue adds two additional platforms for browser testing: Android and iOS. The new browsers are:
+
+* **Android:** Brave, Chrome, DuckDuckGo, Microsoft Edge, Firefox, Opera, Samsung, Tor, Vivaldi, Yandex
+* **iOS:** Brave, Chrome, DuckDuckGo, Edge, Firefox, Firefox Focus, Opera, Safari, Yandex
+
+### A new suite of tests for tracker content blocking
+
+Some web browsers maintain a blocklist of tracking domains. Third-party content (such as tracking pixels and tracking scripts) from these domains are blocked by the browser so that they are not loaded into the page. To see which browsers carry out this form of blocking, and what domains they block, Issue 9 introduces tracker content blocking tests. For 20 of the most common tracking domains reported by [whotracks.me](https://whotracks.me), the tests attempt to load a tracking script or image. A browser passes the test if it blocks the script or image from being loaded.
+
+In this first run: Brave, DuckDuckGo, Firefox Private Mode and Firefox Focus were found to do substantial tracking content blocking.
+
+### Known issue
+
+Again we have skipped testing of Firefox Nightly because of the browser crash.
+
+## Issue 8 ([Desktop](/archive/issue8.html), [Nightly](/archive/issue8.nightly.html): 2021-12-09)
 
 ### New browser versions
 
