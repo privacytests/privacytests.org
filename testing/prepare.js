@@ -8,3 +8,5 @@ const cropPreview = (fileIn, fileOut) => {
 
 cropPreview('out/desktopPreview.png', 'out/desktopPreview2.png');
 cropPreview('out/nightlyPreview.png', 'out/nightlyPreview2.png');
+cropPreview('out/androidPreview.png', 'out/androidPreview2.png');
+cropPreview('out/iosPreview.png', 'out/iosPreview2.png');
