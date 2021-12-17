@@ -333,13 +333,13 @@ const content = (results, jsonFilename, title, nightly) => {
       <div class="navItem ${!(nightly || results.platform === "Android" || results.platform === "iOS") ? "selectedItem" : ""}">
         <a href="/">Desktop browsers</a>
       </div>
-      <div class="navItem ${nightly ? "selectedItem" : ""}">
-        <a href="nightly.html">iOS browsers</a>
+      <div class="navItem ${results.platform === "iOS" ? "selectedItem" : ""}">
+        <a href="ios.html">iOS browsers</a>
       </div>
       <div class="navItem ${results.platform === "Android" ? "selectedItem" : ""}">
-        <a href="nightly.html">Android browsers</a>
+        <a href="android.html">Android browsers</a>
       </div>
-      <div class="navItem ${results.platform === "iOS" ? "selectedItem" : ""}">
+      <div class="navItem ${nightly ? "selectedItem" : ""}">
         <a href="nightly.html">Nightly builds</a>
       </div>
     </div>
@@ -391,7 +391,7 @@ const aggregateRepeatedTrials = (results) => {
       if (aggregatedResults.has(key)) {
         let theseTestResults = aggregatedResults.get(key).testResults;
         if (theseTestResults) {
-          for (let subcategory of ["supercookies", "fingerprinting", "https", "misc", "navigation", "query"]) {
+          for (let subcategory of ["supercookies", "fingerprinting", "https", "misc", "navigation", "query", "trackers"]) {
             let someTests = theseTestResults[subcategory];
             for (let testName in test.testResults[subcategory]) {
               for (let value in test.testResults[subcategory][testName]) {
@@ -415,14 +415,23 @@ const aggregateRepeatedTrials = (results) => {
   return resultsCopy;
 };
 
-const render = async ({ dataFile, live, aggregate }) => {
+const getMergedResults = async (dataFiles) => {
+  let resultItems = await Promise.all(dataFiles.map(readJSONFile));
+  let finalResults = resultItems[0];
+  for (let resultItem of resultItems.slice(1)) {
+    finalResults.all_tests = finalResults.all_tests.concat(resultItem.all_tests);
+  }
+  return finalResults;
+}
+
+const render = async ({ dataFiles, live, aggregate }) => {
   console.log("aggregate:", aggregate);
-  let resultsFileJSON = dataFile ?? await latestResultsFile("./out/results");
+  let resultsFilesJSON = dataFiles ?? [await latestResultsFile("./out/results")];
   let resultsFileHTMLLatest = "./out/results/latest.html";
-  let resultsFileHTML = resultsFileJSON.replace(/\.json$/, ".html");
+  let resultsFileHTML = resultsFilesJSON[0].replace(/\.json$/, ".html");
 //  fs.copyFile(resultsFile, "./out/results/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
-  console.log(`Reading from raw results file: ${resultsFileJSON}`);
-  let results = await readJSONFile(resultsFileJSON);
+  console.log(`Reading from raw results files: ${resultsFilesJSON}`);
+  let results = await getMergedResults(resultsFilesJSON);
   console.log(results.all_tests.length);
   let processedResults = aggregate ? aggregateRepeatedTrials(results) : results;
 //  console.log(results.all_tests[0]);
@@ -440,7 +449,7 @@ const render = async ({ dataFile, live, aggregate }) => {
   }
   await fs.writeFile(resultsFileHTMLLatest, template.htmlPage({
     title: "PrivacyTests.org",
-      content: content(processedResults, path.basename(resultsFileJSON), tableTitle, nightly),
+      content: content(processedResults, path.basename(resultsFilesJSON[0]), tableTitle, nightly),
     cssFiles: ["./template.css", "./inline.css"],
     previewImageUrl: nightly ? "nightlyPreview.png" : "desktopPreview.png"
   }));
@@ -454,9 +463,9 @@ const render = async ({ dataFile, live, aggregate }) => {
 };
 
 const main = async () => {
-  let { _: [ dataFile], live, aggregate } = minimist(process.argv.slice(2),
+  let { _: dataFiles, live, aggregate } = minimist(process.argv.slice(2),
                                      opts = { default: { aggregate: true }});
-  render({ dataFile, live, aggregate });
+  render({ dataFiles, live, aggregate });
 };
 
 if (require.main === module) {
