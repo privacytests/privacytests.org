@@ -436,9 +436,9 @@ read: async (secret) => {
       return blobResponse.text();
     }
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
 unsupported: false, false, false, false, false
 
@@ -472,9 +472,9 @@ read: () =>
         setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
       })
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
 unsupported: false, false, false, false, false
 
@@ -499,9 +499,9 @@ read: async () => {
       return (new URL(url)).searchParams.get("key");
     }
 
-result, same first party: dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a
+result, same first party: b6904e73-8123-470b-af93-9efc26449e01, b6904e73-8123-470b-af93-9efc26449e01, b6904e73-8123-470b-af93-9efc26449e01, b6904e73-8123-470b-af93-9efc26449e01, b6904e73-8123-470b-af93-9efc26449e01
 
-result, different first party: dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a
+result, different first party: b6904e73-8123-470b-af93-9efc26449e01, b6904e73-8123-470b-af93-9efc26449e01, b6904e73-8123-470b-af93-9efc26449e01, b6904e73-8123-470b-af93-9efc26449e01, b6904e73-8123-470b-af93-9efc26449e01
 
 unsupported: false, false, false, false, false
 
@@ -518,9 +518,9 @@ test failed: false, false, false, false, false</span>
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
 unsupported: false, false, false, false, false
 
@@ -563,9 +563,9 @@ read: async (key) => {
       return fontFamily;
     }
 
-result, same first party: fake_9338902186508966, fake_8850601545729619, fake_5782858134685172, fake_9014330432544, fake_48758164233054946
+result, same first party: fake_6564759562645399, fake_7715078364543861, fake_2688179991229023, fake_8301171272574546, fake_20145721921625181
 
-result, different first party: fake_5272798667476346, fake_45732605062800036, fake_2972315508108754, fake_22087986062411158, fake_5345735119832864
+result, different first party: fake_7360365420197268, fake_8467545897474089, fake_2517984108285991, fake_6879276288323972, fake_4129883006948487
 
 unsupported: false, false, false, false, false
 
@@ -613,9 +613,9 @@ read: async (key) => {
       return (await countResponse.text()).trim();
     }
 
-result, same first party: 1, 1, 2, 1, 1
+result, same first party: 1, 2, 2, 1, 1
 
-result, different first party: 2, 2, 3, 2, 2
+result, different first party: 2, 3, 3, 2, 2
 
 unsupported: false, false, false, false, false
 
@@ -665,7 +665,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
 result, different first party: , , , , 
 
@@ -685,7 +685,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
 result, different first party: , , , , 
 
@@ -716,9 +716,9 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: f288e34c9d64754b628d3bf9c182ebe1, 79f597fa81c331056ec6d9d56e345584, c0592bc7574093dad6c5e99456b64695, 7f378b7f6dd58f92cac3a94c05da40fe, 5372b5c37ce98ebb0f62e00ade7209e8
+result, same first party: 6184ad828578da932ff11ddb3ef9a92e, 218f1327387cc11ce5f052f6e13d55fa, 6a735830e5e0fa4083fac85664613348, 813d243965767854ab60d12bc5b49454, 5970c5f2a979691ef5e334ac8f0f2681
 
-result, different first party: , d8fd09173b88b8172a25bd51a6da9c2b, d23d20b149751c48a7291ad4d783c6c1, 0eccecee56bb126b35f829abfc3a0a66, 
+result, different first party: 9916df285931604ee49606b2f5597d84, d6c3cdf438b3f424a7cc28baf9f7401d, 97416b00ee440efa6f3825036442d37c, 766a07e43efa51b2476ccd2cb8e0765a, 482f89ce9e5a2a45a9c3864d3f2dc148
 
 unsupported: false, false, false, false, false
 
@@ -771,9 +771,9 @@ read: async (key) => {
       return (await response.text()).trim();
     }
 
-result, same first party: 1, 1, 1, 1, 1
+result, same first party: 1, 2, 1, 1, 1
 
-result, different first party: 2, 2, 2, 2, 2
+result, different first party: 2, 3, 2, 2, 2
 
 unsupported: false, false, false, false, false
 
@@ -802,9 +802,9 @@ read: async (key) => {
       return (await response.text()).trim();
     }
 
-result, same first party: 2, 1, 1, 1, 1
+result, same first party: 1, 1, 1, 1, 1
 
-result, different first party: 3, 2, 2, 2, 2
+result, different first party: 2, 2, 2, 2, 2
 
 unsupported: false, false, false, false, false
 
@@ -823,9 +823,9 @@ test failed: false, false, false, false, false</span>
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
 unsupported: false, false, false, false, false
 
@@ -838,9 +838,9 @@ test failed: false, false, false, false, false</span>
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
 unsupported: false, false, false, false, false
 
@@ -900,9 +900,9 @@ read: async (key) => {
       return countString;
     }
 
-result, same first party: 1, 1, 1, 1, 1
+result, same first party: 1, 1, 2, 1, 1
 
-result, different first party: 2, 2, 2, 2, 2
+result, different first party: 2, 2, 3, 2, 2
 
 unsupported: false, false, false, false, false
 
@@ -935,9 +935,9 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
 unsupported: false, false, false, false, false
 
@@ -965,9 +965,9 @@ read: () =>
         setTimeout(() => reject("no SharedWorker message received"), 100);
       })
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
 unsupported: false, false, false, false, false
 
@@ -986,9 +986,9 @@ read: async () => {
       return (await results.json()).sessionId;
     }
 
-result, same first party: 8d1e1d5d8544fe595b9206fc84010a086dcdfe1117fd30ef27b6d54eec7d34d3, ac959f8d45e1579a547dcf1bd71f7cbb61a58c454b9149b167cbb46b9c5312b0, 8c2152a59416a12cc9b7f4914ee89bf47e96f34658bb056d243dc6ae2eb6a590, 88afca93e04de906fd860f1203a764116776d0d39521dbad91b6e21e285292ba, d80f199565d4d28f510dd71622c3f04c877d761aa26fc601178a653119260e52
+result, same first party: 4953c07f1aae61471ee9f0e4e5e4a43ed9803afa637a128c3f2f152d074810e2, 53137579066952cfb8b94e48a7664c0886cf98b3a56362b975f5e0e436198d89, 7e4339b3c4a73aeca1e4a1a3e02270babbfc849cdee5e599d502b72139fb8ee5, 7611946ed235304497c372a25cbf1207f8edc5d720bffbc62df9bdfbdc77443b, d9b8b1458abaf85c1b09817f74b6d7167669b348388febef35e7825e3d86c213
 
-result, different first party: 04303424cf389934b0be9487a1d7e7b8c30b158183b86d7ee8176580ddfbb743, 043072c898dd033e855581c0b2b10bfb8761a01484a523ebb2bee1c1866b5a3f, 043071dfffbd91c0f7836c5664262b24e112ebe12f50d19d2e87f48a007bae7b, 04305e0a7afb7ec32e5d40762f43beec80578942a40e53582af4f31345213efc, 043079d0cc94277b7d130194802d5ea63fc7791afdddb119b8aa9f065b19fbf8
+result, different first party: 0430437f16a96de144624947828b8b278ddb36205555474e5ccbce90809e6111, 0430d08347ee9b257b0b17fe7cd85670afc53b231c3fc5cbd9c9ad58ff4328a4, 0430f3f19cd02874357f04f26d822756fd3ca4a3c53d8feb897d1a4879af8e8a, 0430c7e0ed86f833dc9024b78842aff54691ca932b4b4334179552efe2af9934, 04302192a476aa62ebe10af3b348f2b3e544a4922d540b72fdbdc259de4e1775
 
 unsupported: false, false, false, false, false
 
@@ -1061,9 +1061,9 @@ read: () => new Promise((resolve, reject) => {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
 
-result, same first party: Thu, 16 Dec 2021 23:06:53 GMT, Thu, 16 Dec 2021 23:07:44 GMT, Thu, 16 Dec 2021 23:08:41 GMT, Thu, 16 Dec 2021 23:09:35 GMT, Thu, 16 Dec 2021 23:10:30 GMT
+result, same first party: Thu, 16 Dec 2021 22:41:06 GMT, Thu, 16 Dec 2021 22:42:13 GMT, Thu, 16 Dec 2021 22:43:09 GMT, Thu, 16 Dec 2021 22:44:02 GMT, Thu, 16 Dec 2021 22:44:56 GMT
 
-result, different first party: Thu, 16 Dec 2021 22:55:47 GMT, Thu, 16 Dec 2021 22:55:47 GMT, Thu, 16 Dec 2021 22:55:47 GMT, Thu, 16 Dec 2021 22:55:47 GMT, Thu, 16 Dec 2021 22:55:47 GMT
+result, different first party: Tue, 14 Dec 2021 18:46:45 GMT, Tue, 14 Dec 2021 18:46:45 GMT, Tue, 14 Dec 2021 18:46:45 GMT, Tue, 14 Dec 2021 18:46:45 GMT, Tue, 14 Dec 2021 18:46:45 GMT
 
 unsupported: false, false, false, false, false
 
@@ -1096,9 +1096,9 @@ test failed: false, false, false, false, false</span>
 
 read: () => sessionStorage.getItem("secret")
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
 unsupported: false, false, false, false, false
 
@@ -1116,7 +1116,7 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 5be7b9de-9158-4afa-9f54-a747b119b0a9, 96d3779f-e5bd-43d8-b6e2-c0ced70789ad, 6de196a3-562b-4044-8e33-f3e3776bf5eb, 410ec8a5-861e-4770-a030-5c1bdfaaa4a1, 380e0bd4-c2ad-40d4-bbf0-c654587ba893
 
 result, different first party: , , , , 
 
@@ -1398,10 +1398,10 @@ passed: false,false,false,false,false</span>
 > &nbsp;
 <span class="tooltipText">url: https://mc.yandex.ru/metrika/tag.js
 passed: false,false,false,false,false</span>
-</div></td></tr></table><p class="footer">Tests ran at 2021-12-16 23:06:26 UTC.
+</div></td></tr></table><p class="footer">Tests ran at 2021-12-16 22:40:38 UTC.
          Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/5897df7846f2c5777bd70c8eea81a4b49d5c57a6"
     >5897df78</a>.
-    Raw data in <a href="20211216_231108.json">JSON</a>.
+    Raw data in <a href="20211216_224536.json">JSON</a>.
     </p><script type="module">
   const table = document.querySelector(".comparison-table");
   let visibleTooltip = null;

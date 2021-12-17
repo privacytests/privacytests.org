@@ -408,15 +408,15 @@ table.comparison-table .instructions {
 
 read: () => fetchText("https://h3.arthuredelstein.net:4433/protocol")
 
-result, same first party: h3, h3, h3, h3, h3
+result, same first party: h3
 
-result, different first party: h2, h2, h2, h2, h2
+result, different first party: h2
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">blob<span class="tooltipText">A 'blob URL' is a local reference to some raw data. Trackers can use a blob URL to share data between websites.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (secret) => {
@@ -436,15 +436,15 @@ read: async (secret) => {
       return blobResponse.text();
     }
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">BroadcastChannel<span class="tooltipText">A BroadcastChannel is designed to send messages between tabs. In some browsers it can be used for cross-site communication and tracking.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (secret) => {
@@ -472,15 +472,15 @@ read: () =>
         setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
       })
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">CacheStorage<span class="tooltipText">The Cache API is a content storage mechanism originally introduced to support ServiceWorkers. If the same Cache object is accessible to multiple websites, it can be abused to track users.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (key) => {
@@ -499,15 +499,15 @@ read: async () => {
       return (new URL(url)).searchParams.get("key");
     }
 
-result, same first party: dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a
+result, same first party: b6904e73-8123-470b-af93-9efc26449e01
 
-result, different first party: dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a, dbd0fdf5-1be2-41d7-a0aa-b0261e5fe14a
+result, different first party: b6904e73-8123-470b-af93-9efc26449e01
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">cookie<span class="tooltipText">The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website's behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (secret) => {
@@ -518,15 +518,15 @@ test failed: false, false, false, false, false</span>
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">CSS cache<span class="tooltipText">CSS stylesheets are cached, and if that cache is shared between websites, it can be used to track users across sites.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (key) => {
@@ -563,15 +563,15 @@ read: async (key) => {
       return fontFamily;
     }
 
-result, same first party: fake_9338902186508966, fake_8850601545729619, fake_5782858134685172, fake_9014330432544, fake_48758164233054946
+result, same first party: fake_3671115517384804
 
-result, different first party: fake_5272798667476346, fake_45732605062800036, fake_2972315508108754, fake_22087986062411158, fake_5345735119832864
+result, different first party: fake_8773435456423337
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">favicon cache<span class="tooltipText">A favicon is an icon that represents a website, typically shown in browser tab and bookmarks menu. If the favicon cache is not partitioned, it can be used to track users across websites.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (key) => key
@@ -588,15 +588,15 @@ read: async (key) => {
       return count;
     }
 
-result, same first party: 1, 1, 1, 1, 1
+result, same first party: 1
 
-result, different first party: 1, 1, 1, 1, 1
+result, different first party: 1
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">fetch cache<span class="tooltipText">When a resource is received via the Fetch API, it is frequently cached. That cache can potentially be abused for cross-site tracking.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (key) => {
@@ -613,15 +613,15 @@ read: async (key) => {
       return (await countResponse.text()).trim();
     }
 
-result, same first party: 1, 1, 2, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 3, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">font cache<span class="tooltipText">Web fonts are sometimes stored in their own cache, which is vulnerable to being abused for cross-site tracking.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (key) => {
@@ -645,15 +645,15 @@ read: async (key) => {
       return (await response.text()).trim();
     }
 
-result, same first party: 1, 1, 1, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">H1 connection<span class="tooltipText">HTTP/1.x are the classic web connection protocols. If these connections are re-used across websites, they can be used to track users.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (secret) => {
@@ -665,15 +665,15 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-result, different first party: , , , , 
+result, different first party: 
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">H2 connection<span class="tooltipText">HTTP/2 is a web connection protocol introduced in 2015. Some browsers re-use HTTP/2 connections across websites and can thus be used to track users.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (secret) => {
@@ -685,15 +685,15 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-result, different first party: , , , , 
+result, different first party: 
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">H3 connection<span class="tooltipText">HTTP/3 is a new standard HTTP connection protocol, still in draft but widely supported by browsers. If it is not partitioned, it can be used to track users across websites.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (secret) => {
@@ -716,15 +716,15 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: f288e34c9d64754b628d3bf9c182ebe1, 79f597fa81c331056ec6d9d56e345584, c0592bc7574093dad6c5e99456b64695, 7f378b7f6dd58f92cac3a94c05da40fe, 5372b5c37ce98ebb0f62e00ade7209e8
+result, same first party: 954bc36b81cadbdd37a71e974f0d7fc6
 
-result, different first party: , d8fd09173b88b8172a25bd51a6da9c2b, d23d20b149751c48a7291ad4d783c6c1, 0eccecee56bb126b35f829abfc3a0a66, 
+result, different first party: 356f24d008c20e287eae79083e14a084
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">HSTS cache<span class="tooltipText">The HTTP Strict-Transport-Security response header allows a website to signal that it should only be accessed via HTTPS. The browser remembers this directive in a database, but if this database is not partitioned, then it can be used to track users across websites.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: () => {
@@ -739,15 +739,15 @@ read: () => new Promise((resolve, reject) => {
       image.src = "http://hsts.arthuredelstein.net/test_hsts.png";
     })
 
-result, same first party: image load succeeded, image load succeeded, image load succeeded, image load succeeded, image load succeeded
+result, same first party: image load succeeded
 
-result, different first party: Error: image load failed, Error: image load failed, Error: image load failed, Error: image load failed, Error: image load failed
+result, different first party: Error: image load failed
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">iframe cache<span class="tooltipText">An iframe is an element in a web page than allows websites to embed a second web page. Caching of this web page could be abused for cross-site tracking.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: (key) => new Promise((resolve, reject) => {
@@ -771,15 +771,15 @@ read: async (key) => {
       return (await response.text()).trim();
     }
 
-result, same first party: 1, 1, 1, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">image cache<span class="tooltipText">Caching of images in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: (key) => new Promise((resolve, reject) => {
@@ -802,15 +802,15 @@ read: async (key) => {
       return (await response.text()).trim();
     }
 
-result, same first party: 2, 1, 1, 1, 1
+result, same first party: 1
 
-result, different first party: 3, 2, 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">indexedDB<span class="tooltipText">The IndexedDB API exposes a transactional database to web pages. That database can be used to track users across websites, unless it is partitioned.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (secret) => {
@@ -823,30 +823,30 @@ test failed: false, false, false, false, false</span>
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">localStorage<span class="tooltipText">The localStorage API gives websites access to a key-value database that will remain available across visits. If the localStorage API is not partitioned or blocked, it can also be used to track users across websites.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (secret) => localStorage.setItem("secret", secret)
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">locks<span class="tooltipText">navigator.locks (only supported in some browsers) allows scripts on multiple tabs to coordinate. If this API is not partitioned, it can be used for cross-site tracking.</span></div></td><td><div class='dataPoint tooltipParent na'
 > &ndash;
 <span class="tooltipText">write: async (key) => {
@@ -870,11 +870,11 @@ result, same first party: undefined
 
 result, different first party: undefined
 
-unsupported: true, true, true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">prefetch cache<span class="tooltipText">A <link rel='prefetch'...> suggests to browsers they should fetch a resource ahead of time and cache it. But if browsers don't partition this cache, it can be used to track users across websites.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (key) => {
@@ -900,15 +900,15 @@ read: async (key) => {
       return countString;
     }
 
-result, same first party: 1, 1, 1, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">ServiceWorker<span class="tooltipText">The ServiceWorker API allows websites to run code in the background and store content in the browser for offline use. If a ServiceWorker can be accessed from multiple websites, it can be abused to track users across sites.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (key) => {
@@ -935,15 +935,15 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">SharedWorker<span class="tooltipText">The SharedWorker API allows scripts from multiple tabs to share a background thread of computation. If SharedWorker is not partitioned, then it can be abused to shared data between websites in your browser.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (secret) => {
@@ -965,15 +965,15 @@ read: () =>
         setTimeout(() => reject("no SharedWorker message received"), 100);
       })
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">TLS Session ID<span class="tooltipText">The TLS protocol is used by HTTPS to make connections secure. If the browser were to re-use a TLS session, then the session ID could be used to track users across websites.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async () => {
@@ -986,15 +986,15 @@ read: async () => {
       return (await results.json()).sessionId;
     }
 
-result, same first party: 8d1e1d5d8544fe595b9206fc84010a086dcdfe1117fd30ef27b6d54eec7d34d3, ac959f8d45e1579a547dcf1bd71f7cbb61a58c454b9149b167cbb46b9c5312b0, 8c2152a59416a12cc9b7f4914ee89bf47e96f34658bb056d243dc6ae2eb6a590, 88afca93e04de906fd860f1203a764116776d0d39521dbad91b6e21e285292ba, d80f199565d4d28f510dd71622c3f04c877d761aa26fc601178a653119260e52
+result, same first party: 46f128326447f96f8ae9a046d4af106fc93dd80bfeb0bbd7d98a6f5b415ccec4
 
-result, different first party: 04303424cf389934b0be9487a1d7e7b8c30b158183b86d7ee8176580ddfbb743, 043072c898dd033e855581c0b2b10bfb8761a01484a523ebb2bee1c1866b5a3f, 043071dfffbd91c0f7836c5664262b24e112ebe12f50d19d2e87f48a007bae7b, 04305e0a7afb7ec32e5d40762f43beec80578942a40e53582af4f31345213efc, 043079d0cc94277b7d130194802d5ea63fc7791afdddb119b8aa9f065b19fbf8
+result, different first party: 04303a6091a86206eda206fef1d3a765003b26cffe8e6837b7a4c253e6b7855a
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Web SQL Database<span class="tooltipText">The Web SQL Database is a deprecated web API for storing data in an SQL database.</span></div></td><td><div class='dataPoint tooltipParent na'
 > &ndash;
 <span class="tooltipText">write: async (key) => {
@@ -1030,15 +1030,15 @@ read: async () => {
       return result.rows.item(0).value;
     }
 
-result, same first party: Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function
+result, same first party: Error: window.openDatabase is not a function
 
-result, different first party: Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function
+result, different first party: Error: window.openDatabase is not a function
 
-unsupported: true, true, true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">XMLHttpRequest cache<span class="tooltipText">Similar to the newer Fetch API, any resource received may be cached by the browser. The cache is potentially vulnerable to cross-site tracking attack.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: () => new Promise((resolve, reject) => {
@@ -1061,15 +1061,15 @@ read: () => new Promise((resolve, reject) => {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
 
-result, same first party: Thu, 16 Dec 2021 23:06:53 GMT, Thu, 16 Dec 2021 23:07:44 GMT, Thu, 16 Dec 2021 23:08:41 GMT, Thu, 16 Dec 2021 23:09:35 GMT, Thu, 16 Dec 2021 23:10:30 GMT
+result, same first party: Thu, 16 Dec 2021 22:49:29 GMT
 
-result, different first party: Thu, 16 Dec 2021 22:55:47 GMT, Thu, 16 Dec 2021 22:55:47 GMT, Thu, 16 Dec 2021 22:55:47 GMT, Thu, 16 Dec 2021 22:55:47 GMT, Thu, 16 Dec 2021 22:55:47 GMT
+result, different first party: Tue, 14 Dec 2021 18:46:45 GMT
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><th colspan="4" class="subheading tooltipParent">Navigation tests<span class="tooltipText">When you click a hyperlink to navigate your browser from one site to another, certain browser APIs allow the first site to communicate to the second site. These privacy vulnerabilities can be fixed by introducing new limits on how much data is transfered between sites.</span></th></tr><tr><td><div class="tooltipParent">document.referrer<span class="tooltipText">The Referer [sic] request header is a mechanism used by browsers to let a website know where the user is visiting from. This header is inherently tracking users across websites. In recent times, browsers have switched to a policy of trimming a referrer to convey less tracking information, but Referer continues to convey cross-site tracking data by default.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (secret) => { /* do nothing */ }
@@ -1081,30 +1081,30 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: https://arthuredelstein.net/, https://arthuredelstein.net/, https://arthuredelstein.net/, https://arthuredelstein.net/, https://arthuredelstein.net/
+result, same first party: https://arthuredelstein.net/
 
-result, different first party: https://arthuredelstein.net/, https://arthuredelstein.net/, https://arthuredelstein.net/, https://arthuredelstein.net/, https://arthuredelstein.net/
+result, different first party: https://arthuredelstein.net/
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">sessionStorage<span class="tooltipText">The sessionStorage API is similar to the localStorage API, but it does not persist across tabs or across browser sessions. Nonetheless, it can be used to track users if they navigate from one website to another. This tracking can be thwarted by partitioning sessionStorage between websites.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (secret) => sessionStorage.setItem("secret", secret)
 
 read: () => sessionStorage.getItem("secret")
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-result, different first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, different first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: false, false, false, false, false
+passed: false
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">window.name<span class="tooltipText">The window.name API allows websites to store data that will persist after the user has navigated the tab to a different website. This mechanism could be partitioned so that data is not allowed to persist between websites.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: (secret) => parent.postMessage({"write window.name": secret})
@@ -1116,41 +1116,41 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 350b3091-1db6-49d0-a67f-f9d0781e7c51, 5f0ad160-ac9b-4638-a92a-1843241c656e, c0854bbd-5ce4-40eb-bd6b-ecc3b03bdb25, 8a242fa0-56d1-4d6e-81f0-1b6d9a30c5e1, fd463157-2d45-44c7-abe8-241ce9a32792
+result, same first party: 60fb7a2c-1083-4d4d-871a-329a152c1099
 
-result, different first party: , , , , 
+result, different first party: 
 
-unsupported: false, false, false, false, false
+unsupported: false
 
-passed: true, true, true, true, true
+passed: true
 
-test failed: false, false, false, false, false</span>
+test failed: false</span>
 </div></td></tr><tr><th colspan="4" class="subheading tooltipParent">HTTPS tests<span class="tooltipText">HTTPS is the protocol that web browsers use to connect securely to websites. When HTTPS is being used, the connection is encrypted so that third parties on the network cannot read content being sent between the server and your browser. In the past, insecure connections were the default and websites would need to actively request that a browser use HTTPS. Now the status quo is shifting, and browser makers are moving toward a world where HTTPS is the default protocol.</span></th></tr><tr><td><div class="tooltipParent">Insecure website<span class="tooltipText">Checks to see if the browser stops loading an insecure website and warns the user before giving them the option to continue. Known as HTTPS-Only Mode in some browsers.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
-<span class="tooltipText">passed: false,false,false,false,false
-result: Insecure website loaded,Insecure website loaded,Insecure website loaded,Insecure website loaded,Insecure website loaded</span>
+<span class="tooltipText">passed: false
+result: Insecure website loaded</span>
 </div></td></tr><tr><td><div class="tooltipParent">Upgradable address<span class="tooltipText">Checks to see if an insecure address entered into the browser's address bar is upgraded to HTTPS whenever possible.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
-<span class="tooltipText">upgraded: false,false,false,false,false
-passed: false,false,false,false,false</span>
+<span class="tooltipText">upgraded: false
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Upgradable hyperlink<span class="tooltipText">Checks to see if the user has clicked on a hyperlink to an insecure address, if the browser upgrades that address to HTTPS whenever possible.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
-<span class="tooltipText">upgraded: false,false,false,false,false
-passed: false,false,false,false,false</span>
+<span class="tooltipText">upgraded: false
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Upgradable image<span class="tooltipText">Checks to see if the browser attempts to upgrade an insecure address for an image to HTTPS whenever possible.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
-<span class="tooltipText">passed: false,false,false,false,false
-result: loaded insecurely,loaded insecurely,loaded insecurely,loaded insecurely,loaded insecurely</span>
+<span class="tooltipText">passed: false
+result: loaded insecurely</span>
 </div></td></tr><tr><td><div class="tooltipParent">Upgradable script<span class="tooltipText">Checks to see if the browser attempts to upgrade an insecure address for an script to HTTPS whenever possible.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true,true
-result: blocked,blocked,blocked,blocked,blocked</span>
+<span class="tooltipText">passed: true
+result: blocked</span>
 </div></td></tr><tr><th colspan="4" class="subheading tooltipParent">Misc tests<span class="tooltipText">This category includes tests for the presence of miscellaneous privacy features.</span></th></tr><tr><td><div class="tooltipParent">GPC enabled<span class="tooltipText">The Global Privacy Control is an HTTP header that can be sent by a browser to instruct a website not to sell the user's personal data to third parties. This test checks to see if the GPC header is sent by default.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
-<span class="tooltipText">passed: false,false,false,false,false</span>
+<span class="tooltipText">passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">IP address leak<span class="tooltipText">IP addresses can be used to uniquely identify a large percentage of users. A proxy, VPN, or Tor can mask a user's IP address.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true,true</span>
+<span class="tooltipText">passed: true</span>
 </div></td></tr><tr><td><div class="tooltipParent">Stream isolation<span class="tooltipText">Browsers that use Tor can use a different Tor circuit per top-level website.</span></div></td><td><div class='dataPoint tooltipParent na'
 > &ndash;
 <span class="tooltipText">write: () => {
@@ -1165,243 +1165,243 @@ read: async () => {
         throw new Error("Unsupported");
       }
     }
-unsupported: true,true,true,true,true
-readSameFirstParty: Error: Unsupported,Error: Unsupported,Error: Unsupported,Error: Unsupported,Error: Unsupported
-readDifferentFirstParty: Error: Unsupported,Error: Unsupported,Error: Unsupported,Error: Unsupported,Error: Unsupported
-testFailed: false,false,false,false,false</span>
+unsupported: true
+readSameFirstParty: Error: Unsupported
+readDifferentFirstParty: Error: Unsupported
+testFailed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Tor enabled<span class="tooltipText">The Tor network sends the browser's web requests through a series of relays to hide a user's IP address, thereby helping to mask their identity and location. This test checks to see if the Tor network is being used by default.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
-<span class="tooltipText">IsTorExit: false,false,false,false,false
-passed: false,false,false,false,false</span>
+<span class="tooltipText">IsTorExit: false
+passed: false</span>
 </div></td></tr><tr><th colspan="4" class="subheading tooltipParent">Fingerprinting resistance tests<span class="tooltipText">Fingerprinting is a technique trackers use to uniquely identify you as you browse the web. A fingerprinting script will measure several characteristics of your browser and, combining this data, will build a fingerprint that may uniquely identify you among web users. Browsers can introduce countermeasures, such as minimizing the distinguishing information disclosed by certain web APIs so your browser is harder to pick out from the crowd (so-called 'fingerprinting resistance').</span></th></tr><tr><td><div class="tooltipParent">Media query screen height<span class="tooltipText">Height of the user's screen in pixels.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">expression: undefined
 desired expression: innerHeight
-actual value: 640,640,640,640,640
-desired value: 1524,1524,1524,1524,1524
-passed: false,false,false,false,false</span>
+actual value: 640
+desired value: 1524
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Media query screen width<span class="tooltipText">Width of the user's screen in pixels.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">expression: undefined
 desired expression: innerWidth
-actual value: 360,360,360,360,360
-desired value: 980,980,980,980,980
-passed: false,false,false,false,false</span>
+actual value: 360
+desired value: 980
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">outerHeight<span class="tooltipText">Height of the browser window in pixels, including browser chrome.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">expression: outerHeight
 desired expression: innerHeight
-actual value: 616,616,616,616,616
-desired value: 1524,1524,1524,1524,1524
-passed: false,false,false,false,false</span>
+actual value: 616
+desired value: 1524
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">screen.height<span class="tooltipText">Height of the user's screen, in pixels.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">expression: screen.height
 desired expression: innerHeight
-actual value: 640,640,640,640,640
-desired value: 1524,1524,1524,1524,1524
-passed: false,false,false,false,false</span>
+actual value: 640
+desired value: 1524
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">screen.width<span class="tooltipText">Width of the user's screen, in pixels.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">expression: screen.width
 desired expression: innerWidth
-actual value: 360,360,360,360,360
-desired value: 980,980,980,980,980
-passed: false,false,false,false,false</span>
+actual value: 360
+desired value: 980
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">screenX<span class="tooltipText">Position, in pixels, of the left edge of the browser window on screen.</span></div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">expression: screenX
 desired expression: 0
-actual value: 0,0,0,0,0
-desired value: 0,0,0,0,0
-passed: true,true,true,true,true</span>
+actual value: 0
+desired value: 0
+passed: true</span>
 </div></td></tr><tr><td><div class="tooltipParent">screenY<span class="tooltipText">Position, in pixels, of the top edge of the browser window on screen.</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">expression: screenY
 desired expression: 0
-actual value: 24,24,24,24,24
-desired value: 0,0,0,0,0
-passed: false,false,false,false,false</span>
+actual value: 24
+desired value: 0
+passed: false</span>
 </div></td></tr><tr><th colspan="4" class="subheading tooltipParent">Tracking query parameter tests<span class="tooltipText">When you browse from one web page to another, tracking companies will frequently attach a 'tracking query parameter' to the address of the second web page. That query parameter may contain a unique identifier that tracks you individually as you browse the web. And these query parameters are frequently synchronized with cookies, making them a powerful tracking vector. Web browsers can protect you from known tracking query parameters by stripping them from web addresses before your browser sends them. (The set of tracking query parameters tested here was largely borrowed from Brave.)</span></th></tr><tr><td><div class="tooltipParent">__hsfp<span class="tooltipText">HubSpot tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">__hssc<span class="tooltipText">HubSpot tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">__hstc<span class="tooltipText">HubSpot tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">__s<span class="tooltipText">Drip.com email address tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">_hsenc<span class="tooltipText">HubSpot tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">_openstat<span class="tooltipText">Yandex tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">dclid<span class="tooltipText">DoubleClick Click ID (Google)</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">fbclid<span class="tooltipText">Facebook Click Identifier</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">gclid<span class="tooltipText">Google Click Identifier</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">hsCtaTracking<span class="tooltipText">HubSpot tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">igshid<span class="tooltipText">Instagram tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">mc_eid<span class="tooltipText">Mailchimp Email ID (email recipient's address)</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">mkt_tok<span class="tooltipText">Adobe Marketo tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">ml_subscriber<span class="tooltipText">MailerLite email tracking</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">ml_subscriber_hash<span class="tooltipText">MailerLite email tracking</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">msclkid<span class="tooltipText">Microsoft Click ID</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">oly_anon_id<span class="tooltipText">Omeda marketing 'anonymous' customer id</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">oly_enc_id<span class="tooltipText">Omeda marketing 'known' customer id</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">rb_clickid<span class="tooltipText">Unknown high-entropy tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">s_cid<span class="tooltipText">Adobe Site Catalyst tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">vero_conv<span class="tooltipText">Vero tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">vero_id<span class="tooltipText">Vero tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">wickedid<span class="tooltipText">Wicked Reports e-commerce tracking</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">yclid<span class="tooltipText">Yandex Click ID</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 38591357834007045
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><th colspan="4" class="subheading tooltipParent">Tracker content blocking<span class="tooltipText">When you visit a web page, it frequently has third-party embedded tracking content, such as scripts and tracking pixels. These embedded components spy on you. Some browsers and browser extensions maintain list of tracking companies and block their content from being loaded. This section checks to see if a browser blocks 20 of the largest trackers, as reported by https://whotracks.me.</span></th></tr><tr><td><div class="tooltipParent">Adobe<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://munchkin.marketo.net/munchkin.js</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://munchkin.marketo.net/munchkin.js
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Amazon adsystem<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://aax-us-east.amazon-adsystem.com/x/px</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://aax-us-east.amazon-adsystem.com/x/px
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">AppNext<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://acdn.adnxs.com/dmp/up/pixie.js</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://acdn.adnxs.com/dmp/up/pixie.js
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Bing Ads<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://bat.bing.com/bat.js</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://bat.bing.com/bat.js
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Chartbeat<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://pdev.chartbeat.net/ping?h=x&p=x&r=&b=</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://pdev.chartbeat.net/ping?h=x&p=x&r=&b=
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Criteo<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://csm.da.us.criteo.net/iev</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://csm.da.us.criteo.net/iev
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">DoubleClick (Google)<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://securepubads.g.doubleclick.net/static/glade.js</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://securepubads.g.doubleclick.net/static/glade.js
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Facebook Pixel<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://www.facebook.com/tr?id=123</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://www.facebook.com/tr?id=123
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Google Ad Services<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://www.googleadservices.com/pagead/conversion.js</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://www.googleadservices.com/pagead/conversion.js
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Google Analytics<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://google-analytics.com/urchin.js</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://google-analytics.com/urchin.js
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Google Syndication<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://tpc.googlesyndication.com/sodar/UFYwWwmt.js</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://tpc.googlesyndication.com/sodar/UFYwWwmt.js
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Google Tag Manager<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Index Exchange<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&external_user_id=629685505537&C=1</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&external_user_id=629685505537&C=1
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">New Relic<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://js-agent.newrelic.com/nr-1212.min.js</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://js-agent.newrelic.com/nr-1212.min.js
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Quantcast<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://pixel.quantserve.com/pixel</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://pixel.quantserve.com/pixel
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Scorecard Research Beacon<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://sb.scorecardresearch.com/internal-c2/default/cs.js</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://sb.scorecardresearch.com/internal-c2/default/cs.js
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Taboola<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://cdn.taboola.com/libtrc/UNIQUEID/tfa.js</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://cdn.taboola.com/libtrc/UNIQUEID/tfa.js
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Twitter Ads<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://static.ads-twitter.com/uwt.js</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://static.ads-twitter.com/uwt.js
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Yandex Ads<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://yandex.ru/ads/system/header-bidding.js</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://yandex.ru/ads/system/header-bidding.js
-passed: false,false,false,false,false</span>
+passed: false</span>
 </div></td></tr><tr><td><div class="tooltipParent">Yandex Metrika<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://mc.yandex.ru/metrika/tag.js</span></div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://mc.yandex.ru/metrika/tag.js
-passed: false,false,false,false,false</span>
-</div></td></tr></table><p class="footer">Tests ran at 2021-12-16 23:06:26 UTC.
+passed: false</span>
+</div></td></tr></table><p class="footer">Tests ran at 2021-12-16 22:48:53 UTC.
          Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/5897df7846f2c5777bd70c8eea81a4b49d5c57a6"
     >5897df78</a>.
-    Raw data in <a href="20211216_231108.json">JSON</a>.
+    Raw data in <a href="20211216_225008.json">JSON</a>.
     </p><script type="module">
   const table = document.querySelector(".comparison-table");
   let visibleTooltip = null;
