@@ -146,7 +146,7 @@ const iframe_root_different = "https://test-pages.privacytests.org";
 const ipAddressTest = async (supplementaryResults) => {
   const myIpAddress = await fetch_ipAddress();
   let { description, ipAddress } = supplementaryResults["IP address leak"];
-  console.log(myIpAddress, ipAddress);
+  console.log({myIpAddress, deviceIpAddress: ipAddress});
   return {
     "IP address leak": {
       description: description,
