@@ -225,7 +225,7 @@ app.post('/post', (req, res) => {
     }
     const nextStepIndex = getNextStepIndex(sessionId);
     console.log({nextStepIndex, pageSequenceLength: pageSequence.length});
-    if (nextStepIndex >= pageSequence.length - 1) {
+    if (nextStepIndex == pageSequence.length - 1) {
       if (websockets[sessionId]) {
         websocketSend(sessionId, processResults(sessionResults[sessionId]));
       }
