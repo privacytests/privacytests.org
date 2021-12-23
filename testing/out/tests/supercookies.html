@@ -29,7 +29,7 @@
          });
          postData(data, category);
        }
-     }, false);
+     }, {once: true});
      let iframe = document.createElement("iframe");
      document.body.appendChild(iframe);
      iframe_root = (location.hostname === "localhost" ||
