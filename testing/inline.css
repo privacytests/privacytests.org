@@ -107,7 +107,7 @@ table.comparison-table .instructions {
 }
 #navBanner {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
   border-bottom: 1px lightgray solid;
   justify-content: center;
   align-content: stretch;
@@ -115,11 +115,13 @@ table.comparison-table .instructions {
 #navBanner a {
   text-decoration: none;
 }
-#navBanner a:hover {
-  text-decoration: underline;
+.navItem:hover {
+  opacity: 100%;
 }
 .navItem {
-  padding: 4px 10px 4px 10px;
+  padding: 4px 0px 4px 0px;
+  margin: 0px 10px;
+  text-align: center;
 }
 .selectedItem {
   font-weight: bold;
@@ -127,6 +129,9 @@ table.comparison-table .instructions {
 }
 .navItem:not(.selectedItem) {
   opacity: 60%;
+}
+.navItem:hover {
+  opacity: 100%;
 }
 #legend {
   font-size: 14px;
