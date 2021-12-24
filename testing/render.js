@@ -444,19 +444,20 @@ const render = async ({ dataFiles, live, aggregate }) => {
 //  console.log(results.all_tests[0]);
 //  console.log(JSON.stringify(results));
   const nightly = results.all_tests.every(t => (t.nightly === true));
+  const incognito = results.all_tests.every(t => (t.incognito === true));
   let tableTitle;
   if (nightly) {
-    tableTitle = "Nightly Builds";
+    tableTitle = incognito ? "Nightly private modes" : "Nightly Builds";     
   } else if (results.platform === "Android") {
     tableTitle = "Android Browsers";
   } else if (results.platform === "iOS") {
     tableTitle = "iOS Browsers";
   } else {
-    tableTitle = "Desktop Browsers";
+    tableTitle = incognito ? "Desktop private modes" : "Desktop Browsers";
   }
   await fs.writeFile(resultsFileHTMLLatest, template.htmlPage({
     title: "PrivacyTests.org",
-      content: content(processedResults, path.basename(resultsFilesJSON[0]), tableTitle, nightly),
+      content: content(processedResults, path.basename(resultsFilesJSON[0]), tableTitle, nightly, incognito),
     cssFiles: ["./template.css", "./inline.css"],
     previewImageUrl: nightly ? "nightlyPreview.png" : "desktopPreview.png"
   }));
