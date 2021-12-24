@@ -296,12 +296,12 @@ const main = async () => {
     installTestFontIfNeeded();
     disableProxies();
     // Read config file and flags from command line
-    let { _ : [configFile], debug, only, repeat, aggregate, nightly, android, iOS } =
+    let { _ : [configFile], debug, only, repeat, aggregate, nightly, android, incognito, iOS } =
       minimist(process.argv.slice(2), opts = { default: { aggregate: true }});
     let configList = parseConfigFile(configFile, repeat);
     let filteredConfigList = configList
         .filter(d => only ? d.browser.startsWith(only) : true)
-        .map(d => Object.assign({}, d, nightly ? {nightly} : null));
+        .map(d => Object.assign({}, d, nightly ? {nightly} : null, incognito ? {incognito} : null));
     console.log("List of browsers to run:", filteredConfigList);
     let dataFile = writeDataSync(await runTestsBatch(filteredConfigList,
                                                     { shouldQuit: !debug, android, iOS }));

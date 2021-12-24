@@ -320,18 +320,21 @@ const dateString = (dateTime) => {
 };
 
 // Creates the content for a page.
-const content = (results, jsonFilename, title, nightly) => {
+const content = (results, jsonFilename, title, nightly, incognito) => {
   let { headers, body } = resultsToTable(results.all_tests, tableTitleHTML(title));
   console.log(results.platform);
   return `
     <div class="banner" id="issueBanner">
-      <div class="left-heading">No. 8</div>
+      <div class="left-heading">No. 10</div>
       <div class="middle-heading">Open-source tests of web browser privacy.</div>
       <div class="right-heading">Updated ${dateString(results.timeStarted)}</div>
     </div>
     <div class="banner" id="navBanner">
-      <div class="navItem ${!(nightly || results.platform === "Android" || results.platform === "iOS") ? "selectedItem" : ""}">
+      <div class="navItem ${!incognito && !nightly && results.platform !== "Android" && results.platform !== "iOS" ? "selectedItem" : ""}">
         <a href="/">Desktop browsers</a>
+      </div>
+      <div class="navItem ${incognito && !nightly && results.platform !== "Android" && results.platform !== "iOS" ? "selectedItem" : ""}">
+        <a href="/private.html">Desktop private modes</a>
       </div>
       <div class="navItem ${results.platform === "iOS" ? "selectedItem" : ""}">
         <a href="ios.html">iOS browsers</a>
@@ -339,8 +342,11 @@ const content = (results, jsonFilename, title, nightly) => {
       <div class="navItem ${results.platform === "Android" ? "selectedItem" : ""}">
         <a href="android.html">Android browsers</a>
       </div>
-      <div class="navItem ${nightly ? "selectedItem" : ""}">
+      <div class="navItem ${nightly && !incognito ? "selectedItem" : ""}">
         <a href="nightly.html">Nightly builds</a>
+      </div>
+      <div class="navItem ${nightly && incognito ? "selectedItem" : ""}">
+        <a href="nightly-private.html">Nightly private modes</a>
       </div>
     </div>
     <div class="banner" id="legend">
@@ -426,7 +432,8 @@ const getMergedResults = async (dataFiles) => {
 
 const render = async ({ dataFiles, live, aggregate }) => {
   console.log("aggregate:", aggregate);
-  let resultsFilesJSON = dataFiles ?? [await latestResultsFile("./out/results")];
+  let resultsFilesJSON = (dataFiles && dataFiles.length > 0) ? dataFiles : [await latestResultsFile("./out/results")];
+  console.log(resultsFilesJSON);
   let resultsFileHTMLLatest = "./out/results/latest.html";
   let resultsFileHTML = resultsFilesJSON[0].replace(/\.json$/, ".html");
 //  fs.copyFile(resultsFile, "./out/results/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
