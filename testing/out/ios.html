@@ -356,9 +356,9 @@ table.comparison-table .instructions {
 </div>
     
     <div class="banner" id="issueBanner">
-      <div class="left-heading">No. 10</div>
+      <div class="left-heading">No. 10.1</div>
       <div class="middle-heading">Open-source tests of web browser privacy.</div>
-      <div class="right-heading">Updated 2021-12-24</div>
+      <div class="right-heading">Updated 2021-12-25</div>
     </div>
     <div class="banner" id="navBanner">
       <div class="navItem ">
@@ -783,37 +783,9 @@ read: async (secret) => {
       return blobResponse.text();
     }
 
-result, same first party: 42477a8e-35a8-4d16-9cad-c05838fd2461
+result, same first party: 9a42305d-fa19-4fb9-859a-2ffd49be6633
 
-result, different first party: 42477a8e-35a8-4d16-9cad-c05838fd2461
-
-unsupported: false
-
-passed: false
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent bad'
-> &nbsp;
-<span class="tooltipText">write: (secret) => {
-      try {
-        let blobURL = URL.createObjectURL(new Blob([secret]));
-        fetch(`${baseURI}/blob?mode=write&key=${secret}&blobUrl=${encodeURIComponent(blobURL)}`);
-      } catch (e) {
-        throw new Error("Unsupported");
-      }
-    }
-
-read: async (secret) => {
-      let response = await fetch(`${baseURI}/blob?mode=read&key=${secret}`);
-      let result = await response.json();
-      let blobUrl = decodeURIComponent(result.blobUrl);
-      let blobResponse = await fetch(blobUrl);
-      return blobResponse.text();
-    }
-
-result, same first party: 63972290-21e5-4c22-bdc4-c2513f23ff34
-
-result, different first party: 63972290-21e5-4c22-bdc4-c2513f23ff34
+result, different first party: 9a42305d-fa19-4fb9-859a-2ffd49be6633
 
 unsupported: false
 
@@ -839,37 +811,9 @@ read: async (secret) => {
       return blobResponse.text();
     }
 
-result, same first party: 36bf24f3-6c64-4082-9da2-5ec20ef0dadb
+result, same first party: 4409c325-7a0e-4fd1-a602-b05fe5d2f808
 
-result, different first party: 36bf24f3-6c64-4082-9da2-5ec20ef0dadb
-
-unsupported: false
-
-passed: false
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent bad'
-> &nbsp;
-<span class="tooltipText">write: (secret) => {
-      try {
-        let blobURL = URL.createObjectURL(new Blob([secret]));
-        fetch(`${baseURI}/blob?mode=write&key=${secret}&blobUrl=${encodeURIComponent(blobURL)}`);
-      } catch (e) {
-        throw new Error("Unsupported");
-      }
-    }
-
-read: async (secret) => {
-      let response = await fetch(`${baseURI}/blob?mode=read&key=${secret}`);
-      let result = await response.json();
-      let blobUrl = decodeURIComponent(result.blobUrl);
-      let blobResponse = await fetch(blobUrl);
-      return blobResponse.text();
-    }
-
-result, same first party: 5772171a-88b7-43d0-aac1-a3d6aa255dab
-
-result, different first party: 5772171a-88b7-43d0-aac1-a3d6aa255dab
+result, different first party: 4409c325-7a0e-4fd1-a602-b05fe5d2f808
 
 unsupported: false
 
@@ -895,9 +839,65 @@ read: async (secret) => {
       return blobResponse.text();
     }
 
-result, same first party: 66444914-025f-4bbc-888f-6f6e68a2135e
+result, same first party: 01d42778-3975-4a75-a1e2-464880100b71
 
-result, different first party: 66444914-025f-4bbc-888f-6f6e68a2135e
+result, different first party: 01d42778-3975-4a75-a1e2-464880100b71
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: (secret) => {
+      try {
+        let blobURL = URL.createObjectURL(new Blob([secret]));
+        fetch(`${baseURI}/blob?mode=write&key=${secret}&blobUrl=${encodeURIComponent(blobURL)}`);
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
+    }
+
+read: async (secret) => {
+      let response = await fetch(`${baseURI}/blob?mode=read&key=${secret}`);
+      let result = await response.json();
+      let blobUrl = decodeURIComponent(result.blobUrl);
+      let blobResponse = await fetch(blobUrl);
+      return blobResponse.text();
+    }
+
+result, same first party: 76ff53c9-e4b6-445e-bb7b-5b32d9820a73
+
+result, different first party: 76ff53c9-e4b6-445e-bb7b-5b32d9820a73
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: (secret) => {
+      try {
+        let blobURL = URL.createObjectURL(new Blob([secret]));
+        fetch(`${baseURI}/blob?mode=write&key=${secret}&blobUrl=${encodeURIComponent(blobURL)}`);
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
+    }
+
+read: async (secret) => {
+      let response = await fetch(`${baseURI}/blob?mode=read&key=${secret}`);
+      let result = await response.json();
+      let blobUrl = decodeURIComponent(result.blobUrl);
+      let blobResponse = await fetch(blobUrl);
+      return blobResponse.text();
+    }
+
+result, same first party: a866563f-d4ac-4ce1-9105-1a1b580a52ae
+
+result, different first party: a866563f-d4ac-4ce1-9105-1a1b580a52ae
 
 unsupported: false
 
@@ -951,37 +951,9 @@ read: async (secret) => {
       return blobResponse.text();
     }
 
-result, same first party: aaa8c3e1-0d1c-4957-a717-1ce74aea102f
+result, same first party: 3eb35128-c4e4-4d65-a4ac-3653e4e82782
 
-result, different first party: aaa8c3e1-0d1c-4957-a717-1ce74aea102f
-
-unsupported: false
-
-passed: false
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent bad'
-> &nbsp;
-<span class="tooltipText">write: (secret) => {
-      try {
-        let blobURL = URL.createObjectURL(new Blob([secret]));
-        fetch(`${baseURI}/blob?mode=write&key=${secret}&blobUrl=${encodeURIComponent(blobURL)}`);
-      } catch (e) {
-        throw new Error("Unsupported");
-      }
-    }
-
-read: async (secret) => {
-      let response = await fetch(`${baseURI}/blob?mode=read&key=${secret}`);
-      let result = await response.json();
-      let blobUrl = decodeURIComponent(result.blobUrl);
-      let blobResponse = await fetch(blobUrl);
-      return blobResponse.text();
-    }
-
-result, same first party: e61ab6c4-da37-4918-859a-bf14896ac67d
-
-result, different first party: e61ab6c4-da37-4918-859a-bf14896ac67d
+result, different first party: 3eb35128-c4e4-4d65-a4ac-3653e4e82782
 
 unsupported: false
 
@@ -1007,9 +979,37 @@ read: async (secret) => {
       return blobResponse.text();
     }
 
-result, same first party: 75040c46-e45b-4225-b8cc-472b9577ba68
+result, same first party: 2dff31ac-8fe2-4b16-b135-bed1cb7f7b20
 
-result, different first party: 75040c46-e45b-4225-b8cc-472b9577ba68
+result, different first party: 2dff31ac-8fe2-4b16-b135-bed1cb7f7b20
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: (secret) => {
+      try {
+        let blobURL = URL.createObjectURL(new Blob([secret]));
+        fetch(`${baseURI}/blob?mode=write&key=${secret}&blobUrl=${encodeURIComponent(blobURL)}`);
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
+    }
+
+read: async (secret) => {
+      let response = await fetch(`${baseURI}/blob?mode=read&key=${secret}`);
+      let result = await response.json();
+      let blobUrl = decodeURIComponent(result.blobUrl);
+      let blobResponse = await fetch(blobUrl);
+      return blobResponse.text();
+    }
+
+result, same first party: 57e06c53-1bba-4b4f-9773-a906cff928ce
+
+result, different first party: 57e06c53-1bba-4b4f-9773-a906cff928ce
 
 unsupported: false
 
@@ -1493,7 +1493,7 @@ read: async () => {
       return (new URL(url)).searchParams.get("key");
     }
 
-result, same first party: 763ff06c-8089-43b5-a9df-e3674852333e
+result, same first party: fd309849-c8ee-4e89-937c-81ceea438250
 
 result, different first party: Error: undefined is not an object (evaluating &#39;cacheKeys[0].url&#39;)
 
@@ -1593,7 +1593,7 @@ test failed: false</span>
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 42477a8e-35a8-4d16-9cad-c05838fd2461
+result, same first party: 9a42305d-fa19-4fb9-859a-2ffd49be6633
 
 result, different first party: null
 
@@ -1612,7 +1612,7 @@ test failed: false</span>
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 63972290-21e5-4c22-bdc4-c2513f23ff34
+result, same first party: 4409c325-7a0e-4fd1-a602-b05fe5d2f808
 
 result, different first party: null
 
@@ -1631,7 +1631,7 @@ test failed: false</span>
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 36bf24f3-6c64-4082-9da2-5ec20ef0dadb
+result, same first party: 01d42778-3975-4a75-a1e2-464880100b71
 
 result, different first party: null
 
@@ -1650,7 +1650,7 @@ test failed: false</span>
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 5772171a-88b7-43d0-aac1-a3d6aa255dab
+result, same first party: 76ff53c9-e4b6-445e-bb7b-5b32d9820a73
 
 result, different first party: null
 
@@ -1669,7 +1669,7 @@ test failed: false</span>
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 66444914-025f-4bbc-888f-6f6e68a2135e
+result, same first party: a866563f-d4ac-4ce1-9105-1a1b580a52ae
 
 result, different first party: null
 
@@ -1688,7 +1688,7 @@ test failed: false</span>
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 763ff06c-8089-43b5-a9df-e3674852333e
+result, same first party: fd309849-c8ee-4e89-937c-81ceea438250
 
 result, different first party: null
 
@@ -1707,7 +1707,7 @@ test failed: false</span>
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: aaa8c3e1-0d1c-4957-a717-1ce74aea102f
+result, same first party: 3eb35128-c4e4-4d65-a4ac-3653e4e82782
 
 result, different first party: null
 
@@ -1726,7 +1726,7 @@ test failed: false</span>
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: e61ab6c4-da37-4918-859a-bf14896ac67d
+result, same first party: 2dff31ac-8fe2-4b16-b135-bed1cb7f7b20
 
 result, different first party: null
 
@@ -1745,7 +1745,7 @@ test failed: false</span>
 
 read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
 
-result, same first party: 75040c46-e45b-4225-b8cc-472b9577ba68
+result, same first party: 57e06c53-1bba-4b4f-9773-a906cff928ce
 
 result, different first party: null
 
@@ -1790,54 +1790,9 @@ read: async (key) => {
       return fontFamily;
     }
 
-result, same first party: fake_4359894108296598
+result, same first party: fake_8067840643089943
 
-result, different first party: fake_6507290877057088
-
-unsupported: false
-
-passed: true
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent good'
-> &nbsp;
-<span class="tooltipText">write: async (key) => {
-      const href = testURI("resource", "css", key);
-      const head = document.getElementsByTagName("head")[0];
-      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
-      const testElement = document.querySelector("#css");
-      let fontFamily;
-      while (true) {
-        await sleepMs(100);
-        fontFamily = getComputedStyle(testElement).fontFamily;
-        if (fontFamily.startsWith("fake")) {
-          break;
-        }
-      }
-      console.log(fontFamily);
-      return key;
-    }
-
-read: async (key) => {
-      const href = testURI("resource", "css", key);
-      const head = document.getElementsByTagName("head")[0];
-      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
-      const testElement = document.querySelector("#css");
-      let fontFamily;
-      while (true) {
-        await sleepMs(100);
-        fontFamily = getComputedStyle(testElement).fontFamily;
-        if (fontFamily.startsWith("fake")) {
-          break;
-        }
-      }
-      console.log(fontFamily);
-      return fontFamily;
-    }
-
-result, same first party: fake_4945362009880876
-
-result, different first party: fake_08229316005668896
+result, different first party: fake_042963828573761687
 
 unsupported: false
 
@@ -1880,54 +1835,9 @@ read: async (key) => {
       return fontFamily;
     }
 
-result, same first party: fake_3862276174030743
+result, same first party: fake_6395104695965199
 
-result, different first party: fake_5375402139695467
-
-unsupported: false
-
-passed: true
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent good'
-> &nbsp;
-<span class="tooltipText">write: async (key) => {
-      const href = testURI("resource", "css", key);
-      const head = document.getElementsByTagName("head")[0];
-      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
-      const testElement = document.querySelector("#css");
-      let fontFamily;
-      while (true) {
-        await sleepMs(100);
-        fontFamily = getComputedStyle(testElement).fontFamily;
-        if (fontFamily.startsWith("fake")) {
-          break;
-        }
-      }
-      console.log(fontFamily);
-      return key;
-    }
-
-read: async (key) => {
-      const href = testURI("resource", "css", key);
-      const head = document.getElementsByTagName("head")[0];
-      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
-      const testElement = document.querySelector("#css");
-      let fontFamily;
-      while (true) {
-        await sleepMs(100);
-        fontFamily = getComputedStyle(testElement).fontFamily;
-        if (fontFamily.startsWith("fake")) {
-          break;
-        }
-      }
-      console.log(fontFamily);
-      return fontFamily;
-    }
-
-result, same first party: fake_5989150987577838
-
-result, different first party: fake_4552893384378558
+result, different first party: fake_45667485551106
 
 unsupported: false
 
@@ -1970,54 +1880,9 @@ read: async (key) => {
       return fontFamily;
     }
 
-result, same first party: fake_23289840385492955
+result, same first party: fake_8400252289113579
 
-result, different first party: fake_25357533280004074
-
-unsupported: false
-
-passed: true
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent good'
-> &nbsp;
-<span class="tooltipText">write: async (key) => {
-      const href = testURI("resource", "css", key);
-      const head = document.getElementsByTagName("head")[0];
-      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
-      const testElement = document.querySelector("#css");
-      let fontFamily;
-      while (true) {
-        await sleepMs(100);
-        fontFamily = getComputedStyle(testElement).fontFamily;
-        if (fontFamily.startsWith("fake")) {
-          break;
-        }
-      }
-      console.log(fontFamily);
-      return key;
-    }
-
-read: async (key) => {
-      const href = testURI("resource", "css", key);
-      const head = document.getElementsByTagName("head")[0];
-      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
-      const testElement = document.querySelector("#css");
-      let fontFamily;
-      while (true) {
-        await sleepMs(100);
-        fontFamily = getComputedStyle(testElement).fontFamily;
-        if (fontFamily.startsWith("fake")) {
-          break;
-        }
-      }
-      console.log(fontFamily);
-      return fontFamily;
-    }
-
-result, same first party: fake_41853828051188224
-
-result, different first party: fake_3934947262824997
+result, different first party: fake_05898198503852403
 
 unsupported: false
 
@@ -2060,54 +1925,9 @@ read: async (key) => {
       return fontFamily;
     }
 
-result, same first party: fake_18011210061554483
+result, same first party: fake_6331972255261802
 
-result, different first party: fake_3363080590544476
-
-unsupported: false
-
-passed: true
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent good'
-> &nbsp;
-<span class="tooltipText">write: async (key) => {
-      const href = testURI("resource", "css", key);
-      const head = document.getElementsByTagName("head")[0];
-      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
-      const testElement = document.querySelector("#css");
-      let fontFamily;
-      while (true) {
-        await sleepMs(100);
-        fontFamily = getComputedStyle(testElement).fontFamily;
-        if (fontFamily.startsWith("fake")) {
-          break;
-        }
-      }
-      console.log(fontFamily);
-      return key;
-    }
-
-read: async (key) => {
-      const href = testURI("resource", "css", key);
-      const head = document.getElementsByTagName("head")[0];
-      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
-      const testElement = document.querySelector("#css");
-      let fontFamily;
-      while (true) {
-        await sleepMs(100);
-        fontFamily = getComputedStyle(testElement).fontFamily;
-        if (fontFamily.startsWith("fake")) {
-          break;
-        }
-      }
-      console.log(fontFamily);
-      return fontFamily;
-    }
-
-result, same first party: fake_9925054366322883
-
-result, different first party: fake_2639234654747009
+result, different first party: fake_18671440750227597
 
 unsupported: false
 
@@ -2150,9 +1970,189 @@ read: async (key) => {
       return fontFamily;
     }
 
-result, same first party: fake_06529494395685931
+result, same first party: fake_5923067382992406
 
-result, different first party: fake_02418776542120904
+result, different first party: fake_13898946440795878
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async (key) => {
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return key;
+    }
+
+read: async (key) => {
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return fontFamily;
+    }
+
+result, same first party: fake_8924232566882537
+
+result, different first party: fake_23892737255193564
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async (key) => {
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return key;
+    }
+
+read: async (key) => {
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return fontFamily;
+    }
+
+result, same first party: fake_8894967472946713
+
+result, different first party: fake_9050835673066153
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async (key) => {
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return key;
+    }
+
+read: async (key) => {
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return fontFamily;
+    }
+
+result, same first party: fake_5908028549166253
+
+result, different first party: fake_8387097120512612
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async (key) => {
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return key;
+    }
+
+read: async (key) => {
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return fontFamily;
+    }
+
+result, same first party: fake_9109357236315319
+
+result, different first party: fake_15948873062086721
 
 unsupported: false
 
@@ -2908,7 +2908,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 42477a8e-35a8-4d16-9cad-c05838fd2461
+result, same first party: 9a42305d-fa19-4fb9-859a-2ffd49be6633
 
 result, different first party: 
 
@@ -2948,7 +2948,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 36bf24f3-6c64-4082-9da2-5ec20ef0dadb
+result, same first party: 01d42778-3975-4a75-a1e2-464880100b71
 
 result, different first party: 
 
@@ -2988,7 +2988,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 66444914-025f-4bbc-888f-6f6e68a2135e
+result, same first party: a866563f-d4ac-4ce1-9105-1a1b580a52ae
 
 result, different first party: 
 
@@ -3008,27 +3008,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 
-
-result, different first party: 
-
-unsupported: false
-
-passed: undefined
-
-test failed: true</span>
-</div></td><td><div class='dataPoint tooltipParent good'
-> &nbsp;
-<span class="tooltipText">write: async (secret) => {
-      await fetch(`https://h1.arthuredelstein.net:8901/?mode=write&secret=${secret}`, {cache: "no-store"});
-    }
-
-read: async () => {
-      let response = await fetch(`https://h1.arthuredelstein.net:8901/?mode=read`, {cache: "no-store"});
-      return await response.text();
-    }
-
-result, same first party: aaa8c3e1-0d1c-4957-a717-1ce74aea102f
+result, same first party: fd309849-c8ee-4e89-937c-81ceea438250
 
 result, different first party: 
 
@@ -3048,7 +3028,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: e61ab6c4-da37-4918-859a-bf14896ac67d
+result, same first party: 3eb35128-c4e4-4d65-a4ac-3653e4e82782
 
 result, different first party: 
 
@@ -3068,7 +3048,27 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 75040c46-e45b-4225-b8cc-472b9577ba68
+result, same first party: 2dff31ac-8fe2-4b16-b135-bed1cb7f7b20
+
+result, different first party: 
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async (secret) => {
+      await fetch(`https://h1.arthuredelstein.net:8901/?mode=write&secret=${secret}`, {cache: "no-store"});
+    }
+
+read: async () => {
+      let response = await fetch(`https://h1.arthuredelstein.net:8901/?mode=read`, {cache: "no-store"});
+      return await response.text();
+    }
+
+result, same first party: 57e06c53-1bba-4b4f-9773-a906cff928ce
 
 result, different first party: 
 
@@ -3088,7 +3088,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 42477a8e-35a8-4d16-9cad-c05838fd2461
+result, same first party: 9a42305d-fa19-4fb9-859a-2ffd49be6633
 
 result, different first party: 
 
@@ -3128,7 +3128,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 36bf24f3-6c64-4082-9da2-5ec20ef0dadb
+result, same first party: 01d42778-3975-4a75-a1e2-464880100b71
 
 result, different first party: 
 
@@ -3168,7 +3168,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 66444914-025f-4bbc-888f-6f6e68a2135e
+result, same first party: a866563f-d4ac-4ce1-9105-1a1b580a52ae
 
 result, different first party: 
 
@@ -3188,7 +3188,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 763ff06c-8089-43b5-a9df-e3674852333e
+result, same first party: fd309849-c8ee-4e89-937c-81ceea438250
 
 result, different first party: 
 
@@ -3208,7 +3208,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: aaa8c3e1-0d1c-4957-a717-1ce74aea102f
+result, same first party: 3eb35128-c4e4-4d65-a4ac-3653e4e82782
 
 result, different first party: 
 
@@ -3228,7 +3228,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: e61ab6c4-da37-4918-859a-bf14896ac67d
+result, same first party: 2dff31ac-8fe2-4b16-b135-bed1cb7f7b20
 
 result, different first party: 
 
@@ -3248,7 +3248,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 75040c46-e45b-4225-b8cc-472b9577ba68
+result, same first party: 57e06c53-1bba-4b4f-9773-a906cff928ce
 
 result, different first party: 
 
@@ -4322,7 +4322,7 @@ test failed: false</span>
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: 42477a8e-35a8-4d16-9cad-c05838fd2461
+result, same first party: 9a42305d-fa19-4fb9-859a-2ffd49be6633
 
 result, different first party: undefined
 
@@ -4343,7 +4343,7 @@ test failed: false</span>
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: 63972290-21e5-4c22-bdc4-c2513f23ff34
+result, same first party: 4409c325-7a0e-4fd1-a602-b05fe5d2f808
 
 result, different first party: undefined
 
@@ -4364,7 +4364,7 @@ test failed: false</span>
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: 36bf24f3-6c64-4082-9da2-5ec20ef0dadb
+result, same first party: 01d42778-3975-4a75-a1e2-464880100b71
 
 result, different first party: undefined
 
@@ -4385,7 +4385,7 @@ test failed: false</span>
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: 5772171a-88b7-43d0-aac1-a3d6aa255dab
+result, same first party: 76ff53c9-e4b6-445e-bb7b-5b32d9820a73
 
 result, different first party: undefined
 
@@ -4406,7 +4406,7 @@ test failed: false</span>
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: 66444914-025f-4bbc-888f-6f6e68a2135e
+result, same first party: a866563f-d4ac-4ce1-9105-1a1b580a52ae
 
 result, different first party: undefined
 
@@ -4427,7 +4427,7 @@ test failed: false</span>
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: 763ff06c-8089-43b5-a9df-e3674852333e
+result, same first party: fd309849-c8ee-4e89-937c-81ceea438250
 
 result, different first party: undefined
 
@@ -4448,7 +4448,7 @@ test failed: false</span>
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: aaa8c3e1-0d1c-4957-a717-1ce74aea102f
+result, same first party: 3eb35128-c4e4-4d65-a4ac-3653e4e82782
 
 result, different first party: undefined
 
@@ -4469,7 +4469,7 @@ test failed: false</span>
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: e61ab6c4-da37-4918-859a-bf14896ac67d
+result, same first party: 2dff31ac-8fe2-4b16-b135-bed1cb7f7b20
 
 result, different first party: undefined
 
@@ -4490,7 +4490,7 @@ test failed: false</span>
 
 read: () => IdbKeyVal.get("secret")
 
-result, same first party: 75040c46-e45b-4225-b8cc-472b9577ba68
+result, same first party: 57e06c53-1bba-4b4f-9773-a906cff928ce
 
 result, different first party: undefined
 
@@ -4505,7 +4505,7 @@ test failed: false</span>
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 42477a8e-35a8-4d16-9cad-c05838fd2461
+result, same first party: 9a42305d-fa19-4fb9-859a-2ffd49be6633
 
 result, different first party: null
 
@@ -4520,7 +4520,7 @@ test failed: false</span>
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 63972290-21e5-4c22-bdc4-c2513f23ff34
+result, same first party: 4409c325-7a0e-4fd1-a602-b05fe5d2f808
 
 result, different first party: null
 
@@ -4535,7 +4535,7 @@ test failed: false</span>
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 36bf24f3-6c64-4082-9da2-5ec20ef0dadb
+result, same first party: 01d42778-3975-4a75-a1e2-464880100b71
 
 result, different first party: null
 
@@ -4550,7 +4550,7 @@ test failed: false</span>
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 5772171a-88b7-43d0-aac1-a3d6aa255dab
+result, same first party: 76ff53c9-e4b6-445e-bb7b-5b32d9820a73
 
 result, different first party: null
 
@@ -4565,7 +4565,7 @@ test failed: false</span>
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 66444914-025f-4bbc-888f-6f6e68a2135e
+result, same first party: a866563f-d4ac-4ce1-9105-1a1b580a52ae
 
 result, different first party: null
 
@@ -4580,7 +4580,7 @@ test failed: false</span>
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 763ff06c-8089-43b5-a9df-e3674852333e
+result, same first party: fd309849-c8ee-4e89-937c-81ceea438250
 
 result, different first party: null
 
@@ -4595,7 +4595,7 @@ test failed: false</span>
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: aaa8c3e1-0d1c-4957-a717-1ce74aea102f
+result, same first party: 3eb35128-c4e4-4d65-a4ac-3653e4e82782
 
 result, different first party: null
 
@@ -4610,7 +4610,7 @@ test failed: false</span>
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: e61ab6c4-da37-4918-859a-bf14896ac67d
+result, same first party: 2dff31ac-8fe2-4b16-b135-bed1cb7f7b20
 
 result, different first party: null
 
@@ -4625,7 +4625,7 @@ test failed: false</span>
 
 read: () => localStorage.getItem("secret")
 
-result, same first party: 75040c46-e45b-4225-b8cc-472b9577ba68
+result, same first party: 57e06c53-1bba-4b4f-9773-a906cff928ce
 
 result, different first party: null
 
@@ -5218,7 +5218,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 42477a8e-35a8-4d16-9cad-c05838fd2461
+result, same first party: 9a42305d-fa19-4fb9-859a-2ffd49be6633
 
 result, different first party: 
 
@@ -5253,7 +5253,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 63972290-21e5-4c22-bdc4-c2513f23ff34
+result, same first party: 4409c325-7a0e-4fd1-a602-b05fe5d2f808
 
 result, different first party: 
 
@@ -5288,7 +5288,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 36bf24f3-6c64-4082-9da2-5ec20ef0dadb
+result, same first party: 01d42778-3975-4a75-a1e2-464880100b71
 
 result, different first party: 
 
@@ -5323,7 +5323,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 5772171a-88b7-43d0-aac1-a3d6aa255dab
+result, same first party: 76ff53c9-e4b6-445e-bb7b-5b32d9820a73
 
 result, different first party: 
 
@@ -5358,7 +5358,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 66444914-025f-4bbc-888f-6f6e68a2135e
+result, same first party: a866563f-d4ac-4ce1-9105-1a1b580a52ae
 
 result, different first party: 
 
@@ -5393,7 +5393,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 763ff06c-8089-43b5-a9df-e3674852333e
+result, same first party: fd309849-c8ee-4e89-937c-81ceea438250
 
 result, different first party: 
 
@@ -5428,7 +5428,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: aaa8c3e1-0d1c-4957-a717-1ce74aea102f
+result, same first party: 3eb35128-c4e4-4d65-a4ac-3653e4e82782
 
 result, different first party: 
 
@@ -5463,7 +5463,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: e61ab6c4-da37-4918-859a-bf14896ac67d
+result, same first party: 2dff31ac-8fe2-4b16-b135-bed1cb7f7b20
 
 result, different first party: 
 
@@ -5498,7 +5498,7 @@ read: async () => {
       return await response.text();
     }
 
-result, same first party: 75040c46-e45b-4225-b8cc-472b9577ba68
+result, same first party: 57e06c53-1bba-4b4f-9773-a906cff928ce
 
 result, different first party: 
 
@@ -5789,30 +5789,9 @@ read: async () => {
       return (await results.json()).sessionId;
     }
 
-result, same first party: 9339cd004374ba949a51cb2be529028c232365a7583329a2746638b26b627778
+result, same first party: 0e03878565614c3b27418172e648d02acffa3d90eb910fe4a41f762ffeb3c9b9
 
-result, different first party: bb53ef233d31601a2b7846cdb8ca045c031854f7d9e10ad64abd1dea5319cb6a
-
-unsupported: false
-
-passed: true
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent good'
-> &nbsp;
-<span class="tooltipText">write: async () => {
-      let results = await fetch("https://tls.arthuredelstein.net:8900/");
-      return (await results.json()).sessionId;
-    }
-
-read: async () => {
-      let results = await fetch("https://tls.arthuredelstein.net:8900/");
-      return (await results.json()).sessionId;
-    }
-
-result, same first party: e6e817e2016b2dad4deae4c4523d003ef8804b08ebfc9ccc923f68546275d4c6
-
-result, different first party: d01ea2aff512218df5752ca31b9365f09ba04a862761d20ee663001e372608da
+result, different first party: d929b23cf482767b2fd48693d83374c27e56538391736288e08f073e6d7b3b38
 
 unsupported: false
 
@@ -5831,30 +5810,9 @@ read: async () => {
       return (await results.json()).sessionId;
     }
 
-result, same first party: ffe7b1ba9c6c8d315b5c7d76fe9fc0c1944e01776fab0c10b70c2de00de6e857
+result, same first party: 57cd24c4cb260060c19d43a801aedc65549a3567cf0f050171177dffd4511e6f
 
-result, different first party: e893741e0901db7b4c30293ada58d3fa225d49a4f425b4c42dc8d914939c6a3c
-
-unsupported: false
-
-passed: true
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent good'
-> &nbsp;
-<span class="tooltipText">write: async () => {
-      let results = await fetch("https://tls.arthuredelstein.net:8900/");
-      return (await results.json()).sessionId;
-    }
-
-read: async () => {
-      let results = await fetch("https://tls.arthuredelstein.net:8900/");
-      return (await results.json()).sessionId;
-    }
-
-result, same first party: effc23f2be8efaefc3a14d134f889b79b78fbc71e55a05968c511a39649578ef
-
-result, different first party: a356e7d75198c0cafbfa8575971ab5edba3a5d8bff6670f0cc7473c49cc48418
+result, different first party: 988ebe4a7a64d0665558261db4e76458ebffae57d7609e8cf1f2823459d2682c
 
 unsupported: false
 
@@ -5873,30 +5831,9 @@ read: async () => {
       return (await results.json()).sessionId;
     }
 
-result, same first party: d121caeee6b7cc7686968f7c37c52d5ecd3ddda984cbb02b26f952e88c5c428e
+result, same first party: 9dcd69e2f3a9466378737c6e96187350bb74108b8e4ca46d96c5428e634c5504
 
-result, different first party: d8df09eea0f7a3f2156b9df7374a566cc3119c13fe1abe10951822bedafb0fd0
-
-unsupported: false
-
-passed: true
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent good'
-> &nbsp;
-<span class="tooltipText">write: async () => {
-      let results = await fetch("https://tls.arthuredelstein.net:8900/");
-      return (await results.json()).sessionId;
-    }
-
-read: async () => {
-      let results = await fetch("https://tls.arthuredelstein.net:8900/");
-      return (await results.json()).sessionId;
-    }
-
-result, same first party: 7cec94fb6f4e3636d6a20970d4c46f217c05b9fa657b2ad8f009aca37dc14f41
-
-result, different first party: ec333ff7e5d02dbf99c0a66861757ee2f611ac080db44376866711327e17c41b
+result, different first party: 69515839816953dc615119521994110d84a6c8b818875b5e2772c0e310bd12b6
 
 unsupported: false
 
@@ -5915,30 +5852,9 @@ read: async () => {
       return (await results.json()).sessionId;
     }
 
-result, same first party: e6d732955c7fad3facf1abda71fbf9ef92767f9bb006679830d924d11cb25261
+result, same first party: 6f38920712870bd2cf856d46cb1eeede7f1df88fdb3a92405b34fc7d34b43908
 
-result, different first party: dd0502bcac71cac3c8df3d4a3764235e2e35d6c7aee410dcca17326f150889d8
-
-unsupported: false
-
-passed: true
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent good'
-> &nbsp;
-<span class="tooltipText">write: async () => {
-      let results = await fetch("https://tls.arthuredelstein.net:8900/");
-      return (await results.json()).sessionId;
-    }
-
-read: async () => {
-      let results = await fetch("https://tls.arthuredelstein.net:8900/");
-      return (await results.json()).sessionId;
-    }
-
-result, same first party: 3e8fe5419e76d2db0300b10b63fcf0f9f3f31205019d92510b6f01448eaee15c
-
-result, different first party: 77556c22328d91c670d9b79c629af3fc69c18b96e80384edcdaa324dcbe374c7
+result, different first party: 1c1783f58ecf5e7ebcb7cca4dadf933db3e246aa0ac15363d72dc68af8f21494
 
 unsupported: false
 
@@ -5957,9 +5873,93 @@ read: async () => {
       return (await results.json()).sessionId;
     }
 
-result, same first party: 4ed5fad4b2199c978195e9e53811cdcec1f9d28461c7d0f15392c31c2483d399
+result, same first party: 2899e054bfd8d793a28e8a00071f1ac4cc0451c01840495653cffc4f071d68df
 
-result, different first party: 979ac5a4d0a33922d27f39468da7c2cbb0a295df1d9d6a03663127273ec426f3
+result, different first party: 2df861191daaad38eb715784691f3c04a8f99e55b27ebf67bc90f48870a13e5c
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async () => {
+      let results = await fetch("https://tls.arthuredelstein.net:8900/");
+      return (await results.json()).sessionId;
+    }
+
+read: async () => {
+      let results = await fetch("https://tls.arthuredelstein.net:8900/");
+      return (await results.json()).sessionId;
+    }
+
+result, same first party: 1eddce54059a89b31dbfac2db8fd0edfbd2681621de40cd67c1f1d03ada1f45c
+
+result, different first party: 04191a930cf1953b80011b043a33dd58f58b69423b7ffdaf45fef46123d492ae
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async () => {
+      let results = await fetch("https://tls.arthuredelstein.net:8900/");
+      return (await results.json()).sessionId;
+    }
+
+read: async () => {
+      let results = await fetch("https://tls.arthuredelstein.net:8900/");
+      return (await results.json()).sessionId;
+    }
+
+result, same first party: 0b22d0119a0eaea929d085c4661f5347fa1038fb63056f258dbe1ca9363024ad
+
+result, different first party: c6db4f8b1c9f021555d4f70250fb0a0497e5b0691f87ae89f78b968d3ff8b1bd
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async () => {
+      let results = await fetch("https://tls.arthuredelstein.net:8900/");
+      return (await results.json()).sessionId;
+    }
+
+read: async () => {
+      let results = await fetch("https://tls.arthuredelstein.net:8900/");
+      return (await results.json()).sessionId;
+    }
+
+result, same first party: b160e5dea8768f2e69df44d2b07206a854de74697e267028cc87157d9c2d680d
+
+result, different first party: 98cfc530ac9e37d771d4603cc6620f48e12d9a1f392bb435b453e13bab95dba8
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async () => {
+      let results = await fetch("https://tls.arthuredelstein.net:8900/");
+      return (await results.json()).sessionId;
+    }
+
+read: async () => {
+      let results = await fetch("https://tls.arthuredelstein.net:8900/");
+      return (await results.json()).sessionId;
+    }
+
+result, same first party: 6e0676fd3dc197e2381e854463863eb34b7b6fdbf24c63977d112d07b7138fc2
+
+result, different first party: bde482e2debbad2359e1247601628e89b851b84ca3aebfd204bf3b11c6d60bc2
 
 unsupported: false
 
@@ -6384,40 +6384,9 @@ read: () => new Promise((resolve, reject) => {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
 
-result, same first party: Fri, 24 Dec 2021 17:23:22 GMT
+result, same first party: Sat, 25 Dec 2021 19:42:59 GMT
 
-result, different first party: Fri, 24 Dec 2021 17:23:32 GMT
-
-unsupported: false
-
-passed: true
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent good'
-> &nbsp;
-<span class="tooltipText">write: () => new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-      xhr.addEventListener("load", () => resolve(
-        {"secret": xhr.getResponseHeader("date")}));
-      xhr.open("GET", "https://arthuredelstein.net");
-      xhr.setRequestHeader("Cache-Control", "no-cache");
-      xhr.send();
-      setTimeout(() => reject({message: "XHR: no response"}), 3000);
-    })
-
-read: () => new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-      xhr.addEventListener("load", () => resolve(
-        xhr.getResponseHeader("date")));
-      xhr.open("GET", "https://arthuredelstein.net");
-      xhr.setRequestHeader("Cache-Control", "max-age");
-      xhr.send();
-      setTimeout(() => reject({message: "XHR: no response"}), 3000);
-    })
-
-result, same first party: Fri, 24 Dec 2021 17:10:38 GMT
-
-result, different first party: Fri, 24 Dec 2021 17:10:49 GMT
+result, different first party: Sat, 25 Dec 2021 19:43:08 GMT
 
 unsupported: false
 
@@ -6446,7 +6415,38 @@ read: () => new Promise((resolve, reject) => {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
 
-result, same first party: Fri, 24 Dec 2021 17:14:58 GMT
+result, same first party: Sat, 25 Dec 2021 19:38:46 GMT
+
+result, different first party: Sat, 25 Dec 2021 19:38:57 GMT
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: () => new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+      xhr.addEventListener("load", () => resolve(
+        {"secret": xhr.getResponseHeader("date")}));
+      xhr.open("GET", "https://arthuredelstein.net");
+      xhr.setRequestHeader("Cache-Control", "no-cache");
+      xhr.send();
+      setTimeout(() => reject({message: "XHR: no response"}), 3000);
+    })
+
+read: () => new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+      xhr.addEventListener("load", () => resolve(
+        xhr.getResponseHeader("date")));
+      xhr.open("GET", "https://arthuredelstein.net");
+      xhr.setRequestHeader("Cache-Control", "max-age");
+      xhr.send();
+      setTimeout(() => reject({message: "XHR: no response"}), 3000);
+    })
+
+result, same first party: Sat, 25 Dec 2021 19:44:48 GMT
 
 result, different first party: Fri, 24 Dec 2021 07:28:51 GMT
 
@@ -6477,40 +6477,9 @@ read: () => new Promise((resolve, reject) => {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
 
-result, same first party: Fri, 24 Dec 2021 17:12:34 GMT
+result, same first party: Sat, 25 Dec 2021 19:40:48 GMT
 
-result, different first party: Fri, 24 Dec 2021 17:12:46 GMT
-
-unsupported: false
-
-passed: true
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent good'
-> &nbsp;
-<span class="tooltipText">write: () => new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-      xhr.addEventListener("load", () => resolve(
-        {"secret": xhr.getResponseHeader("date")}));
-      xhr.open("GET", "https://arthuredelstein.net");
-      xhr.setRequestHeader("Cache-Control", "no-cache");
-      xhr.send();
-      setTimeout(() => reject({message: "XHR: no response"}), 3000);
-    })
-
-read: () => new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-      xhr.addEventListener("load", () => resolve(
-        xhr.getResponseHeader("date")));
-      xhr.open("GET", "https://arthuredelstein.net");
-      xhr.setRequestHeader("Cache-Control", "max-age");
-      xhr.send();
-      setTimeout(() => reject({message: "XHR: no response"}), 3000);
-    })
-
-result, same first party: Fri, 24 Dec 2021 17:01:12 GMT
-
-result, different first party: Fri, 24 Dec 2021 17:01:22 GMT
+result, different first party: Sat, 25 Dec 2021 19:41:00 GMT
 
 unsupported: false
 
@@ -6539,40 +6508,9 @@ read: () => new Promise((resolve, reject) => {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
 
-result, same first party: Fri, 24 Dec 2021 17:07:27 GMT
+result, same first party: Sat, 25 Dec 2021 19:30:58 GMT
 
-result, different first party: Fri, 24 Dec 2021 17:07:36 GMT
-
-unsupported: false
-
-passed: true
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent good'
-> &nbsp;
-<span class="tooltipText">write: () => new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-      xhr.addEventListener("load", () => resolve(
-        {"secret": xhr.getResponseHeader("date")}));
-      xhr.open("GET", "https://arthuredelstein.net");
-      xhr.setRequestHeader("Cache-Control", "no-cache");
-      xhr.send();
-      setTimeout(() => reject({message: "XHR: no response"}), 3000);
-    })
-
-read: () => new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-      xhr.addEventListener("load", () => resolve(
-        xhr.getResponseHeader("date")));
-      xhr.open("GET", "https://arthuredelstein.net");
-      xhr.setRequestHeader("Cache-Control", "max-age");
-      xhr.send();
-      setTimeout(() => reject({message: "XHR: no response"}), 3000);
-    })
-
-result, same first party: Fri, 24 Dec 2021 17:08:58 GMT
-
-result, different first party: Fri, 24 Dec 2021 17:09:08 GMT
+result, different first party: Sat, 25 Dec 2021 19:31:08 GMT
 
 unsupported: false
 
@@ -6601,9 +6539,9 @@ read: () => new Promise((resolve, reject) => {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
 
-result, same first party: Fri, 24 Dec 2021 17:02:43 GMT
+result, same first party: Sat, 25 Dec 2021 19:35:22 GMT
 
-result, different first party: Fri, 24 Dec 2021 17:02:55 GMT
+result, different first party: Sat, 25 Dec 2021 19:35:31 GMT
 
 unsupported: false
 
@@ -6632,9 +6570,71 @@ read: () => new Promise((resolve, reject) => {
       setTimeout(() => reject({message: "XHR: no response"}), 3000);
     })
 
-result, same first party: Fri, 24 Dec 2021 17:04:57 GMT
+result, same first party: Sat, 25 Dec 2021 19:36:59 GMT
 
-result, different first party: Fri, 24 Dec 2021 17:05:07 GMT
+result, different first party: Sat, 25 Dec 2021 19:37:08 GMT
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: () => new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+      xhr.addEventListener("load", () => resolve(
+        {"secret": xhr.getResponseHeader("date")}));
+      xhr.open("GET", "https://arthuredelstein.net");
+      xhr.setRequestHeader("Cache-Control", "no-cache");
+      xhr.send();
+      setTimeout(() => reject({message: "XHR: no response"}), 3000);
+    })
+
+read: () => new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+      xhr.addEventListener("load", () => resolve(
+        xhr.getResponseHeader("date")));
+      xhr.open("GET", "https://arthuredelstein.net");
+      xhr.setRequestHeader("Cache-Control", "max-age");
+      xhr.send();
+      setTimeout(() => reject({message: "XHR: no response"}), 3000);
+    })
+
+result, same first party: Sat, 25 Dec 2021 19:32:40 GMT
+
+result, different first party: Fri, 24 Dec 2021 07:12:50 GMT
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: () => new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+      xhr.addEventListener("load", () => resolve(
+        {"secret": xhr.getResponseHeader("date")}));
+      xhr.open("GET", "https://arthuredelstein.net");
+      xhr.setRequestHeader("Cache-Control", "no-cache");
+      xhr.send();
+      setTimeout(() => reject({message: "XHR: no response"}), 3000);
+    })
+
+read: () => new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+      xhr.addEventListener("load", () => resolve(
+        xhr.getResponseHeader("date")));
+      xhr.open("GET", "https://arthuredelstein.net");
+      xhr.setRequestHeader("Cache-Control", "max-age");
+      xhr.send();
+      setTimeout(() => reject({message: "XHR: no response"}), 3000);
+    })
+
+result, same first party: Sat, 25 Dec 2021 19:49:41 GMT
+
+result, different first party: Sat, 25 Dec 2021 19:49:51 GMT
 
 unsupported: false
 
@@ -6827,24 +6827,9 @@ test failed: false</span>
 
 read: () => sessionStorage.getItem("secret")
 
-result, same first party: 42477a8e-35a8-4d16-9cad-c05838fd2461
+result, same first party: 9a42305d-fa19-4fb9-859a-2ffd49be6633
 
-result, different first party: 42477a8e-35a8-4d16-9cad-c05838fd2461
-
-unsupported: false
-
-passed: false
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent bad'
-> &nbsp;
-<span class="tooltipText">write: (secret) => sessionStorage.setItem("secret", secret)
-
-read: () => sessionStorage.getItem("secret")
-
-result, same first party: 63972290-21e5-4c22-bdc4-c2513f23ff34
-
-result, different first party: 63972290-21e5-4c22-bdc4-c2513f23ff34
+result, different first party: 9a42305d-fa19-4fb9-859a-2ffd49be6633
 
 unsupported: false
 
@@ -6857,24 +6842,9 @@ test failed: false</span>
 
 read: () => sessionStorage.getItem("secret")
 
-result, same first party: 36bf24f3-6c64-4082-9da2-5ec20ef0dadb
+result, same first party: 4409c325-7a0e-4fd1-a602-b05fe5d2f808
 
-result, different first party: 36bf24f3-6c64-4082-9da2-5ec20ef0dadb
-
-unsupported: false
-
-passed: false
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent bad'
-> &nbsp;
-<span class="tooltipText">write: (secret) => sessionStorage.setItem("secret", secret)
-
-read: () => sessionStorage.getItem("secret")
-
-result, same first party: 5772171a-88b7-43d0-aac1-a3d6aa255dab
-
-result, different first party: 5772171a-88b7-43d0-aac1-a3d6aa255dab
+result, different first party: 4409c325-7a0e-4fd1-a602-b05fe5d2f808
 
 unsupported: false
 
@@ -6887,24 +6857,9 @@ test failed: false</span>
 
 read: () => sessionStorage.getItem("secret")
 
-result, same first party: 66444914-025f-4bbc-888f-6f6e68a2135e
+result, same first party: 01d42778-3975-4a75-a1e2-464880100b71
 
-result, different first party: 66444914-025f-4bbc-888f-6f6e68a2135e
-
-unsupported: false
-
-passed: false
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent bad'
-> &nbsp;
-<span class="tooltipText">write: (secret) => sessionStorage.setItem("secret", secret)
-
-read: () => sessionStorage.getItem("secret")
-
-result, same first party: 763ff06c-8089-43b5-a9df-e3674852333e
-
-result, different first party: 763ff06c-8089-43b5-a9df-e3674852333e
+result, different first party: 01d42778-3975-4a75-a1e2-464880100b71
 
 unsupported: false
 
@@ -6917,24 +6872,9 @@ test failed: false</span>
 
 read: () => sessionStorage.getItem("secret")
 
-result, same first party: aaa8c3e1-0d1c-4957-a717-1ce74aea102f
+result, same first party: 76ff53c9-e4b6-445e-bb7b-5b32d9820a73
 
-result, different first party: aaa8c3e1-0d1c-4957-a717-1ce74aea102f
-
-unsupported: false
-
-passed: false
-
-test failed: false</span>
-</div></td><td><div class='dataPoint tooltipParent bad'
-> &nbsp;
-<span class="tooltipText">write: (secret) => sessionStorage.setItem("secret", secret)
-
-read: () => sessionStorage.getItem("secret")
-
-result, same first party: e61ab6c4-da37-4918-859a-bf14896ac67d
-
-result, different first party: e61ab6c4-da37-4918-859a-bf14896ac67d
+result, different first party: 76ff53c9-e4b6-445e-bb7b-5b32d9820a73
 
 unsupported: false
 
@@ -6947,9 +6887,69 @@ test failed: false</span>
 
 read: () => sessionStorage.getItem("secret")
 
-result, same first party: 75040c46-e45b-4225-b8cc-472b9577ba68
+result, same first party: a866563f-d4ac-4ce1-9105-1a1b580a52ae
 
-result, different first party: 75040c46-e45b-4225-b8cc-472b9577ba68
+result, different first party: a866563f-d4ac-4ce1-9105-1a1b580a52ae
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: (secret) => sessionStorage.setItem("secret", secret)
+
+read: () => sessionStorage.getItem("secret")
+
+result, same first party: fd309849-c8ee-4e89-937c-81ceea438250
+
+result, different first party: fd309849-c8ee-4e89-937c-81ceea438250
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: (secret) => sessionStorage.setItem("secret", secret)
+
+read: () => sessionStorage.getItem("secret")
+
+result, same first party: 3eb35128-c4e4-4d65-a4ac-3653e4e82782
+
+result, different first party: 3eb35128-c4e4-4d65-a4ac-3653e4e82782
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: (secret) => sessionStorage.setItem("secret", secret)
+
+read: () => sessionStorage.getItem("secret")
+
+result, same first party: 2dff31ac-8fe2-4b16-b135-bed1cb7f7b20
+
+result, different first party: 2dff31ac-8fe2-4b16-b135-bed1cb7f7b20
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: (secret) => sessionStorage.setItem("secret", secret)
+
+read: () => sessionStorage.getItem("secret")
+
+result, same first party: 57e06c53-1bba-4b4f-9773-a906cff928ce
+
+result, different first party: 57e06c53-1bba-4b4f-9773-a906cff928ce
 
 unsupported: false
 
@@ -6967,7 +6967,7 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 42477a8e-35a8-4d16-9cad-c05838fd2461
+result, same first party: 9a42305d-fa19-4fb9-859a-2ffd49be6633
 
 result, different first party: 
 
@@ -6987,7 +6987,7 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 63972290-21e5-4c22-bdc4-c2513f23ff34
+result, same first party: 4409c325-7a0e-4fd1-a602-b05fe5d2f808
 
 result, different first party: 
 
@@ -7007,7 +7007,7 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 36bf24f3-6c64-4082-9da2-5ec20ef0dadb
+result, same first party: 01d42778-3975-4a75-a1e2-464880100b71
 
 result, different first party: 
 
@@ -7027,7 +7027,7 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 5772171a-88b7-43d0-aac1-a3d6aa255dab
+result, same first party: 76ff53c9-e4b6-445e-bb7b-5b32d9820a73
 
 result, different first party: 
 
@@ -7047,7 +7047,7 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 66444914-025f-4bbc-888f-6f6e68a2135e
+result, same first party: a866563f-d4ac-4ce1-9105-1a1b580a52ae
 
 result, different first party: 
 
@@ -7067,7 +7067,7 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 763ff06c-8089-43b5-a9df-e3674852333e
+result, same first party: fd309849-c8ee-4e89-937c-81ceea438250
 
 result, different first party: 
 
@@ -7087,7 +7087,7 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: aaa8c3e1-0d1c-4957-a717-1ce74aea102f
+result, same first party: 3eb35128-c4e4-4d65-a4ac-3653e4e82782
 
 result, different first party: 
 
@@ -7107,7 +7107,7 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: e61ab6c4-da37-4918-859a-bf14896ac67d
+result, same first party: 2dff31ac-8fe2-4b16-b135-bed1cb7f7b20
 
 result, different first party: 
 
@@ -7127,7 +7127,7 @@ read: () => new Promise((resolve) => {
       }, { once: true });
     })
 
-result, same first party: 75040c46-e45b-4225-b8cc-472b9577ba68
+result, same first party: 57e06c53-1bba-4b4f-9773-a906cff928ce
 
 result, different first party: 
 
@@ -9629,10 +9629,10 @@ passed: false</span>
 > &nbsp;
 <span class="tooltipText">url: https://mc.yandex.ru/metrika/tag.js
 passed: false</span>
-</div></td></tr></table><p class="footer">Tests ran at 2021-12-24 17:00:57 UTC.
-         Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/b9fe6147ec04fff6ade3991551af7233170e545d"
-    >b9fe6147</a>.
-    Raw data in <a href="20211224_171611.json">JSON</a>.
+</div></td></tr></table><p class="footer">Tests ran at 2021-12-25 19:30:39 UTC.
+         Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/5a8e4edb09e6003fb9d7aba8ece7b151aeda32c5"
+    >5a8e4edb</a>.
+    Raw data in <a href="20211225_194605.json">JSON</a>.
     </p><script type="module">
   const table = document.querySelector(".comparison-table");
   let visibleTooltip = null;
