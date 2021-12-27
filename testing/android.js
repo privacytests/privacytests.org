@@ -13,6 +13,11 @@ const browserInfo = {
     urlBarClick: "url_bar",
     urlBarKeys: "url_bar"
   },
+  bromite: {
+    packageName: "org.bromite.bromite",
+    urlBarClick: "url_bar",
+    urlBarKeys: "url_bar"
+  },
   chrome: {
     packageName: "com.android.chrome",
     urlBarClick: "search_box_text",
