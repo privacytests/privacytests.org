@@ -341,8 +341,11 @@ let tests = {
 */
   "HSTS cache": {
     description: "The HTTP Strict-Transport-Security response header allows a website to signal that it should only be accessed via HTTPS. The browser remembers this directive in a database, but if this database is not partitioned, then it can be used to track users across websites.",
-    write: () => {
+    write: async () => {
       let image = document.getElementById("hsts-image");
+      let loadPromise = new Promise((resolve) => image.addEventListener("load", resolve, { once: true}));
+      image.src = "https://hsts.arthuredelstein.net/clear_hsts.png";
+      await loadPromise;
       image.src = "https://hsts.arthuredelstein.net/set_hsts.png";
     },
     read: () => new Promise((resolve, reject) => {
