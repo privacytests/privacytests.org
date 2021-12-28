@@ -3628,29 +3628,9 @@ unsupported: false, false, false, false, false
 passed: true, true, true, true, true
 
 test failed: false, false, false, false, false</span>
-</div></td><td><div class='dataPoint tooltipParent bad'
+</div></td><td><div class='dataPoint tooltipParent'
 > &nbsp;
-<span class="tooltipText">write: () => {
-      let image = document.getElementById("hsts-image");
-      image.src = "https://hsts.arthuredelstein.net/set_hsts.png";
-    }
-
-read: () => new Promise((resolve, reject) => {
-      let image = document.getElementById("hsts-image");
-      image.onload = () => resolve("image load succeeded");
-      image.onerror = () => reject(new Error("image load failed"));
-      image.src = "http://hsts.arthuredelstein.net/test_hsts.png";
-    })
-
-result, same first party: image load succeeded, image load succeeded, image load succeeded, image load succeeded, image load succeeded
-
-result, different first party: image load succeeded, image load succeeded, image load succeeded, image load succeeded, image load succeeded
-
-unsupported: false, false, false, false, false
-
-passed: false, false, false, false, false
-
-test failed: false, false, false, false, false</span>
+<span class="tooltipText">Investigating this data point</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: () => {
