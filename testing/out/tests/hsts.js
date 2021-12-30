@@ -34,11 +34,13 @@ const set_hsts = async () => {
 
 const test_hsts = async () => {
   // Test HSTS:
-  let result = await loadSubresource("img", "http://hsts.arthuredelstein.net/test_hsts.png");
-  console.log(result.type);
-  const passed = (result.type === "error");
+  const event = await loadSubresource("img", "http://hsts.arthuredelstein.net/test_hsts.png");
+  console.log(event.type);
+  const http = (event.type === "error");
+  const passed = http;
+  const result = http ? "Used http" : "Upgraded to https";
   return {
-    description, passed
+    description, passed, result
   }
 };
 
