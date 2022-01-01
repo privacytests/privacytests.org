@@ -11,7 +11,7 @@ This week we have added the privacy-oriented Bromite browser to our Android test
 Issue 10.1 fixes a problem in Issue 10 where Alt-Svc and H3 connection tests weren't operating properly.
 
 ## Issue 10: 2021-12-24
-([Desktop](.), [Private modes](archive/issue10/private.html), [Android](archive/issue10/android.html), [iOS](archive/issue10/ios.html), [Nightly](archive/issue10/nightly.html), [Nightly private modes](archive/issue10/nightly-private.html))
+([Desktop](archive/issue10/index.html), [Private modes](archive/issue10/private.html), [Android](archive/issue10/android.html), [iOS](archive/issue10/ios.html), [Nightly](archive/issue10/nightly.html), [Nightly private modes](archive/issue10/nightly-private.html))
 
 
 ### Introducing LibreWolf tests
