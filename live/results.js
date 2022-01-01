@@ -106,6 +106,9 @@ const pageSequence = [
 ];
 
 const nextUrl = (sessionId, nextStepIndex) => {
+  if (nextStepIndex >= pageSequence.length) {
+    return undefined;
+  }
   const rawUrl = pageSequence[nextStepIndex];
   const urlObject = new URL(rawUrl);
   urlObject.searchParams.set("sessionId", sessionId);
@@ -210,7 +213,8 @@ app.post('/post', (req, res) => {
     // We don't recognized this as an existing sessionId.
     console.log(`Unknown sessionId '${sessionId}'; Sending 404.`);
     res.sendStatus(404);
-  } else if (category === "supplementary" || category === "insecure" || category === "upgradable_address") {
+  } else if (["supplementary", "insecure", "upgradable_address", "toplevel", "nothing", "hsts"].includes(category)) {
+    console.log({category, sessionId, data});
     websocketSend(sessionId, data);
     res.json({}); // No instructions for page
   } else {
@@ -225,7 +229,7 @@ app.post('/post', (req, res) => {
     }
     const nextStepIndex = getNextStepIndex(sessionId);
     console.log({nextStepIndex, pageSequenceLength: pageSequence.length});
-    if (nextStepIndex == pageSequence.length - 1) {
+    if (nextStepIndex === pageSequence.length - 1) {
       if (websockets[sessionId]) {
         websocketSend(sessionId, processResults(sessionResults[sessionId]));
       }

@@ -8,6 +8,11 @@
   <body>
     <script src="./post_data.js"></script>
     <script src="./hsts.js"></script>
-    <script>set_hsts();</script>
+    <script>
+     (async () => {
+       await set_hsts();
+       postData({}, "nothing");
+     })();
+    </script>
   </body>
 </html>

@@ -91,13 +91,40 @@ app.get('/etag', (req, res) => {
   res.send(key);
 });
 
+// ## HSTS cache tests
+
+app.get('/set_hsts.js', (req, res) => {
+  let headers = { "Strict-Transport-Security": "max-age=30",
+                  "Cache-Control": "no-store"};
+  res.sendFile("test.js", { root: __dirname, headers });
+});
+
+app.get('/test_hsts.js', (req, res) => {
+  let headers = { "Cache-Control": "no-store"};
+  res.sendFile("test.js", { root: __dirname, headers });
+});
+
+app.get('/clear_hsts.js', (req, res) => {
+  let headers = { "Strict-Transport-Security": "max-age=0",
+                  "Cache-Control": "no-store"};
+  res.sendFile("test.js", { root: __dirname, headers });
+});
+
 app.get('/set_hsts.png', (req, res) => {
-  res.set({ "Strict-Transport-Security": "max-age=20" });
-  res.sendFile("image.png", { root: __dirname });
+  let headers = { "Strict-Transport-Security": "max-age=30",
+                  "Cache-Control": "max-age=0"};
+  res.sendFile("image.png", { root: __dirname, headers });
 });
 
 app.get('/test_hsts.png', (req, res) => {
-  res.sendFile("image.png", { root: __dirname });
+  let headers = { "Cache-Control": "max-age=0"};
+  res.sendFile("image.png", { root: __dirname, headers });
+});
+
+app.get('/clear_hsts.png', (req, res) => {
+  let headers = { "Strict-Transport-Security": "max-age=0",
+                  "Cache-Control": "max-age=0"};
+  res.sendFile("image.png", { root: __dirname, headers });
 });
 
 let passwordCounts = {};
@@ -140,6 +167,39 @@ app.get('/blob', (req, res) => {
   } else {
     res.json({blobUrl: blobs[key]});
   }
+});
+
+app.get('/toplevel', (req, res) => {
+  const ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
+  const gpcHeaderValue = req.header('Sec-GPC');
+  console.log(ip);
+  console.log({gpcHeaderValue});
+  res.send(`
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8">
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+  </head>
+  <body>
+    <script src="/test-pages/post_data.js"></script>
+    <script>
+      const results = {
+        "IP address leak": {
+          "ipAddress": "${ip}",
+          "description": "IP addresses can be used to uniquely identify a large percentage of users. A proxy, VPN, or Tor can mask a user's IP address."
+        },
+        "GPC enabled first-party": {
+          "header value": "${gpcHeaderValue}",
+          "description": "The Global Privacy Control is an HTTP header that can be sent by a browser to instruct a website not to sell the user's personal data to third parties. This test checks to see if the GPC header is sent by default to the top-level website.",
+          "passed": ${gpcHeaderValue === "1"}
+        }
+      };
+      postData(results, "toplevel");
+    </script>
+  </body>
+</html>
+`);
 });
 
 app.listen(port, () => console.log(`listening for file requests on ${port}`));
