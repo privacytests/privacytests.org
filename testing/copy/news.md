@@ -1,6 +1,41 @@
 # News
 
-## Issue 9 ([Desktop](/), [Nightly](/nightly.html), [Android](/android.html), [iOS](/ios.html): 2021-12-16)
+## [Issue 11](/): 2021-12-31
+
+### New browsers
+
+This week we have added the privacy-oriented Bromite browser to our Android tests, and Ungoogle Chromium to our desktop tests.
+
+## [Issue 10.1](archive/issue10.1/): 2021-12-26
+
+Issue 10.1 fixes a problem in Issue 10 where Alt-Svc and H3 connection tests weren't operating properly.
+
+## Issue 10: 2021-12-24
+([Desktop](.), [Private modes](archive/issue10/private.html), [Android](archive/issue10/android.html), [iOS](archive/issue10/ios.html), [Nightly](archive/issue10/nightly.html), [Nightly private modes](archive/issue10/nightly-private.html))
+
+
+### Introducing LibreWolf tests
+
+In Issue 10, we have added LibreWolf to the set of tested browsers. LibreWolf is a Firefox-based browser with some unique default privacy features not found in other browsers.
+
+### Updated layout
+
+We have separated out Private Modes (aka Private Browsing, Incognito etc.) into their own tables for Desktop and Nightly browsers.
+
+### New browser versions
+
+Since last week, some browser versions have updated:
+ * **Android:** Brave 1.33, DuckDuckGo 5.106, Firefox 95.2, Opera 66.2.
+ * **iOS:** DuckDuckGo 7.65, Firefox 40.1, Safari 15.2, and Yandex 2111.7.
+
+Desktop versions haven't updated this week.
+
+### Added test
+
+I have separated the Global Privacy Control test into "GPC enabled first-party" and "GPC enabled third-party."
+
+## Issue 9: 2021-12-16
+([Desktop](archive/issue9/), [Nightly](archive/issue9/nightly.html), [Android](archive/issue9/android.html), [iOS](archive/issue9/ios.html))
 
 ### Introducing mobile web browser testing
 
