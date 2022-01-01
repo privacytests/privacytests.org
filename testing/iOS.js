@@ -123,7 +123,7 @@ class iOSBrowser {
 		await clickElementWithName(this.client, "General");
 		//await sleepMs(500);
 		await clickElementWithName(this.client, "iPhone Storage");
-		await sleepMs(4000);
+		await sleepMs(8000);
 		if (this.browser === "safari") {
 			const elements = await this.client.findElements("name", "Title");
 			console.log(elements);
