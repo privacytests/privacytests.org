@@ -278,10 +278,12 @@ const runTestsBatch = async (browserList, { shouldQuit, android, iOS } = { shoul
 
 // Takes our results in a JSON object and writes them to disk.
 // The file name looks like `yyyymmdd__HHMMss.json`.
-const writeDataSync = (data) => {
-  let dateStub = dateFormat(new Date(), "yyyymmdd_HHMMss", true);
-  let filePath = `out/results/${dateStub}.json`;
-  fs.mkdirSync("out/results", { recursive: true });
+const writeDataSync = (filename, data) => {
+  const dateString = dateFormat(new Date(), "yyyymmdd", true);
+  const fileStub = filename ?? dateFormat(new Date(), "HHMMss", true);
+  const dir = `out/results/${dateString}`;
+  fs.mkdirSync(dir, { recursive: true });
+  const filePath = `${dir}/${fileStub}.json`;
   fs.writeFileSync(filePath, JSON.stringify(data));
   console.log(`Wrote results to "${filePath}".`);
   return filePath;
@@ -349,10 +351,11 @@ const main = async () => {
     console.log({config});
     const expandedBrowserList = configToExpandedBrowserList(config);
     console.log("List of browsers to run:", expandedBrowserList);
-    let dataFile = writeDataSync(await runTestsBatch(expandedBrowserList,
-                                                    { shouldQuit: !config.debug, android: config.android, iOS: config.ios }));
+    const testResults = await runTestsBatch(expandedBrowserList,
+      { shouldQuit: !config.debug, android: config.android, iOS: config.ios });
+    let dataFile = writeDataSync(config.filename, testResults);
     restoreProxies();
-    render.render({ dataFile, aggregate: config.aggregate });
+    render.render({ dataFiles: [dataFile], aggregate: config.aggregate });
   } catch (e) {
     console.log(e);
   }
