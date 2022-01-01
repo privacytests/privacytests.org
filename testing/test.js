@@ -143,13 +143,14 @@ const destroyWebSocket = (websocket) => {
 const iframe_root_same = "https://arthuredelstein.net/test-pages";
 const iframe_root_different = "https://test-pages.privacytests.org";
 
-const ipAddressTest = async (supplementaryResults) => {
+const ipAddressTest = async (results) => {
   const myIpAddress = await fetch_ipAddress();
-  let { description, ipAddress } = supplementaryResults["IP address leak"];
+  console.log("ipAddressTest", {results});
+  let { description, ipAddress } = results["IP address leak"];
   console.log({myIpAddress, deviceIpAddress: ipAddress});
   return {
     "IP address leak": {
-      description: description,
+      description,
       passed: ipAddress !== myIpAddress
     }
   };
@@ -181,29 +182,51 @@ const runTests = async (browserObject) => {
       await browserObject.openUrl(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`);
     }
     let mainResults = await nextValue(websocket);
+    let results = Object.assign({}, mainResults);
     await sleep(1000);
     await browserObject.openUrl(`${iframe_root_same}/supplementary.html?sessionId=${sessionId}`);
     let supplementaryResults = await nextValue(websocket);
-    let results = Object.assign({}, mainResults);
     // For now, don't include system font detection test in mobile
     if (browserObject instanceof DesktopBrowser) {
       Object.assign(results["fingerprinting"], {"System font detection": supplementaryResults["System font detection"]});
     }
-    const ipAddressLeak = await ipAddressTest(supplementaryResults);
+    await browserObject.openUrl(`https://arthuredelstein.net/browser-privacy-live/toplevel?sessionId=${sessionId}`)
+    const toplevelResults = await nextValue(websocket);
+    const ipAddressLeak = await ipAddressTest(toplevelResults);
     Object.assign(results["misc"], ipAddressLeak);
+    Object.assign(results["misc"], { "GPC enabled first-party": toplevelResults["GPC enabled first-party"]});
     await browserObject.openUrl(`http://upgradable.arthuredelstein.net/upgradable.html?source=address&sessionId=${sessionId}`);
     console.log("upgradable...");
     const upgradableAddressResult = await nextValue(websocket);
     console.log("upgradable received.");
     Object.assign(results["https"], upgradableAddressResult);
     await browserObject.openUrl(`http://insecure.arthuredelstein.net/insecure.html?sessionId=${sessionId}`);
-    let insecureResult;
+    let insecureResult, insecurePassed;
     try {
       insecureResult = await deadlinePromise(nextValue(websocket), 8000);
+      insecurePassed = false;
     } catch (e) {
       insecureResult =  { "Insecure website": { passed: true, result: "Insecure website never loaded" } };
+      insecurePassed = true;
     }
     Object.assign(results["https"], insecureResult);
+    if (!insecurePassed) {
+      await browserObject.openUrl(`https://test-pages.privacytests.org/clear_hsts.html?sessionId=${sessionId}`);
+      await nextValue(websocket);
+      await browserObject.openUrl(`https://test-pages.privacytests.org/set_hsts.html?sessionId=${sessionId}`);
+      await nextValue(websocket);
+      await browserObject.openUrl(`http://insecure.arthuredelstein.net/test_hsts.html?sessionId=${sessionId}`);
+      hstsResult = await nextValue(websocket);
+      console.log({hstsResult});
+      Object.assign(results["supercookies"], {"HSTS cache":hstsResult});
+    } else {
+      Object.assign(results["supercookies"], {"HSTS cache":{
+        write: null, read: null,
+        readSameFirstParty: null, readDifferentFirstParty: "HTTPS used by default; no HSTS cache issue expected",
+        passed: true, testFailed: false, unsupported: null
+      }});
+    }
+
     return results;
   } catch (e) {
     console.log(e);
@@ -213,10 +236,10 @@ const runTests = async (browserObject) => {
 
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
-const runTestsBatch = async (configList, { shouldQuit, android, iOS } = { shouldQuit: true }) => {
+const runTestsBatch = async (browserList, { shouldQuit, android, iOS } = { shouldQuit: true }) => {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
-  for (let config of configList) {
+  for (let config of browserList) {
     console.log("\nnext test:", config);
     const { browser, incognito, tor, nightly } = config;
     const timeStarted = new Date().toISOString();
@@ -267,23 +290,49 @@ const writeDataSync = (data) => {
 // ## Config files
 
 // Takes a list of browser configs, and repeats or removes them as needed.
-const expandConfigList = (configList, repeat = 1) => {
+const expandBrowserList = (browserList, repeat = 1) => {
   let results = [];
-  for (let config of configList) {
-    if (!config.disable) {
-      const config2 = deepCopy(config);
+  for (let browserSpec of browserList) {
+    if (!browserSpec.disable) {
+      const config2 = deepCopy(browserSpec);
       delete config2["repeat"];
-      results = [].concat(results, Array((config.repeat ?? 1) * (repeat ?? 1)).fill(config2));
+      results = [].concat(results, Array((browserSpec.repeat ?? 1) * (repeat ?? 1)).fill(config2));
     }
   }
   return results;
 };
 
-// Read config file in YAML or JSON.
-const parseConfigFile = (configFile, repeat = 1) => {
-  let configFileContents = fs.readFileSync(configFile, 'utf8');
-  let rawConfigs = YAML.parse(configFileContents);
-  return expandConfigList(rawConfigs, repeat);
+// Read a YAML file from disk.
+const readYAMLFile = (file) => {
+  const fileContents = fs.readFileSync(file, 'utf8');
+  return YAML.parse(fileContents);
+};
+
+const readConfig = () => {
+  const defaultConfig = {aggregate: true, repeat: 1, debug: false};
+  let commandLineConfig = minimist(process.argv.slice(2));
+  const configFile = commandLineConfig._[0];
+  delete commandLineConfig._;
+  let commandLineBrowsers = commandLineConfig.browsers ?? commandLineConfig.browser;
+  if (commandLineBrowsers) {
+    commandLineConfig.browsers = commandLineBrowsers.split(",");
+  }
+  const yamlConfig = configFile ? readYAMLFile(configFile) : null;
+  return Object.assign({}, defaultConfig, yamlConfig, commandLineConfig);
+};
+
+const configToExpandedBrowserList = (config) => {
+  let browserList = [];
+  for (const browser of config.browsers) {
+    browserList.push({
+      browser,
+      nightly: config.nightly ? true : false,
+      incognito: config.incognito ? true : false,
+      android: config.android ? true : false,
+      ios: config.ios ? true : false,
+    })
+  }
+  return expandBrowserList(browserList, config.repeat);
 };
 
 // ## Main program
@@ -296,17 +345,14 @@ const main = async () => {
     installTestFontIfNeeded();
     disableProxies();
     // Read config file and flags from command line
-    let { _ : [configFile], debug, only, repeat, aggregate, nightly, android, incognito, iOS } =
-      minimist(process.argv.slice(2), opts = { default: { aggregate: true }});
-    let configList = parseConfigFile(configFile, repeat);
-    let filteredConfigList = configList
-        .filter(d => only ? d.browser.startsWith(only) : true)
-        .map(d => Object.assign({}, d, nightly ? {nightly} : null, incognito ? {incognito} : null));
-    console.log("List of browsers to run:", filteredConfigList);
-    let dataFile = writeDataSync(await runTestsBatch(filteredConfigList,
-                                                    { shouldQuit: !debug, android, iOS }));
+    const config = readConfig();
+    console.log({config});
+    const expandedBrowserList = configToExpandedBrowserList(config);
+    console.log("List of browsers to run:", expandedBrowserList);
+    let dataFile = writeDataSync(await runTestsBatch(expandedBrowserList,
+                                                    { shouldQuit: !config.debug, android: config.android, iOS: config.ios }));
     restoreProxies();
-    render.render({ dataFile, aggregate });
+    render.render({ dataFile, aggregate: config.aggregate });
   } catch (e) {
     console.log(e);
   }
