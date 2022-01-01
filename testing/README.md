@@ -21,28 +21,36 @@ Then, on all platforms:
 
 To run tests, point to a .yaml file:
 
-`node test chromium.yaml`
-
-You can use a few optional flags after the yaml file:
-
-* `--repeat 10`: repeat the whole set of tests 10 times
-* `--debug`: Don't close browser(s) after test is done
-* `--only brave`: Only run a single browser in the config file with the name given
-* `--aggregate`: Combine results from the same browser into a single column (enabled by default)
+`node test desktop.yaml`
 
 Config files are YAML arrays. Each item in the array is an object
 that describes what should go into a single test. All parameters
 are optional, except `browser`:
 
 ```
-- browser: chrome          # Possible values include chrome, firefox, brave, opera, edge, vivaldi, etc.
-  incognito: true,         # Set incognito to true for private browsing windows.
-  tor: true                # Set tor to true for 'Brave Private Window with Tor.'
-  repeat: 1                # Integer, how many times we should repeat this test.
-  disable: false           # If true, this test won't be run.
-- browser: firefox         # On to the next test item in the array...
-  ...
+browsers:                # Possible values include chrome, firefox, brave, opera, edge, vivaldi, etc.
+  - chrome
+  - firefox
+  - brave
+  - edge
+android: false,          # Set to true to run on Android platform (default: false)
+ios: false,              # Set to true to run on iOS platform (default: false)
+incognito: false,        # Set incognito to true for testing private browsing windows. (default: false)
+tor: true                # Set tor to true for 'Brave Private Window with Tor.' (default: false)
+repeat: 1                # Integer, how many times we should repeat this test (default: 1)
+aggregate: true          # Whether to combine repeated runs of a browser into a single column (default: true)
+debug: false             # Whether to leave browsers open after test is done (default: false)
 ```
+
+You can also use these flags on the command line, after the yaml file or instead of one:
+
+* `--browsers chrome,firefox,vivaldi`: use the specified browsers, separated by commas
+* `--repeat 10`: repeat the whole set of tests 10 times
+* `--debug`: Don't close browser(s) after test is done
+* `--only brave`: Only run a single browser in the config file with the name given
+* `--aggregate`: Combine results from the same browser into a single column (enabled by default)
+* `--ios`: Add flag to run on iOS
+* `--android`: Add flag to run on Android
 
 ## Development
 
