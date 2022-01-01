@@ -226,8 +226,12 @@ let rowNames = Object.keys(bestResultsForCategory)
     row.push(`<div class="tooltipParent">${rowName}<span class="tooltipText">${description}</span></div>`);
     for (let resultMap of resultMaps) {
       let tooltip = tooltipFunction(resultMap[rowName]);
-      let { passed, testFailed, unsupported } = resultMap[rowName];
-      row.push(testBody({ passed, testFailed, tooltip, unsupported }));
+      try {
+        let { passed, testFailed, unsupported } = resultMap[rowName];
+        row.push(testBody({ passed, testFailed, tooltip, unsupported }));
+      } catch (e) {
+        console.log(e, resultMap[rowName]);
+      }
     }
     section.push(row);
   }
@@ -325,16 +329,16 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
   console.log(results.platform);
   return `
     <div class="banner" id="issueBanner">
-      <div class="left-heading">No. 10</div>
+      <div class="left-heading">No. 11</div>
       <div class="middle-heading">Open-source tests of web browser privacy.</div>
       <div class="right-heading">Updated ${dateString(results.timeStarted)}</div>
     </div>
     <div class="banner" id="navBanner">
       <div class="navItem ${!incognito && !nightly && results.platform !== "Android" && results.platform !== "iOS" ? "selectedItem" : ""}">
-        <a href="/">Desktop browsers</a>
+        <a href=".">Desktop browsers</a>
       </div>
       <div class="navItem ${incognito && !nightly && results.platform !== "Android" && results.platform !== "iOS" ? "selectedItem" : ""}">
-        <a href="/private.html">Desktop private modes</a>
+        <a href="private.html">Desktop private modes</a>
       </div>
       <div class="navItem ${results.platform === "iOS" ? "selectedItem" : ""}">
         <a href="ios.html">iOS browsers</a>
@@ -444,7 +448,7 @@ const render = async ({ dataFiles, live, aggregate }) => {
 //  console.log(results.all_tests[0]);
 //  console.log(JSON.stringify(results));
   const nightly = results.all_tests.every(t => (t.nightly === true));
-  const incognito = results.all_tests.every(t => (t.incognito === true));
+  const incognito = results.all_tests.every(t => (t.incognito === true || t.tor === true));
   let tableTitle;
   if (nightly) {
     tableTitle = incognito ? "Nightly private modes" : "Nightly Builds";     
