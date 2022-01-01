@@ -92,6 +92,12 @@ const macOSdefaultBrowserSettings = {
     preLaunchDelay: 10000,
     postLaunchDelay: 10000
   },
+  ungoogled: {
+    name: "Ungoogled Chromium",
+    binaryName: "Chromium",
+    privateFlag: "incognito",
+    dataDir: "Google/Chrome",
+  },
   vivaldi: {
     name: "Vivaldi",
     nightly: "Vivaldi Snapshot",
