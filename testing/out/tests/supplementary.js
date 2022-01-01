@@ -1,19 +1,3 @@
-const fetchJSON = async (...fetchArgs) => {
-  let response = await fetch(...fetchArgs);
-  return response.json();
-};
-
-const testIp = async () => {
-  const wtfJSON = await fetchJSON("https://ipv4.wtfismyip.com/json");
-  console.log(wtfJSON);
-  const ipAddress = wtfJSON["YourFuckingIPAddress"];
-  return {
-    "IP address leak" : {
-      ipAddress,
-      description: "IP addresses can be used to uniquely identify a large percentage of users. A proxy, VPN, or Tor can mask a user's IP address."
-    }};
-};
-
 const testFontFingerprinting = () => {
   // (The Algerian font installed through the iFont app on Android.)
   let div1 = document.createElement("div1");
@@ -37,7 +21,7 @@ const testFontFingerprinting = () => {
 };
 
 const runTests = async () => {
-  let resultsJSON = Object.assign({}, await testIp(), testFontFingerprinting());
+  let resultsJSON = Object.assign({}, testFontFingerprinting());
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
   await postData(resultsJSON, "supplementary");
 };

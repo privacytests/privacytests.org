@@ -44,10 +44,11 @@ const testDoH = async () => {
 
 const testGPC = async () => {
   // Ask the server what headers it sees.
-  const description = "The Global Privacy Control is an HTTP header that can be sent by a browser to instruct a website not to sell the user's personal data to third parties. This test checks to see if the GPC header is sent by default.";
+  const description = "The Global Privacy Control is an HTTP header that can be sent by a browser to instruct a visited website not to sell the user's personal data to other parties. This test checks to see if the GPC header is sent to third-party elements on the web page.";
   const requestHeaders = await fetchJSON("https://arthuredelstein.net/browser-privacy-live/headers");
   const passed = requestHeaders["sec-gpc"] === "1";
-  return { "GPC enabled": { "sec-gpc": requestHeaders["sec-gpc"], passed, description }};
+  document.body.innerHTML += "<br>" + JSON.stringify(requestHeaders);
+  return { "GPC enabled third-party": { "sec-gpc": requestHeaders["sec-gpc"], passed, description }};
 };
 
 const runTests = async () => {

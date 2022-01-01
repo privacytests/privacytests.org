@@ -339,19 +339,6 @@ let tests = {
     }
   },
 */
-  "HSTS cache": {
-    description: "The HTTP Strict-Transport-Security response header allows a website to signal that it should only be accessed via HTTPS. The browser remembers this directive in a database, but if this database is not partitioned, then it can be used to track users across websites.",
-    write: () => {
-      let image = document.getElementById("hsts-image");
-      image.src = "https://hsts.arthuredelstein.net/set_hsts.png";
-    },
-    read: () => new Promise((resolve, reject) => {
-      let image = document.getElementById("hsts-image");
-      image.onload = () => resolve("image load succeeded");
-      image.onerror = () => reject(new Error("image load failed"));
-      image.src = "http://hsts.arthuredelstein.net/test_hsts.png";
-    })
-  },
   "TLS Session ID": {
     description: "The TLS protocol is used by HTTPS to make connections secure. If the browser were to re-use a TLS session, then the session ID could be used to track users across websites.",
     write: async () => {
