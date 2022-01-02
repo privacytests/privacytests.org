@@ -171,7 +171,7 @@ class AndroidBrowser {
   }
   // Get the browser version.
   async version() {
-    const cmd = `adb shell dumpsys package ${this.packageName} | grep versionName`;
+    const cmd = `/opt/homebrew/bin/adb shell dumpsys package ${this.packageName} | /usr/bin/grep versionName`;
     const raw = child_process.execSync(cmd).toString();
     return raw.match(/versionName=(\S+)/)[1];
   }
