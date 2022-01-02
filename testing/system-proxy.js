@@ -19,13 +19,13 @@ const parseNetworkServiceList = (text) =>
         .map(m => m[1]);
 
 const getNetworkServices = () => {
-  const result = run("networksetup -listnetworkserviceorder");
+  const result = run("/usr/sbin/networksetup -listnetworkserviceorder");
   return parseNetworkServiceList(result);
 };
 
 const setProxyState = (networkService, type, enabled) => {
   const state = enabled ? "on" : "off";
-  return run(`networksetup -set${type}proxystate "${networkService}" "${state}"`);
+  return run(`/usr/sbin/networksetup -set${type}proxystate "${networkService}" "${state}"`);
 };
 
 const setProxy = (networkService, type, { enabled, domain, port, authenticated, username, password }) => {
@@ -33,7 +33,7 @@ const setProxy = (networkService, type, { enabled, domain, port, authenticated, 
   let usernameString = username === undefined ? "" : username;
   let passwordString = password === undefined ? "" : password;
   if (domain !== undefined && port !== undefined) {
-    run(`networksetup -set${type}proxy "${networkService}" "${domain}" "${port}" "${authenticatedString}" "${usernameString} ${passwordString}"`);
+    run(`/usr/sbin/networksetup -set${type}proxy "${networkService}" "${domain}" "${port}" "${authenticatedString}" "${usernameString} ${passwordString}"`);
   }
   if (enabled !== undefined) {
     setProxyState(networkService, type, enabled);
@@ -60,7 +60,7 @@ const parseGetterResult = raw => {
 };
 
 const getProxy = (networkService, type) => {
-  const raw = run(`networksetup -get${type}proxy "${networkService}"`);
+  const raw = run(`/usr/sbin/networksetup -get${type}proxy "${networkService}"`);
   return parseGetterResult(raw);
 };
 
