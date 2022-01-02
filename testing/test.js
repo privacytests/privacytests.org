@@ -269,7 +269,7 @@ const runTestsBatch = async (browserList, { shouldQuit, android, iOS } = { shoul
   } else if (iOS) {
     platform = "iOS";
   } else {
-    platform = "Desktop;"
+    platform = "Desktop";
   }
   return { all_tests, git: gitHash(), timeStarted, timeStopped, platform };
 };
