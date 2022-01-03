@@ -10,6 +10,7 @@ const browserInfo = {
   },
   brave: {
     packageName: "com.brave.browser",
+    nightlyPackageName: "com.brave.browser_nightly",
     urlBarClick: "url_bar",
     urlBarKeys: "url_bar"
   },
@@ -20,6 +21,7 @@ const browserInfo = {
   },
   chrome: {
     packageName: "com.android.chrome",
+    nightlyPackageName: "com.chrome.canary",
     urlBarClick: "search_box_text",
     urlBarKeys: "url_bar"
   },
@@ -35,11 +37,13 @@ const browserInfo = {
   },
   edge: {
     packageName: "com.microsoft.emmx",
+    nightlyPackageName: "com.microsoft.emmx.canary",
     urlBarClick: "search_box_text",
     urlBarKeys: "url_bar"
   },
   firefox: {
     packageName: "org.mozilla.firefox",
+    nightlyPackageName: "org.mozilla.fenix",
     urlBarClick: "mozac_browser_toolbar_url_view",
     urlBarClick2: "toolbar_wrapper",
     urlBarKeys: "mozac_browser_toolbar_edit_url_view"
@@ -56,17 +60,20 @@ const browserInfo = {
   },
   opera: {
     packageName: "com.opera.browser",
+    nightlyPackageName: "com.opera.browser.beta",
     urlBarClick: "url_field",
     urlBarKeys: "url_field"
   },
   samsung: {
     packageName: "com.sec.android.app.sbrowser",
+    nightlyPackageName: "com.sec.android.app.sbrowser.beta",
     urlBarClick: "location_bar_edit_text",
     urlBarKeys: "location_bar_edit_text",
     contentElement: "content_layout"
   },
   tor: {
     packageName: "org.torproject.torbrowser",
+    nightlyPackageName: "org.torproject.torbrowser_alpha",
     startupClick: "tor_bootstrap_connect_button",
     urlBarClick: "toolbar",
     urlBarKeys: "mozac_browser_toolbar_edit_url_view"
@@ -81,6 +88,7 @@ const browserInfo = {
   },
   vivaldi: {
     packageName: "com.vivaldi.browser",
+    nightlyPackageName: "com.vivaldi.browser.snapshot",
     urlBarClick: "url_bar",
     urlBarKeys: "url_bar"
   },
@@ -91,6 +99,7 @@ const browserInfo = {
   },
   yandex: {
     packageName: "com.yandex.browser",
+    nightlyPackageName: "com.yandex.browser.alpha",
     urlBarClick: "bro_omnibar_address_title_text",
     urlBarClick2: "bro_sentry_bar_fake_text",
     urlBarKeys: "suggest_omnibox_query_edit"
