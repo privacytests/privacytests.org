@@ -225,12 +225,13 @@ let rowNames = Object.keys(bestResultsForCategory)
     let description = bestResultsForCategory[rowName]["description"] ?? "";
     row.push(`<div class="tooltipParent">${rowName}<span class="tooltipText">${description}</span></div>`);
     for (let resultMap of resultMaps) {
-      let tooltip = tooltipFunction(resultMap[rowName]);
       try {
+        let tooltip = tooltipFunction(resultMap[rowName]);
         let { passed, testFailed, unsupported } = resultMap[rowName];
         row.push(testBody({ passed, testFailed, tooltip, unsupported }));
       } catch (e) {
-        console.log(e, resultMap[rowName]);
+        console.log(e, category, rowName, resultMap, resultMap[rowName]);
+        throw e;
       }
     }
     section.push(row);
@@ -435,6 +436,7 @@ const getMergedResults = async (dataFiles) => {
 }
 
 const render = async ({ dataFiles, live, aggregate }) => {
+  const createPreviewImage = (await import('./prepare.mjs')).createPreviewImage;
   console.log("aggregate:", aggregate);
   let resultsFilesJSON = (dataFiles && dataFiles.length > 0) ? dataFiles : [await latestResultsFile("./out/results")];
   console.log(resultsFilesJSON);
@@ -468,7 +470,7 @@ const render = async ({ dataFiles, live, aggregate }) => {
   console.log(`Wrote out ${fileUrl(resultsFileHTMLLatest)}`);
   await fs.copyFile(resultsFileHTMLLatest, resultsFileHTML);
   console.log(`Wrote out ${fileUrl(resultsFileHTML)}`);
-
+  createPreviewImage(resultsFileHTML);
   if (!live) {
     open(fileUrl(resultsFileHTML));
   }
@@ -477,7 +479,7 @@ const render = async ({ dataFiles, live, aggregate }) => {
 const main = async () => {
   let { _: dataFiles, live, aggregate } = minimist(process.argv.slice(2),
                                      opts = { default: { aggregate: true }});
-  render({ dataFiles, live, aggregate });
+  await render({ dataFiles, live, aggregate });
 };
 
 if (require.main === module) {
