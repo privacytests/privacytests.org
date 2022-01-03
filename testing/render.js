@@ -442,6 +442,7 @@ const render = async ({ dataFiles, live, aggregate }) => {
   console.log(resultsFilesJSON);
   let resultsFileHTMLLatest = "./out/results/latest.html";
   let resultsFileHTML = resultsFilesJSON[0].replace(/\.json$/, ".html");
+  let resultsFilePreviewImage = resultsFileHTML.replace(".html", "-preview.png");
 //  fs.copyFile(resultsFile, "./out/results/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
   console.log(`Reading from raw results files: ${resultsFilesJSON}`);
   let results = await getMergedResults(resultsFilesJSON);
@@ -465,12 +466,12 @@ const render = async ({ dataFiles, live, aggregate }) => {
     title: "PrivacyTests.org",
       content: content(processedResults, path.basename(resultsFilesJSON[0]), tableTitle, nightly, incognito),
     cssFiles: ["./template.css", "./inline.css"],
-    previewImageUrl: nightly ? "nightlyPreview.png" : "desktopPreview.png"
+    previewImageUrl: path.basename(resultsFilePreviewImage)
   }));
   console.log(`Wrote out ${fileUrl(resultsFileHTMLLatest)}`);
   await fs.copyFile(resultsFileHTMLLatest, resultsFileHTML);
   console.log(`Wrote out ${fileUrl(resultsFileHTML)}`);
-  createPreviewImage(resultsFileHTML);
+  createPreviewImage(resultsFileHTML, resultsFilePreviewImage);
   if (!live) {
     open(fileUrl(resultsFileHTML));
   }
