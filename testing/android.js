@@ -4,82 +4,82 @@ const child_process = require('child_process');
 
 const browserInfo = {
   baidu: {
-    packageName: "com.baidu.searchbox",
+    releasePackageName: "com.baidu.searchbox",
     urlBarClick: "baidu_searchbox",
     urlBarKeys: "SearchTextInput"
   },
   brave: {
-    packageName: "com.brave.browser",
+    releasePackageName: "com.brave.browser",
     nightlyPackageName: "com.brave.browser_nightly",
     urlBarClick: "url_bar",
     urlBarKeys: "url_bar"
   },
   bromite: {
-    packageName: "org.bromite.bromite",
+    releasePackageName: "org.bromite.bromite",
     urlBarClick: "url_bar",
     urlBarKeys: "url_bar"
   },
   chrome: {
-    packageName: "com.android.chrome",
+    releasePackageName: "com.android.chrome",
     nightlyPackageName: "com.chrome.canary",
     urlBarClick: "search_box_text",
     urlBarKeys: "url_bar"
   },
   coccoc: {
-    packageName: "com.coccoc.trinhduyet",
+    releasePackageName: "com.coccoc.trinhduyet",
     urlBarClick: "omnibox_container",
     urlBarKeys: "url_bar"
   },
   duckduckgo: {
-    packageName: "com.duckduckgo.mobile.android",
+    releasePackageName: "com.duckduckgo.mobile.android",
     urlBarClick: "omnibarTextInput",
     urlBarKeys: "omnibarTextInput"
   },
   edge: {
-    packageName: "com.microsoft.emmx",
+    releasePackageName: "com.microsoft.emmx",
     nightlyPackageName: "com.microsoft.emmx.canary",
     urlBarClick: "search_box_text",
     urlBarKeys: "url_bar"
   },
   firefox: {
-    packageName: "org.mozilla.firefox",
+    releasePackageName: "org.mozilla.firefox",
     nightlyPackageName: "org.mozilla.fenix",
     urlBarClick: "mozac_browser_toolbar_url_view",
     urlBarClick2: "toolbar_wrapper",
     urlBarKeys: "mozac_browser_toolbar_edit_url_view"
   },
   focus: {
-    packageName: "org.mozilla.focus",
+    releasePackageName: "org.mozilla.focus",
     urlBarClick: "mozac_browser_toolbar_edit_url_view",
     urlBarKeys: "mozac_browser_toolbar_edit_url_view"
   },
   mi: {
-    packageName: "com.mi.globalbrowser",
+    releasePackageName: "com.mi.globalbrowser",
     urlBarClick: "search_hint",
     urlBarKeys: "url"
   },
   opera: {
-    packageName: "com.opera.browser",
+    releasePackageName: "com.opera.browser",
     nightlyPackageName: "com.opera.browser.beta",
     urlBarClick: "url_field",
     urlBarKeys: "url_field"
   },
   samsung: {
-    packageName: "com.sec.android.app.sbrowser",
+    releasePackageName: "com.sec.android.app.sbrowser",
     nightlyPackageName: "com.sec.android.app.sbrowser.beta",
     urlBarClick: "location_bar_edit_text",
     urlBarKeys: "location_bar_edit_text",
     contentElement: "content_layout"
   },
   tor: {
-    packageName: "org.torproject.torbrowser",
+    releasePackageName: "org.torproject.torbrowser",
     nightlyPackageName: "org.torproject.torbrowser_alpha",
     startupClick: "tor_bootstrap_connect_button",
     urlBarClick: "toolbar",
     urlBarKeys: "mozac_browser_toolbar_edit_url_view"
   },
   uc: {
-    packageName: "com.UCMobile.intl",
+    releasePackageName: "com.UCMobile.intl",
     urlBarClick: `//android.widget.ImageView[@content-desc="data saving"]/following-sibling::android.widget.TextView`,
     urlBarClick2: `//android.widget.TextView[@content-desc="Search or Enter URL edit box"]`,
     urlBarKeys: `//android.widget.LinearLayout[@content-desc="Search or Enter URL edit box"]/android.widget.EditText`,
@@ -87,18 +87,18 @@ const browserInfo = {
     contentElement: "//com.uc.webview.export.WebView"
   },
   vivaldi: {
-    packageName: "com.vivaldi.browser",
+    releasePackageName: "com.vivaldi.browser",
     nightlyPackageName: "com.vivaldi.browser.snapshot",
     urlBarClick: "url_bar",
     urlBarKeys: "url_bar"
   },
   whale: {
-    packageName: "com.naver.whale",
+    releasePackageName: "com.naver.whale",
     urlBarClick: "url_bar",
     urlBarKeys: "url_bar"
   },
   yandex: {
-    packageName: "com.yandex.browser",
+    releasePackageName: "com.yandex.browser",
     nightlyPackageName: "com.yandex.browser.alpha",
     urlBarClick: "bro_omnibar_address_title_text",
     urlBarClick2: "bro_sentry_bar_fake_text",
@@ -131,24 +131,6 @@ const findElementWithClass = async (client, className) => {
   return elementObject.ELEMENT;
 };
 
-const demoBrowser = async (client, browserName, url) => {
-  const { startupClick, packageName, urlBarClick, urlBarKeys } = browserInfo[browserName];
-  await client.activateApp(packageName);
-  await sleepMs(5000);
-  if (startupClick) {
-    const startupButton = await findElement(client, packageName, startupClick);
-    await client.elementClick(startupButton)
-    await sleepMs(3000);
-  }
-  const urlBarToClick = await findElement(client, packageName, urlBarClick);
-  await client.elementClick(urlBarToClick);
-  await sleepMs(1000);
-  const urlBarToSendKeys = await findElement(client, packageName, urlBarKeys);
-  await client.elementSendKeys(urlBarToSendKeys, url + "\\n");
-  await sleepMs(8000);
-  await client.terminateApp(packageName);
-};
-
 const webdriverSession = _.memoize(async () => {
   const client = await WebDriver.newSession({
     port: 4723,
@@ -162,6 +144,7 @@ const webdriverSession = _.memoize(async () => {
 class AndroidBrowser {
   constructor({browser, incognito, tor, nightly}) {
     Object.assign(this, { browser, incognito, tor, nightly }, browserInfo[browser]);
+    this.packageName = nightly ? this.nightlyPackageName : this.releasePackageName;
   }
   // Launch the browser.
   async launch() {
@@ -223,6 +206,24 @@ class AndroidBrowser {
 }
 
 module.exports = { AndroidBrowser };
+
+const demoBrowser = async (client, browserName, url) => {
+  const { startupClick, packageName, urlBarClick, urlBarKeys } = browserInfo[browserName];
+  await client.activateApp(packageName);
+  await sleepMs(5000);
+  if (startupClick) {
+    const startupButton = await findElement(client, packageName, startupClick);
+    await client.elementClick(startupButton)
+    await sleepMs(3000);
+  }
+  const urlBarToClick = await findElement(client, packageName, urlBarClick);
+  await client.elementClick(urlBarToClick);
+  await sleepMs(1000);
+  const urlBarToSendKeys = await findElement(client, packageName, urlBarKeys);
+  await client.elementSendKeys(urlBarToSendKeys, url + "\\n");
+  await sleepMs(8000);
+  await client.terminateApp(packageName);
+};
 
 async function main() {
   const client = await WebDriver.newSession({
