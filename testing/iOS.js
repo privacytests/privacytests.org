@@ -69,6 +69,8 @@ const browserInfo = {
   }
 };
 
+let versionsSeen = {};
+
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
 const findElementWithName = async (client, name) => {
@@ -116,6 +118,12 @@ class iOSBrowser {
   }
   // Get the browser version.
   async version() {
+		const browserSpec = `${this.browser}|${this.nightly}`;
+		const maybeSeen = versionsSeen[browserSpec];
+		if (maybeSeen) {
+			return maybeSeen;
+		}
+		// We don't have the browser version yet. Go get it.
 		await this.client.terminateApp("com.apple.Preferences");
 		//await sleepMs(1000);
 		await this.client.activateApp("com.apple.Preferences");
@@ -145,6 +153,7 @@ class iOSBrowser {
 		// Remove the word "Version" from the info text if it's present.
 		const versionText = infoText.replace("Version ", "").trim();
 		await this.client.terminateApp("com.apple.Preferences");
+		versionsSeen[browserSpec] = versionText;
 		return versionText;
   }
   // Open the url in a new tab.
