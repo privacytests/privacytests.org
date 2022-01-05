@@ -1,5 +1,5 @@
 // imports
-const { existsSync, promises : fs, constants : fsConstants } = require('fs');
+const fs = require('fs');
 const path = require('path');
 const fileUrl = require('file-url');
 const open = require('open');
@@ -327,10 +327,11 @@ const dateString = (dateTime) => {
 // Creates the content for a page.
 const content = (results, jsonFilename, title, nightly, incognito) => {
   let { headers, body } = resultsToTable(results.all_tests, tableTitleHTML(title));
+  const issueNumber = fs.readFileSync("issue-number").toString().trim();  
   console.log(results.platform);
   return `
     <div class="banner" id="issueBanner">
-      <div class="left-heading">No. 11</div>
+      <div class="left-heading">No. ${issueNumber}</div>
       <div class="middle-heading">Open-source tests of web browser privacy.</div>
       <div class="right-heading">Updated ${dateString(results.timeStarted)}</div>
     </div>
@@ -369,13 +370,13 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
 };
 
 // Reads in a file and parses it to a JSON object.
-const readJSONFile = async (file) =>
-    JSON.parse(await fs.readFile(file));
+const readJSONFile = (file) =>
+    JSON.parse(fs.readFileSync(file));
 
 // Returns the path to the latest results file in
 // the given directory.
-const latestResultsFile = async (dir) => {
-  let files = await fs.readdir(dir);
+const latestResultsFile = (dir) => {
+  let files = fs.readdirSync(dir);
   let stem = files
       .filter(f => f.match("^(.*?)\.json$"))
       .sort()
@@ -426,8 +427,8 @@ const aggregateRepeatedTrials = (results) => {
   return resultsCopy;
 };
 
-const getMergedResults = async (dataFiles) => {
-  let resultItems = await Promise.all(dataFiles.map(readJSONFile));
+const getMergedResults = (dataFiles) => {
+  let resultItems = dataFiles.map(readJSONFile);
   let finalResults = resultItems[0];
   for (let resultItem of resultItems.slice(1)) {
     finalResults.all_tests = finalResults.all_tests.concat(resultItem.all_tests);
@@ -435,17 +436,15 @@ const getMergedResults = async (dataFiles) => {
   return finalResults;
 }
 
-const render = async ({ dataFiles, live, aggregate }) => {
-  const createPreviewImage = (await import('./prepare.mjs')).createPreviewImage;
-  console.log("aggregate:", aggregate);
-  let resultsFilesJSON = (dataFiles && dataFiles.length > 0) ? dataFiles : [await latestResultsFile("./out/results")];
+const renderPage = ({ dataFiles, live, aggregate }) => {
+  let resultsFilesJSON = (dataFiles && dataFiles.length > 0) ? dataFiles : [latestResultsFile("./out/results")];
   console.log(resultsFilesJSON);
-  let resultsFileHTMLLatest = "./out/results/latest.html";
-  let resultsFileHTML = resultsFilesJSON[0].replace(/\.json$/, ".html");
-  let resultsFilePreviewImage = resultsFileHTML.replace(".html", "-preview.png");
-//  fs.copyFile(resultsFile, "./out/results/" + path.basename(resultsFile), fsConstants.COPYFILE_EXCL);
+  const resultsFileHTMLLatest = "./out/results/latest.html";
+  const resultsFileHTML = resultsFilesJSON[0].replace(/\.json$/, ".html");
+  const resultsFilePreviewImage = resultsFileHTML.replace(".html", "-preview.png");
+//  fs.copyFile(resultsFile, "./out/results/" + path.basename(resultsFile), fs.constants.COPYFILE_EXCL);
   console.log(`Reading from raw results files: ${resultsFilesJSON}`);
-  let results = await getMergedResults(resultsFilesJSON);
+  let results = getMergedResults(resultsFilesJSON);
   console.log(results.all_tests.length);
   let processedResults = aggregate ? aggregateRepeatedTrials(results) : results;
 //  console.log(results.all_tests[0]);
@@ -462,20 +461,26 @@ const render = async ({ dataFiles, live, aggregate }) => {
   } else {
     tableTitle = incognito ? "Desktop private modes" : "Desktop Browsers";
   }
-  await fs.writeFile(resultsFileHTMLLatest, template.htmlPage({
+  fs.writeFileSync(resultsFileHTMLLatest, template.htmlPage({
     title: "PrivacyTests.org",
       content: content(processedResults, path.basename(resultsFilesJSON[0]), tableTitle, nightly, incognito),
     cssFiles: ["./template.css", "./inline.css"],
     previewImageUrl: path.basename(resultsFilePreviewImage)
   }));
   console.log(`Wrote out ${fileUrl(resultsFileHTMLLatest)}`);
-  await fs.copyFile(resultsFileHTMLLatest, resultsFileHTML);
+  fs.copyFileSync(resultsFileHTMLLatest, resultsFileHTML);
   console.log(`Wrote out ${fileUrl(resultsFileHTML)}`);
+  return { resultsFileHTML, resultsFilePreviewImage };
+};
+
+const render = async ({dataFiles, live, aggregate }) => {
+  const createPreviewImage = (await import('./prepare.mjs')).createPreviewImage;
+  const { resultsFileHTML, resultsFilePreviewImage} = renderPage({dataFiles, live, aggregate});
   createPreviewImage(resultsFileHTML, resultsFilePreviewImage);
   if (!live) {
     open(fileUrl(resultsFileHTML));
   }
-};
+}
 
 const main = async () => {
   let { _: dataFiles, live, aggregate } = minimist(process.argv.slice(2),
