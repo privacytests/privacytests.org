@@ -1,18 +1,19 @@
 const child_process = require('child_process');
 const robot = require("robotjs");
-const { existsSync } = require("fs");
+const fs = require("fs");
 const path = require("path");
+//const homedir = require('os').homedir();
 
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
-const execSync = command => {
+const execSync = (command, options) => {
   console.log(command);
-  return child_process.execSync(command);
+  return child_process.execSync(command, options);
 };
 
-const exec = command => {
+const exec = (command, options) => {
   console.log(command);
-  return child_process.exec(command);
+  return child_process.exec(command, options);
 };
 
 /*
@@ -54,6 +55,8 @@ const macOSdefaultBrowserSettings = {
     dataDir: "Firefox/Profiles/",
     createProfile: "-CreateProfile",
     profile: "pto",
+    //profileDir: "~/Library/Caches/Firefox/Profiles",
+    env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" }
   },
   librewolf: {
     name: "librewolf",
@@ -61,6 +64,8 @@ const macOSdefaultBrowserSettings = {
     dataDir: "LibreWolf/Profiles/",
     createProfile: "-CreateProfile",
     profile: "pto",
+    //profileDir: "~/Library/Caches/Firefox/Profiles",
+    env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" }
   },
   edge: {
     name: "Microsoft Edge",
@@ -117,7 +122,7 @@ const browserPath = ({browser, nightly}) => {
   const fullBinaryPath = `${appDirectory}/${appName}.app/${binaryPath}`;
   const executablePath1 = `${fullBinaryPath}/${binaryName}`;
   const executablePath2 = `${fullBinaryPath}/${appName}`;
-  if (existsSync(executablePath1)) {
+  if (fs.existsSync(executablePath1)) {
     return executablePath1;
   } else {
     return executablePath2;
@@ -152,9 +157,20 @@ class DesktopBrowser {
     console.log(this._defaults);
     const { createProfile, profile } = this._defaults;
     if (createProfile) {
-      execSync(`"${this._path}" ${createProfile} ${"pto"}`);
+      /*if (this._defaults.profileDir) {
+        const profileDir = this._defaults.profileDir.replace("~", homedir);
+        console.log(profileDir);
+        const files = fs.readdirSync(profileDir);
+        for (let file of files) {
+          console.log(file);
+          if (file.includes(`${profile}`)) {
+            fs.rmSync(path.join(profileDir, file), { recursive: true});
+          }
+        }
+      }*/
+      execSync(`"${this._path}" ${createProfile} ${profile}`);
     }
-    this._process = exec(this._command);
+    this._process = exec(this._command, { env: this._defaults.env });
     await sleepMs(this._defaults.postLaunchDelay ?? 0);
     await sleepMs(5000);
     if (this.incognito && this._defaults.incognitoCommand) {
