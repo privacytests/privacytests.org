@@ -2,7 +2,6 @@ const child_process = require('child_process');
 const robot = require("robotjs");
 const fs = require("fs");
 const path = require("path");
-//const homedir = require('os').homedir();
 
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
@@ -55,7 +54,6 @@ const macOSdefaultBrowserSettings = {
     dataDir: "Firefox/Profiles/",
     createProfile: "-CreateProfile",
     profile: "pto",
-    //profileDir: "~/Library/Caches/Firefox/Profiles",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" }
   },
   librewolf: {
@@ -64,7 +62,6 @@ const macOSdefaultBrowserSettings = {
     dataDir: "LibreWolf/Profiles/",
     createProfile: "-CreateProfile",
     profile: "pto",
-    //profileDir: "~/Library/Caches/Firefox/Profiles",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" }
   },
   edge: {
@@ -157,17 +154,6 @@ class DesktopBrowser {
     console.log(this._defaults);
     const { createProfile, profile } = this._defaults;
     if (createProfile) {
-      /*if (this._defaults.profileDir) {
-        const profileDir = this._defaults.profileDir.replace("~", homedir);
-        console.log(profileDir);
-        const files = fs.readdirSync(profileDir);
-        for (let file of files) {
-          console.log(file);
-          if (file.includes(`${profile}`)) {
-            fs.rmSync(path.join(profileDir, file), { recursive: true});
-          }
-        }
-      }*/
       execSync(`"${this._path}" ${createProfile} ${profile}`);
     }
     this._process = exec(this._command, { env: this._defaults.env });
