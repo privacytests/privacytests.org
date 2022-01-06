@@ -51,14 +51,14 @@ const macOSdefaultBrowserSettings = {
     nightlyName: "Firefox Nightly",
     privateFlag: "private-window",
     dataDir: "Firefox/Profiles/",
-    profile: "firefox_profile",
+    profileCommand: "-profile",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" }
   },
   librewolf: {
     name: "librewolf",
     privateFlag: "private-window",
     dataDir: "LibreWolf/Profiles/",
-    profile: "librewolf_profile",
+    profileCommand: "-profile",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" }
   },
   edge: {
@@ -116,21 +116,7 @@ const browserPath = ({browser, nightly}) => {
   const fullBinaryPath = `${appDirectory}/${appName}.app/${binaryPath}`;
   const executablePath1 = `${fullBinaryPath}/${binaryName}`;
   const executablePath2 = `${fullBinaryPath}/${appName}`;
-  if (fs.existsSync(executablePath1)) {
-    return executablePath1;
-  } else {
-    return executablePath2;
-  }
-};
-
-const browserCommand = ({browser, pathToBrowser, incognito, tor, appPath, profilePath }) => {
-  const { privateFlag, torFlag, useOpen } = macOSdefaultBrowserSettings[browser];
-  if (useOpen) {
-    return `open -a "${appPath}"`;
-  } else {
-    const flags = `${incognito ? "--" + privateFlag : ""} ${tor ? "--" + torFlag : ""} ${profilePath ? `-profile "${profilePath}"` : ""}`;
-    return `"${pathToBrowser}" ${flags}`.trim();
-  }
+  return fs.existsSync(executablePath1) ? executablePath1 : executablePath2;
 };
 
 // A Browser object represents a browser we run tests on.
@@ -138,16 +124,18 @@ class DesktopBrowser {
   constructor({browser, path, incognito, tor, nightly}) {
     Object.assign(this, {browser, incognito, tor, nightly});
     this._defaults = macOSdefaultBrowserSettings[browser];
-    this._path = path ?? browserPath({browser, nightly});
-    this._profilePath = this._defaults.profile ? joinDir(__dirname, this._defaults.profile) : undefined;
     this._version = undefined;
-    this._appPath = this._path.split(".app")[0] + ".app";
-    this._command = browserCommand({
-      browser, incognito, tor,
-      pathToBrowser: this._path, appPath: this._appPath, profilePath: this._profilePath
-    });
     this._keepAlivePingId = null;
+    this._path = path ?? browserPath({browser, nightly});
+    this._appPath = this._path.split(".app")[0] + ".app";
     this._appName = nightly ? this._defaults.nightlyName : this._defaults.name;
+    this._profilePath = this._defaults.profileCommand ? joinDir(__dirname, `${browser}_profile`) : undefined;
+    if (this._defaults.useOpen) {
+      this._command = `open -a "${this._appPath}"`;
+    } else {
+      const flags = `${incognito ? "--" + this._defaults.privateFlag : ""} ${tor ? "--" + this._defaults.torFlag : ""} ${this._profilePath ? `${this._defaults.profileCommand} "${this._profilePath}"` : ""}`;
+      this._command = `"${this._path}" ${flags}`.trim();
+    }
   }
   // Launch the browser.
   async launch() {
