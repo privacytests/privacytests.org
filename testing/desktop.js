@@ -1,8 +1,6 @@
 const child_process = require('child_process');
-const robot = require("robotjs");
 const fs = require("fs");
-const path = require("path");
-const homedir = require('os').homedir();
+const { join: joinDir } = require("path");
 
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
@@ -35,7 +33,7 @@ const macOSdefaultBrowserSettings = {
   },
   brave: {
     name: "Brave Browser",
-    nightly: "Brave Browser Nightly",
+    nightlyName: "Brave Browser Nightly",
     privateFlag: "incognito",
     torFlag: "tor",
     dataDir: "BraveSoftware/Brave-Browser",
@@ -43,54 +41,50 @@ const macOSdefaultBrowserSettings = {
   },
   chrome: {
     name: "Google Chrome",
-    nightly: "Google Chrome Canary",
+    nightlyName: "Google Chrome Canary",
     privateFlag: "incognito",
     dataDir: "Google/Chrome",
     nightlyDataDir: "Google/Chrome Canary"
   },
   firefox: {
     name: "firefox",
-    nightly: "Firefox Nightly",
+    nightlyName: "Firefox Nightly",
     privateFlag: "private-window",
     dataDir: "Firefox/Profiles/",
-    createProfile: "-CreateProfile",
-    profile: "pto",
-    profileDir: "~/Library/Caches/Firefox/Profiles",
+    profile: "firefox_profile",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" }
   },
   librewolf: {
     name: "librewolf",
     privateFlag: "private-window",
     dataDir: "LibreWolf/Profiles/",
-    createProfile: "-CreateProfile",
-    profile: "pto",
-    profileDir: "~/Library/Caches/Firefox/Profiles",
+    profile: "librewolf_profile",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" }
   },
   edge: {
     name: "Microsoft Edge",
-    nightly: "Microsoft Edge Canary",
+    nightlyName: "Microsoft Edge Canary",
     privateFlag: "inprivate",
     dataDir: "Microsoft Edge",
     nightlyDataDir: "Microsoft Edge Canary"
   },
   opera: {
     name: "Opera",
-    nightly: "Opera Developer",
+    nightlyName: "Opera Developer",
     privateFlag: "private",
     dataDir: "com.operasoftware.Opera",
     nightlyDataDir: "com.operasoftware.OperaDeveloper"
   },
   safari: {
     name: "Safari",
-    nightly: "Safari Technology Preview",
+    nightlyName: "Safari Technology Preview",
     useOpen: true,
     incognitoCommand: "osascript safariPBM.applescript",
     postLaunchDelay: 6000
   },
   tor: {
     name: "Tor Browser",
-    nightly: "Tor Browser Nightly",
+    nightlyName: "Tor Browser Nightly",
     binaryName: "firefox",
     useOpen: true,
     dataDir: "TorBrowser-Data",
@@ -105,7 +99,7 @@ const macOSdefaultBrowserSettings = {
   },
   vivaldi: {
     name: "Vivaldi",
-    nightly: "Vivaldi Snapshot",
+    nightlyName: "Vivaldi Snapshot",
     privateFlag: "incognito",
     dataDir: "Vivaldi",
     nightlyDataDir: "Vivaldi Snapshot",
@@ -114,11 +108,11 @@ const macOSdefaultBrowserSettings = {
   }
 };
 
-const browserPath = ({browser, nightly}) => {
+const browserPath = ({browser, nightlyName}) => {
   const { appDirectory, binaryPath } = macOSdefaultBrowserSettings.defaultValues;
   const browserValues = macOSdefaultBrowserSettings[browser];
   const binaryName = browserValues.binaryName ?? browserValues.name;
-  const appName = nightly ? browserValues.nightly : browserValues.name;
+  const appName = nightlyName ? browserValues.nightlyName : browserValues.name;
   const fullBinaryPath = `${appDirectory}/${appName}.app/${binaryPath}`;
   const executablePath1 = `${fullBinaryPath}/${binaryName}`;
   const executablePath2 = `${fullBinaryPath}/${appName}`;
@@ -129,25 +123,13 @@ const browserPath = ({browser, nightly}) => {
   }
 };
 
-const browserCommand = ({browser, path, incognito, tor, appPath }) => {
-  const { privateFlag, torFlag, useOpen, profile } = macOSdefaultBrowserSettings[browser];
+const browserCommand = ({browser, pathToBrowser, incognito, tor, appPath, profilePath }) => {
+  const { privateFlag, torFlag, useOpen } = macOSdefaultBrowserSettings[browser];
   if (useOpen) {
     return `open -a "${appPath}"`;
   } else {
-    const flags = `${incognito ? "--" + privateFlag : ""} ${tor ? "--" + torFlag : ""} ${profile ? "-P " + profile : ""}`;
-    return `"${path}" ${flags}`.trim();
-  }
-};
-
-// Delete profiles we created in profileDir.
-const deleteOldProfiles = (profileDir, profile) => {
-  profileDirFull = profileDir.replace("~", homedir);
-  const files = fs.readdirSync(profileDirFull);
-  for (let file of files) {
-    if (file.includes(`${profile}`)) {
-      console.log(`Deleting ${profileDirFull}/${file}`);
-      fs.rmSync(path.join(profileDirFull, file), { recursive: true });
-    }
+    const flags = `${incognito ? "--" + privateFlag : ""} ${tor ? "--" + torFlag : ""} ${profilePath ? `-profile "${profilePath}"` : ""}`;
+    return `"${pathToBrowser}" ${flags}`.trim();
   }
 };
 
@@ -157,9 +139,13 @@ class DesktopBrowser {
     Object.assign(this, {browser, incognito, tor, nightly});
     this._defaults = macOSdefaultBrowserSettings[browser];
     this._path = path ?? browserPath({browser, nightly});
+    this._profilePath = this._defaults.profile ? joinDir(__dirname, this._defaults.profile) : undefined;
     this._version = undefined;
     this._appPath = this._path.split(".app")[0] + ".app";
-    this._command = browserCommand({browser, path: this._path, incognito, tor, appPath: this._appPath});
+    this._command = browserCommand({
+      browser, incognito, tor,
+      pathToBrowser: this._path, appPath: this._appPath, profilePath: this._profilePath
+    });
     this._keepAlivePingId = null;
     this._appName = nightly ? this._defaults.nightly : this._defaults.name;
   }
@@ -167,12 +153,10 @@ class DesktopBrowser {
   async launch() {
     await sleepMs(this._defaults.preLaunchDelay ?? 0);
     console.log(this._defaults);
-    const { createProfile, profile, profileDir } = this._defaults;
-    if (createProfile) {
-      if (profileDir) {
-        deleteOldProfiles(profileDir, profile);
-      }
-      execSync(`"${this._path}" ${createProfile} ${profile}`);
+    if (this._profilePath) {
+      // Delete old profiles if they exist.
+      console.log(`Deleting any old ${this._profilePath}`);
+      fs.rmSync(this._profilePath, { recursive: true, force: true });
     }
     this._process = exec(this._command, { env: this._defaults.env });
     await sleepMs(this._defaults.postLaunchDelay ?? 0);
