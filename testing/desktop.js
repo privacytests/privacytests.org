@@ -108,11 +108,11 @@ const macOSdefaultBrowserSettings = {
   }
 };
 
-const browserPath = ({browser, nightlyName}) => {
+const browserPath = ({browser, nightly}) => {
   const { appDirectory, binaryPath } = macOSdefaultBrowserSettings.defaultValues;
   const browserValues = macOSdefaultBrowserSettings[browser];
   const binaryName = browserValues.binaryName ?? browserValues.name;
-  const appName = nightlyName ? browserValues.nightlyName : browserValues.name;
+  const appName = nightly ? browserValues.nightlyName : browserValues.name;
   const fullBinaryPath = `${appDirectory}/${appName}.app/${binaryPath}`;
   const executablePath1 = `${fullBinaryPath}/${binaryName}`;
   const executablePath2 = `${fullBinaryPath}/${appName}`;
@@ -147,7 +147,7 @@ class DesktopBrowser {
       pathToBrowser: this._path, appPath: this._appPath, profilePath: this._profilePath
     });
     this._keepAlivePingId = null;
-    this._appName = nightly ? this._defaults.nightly : this._defaults.name;
+    this._appName = nightly ? this._defaults.nightlyName : this._defaults.name;
   }
   // Launch the browser.
   async launch() {
