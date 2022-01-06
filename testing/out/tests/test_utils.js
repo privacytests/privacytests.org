@@ -28,9 +28,15 @@ let queryParams = (urlString) => {
 
 // Remove any lingering service workers.
 const removeAllServiceWorkers = async () => {
-  let registrations = await navigator.serviceWorker.getRegistrations();
-  for (const registration of registrations) {
-    registration.unregister()
+  if (navigator.serviceWorker) {
+    try {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (const registration of registrations) {
+        registration.unregister()
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 };
 
