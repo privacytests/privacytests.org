@@ -14,6 +14,8 @@ const exec = (command, options) => {
   return child_process.exec(command, options);
 };
 
+const chromiumProfileFlags = "--no-first-run --no-default-browser-check --user-data-dir=";
+
 /*
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --incognito "https://example.com"
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --tor "https://example.com"
@@ -37,28 +39,30 @@ const macOSdefaultBrowserSettings = {
     privateFlag: "incognito",
     torFlag: "tor",
     dataDir: "BraveSoftware/Brave-Browser",
-    nightlyDataDir: "BraveSoftware/Brave-Browser-Nightly"
+    nightlyDataDir: "BraveSoftware/Brave-Browser-Nightly",
+//    profileCommand: chromiumProfileFlags,
   },
   chrome: {
     name: "Google Chrome",
     nightlyName: "Google Chrome Canary",
     privateFlag: "incognito",
     dataDir: "Google/Chrome",
-    nightlyDataDir: "Google/Chrome Canary"
+    nightlyDataDir: "Google/Chrome Canary",
+//    profileCommand: chromiumProfileFlags,
   },
   firefox: {
     name: "firefox",
     nightlyName: "Firefox Nightly",
     privateFlag: "private-window",
     dataDir: "Firefox/Profiles/",
-    profileCommand: "-profile",
+    profileCommand: "-profile ",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" }
   },
   librewolf: {
     name: "librewolf",
     privateFlag: "private-window",
     dataDir: "LibreWolf/Profiles/",
-    profileCommand: "-profile",
+    profileCommand: "-profile ",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" }
   },
   edge: {
@@ -66,14 +70,16 @@ const macOSdefaultBrowserSettings = {
     nightlyName: "Microsoft Edge Canary",
     privateFlag: "inprivate",
     dataDir: "Microsoft Edge",
-    nightlyDataDir: "Microsoft Edge Canary"
+    nightlyDataDir: "Microsoft Edge Canary",
+//    profileCommand: chromiumProfileFlags,
   },
   opera: {
     name: "Opera",
     nightlyName: "Opera Developer",
     privateFlag: "private",
     dataDir: "com.operasoftware.Opera",
-    nightlyDataDir: "com.operasoftware.OperaDeveloper"
+    nightlyDataDir: "com.operasoftware.OperaDeveloper",
+//    profileCommand: chromiumProfileFlags,
   },
   safari: {
     name: "Safari",
@@ -96,6 +102,7 @@ const macOSdefaultBrowserSettings = {
     binaryName: "Chromium",
     privateFlag: "incognito",
     dataDir: "Google/Chrome",
+//    profileCommand: chromiumProfileFlags,
   },
   vivaldi: {
     name: "Vivaldi",
@@ -104,7 +111,8 @@ const macOSdefaultBrowserSettings = {
     dataDir: "Vivaldi",
     nightlyDataDir: "Vivaldi Snapshot",
     preLaunchDelay: 10000,
-    postLaunchDelay: 10000
+    postLaunchDelay: 10000,
+//    profileCommand: chromiumProfileFlags,
   }
 };
 
@@ -133,7 +141,7 @@ class DesktopBrowser {
     if (this._defaults.useOpen) {
       this._command = `open -a "${this._appPath}"`;
     } else {
-      const flags = `${incognito ? "--" + this._defaults.privateFlag : ""} ${tor ? "--" + this._defaults.torFlag : ""} ${this._profilePath ? `${this._defaults.profileCommand} "${this._profilePath}"` : ""}`;
+      const flags = `${incognito ? "--" + this._defaults.privateFlag : ""} ${tor ? "--" + this._defaults.torFlag : ""} ${this._profilePath ? `${this._defaults.profileCommand}"${this._profilePath}"` : ""}`;
       this._command = `"${this._path}" ${flags}`.trim();
     }
   }
