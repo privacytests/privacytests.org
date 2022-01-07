@@ -41,6 +41,7 @@ const macOSdefaultBrowserSettings = {
     dataDir: "BraveSoftware/Brave-Browser",
     nightlyDataDir: "BraveSoftware/Brave-Browser-Nightly",
 //    profileCommand: chromiumProfileFlags,
+    update: "brave://settings/help",
   },
   chrome: {
     name: "Google Chrome",
@@ -49,6 +50,7 @@ const macOSdefaultBrowserSettings = {
     dataDir: "Google/Chrome",
     nightlyDataDir: "Google/Chrome Canary",
 //    profileCommand: chromiumProfileFlags,
+    update: "chrome://settings/help",
   },
   firefox: {
     name: "firefox",
@@ -56,14 +58,16 @@ const macOSdefaultBrowserSettings = {
     privateFlag: "private-window",
     dataDir: "Firefox/Profiles/",
     profileCommand: "-profile ",
-    env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" }
+    env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
+    update: "chrome://browser/content/aboutDialog.xhtml",
   },
   librewolf: {
     name: "librewolf",
     privateFlag: "private-window",
     dataDir: "LibreWolf/Profiles/",
     profileCommand: "-profile ",
-    env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" }
+    env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
+    update: "chrome://browser/content/aboutDialog.xhtml",
   },
   edge: {
     name: "Microsoft Edge",
@@ -72,7 +76,8 @@ const macOSdefaultBrowserSettings = {
     dataDir: "Microsoft Edge",
     nightlyDataDir: "Microsoft Edge Canary",
 //    profileCommand: chromiumProfileFlags,
-  },
+    update: "edge://settings/help",
+},
   opera: {
     name: "Opera",
     nightlyName: "Opera Developer",
@@ -80,6 +85,7 @@ const macOSdefaultBrowserSettings = {
     dataDir: "com.operasoftware.Opera",
     nightlyDataDir: "com.operasoftware.OperaDeveloper",
 //    profileCommand: chromiumProfileFlags,
+    update: "opera://settings/help",
   },
   safari: {
     name: "Safari",
@@ -95,7 +101,8 @@ const macOSdefaultBrowserSettings = {
     useOpen: true,
     dataDir: "TorBrowser-Data",
     preLaunchDelay: 10000,
-    postLaunchDelay: 10000
+    postLaunchDelay: 10000,
+    update: "chrome://browser/content/aboutDialog.xhtml",
   },
   ungoogled: {
     name: "Ungoogled Chromium",
@@ -103,6 +110,7 @@ const macOSdefaultBrowserSettings = {
     privateFlag: "incognito",
     dataDir: "Google/Chrome",
 //    profileCommand: chromiumProfileFlags,
+    update: "chrome://settings/help",
   },
   vivaldi: {
     name: "Vivaldi",
