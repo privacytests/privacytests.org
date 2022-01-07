@@ -26,12 +26,29 @@ let queryParams = (urlString) => {
   return Object.fromEntries(searchParams.entries());
 };
 
+// Remove any lingering service workers.
+const removeAllServiceWorkers = async () => {
+  if (navigator.serviceWorker) {
+    try {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (const registration of registrations) {
+        registration.unregister()
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+};
+
 export let sleepMs = (timeMs) => new Promise(
   (resolve, reject) => setTimeout(resolve, timeMs)
 );
 
 export let runAllTests = async (tests) => {
   let params = queryParams(document.URL);
+  if (params["mode"] === "write") {
+    await removeAllServiceWorkers();
+  }
   let results = await runTests(tests, params["mode"], params);
   console.log("results", results);
   if (window.location !== parent.location) {

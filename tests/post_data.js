@@ -3,10 +3,11 @@
 // that sessionId.
 const postData = async (results, category) => {
   const urlParams = new URLSearchParams(window.location.search);
+  const sessionId = urlParams.get("sessionId");
+  document.body.innerHTML += "<br><pre>Results: " + JSON.stringify({sessionId, results}, null, 2) + "</pre>";
   if (!urlParams.has("sessionId")) {
     return;
   }
-  const sessionId = urlParams.get("sessionId");
   console.log("posting", {sessionId, results});
   let response = await fetch("https://results.privacytests.org/post", {
     method: 'POST',

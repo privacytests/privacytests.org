@@ -39,8 +39,16 @@ const test_hsts = async () => {
   const http = (event.type === "error");
   const passed = http;
   const result = http ? "Used http" : "Upgraded to https";
+  // Create a result object that conforms to the supercookies style
   return {
-    description, passed, result
+    description,
+    passed,
+    unsupported: false,
+    testFailed: false,
+    readDifferentFirstParty: result,
+    readSameFirstParty: "not tested",
+    write: "set HSTS flag",
+    read: "read HSTS flag"
   }
 };
 
