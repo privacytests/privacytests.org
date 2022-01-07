@@ -62,6 +62,7 @@ const browserInfo = {
   yandex: {
 		name: "Yandex",
     bundleId: "ru.yandex.mobile.search",
+		startupClick: "Fix problems",
 		urlBarClick: "Address bar",
 		urlBarClick2: "Enter a search query or URL",
 		urlBarClear: "Clear the input field",
@@ -114,6 +115,13 @@ class iOSBrowser {
     this.client = client;
 		if (this.postLaunchDelay) {
 			await sleepMs(this.postLaunchDelay);
+		}
+		if (this.startupClick) {
+			try {
+				await clickElementWithName(this.client, this.startupClick);
+			} catch (e) {
+				console.log(e);
+			}
 		}
   }
   // Get the browser version.
