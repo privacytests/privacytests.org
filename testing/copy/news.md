@@ -1,6 +1,13 @@
 # News
 
-## [Issue 11](/): 2021-12-31
+## [Issue 12](/): 2021-12-31
+
+This week, new desktop browser versions include:
+* Brave 1.34
+* Chrome 97.0
+* Edge 97.0
+
+## [Issue 11](/archive/issue10.1/): 2021-12-31
 
 ### New browsers
 
