@@ -54,6 +54,7 @@ app.get('/resource', (req, res) => {
   }
   console.log(`Requested: ${req.url} ; Count: ${countMap[key]}`);
   res.set({
+    'Access-Control-Allow-Origin': '*',
     "Cache-Control": "public, max-age=604800, immutable"
   });
   res.setHeader('content-type', mimeTypes[type]);
