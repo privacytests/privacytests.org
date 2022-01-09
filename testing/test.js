@@ -30,7 +30,7 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // Wraps a promise. If the promise resolves before timeMs, then
 // resolves to the promise's result. Otherwise rejects with a timeout error.
 const deadlinePromise = async (name, promise, timeMs) => {
-  const timeoutId;
+  let timeoutId;
   const timeoutPromise = new Promise((_r, rej) => {
     timeoutId = setTimeout(() => rej(`${name} timed out after ${timeMs/1000} s.`), timeMs);
   });
