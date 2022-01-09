@@ -1,6 +1,6 @@
 # News
 
-## [Issue 12](/): 2021-12-31
+## [Issue 12](/): 2021-01-07
 
 This week, new desktop browser versions include:
 * Brave 1.34
@@ -11,7 +11,7 @@ This week, new desktop browser versions include:
 
 ### New browsers
 
-This week we have added the privacy-oriented Bromite browser to our Android tests, and Ungoogle Chromium to our desktop tests.
+This week we have added the privacy-oriented Bromite browser to our Android tests, and Ungoogled Chromium to our desktop tests.
 
 ## [Issue 10.1](archive/issue10.1/): 2021-12-26
 
