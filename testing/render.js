@@ -397,7 +397,7 @@ const resultsKeys = [
 const aggregateRepeatedTrials = (results) => {
   let aggregatedResults = new Map();
   for (let test of results.all_tests) {
-    if (test.testResults) {
+    if (test && test.testResults) {
       let key = resultsToDescription(test);
       //console.log(key);
       if (aggregatedResults.has(key)) {
