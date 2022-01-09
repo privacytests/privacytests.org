@@ -32,6 +32,8 @@ These tests will be run on a regular basis, to monitor the privacy improvements 
 
 ## Work in progress
 
-This project is a work in progress and is under active development! I plan to cover more browsers and more tracking vulnerabilities in the future. [Feedback](https://twitter.com/privacytests), [bug reports](https://github.com/arthuredelstein/privacytests.org/issues) and [pull requests](https://github.com/arthuredelstein/privacytests.org/pulls) are welcome.
+This project is a work in progress and is under active development! I plan to cover more browsers and more tracking vulnerabilities in the future.
+
+I want to hear from you! All kinds of feedback: comments, suggestions, critiques and questions are welcome. You can contact me via email (contact@privacytests.org), [Twitter](https://twitter.com/privacytests), or [github](https://github.com/arthuredelstein/privacytests.org/issues).
 
 *This website and the browser privacy tests are an independent project by Arthur Edelstein.*
