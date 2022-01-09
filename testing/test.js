@@ -29,9 +29,11 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Wraps a promise. If the promise resolves before timeMs, then
 // resolves to the promise's result. Otherwise rejects with a timeout error.
-const deadlinePromise = async (promise, timeMs) => {
-  let timeoutId;
-  const timeoutPromise = new Promise((_r, rej) => { timeoutId = setTimeout(() => rej("Timed out"), timeMs); });
+const deadlinePromise = async (name, promise, timeMs) => {
+  const timeoutId;
+  const timeoutPromise = new Promise((_r, rej) => {
+    timeoutId = setTimeout(() => rej(`${name} timed out after ${timeMs/1000} s.`), timeMs);
+  });
   const result = await Promise.race([promise, timeoutPromise]);
   clearTimeout(timeoutId);
   return result;
@@ -96,7 +98,7 @@ const restoreProxies = () => {
   }
 };
 
-// ## Websocket setup
+// ## Websocket utilities
 
 // Set up websocket.
 const createWebsocket = async () => {
@@ -203,7 +205,7 @@ const runTests = async (browserObject) => {
     await browserObject.openUrl(`http://insecure.arthuredelstein.net/insecure.html?sessionId=${sessionId}`);
     let insecureResult, insecurePassed;
     try {
-      insecureResult = await deadlinePromise(nextValue(websocket), 8000);
+      insecureResult = await deadlinePromise("insecure test", nextValue(websocket), 8000);
       insecurePassed = false;
     } catch (e) {
       insecureResult =  { "Insecure website": { passed: true, result: "Insecure website never loaded" } };
@@ -247,7 +249,7 @@ const runTestsBatch = async (browserList, { shouldQuit, android, iOS } = { shoul
     browserObject._websocket = await createWebsocket();
     try {
       await browserObject.launch();
-      const testResults = await deadlinePromise(runTests(browserObject), 300000);
+      const testResults = await deadlinePromise(`${browser} tests`, runTests(browserObject), 300000);
       all_tests.push({
         browser, incognito, tor, nightly,
         testResults, timeStarted,
@@ -259,7 +261,11 @@ const runTestsBatch = async (browserList, { shouldQuit, android, iOS } = { shoul
     }
     if (shouldQuit) {
       await destroyWebSocket(browserObject._websocket);
-      await browserObject.kill();
+      try {
+        await browserObject.kill();
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
   const timeStopped = new Date().toISOString();
@@ -292,18 +298,6 @@ const writeDataSync = (filename, data) => {
 // ## Config files
 
 // Takes a list of browser configs, and repeats or removes them as needed.
-const expandBrowserList = (browserList, repeat = 1) => {
-  let results = [];
-  for (let browserSpec of browserList) {
-    if (!browserSpec.disable) {
-      const config2 = deepCopy(browserSpec);
-      delete config2["repeat"];
-      results = [].concat(results, Array((browserSpec.repeat ?? 1) * (repeat ?? 1)).fill(config2));
-    }
-  }
-  return results;
-};
-
 // Read a YAML file from disk.
 const readYAMLFile = (file) => {
   const fileContents = fs.readFileSync(file, 'utf8');
@@ -323,7 +317,7 @@ const readConfig = () => {
   return Object.assign({}, defaultConfig, yamlConfig, commandLineConfig);
 };
 
-const configToExpandedBrowserList = (config) => {
+const configToBrowserList = (config) => {
   let browserList = [];
   for (const browser of config.browsers) {
     browserList.push({
@@ -334,7 +328,32 @@ const configToExpandedBrowserList = (config) => {
       ios: config.ios ? true : false,
     })
   }
+  return browserList;
+};
+
+const expandBrowserList = (browserList, repeat = 1) => {
+  let results = [];
+  for (let browserSpec of browserList) {
+    if (!browserSpec.disable) {
+      const config2 = deepCopy(browserSpec);
+      delete config2["repeat"];
+      results = [].concat(results, Array((browserSpec.repeat ?? 1) * (repeat ?? 1)).fill(config2));
+    }
+  }
+  return results;
+};
+
+const configToExpandedBrowserList = (config) => {
+  const browserList = configToBrowserList(config);
   return expandBrowserList(browserList, config.repeat);
+};
+
+const updateAll = async (config) => {
+  const browserList = configToBrowserList(config);
+  await Promise.all(browserList.map(async browserSpec => {
+    const browserObject = new DesktopBrowser(browserSpec);
+    await browserObject.update();
+  }));
 };
 
 // ## Main program
@@ -349,6 +368,9 @@ const main = async () => {
     // Read config file and flags from command line
     const config = readConfig();
     console.log({config});
+    if (config.update) {
+      await updateAll(config);
+    }
     const expandedBrowserList = configToExpandedBrowserList(config);
     console.log("List of browsers to run:", expandedBrowserList);
     const testResults = await runTestsBatch(expandedBrowserList,
