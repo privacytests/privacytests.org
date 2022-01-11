@@ -11,6 +11,7 @@ let countMaps = {
   "page": {},
   "preload": {},
   "prefetch": {},
+  "xhr": {},
 };
 
 let blobs = {
@@ -25,6 +26,7 @@ let resourceFiles = {
   "page": "page.html",
   "preload": "page.html",
   "prefetch": "page.html",
+  "xhr": "page.html",
 };
 
 let fileGenerators = {
