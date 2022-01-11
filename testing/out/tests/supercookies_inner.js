@@ -146,7 +146,7 @@ let tests = {
       req.setRequestHeader("Cache-Control", "max-age=604800");
       req.send();
       await loadPromise;
-      let countResponse = await fetch(testURI("ctr", "fetch", key),
+      let countResponse = await fetch(testURI("ctr", "xhr", key),
                                       {cache: "reload"});
       return (await countResponse.text()).trim();
     }
