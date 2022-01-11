@@ -194,6 +194,7 @@ class iOSBrowser {
   }
   // Clean up and close the browser.
   async kill() {
+		await this.client.terminateApp(this.bundleId);
 		await this.client.deleteSession();
   }
   async clickContent() {
