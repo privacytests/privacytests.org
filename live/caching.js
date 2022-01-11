@@ -42,6 +42,7 @@ let mimeTypes = {
   "preload": "text/html",
   "prefetch": "text/html",
   "css": "text/css",
+  "xhr": "text/html",
 };
 
 app.get('/', (req, res) => res.send('Hello World!'));
