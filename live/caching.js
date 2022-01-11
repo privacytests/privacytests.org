@@ -11,6 +11,7 @@ let countMaps = {
   "page": {},
   "preload": {},
   "prefetch": {},
+  "xhr": {},
 };
 
 let blobs = {
@@ -25,6 +26,7 @@ let resourceFiles = {
   "page": "page.html",
   "preload": "page.html",
   "prefetch": "page.html",
+  "xhr": "page.html",
 };
 
 let fileGenerators = {
@@ -40,6 +42,7 @@ let mimeTypes = {
   "preload": "text/html",
   "prefetch": "text/html",
   "css": "text/css",
+  "xhr": "text/html",
 };
 
 app.get('/', (req, res) => res.send('Hello World!'));
