@@ -41,7 +41,7 @@ const macOSdefaultBrowserSettings = {
     dataDir: "BraveSoftware/Brave-Browser",
     nightlyDataDir: "BraveSoftware/Brave-Browser-Nightly",
 //    profileCommand: chromiumProfileFlags,
-    update: "brave://settings/help",
+    update: ["Brave", "About Brave"],
   },
   chrome: {
     name: "Google Chrome",
@@ -50,7 +50,7 @@ const macOSdefaultBrowserSettings = {
     dataDir: "Google/Chrome",
     nightlyDataDir: "Google/Chrome Canary",
 //    profileCommand: chromiumProfileFlags,
-    update: "chrome://settings/help",
+    update: ["Chrome", "About Google Chrome"],
   },
   firefox: {
     name: "firefox",
@@ -59,7 +59,7 @@ const macOSdefaultBrowserSettings = {
     dataDir: "Firefox/Profiles/",
     profileCommand: "-profile ",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
-    update: "chrome://browser/content/aboutDialog.xhtml",
+    update: ["Firefox", "About Firefox"],
   },
   librewolf: {
     name: "librewolf",
@@ -67,7 +67,6 @@ const macOSdefaultBrowserSettings = {
     dataDir: "LibreWolf/Profiles/",
     profileCommand: "-profile ",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
-    update: "chrome://browser/content/aboutDialog.xhtml",
   },
   edge: {
     name: "Microsoft Edge",
@@ -76,7 +75,7 @@ const macOSdefaultBrowserSettings = {
     dataDir: "Microsoft Edge",
     nightlyDataDir: "Microsoft Edge Canary",
 //    profileCommand: chromiumProfileFlags,
-    update: "edge://settings/help",
+    update: ["Microsoft Edge", "About Microsoft Edge"],
 },
   opera: {
     name: "Opera",
@@ -85,7 +84,7 @@ const macOSdefaultBrowserSettings = {
     dataDir: "com.operasoftware.Opera",
     nightlyDataDir: "com.operasoftware.OperaDeveloper",
 //    profileCommand: chromiumProfileFlags,
-    update: "opera://settings/help",
+    update: ["Opera", "About Opera"],
   },
   safari: {
     name: "Safari",
@@ -102,7 +101,6 @@ const macOSdefaultBrowserSettings = {
     dataDir: "TorBrowser-Data",
     preLaunchDelay: 10000,
     postLaunchDelay: 10000,
-    update: "chrome://browser/content/aboutDialog.xhtml",
   },
   ungoogled: {
     name: "Ungoogled Chromium",
@@ -110,7 +108,6 @@ const macOSdefaultBrowserSettings = {
     privateFlag: "incognito",
     dataDir: "Google/Chrome",
 //    profileCommand: chromiumProfileFlags,
-    update: "chrome://settings/help",
   },
   vivaldi: {
     name: "Vivaldi",
@@ -121,7 +118,9 @@ const macOSdefaultBrowserSettings = {
     preLaunchDelay: 10000,
     postLaunchDelay: 10000,
 //    profileCommand: chromiumProfileFlags,
-  }
+// Assumes Vivaldi is on automatic updates:
+    update: ["Vivaldi", "About Vivaldi"],
+}
 };
 
 const browserPath = ({browser, nightly}) => {
@@ -201,6 +200,17 @@ class DesktopBrowser {
       await sleepMs(5000);
     } catch (e) {
       console.log(e);
+    }
+  }
+  // Update the browser to the latest version.
+  async update() {
+    if (this._defaults.update) {
+      await this.launch();
+      execSync(`osascript updateBrowser.applescript "${this._defaults.update[0]}" "${this._defaults.update[1]}"`);
+      await this.openUrl(this._defaults.updateURL);
+      // Wait 5 minutes for the update binary to download
+      await sleepMs(300000);
+      await this.kill();
     }
   }
 }

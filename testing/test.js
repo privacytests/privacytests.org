@@ -348,15 +348,14 @@ const configToExpandedBrowserList = (config) => {
   return expandBrowserList(browserList, config.repeat);
 };
 
-/*
 const updateAll = async (config) => {
   const browserList = configToBrowserList(config);
   await Promise.all(browserList.map(async browserSpec => {
     const browserObject = new DesktopBrowser(browserSpec);
+    console.log(browserObject);
     await browserObject.update();
   }));
 };
-*/
 
 // ## Main program
 
@@ -370,11 +369,9 @@ const main = async () => {
     // Read config file and flags from command line
     const config = readConfig();
     console.log({config});
-    /*  
     if (config.update) {
       await updateAll(config);
     }
-    */
     const expandedBrowserList = configToExpandedBrowserList(config);
     console.log("List of browsers to run:", expandedBrowserList);
     const testResults = await runTestsBatch(expandedBrowserList,
