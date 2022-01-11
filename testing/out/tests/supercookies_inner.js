@@ -134,7 +134,6 @@ let tests = {
       const req = new XMLHttpRequest();
       const loadPromise = new Promise(resolve => req.addEventListener("load", resolve));
       req.open("GET", testURI("resource", "xhr", key));
-      req.setRequestHeader("Cache-Control", "max-age=604800");
       req.send();
       await loadPromise;
       return key;
@@ -143,7 +142,6 @@ let tests = {
       const req = new XMLHttpRequest();
       const loadPromise = new Promise(resolve => req.addEventListener("load", resolve));
       req.open("GET", testURI("resource", "xhr", key));
-      req.setRequestHeader("Cache-Control", "max-age=604800");
       req.send();
       await loadPromise;
       let countResponse = await fetch(testURI("ctr", "xhr", key),
