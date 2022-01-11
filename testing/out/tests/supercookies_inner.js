@@ -130,24 +130,24 @@ let tests = {
   },
   "XMLHttpRequest cache": {
     description: "Similar to the newer Fetch API, any resource received may be cached by the browser. The cache is potentially vulnerable to cross-site tracking attack.",
-    write: () => new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-      xhr.addEventListener("load", () => resolve(
-        {"secret": xhr.getResponseHeader("date")}));
-      xhr.open("GET", "https://arthuredelstein.net");
-      xhr.setRequestHeader("Cache-Control", "no-cache");
-      xhr.send();
-      setTimeout(() => reject({message: "XHR: no response"}), 3000);
-    }),
-    read: () => new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-      xhr.addEventListener("load", () => resolve(
-        xhr.getResponseHeader("date")));
-      xhr.open("GET", "https://arthuredelstein.net");
-      xhr.setRequestHeader("Cache-Control", "max-age");
-      xhr.send();
-      setTimeout(() => reject({message: "XHR: no response"}), 3000);
-    })
+    write: async (key) => {
+      const req = new XMLHttpRequest();
+      const loadPromise = new Promise(resolve => req.addEventListener("load", resolve));
+      req.open("GET", testURI("resource", "xhr", key));
+      req.send();
+      await loadPromise;
+      return key;
+    },
+    read: async (key) => {
+      const req = new XMLHttpRequest();
+      const loadPromise = new Promise(resolve => req.addEventListener("load", resolve));
+      req.open("GET", testURI("resource", "xhr", key));
+      req.send();
+      await loadPromise;
+      let countResponse = await fetch(testURI("ctr", "xhr", key),
+                                      {cache: "reload"});
+      return (await countResponse.text()).trim();
+    }
   },
   "iframe cache": {
     description: "An iframe is an element in a web page than allows websites to embed a second web page. Caching of this web page could be abused for cross-site tracking.",
