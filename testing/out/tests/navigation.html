@@ -6,6 +6,7 @@
     <meta name="referrer" content="origin">
   </head>
   <body>
+    <iframe id="inner"/></iframe>
     <script src="./post_data.js"></script>
     <script>
      const searchParams = new URLSearchParams(window.location.search);
@@ -15,10 +16,9 @@
                           location.hostname === "127.0.0.1" ||
                           location.hostname === "")
                        ? "" : "https://arthuredelstein.net/test-pages";
-     const iframe = document.createElement("iframe");
-     document.body.appendChild(iframe);
      addEventListener("message", async ({data}) => {
        console.log("navigation.html received message:", data);
+       const iframe = document.getElementById("inner");
        if (data["write window.name"]) {
          window.name = data["write window.name"];
        } else if (data["read window.name"]) {
@@ -32,6 +32,7 @@
          await postDataAndCarryOn(data, `navigation_${mode}_${thirdparty}`);
        }
      }, false);
+     const iframe = document.getElementById("inner");
      iframe.src = `${iframe_root}/navigation_inner.html${window.location.search}`;
     </script>
   </body>
