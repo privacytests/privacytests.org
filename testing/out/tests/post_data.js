@@ -2,7 +2,8 @@
 // and sends the results to results.privacytests.org/post under
 // that sessionId.
 
-const appendData = (name, data) => {
+const showData = (name, data) => {
+  console.log(name, data);
   const dataDiv = document.createElement("div");
   dataDiv.style = "white-space: pre; font-family: monospace;";
   dataDiv.innerText = `${name}: ` + JSON.stringify(data, null, 2);
@@ -12,7 +13,7 @@ const appendData = (name, data) => {
 const postData = async (results, category) => {
   const urlParams = new URLSearchParams(window.location.search);
   const sessionId = urlParams.get("sessionId");
-  appendData("posted", {sessionId, results});
+  showData("posted", {sessionId, results});
   if (!urlParams.has("sessionId")) {
     return;
   }
@@ -30,7 +31,7 @@ const postData = async (results, category) => {
 
 const postDataAndCarryOn = async (results, category) => {
   const response = await postData(results, category);
-  appendData("response", response);
+  showData("response", response);
   if (!response) {
     return;
   }
