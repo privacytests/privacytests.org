@@ -30,16 +30,20 @@ const postData = async (results, category) => {
 };
 
 const postDataAndCarryOn = async (results, category) => {
-  const response = await postData(results, category);
-  showData("response", response);
-  if (!response) {
-    return;
-  }
-  const { newTabUrl, navigateUrl } = response;
-  if (newTabUrl) {
-    window.open(newTabUrl, "_blank");
-  }
-  if (navigateUrl) {
-    window.location.href = navigateUrl;
+  try {
+    const response = await postData(results, category);
+    showData("response", response);
+    if (!response) {
+      return;
+    }
+    const { newTabUrl, navigateUrl } = response;
+    if (newTabUrl) {
+      window.open(newTabUrl, "_blank");
+    }
+    if (navigateUrl) {
+      window.location.href = navigateUrl;
+    }
+  } catch (e) {
+    showData("error", { message: e.toString(), stack: e.stack });
   }
 };

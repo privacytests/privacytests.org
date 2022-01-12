@@ -108,7 +108,6 @@
          passed = true;
          console.log(url, err);
        }
-       document.body.innerHTML += `<br>${url}: ${passed ? "passed" : "failed"}`;
        return passed;
      };
 
@@ -119,14 +118,7 @@
          const description = `Tests whether the browser blocks the page from loading the tracker at ${url}`;
          results[name] = { url, passed, description };
        }
-       console.log(results);
-       document.body.innerHTML += `<br>Done.<br><br>${JSON.stringify(results)}`;
-       try {
-         await postDataAndCarryOn(results, "trackers");
-       } catch (e) {
-         document.body.innerHTML += `${e.stack}`;
-       }
-       document.body.innerHTML += "<br> postDataAndCarryOn complete.";
+       await postDataAndCarryOn(results, "trackers");
      };
      runTest();
     </script>
