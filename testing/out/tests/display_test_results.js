@@ -18,7 +18,6 @@ const run_and_display_all_tests = async function (testResultsDiv) {
     }
   } catch (e) {
     results["error"] = e.toString();
-    document.body.innerHTML += `<div>${e.toString()}</div>`;
   }
 
   await postDataAndCarryOn(results, "fingerprinting");
