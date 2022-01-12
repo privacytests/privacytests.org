@@ -74,12 +74,6 @@ app.get('/ctr', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.send(`${countMaps[type][key] || 0}`);
 });
-app.get('/altsvc', (req, res) => {
-  res.set({
-    "Alt-Svc": "h2=\"torpat.ch:443\"; ma=2592000;"
-  })
-  res.send("Alt-Svc");
-});
 
 let ifNoneMatchValues = {};
 
