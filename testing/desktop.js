@@ -67,6 +67,7 @@ const macOSdefaultBrowserSettings = {
     dataDir: "LibreWolf/Profiles/",
     profileCommand: "-profile ",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
+    updateCommand: "brew upgrade librewolf",
   },
   edge: {
     name: "Microsoft Edge",
@@ -107,6 +108,7 @@ const macOSdefaultBrowserSettings = {
     binaryName: "Chromium",
     privateFlag: "incognito",
     dataDir: "Google/Chrome",
+    upgradeCommand: "brew upgrade eloston-chromium",
 //    profileCommand: chromiumProfileFlags,
   },
   vivaldi: {
@@ -207,7 +209,6 @@ class DesktopBrowser {
     if (this._defaults.update) {
       await this.launch();
       execSync(`osascript updateBrowser.applescript "${this._defaults.update[0]}" "${this._defaults.update[1]}"`);
-      await this.openUrl(this._defaults.updateURL);
       // Wait 5 minutes for the update binary to download
       await sleepMs(300000);
       await this.kill();
