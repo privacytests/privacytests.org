@@ -19,14 +19,14 @@ And on Android, we have:
 * Opera 66.2
 * Samsung 16.0
 
-## [Issue 12](/archive/issue13/): 2021-01-07
+## [Issue 12](/archive/issue12/): 2021-01-07
 
 This week, new desktop browser versions include:
 * Brave 1.34
 * Chrome 97.0
 * Edge 97.0
 
-## [Issue 11](/archive/issue10.1/): 2021-12-31
+## [Issue 11](/archive/issue11/): 2021-12-31
 
 ### New browsers
 
