@@ -22,15 +22,7 @@
          passed: upgraded,
          description
        };
-       console.log(resultsJSON);
-       document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
-       document.body.innerHTML += "<br>done";
-       document.body.innerHTML += "<br>" + JSON.stringify(resultsJSON);
-       try {
-         await postDataAndCarryOn(resultsJSON, `upgradable_${source}`);
-       } catch (e) {
-         document.body.innerHTML += "<br>" + e.stack.join("<br");
-       }
+       await postDataAndCarryOn(resultsJSON, `upgradable_${source}`);
      };
      runTests();
     </script>

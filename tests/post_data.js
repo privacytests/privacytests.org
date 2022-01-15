@@ -1,10 +1,19 @@
 // postResults(results) learns the sessionId for this page load,
 // and sends the results to results.privacytests.org/post under
 // that sessionId.
+
+const showData = (name, data) => {
+  console.log(name, data);
+  const dataDiv = document.createElement("div");
+  dataDiv.style = "white-space: pre; font-family: monospace;";
+  dataDiv.innerText = `${name}: ` + JSON.stringify(data, null, 2);
+  document.body.appendChild(dataDiv);
+};
+
 const postData = async (results, category) => {
   const urlParams = new URLSearchParams(window.location.search);
   const sessionId = urlParams.get("sessionId");
-  document.body.innerHTML += "<br><pre>Results: " + JSON.stringify({sessionId, results}, null, 2) + "</pre>";
+  showData("posted", {sessionId, results});
   if (!urlParams.has("sessionId")) {
     return;
   }
@@ -21,16 +30,20 @@ const postData = async (results, category) => {
 };
 
 const postDataAndCarryOn = async (results, category) => {
-  const response = await postData(results, category);
-  document.body.innerHTML += "<br>response: " + JSON.stringify(response);
-  if (!response) {
-    return;
-  }
-  const { newTabUrl, navigateUrl } = response;
-  if (newTabUrl) {
-    window.open(newTabUrl, "_blank");
-  }
-  if (navigateUrl) {
-    window.location.href = navigateUrl;
+  try {
+    const response = await postData(results, category);
+    showData("response", response);
+    if (!response) {
+      return;
+    }
+    const { newTabUrl, navigateUrl } = response;
+    if (newTabUrl) {
+      window.open(newTabUrl, "_blank");
+    }
+    if (navigateUrl) {
+      window.location.href = navigateUrl;
+    }
+  } catch (e) {
+    showData("error", { message: e.toString(), stack: e.stack });
   }
 };

@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf8'/>
+    
+     <meta name="twitter:card" content="summary_large_image"/>
+     <meta property="og:image" content="https://privacytests.org/182858-preview.png"/>
+     <meta property="og:title" content="Which browsers are best for privacy?"/>
+     <meta property="og:description" content="An open-source privacy audit of popular web browsers."/>
+     <meta property="og:type" content="website"/>
+
+    <link href="data:image/png;base64,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" rel="icon" type="image/x-icon" />
+    <title>PrivacyTests.org: open-source tests of web browser privacy</title>
+    <meta name="description" content="PrivacyTests.org subjects major web browsers to a suite of automated tests to find out: which web browsers offer the best privacy protections?"/>
+    <style>body {
+  font-family: sans-serif;
+  margin:0px;
+  display: flex;
+  flex-direction: row;
+}
+
+.gutter {
+  flex-grow: 1;
+}
+
+.wrapper {
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0px;
+}
+
+.header {
+  background-color: #eee;
+ /* border-bottom: darkgreen 1px solid; */
+  color: rgb(80, 80, 80);
+  /*display:table-cell;*/
+  display: flex;
+  /*flex-flow: row wrap;*/
+  flex-direction: row;
+  font-family: sans-serif;
+  align-items: center;
+  overflow: hidden;
+  padding: 20px 18px;
+  position: relative;
+  top: 0px;
+  /*margin: 0px auto;*/
+  vertical-align: top;
+ /* z-index: 4;*/
+}
+
+.header div.title-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.header div.title {
+  display: flex;
+  font-size: 28px;
+  font-weight:bold;
+  font-family: sans-serif;
+  flex-grow: 0;
+  align-items: center;
+}
+
+.header div.title a {
+  display: flex;
+  align-items: center;
+}
+.header div.title img {
+  padding-right: 16px;
+}
+
+.header .title-wrapper div.version {
+  font-size: 14px;
+  padding-top: 8px;
+}
+
+.header div.links {
+  align-items: center;
+  flex-grow: 1;
+  display:flex;
+  flex-direction: row;
+  justify-content: right;
+  -webkit-justify-content: flex-end;
+  padding: 0px 0px;
+  opacity: 85%;
+}
+
+.header div.link-header {
+  display: table-cell;
+  font-weight: bold;
+  padding: 0px 15px;
+  font-size: 16px;
+}
+
+.header a {
+  text-decoration: none;
+  color:black;
+}
+
+.title {
+  font-weight: bold;
+  margin: 0px -1px;
+  text-align: left;
+  padding-left: 0px;
+  padding-right: 20px;
+}
+
+blockquote {
+  font-style: italic;
+  font-size: 16px;
+}
+
+.copy {
+  padding: 20px 100px;
+  margin: auto;
+}
+
+.copy p {
+  padding: 0.2em 0;
+  line-height: 1.3em;
+}
+
+p.footer {
+  padding: 0px 20px;
+}
+
+h1.title {
+  text-transform: none;
+}table.comparison-table {
+  border-collapse:collapse;
+  margin-top: 10px;
+  position: relative;
+  margin: 10px 10px;
+}
+table.comparison-table tr th.table-header {
+  background-color: white;
+  text-align: center;
+  word-break: break-all;  
+  vertical-align: top;
+  top: 0px;
+  font-size: 12px;
+  font-weight: normal;
+  table-layout: fixed;
+  width: 120px;
+  position: sticky;
+  position: -webkit-sticky;
+  padding: 10px 0px;
+  z-index: 1;
+}
+table.comparison-table tr:first-child th:first-child {
+  z-index: 2;
+}
+table.comparison-table tr:nth-child(2n+1) td {
+  background-color: #eee;
+}
+table.comparison-table tr:nth-child(2n) td {
+  background-color: white;
+}
+table.comparison-table tr td {
+  min-width: 49px;
+  max-width: 49px;
+  padding: 0px;
+  text-align: center;
+}
+table.comparison-table .subheading {
+  font-size: 18px;
+  padding-top: 30px;
+  padding-bottom: 5px;
+  color:#222;
+}
+table.comparison-table .first.subheading {
+  padding-top: 10px;
+}
+.good, .bad, .na {
+  font-size: 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-clip: border-box;
+}
+.good {
+  color: green;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABEVBMVEUAAABKx0o/wz82wTY2wDb///84wTgAgABHxkcxvzEvvi8wvzAguiAxvzEluyUxvzErvSsuvi5OyE5Mx0xizmIRtREPtQ8rvSt01HQStRIDsQMBsAEPtQ////////+X35cTthMEsQQDsQMRtRFAxEAWtxYZuBn3/PcVthUEsQQDsQMQtRBSyVIStRIDsQMFsgUWtxb///8WtxYEsQQDsQMQtRBQyVAPtQ8BsAEEsQQRtREEsQQCsQIPtQ9GxkYtvi0MtAwCsAIBsAECsQIQtRBGxUYwvzANtA0CsQICsQIQtRBHxkcxvzEOtA4FsQUQtRBJxkkuvi4guiAuvi4AsAAAsAAAsAAAsAAAsAAAsAD////XNc91AAAAVHRSTlMAAAAAAAAAAAAAAAAAAAAAAAAEBwJljBMCYe78ogAAAV3s73gFWUABWerybAR38N1HAFXo83AEnvrfiOP0cwUPjvr+9XYFDIr59nkGCobvfQcMQAv6JZO0AAAAAWJLR0QF+G/pxwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAAd0SU1FB+ILDwYJMqVzpxUAAAB7SURBVAjXY2CAAkYhYSYYm1lEVEwcymaRkJSSlmFglZVjZWCTV1AMUVJmUFFVY+dQ19AM0dLWYdDV0zcwNDIONTE142QwtwiztLIOtbG142JgsHdwDHeKcHZx5Qaaw+Pm7hHp6eXNCzaVz8fXzz+AH2qHQGBQsCADBgAAgLoQVIbOYasAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtMDktMDVUMTQ6MjQ6MjktMDc6MDD3IjJVAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTA5LTA1VDE0OjI0OjI5LTA3OjAwhn+K6QAAAABJRU5ErkJggg==);
+}
+.bad {
+  color: red;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAMAAAC67D+PAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABF1BMVEXPAADeTEzgWFjIAADNAADLAADKAADNAADiY2PKAADPAADdTEzdTEzPAADKAADiZGTNAADKAADLAADMAADJAADhYWHdS0vOAADUGRnSDAzUFBTUFRXSDAzUGRnSDAzRBQXUFhbUFxfRBQXSDAzUFhbRBQXRBQXUGBjUGBjRBQXRBQXUFRXUFxfRBQXRBQXRBQXRBQXUFxfUGRnRBQXRBQXUGBjUGBjRBQXRBQXUGRnUFhbRBQXRBQXRBQXRBQXUFxfUFRXRBQXRBQXUGBjUGBjRBQXRBQXUFRXSDAzRBQXUFxfUFxfRBQXSDAzSDAzUFRXUFBTSDAzQAQHQAQHQAADQAADQAADQAADQAADQAADQAQHQAQH////CqmDcAAAAUnRSTlMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5rjpHtze2zDI61a1F1M8yN9XNOznU19nPMzfa2DMz2No4Ms/Z19U6OcvUNzPP1Uet1Dkzzba3RTuu4CS2RAAAAAFiS0dEXOrYAJcAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfiCw8GCRaZcEPEAAAAdklEQVQI12OQkJRiYGRilpaRZZALkldgYVVUClZmUFENUVPX0AzV0mZg09EN09MPNzBkZ+DgNDKOiDAx5eJm4OE1M4+IsLDk42cQsLIOtbGNtLMXZHBwDHFydnENdXNn8Ijy9BIS9vaJ9mWQ8PMXERUTDwiUBQB4nxKWDdKgdgAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0wOS0wNVQxNDoyNDoyOS0wNzowMPciMlUAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMDktMDVUMTQ6MjQ6MjktMDc6MDCGf4rpAAAAAElFTkSuQmCC);
+}
+.na {
+    color: LimeGreen;
+    font-weight: bold;
+    text-align: center;
+}
+table.comparison-table tr td:first-child,th:first-child {
+  text-align: left;
+  left: 0px;
+  padding-left: 8px;
+/*  position: sticky;
+  position: -webkit-sticky;*/
+}
+table.comparison-table tr td:first-child {
+  max-width: 150px;
+  min-width: 150px;
+ /* font-size: 16px;*/
+}
+table.comparison-table .table-title {
+  word-break: normal;
+  font-size: 22px;
+  text-align: left;
+  padding-left: 8px;
+}
+table.comparison-table .date {
+  text-align: center;
+  font-size: 14px;
+  padding-top: 6px;
+  color: rgb(70, 70, 70);
+}
+table.comparison-table .instructions {
+  font-size: 12px;
+  padding-top: 6px;
+  padding-left: 12px;
+  color: rgb(73, 73, 73);
+  text-transform:lowercase;
+  word-break:normal;
+  font-weight:normal;
+}
+.banner {
+  padding: 10px 0px 10px 16px;
+  flex-direction: row;
+  display: flex;
+}
+#issueBanner {
+  font-style: italic;
+  font-size: 16px;
+  border-bottom: 1px lightgray solid;
+}
+#navBanner {
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 1px lightgray solid;
+  justify-content: center;
+  align-content: stretch;
+}
+#navBanner a {
+  text-decoration: none;
+}
+.navItem:hover {
+  opacity: 100%;
+}
+.navItem {
+  padding: 4px 0px 4px 0px;
+  margin: 0px 10px;
+  text-align: center;
+}
+.selectedItem {
+  font-weight: bold;
+  border-bottom: 4px #a9e6a9 solid;
+}
+.navItem:not(.selectedItem) {
+  opacity: 60%;
+}
+.navItem:hover {
+  opacity: 100%;
+}
+#legend {
+  font-size: 14px;
+  justify-content: center;
+  align-content: stretch;
+  vertical-align: top;
+  border-bottom:  lightgray dotted 1px;
+}
+#legend div {
+  padding: 0px 10px;
+  vertical-align: top;
+}
+#legend .marker {
+  display: inline-block;
+  width: 20px;
+}
+.dataPoint {
+  display: inline-block;
+  width:100%;
+  height:18px;
+  padding: 4px 0px;
+}
+.left-heading {
+  text-align: start;
+  width: 25%;
+}
+.middle-heading {
+  text-align: center;
+  width: 50%;
+}
+.right-heading {
+  text-align: end;
+  width: 25%
+}
+.tooltipParent {
+  cursor: pointer;
+}
+.tooltipParent .tooltipText {
+  background-color: #fffff7;
+  border-radius: 4px;
+  border: 1px solid gray;
+  color: black;
+  font-size: 14px;
+  font-weight: normal;
+  max-width: 400px;
+  opacity: 0.97;
+  padding: 20px;
+  position:absolute;
+  text-align: start;
+  transform: translate(0px, 2px);
+  display: none;
+  white-space: pre-wrap;
+  width: max-content;
+  z-index: 1;
+}
+.browser-logo-image {
+  border-radius: 6px;
+}</style>
+  </head>
+  <body>
+    <div class="gutter"></div>
+    <div class="wrapper">
+    
+<div class="header">
+  <div class="title-wrapper">
+    <div class="title">
+      <a href="/">
+        <img height="48px" src="data:image/png;base64,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">
+        <span>PrivacyTests.org</span>
+      </a>
+    </div>
+  </div>
+  <div class="links">
+    <div class="link-header">
+      <a href="/news.html">News</a>
+    </div>
+    <div class="link-header">
+      <a href="/about.html">About</a>
+    </div>
+    <div class="link-header">
+      <a href="https://github.com/arthuredelstein/privacytests.org" title="Source code on github.
+Issues are welcome!"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTIgMGMtNi42MjYgMC0xMiA1LjM3My0xMiAxMiAwIDUuMzAyIDMuNDM4IDkuOCA4LjIwNyAxMS4zODcuNTk5LjExMS43OTMtLjI2MS43OTMtLjU3N3YtMi4yMzRjLTMuMzM4LjcyNi00LjAzMy0xLjQxNi00LjAzMy0xLjQxNi0uNTQ2LTEuMzg3LTEuMzMzLTEuNzU2LTEuMzMzLTEuNzU2LTEuMDg5LS43NDUuMDgzLS43MjkuMDgzLS43MjkgMS4yMDUuMDg0IDEuODM5IDEuMjM3IDEuODM5IDEuMjM3IDEuMDcgMS44MzQgMi44MDcgMS4zMDQgMy40OTIuOTk3LjEwNy0uNzc1LjQxOC0xLjMwNS43NjItMS42MDQtMi42NjUtLjMwNS01LjQ2Ny0xLjMzNC01LjQ2Ny01LjkzMSAwLTEuMzExLjQ2OS0yLjM4MSAxLjIzNi0zLjIyMS0uMTI0LS4zMDMtLjUzNS0xLjUyNC4xMTctMy4xNzYgMCAwIDEuMDA4LS4zMjIgMy4zMDEgMS4yMy45NTctLjI2NiAxLjk4My0uMzk5IDMuMDAzLS40MDQgMS4wMi4wMDUgMi4wNDcuMTM4IDMuMDA2LjQwNCAyLjI5MS0xLjU1MiAzLjI5Ny0xLjIzIDMuMjk3LTEuMjMuNjUzIDEuNjUzLjI0MiAyLjg3NC4xMTggMy4xNzYuNzcuODQgMS4yMzUgMS45MTEgMS4yMzUgMy4yMjEgMCA0LjYwOS0yLjgwNyA1LjYyNC01LjQ3OSA1LjkyMS40My4zNzIuODIzIDEuMTAyLjgyMyAyLjIyMnYzLjI5M2MwIC4zMTkuMTkyLjY5NC44MDEuNTc2IDQuNzY1LTEuNTg5IDguMTk5LTYuMDg2IDguMTk5LTExLjM4NiAwLTYuNjI3LTUuMzczLTEyLTEyLTEyeiIvPjwvc3ZnPg==" width=20></a>
+    </div>
+    <div class="link-header">
+      <a href="https://twitter.com/privacytests" title="@privacytests on Twitter.
+Join the discussion!"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMjQgNC41NTdjLS44ODMuMzkyLTEuODMyLjY1Ni0yLjgyOC43NzUgMS4wMTctLjYwOSAxLjc5OC0xLjU3NCAyLjE2NS0yLjcyNC0uOTUxLjU2NC0yLjAwNS45NzQtMy4xMjcgMS4xOTUtLjg5Ny0uOTU3LTIuMTc4LTEuNTU1LTMuNTk0LTEuNTU1LTMuMTc5IDAtNS41MTUgMi45NjYtNC43OTcgNi4wNDUtNC4wOTEtLjIwNS03LjcxOS0yLjE2NS0xMC4xNDgtNS4xNDQtMS4yOSAyLjIxMy0uNjY5IDUuMTA4IDEuNTIzIDYuNTc0LS44MDYtLjAyNi0xLjU2Ni0uMjQ3LTIuMjI5LS42MTYtLjA1NCAyLjI4MSAxLjU4MSA0LjQxNSAzLjk0OSA0Ljg5LS42OTMuMTg4LTEuNDUyLjIzMi0yLjIyNC4wODQuNjI2IDEuOTU2IDIuNDQ0IDMuMzc5IDQuNiAzLjQxOS0yLjA3IDEuNjIzLTQuNjc4IDIuMzQ4LTcuMjkgMi4wNCAyLjE3OSAxLjM5NyA0Ljc2OCAyLjIxMiA3LjU0OCAyLjIxMiA5LjE0MiAwIDE0LjMwNy03LjcyMSAxMy45OTUtMTQuNjQ2Ljk2Mi0uNjk1IDEuNzk3LTEuNTYyIDIuNDU3LTIuNTQ5eiIvPjwvc3ZnPg==" width=20></a>
+    </div>
+    <div class="link-header">
+      <a href="mailto:contact@privacytests.org" title="Contact me directly via email:
+contact@privacytests.org.
+Feedback is welcome!"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTIgMTIuNzEzbC0xMS45ODUtOS43MTNoMjMuOTcxbC0xMS45ODYgOS43MTN6bS01LjQyNS0xLjgyMmwtNi41NzUtNS4zMjl2MTIuNTAxbDYuNTc1LTcuMTcyem0xMC44NSAwbDYuNTc1IDcuMTcydi0xMi41MDFsLTYuNTc1IDUuMzI5em0tMS41NTcgMS4yNjFsLTMuODY4IDMuMTM1LTMuODY4LTMuMTM1LTguMTEgOC44NDhoMjMuOTU2bC04LjExLTguODQ4eiIvPjwvc3ZnPg==" width=20></a>
+    </div>
+  </div>
+</div>
+    
+    <div class="banner" id="issueBanner">
+      <div class="left-heading">No. 12</div>
+      <div class="middle-heading">Open-source tests of web browser privacy.</div>
+      <div class="right-heading">Updated 2022-01-12</div>
+    </div>
+    <div class="banner" id="navBanner">
+      <div class="navItem selectedItem">
+        <a href=".">Desktop browsers</a>
+      </div>
+      <div class="navItem ">
+        <a href="private.html">Desktop private modes</a>
+      </div>
+      <div class="navItem ">
+        <a href="ios.html">iOS browsers</a>
+      </div>
+      <div class="navItem ">
+        <a href="android.html">Android browsers</a>
+      </div>
+      <div class="navItem ">
+        <a href="nightly.html">Nightly builds</a>
+      </div>
+      <div class="navItem ">
+        <a href="nightly-private.html">Nightly private modes</a>
+      </div>
+    </div>
+    <div class="banner" id="legend">
+      <div><span class="marker good">&nbsp;</span>= Passed privacy test</div>
+      <div><span class="marker bad">&nbsp;</span>= Failed privacy test</div>
+      <div><span class="marker na">–</span>= No such feature</div>
+    </div><table class="comparison-table"><tr><th class="table-header" style="text-transform: capitalize;"><h1 class="title">
+  <div class="table-title">Desktop Browsers</div>
+  <div class="instructions">(click anywhere for more info)</a></h1></th><th class="table-header" style="text-transform: capitalize;">
+  <span>
+    <img class="browser-logo-image" src="data:image/png;base64,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" width="32" height="32"><br>
+    firefox<br>
+    96.0
+  </span></th></tr><tr><th colspan="4" class="first subheading tooltipParent">State Partitioning tests<span class="tooltipText">A common vulnerability of web browsers is that they allow tracking companies to 'tag' your browser with some data ('state') that identifies you. When third-party trackers are embedded in websites, they can see this identifying data as you browse to different websites. Fortunately, it is possible for this category of leaks to be fixed by partitioning all data stored in the browser such that no data can be shared between websites.</span></th></tr><tr><td><div class="tooltipParent">Alt-Svc<span class="tooltipText">Alt-Svc allows the server to indicate to the web browser that a resource should be loaded on a different server. Because this is a persistent setting, it could be used to track users across websites if it is not correctly partitioned.</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async () => {
+      // Clear Alt-Svc caching first.
+      let responseText = "";
+      for (let i = 0; i < 10 && responseText !== "h2"; ++i) {
+        responseText = await fetchText("https://h3.arthuredelstein.net:4433/clear");
+        console.log("clear", responseText, i);
+        await sleepMs(10);
+      }
+      if (responseText !== "h2") {
+        // Clearing failed.
+        throw new Error("Unsupported");
+      }
+      // Store "h3" state in Alt-Svc cache
+      for (let i = 0; i < 10 && responseText !== "h3"; ++i) {
+        responseText = await fetchText("https://h3.arthuredelstein.net:4433/protocol");
+        console.log("protocol", responseText, i);
+        await sleepMs(10);
+      }
+      if (responseText !== "h3") {
+        // Storage failed.
+        throw new Error("Unsupported");
+      }
+    }
+
+read: () => fetchText("https://h3.arthuredelstein.net:4433/protocol")
+
+result, same first party: h3
+
+result, different first party: h2
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">blob<span class="tooltipText">A 'blob URL' is a local reference to some raw data. Trackers can use a blob URL to share data between websites.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: (secret) => {
+      try {
+        let blobURL = URL.createObjectURL(new Blob([secret]));
+        fetch(`${baseURI}/blob?mode=write&key=${secret}&blobUrl=${encodeURIComponent(blobURL)}`);
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
+    }
+
+read: async (secret) => {
+      let response = await fetch(`${baseURI}/blob?mode=read&key=${secret}`);
+      let result = await response.json();
+      let blobUrl = decodeURIComponent(result.blobUrl);
+      let blobResponse = await fetch(blobUrl);
+      return blobResponse.text();
+    }
+
+result, same first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+result, different first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">BroadcastChannel<span class="tooltipText">A BroadcastChannel is designed to send messages between tabs. In some browsers it can be used for cross-site communication and tracking.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: (secret) => {
+      try {
+        let bc = new BroadcastChannel("secrets");
+        bc.onmessage = (event) => {
+          if (event.data === "request") {
+            bc.postMessage(secret);
+          }
+        };
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
+    }
+
+read: () =>
+      new Promise((resolve, reject) => {
+        let bc = new BroadcastChannel("secrets");
+        bc.onmessage = (event) => {
+          if (event.data !== "request") {
+            resolve(event.data);
+          }
+        };
+        bc.postMessage("request");
+        setTimeout(() => reject({message: "no BroadcastChannel message"}), 3000);
+      })
+
+result, same first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+result, different first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">CacheStorage<span class="tooltipText">The Cache API is a content storage mechanism originally introduced to support ServiceWorkers. If the same Cache object is accessible to multiple websites, it can be abused to track users.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: async (key) => {
+      try {
+        let cache = await caches.open("supercookies");
+        cache.addAll([`test.css?key=${key}`]);
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
+    }
+
+read: async () => {
+      let cache = await caches.open("supercookies");
+      let cacheKeys = await cache.keys();
+      let url = cacheKeys[0].url;
+      return (new URL(url)).searchParams.get("key");
+    }
+
+result, same first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+result, different first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">cookie<span class="tooltipText">The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website's behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: (secret) => {
+      let expiry = new Date();
+      expiry.setFullYear(expiry.getFullYear() + 1);
+      document.cookie = `secret=${secret}; SameSite=None; Secure`;
+    }
+
+read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null
+
+result, same first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+result, different first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">CSS cache<span class="tooltipText">CSS stylesheets are cached, and if that cache is shared between websites, it can be used to track users across sites.</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async (key) => {
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return key;
+    }
+
+read: async (key) => {
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return fontFamily;
+    }
+
+result, same first party: fake_9729964005711882
+
+result, different first party: fake_15242966754535003
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">favicon cache<span class="tooltipText">A favicon is an icon that represents a website, typically shown in browser tab and bookmarks menu. If the favicon cache is not partitioned, it can be used to track users across websites.</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: (key) => key
+
+read: async (key) => {
+      // Wait for the favicon to load (defined in supercookies.html)
+      await sleepMs(500);
+      let response = await fetch(
+        testURI("ctr", "favicon", key), {"cache": "reload"});
+      let count = (await response.text()).trim();
+      if (count === "0") {
+        throw new Error("No requests received");
+      }
+      return count;
+    }
+
+result, same first party: 1
+
+result, different first party: 2
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">fetch cache<span class="tooltipText">When a resource is received via the Fetch API, it is frequently cached. That cache can potentially be abused for cross-site tracking.</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async (key) => {
+      let response = await fetch(testURI("resource", "fetch", key),
+                                 {cache: "force-cache"});
+      return key;
+    }
+
+read: async (key) => {
+      let response = await fetch(testURI("resource", "fetch", key),
+                                 {cache: "force-cache"});
+      let countResponse = await fetch(testURI("ctr", "fetch", key),
+                                      {cache: "reload"});
+      return (await countResponse.text()).trim();
+    }
+
+result, same first party: 1
+
+result, different first party: 2
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">font cache<span class="tooltipText">Web fonts are sometimes stored in their own cache, which is vulnerable to being abused for cross-site tracking.</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async (key) => {
+      let style = document.createElement("style");
+      style.type=&#39;text/css&#39;;
+      let fontURI = testURI("resource", "font", key);
+      style.innerHTML = `@font-face {font-family: "myFont"; src: url("${fontURI}"); } body { font-family: "myFont" }`;
+      document.getElementsByTagName("head")[0].appendChild(style);
+      return key;
+    }
+
+read: async (key) => {
+      let style = document.createElement("style");
+      style.type=&#39;text/css&#39;;
+      let fontURI = testURI("resource", "font", key);
+      style.innerHTML = `@font-face {font-family: "myFont"; src: url("${fontURI}"); } body { font-family: "myFont" }`;
+      document.getElementsByTagName("head")[0].appendChild(style);
+      await sleepMs(500);
+      let response = await fetch(
+        testURI("ctr", "font", key), {"cache": "reload"});
+      return (await response.text()).trim();
+    }
+
+result, same first party: 1
+
+result, different first party: 2
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">H1 connection<span class="tooltipText">HTTP/1.x are the classic web connection protocols. If these connections are re-used across websites, they can be used to track users.</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async (secret) => {
+      await fetch(`https://h1.arthuredelstein.net:8901/?mode=write&secret=${secret}`, {cache: "no-store"});
+    }
+
+read: async () => {
+      let response = await fetch(`https://h1.arthuredelstein.net:8901/?mode=read`, {cache: "no-store"});
+      return await response.text();
+    }
+
+result, same first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+result, different first party: 
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">H2 connection<span class="tooltipText">HTTP/2 is a web connection protocol introduced in 2015. Some browsers re-use HTTP/2 connections across websites and can thus be used to track users.</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async (secret) => {
+      await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`, {cache: "no-store"});
+    }
+
+read: async () => {
+      let response = await fetch(`https://h2.arthuredelstein.net:8902/?mode=read`, {cache: "no-store"});
+      return await response.text();
+    }
+
+result, same first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+result, different first party: 
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">H3 connection<span class="tooltipText">HTTP/3 is a new standard HTTP connection protocol, still in draft but widely supported by browsers. If it is not partitioned, it can be used to track users across websites.</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async (secret) => {
+      // Ensure that we can switch over to h3 via alt-svc:
+      for (let i = 0; i<3; ++i) {
+        await fetch(`https://h3.arthuredelstein.net:4433/connection_id`, {cache: "no-store"});
+        await sleepMs(500);
+      }
+      // Are we now connecting over h3?
+      let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`, {cache: "no-store"});
+      let text = await response.text();
+      // Empty response text indicates we are not connecting over h3:
+      if (text.trim() === "") {
+        throw new Error("Unsupported");
+      }
+    }
+
+read: async () => {
+      let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
+      return await response.text();
+    }
+
+result, same first party: 3e0118c2d4b72632e61c482aceacb7f3
+
+result, different first party: 6a4032574fca69d7da527fd9b09418c2
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">HSTS cache<span class="tooltipText">The HTTP Strict-Transport-Security response header allows a website to signal that it should only be accessed via HTTPS. The browser remembers this directive in a database, but if this database is not partitioned, then it can be used to track users across websites."</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: set HSTS flag
+
+read: read HSTS flag
+
+result, same first party: not tested
+
+result, different first party: Used http
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">iframe cache<span class="tooltipText">An iframe is an element in a web page than allows websites to embed a second web page. Caching of this web page could be abused for cross-site tracking.</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: (key) => new Promise((resolve, reject) => {
+      let iframe = document.createElement("iframe");
+      document.body.appendChild(iframe);
+      iframe.addEventListener("load", () => resolve(key), {once: true});
+      iframe.src = testURI("resource", "page", key);
+    })
+
+read: async (key) => {
+      let iframe = document.createElement("iframe");
+      document.body.appendChild(iframe);
+      let iframeLoadPromise = new Promise((resolve, reject) => {
+        iframe.addEventListener("load", resolve, {once: true});
+      });
+      let address = testURI("resource", "page", key);
+      iframe.src = address;
+      await iframeLoadPromise;
+      let response = await fetch(
+        testURI("ctr", "page", key), {"cache": "reload"});
+      return (await response.text()).trim();
+    }
+
+result, same first party: 1
+
+result, different first party: 2
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">image cache<span class="tooltipText">Caching of images in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: (key) => new Promise((resolve, reject) => {
+      let img = document.createElement("img");
+      document.body.appendChild(img);
+      img.addEventListener("load", () => resolve(key), {once: true});
+      img.src = testURI("resource", "image", key);
+    })
+
+read: async (key) => {
+      let img = document.createElement("img");
+      document.body.appendChild(img);
+      let imgLoadPromise = new Promise((resolve, reject) => {
+        img.addEventListener("load", resolve, {once: true});
+      });
+      img.src = testURI("resource", "image", key);
+      await imgLoadPromise;
+      let response = await fetch(
+        testURI("ctr", "image", key), {"cache": "reload"});
+      return (await response.text()).trim();
+    }
+
+result, same first party: 1
+
+result, different first party: 2
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">indexedDB<span class="tooltipText">The IndexedDB API exposes a transactional database to web pages. That database can be used to track users across websites, unless it is partitioned.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: async (secret) => {
+      try {
+        return await IdbKeyVal.set("secret", secret);
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
+    }
+
+read: () => IdbKeyVal.get("secret")
+
+result, same first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+result, different first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">localStorage<span class="tooltipText">The localStorage API gives websites access to a key-value database that will remain available across visits. If the localStorage API is not partitioned or blocked, it can also be used to track users across websites.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: (secret) => localStorage.setItem("secret", secret)
+
+read: () => localStorage.getItem("secret")
+
+result, same first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+result, different first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">locks<span class="tooltipText">navigator.locks (only supported in some browsers) allows scripts on multiple tabs to coordinate. If this API is not partitioned, it can be used for cross-site tracking.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: async (key) => {
+      if (navigator.locks) {
+        navigator.locks.request(key, lock => new Promise((f,r) => {}));
+        let queryResult = await navigator.locks.query();
+        return queryResult.held[0].clientId;
+      } else {
+        throw new Error("Unsupported");
+      }
+    }
+
+read: async () => {
+      if (navigator.locks) {
+        let queryResult = await navigator.locks.query();
+        return queryResult.held[0].name;
+      }
+    }
+
+result, same first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+result, different first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">prefetch cache<span class="tooltipText">A <link rel='prefetch'...> suggests to browsers they should fetch a resource ahead of time and cache it. But if browsers don't partition this cache, it can be used to track users across websites.</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async (key) => {
+      let link = document.createElement("link");
+      link.rel = "prefetch";
+      link.href = testURI("resource", "prefetch", key);
+      document.getElementsByTagName("head")[0].appendChild(link);
+      return key;
+    }
+
+read: async (key) => {
+      let link = document.createElement("link");
+      link.rel = "prefetch";
+      link.href = testURI("resource", "prefetch", key);
+      document.getElementsByTagName("head")[0].appendChild(link);
+      await sleepMs(500);
+      let response = await fetch(
+        testURI("ctr", "prefetch", key), {"cache": "reload"});
+      let countString = (await response.text()).trim();
+      if (parseInt(countString) === 0) {
+        throw new Error("No requests received");
+      }
+      return countString;
+    }
+
+result, same first party: 1
+
+result, different first party: 2
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">ServiceWorker<span class="tooltipText">The ServiceWorker API allows websites to run code in the background and store content in the browser for offline use. If a ServiceWorker can be accessed from multiple websites, it can be abused to track users across sites.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: async (key) => {
+      if (!navigator.serviceWorker) {
+        throw new Error("Unsupported");
+      }
+      let registration = await navigator.serviceWorker.register(
+        &#39;serviceWorker.js&#39;);
+      console.log(registration);
+      await navigator.serviceWorker.ready;
+      console.log("service worker ready");
+      await sleepMs(100);
+      await fetch(`serviceworker-write?secret=${key}`);
+    }
+
+read: async () => {
+      let registration = await navigator.serviceWorker.register(
+        &#39;serviceWorker.js&#39;);
+      console.log(registration);
+      await navigator.serviceWorker.ready;
+      console.log("service worker ready");
+      await sleepMs(100);
+      let response = await fetch("serviceworker-read");
+      return await response.text();
+    }
+
+result, same first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+result, different first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">SharedWorker<span class="tooltipText">The SharedWorker API allows scripts from multiple tabs to share a background thread of computation. If SharedWorker is not partitioned, then it can be abused to shared data between websites in your browser.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: (secret) => {
+      try {
+        let worker = new SharedWorker("supercookies_sharedworker.js");
+        worker.port.start();
+        worker.port.postMessage(secret);
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
+    }
+
+read: () =>
+      new Promise((resolve, reject) => {
+        let worker = new SharedWorker("supercookies_sharedworker.js");
+        worker.port.start();
+        worker.port.postMessage("request");
+        worker.port.onmessage = (e) => resolve(e.data);
+        setTimeout(() => reject("no SharedWorker message received"), 100);
+      })
+
+result, same first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+result, different first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">TLS Session ID<span class="tooltipText">The TLS protocol is used by HTTPS to make connections secure. If the browser were to re-use a TLS session, then the session ID could be used to track users across websites.</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async () => {
+      let results = await fetch("https://tls.arthuredelstein.net:8900/");
+      return (await results.json()).sessionId;
+    }
+
+read: async () => {
+      let results = await fetch("https://tls.arthuredelstein.net:8900/");
+      return (await results.json()).sessionId;
+    }
+
+result, same first party: 04946ea75bf221491fdf9e4c607b30f4222cb311b7a097966f21d8669d017d0a
+
+result, different first party: 043075816f72694d7c714969e544afb2c19bcdb94a45e9d4e72e78d6e3238617
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Web SQL Database<span class="tooltipText">The Web SQL Database is a deprecated web API for storing data in an SQL database.</span></div></td><td><div class='dataPoint tooltipParent na'
+> &ndash;
+<span class="tooltipText">write: async (key) => {
+      if (!window.openDatabase) {
+        throw new Error("Unsupported");
+      }
+      let database = window.openDatabase("sqlite_supercookie", "", "supercookie", 1024 * 1024);
+      let tx = new Promise((resolve) => database.transaction(tx => {
+        tx.executeSql(
+          `CREATE TABLE IF NOT EXISTS cache(
+             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+             name TEXT NOT NULL,
+             value TEXT NOT NULL,
+             UNIQUE (name)
+           )`,
+          [], (tx, rs) => {}, (tx, err) => {});
+        tx.executeSql(
+          `INSERT OR REPLACE INTO cache(name, value)
+           VALUES(?, ?)`,
+          ["secret", key], (tx, rs) => {}, (tx, rs) => {});
+      }));
+    }
+
+read: async () => {
+      let database = window.openDatabase("sqlite_supercookie", "", "supercookie", 1024 * 1024);
+      let result = await new Promise((resolve, reject) => database.transaction(tx => {
+        tx.executeSql(
+          "SELECT value FROM cache WHERE name=?",
+          ["secret"],
+          (tx, rs) => resolve(rs),
+          (tx, err) => reject(err));
+      }));
+      return result.rows.item(0).value;
+    }
+
+result, same first party: Error: window.openDatabase is not a function
+
+result, different first party: Error: window.openDatabase is not a function
+
+unsupported: true
+
+passed: undefined
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">XMLHttpRequest cache<span class="tooltipText">Similar to the newer Fetch API, any resource received may be cached by the browser. The cache is potentially vulnerable to cross-site tracking attack.</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: async (key) => {
+      const req = new XMLHttpRequest();
+      const loadPromise = new Promise(resolve => req.addEventListener("load", resolve));
+      req.open("GET", testURI("resource", "xhr", key));
+      req.send();
+      await loadPromise;
+      return key;
+    }
+
+read: async (key) => {
+      const req = new XMLHttpRequest();
+      const loadPromise = new Promise(resolve => req.addEventListener("load", resolve));
+      req.open("GET", testURI("resource", "xhr", key));
+      req.send();
+      await loadPromise;
+      let countResponse = await fetch(testURI("ctr", "xhr", key),
+                                      {cache: "reload"});
+      return (await countResponse.text()).trim();
+    }
+
+result, same first party: 1
+
+result, different first party: 2
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td></tr><tr><th colspan="4" class="subheading tooltipParent">Navigation tests<span class="tooltipText">When you click a hyperlink to navigate your browser from one site to another, certain browser APIs allow the first site to communicate to the second site. These privacy vulnerabilities can be fixed by introducing new limits on how much data is transfered between sites.</span></th></tr><tr><td><div class="tooltipParent">document.referrer<span class="tooltipText">The Referer [sic] request header is a mechanism used by browsers to let a website know where the user is visiting from. This header is inherently tracking users across websites. In recent times, browsers have switched to a policy of trimming a referrer to convey less tracking information, but Referer continues to convey cross-site tracking data by default.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: (secret) => { /* do nothing */ }
+
+read: () => new Promise((resolve) => {
+      parent.postMessage({"read document.referrer": true}, "*");
+      addEventListener("message", ({data}) => {
+        resolve(data);
+      }, { once: true });
+    })
+
+result, same first party: https://arthuredelstein.net/
+
+result, different first party: https://arthuredelstein.net/
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">sessionStorage<span class="tooltipText">The sessionStorage API is similar to the localStorage API, but it does not persist across tabs or across browser sessions. Nonetheless, it can be used to track users if they navigate from one website to another. This tracking can be thwarted by partitioning sessionStorage between websites.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">write: (secret) => sessionStorage.setItem("secret", secret)
+
+read: () => sessionStorage.getItem("secret")
+
+result, same first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+result, different first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+unsupported: false
+
+passed: false
+
+test failed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">window.name<span class="tooltipText">The window.name API allows websites to store data that will persist after the user has navigated the tab to a different website. This mechanism could be partitioned so that data is not allowed to persist between websites.</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">write: (secret) => parent.postMessage({"write window.name": secret})
+
+read: () => new Promise((resolve) => {
+      parent.postMessage({"read window.name": true}, "*");
+      addEventListener("message", ({data}) => {
+        resolve(data);
+      }, { once: true });
+    })
+
+result, same first party: d1400fa8-4bdf-4f69-96e3-40cfbca2978c
+
+result, different first party: 
+
+unsupported: false
+
+passed: true
+
+test failed: false</span>
+</div></td></tr><tr><th colspan="4" class="subheading tooltipParent">HTTPS tests<span class="tooltipText">HTTPS is the protocol that web browsers use to connect securely to websites. When HTTPS is being used, the connection is encrypted so that third parties on the network cannot read content being sent between the server and your browser. In the past, insecure connections were the default and websites would need to actively request that a browser use HTTPS. Now the status quo is shifting, and browser makers are moving toward a world where HTTPS is the default protocol.</span></th></tr><tr><td><div class="tooltipParent">Insecure website<span class="tooltipText">Checks to see if the browser stops loading an insecure website and warns the user before giving them the option to continue. Known as HTTPS-Only Mode in some browsers.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">passed: false
+result: Insecure website loaded</span>
+</div></td></tr><tr><td><div class="tooltipParent">Upgradable address<span class="tooltipText">Checks to see if an insecure address entered into the browser's address bar is upgraded to HTTPS whenever possible.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">upgraded: false
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Upgradable hyperlink<span class="tooltipText">Checks to see if the user has clicked on a hyperlink to an insecure address, if the browser upgrades that address to HTTPS whenever possible.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">upgraded: false
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Upgradable image<span class="tooltipText">Checks to see if the browser attempts to upgrade an insecure address for an image to HTTPS whenever possible.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">passed: false
+result: loaded insecurely</span>
+</div></td></tr><tr><td><div class="tooltipParent">Upgradable script<span class="tooltipText">Checks to see if the browser attempts to upgrade an insecure address for an script to HTTPS whenever possible.</span></div></td><td><div class='dataPoint tooltipParent good'
+> &nbsp;
+<span class="tooltipText">passed: true
+result: blocked</span>
+</div></td></tr><tr><th colspan="4" class="subheading tooltipParent">Misc tests<span class="tooltipText">This category includes tests for the presence of miscellaneous privacy features.</span></th></tr><tr><td><div class="tooltipParent">GPC enabled first-party<span class="tooltipText">The Global Privacy Control is an HTTP header that can be sent by a browser to instruct a website not to sell the user's personal data to third parties. This test checks to see if the GPC header is sent by default to the top-level website.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">header value: undefined
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">GPC enabled third-party<span class="tooltipText">The Global Privacy Control is an HTTP header that can be sent by a browser to instruct a visited website not to sell the user's personal data to other parties. This test checks to see if the GPC header is sent to third-party elements on the web page.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">IP address leak<span class="tooltipText">IP addresses can be used to uniquely identify a large percentage of users. A proxy, VPN, or Tor can mask a user's IP address.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Stream isolation<span class="tooltipText">Browsers that use Tor can use a different Tor circuit per top-level website.</span></div></td><td><div class='dataPoint tooltipParent na'
+> &ndash;
+<span class="tooltipText">write: () => {
+      if (!usingTor) {
+        throw new Error("Unsupported");
+      }
+    }
+read: async () => {
+      if (usingTor) {
+        return ipAddress;
+      } else {
+        throw new Error("Unsupported");
+      }
+    }
+unsupported: true
+readSameFirstParty: Error: Unsupported
+readDifferentFirstParty: Error: Unsupported
+testFailed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Tor enabled<span class="tooltipText">The Tor network sends the browser's web requests through a series of relays to hide a user's IP address, thereby helping to mask their identity and location. This test checks to see if the Tor network is being used by default.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">IsTorExit: false
+passed: false</span>
+</div></td></tr><tr><th colspan="4" class="subheading tooltipParent">Fingerprinting resistance tests<span class="tooltipText">Fingerprinting is a technique trackers use to uniquely identify you as you browse the web. A fingerprinting script will measure several characteristics of your browser and, combining this data, will build a fingerprint that may uniquely identify you among web users. Browsers can introduce countermeasures, such as minimizing the distinguishing information disclosed by certain web APIs so your browser is harder to pick out from the crowd (so-called 'fingerprinting resistance').</span></th></tr><tr><td><div class="tooltipParent">Media query screen height<span class="tooltipText">Height of the user's screen in pixels.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">expression: undefined
+desired expression: innerHeight
+actual value: 1440
+desired value: 983
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Media query screen width<span class="tooltipText">Width of the user's screen in pixels.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">expression: undefined
+desired expression: innerWidth
+actual value: 2560
+desired value: 1280
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">outerHeight<span class="tooltipText">Height of the browser window in pixels, including browser chrome.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">expression: outerHeight
+desired expression: innerHeight
+actual value: 1068
+desired value: 983
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">screen.height<span class="tooltipText">Height of the user's screen, in pixels.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">expression: screen.height
+desired expression: innerHeight
+actual value: 1440
+desired value: 983
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">screen.width<span class="tooltipText">Width of the user's screen, in pixels.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">expression: screen.width
+desired expression: innerWidth
+actual value: 2560
+desired value: 1280
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">screenX<span class="tooltipText">Position, in pixels, of the left edge of the browser window on screen.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">expression: screenX
+desired expression: 0
+actual value: 4
+desired value: 0
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">screenY<span class="tooltipText">Position, in pixels, of the top edge of the browser window on screen.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">expression: screenY
+desired expression: 0
+actual value: 25
+desired value: 0
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">System font detection<span class="tooltipText">Web pages can detect the presence of a font installed on the user's system. The presence or absence of various fonts is commonly used to fingerprint users.</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">expression: undefined
+desired expression: undefined
+actual value: undefined
+desired value: undefined
+passed: false</span>
+</div></td></tr><tr><th colspan="4" class="subheading tooltipParent">Tracking query parameter tests<span class="tooltipText">When you browse from one web page to another, tracking companies will frequently attach a 'tracking query parameter' to the address of the second web page. That query parameter may contain a unique identifier that tracks you individually as you browse the web. And these query parameters are frequently synchronized with cookies, making them a powerful tracking vector. Web browsers can protect you from known tracking query parameters by stripping them from web addresses before your browser sends them. (The set of tracking query parameters tested here was largely borrowed from Brave.)</span></th></tr><tr><td><div class="tooltipParent">__hsfp<span class="tooltipText">HubSpot tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">__hssc<span class="tooltipText">HubSpot tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">__hstc<span class="tooltipText">HubSpot tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">__s<span class="tooltipText">Drip.com email address tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">_hsenc<span class="tooltipText">HubSpot tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">_openstat<span class="tooltipText">Yandex tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">dclid<span class="tooltipText">DoubleClick Click ID (Google)</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">fbclid<span class="tooltipText">Facebook Click Identifier</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">gclid<span class="tooltipText">Google Click Identifier</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">hsCtaTracking<span class="tooltipText">HubSpot tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">igshid<span class="tooltipText">Instagram tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">mc_eid<span class="tooltipText">Mailchimp Email ID (email recipient's address)</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">mkt_tok<span class="tooltipText">Adobe Marketo tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">ml_subscriber<span class="tooltipText">MailerLite email tracking</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">ml_subscriber_hash<span class="tooltipText">MailerLite email tracking</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">msclkid<span class="tooltipText">Microsoft Click ID</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">oly_anon_id<span class="tooltipText">Omeda marketing 'anonymous' customer id</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">oly_enc_id<span class="tooltipText">Omeda marketing 'known' customer id</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">rb_clickid<span class="tooltipText">Unknown high-entropy tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">s_cid<span class="tooltipText">Adobe Site Catalyst tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">vero_conv<span class="tooltipText">Vero tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">vero_id<span class="tooltipText">Vero tracking parameter</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">wickedid<span class="tooltipText">Wicked Reports e-commerce tracking</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">yclid<span class="tooltipText">Yandex Click ID</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">value: 5017538016479168
+passed: false</span>
+</div></td></tr><tr><th colspan="4" class="subheading tooltipParent">Tracker content blocking<span class="tooltipText">When you visit a web page, it frequently has third-party embedded tracking content, such as scripts and tracking pixels. These embedded components spy on you. Some browsers and browser extensions maintain list of tracking companies and block their content from being loaded. This section checks to see if a browser blocks 20 of the largest trackers, as reported by https://whotracks.me.</span></th></tr><tr><td><div class="tooltipParent">Adobe<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://munchkin.marketo.net/munchkin.js</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://munchkin.marketo.net/munchkin.js
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Amazon adsystem<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://aax-us-east.amazon-adsystem.com/x/px</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://aax-us-east.amazon-adsystem.com/x/px
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">AppNext<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://acdn.adnxs.com/dmp/up/pixie.js</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://acdn.adnxs.com/dmp/up/pixie.js
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Bing Ads<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://bat.bing.com/bat.js</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://bat.bing.com/bat.js
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Chartbeat<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://pdev.chartbeat.net/ping?h=x&p=x&r=&b=</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://pdev.chartbeat.net/ping?h=x&p=x&r=&b=
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Criteo<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://csm.da.us.criteo.net/iev</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://csm.da.us.criteo.net/iev
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">DoubleClick (Google)<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://securepubads.g.doubleclick.net/static/glade.js</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://securepubads.g.doubleclick.net/static/glade.js
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Facebook Pixel<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://www.facebook.com/tr?id=123</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://www.facebook.com/tr?id=123
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Google Ad Services<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://www.googleadservices.com/pagead/conversion.js</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://www.googleadservices.com/pagead/conversion.js
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Google Analytics<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://google-analytics.com/urchin.js</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://google-analytics.com/urchin.js
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Google Syndication<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://tpc.googlesyndication.com/sodar/UFYwWwmt.js</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://tpc.googlesyndication.com/sodar/UFYwWwmt.js
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Google Tag Manager<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Index Exchange<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&external_user_id=629685505537&C=1</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&external_user_id=629685505537&C=1
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">New Relic<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://js-agent.newrelic.com/nr-1212.min.js</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://js-agent.newrelic.com/nr-1212.min.js
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Quantcast<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://pixel.quantserve.com/pixel</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://pixel.quantserve.com/pixel
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Scorecard Research Beacon<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://sb.scorecardresearch.com/internal-c2/default/cs.js</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://sb.scorecardresearch.com/internal-c2/default/cs.js
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Taboola<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://cdn.taboola.com/libtrc/UNIQUEID/tfa.js</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://cdn.taboola.com/libtrc/UNIQUEID/tfa.js
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Twitter Ads<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://static.ads-twitter.com/uwt.js</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://static.ads-twitter.com/uwt.js
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Yandex Ads<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://yandex.ru/ads/system/header-bidding.js</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://yandex.ru/ads/system/header-bidding.js
+passed: false</span>
+</div></td></tr><tr><td><div class="tooltipParent">Yandex Metrika<span class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://mc.yandex.ru/metrika/tag.js</span></div></td><td><div class='dataPoint tooltipParent bad'
+> &nbsp;
+<span class="tooltipText">url: https://mc.yandex.ru/metrika/tag.js
+passed: false</span>
+</div></td></tr></table><p class="footer">Tests ran at 2022-01-12 18:28:30 UTC.
+         Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/366a96bff69052adf9ef0bbe53fb6a5f809181e8"
+    >366a96bf</a>.
+    Raw data in <a href="182858.json">JSON</a>.
+    </p><script type="module">
+  const table = document.querySelector(".comparison-table");
+  let visibleTooltip = null;
+  const hide = () => {
+    if (visibleTooltip) {
+      visibleTooltip.style.display = "none";
+      visibleTooltip.parentElement.style.backgroundColor = "";
+      visibleTooltip = null;
+    }
+  }
+  const show = (tooltip) => {
+    hide();
+    const viewportWidth = document.documentElement.clientWidth;
+    tooltip.style.display = "block";
+    tooltip.parentElement.style.backgroundColor = "#ffa";
+    const tooltipRight = tooltip.getClientRects()[0].right;
+    const tableRight = table.getClientRects()[0].right;
+    const overflowX = tooltipRight- tableRight + 8;
+    if (overflowX > 0) {
+      tooltip.style.transform="translate(" + (-overflowX) +"px, 0px)";
+    }
+    visibleTooltip = tooltip;
+  }
+  document.addEventListener("mousedown", e => {
+    if (e.target.classList.contains("tooltipParent")) {
+      const tooltip = e.target.querySelector(".tooltipText");
+      if (tooltip) {
+        tooltip === visibleTooltip ? hide() : show(tooltip);
+      }
+    } else if (e.target.classList.contains("tooltipText")) {
+      hide();
+    } else {
+      hide();
+    }
+  });
+  //document.addEventListener("scroll", hide);
+</script>
+    </div>
+    <div class="gutter"></div>
+  </body>
+</html>
