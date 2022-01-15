@@ -1,6 +1,25 @@
 # News
 
-## [Issue 12](/): 2021-01-07
+## [Issue 13](/): 2021-01-14
+
+This week, new desktop browser versions include:
+* Firefox 96.0
+* LibreWolf 96.0
+* Safari 15.2
+* Ungoogled Chromium 87.0
+
+On iOS, new browser versions are:
+* Edge 97.1072
+* Yandex 2201.0
+
+And on Android, we have:
+* Brave 1.34
+* DuckDuckGo 5.107
+* Edge 97.0
+* Opera 66.2
+* Samsung 16.0
+
+## [Issue 12](/archive/issue13/): 2021-01-07
 
 This week, new desktop browser versions include:
 * Brave 1.34
