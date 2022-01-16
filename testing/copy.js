@@ -14,7 +14,7 @@ const generateHtmlFile = (filename) => {
   const newFilename = filename.replace(".md", ".html");
   const htmlOutput = template.htmlPage( {
     title: "Browser Privacy Tests",
-    content: wrapCopy(marked(copy)),
+    content: wrapCopy(marked.parse(copy)),
     cssFiles: ["template.css"]
   });
 //  console.log(htmlOutput);
