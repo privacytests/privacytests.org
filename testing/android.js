@@ -167,8 +167,7 @@ class AndroidBrowser {
     const raw = child_process.execSync(cmd).toString();
     return raw.match(/versionName=(\S+)/)[1];
   }
-  // Open the url in a new tab.
-  async openUrl(url) {
+  async openUrlOnce(url) {
     let urlBarToClick = await findElement(this.client, this.packageName, this.urlBarClick);
     if (urlBarToClick === undefined) {
       if (this.urlBarClick2) {
@@ -188,6 +187,20 @@ class AndroidBrowser {
 		}
     const urlBarToSendKeys = await findElement(this.client, this.packageName, this.urlBarKeys);
     await this.client.elementSendKeys(urlBarToSendKeys, url + "\\n");
+  }
+  // Open the url in a new tab.
+  async openUrl(url) {
+    for (let i = 0; i < 2; ++i) {
+      try {
+        await this.openUrlOnce(url)
+        // Success!
+        return;
+      } catch (e) {
+        console.log(e);
+        // Sleep a bit before we try again.
+        await sleepMs(3000);
+      }
+    }
   }
   // Clean up and close the browser.
   async kill() {
