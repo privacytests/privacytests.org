@@ -142,8 +142,15 @@ const destroyWebSocket = (websocket) => {
 // The "same" domain is the one that is used for simluated third-party tracker
 // and one of the two first parties. The "different" domain is the other
 // first party we use.
+// We also have a insecure domain for purely insecure pages, and an upgradable
+// root for a domain that can be upgraded to https.
+// Finally we have a live root for additional tests that require non-static
+// responses.
 const iframe_root_same = "https://arthuredelstein.net/test-pages";
 const iframe_root_different = "https://test-pages.privacytests.org";
+const insecure_root = "http://insecure.arthuredelstein.net";
+const upgradable_root = "http://upgradable.arthuredelstein.net";
+const live_root = "https://arthuredelstein.net/browser-privacy-live";
 
 const ipAddressTest = async (results) => {
   const myIpAddress = await fetch_ipAddress();
@@ -158,6 +165,69 @@ const ipAddressTest = async (results) => {
   };
 };
 
+// Get the next value from the websocket assigned to a particular browser.
+const nextBrowserValue = (browserObject) => nextValue(browserObject._websocket);
+
+// Open a page at url, passing it the browser's assigned session id as a URL parameter.
+const openSessionUrl = (browserObject, url) => browserObject.openUrl(
+  addSearchParam(url, "sessionId", browserObject._websocket._sessionId));
+
+// Open a page at url, and return the results once they are available.
+const runPageTest = async(browserObject, url) => {
+  await openSessionUrl(browserObject, url);
+  return nextBrowserValue(browserObject);
+};
+
+// Run the main browser tests.
+const runMainTests = async (browserObject) => {
+  const signal = await runPageTest(browserObject, `${iframe_root_same}/supercookies.html?mode=write&thirdparty=same`);
+  if (!signal.supercookie_write_finished) {
+    throw new Error("failed to get signal that the supercookie write finished");
+  }
+  if (browserObject.browser === "onion") {
+    // Onion browser seems to need more handholding
+    await browserObject.clickContent();
+    await openSessionUrl(browserObject, `${iframe_root_same}/supercookies.html?mode=read&thirdparty=same`);
+  } else if (browserObject instanceof AndroidBrowser || browserObject instanceof iOSBrowser) {
+    // In mobile, we click the viewport to open a new tab.
+    await browserObject.clickContent();
+  } else {
+    // In desktop, we manually open a new tab.
+    await openSessionUrl(browserObject, `${iframe_root_same}/supercookies.html?mode=read&thirdparty=same`);
+  }
+  // Return the main results.
+  return nextBrowserValue(browserObject);
+}
+
+// Run the insecure connection test. Returns { insecureRsults, insecurePassed }.
+const runInsecureTest = async (browserObject) => {
+  await openSessionUrl(browserObject, `${insecure_root}/insecure.html`);
+  let insecureResult, insecurePassed;
+  try {
+    insecureResult = await deadlinePromise("insecure test", nextBrowserValue(browserObject), 8000);
+    insecurePassed = false;
+  } catch (e) {
+    insecureResult = { "Insecure website": { passed: true, result: "Insecure website never loaded" } };
+    insecurePassed = true;
+  }
+  return { insecureResult, insecurePassed };
+}
+
+// Run the HSTS cache supercookie test.
+const runHstsTest = async (browserObject, insecurePassed) => {
+  if (!insecurePassed) {
+    await runPageTest(browserObject, `${iframe_root_different}/clear_hsts.html`);
+    await runPageTest(browserObject, `${iframe_root_different}/set_hsts.html`);
+    return await runPageTest(browserObject, `${insecure_root}/test_hsts.html`);
+  } else {
+    return {
+        write: null, read: null,
+        readSameFirstParty: null, readDifferentFirstParty: "HTTPS used by default; no HSTS cache issue expected",
+        passed: true, testFailed: false, unsupported: null
+    }
+  }
+};
+
 // Run all of our privacy tests using selenium for a given driver. Returns
 // a map of test types to test result maps. Such as
 // `
@@ -168,67 +238,31 @@ const ipAddressTest = async (results) => {
 //   "supercookies" : { ... } }
 const runTests = async (browserObject) => {
   try {
-    const websocket = browserObject._websocket;
-    const sessionId = websocket._sessionId
-    await browserObject.openUrl(`${iframe_root_same}/supercookies.html?mode=write&thirdparty=same&sessionId=${sessionId}`);
-    let signal = await nextValue(websocket);
-    if (!signal.supercookie_write_finished) {
-      throw new Error("failed to get signal that the supercookie write finished");
-    }
-    if (browserObject.browser === "onion") {
-      await browserObject.clickContent();
-      await browserObject.openUrl(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`);
-    } else if (browserObject instanceof AndroidBrowser || browserObject instanceof iOSBrowser) {
-      await browserObject.clickContent();
-    } else {
-      await browserObject.openUrl(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`);
-    }
-    let mainResults = await nextValue(websocket);
-    let results = Object.assign({}, mainResults);
+    // Main tests
+    const mainResults = await runMainTests(browserObject);
     await sleep(1000);
-    await browserObject.openUrl(`${iframe_root_same}/supplementary.html?sessionId=${sessionId}`);
-    let supplementaryResults = await nextValue(websocket);
-    // For now, don't include system font detection test in mobile
+    // Supplementary tests
+    const supplementaryResults = await runPageTest(browserObject, `${iframe_root_same}/supplementary.html`);
+    // Top-level tests
+    const topLevelResults = await runPageTest(browserObject, `${live_root}/toplevel`)
+    const ipAddressLeak = await ipAddressTest(topLevelResults);
+    // HTTPS tests
+    const upgradableAddressResult = await runPageTest(browserObject, `${upgradable_root}/upgradable.html?source=address`);
+    const { insecureResult, insecurePassed } = await runInsecureTest(browserObject);
+    // HSTS supercookie test
+    const hstsResult = await runHstsTest(browserObject, insecurePassed);
+    // Now compile the results into a final format.
+    let results = Object.assign({}, mainResults);
+    Object.assign(results["misc"],
+                  ipAddressLeak,
+                  { "GPC enabled first-party": topLevelResults["GPC enabled first-party"]});
+    Object.assign(results["https"], upgradableAddressResult, insecureResult);
+    Object.assign(results["supercookies"], { "HSTS cache": hstsResult });
+    // For now, only include system font detection results in desktop
     if (browserObject instanceof DesktopBrowser) {
-      Object.assign(results["fingerprinting"], {"System font detection": supplementaryResults["System font detection"]});
+      Object.assign(results["fingerprinting"],
+                    {"System font detection": supplementaryResults["System font detection"]});
     }
-    await browserObject.openUrl(`https://arthuredelstein.net/browser-privacy-live/toplevel?sessionId=${sessionId}`)
-    const toplevelResults = await nextValue(websocket);
-    const ipAddressLeak = await ipAddressTest(toplevelResults);
-    Object.assign(results["misc"], ipAddressLeak);
-    Object.assign(results["misc"], { "GPC enabled first-party": toplevelResults["GPC enabled first-party"]});
-    await browserObject.openUrl(`http://upgradable.arthuredelstein.net/upgradable.html?source=address&sessionId=${sessionId}`);
-    console.log("upgradable...");
-    const upgradableAddressResult = await nextValue(websocket);
-    console.log("upgradable received.");
-    Object.assign(results["https"], upgradableAddressResult);
-    await browserObject.openUrl(`http://insecure.arthuredelstein.net/insecure.html?sessionId=${sessionId}`);
-    let insecureResult, insecurePassed;
-    try {
-      insecureResult = await deadlinePromise("insecure test", nextValue(websocket), 8000);
-      insecurePassed = false;
-    } catch (e) {
-      insecureResult =  { "Insecure website": { passed: true, result: "Insecure website never loaded" } };
-      insecurePassed = true;
-    }
-    Object.assign(results["https"], insecureResult);
-    if (!insecurePassed) {
-      await browserObject.openUrl(`https://test-pages.privacytests.org/clear_hsts.html?sessionId=${sessionId}`);
-      await nextValue(websocket);
-      await browserObject.openUrl(`https://test-pages.privacytests.org/set_hsts.html?sessionId=${sessionId}`);
-      await nextValue(websocket);
-      await browserObject.openUrl(`http://insecure.arthuredelstein.net/test_hsts.html?sessionId=${sessionId}`);
-      hstsResult = await nextValue(websocket);
-      console.log({hstsResult});
-      Object.assign(results["supercookies"], {"HSTS cache":hstsResult});
-    } else {
-      Object.assign(results["supercookies"], {"HSTS cache":{
-        write: null, read: null,
-        readSameFirstParty: null, readDifferentFirstParty: "HTTPS used by default; no HSTS cache issue expected",
-        passed: true, testFailed: false, unsupported: null
-      }});
-    }
-
     return results;
   } catch (e) {
     console.log(e);
@@ -385,3 +419,4 @@ const main = async () => {
 };
 
 main();
+
