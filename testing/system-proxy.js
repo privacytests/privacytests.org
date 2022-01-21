@@ -29,13 +29,14 @@ const setProxyState = (networkService, type, enabled) => {
 };
 
 const setProxy = (networkService, type, { enabled, domain, port, authenticated, username, password }) => {
+  //console.log(networkService, type, { enabled, domain, port, authenticated, username, password });
   let authenticatedString = authenticated === undefined ? "" : (authenticated ? "on" : "off");
   let usernameString = username === undefined ? "" : username;
   let passwordString = password === undefined ? "" : password;
   if (domain !== undefined && port !== undefined) {
     let command = `/usr/sbin/networksetup -set${type}proxy "${networkService}" "${domain}" "${port}"`;
     if (authenticatedString) {
-      command += `"${authenticatedString}" "${usernameString} ${passwordString}"`;
+      command += ` "${authenticatedString}" "${usernameString} ${passwordString}"`;
     }
     run(command);
   }
