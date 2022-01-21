@@ -256,7 +256,7 @@ const runTrackingCookieTest = async (browserObject) => {
 //   "https" : { ... },
 //   "navigation" : { ... },
 //   "supercookies" : { ... } }
-const runTests = async (browserObject) => {
+const runTests = async (browserObject, trackingCookies) => {
   try {
     // Main tests
     const mainResults = await runMainTests(browserObject);
@@ -272,7 +272,7 @@ const runTests = async (browserObject) => {
     // HSTS supercookie test
     const hstsResult = await runHstsTest(browserObject, insecurePassed);
     // Now compile the results into a final format.
-    const trackingCookieResult = await runTrackingCookieTest(browserObject);
+    const trackingCookieResult = trackingCookies ? await runTrackingCookieTest(browserObject) : undefined;
     let results = Object.assign({}, mainResults);
     Object.assign(results["misc"],
                   ipAddressLeak,
@@ -283,7 +283,9 @@ const runTests = async (browserObject) => {
     if (browserObject instanceof DesktopBrowser) {
       Object.assign(results["fingerprinting"],
                     {"System font detection": supplementaryResults["System font detection"]});
-      Object.assign(results["tracking cookies"], trackingCookieResult); 
+      if (trackingCookieResult) {
+        Object.assign(results["tracking cookies"], trackingCookieResult); 
+      }
     }
     return results;
   } catch (e) {
@@ -294,7 +296,7 @@ const runTests = async (browserObject) => {
 
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
-const runTestsBatch = async (browserList, { shouldQuit, android, iOS } = { shouldQuit: true }) => {
+const runTestsBatch = async (browserList, { shouldQuit, android, iOS, trackingCookies } = { shouldQuit: true }) => {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
   for (let config of browserList) {
@@ -305,7 +307,7 @@ const runTestsBatch = async (browserList, { shouldQuit, android, iOS } = { shoul
     browserObject._websocket = await createWebsocket();
     try {
       await browserObject.launch();
-      const testResults = await deadlinePromise(`${browser} tests`, runTests(browserObject), 300000);
+      const testResults = await deadlinePromise(`${browser} tests`, runTests(browserObject, trackingCookies), 300000);
       all_tests.push({
         browser, incognito, tor, nightly,
         testResults, timeStarted,
@@ -431,7 +433,8 @@ const main = async () => {
     const expandedBrowserList = configToExpandedBrowserList(config);
     console.log("List of browsers to run:", expandedBrowserList);
     const testResults = await runTestsBatch(expandedBrowserList,
-      { shouldQuit: !config.debug, android: config.android, iOS: config.ios });
+					    { shouldQuit: !config.debug, android: config.android,
+					      iOS: config.ios, trackingCookies: config.trackingCookies });
     let dataFile = writeDataSync(config.filename, testResults);
     restoreProxies();
     render.render({ dataFiles: [dataFile], aggregate: config.aggregate });

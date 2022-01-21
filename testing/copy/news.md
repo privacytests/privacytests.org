@@ -1,6 +1,15 @@
 # News
 
-## [Issue 13](/): 2021-01-14
+## [Issue 14](/): 2021-01-21
+
+This week, Opera Desktop has updated to version 83.0.
+
+On Android, new browser versions are:
+* DuckDuckGo 5.109
+* Fireofx 96.2
+* Yandex 22.1
+
+## [Issue 13](/archive/issue13/): 2021-01-14
 
 This week, new desktop browser versions include:
 * Firefox 96.0
