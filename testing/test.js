@@ -81,6 +81,8 @@ const installTestFontIfNeeded = () => {
   }
 };
 
+// ## Proxies
+
 let originalProxyState = {};
 const disableProxies = () => {
   const networkServices = proxy.getNetworkServices();
@@ -97,6 +99,14 @@ const restoreProxies = () => {
     proxy.setProxies(networkService, originalProxyState[networkService]);
   }
 };
+
+const enableLocalProxies = (port) => {
+  const networkServices = proxy.getNetworkServices();
+  for (const networkService of networkServices) {
+    proxy.setProxies(networkService, {"web": { enabled: true, domain: "127.0.0.1", port },
+                                      "secureweb": { enabled: true, domain: "127.0.0.1", port }});
+  }
+}
 
 // ## Websocket utilities
 
@@ -197,7 +207,7 @@ const runMainTests = async (browserObject) => {
   }
   // Return the main results.
   return nextBrowserValue(browserObject);
-}
+};
 
 // Run the insecure connection test. Returns { insecureRsults, insecurePassed }.
 const runInsecureTest = async (browserObject) => {
@@ -211,7 +221,7 @@ const runInsecureTest = async (browserObject) => {
     insecurePassed = true;
   }
   return { insecureResult, insecurePassed };
-}
+};
 
 // Run the HSTS cache supercookie test.
 const runHstsTest = async (browserObject, insecurePassed) => {
@@ -226,6 +236,16 @@ const runHstsTest = async (browserObject, insecurePassed) => {
         passed: true, testFailed: false, unsupported: null
     }
   }
+};
+
+const runTrackingCookieTest = async (browserObject) => {
+  if (!(browserObject instanceof DesktopBrowser)) {
+    return undefined;
+  }
+  enableLocalProxies(9090);
+  let results = await runPageTest(browserObject, `${iframe_root_different}/tracking_content.html`);
+  disableLocalProxies(9090);
+  return results;
 };
 
 // Run all of our privacy tests using selenium for a given driver. Returns
@@ -252,6 +272,7 @@ const runTests = async (browserObject) => {
     // HSTS supercookie test
     const hstsResult = await runHstsTest(browserObject, insecurePassed);
     // Now compile the results into a final format.
+    const trackingCookieResult = await runTrackingCookieTest(browserObject);
     let results = Object.assign({}, mainResults);
     Object.assign(results["misc"],
                   ipAddressLeak,
@@ -262,6 +283,7 @@ const runTests = async (browserObject) => {
     if (browserObject instanceof DesktopBrowser) {
       Object.assign(results["fingerprinting"],
                     {"System font detection": supplementaryResults["System font detection"]});
+      Object.assign(results["tracking cookies"], trackingCookieResult); 
     }
     return results;
   } catch (e) {
