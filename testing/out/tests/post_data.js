@@ -33,6 +33,11 @@ const postDataAndCarryOn = async (results, category) => {
   try {
     const response = await postData(results, category);
     showData("response", response);
+    const urlParams = new URLSearchParams(window.location.search);
+    const manual = urlParams.get("manual");
+    if (manual) {
+      return;
+    }
     if (!response) {
       return;
     }
