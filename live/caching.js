@@ -37,7 +37,7 @@ let mimeTypes = {
   "favicon": "image/png",
   "fetch": "text/html",
   "font": "font/woff",
-  "image": "image.png",
+  "image": "image/png",
   "page": "text/html",
   "preload": "text/html",
   "prefetch": "text/html",
