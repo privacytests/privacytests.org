@@ -429,6 +429,7 @@ const main = async () => {
     console.log({config});
     if (config.update) {
       await updateAll(config);
+      return;
     }
     const expandedBrowserList = configToExpandedBrowserList(config);
     console.log("List of browsers to run:", expandedBrowserList);
