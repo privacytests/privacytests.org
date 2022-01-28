@@ -93,6 +93,7 @@
 
      const testUrl = async (url) => {
        let passed;
+       const random = Math.random().toString().slice(2);
        try {
          const testElement = document.createElement(url.includes(".js") ? "script" : "img");
          document.body.appendChild(testElement);
@@ -100,7 +101,9 @@
            testElement.addEventListener("load", e => resolve(e), { once: true});
            testElement.addEventListener("error", e => reject(e), { once: true});
          });
-         testElement.src = url;
+         const url2 = new URL(url);
+         url2.searchParams.append("rand", random);
+         testElement.src = url2.href;
          let result = await resultPromise;
          passed = false;
          console.log(url, result);
