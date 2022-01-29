@@ -12,9 +12,10 @@ const browserInfo = {
   chrome: {
 		name: "Chrome",
     bundleId: "com.google.chrome.ios",
-		urlBarClick: "Search or type URL",
-		urlBarClick2: "NTPHomeFakeOmniboxAccessibilityID",
-		urlBarKeys: "NTPHomeFakeOmniboxAccessibilityID",
+		urlBarClick: "NTPHomeFakeOmniboxAccessibilityID",
+		//urlBarClick2: "Toolbar",
+		urlBarClick2: "Address and search bar",
+		urlBarKeys: "Address",
 		privateWindow: ["kToolbarStackButtonIdentifier", "TabGridIncognitoTabsPageButtonIdentifier", "TabGridDoneButtonIdentifier"],
 		normalWindow: ["kToolbarStackButtonIdentifier", "TabGridRegularTabsPageButtonIdentifier", "TabGridDoneButtonIdentifier"]
   },
