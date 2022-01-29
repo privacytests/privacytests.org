@@ -32,6 +32,7 @@
      };
 
      const runTest = async () => {
+       const tracking_cookies = new URLSearchParams(window.location.search).get("tracking_cookies");
        const response = await fetch("./trackers.json",   { headers: {'Accept': 'application/json' } });
        const tests = await response.json();
        let results = {};
@@ -40,7 +41,7 @@
          const description = `Tests whether the browser blocks the page from loading the tracker at ${url}`;
          results[name] = { url, passed, description };
        }
-       await postDataAndCarryOn(results, "trackers");
+       await postDataAndCarryOn(results, tracking_cookies ? "tracking_cookies" : "trackers");
      };
      runTest();
     </script>
