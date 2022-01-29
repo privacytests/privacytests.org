@@ -5,14 +5,18 @@ const browserInfo = {
 		name: "Brave",
     bundleId: "com.brave.ios.browser",
     urlBarClick: "url",
-    urlBarKeys: "url"
+    urlBarKeys: "url",
+		privateWindow: ["TabToolbar.tabsButton", "Private Mode", "TabTrayController.doneButton"],
+		normalWindow: ["TabToolbar.tabsButton", "Private Mode", "TabTrayController.doneButton"]
   },
   chrome: {
 		name: "Chrome",
     bundleId: "com.google.chrome.ios",
-		urlBarClick: "Address and search bar",
+		urlBarClick: "Search or type URL",
 		urlBarClick2: "NTPHomeFakeOmniboxAccessibilityID",
-		urlBarKeys: "Address",
+		urlBarKeys: "NTPHomeFakeOmniboxAccessibilityID",
+		privateWindow: ["kToolbarStackButtonIdentifier", "TabGridIncognitoTabsPageButtonIdentifier", "TabGridDoneButtonIdentifier"],
+		normalWindow: ["kToolbarStackButtonIdentifier", "TabGridRegularTabsPageButtonIdentifier", "TabGridDoneButtonIdentifier"]
   },
   duckduckgo: {
 		name: "DuckDuckGo",
@@ -45,7 +49,8 @@ const browserInfo = {
 		urlBarClickClass: "XCUIElementTypeTextField", // Hoping this is the only one present
 		urlBarKeys: "Onion Browser", // application element
 		urlBarClear: "Clear text",
-		postLaunchDelay: 10000
+		postLaunchDelay: 10000,
+		// No additional private mode
   },
   opera: {
 		name: "Opera",
@@ -89,6 +94,13 @@ const findElementWithClass = async (client, className) => {
   return elementObject.ELEMENT;
 };
 
+const clickSeries = async (client, names) => {
+	for (let name of names) {
+		console.log(`clicking ${name}`)
+		await clickElementWithName(client, name);
+	}
+}
+
 class iOSBrowser {
   constructor({browser, incognito, tor, nightly}) {
     Object.assign(this, { browser, incognito, tor, nightly }, browserInfo[browser]);
@@ -123,6 +135,16 @@ class iOSBrowser {
 				console.log(e);
 			}
 		}
+		if (this.incognito) {
+			if (this.privateWindow) {
+				await clickSeries(this.client, this.privateWindow);
+			}
+		} else {
+			if (this.normalWindow) {
+				await clickSeries(this.client, this.normalWindow);
+			}
+		}
+		await sleepMs(2000);
   }
   // Get the browser version.
   async version() {
