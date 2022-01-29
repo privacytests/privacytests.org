@@ -5,7 +5,7 @@
 // ## imports
 
 const fs = require('fs');
-const { execSync } = require('child_process');
+const { execSync, exec } = require('child_process');
 const minimist = require('minimist');
 const dateFormat = require('dateformat');
 const YAML = require('yaml');
@@ -32,7 +32,7 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const deadlinePromise = async (name, promise, timeMs) => {
   let timeoutId;
   const timeoutPromise = new Promise((_r, rej) => {
-    timeoutId = setTimeout(() => rej(`${name} timed out after ${timeMs/1000} s.`), timeMs);
+    timeoutId = setTimeout(() => rej(`${name} timed out after ${timeMs / 1000} s.`), timeMs);
   });
   const result = await Promise.race([promise, timeoutPromise]);
   clearTimeout(timeoutId);
@@ -41,7 +41,7 @@ const deadlinePromise = async (name, promise, timeMs) => {
 
 // Reads the current git commit hash for this program in a string. Used
 // when reporting results, to make them easier to reproduce.
-const gitHash = () => execSync('git rev-parse HEAD', { cwd: __dirname}).toString().trim();
+const gitHash = () => execSync('git rev-parse HEAD', { cwd: __dirname }).toString().trim();
 
 // Accepts a url string and a key and val to add search parameter.
 const addSearchParam = (url, key, val) => {
@@ -73,7 +73,7 @@ const installTestFontIfNeeded = () => {
     "linux": `${homedir}/.local/share/fonts`
   }[process.platform];
   if (!fs.existsSync(userFontDir)) {
-    fs.mkdirSync(userFontDir, {recursive: true});
+    fs.mkdirSync(userFontDir, { recursive: true });
   }
   const fontDestination = `${userFontDir}/Monoton-Regular.ttf`;
   if (!fs.existsSync(fontDestination)) {
@@ -81,30 +81,42 @@ const installTestFontIfNeeded = () => {
   }
 };
 
+let openProcesses = new Set();
+
+const execute = (cmd, options) => {
+  const process = exec(cmd, options);
+  openProcesses.add(process);
+  return process;
+};
+
+const killAllChildProcesses = () => {
+  for (let process of openProcesses) {
+    process.kill();
+  }
+}
+
 // ## Proxies
 
 let originalProxyState = {};
+
 const disableProxies = () => {
   const networkServices = proxy.getNetworkServices();
   for (let networkService of networkServices) {
     originalProxyState[networkService] = proxy.getProxies(networkService);
-    proxy.setProxies(networkService, {"web":{enabled:false},
-                                      "secureweb":{enabled:false}});
+    proxy.setProxies(networkService, {
+      "web": { enabled: false },
+      "secureweb": { enabled: false }
+    });
   }
 };
 
-const restoreProxies = () => {
-  const networkServices = proxy.getNetworkServices();
-  for (let networkService of networkServices) {
-    proxy.setProxies(networkService, originalProxyState[networkService]);
-  }
-};
-
-const enableLocalProxies = (port) => {
+const enableProxies = (port) => {
   const networkServices = proxy.getNetworkServices();
   for (const networkService of networkServices) {
-    proxy.setProxies(networkService, {"web": { enabled: true, domain: "127.0.0.1", port },
-                                      "secureweb": { enabled: true, domain: "127.0.0.1", port }});
+    proxy.setProxies(networkService, {
+      "web": { enabled: true, domain: "127.0.0.1", port },
+      "secureweb": { enabled: true, domain: "127.0.0.1", port }
+    });
   }
 }
 
@@ -125,7 +137,7 @@ const createWebsocket = async () => {
 // Get the next value from the websocket.
 const nextValue = async (websocket) => {
   const message = await websocket.source.next();
-  console.log({message});
+  console.log({ message });
   if (message.value === undefined) {
     throw new Error(`Unexpected message: ${JSON.stringify(message)}`);
   }
@@ -164,9 +176,9 @@ const live_root = "https://arthuredelstein.net/browser-privacy-live";
 
 const ipAddressTest = async (results) => {
   const myIpAddress = await fetch_ipAddress();
-  console.log("ipAddressTest", {results});
+  console.log("ipAddressTest", { results });
   let { description, ipAddress } = results["IP address leak"];
-  console.log({myIpAddress, deviceIpAddress: ipAddress});
+  console.log({ myIpAddress, deviceIpAddress: ipAddress });
   return {
     "IP address leak": {
       description,
@@ -183,13 +195,13 @@ const openSessionUrl = (browserObject, url) => browserObject.openUrl(
   addSearchParam(url, "sessionId", browserObject._websocket._sessionId));
 
 // Open a page at url, and return the results once they are available.
-const runPageTest = async(browserObject, url) => {
+const runPageTest = async (browserObject, url) => {
   await openSessionUrl(browserObject, url);
   return nextBrowserValue(browserObject);
 };
 
 // Run the main browser tests.
-const runMainTests = async (browserObject) => {
+const runMainTests = async (browserObject, categories) => {
   const signal = await runPageTest(browserObject, `${iframe_root_same}/supercookies.html?mode=write&thirdparty=same`);
   if (!signal.supercookie_write_finished) {
     throw new Error("failed to get signal that the supercookie write finished");
@@ -231,21 +243,79 @@ const runHstsTest = async (browserObject, insecurePassed) => {
     return await runPageTest(browserObject, `${insecure_root}/test_hsts.html`);
   } else {
     return {
-        write: null, read: null,
-        readSameFirstParty: null, readDifferentFirstParty: "HTTPS used by default; no HSTS cache issue expected",
-        passed: true, testFailed: false, unsupported: null
+      write: null, read: null,
+      readSameFirstParty: null, readDifferentFirstParty: "HTTPS used by default; no HSTS cache issue expected",
+      passed: true, testFailed: false, unsupported: null
     }
   }
 };
 
+const execDataPromise = (process) => new Promise((resolve, reject) => {
+  let result = [];
+  process.stdout.on('data', (data) => {
+    console.log(`Received data: '${data}'`);
+    result.push(data);
+  });
+  process.stdout.on('end', () => {
+    resolve(result.join(""));
+  });
+  process.stderr.on('data', (data) => {
+    reject(data);
+  })
+});
+
+const mitmOpenSessionUrl = async (browserObject, url, mitmScript, mitmProxyPort) => {
+  console.log("about to launch mitmdump");
+  console.log(`mitmdump -q -p ${mitmProxyPort} -s ${mitmScript}`);
+  const mitmProxyProcess = execute(
+    `mitmdump -q -p ${mitmProxyPort} -s ${mitmScript}`,
+    { cwd: "./mitmproxy_scripts" });
+  await sleep(2000);
+  console.log("launched");
+  const responsePromise = execDataPromise(mitmProxyProcess);
+  console.log({responsePromise})
+  //await sleep(5000);
+  await runPageTest(browserObject, url);
+  mitmProxyProcess.kill();
+  const response = await responsePromise;
+  console.log("mitmdump finished");
+  console.log(response);
+  return response;
+};
+
+const analyzeTrackingCookieTestResults = (secretCookie, requestsDataString) => {
+  const requestsData = requestsDataString.split("\n").map(x => x.split(" "));
+  let requestsResults = {};
+  for (let [host, cookie] of requestsData) {
+    requestsResults[host] = cookie;
+  }
+  const trackers = JSON.parse(fs.readFileSync("./out/tests/trackers.json"));
+  let analyzedResults = {};
+  for (let {name, url} of trackers) {
+    let host = new URL(url).host;
+    const cookieFound = requestsResults[host];
+    const passed = cookieFound !== secretCookie;
+    const description = `Tests whether the browser stops cookies from ${host} from tracking users across websites.`;
+    analyzedResults[name] = {passed, url, description, cookieFound};
+  }
+  console.log(analyzedResults);
+  return analyzedResults;
+}
+
 const runTrackingCookieTest = async (browserObject) => {
+  const mitmProxyPort = 9090;
   if (!(browserObject instanceof DesktopBrowser)) {
     return undefined;
   }
-  enableLocalProxies(9090);
-  let results = await runPageTest(browserObject, `${iframe_root_different}/tracking_content.html`);
-  disableLocalProxies(9090);
-  return results;
+  enableProxies(mitmProxyPort);
+  const responsesData = await mitmOpenSessionUrl(
+    browserObject, `${iframe_root_same}/tracking_content.html?manual=true&tracking_cookies=true`, "responses.py", mitmProxyPort);
+  const secretCookie = responsesData.trim();
+  console.log({secretCookie});
+  const requestsDataString = await mitmOpenSessionUrl(
+    browserObject, `${iframe_root_different}/tracking_content.html?manual=true&tracking_cookies=true`, "requests.py", mitmProxyPort);
+  disableProxies(mitmProxyPort);
+  return analyzeTrackingCookieTestResults(secretCookie, requestsDataString);
 };
 
 // Run all of our privacy tests using selenium for a given driver. Returns
@@ -256,36 +326,48 @@ const runTrackingCookieTest = async (browserObject) => {
 //   "https" : { ... },
 //   "navigation" : { ... },
 //   "supercookies" : { ... } }
-const runTests = async (browserObject, trackingCookies) => {
+const runTests = async (browserObject, categories) => {
   try {
+    let results = {};
+    console.log({categories});
     // Main tests
-    const mainResults = await runMainTests(browserObject);
-    await sleep(1000);
+    if (!categories || categories.includes("main")) {
+      const mainResults = await runMainTests(browserObject, categories);
+      Object.assign(results, mainResults);
+      await sleep(1000);
+    }
     // Supplementary tests
-    const supplementaryResults = await runPageTest(browserObject, `${iframe_root_same}/supplementary.html`);
-    // Top-level tests
-    const topLevelResults = await runPageTest(browserObject, `${live_root}/toplevel`)
-    const ipAddressLeak = await ipAddressTest(topLevelResults);
-    // HTTPS tests
-    const upgradableAddressResult = await runPageTest(browserObject, `${upgradable_root}/upgradable.html?source=address`);
-    const { insecureResult, insecurePassed } = await runInsecureTest(browserObject);
-    // HSTS supercookie test
-    const hstsResult = await runHstsTest(browserObject, insecurePassed);
-    // Now compile the results into a final format.
-    const trackingCookieResult = trackingCookies ? await runTrackingCookieTest(browserObject) : undefined;
-    let results = Object.assign({}, mainResults);
-    Object.assign(results["misc"],
-                  ipAddressLeak,
-                  { "GPC enabled first-party": topLevelResults["GPC enabled first-party"]});
-    Object.assign(results["https"], upgradableAddressResult, insecureResult);
-    Object.assign(results["supercookies"], { "HSTS cache": hstsResult });
-    // For now, only include system font detection results in desktop
-    if (browserObject instanceof DesktopBrowser) {
-      Object.assign(results["fingerprinting"],
-                    {"System font detection": supplementaryResults["System font detection"]});
-      if (trackingCookieResult) {
-        Object.assign(results["tracking cookies"], trackingCookieResult); 
+    if (!categories || categories.includes("supplementary")) {
+      const supplementaryResults = await runPageTest(browserObject, `${iframe_root_same}/supplementary.html`);
+      // For now, only include system font detection results in desktop
+      if (browserObject instanceof DesktopBrowser) {
+        Object.assign(results["fingerprinting"],
+          { "System font detection": supplementaryResults["System font detection"] });
       }
+    }
+    // Misc
+    if (!categories || categories.includes("misc")) {
+      const topLevelResults = await runPageTest(browserObject, `${live_root}/toplevel`)
+      const ipAddressLeak = await ipAddressTest(topLevelResults);
+      Object.assign(results["misc"],
+        ipAddressLeak,
+        { "GPC enabled first-party": topLevelResults["GPC enabled first-party"] });
+    }
+    // HTTPS tests
+    if (!categories || categories.includes("https")) {
+      const upgradableAddressResult = await runPageTest(browserObject, `${upgradable_root}/upgradable.html?source=address`);
+      const { insecureResult, insecurePassed } = await runInsecureTest(browserObject);
+      // HSTS supercookie test
+      const hstsResult = await runHstsTest(browserObject, insecurePassed);
+      Object.assign(results["https"], upgradableAddressResult, insecureResult);
+      Object.assign(results["supercookies"], { "HSTS cache": hstsResult });
+    }
+    // Tracking cookies
+    if (browserObject instanceof DesktopBrowser && (!categories || categories.includes("trackingCookies"))) {
+      // Now compile the results into a final format.
+      console.log("running trackingCookies");
+      const trackingCookieResult = await runTrackingCookieTest(browserObject);
+      Object.assign(results, {"tracker_cookies": trackingCookieResult});
     }
     return results;
   } catch (e) {
@@ -296,7 +378,7 @@ const runTests = async (browserObject, trackingCookies) => {
 
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
-const runTestsBatch = async (browserList, { shouldQuit, android, iOS, trackingCookies } = { shouldQuit: true }) => {
+const runTestsBatch = async (browserList, { shouldQuit, android, iOS, categories } = { shouldQuit: true }) => {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
   for (let config of browserList) {
@@ -307,7 +389,7 @@ const runTestsBatch = async (browserList, { shouldQuit, android, iOS, trackingCo
     browserObject._websocket = await createWebsocket();
     try {
       await browserObject.launch();
-      const testResults = await deadlinePromise(`${browser} tests`, runTests(browserObject, trackingCookies), 300000);
+      const testResults = await deadlinePromise(`${browser} tests`, runTests(browserObject, categories), 300000);
       all_tests.push({
         browser, incognito, tor, nightly,
         testResults, timeStarted,
@@ -363,7 +445,7 @@ const readYAMLFile = (file) => {
 };
 
 const readConfig = () => {
-  const defaultConfig = {aggregate: true, repeat: 1, debug: false};
+  const defaultConfig = { aggregate: true, repeat: 1, debug: false };
   let commandLineConfig = minimist(process.argv.slice(2));
   const configFile = commandLineConfig._[0];
   delete commandLineConfig._;
@@ -415,18 +497,35 @@ const updateAll = async (config) => {
   }));
 };
 
+let cleanupRan = false;
+const cleanup = () => {
+  if (cleanupRan) {
+    return;
+  }
+  console.log("cleaning up");
+  disableProxies();
+  killAllChildProcesses();
+  cleanupRan = true;
+};
+
 // ## Main program
 
 // Reads in command-line arguments, config file, runs the required
 // tests, writes them to a JSON data file, and then renders results to
 // a human-readable web page.
 const main = async () => {
+  [`exit`, `SIGINT`, `SIGUSR1`, `SIGUSR2`, /*`uncaughtException`,*/ `SIGTERM`].forEach((eventType) => {
+    process.on(eventType, (code) => {
+      cleanup(eventType);
+      process.exit(code);
+    });
+  });
   try {
     installTestFontIfNeeded();
     disableProxies();
     // Read config file and flags from command line
     const config = readConfig();
-    console.log({config});
+    console.log({ config });
     if (config.update) {
       await updateAll(config);
       return;
@@ -434,11 +533,13 @@ const main = async () => {
     const expandedBrowserList = configToExpandedBrowserList(config);
     console.log("List of browsers to run:", expandedBrowserList);
     const testResults = await runTestsBatch(expandedBrowserList,
-					    { shouldQuit: !config.debug, android: config.android,
-					      iOS: config.ios, trackingCookies: config.trackingCookies });
+      {
+        shouldQuit: !config.debug, android: config.android,
+        iOS: config.ios,
+        categories: config.categories
+      });
     let dataFile = writeDataSync(config.filename, testResults);
-    restoreProxies();
-    render.render({ dataFiles: [dataFile], aggregate: config.aggregate });
+    await render.render({ dataFiles: [dataFile], aggregate: config.aggregate });
   } catch (e) {
     console.log(e);
   }
