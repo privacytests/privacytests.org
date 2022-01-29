@@ -280,8 +280,16 @@ const sectionDescription = {
     browser extensions maintain list of tracking companies and block their content from
     being loaded.
     
-    This section checks to see if a browser blocks 20 of the largest trackers, as reported
-    by https://whotracks.me.`};
+    This section checks to see if a browser blocks 20 of the largest trackers listed
+    by https://whotracks.me.`,
+  tracker_cookies: `
+    A large fraction of web pages on the web have hidden third-party trackers that read and
+    write cookies in your browser. These cookies can be used to track your browsing across
+    websites.
+
+    This section checks to see if a browser stops cross-site tracking by cookies from 20 of
+    the largest trackers listed by https://whotracks.me.
+  `};
 
 const resultsToTable = (results, title) => {
   console.log(results);
@@ -310,6 +318,8 @@ const resultsToTable = (results, title) => {
   body = body.concat(resultsSection({bestResults, category:"query", tooltipFunction: simpleToolTip}));
   body.push([{subheading:"Tracker content blocking", description: sectionDescription.trackers}]);
   body = body.concat(resultsSection({bestResults, category:"trackers", tooltipFunction: simpleToolTip}));
+  body.push([{subheading:"Tracker cookie protection", description: sectionDescription.tracker_cookies}]);
+  body = body.concat(resultsSection({bestResults, category:"tracker_cookies", tooltipFunction: simpleToolTip}));
   return { headers, body };
 };
 
