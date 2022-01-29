@@ -42,6 +42,7 @@ const macOSdefaultBrowserSettings = {
     nightlyDataDir: "BraveSoftware/Brave-Browser-Nightly",
 //    profileCommand: chromiumProfileFlags,
     update: ["Brave", "About Brave"],
+    updateNightly: ["Brave", "About Brave"],
   },
   chrome: {
     name: "Google Chrome",
@@ -51,6 +52,7 @@ const macOSdefaultBrowserSettings = {
     nightlyDataDir: "Google/Chrome Canary",
 //    profileCommand: chromiumProfileFlags,
     update: ["Chrome", "About Google Chrome"],
+    updateNightly: ["Chrome Canary", "About Google Chrome"],
   },
   firefox: {
     name: "firefox",
@@ -60,6 +62,7 @@ const macOSdefaultBrowserSettings = {
     profileCommand: "-profile ",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
     update: ["Firefox", "About Firefox"],
+    updateNightly: ["Firefox Nightly", "About Nightly"],
   },
   librewolf: {
     name: "librewolf",
@@ -77,6 +80,7 @@ const macOSdefaultBrowserSettings = {
     nightlyDataDir: "Microsoft Edge Canary",
 //    profileCommand: chromiumProfileFlags,
     update: ["Microsoft Edge", "About Microsoft Edge"],
+    updateNightly: ["Microsoft Edge Canary", "About Microsoft Edge"],
 },
   opera: {
     name: "Opera",
@@ -86,6 +90,7 @@ const macOSdefaultBrowserSettings = {
     nightlyDataDir: "com.operasoftware.OperaDeveloper",
 //    profileCommand: chromiumProfileFlags,
     update: ["Opera", "About Opera"],
+    updateNightly: ["Opera Developer", "About Opera"],
   },
   safari: {
     name: "Safari",
@@ -102,6 +107,8 @@ const macOSdefaultBrowserSettings = {
     dataDir: "TorBrowser-Data",
     preLaunchDelay: 10000,
     postLaunchDelay: 10000,
+    update: ["Tor Browser", "About Tor Browser"],
+    updateNightly: ["Tor Browser", "About Tor Browser"],
   },
   ungoogled: {
     name: "Ungoogled Chromium",
@@ -122,6 +129,7 @@ const macOSdefaultBrowserSettings = {
 //    profileCommand: chromiumProfileFlags,
 // Assumes Vivaldi is on automatic updates:
     update: ["Vivaldi", "About Vivaldi"],
+    updateNightly: ["Vivaldi Snapshot", "About Vivaldi"],
 }
 };
 
@@ -206,9 +214,11 @@ class DesktopBrowser {
   }
   // Update the browser to the latest version.
   async update() {
-    if (this._defaults.update) {
+    // For most browsers, we use the "About" menu item to get the browser to check for udpates.
+    const [menuName, aboutItemName] = this._nightly ? this._defaults.updateNightly : this._defaults.update;
+    if (menuName) {
       await this.launch();
-      execSync(`osascript updateBrowser.applescript "${this._defaults.update[0]}" "${this._defaults.update[1]}"`);
+      execSync(`osascript updateBrowser.applescript "${menuName}" "${aboutItemName}"`);
       // Wait 5 minutes for the update binary to download
       await sleepMs(300000);
       await this.kill();
