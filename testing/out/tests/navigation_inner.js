@@ -1,5 +1,9 @@
 import { runAllTests, sleepMs } from "./test_utils.js";
 
+const baseURI = "https://arthuredelstein.net/browser-privacy-live/";
+
+let testURI = (path, type, key) => `${baseURI}${path}?type=${type}&key=${key}`;
+
 let tests = {
   "sessionStorage": {
     description: "The sessionStorage API is similar to the localStorage API, but it does not persist across tabs or across browser sessions. Nonetheless, it can be used to track users if they navigate from one website to another. This tracking can be thwarted by partitioning sessionStorage between websites.",
@@ -50,7 +54,109 @@ let tests = {
       let response = await fetch("serviceworker-read");
       return await response.text();
     }
-  }
+  },
+  "CSS cache": {
+    description: "CSS stylesheets are cached, and if that cache is shared between websites, it can be used to track users across sites.",
+    write: async (key) => {
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return key;
+    },
+    read: async (key) => {
+      const href = testURI("resource", "css", key);
+      const head = document.getElementsByTagName("head")[0];
+      head.innerHTML += `<link type="text/css" rel="stylesheet" href="${href}">`;
+      const testElement = document.querySelector("#css");
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith("fake")) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return fontFamily;
+    }
+  },
+  "image cache": {
+    description: "Caching of images in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.",
+    write: (key) => new Promise((resolve, reject) => {
+      let img = document.createElement("img");
+      document.body.appendChild(img);
+      img.addEventListener("load", () => resolve(key), {once: true});
+      img.src = testURI("resource", "image", key);
+    }),
+    read: async (key) => {
+      let img = document.createElement("img");
+      document.body.appendChild(img);
+      let imgLoadPromise = new Promise((resolve, reject) => {
+        img.addEventListener("load", resolve, {once: true});
+      });
+      img.src = testURI("resource", "image", key);
+      await imgLoadPromise;
+      let response = await fetch(
+        testURI("ctr", "image", key), {"cache": "reload"});
+      return (await response.text()).trim();
+    }
+  },
+  "font cache": {
+    description: "Web fonts are sometimes stored in their own cache, which is vulnerable to being abused for cross-site tracking.",
+    write: async (key) => {
+      let style = document.createElement("style");
+      style.type='text/css';
+      let fontURI = testURI("resource", "font", key);
+      style.innerHTML = `@font-face {font-family: "myFont"; src: url("${fontURI}"); } body { font-family: "myFont" }`;
+      document.getElementsByTagName("head")[0].appendChild(style);
+      return key;
+    },
+    read: async (key) => {
+      let style = document.createElement("style");
+      style.type='text/css';
+      let fontURI = testURI("resource", "font", key);
+      style.innerHTML = `@font-face {font-family: "myFont"; src: url("${fontURI}"); } body { font-family: "myFont" }`;
+      document.getElementsByTagName("head")[0].appendChild(style);
+      await sleepMs(500);
+      let response = await fetch(
+        testURI("ctr", "font", key), {"cache": "reload"});
+      return (await response.text()).trim();
+    }
+  },
+  "prefetch cache": {
+    description: "A <link rel='prefetch'...> suggests to browsers they should fetch a resource ahead of time and cache it. But if browsers don't partition this cache, it can be used to track users across websites.",
+    write: async (key) => {
+      let link = document.createElement("link");
+      link.rel = "prefetch";
+      link.href = testURI("resource", "prefetch", key);
+      document.getElementsByTagName("head")[0].appendChild(link);
+      return key;
+    },
+    read: async (key) => {
+      let link = document.createElement("link");
+      link.rel = "prefetch";
+      link.href = testURI("resource", "prefetch", key);
+      document.getElementsByTagName("head")[0].appendChild(link);
+      await sleepMs(500);
+      let response = await fetch(
+        testURI("ctr", "prefetch", key), {"cache": "reload"});
+      let countString = (await response.text()).trim();
+      if (parseInt(countString) === 0) {
+        throw new Error("No requests received");
+      }
+      return countString;
+    }
+  },
 };
 
 runAllTests(tests);
