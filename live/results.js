@@ -213,7 +213,7 @@ app.post('/post', (req, res) => {
     // We don't recognized this as an existing sessionId.
     console.log(`Unknown sessionId '${sessionId}'; Sending 404.`);
     res.sendStatus(404);
-  } else if (["supplementary", "insecure", "upgradable_address", "toplevel", "nothing", "hsts"].includes(category)) {
+  } else if (["supplementary", "insecure", "upgradable_address", "toplevel", "nothing", "hsts", "tracking_cookies"].includes(category)) {
     console.log({category, sessionId, data});
     websocketSend(sessionId, data);
     res.json({}); // No instructions for page
