@@ -1,6 +1,33 @@
 # News
 
-## [Issue 14](/): 2021-01-21
+## [Issue 15](/): 2021-02-03
+
+After a brief pause to investigate an inconsistency in test results, we are back with Issue 15:
+
+New desktop browser versions are:
+* Brave 1.35
+* Chrome 98.0
+
+On Android, one browser updated:
+ * Firefox 96.2
+
+On iOS, updates are:
+* Brave 1.34
+* Chrome 97.4692
+* Firefox 96.0
+* Yandex 2201.3
+
+### Investigation of inconsistency in four cache partitioning tests
+
+Over the past week, I investigated puzzling behavior in four partitioning tests: CSS cache, font cache, image cache, and prefetch cache. Chromium-based browsers were passing these privacy tests, but, surprisingly, running the same tests manually or via a different testing framework resulted in failures. I wanted to understand why I was getting these inconsistent results, to make sure the published results are correct going forward.
+
+Whether these tests passed or failed (i.e, isolation or sharing of data between websites) turned out to depend on how two pages from different websites were loaded. If the two pages are loaded completely independently, we see isolation, but if one page is loaded in a child tab of the other page, or if one page navigates to a second page, we see that the two pages can share cache data. That indicates that Chromium browsers are weakly isolating these caches, but not isolating them under all circumstances.
+
+I decided to take the more stringent testing approach, on the principle that browsers should always isolate websites' data from one another except under user consent. So in this issue, the testing framework has been updated such that we see these tests newly failing for several Chromium-based browsers.
+
+Thanks to Steven Englehardt for alerting me to this problem and providng helpful guidance.
+
+## [Issue 14](/archive/issue14/): 2021-01-21
 
 This week, Opera Desktop has updated to version 83.0.
 

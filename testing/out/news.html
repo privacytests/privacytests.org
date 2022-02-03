@@ -163,7 +163,30 @@ Feedback is welcome!"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cD
 </div>
     
   <div class="copy"><h1 id="news">News</h1>
-<h2 id="issue-14-2021-01-21"><a href="/">Issue 14</a>: 2021-01-21</h2>
+<h2 id="issue-15-2021-02-03"><a href="/">Issue 15</a>: 2021-02-03</h2>
+<p>After a brief pause to investigate an inconsistency in test results, we are back with Issue 15:</p>
+<p>New desktop browser versions are:</p>
+<ul>
+<li>Brave 1.35</li>
+<li>Chrome 98.0</li>
+</ul>
+<p>On Android, one browser updated:</p>
+<ul>
+<li>Firefox 96.2</li>
+</ul>
+<p>On iOS, updates are:</p>
+<ul>
+<li>Brave 1.34</li>
+<li>Chrome 97.4692</li>
+<li>Firefox 96.0</li>
+<li>Yandex 2201.3</li>
+</ul>
+<h3 id="investigation-of-inconsistency-in-four-cache-partitioning-tests">Investigation of inconsistency in four cache partitioning tests</h3>
+<p>Over the past week, I investigated puzzling behavior in four partitioning tests: CSS cache, font cache, image cache, and prefetch cache. Chromium-based browsers were passing these privacy tests, but, surprisingly, running the same tests manually or via a different testing framework resulted in failures. I wanted to understand why I was getting these inconsistent results, to make sure the published results are correct going forward.</p>
+<p>Whether these tests passed or failed (i.e, isolation or sharing of data between websites) turned out to depend on how two pages from different websites were loaded. If the two pages are loaded completely independently, we see isolation, but if one page is loaded in a child tab of the other page, or if one page navigates to a second page, we see that the two pages can share cache data. That indicates that Chromium browsers are weakly isolating these caches, but not isolating them under all circumstances.</p>
+<p>I decided to take the more stringent testing approach, on the principle that browsers should always isolate websites&#39; data from one another except under user consent. So in this issue, the testing framework has been updated such that we see these tests newly failing for several Chromium-based browsers.</p>
+<p>Thanks to Steven Englehardt for alerting me to this problem and providng helpful guidance.</p>
+<h2 id="issue-14-2021-01-21"><a href="/archive/issue14/">Issue 14</a>: 2021-01-21</h2>
 <p>This week, Opera Desktop has updated to version 83.0.</p>
 <p>On Android, new browser versions are:</p>
 <ul>
