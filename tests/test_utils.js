@@ -2,6 +2,11 @@ let runTests = async (tests, mode, params) => {
   let results = {};
   for (let test of Object.keys(tests)) {
     let result;
+    if (params["only"]) {
+      if (test !== params["only"]) {
+        continue;
+      }
+    }
     console.log(`running ${test}...`);
     try {
       let input = params["sessionId"];
