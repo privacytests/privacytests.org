@@ -7,7 +7,7 @@ const browserInfo = {
     urlBarClick: "url",
     urlBarKeys: "url",
 		privateWindow: ["TabToolbar.tabsButton", "Private Mode", "TabTrayController.doneButton"],
-		normalWindow: ["TabToolbar.tabsButton", "Private Mode", "TabTrayController.doneButton"]
+		// Brave starts in normal window mode.
   },
   chrome: {
 		name: "Chrome",
