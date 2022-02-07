@@ -158,6 +158,15 @@ app.get('/headers', (req, res) => {
   res.json(req.headers);
 });
 
+app.get('/cookie', (req, res) => {
+  const secret = req.query["secret"];
+  const cookieHeader = `secret=${secret}; HTTPOnly; SameSite=None; Secure`;
+  res.set({
+    'set-cookie': cookieHeader
+  });
+  res.send(`<!DOCTYPE html><html><body><pre>set-cookie: ${cookieHeader}</pre></body></html>`);
+});
+
 app.get('/blob', (req, res) => {
   let { key, mode, blobUrl } = req.query;
   if (mode === "write") {
