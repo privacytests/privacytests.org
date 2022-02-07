@@ -175,6 +175,10 @@ const processResults = (rawResults) => {
   let supercookies = getJointResult(supercookies_write_same, supercookies_read_same, supercookies_read_different);
   let navigation = getJointResult(navigation_write_same, navigation_read_same, navigation_read_different);
   moveTestBetweenCategories("ServiceWorker", navigation, supercookies);
+  moveTestBetweenCategories("CSS cache", navigation, supercookies);
+  moveTestBetweenCategories("font cache", navigation, supercookies);
+  moveTestBetweenCategories("image cache", navigation, supercookies);
+  moveTestBetweenCategories("prefetch cache", navigation, supercookies);
   moveTestBetweenCategories("Stream isolation", supercookies, misc);
   return {
     misc,
