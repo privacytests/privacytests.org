@@ -37,7 +37,7 @@ let tests = {
       // Request a page that will send a 'set-cookie' response header with secret value.
       await fetch(`${baseURI}cookie?secret=${secret}_http`);
     },
-    read: () => {
+    read: async () => {
       // Test if we now send a requests with a 'cookie' header containing the secret.
       let response = await fetch(`${baseURI}headers`);
       let cookie = await response.json()["cookie"];
