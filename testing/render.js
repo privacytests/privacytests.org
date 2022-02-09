@@ -495,7 +495,7 @@ const render = async ({dataFiles, live, aggregate }) => {
 const main = async () => {
   let { _: dataFiles, live, aggregate } = minimist(process.argv.slice(2),
                                      opts = { default: { aggregate: true }});
-  await render({ dataFiles, live, aggregate });
+  await render({ dataFiles, live, aggregate: (aggregate === true) });
 };
 
 if (require.main === module) {
