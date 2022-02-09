@@ -34,13 +34,13 @@ let tests = {
    "cookie (HTTP)": {
     description: "The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website's behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.",
     write: async (secret) => {
-      // Request a page that will send a 'set-cookie' response header with secret value.
+      // Request a page that will send an HTTPOnly 'set-cookie' response header with secret value.
       await fetch(`${baseURI}cookie?secret=${secret}_http`);
     },
     read: async () => {
       // Test if we now send a requests with a 'cookie' header containing the secret.
       let response = await fetch(`${baseURI}headers`);
-      let cookie = await response.json()["cookie"];
+      let cookie = (await response.json())["cookie"];
       return cookie ? cookie.match(/secret=(\S+)/)[1]: null;
     }
    },
