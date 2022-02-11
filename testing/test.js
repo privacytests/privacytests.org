@@ -271,10 +271,9 @@ const execDataPromise = (process) => new Promise((resolve, reject) => {
 
 const mitmOpenSessionUrl = async (browserObject, url, mitmScript, mitmProxyPort) => {
   log("about to launch mitmdump");
-  log(`mitmdump -q -p ${mitmProxyPort} -s ${mitmScript}`);
-  const mitmProxyProcess = execute(
-    `mitmdump -q -p ${mitmProxyPort} -s ${mitmScript}`,
-    { cwd: "./mitmproxy_scripts" });
+  const command = `/opt/homebrew/bin/mitmdump -q -p ${mitmProxyPort} -s ${mitmScript}`;
+  log(command);
+  const mitmProxyProcess = execute(command, { cwd: "./mitmproxy_scripts" });
   await sleep(4000);
   log("launched");
   const responsePromise = execDataPromise(mitmProxyProcess);
