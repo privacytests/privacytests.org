@@ -291,7 +291,7 @@ const sectionDescription = {
     the largest trackers listed by https://whotracks.me.
   `};
 
-const resultsToTable = (results, title) => {
+const resultsToTable = (results, title, includeTrackingCookies) => {
   console.log(results);
   let bestResults = results
       .filter(m => m["testResults"])
@@ -316,8 +316,10 @@ const resultsToTable = (results, title) => {
   body = body.concat(resultsSection({bestResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
   body.push([{subheading:"Tracking query parameter tests", description: sectionDescription.queryParameters}]);
   body = body.concat(resultsSection({bestResults, category:"query", tooltipFunction: simpleToolTip}));
-  body.push([{subheading:"Tracker cookie protection", description: sectionDescription.tracker_cookies}]);
-  body = body.concat(resultsSection({bestResults, category:"tracker_cookies", tooltipFunction: simpleToolTip}));
+  if (includeTrackingCookies) {
+    body.push([{subheading:"Tracker cookie protection", description: sectionDescription.tracker_cookies}]);
+    body = body.concat(resultsSection({bestResults, category:"tracker_cookies", tooltipFunction: simpleToolTip}));
+  }
   body.push([{subheading:"Tracker content blocking", description: sectionDescription.trackers}]);
   body = body.concat(resultsSection({bestResults, category:"trackers", tooltipFunction: simpleToolTip}));
   return { headers, body };
@@ -336,7 +338,7 @@ const dateString = (dateTime) => {
 
 // Creates the content for a page.
 const content = (results, jsonFilename, title, nightly, incognito) => {
-  let { headers, body } = resultsToTable(results.all_tests, tableTitleHTML(title));
+  let { headers, body } = resultsToTable(results.all_tests, tableTitleHTML(title), results.platform === "Desktop");
   const issueNumber = fs.readFileSync("issue-number").toString().trim();  
   console.log(results.platform);
   return `
