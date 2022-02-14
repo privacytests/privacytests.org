@@ -101,29 +101,23 @@ const killAllChildProcesses = () => {
 
 // ## Proxies
 
-let originalProxyState = {};
+let preferredNetworkService;
 
 const disableProxies = () => {
-  const networkServices = proxy.getNetworkServices();
-  for (let networkService of networkServices) {
-    originalProxyState[networkService] = proxy.getProxies(networkService);
-    proxy.setProxies(networkService, {
-      "web": { enabled: false },
-      "secureweb": { enabled: false }
-    });
-  }
+  preferredNetworkService ??= proxy.getPreferredNetworkService();
+  proxy.setProxies(networkService, {
+    "web": { enabled: false },
+    "secureweb": { enabled: false }
+  });
 };
 
 const enableProxies = (port) => {
-  let t1 = Date.now();
-  const networkServices = proxy.getNetworkServices();
-  for (const networkService of networkServices) {
-    proxy.setProxies(networkService, {
-      "web": { enabled: true, domain: "127.0.0.1", port },
-      "secureweb": { enabled: true, domain: "127.0.0.1", port }
-    });
-  }
-}
+  preferredNetworkService ??= proxy.getPreferredNetworkService();
+  proxy.setProxies(preferredNetworkService, {
+    "web": { enabled: true, domain: "127.0.0.1", port },
+    "secureweb": { enabled: true, domain: "127.0.0.1", port }
+  });
+};
 
 // ## Websocket utilities
 

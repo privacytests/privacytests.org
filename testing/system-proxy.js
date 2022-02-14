@@ -14,14 +14,38 @@ An asterisk (*) denotes that a network service is disabled.
 
 const run = (...args) => execSync(...args).toString();
 
-const parseNetworkServiceList = (text) =>
-  [...text.matchAll(/\(\d+?\)\s+?(.+)$/mg)]
-        .map(m => m[1]);
+const getPreferredDevice = () => {
+  const result = run("route get example.com | grep interface");
+  return result.split(":")[1].trim();
+};
+
+const parseNetworkServiceList = (text) => {
+  const groups = text.split("\n\n");
+  let result = {};
+  for (let group of groups) {
+    let lines = group.split("\n");
+    let hardwarePort, device;
+    for (let line of lines) {
+      const chunks =line.split(": ");
+      if (chunks[0] === "Hardware Port") {
+        hardwarePort = chunks[1];
+      } else if (chunks[0] === "Device") {
+        device = chunks[1];
+      }
+    }
+    if (device && hardwarePort) {
+      result[device] = hardwarePort;
+    }
+}
+  return result;
+};
 
 const getNetworkServices = () => {
-  const result = run("/usr/sbin/networksetup -listnetworkserviceorder");
+  const result = run("/usr/sbin/networksetup -listallhardwareports");
   return parseNetworkServiceList(result);
 };
+
+const getPreferredNetworkService = () => getNetworkServices()[getPreferredDevice()];
 
 const setProxyState = (networkService, type, enabled) => {
   const state = enabled ? "on" : "off";
@@ -60,7 +84,7 @@ const parseGetterResult = raw => {
   result["domain"] = server === "0" ? undefined : server;
   const port = rawMap["Port"];
   result["port"] = port === "0" ? undefined : port;
-  result["authenticated"] = {"0": false, "1": true}[rawMap["Authenticated Proxy Enabled"]];
+  result["authenticated"] = { "0": false, "1": true }[rawMap["Authenticated Proxy Enabled"]];
   return result;
 };
 
@@ -85,24 +109,23 @@ const getProxies = (networkService) => {
 };
 
 const runTests = () => {
-  console.log("Fake:", parseNetworkServiceList(exampleOutput));
-  let networkServices = getNetworkServices();
-  console.log(networkServices);
-  for (const networkService of networkServices) {
-    let oldSettings = getProxies(networkService);
-    console.log(oldSettings);
-    setProxies(networkService, {"web": { enabled: true, domain: "127.0.0.1", port: 8080 },
-                                "secureweb": { enabled: true, domain: "127.0.0.1", port: 8080 }});
+  const networkService = getPreferredNetworkService();
+  console.log(networkService);
+  const oldSettings = getProxies(networkService);
+  console.log(oldSettings);
+  setProxies(networkService, {
+    "web": { enabled: true, domain: "127.0.0.1", port: 8080 },
+    "secureweb": { enabled: true, domain: "127.0.0.1", port: 8080 }
+  });
+  console.log(getProxies(networkService));
+  setTimeout(() => {
+    setProxies(networkService, oldSettings);
     console.log(getProxies(networkService));
-    setTimeout(() => {
-      setProxies(networkService, oldSettings);
-      console.log(getProxies(networkService));
-    }, 5000);
-  }
+  }, 5000);
 };
 
 if (require.main === module) {
   runTests();
 }
 
-module.exports = { setProxies, getProxies, getNetworkServices };
+module.exports = { setProxies, getProxies, getNetworkServices, getPreferredNetworkService };
