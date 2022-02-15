@@ -316,12 +316,12 @@ const resultsToTable = (results, title, includeTrackingCookies) => {
   body = body.concat(resultsSection({bestResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
   body.push([{subheading:"Tracking query parameter tests", description: sectionDescription.queryParameters}]);
   body = body.concat(resultsSection({bestResults, category:"query", tooltipFunction: simpleToolTip}));
+  body.push([{subheading:"Tracker content blocking", description: sectionDescription.trackers}]);
+  body = body.concat(resultsSection({bestResults, category:"trackers", tooltipFunction: simpleToolTip}));
   if (includeTrackingCookies) {
     body.push([{subheading:"Tracker cookie protection", description: sectionDescription.tracker_cookies}]);
     body = body.concat(resultsSection({bestResults, category:"tracker_cookies", tooltipFunction: simpleToolTip}));
   }
-  body.push([{subheading:"Tracker content blocking", description: sectionDescription.trackers}]);
-  body = body.concat(resultsSection({bestResults, category:"trackers", tooltipFunction: simpleToolTip}));
   return { headers, body };
 };
 
