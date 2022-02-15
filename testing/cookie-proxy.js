@@ -1,8 +1,8 @@
-const { result } = require('lodash');
 const mockttp = require('mockttp');
 
 let hostsThatLeak = {};
 
+// Takes a cookie string and returns a map with key-values.
 const parseCookies = (cookieString) => {
   if (!cookieString) {
     return {};
@@ -17,8 +17,9 @@ const parseCookies = (cookieString) => {
 };
 
 const simulateTrackingCookies = async () => { 
-  // Create a proxy server with a self-signed HTTPS CA certificate:
+  // Allows us to match requests to responses.
   let idToUrlMapping = new Map();
+  // Create a proxy server with a self-signed HTTPS CA certificate:
   const server = mockttp.getLocal({
     https: {
       keyPath: '../../.pto_certs/key.pem',
@@ -26,7 +27,24 @@ const simulateTrackingCookies = async () => {
     }
   });
   server.forAnyRequest().thenPassThrough({
-  // Inject cookies for responses
+    // Inject cookies for responses
+    beforeResponse: (response) => {
+      const url = idToUrlMapping.get(response.id);
+      idToUrlMapping.delete(response.id);
+      const searchParams = (new URL(url)).searchParams;
+      const sessionId = searchParams.get("sessionId");
+      const writeCookie = searchParams.get("pto_write_cookie") === "true";
+      let headers;
+      let setCookieHeader;
+      if (writeCookie && sessionId) {
+        headers = response.headers;
+        setCookieHeader = `pto_cookie=${sessionId}; max-age=3600; Secure; SameSite=None`;
+        headers["set-cookie"] = setCookieHeader;
+      }
+      console.log({url, sessionId, writeCookie, setCookieHeader, /*response*/});
+      return { headers };
+    },
+    // Look for cookies in requests
     beforeRequest: (request) => {
       const url = request.url;
       idToUrlMapping.set(request.id, request.url);
@@ -37,35 +55,20 @@ const simulateTrackingCookies = async () => {
       const pto_cookie = parseCookies(request.headers.cookie)["pto_cookie"];
       if (readCookie && pto_cookie === sessionId) {
         // We have found cookie sharing.
-        hostsThatLeak[sessionId] ??= [];
-        hostsThatLeak[sessionId].push(hostname);
+        hostsThatLeak[sessionId] ??= new Set();
+        hostsThatLeak[sessionId].add(hostname);
       }
-      console.log({url, readCookie, sessionId, /*request,*/ pto_cookie});
-    },
-    beforeResponse: (response) => {
-      const url = idToUrlMapping.get(response.id);
-      idToUrlMapping.delete(response.id);
-      const searchParams = (new URL(url)).searchParams;
-      const sessionId = searchParams.get("sessionId");
-      const writeCookie = searchParams.get("pto_write_cookie") === "true";
-      let headers = response.headers;
-      let setCookieHeader;
-      if (writeCookie && sessionId) {
-        setCookieHeader = `pto_cookie=${sessionId}; max-age=3600; Secure; SameSite=None`;
-        headers["set-cookie"] = setCookieHeader;
-      }
-      console.log({url, sessionId, writeCookie, setCookieHeader, /*response*/});
-      return { headers };
+      console.log({url, readCookie, sessionId, pto_cookie, /*request*/});
     }
   });
   await server.start(9090);
   console.log(`Tracking cookie proxy running on port ${server.port}`);
 };
 
-const getHostsForCookie = (cookie) => hostsThatLeak[cookie];
+const getLeakyHosts = (sessionId) => hostsThatLeak[sessionId];
 
 if (require.main === module) {
   simulateTrackingCookies();
 }
 
-module.exports = { getHostsForCookie };
+module.exports = { simulateTrackingCookies, getLeakyHosts };

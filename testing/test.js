@@ -18,6 +18,7 @@ const { AndroidBrowser } = require("./android.js");
 const { iOSBrowser } = require("./iOS.js");
 const proxy = require("./system-proxy");
 const { connect } = require("it-ws/client");
+const { simulateTrackingCookies, getLeakyHosts } = require('./cookie-proxy');
 
 // ## Utility functions
 
@@ -105,7 +106,7 @@ let preferredNetworkService;
 
 const disableProxies = () => {
   preferredNetworkService ??= proxy.getPreferredNetworkService();
-  proxy.setProxies(networkService, {
+  proxy.setProxies(preferredNetworkService, {
     "web": { enabled: false },
     "secureweb": { enabled: false }
   });
@@ -249,75 +250,33 @@ const runHstsTest = async (browserObject, insecurePassed) => {
   }
 };
 
-const execDataPromise = (process) => new Promise((resolve, reject) => {
-  let result = [];
-  process.stdout.on('data', (data) => {
-    log(`Received data: '${data}'`);
-    result.push(data);
-  });
-  process.stdout.on('end', () => {
-    resolve(result.join(""));
-  });
-  process.stderr.on('data', (data) => {
-    reject(data);
-  })
-});
-
-const mitmOpenSessionUrl = async (browserObject, url, mitmScript, mitmProxyPort) => {
-  log("about to launch mitmdump");
-  const command = `/opt/homebrew/bin/mitmdump -q -p ${mitmProxyPort} -s ${mitmScript}`;
-  log(command);
-  const mitmProxyProcess = execute(command, { cwd: "./mitmproxy_scripts" });
-  await sleep(4000);
-  log("launched");
-  const responsePromise = execDataPromise(mitmProxyProcess);
-  log({responsePromise})
-  //await sleep(5000);
-  await runPageTest(browserObject, url);
-  try {
-  mitmProxyProcess.kill();
-  } catch (e) {
-    log(e);
-  }
-  const response = await responsePromise;
-  log("mitmdump finished");
-  log(response);
-  return response;
-};
-
-const analyzeTrackingCookieTestResults = (secretCookie, requestsDataString) => {
-  const requestsData = requestsDataString.split("\n").map(x => x.split(" "));
-  let requestsResults = {};
-  for (let [host, cookie] of requestsData) {
-    requestsResults[host] = cookie;
-  }
+const analyzeTrackingCookieTestResults = (leakyHosts) => {
   const trackers = JSON.parse(fs.readFileSync("./out/tests/trackers.json"));
   let analyzedResults = {};
-  for (let {name, url} of trackers) {
+  for (let { name, url } of trackers) {
     let host = new URL(url).host;
-    const cookieFound = requestsResults[host];
-    const passed = cookieFound !== secretCookie;
+    const cookieFound = leakyHosts ? leakyHosts.has(host) : false;
+    const passed = !cookieFound;
     const description = `Tests whether the browser stops cookies from ${host} from tracking users across websites.`;
-    analyzedResults[name] = {passed, url, description, cookieFound};
+    analyzedResults[name] = { passed, url, description, cookieFound };
   }
   log(analyzedResults);
   return analyzedResults;
 }
 
 const runTrackingCookieTest = async (browserObject) => {
-  const mitmProxyPort = 9090;
+  const cookieProxyPort = 9090;
   if (!(browserObject instanceof DesktopBrowser)) {
     return undefined;
   }
-  enableProxies(mitmProxyPort);
-  const responsesData = await mitmOpenSessionUrl(
-    browserObject, `${iframe_root_same}/tracking_content.html?manual=true&tracking_cookies=true`, "responses.py", mitmProxyPort);
-  const secretCookie = responsesData.trim();
-  log({secretCookie});
-  const requestsDataString = await mitmOpenSessionUrl(
-    browserObject, `${iframe_root_different}/tracking_content.html?manual=true&tracking_cookies=true`, "requests.py", mitmProxyPort);
-  disableProxies(mitmProxyPort);
-  return analyzeTrackingCookieTestResults(secretCookie, requestsDataString);
+  enableProxies(cookieProxyPort);
+  await runPageTest(
+    browserObject, `${iframe_root_same}/tracking_content.html?manual=true&write_cookies=true`);
+  await runPageTest(
+    browserObject, `${iframe_root_different}/tracking_content.html?manual=true&read_cookies=true`);
+  disableProxies(cookieProxyPort);
+  const leakyHosts = getLeakyHosts(browserObject._websocket._sessionId);
+  return analyzeTrackingCookieTestResults(leakyHosts);
 };
 
 // Run all of our privacy tests using selenium for a given driver. Returns
@@ -331,7 +290,7 @@ const runTrackingCookieTest = async (browserObject) => {
 const runTests = async (browserObject, categories) => {
   disableProxies();
   let results = {};
-  log({categories});
+  log({ categories });
   // Main tests
   if (!categories || categories.includes("main")) {
     const mainResults = await runMainTests(browserObject, categories);
@@ -360,7 +319,7 @@ const runTests = async (browserObject, categories) => {
     // Now compile the results into a final format.
     log("running trackingCookies");
     const trackingCookieResult = await runTrackingCookieTest(browserObject);
-    Object.assign(results, {"tracker_cookies": trackingCookieResult});
+    Object.assign(results, { "tracker_cookies": trackingCookieResult });
   }  // HTTPS tests
   if (!categories || categories.includes("https")) {
     const upgradableAddressResult = await runPageTest(browserObject, `${upgradable_root}/upgradable.html?source=address`);
@@ -378,6 +337,7 @@ const runTests = async (browserObject, categories) => {
 const runTestsBatch = async (browserList, { shouldQuit, android, iOS, categories } = { shouldQuit: true }) => {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
+  simulateTrackingCookies();
   for (let config of browserList) {
     log("\nnext test:", config);
     const { browser, incognito, tor, nightly } = config;
