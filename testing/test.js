@@ -104,20 +104,24 @@ const killAllChildProcesses = () => {
 
 let preferredNetworkService;
 
-const disableProxies = () => {
+const disableProxies = async () => {
   preferredNetworkService ??= proxy.getPreferredNetworkService();
   proxy.setProxies(preferredNetworkService, {
     "web": { enabled: false },
     "secureweb": { enabled: false }
   });
+  // Wait for proxy settings to propagate.
+  await sleep(1000);
 };
 
-const enableProxies = (port) => {
+const enableProxies = async (port) => {
   preferredNetworkService ??= proxy.getPreferredNetworkService();
   proxy.setProxies(preferredNetworkService, {
     "web": { enabled: true, domain: "127.0.0.1", port },
     "secureweb": { enabled: true, domain: "127.0.0.1", port }
   });
+  // Wait for proxy settings to propagate.
+  await sleep(1000);
 };
 
 // ## Websocket utilities
@@ -269,12 +273,12 @@ const runTrackingCookieTest = async (browserObject) => {
   if (!(browserObject instanceof DesktopBrowser)) {
     return undefined;
   }
-  enableProxies(cookieProxyPort);
+  await enableProxies(cookieProxyPort);
   await runPageTest(
     browserObject, `${iframe_root_same}/tracking_content.html?manual=true&write_cookies=true`);
   await runPageTest(
     browserObject, `${iframe_root_different}/tracking_content.html?manual=true&read_cookies=true`);
-  disableProxies(cookieProxyPort);
+  await disableProxies(cookieProxyPort);
   const leakyHosts = getLeakyHosts(browserObject._websocket._sessionId);
   return analyzeTrackingCookieTestResults(leakyHosts);
 };
@@ -288,7 +292,7 @@ const runTrackingCookieTest = async (browserObject) => {
 //   "navigation" : { ... },
 //   "supercookies" : { ... } }
 const runTests = async (browserObject, categories) => {
-  disableProxies();
+  await disableProxies();
   let results = {};
   log({ categories });
   // Main tests
@@ -455,12 +459,12 @@ const updateAll = async (config) => {
 };
 
 let cleanupRan = false;
-const cleanup = () => {
+const cleanup = async () => {
   if (cleanupRan) {
     return;
   }
   log("cleaning up");
-  disableProxies();
+  await disableProxies();
   killAllChildProcesses();
   cleanupRan = true;
 };
@@ -480,7 +484,7 @@ const main = async () => {
   });
   try {
     installTestFontIfNeeded();
-    disableProxies();
+    await disableProxies();
     // Read config file and flags from command line
     const config = readConfig();
     log({ config });
