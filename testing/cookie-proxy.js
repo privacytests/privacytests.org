@@ -24,7 +24,8 @@ const simulateTrackingCookies = async () => {
     https: {
       keyPath: '../../.pto_certs/key.pem',
       certPath: '../../.pto_certs/cert.pem'
-    }
+    },
+    cors: true
   });
   server.forAnyRequest().thenPassThrough({
     // Inject cookies for responses
@@ -35,14 +36,15 @@ const simulateTrackingCookies = async () => {
       const sessionId = searchParams.get("sessionId");
       const writeCookie = searchParams.get("pto_write_cookie") === "true";
       let headers;
+      headers = response.headers;
       let setCookieHeader;
       if (writeCookie && sessionId) {
-        headers = response.headers;
         setCookieHeader = `pto_cookie=${sessionId}; max-age=3600; Secure; SameSite=None`;
         headers["set-cookie"] = setCookieHeader;
+        console.log({url, sessionId, writeCookie, setCookieHeader});
+        return { headers }
       }
-      console.log({url, sessionId, writeCookie, setCookieHeader, /*response*/});
-      return { headers };
+      return undefined;
     },
     // Look for cookies in requests
     beforeRequest: (request) => {
@@ -58,7 +60,9 @@ const simulateTrackingCookies = async () => {
         hostsThatLeak[sessionId] ??= new Set();
         hostsThatLeak[sessionId].add(hostname);
       }
-      console.log({url, readCookie, sessionId, pto_cookie, /*request*/});
+      if (readCookie) {
+        console.log({url, readCookie, sessionId, pto_cookie});
+      }
     }
   });
   await server.start(9090);
