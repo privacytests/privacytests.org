@@ -1,5 +1,6 @@
 const mockttp = require('mockttp');
 
+let server;
 let hostsThatLeak = {};
 
 // Takes a cookie string and returns a map with key-values.
@@ -16,17 +17,22 @@ const parseCookies = (cookieString) => {
   return result;
 };
 
-const simulateTrackingCookies = async () => { 
+// Start the simulation of tracking cookies by launching a proxy
+// that reads and writes third-party cookies. Injects a tracking
+// cookie if URL has "pto_write_cookie" query parameter; looks
+// for a cookie if URL has "pto_read_cookie" query parameter.
+const simulateTrackingCookies = async (port) => { 
   // Allows us to match requests to responses.
   let idToUrlMapping = new Map();
   // Create a proxy server with a self-signed HTTPS CA certificate:
-  const server = mockttp.getLocal({
+  server = mockttp.getLocal({
     https: {
       keyPath: '../../.pto_certs/key.pem',
       certPath: '../../.pto_certs/cert.pem'
     },
     cors: true
   });
+  server.forGet().thenPassThrough({});
   server.forAnyRequest().thenPassThrough({
     // Inject cookies for responses
     beforeResponse: (response) => {
@@ -65,14 +71,22 @@ const simulateTrackingCookies = async () => {
       }
     }
   });
-  await server.start(9090);
+  await server.start(port);
   console.log(`Tracking cookie proxy running on port ${server.port}`);
 };
 
+// Returns the list of leaky hosts.
 const getLeakyHosts = (sessionId) => hostsThatLeak[sessionId];
 
+// Stop the tracking cookie simulation.
+const stopTrackingCookieSimulation = () => {
+  server.stop();
+};
+
 if (require.main === module) {
-  simulateTrackingCookies();
+  simulateTrackingCookies(9090);
+  //console.log(getLeakyHosts());
+  //stopTrackingCookieSimulation();
 }
 
-module.exports = { simulateTrackingCookies, getLeakyHosts };
+module.exports = { simulateTrackingCookies, getLeakyHosts, stopTrackingCookieSimulation };

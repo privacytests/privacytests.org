@@ -18,7 +18,11 @@ const { AndroidBrowser } = require("./android.js");
 const { iOSBrowser } = require("./iOS.js");
 const proxy = require("./system-proxy");
 const { connect } = require("it-ws/client");
-const { simulateTrackingCookies, getLeakyHosts } = require('./cookie-proxy');
+const cookieProxy = require('./cookie-proxy');
+
+// ## Constants
+
+const cookieProxyPort = 9090;
 
 // ## Utility functions
 
@@ -269,7 +273,6 @@ const analyzeTrackingCookieTestResults = (leakyHosts) => {
 }
 
 const runTrackingCookieTest = async (browserObject) => {
-  const cookieProxyPort = 9090;
   if (!(browserObject instanceof DesktopBrowser)) {
     return undefined;
   }
@@ -279,7 +282,7 @@ const runTrackingCookieTest = async (browserObject) => {
   await runPageTest(
     browserObject, `${iframe_root_different}/tracking_content.html?manual=true&read_cookies=true`);
   await disableProxies(cookieProxyPort);
-  const leakyHosts = getLeakyHosts(browserObject._websocket._sessionId);
+  const leakyHosts = cookieProxy.getLeakyHosts(browserObject._websocket._sessionId);
   return analyzeTrackingCookieTestResults(leakyHosts);
 };
 
@@ -341,7 +344,7 @@ const runTests = async (browserObject, categories) => {
 const runTestsBatch = async (browserList, { shouldQuit, android, iOS, categories } = { shouldQuit: true }) => {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
-  simulateTrackingCookies();
+  cookieProxy.simulateTrackingCookies(cookieProxyPort);
   for (let config of browserList) {
     log("\nnext test:", config);
     const { browser, incognito, tor, nightly } = config;
@@ -369,6 +372,7 @@ const runTestsBatch = async (browserList, { shouldQuit, android, iOS, categories
       }
     }
   }
+  cookieProxy.stopTrackingCookieSimulation();
   const timeStopped = new Date().toISOString();
   let platform;
   if (android) {
