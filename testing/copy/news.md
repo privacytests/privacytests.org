@@ -8,6 +8,10 @@ In this issue, we have added a new capability on desktop: testing for "tracker c
 
 Getting these tests to work was a challenge. By next issue, I hope to be running the same tests on Android and iOS as well.
 
+### New cookie test
+
+I also have expanded general cookie testing to examine both cross-site tracking via HTTP cookies and cross-site tracking via JavaScript cookies (aka document.cookie).
+
 ### New versions
 
 New desktop browser versions are:
