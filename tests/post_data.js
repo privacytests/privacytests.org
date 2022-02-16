@@ -18,7 +18,9 @@ const postData = async (results, category) => {
     return;
   }
   console.log("posting", {sessionId, results});
-  let response = await fetch("https://results.privacytests.org/post", {
+  const isLocal = window.location.host.endsWith(".example");
+    const postURL = isLocal ? "https://results.pto2.example/post" : "https://results.privacytests.org/post";  
+  const response = await fetch(postURL, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',

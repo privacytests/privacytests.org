@@ -24,14 +24,25 @@ const { ipAddress, usingTor } = await (async () => {
 })();
 
 let tests = {
-  "cookie": {
+  "cookie (JS)": {
     description: "The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website's behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.",
     write: (secret) => {
-      let expiry = new Date();
-      expiry.setFullYear(expiry.getFullYear() + 1);
-      document.cookie = `secret=${secret}; SameSite=None; Secure`;
+      document.cookie = `secret=${secret}_js; SameSite=None; Secure`;
     },
     read: () => document.cookie ? document.cookie.match(/secret=(\S+)/)[1] : null,
+   },
+   "cookie (HTTP)": {
+    description: "The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website's behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.",
+    write: async (secret) => {
+      // Request a page that will send an HTTPOnly 'set-cookie' response header with secret value.
+      await fetch(`${baseURI}cookie?secret=${secret}_http`);
+    },
+    read: async () => {
+      // Test if we now send a requests with a 'cookie' header containing the secret.
+      let response = await fetch(`${baseURI}headers`);
+      let cookie = (await response.json())["cookie"];
+      return cookie ? cookie.match(/secret=(\S+)/)[1]: null;
+    }
    },
   "localStorage": {
     description: "The localStorage API gives websites access to a key-value database that will remain available across visits. If the localStorage API is not partitioned or blocked, it can also be used to track users across websites.",
