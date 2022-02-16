@@ -15,7 +15,7 @@ An asterisk (*) denotes that a network service is disabled.
 const run = (...args) => execSync(...args).toString();
 
 const getPreferredDevice = () => {
-  const result = run("route get example.com | grep interface");
+  const result = run("/sbin/route get example.com | /usr/bin/grep interface");
   return result.split(":")[1].trim();
 };
 
