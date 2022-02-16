@@ -1,6 +1,31 @@
 # News
 
-## [Issue 15](/): 2021-02-03
+## [Issue 16](/): 2021-02-16
+
+### New test category: tracker cookie protection
+
+In this issue, we have added a new capability on desktop: testing for "tracker cookie protection". For each desktop browser, we check to see whether third-party cookies from 20 of the web's top tracking domains are stopped from sharing data between first parties.
+
+Getting these tests to work was a challenge. By next issue, I hope to be running the same tests on Android and iOS as well.
+
+### New versions
+
+New desktop browser versions are:
+* Edge 98.0
+* Firefox 97.0
+* Librewolf 97.0-2
+* Ungoogled Chromium 98.0
+* Vivaldi 5.1
+
+New Android browser version:
+* DuckDuckGo 5.112
+
+New iOS browser versions:
+* Chrome 98.4758
+* Firefox 97.0
+* Focus 97.0
+
+## [Issue 15](/archive/issue15/): 2021-02-03
 
 After a brief pause to investigate an inconsistency in test results, we are back with Issue 15:
 
@@ -9,7 +34,7 @@ New desktop browser versions are:
 * Chrome 98.0
 
 On Android, one browser updated:
- * Firefox 96.2
+* Firefox 96.2
 
 On iOS, updates are:
 * Brave 1.34
