@@ -8,10 +8,11 @@
     <script id="testScript"></script>
     <script src="./post_data.js"></script>
     <script>
-     const testUrl = async ({url, sessionId, readCookies, writeCookies}) => {
+     const testUrl = async ({url, sessionId, readCookies, writeCookies, type}) => {
        let passed;
        try {
-         const testElement = document.createElement(url.includes(".js") ? "script" : "img");
+         const isScript = url.includes(".js") || type === "script";
+         const testElement = document.createElement(isScript ? "script" : "img");
          document.body.appendChild(testElement);
          const resultPromise = new Promise((resolve, reject) => {
            testElement.addEventListener("load", e => resolve(e), { once: true});
@@ -44,8 +45,8 @@
        const response = await fetch("./trackers.json",   { headers: {'Accept': 'application/json' } });
        const tests = await response.json();
        let results = {};
-       for (const {name, url} of tests) {
-         const passed = await testUrl({url, sessionId, readCookies, writeCookies});
+       for (const {name, url, type} of tests) {
+         const passed = await testUrl({url, sessionId, readCookies, writeCookies, type});
          const description = `Tests whether the browser blocks the page from loading the tracker at ${url}`;
          results[name] = { url, passed, description };
        }
