@@ -8,11 +8,12 @@
     <script id="testScript"></script>
     <script src="./post_data.js"></script>
     <script>
-     const testUrl = async (url) => {
+     const testUrl = async (url, type) => {
        let passed;
        const random = Math.random().toString().slice(2);
        try {
-         const testElement = document.createElement(url.includes(".js") ? "script" : "img");
+         const isScript = url.includes(".js") || type === "script";
+         const testElement = document.createElement(isScript ? "script" : "img");
          document.body.appendChild(testElement);
          const resultPromise = new Promise((resolve, reject) => {
            testElement.addEventListener("load", e => resolve(e), { once: true});
@@ -36,8 +37,8 @@
        const response = await fetch("./trackers.json",   { headers: {'Accept': 'application/json' } });
        const tests = await response.json();
        let results = {};
-       for (const {name, url} of tests) {
-         const passed = await testUrl(url);
+       for (const {name, url, type} of tests) {
+         const passed = await testUrl(url, type);
          const description = `Tests whether the browser blocks the page from loading the tracker at ${url}`;
          results[name] = { url, passed, description };
        }
