@@ -4,7 +4,7 @@
 
 ### New cookie test
 
-I also have expanded general cookie testing to examine both cross-site tracking via HTTP cookies and cross-site tracking via JavaScript cookies (aka document.cookie).
+I have expanded general cookie testing to examine both cross-site tracking via HTTP cookies and cross-site tracking via JavaScript cookies (aka document.cookie).
 
 ### New versions
 
