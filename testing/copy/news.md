@@ -2,12 +2,6 @@
 
 ## [Issue 16](/): 2021-02-16
 
-### New test category: tracker cookie protection
-
-In this issue, we have added a new capability on desktop: testing for "tracker cookie protection". For each desktop browser, we check to see whether third-party cookies from 20 of the web's top tracking domains are stopped from sharing data between first parties.
-
-Getting these tests to work was a challenge. By next issue, I hope to be running the same tests on Android and iOS as well.
-
 ### New cookie test
 
 I also have expanded general cookie testing to examine both cross-site tracking via HTTP cookies and cross-site tracking via JavaScript cookies (aka document.cookie).
