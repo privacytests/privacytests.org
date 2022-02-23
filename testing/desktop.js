@@ -215,13 +215,17 @@ class DesktopBrowser {
   // Update the browser to the latest version.
   async update() {
     // For most browsers, we use the "About" menu item to get the browser to check for udpates.
-    const [menuName, aboutItemName] = this._nightly ? this._defaults.updateNightly : this._defaults.update;
-    if (menuName) {
-      await this.launch();
-      execSync(`osascript updateBrowser.applescript "${menuName}" "${aboutItemName}"`);
-      // Wait 5 minutes for the update binary to download
-      await sleepMs(300000);
-      await this.kill();
+    const update = this.nightly ? this._defaults.updateNightly : this._defaults.update;
+    if (update) {
+      console.log({this_nightly: this._nightly, update});
+      const [menuName, aboutItemName] = update;
+      if (menuName) {
+        await this.launch();
+        execSync(`osascript updateBrowser.applescript "${menuName}" "${aboutItemName}"`);
+        // Wait 5 minutes for the update binary to download
+        await sleepMs(300000);
+        await this.kill();
+      }
     }
   }
 }
