@@ -1,6 +1,6 @@
 # News
 
-## [Issue 16](/): 2021-02-16
+## [Issue 16](/): 2022-02-16
 
 ### New cookie test
 
@@ -23,7 +23,7 @@ New iOS browser versions:
 * Firefox 97.0
 * Focus 97.0
 
-## [Issue 15](/archive/issue15/): 2021-02-03
+## [Issue 15](/archive/issue15/): 2022-02-03
 
 After a brief pause to investigate an inconsistency in test results, we are back with Issue 15:
 
@@ -50,7 +50,7 @@ I decided to take the more stringent testing approach, on the principle that bro
 
 Thanks to Steven Englehardt for alerting me to this problem and providng helpful guidance.
 
-## [Issue 14](/archive/issue14/): 2021-01-21
+## [Issue 14](/archive/issue14/): 2022-01-21
 
 This week, Opera Desktop has updated to version 83.0.
 
@@ -59,7 +59,7 @@ On Android, new browser versions are:
 * Fireofx 96.2
 * Yandex 22.1
 
-## [Issue 13](/archive/issue13/): 2021-01-14
+## [Issue 13](/archive/issue13/): 2022-01-14
 
 This week, new desktop browser versions include:
 * Firefox 96.0
@@ -78,7 +78,7 @@ And on Android, we have:
 * Opera 66.2
 * Samsung 16.0
 
-## [Issue 12](/archive/issue12/): 2021-01-07
+## [Issue 12](/archive/issue12/): 2022-01-07
 
 This week, new desktop browser versions include:
 * Brave 1.34
