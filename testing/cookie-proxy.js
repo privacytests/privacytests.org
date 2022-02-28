@@ -21,7 +21,7 @@ const parseCookies = (cookieString) => {
 // that reads and writes third-party cookies. Injects a tracking
 // cookie if URL has "pto_write_cookie" query parameter; looks
 // for a cookie if URL has "pto_read_cookie" query parameter.
-const simulateTrackingCookies = async (port) => { 
+const simulateTrackingCookies = async (port, debug = false) => { 
   // Allows us to match requests to responses.
   let idToUrlMapping = new Map();
   // Create a proxy server with a self-signed HTTPS CA certificate:
@@ -37,6 +37,9 @@ const simulateTrackingCookies = async (port) => {
     // Inject cookies for responses
     beforeResponse: (response) => {
       const url = idToUrlMapping.get(response.id);
+      if (debug) {
+        console.log(url, response.headers);
+      }
       idToUrlMapping.delete(response.id);
       const searchParams = (new URL(url)).searchParams;
       const sessionId = searchParams.get("sessionId");
@@ -47,7 +50,8 @@ const simulateTrackingCookies = async (port) => {
       if (writeCookie && sessionId) {
         setCookieHeader = `pto_cookie=${sessionId}; max-age=3600; Secure; SameSite=None`;
         headers["set-cookie"] = setCookieHeader;
-        console.log({url, sessionId, writeCookie, setCookieHeader});
+        let time = new Date().toUTCString();
+        console.log({time, url, sessionId, writeCookie, setCookieHeader});
         return { headers }
       }
       return undefined;
@@ -67,7 +71,8 @@ const simulateTrackingCookies = async (port) => {
         hostsThatLeak[sessionId].add(hostname);
       }
       if (readCookie) {
-        console.log({url, readCookie, sessionId, pto_cookie});
+        let time = new Date().toUTCString();
+        console.log({time, url, readCookie, sessionId, pto_cookie});
       }
     }
   });
@@ -84,7 +89,7 @@ const stopTrackingCookieSimulation = () => {
 };
 
 if (require.main === module) {
-  simulateTrackingCookies(9090);
+  simulateTrackingCookies(9090, true);
   //console.log(getLeakyHosts());
   //stopTrackingCookieSimulation();
 }
