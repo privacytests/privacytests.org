@@ -319,7 +319,7 @@ const resultsToTable = (results, title, includeTrackingCookies) => {
   body.push([{subheading:"Tracker content blocking", description: sectionDescription.trackers}]);
   body = body.concat(resultsSection({bestResults, category:"trackers", tooltipFunction: simpleToolTip}));
   if (includeTrackingCookies) {
-    body.push([{subheading:"Tracker cookie protection", description: sectionDescription.tracker_cookies}]);
+    body.push([{subheading:"Tracking cookie protection", description: sectionDescription.tracker_cookies}]);
     body = body.concat(resultsSection({bestResults, category:"tracker_cookies", tooltipFunction: simpleToolTip}));
   }
   return { headers, body };
@@ -409,6 +409,7 @@ const resultsKeys = [
 // for a simpler rendering.
 const aggregateRepeatedTrials = (results) => {
   let aggregatedResults = new Map();
+  let testIndex = 0;
   for (let test of results.all_tests) {
     if (test && test.testResults) {
       let key = resultsToDescription(test);
@@ -422,6 +423,9 @@ const aggregateRepeatedTrials = (results) => {
             for (let testName in test.testResults[subcategory]) {
               for (let value in test.testResults[subcategory][testName]) {
                 if (resultsKeys.includes(value)) {
+                  if (!someTests[testName]) {
+                    throw new Error(`Can't find the "${testName}" ${subcategory} test in testing round ${testIndex}`);
+                  }
                   if (!Array.isArray(someTests[testName][value])) {
                     someTests[testName][value] = [someTests[testName][value]];
                   }
@@ -435,6 +439,7 @@ const aggregateRepeatedTrials = (results) => {
         aggregatedResults.set(key, deepCopy(test));
       }
     }
+    ++testIndex;
   }
   let resultsCopy = deepCopy(results);
   resultsCopy.all_tests = [...aggregatedResults.values()];
