@@ -273,15 +273,16 @@ const analyzeTrackingCookieTestResults = (leakyHosts) => {
 }
 
 const runTrackingCookieTest = async (browserObject) => {
-  if (!(browserObject instanceof DesktopBrowser)) {
-    return undefined;
+  if (browserObject instanceof DesktopBrowser) {
+    await enableProxies(cookieProxyPort);
   }
-  await enableProxies(cookieProxyPort);
   await runPageTest(
     browserObject, `${iframe_root_same}/tracking_content.html?manual=true&write_cookies=true`);
   await runPageTest(
     browserObject, `${iframe_root_different}/tracking_content.html?manual=true&read_cookies=true`);
-  await disableProxies(cookieProxyPort);
+  if (browserObject instanceof DesktopBrowser) {  
+    await disableProxies(cookieProxyPort);
+  }
   const leakyHosts = cookieProxy.getLeakyHosts(browserObject._websocket._sessionId);
   return analyzeTrackingCookieTestResults(leakyHosts);
 };
@@ -322,7 +323,8 @@ const runTests = async (browserObject, categories) => {
       { "GPC enabled first-party": topLevelResults["GPC enabled first-party"] });
   }
   // Tracking cookies
-  if (browserObject instanceof DesktopBrowser && (!categories || categories.includes("trackingCookies"))) {
+  if (browserObject instanceof DesktopBrowser &&
+      (!categories || categories.includes("trackingCookies"))) {
     // Now compile the results into a final format.
     log("running trackingCookies");
     const trackingCookieResult = await runTrackingCookieTest(browserObject);
