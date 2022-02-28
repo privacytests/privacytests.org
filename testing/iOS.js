@@ -4,6 +4,7 @@ const browserInfo = {
   brave: {
 		name: "Brave",
     bundleId: "com.brave.ios.browser",
+		startupClick: "No",
     urlBarClick: "url",
     urlBarKeys: "url",
 		privateWindow: ["TabToolbar.tabsButton", "Private Mode", "TabTrayController.doneButton"],
@@ -68,7 +69,7 @@ const browserInfo = {
   yandex: {
 		name: "Yandex",
     bundleId: "ru.yandex.mobile.search",
-		startupClick: "Fix problems",
+		startupClick: "Решить проблемы",
 		urlBarClick: "Address bar",
 		urlBarClick2: "Enter a search query or URL",
 		urlBarClear: "Clear the input field",
