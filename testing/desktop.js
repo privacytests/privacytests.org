@@ -70,7 +70,7 @@ const macOSdefaultBrowserSettings = {
     dataDir: "LibreWolf/Profiles/",
     profileCommand: "-profile ",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
-    updateCommand: "brew upgrade librewolf",
+    updateCommand: "/opt/homebrew/bin/brew upgrade librewolf",
   },
   edge: {
     name: "Microsoft Edge",
