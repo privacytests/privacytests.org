@@ -115,7 +115,7 @@ const macOSdefaultBrowserSettings = {
     binaryName: "Chromium",
     privateFlag: "incognito",
     dataDir: "Google/Chrome",
-    upgradeCommand: "brew upgrade eloston-chromium",
+    upgradeCommand: "/opt/homebrew/bin/brew upgrade eloston-chromium",
 //    profileCommand: chromiumProfileFlags,
   },
   vivaldi: {
