@@ -88,6 +88,9 @@ const findElementWithName = async (client, name) => {
 
 const clickElementWithName = async (client, name) => {
 	const element = await findElementWithName(client, name);
+	if (!element) {
+		throw new Error(`no element with name #{name} found`);
+	}
 	return await client.elementClick(element);
 };
 
@@ -163,7 +166,7 @@ class iOSBrowser {
 		await clickElementWithName(this.client, "General");
 		//await sleepMs(500);
 		await clickElementWithName(this.client, "iPhone Storage");
-		await sleepMs(8000);
+		await sleepMs(4000);
 		if (this.browser === "safari") {
 			const elements = await this.client.findElements("name", "Title");
 			console.log(elements);
@@ -176,7 +179,15 @@ class iOSBrowser {
 				}
 			}
 		} else {
-			await clickElementWithName(this.client,  `App:${this.name}`);
+			for (let i = 0; i < 12; ++i) {
+				await sleepMs(1000);
+				try {
+					await clickElementWithName(this.client,  `App:${this.name}`);
+					break;
+				} catch (e) {
+					// Keep trying
+				}
+			}
 		}
 		await sleepMs(1000);
 		const infoElement = await findElementWithName(this.client, "Info");
