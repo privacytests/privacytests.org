@@ -1,6 +1,15 @@
 # News
 
-## [Issue 16](/): 2022-02-16
+## [Issue 17](/): 2022-03-04
+
+### New "tracking cookie protection" category of tests
+
+Today I am publishing a set of new "tracking cookie protection" tests for desktop browsers. In these tests, we check whether the browser allows cookies from 19 of the top tracking domains to be shared across websites. The test works as follows:
+
+1. A web page from test site A is loaded with third-party tracking subresources, one from each tracking domain. A mitm proxy is used to inject a "Set-Cookie" header for each tracker.
+2. A second web page from test site B is loaded, with the same set of tracking subresources. The MITM proxy is again used to test whether it can read back the same cookies that were set for those tracking domains in step 1.
+
+## [Issue 16](/archive/issue16/): 2022-02-16
 
 ### New cookie test
 
