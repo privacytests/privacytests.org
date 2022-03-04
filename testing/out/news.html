@@ -163,7 +163,14 @@ Feedback is welcome!"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cD
 </div>
     
   <div class="copy"><h1 id="news">News</h1>
-<h2 id="issue-16-2022-02-16"><a href="/">Issue 16</a>: 2022-02-16</h2>
+<h2 id="issue-17-2022-03-04"><a href="/">Issue 17</a>: 2022-03-04</h2>
+<h3 id="new-tracking-cookie-protection-category-of-tests">New &quot;tracking cookie protection&quot; category of tests</h3>
+<p>Today I am publishing a set of new &quot;tracking cookie protection&quot; tests for desktop browsers. In these tests, we check whether the browser allows cookies from 19 of the top tracking domains to be shared across websites. The test works as follows:</p>
+<ol>
+<li>A web page from test site A is loaded with third-party tracking subresources, one from each tracking domain. A mitm proxy is used to inject a &quot;Set-Cookie&quot; header for each tracker.</li>
+<li>A second web page from test site B is loaded, with the same set of tracking subresources. The MITM proxy is again used to test whether it can read back the same cookies that were set for those tracking domains in step 1.</li>
+</ol>
+<h2 id="issue-16-2022-02-16"><a href="/archive/issue16/">Issue 16</a>: 2022-02-16</h2>
 <h3 id="new-cookie-test">New cookie test</h3>
 <p>I have expanded general cookie testing to examine both cross-site tracking via HTTP cookies and cross-site tracking via JavaScript cookies (aka document.cookie).</p>
 <h3 id="new-versions">New versions</h3>
