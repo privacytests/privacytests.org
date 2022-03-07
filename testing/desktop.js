@@ -70,7 +70,7 @@ const macOSdefaultBrowserSettings = {
     dataDir: "LibreWolf/Profiles/",
     profileCommand: "-profile ",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
-    updateCommand: "/opt/homebrew/bin/brew upgrade librewolf",
+    //updateCommand: "/opt/homebrew/bin/brew upgrade librewolf",
   },
   edge: {
     name: "Microsoft Edge",
@@ -115,7 +115,7 @@ const macOSdefaultBrowserSettings = {
     binaryName: "Chromium",
     privateFlag: "incognito",
     dataDir: "Google/Chrome",
-    upgradeCommand: "/opt/homebrew/bin/brew upgrade eloston-chromium",
+    updateCommand: "mv '/Applications/Ungoogled Chromium.app' /Applications/Chromium.app && /opt/homebrew/bin/brew upgrade eloston-chromium && mv /Applications/Chromium.app '/Applications/Ungoogled Chromium.app'",
 //    profileCommand: chromiumProfileFlags,
   },
   vivaldi: {
@@ -206,26 +206,31 @@ class DesktopBrowser {
     }
     try {
       clearInterval(this._keepAlivePingId);
-      execSync(`osascript -e 'quit app "${this._appName}"'`);
+      execSync(`osascript -e 'quit app "${this._path}"'`);
       await sleepMs(5000);
     } catch (e) {
       console.log(e);
+      this._process.kill();
     }
   }
   // Update the browser to the latest version.
   async update() {
     // For most browsers, we use the "About" menu item to get the browser to check for udpates.
     const update = this.nightly ? this._defaults.updateNightly : this._defaults.update;
+    const updateCommand = this._defaults.updateCommand;
     if (update) {
       console.log({this_nightly: this._nightly, update});
       const [menuName, aboutItemName] = update;
       if (menuName) {
         await this.launch();
-        execSync(`osascript updateBrowser.applescript "${menuName}" "${aboutItemName}"`);
+        exec(`osascript updateBrowser.applescript "${menuName}" "${aboutItemName}"`);
         // Wait 5 minutes for the update binary to download
-        await sleepMs(300000);
+        await sleepMs(5000);
+        //await sleepMs(300000);
         await this.kill();
       }
+    } else if (updateCommand) {
+      execSync(updateCommand);
     }
   }
 }
