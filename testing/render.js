@@ -511,4 +511,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { render };
+module.exports = { render, content };
