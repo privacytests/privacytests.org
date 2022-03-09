@@ -3,6 +3,7 @@
 const { v4: uuidv4 } = require('uuid');
 const express = require('express');
 const cors = require('cors');
+const { contentPage } = require('../testing/render.js');
 
 const app = express();
 const { WebSocketServer } = require('ws');
@@ -205,7 +206,20 @@ app.get('/results', (req, res) => {
   }
 });
 
+app.get('/me', (req, res) => {
+  const { sessionId } = req.query;
+  const testResults = processResults(sessionResults[sessionId]);
+  const data = { all_tests: [{browser: "mine", incognito: false, nightly: false, testResults}], git: "fake_git_string"};
+  const page = contentPage({results: data, title: "PrivacyTests.org: my browser", basename: "basename",
+                            previewImageUrl: null, tableTitle: "my browser", nightly: false, incognito: false});
+  console.log(page);
+  res.send(page);
+});
+
 const websocketSend = (sessionId, data) => {
+  if (!websockets[sessionId]) {
+    throw new Error(`no websocket exists for sessionId=${sessionId}`);
+  }
   websockets[sessionId].send(JSON.stringify({sessionId, data}));
 };
 

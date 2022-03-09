@@ -346,7 +346,7 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
     <div class="banner" id="issueBanner">
       <div class="left-heading">${leftHeaderText}</div>
       <div class="middle-heading">Open-source tests of web browser privacy.</div>
-      <div class="right-heading">Updated ${dateString(results.timeStarted)}</div>
+      <div class="right-heading">Updated ${results.timeStarted ? dateString(results.timeStarted) : "??"}</div>
     </div>
     <div class="banner" id="navBanner">
       <div class="navItem ${!incognito && !nightly && results.platform !== "Android" && results.platform !== "iOS" ? "selectedItem" : ""}">
@@ -375,12 +375,19 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
     </div>` +
   htmlTable({headers, body,
                     className:"comparison-table"}) +
-	`<p class="footer">Tests ran at ${results.timeStarted.replace("T"," ").replace(/\.[0-9]{0,3}Z/, " UTC")}.
+	`<p class="footer">Tests ran at ${results.timeStarted ? results.timeStarted.replace("T"," ").replace(/\.[0-9]{0,3}Z/, " UTC") : "??"}.
          Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/${results.git}"
     >${results.git.slice(0,8)}</a>.
     Raw data in <a href="${jsonFilename}">JSON</a>.
     </p>` + `<script type="module">${tooltipScript}</script>`;
 };
+
+const contentPage = ({results, title, basename, previewImageUrl, tableTitle, nightly, incognito}) =>
+      template.htmlPage({
+        title, previewImageUrl,
+        cssFiles: [`${__dirname}/template.css`, `${__dirname}/inline.css`],
+        content: content(results, basename, tableTitle, nightly, incognito),
+      });
 
 // Reads in a file and parses it to a JSON object.
 const readJSONFile = (file) =>
@@ -481,10 +488,11 @@ const renderPage = ({ dataFiles, live, aggregate }) => {
   } else {
     tableTitle = incognito ? "Desktop private modes" : "Desktop Browsers";
   }
-  fs.writeFileSync(resultsFileHTMLLatest, template.htmlPage({
+  const basename = path.basename(resultsFilesJSON[0]);
+  fs.writeFileSync(resultsFileHTMLLatest, contentPage({
     title: "PrivacyTests.org",
-      content: content(processedResults, path.basename(resultsFilesJSON[0]), tableTitle, nightly, incognito),
-    cssFiles: ["./template.css", "./inline.css"],
+    tableTitle, nightly, incognito, basename,
+    results: processedResults,
     previewImageUrl: path.basename(resultsFilePreviewImage)
   }));
   console.log(`Wrote out ${fileUrl(resultsFileHTMLLatest)}`);
@@ -512,4 +520,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { render, content };
+module.exports = { render, contentPage };
