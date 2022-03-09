@@ -4,7 +4,6 @@ const path = require('path');
 const fileUrl = require('file-url');
 const open = require('open');
 const minimist = require('minimist');
-const datauri = require('datauri/sync');
 const template = require('./template.js');
 const _ = require('lodash');
 
