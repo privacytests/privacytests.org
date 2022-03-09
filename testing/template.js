@@ -75,4 +75,4 @@ const htmlPage = ({ content, cssFiles, previewImageUrl }) => {
 `;
 };
 
-module.exports = { htmlPage };
+module.exports = { htmlPage, dataUriFromFile };
