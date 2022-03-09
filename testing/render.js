@@ -24,10 +24,10 @@ const browserLogoDataUri = _.memoize((browserName, nightly) => {
   const browserIconName = nightly ? nightlyIconNames[browserName] : browserName;
   let iconUri;
   try {
-    iconUri = dataUriFromFile(`node_modules/browser-logos/src/${browserIconName}/${browserIconName}_128x128.png`).content;
+    iconUri = dataUriFromFile(`node_modules/browser-logos/src/${browserIconName}/${browserIconName}_128x128.png`);
     return iconUri;
   } catch (e) {
-    return template.dataUriFromFile(`icons/${browserIconName}.png`).content;
+    return template.dataUriFromFile(`icons/${browserIconName}.png`);
   }
 });
 
