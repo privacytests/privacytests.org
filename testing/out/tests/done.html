@@ -7,5 +7,10 @@
 </html>
 <body>
   done!
+  <script type="module">
+   const urlParams = new URLSearchParams(window.location.search);
+   const sessionId = urlParams.get("sessionId");
+   window.location.href = `https://results.privacytests.org/me?sessionId=${sessionId}`;
+  </script>
 </body>
 </html>
