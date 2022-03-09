@@ -338,11 +338,13 @@ const dateString = (dateTime) => {
 // Creates the content for a page.
 const content = (results, jsonFilename, title, nightly, incognito) => {
   let { headers, body } = resultsToTable(results.all_tests, tableTitleHTML(title), results.platform === "Desktop");
-  const issueNumber = fs.readFileSync("issue-number").toString().trim();  
+  const issueNumberExists = fs.existsSync(`${__dirname}/issue-number`);
+  const issueNumber = issueNumberExists ? fs.readFileSync(`${__dirname}/issue-number`).toString().trim() : undefined;
+  const leftHeaderText = issueNumber ? `No. ${issueNumber}` : "";
   console.log(results.platform);
   return `
     <div class="banner" id="issueBanner">
-      <div class="left-heading">No. ${issueNumber}</div>
+      <div class="left-heading">${leftHeaderText}</div>
       <div class="middle-heading">Open-source tests of web browser privacy.</div>
       <div class="right-heading">Updated ${dateString(results.timeStarted)}</div>
     </div>
