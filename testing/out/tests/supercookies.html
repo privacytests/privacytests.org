@@ -8,36 +8,41 @@
   <body>
     <script src="./post_data.js"></script>
     <script>
-     const iframe_root_same = "https://arthuredelstein.net/test-pages";
-     const param = (key) => new URLSearchParams(window.location.search).get(key);
-     const sessionId = param("sessionId");
-     let favicon = document.getElementById("favicon");
-     const baseURI = "https://arthuredelstein.net/browser-privacy-live";
-     favicon.setAttribute("href", `${baseURI}/resource?type=favicon&key=${sessionId}`);
-     addEventListener("message", ({data}) => {
-       document.body.setAttribute("data-test-results", JSON.stringify(data));
-       const mode = param("mode");
-       const thirdparty = param("thirdparty");
-       const category = `supercookies_${mode}_${thirdparty}`;
-       if (mode === "read") {
-//         document.body.style.backgroundColor = "green";
-	 postDataAndCarryOn(data, category);
-//         document.body.style.backgroundColor = "red";
-       } else {
-         document.documentElement.addEventListener("click", () => {
-           window.open(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`, "_blank");
-         });
-         postData(data, category);
-       }
-     }, {once: true});
-     let iframe = document.createElement("iframe");
-     document.body.appendChild(iframe);
-     iframe_root = (location.hostname === "localhost" ||
+    const sleep = async (t) => new Promise(resolve => window.setTimeout(resolve, t));
+    (async () => {
+      const iframe_root_same = "https://arthuredelstein.net/test-pages";
+      const param = (key) => new URLSearchParams(window.location.search).get(key);
+      const sessionId = param("sessionId");
+      let favicon = document.getElementById("favicon");
+      const baseURI = "https://arthuredelstein.net/browser-privacy-live";
+      favicon.setAttribute("href", `${baseURI}/resource?type=favicon&key=${sessionId}`);
+      addEventListener("message", ({data}) => {
+        document.body.setAttribute("data-test-results", JSON.stringify(data));
+        const mode = param("mode");
+        const me = param("me");
+        const thirdparty = param("thirdparty");
+        const category = `supercookies_${mode}_${thirdparty}`;
+        if (mode === "read") {
+          await sleep(5000);
+  //         document.body.style.backgroundColor = "green";
+    postDataAndCarryOn(data, category);
+  //         document.body.style.backgroundColor = "red";
+        } else if (!me) {
+          document.documentElement.addEventListener("click", () => {
+            window.open(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`, "_blank");
+          });
+          postData(data, category);
+        }
+      }, {once: true});
+      let iframe = document.createElement("iframe");
+      document.body.appendChild(iframe);
+      iframe_root = (location.hostname === "localhost" ||
                     location.hostname === "127.0.0.1" ||
                     location.hostname === "")
-                 ? "" : "https://arthuredelstein.net/test-pages";
-     iframe.src = `${iframe_root}/supercookies_inner.html${window.location.search}`;
-     iframe.allow = "geolocation camera microphone";
+                  ? "" : "https://arthuredelstein.net/test-pages";
+      iframe.src = `${iframe_root}/supercookies_inner.html${window.location.search}`;
+      iframe.allow = "geolocation camera microphone";
+    })();
     </script>
   </body>
 </html>
