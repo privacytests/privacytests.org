@@ -19,7 +19,7 @@ New Android browser versions:
 New iOS browser version:
 * Edge: 99.1150
 
-## [Issue 17](/): 2022-03-04
+## [Issue 17](/archive/issue17/): 2022-03-04
 
 ### New "tracking cookie protection" category of tests
 
