@@ -7,6 +7,7 @@
 New desktop browser versions are:
 * Chrome 99.0
 * Edge 99.0
+* Firefox 98.0
 * Ungoogled 99.0
 
 New Android browser versions:
@@ -27,6 +28,29 @@ Today I am publishing a set of new "tracking cookie protection" tests for deskto
 
 1. A web page from test site A is loaded with third-party tracking subresources, one from each tracking domain. A mitm proxy is used to inject a "Set-Cookie" header for each tracker.
 2. A second web page from test site B is loaded, with the same set of tracking subresources. The MITM proxy is again used to test whether it can read back the same cookies that were set for those tracking domains in step 1.
+
+### New browser versions
+
+Desktop versions:
+* Brave 1.36
+* Opera 84.0
+
+New Android browser versions:
+* Brave 1.35
+* Bromite 98.0
+* Chrome 98.0
+* DuckDuckGo 5.113
+* Edge 98.0
+* Firefox 97.2
+* Opera 67.1
+* Tor 11.0
+* Vivaldi 5.1
+
+New iOS browser versions:
+* Brave 1.35
+* Edge 98.1108
+* Safari 15.3
+* Yandex 2201.6
 
 ## [Issue 16](/archive/issue16/): 2022-02-16
 
