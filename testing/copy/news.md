@@ -1,5 +1,24 @@
 # News
 
+## [Issue 18](/): 2022-03-11
+
+### New browsers
+
+New desktop browser versions are:
+* Chrome 99.0
+* Edge 99.0
+* Ungoogled 99.0
+
+New Android browser versions:
+* Chrome 99.0
+* DuckDuckGo 5.115
+* Edge 99.0
+* Firefox 98.1
+* Samsung 16.2
+
+New iOS browser version:
+* Edge: 99.1150
+
 ## [Issue 17](/): 2022-03-04
 
 ### New "tracking cookie protection" category of tests
