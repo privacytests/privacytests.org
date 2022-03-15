@@ -206,6 +206,12 @@ app.get('/results', (req, res) => {
   }
 });
 
+app.get('/step', (req, res) => {
+  const {sessionId} = req.query;
+  console.log(stepCounters);
+  res.json({step: stepCounters[sessionId]});
+});
+
 app.get('/me', (req, res) => {
   const { sessionId } = req.query;
   const testResults = processResults(sessionResults[sessionId]);
