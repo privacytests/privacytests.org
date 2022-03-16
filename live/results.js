@@ -106,6 +106,11 @@ const pageSequence = [
   `${iframe_root_same}/done.html`
 ];
 
+const round = (x, digits) => {
+  const factor = Math.pow(10, digits);
+  return Math.round(x * factor) / factor;
+};
+
 const nextUrl = (sessionId, nextStepIndex) => {
   if (nextStepIndex >= pageSequence.length) {
     return undefined;
@@ -113,6 +118,7 @@ const nextUrl = (sessionId, nextStepIndex) => {
   const rawUrl = pageSequence[nextStepIndex];
   const urlObject = new URL(rawUrl);
   urlObject.searchParams.set("sessionId", sessionId);
+  urlObject.searchParams.set("progress", round(nextStepIndex/(pageSequence.length-1), 3).toString());
   return urlObject.toString();
 };
 
@@ -180,6 +186,7 @@ const processResults = (rawResults) => {
   moveTestBetweenCategories("font cache", navigation, supercookies);
   moveTestBetweenCategories("image cache", navigation, supercookies);
   moveTestBetweenCategories("prefetch cache", navigation, supercookies);
+  moveTestBetweenCategories("Alt-Svc", navigation, supercookies);
   moveTestBetweenCategories("Stream isolation", supercookies, misc);
   return {
     misc,
@@ -209,7 +216,7 @@ app.get('/results', (req, res) => {
 app.get('/step', (req, res) => {
   const {sessionId} = req.query;
   console.log(stepCounters);
-  res.json({step: stepCounters[sessionId]});
+  res.json({step: stepCounters[sessionId] ?? 0, length: pageSequence.length});
 });
 
 app.get('/me', (req, res) => {
