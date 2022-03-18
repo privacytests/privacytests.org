@@ -45,6 +45,11 @@ const removeAllServiceWorkers = async () => {
   }
 };
 
+export let fetchText = async (...args) => {
+  let response = await fetch(...args);
+  return await response.text();
+};
+
 export let sleepMs = (timeMs) => new Promise(
   (resolve, reject) => setTimeout(resolve, timeMs)
 );

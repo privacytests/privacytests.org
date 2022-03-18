@@ -2,6 +2,30 @@
 // and sends the results to results.privacytests.org/post under
 // that sessionId.
 
+
+const progressBar = (parent, fraction) => {
+  const progressOuter = document.createElement("div");
+  parent.prepend(progressOuter);
+  const progressInner = document.createElement("div");
+  progressOuter.prepend(progressInner);
+    progressOuter.style = `
+    width: 100%;
+    height: 48px;
+    background-color: lightgray;
+  `;
+    progressInner.style = `
+    width: ${100*(fraction ?? 0)}%;
+    height: 100%;
+    background-color: seagreen;
+  `;
+  return progressOuter;
+};
+const urlParams = new URLSearchParams(window.location.search);
+(async () => {
+  let progress = urlParams.get("progress") || 0.05;
+  progressBar(document.body, parseFloat(progress));
+})();
+
 const showData = (name, data) => {
   console.log(name, data);
   const dataDiv = document.createElement("div");
@@ -11,7 +35,6 @@ const showData = (name, data) => {
 };
 
 const postData = async (results, category) => {
-  const urlParams = new URLSearchParams(window.location.search);
   const sessionId = urlParams.get("sessionId");
   showData("posted", {sessionId, results});
   if (!urlParams.has("sessionId")) {
@@ -19,7 +42,7 @@ const postData = async (results, category) => {
   }
   console.log("posting", {sessionId, results});
   const isLocal = window.location.host.endsWith(".example");
-    const postURL = isLocal ? "https://results.pto2.example/post" : "https://results.privacytests.org/post";  
+  const postURL = isLocal ? "https://results.pto2.example/post" : "https://results.privacytests.org/post";
   const response = await fetch(postURL, {
     method: 'POST',
     headers: {
@@ -54,3 +77,4 @@ const postDataAndCarryOn = async (results, category) => {
     showData("error", { message: e.toString(), stack: e.stack });
   }
 };
+
