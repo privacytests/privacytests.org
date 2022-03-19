@@ -162,30 +162,24 @@ let tests = {
     write: async () => {
       // Clear Alt-Svc caching first.
       let responseText = "";
-      for (let i = 0; i < 10 && responseText !== "h2"; ++i) {
-        responseText = await fetchText("https://altsvc.arthuredelstein.net:4433/clear");
-        console.log("clear", responseText, i);
-        await sleepMs(10);
-      }
-      if (responseText !== "h2") {
-        // Clearing failed.
-        throw new Error("Unsupported");
-      }
+      await fetch("https://altsvc.arthuredelstein.net:4433/clear");
+      await sleepMs(100);
+      responseText = await fetchText("https://altsvc.arthuredelstein.net:4433/protocol");
+      console.log("after clear:", responseText);
       // Store "h3" state in Alt-Svc cache
-      for (let i = 0; i < 10 && responseText !== "h3"; ++i) {
-        await fetch("https://altsvc.arthuredelstein.net:4433/set");
-        responseText = await fetchText("https://altsvc.arthuredelstein.net:4433/protocol");
-        console.log("protocol", responseText, i);
-        await sleepMs(10);
-      }
-      if (responseText !== "h3") {
-        // Storage failed.
-        throw new Error("Unsupported");
-      }
+      await fetch("https://altsvc.arthuredelstein.net:4433/set");
+      await sleepMs(100);
+      responseText = await fetchText("https://altsvc.arthuredelstein.net:4433/protocol");
+      console.log("after set:", responseText);
     },
-    read: () => {
-      const responseText = fetchText("https://altsvc.arthuredelstein.net:4433/protocol");
-      return responseText
+    read: async () => {
+      const protocol = await fetchText("https://altsvc.arthuredelstein.net:4433/protocol");
+      if ((new URL(location)).searchParams.get("thirdparty") === "same") {
+        if (protocol !== "h3") {
+          throw new Error("Unsupported");
+        }
+      }
+      return protocol;
     }
   },
 };

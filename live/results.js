@@ -133,12 +133,13 @@ const accumulateResultData = (sessionId, category, data) => {
 
 // Takes the results of supercookie or navigation tests
 const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty) => {
+  console.log({"jointResults":{writeResults, readResultsSameFirstParty, readResultsDifferentFirstParty}});
   let jointResult = {};
   for (let test in readResultsDifferentFirstParty) {
     let { write, read, description, result: readDifferentFirstParty } = readResultsDifferentFirstParty[test];
     let { result: readSameFirstParty } = readResultsSameFirstParty[test];
     let { result: writeResult } = writeResults[test];
-    let unsupported = (writeResult === "Error: Unsupported");
+    let unsupported = (writeResult === "Error: Unsupported") || (readSameFirstParty === "Error: Unsupported");
     let readSameFirstPartyFailedToFetch = readSameFirstParty ? readSameFirstParty.startsWith("Error: Failed to fetch") : false;
     let readDifferentFirstPartyFailedToFetch = readDifferentFirstParty ? readDifferentFirstParty.startsWith("Error: Failed to fetch") : false;
     unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith("Error: No requests received") : false);
