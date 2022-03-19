@@ -508,6 +508,9 @@ const main = async () => {
       });
     let dataFile = writeDataSync(config.filename, testResults);
     await render.render({ dataFiles: [dataFile], aggregate: config.aggregate });
+    if (!shouldQuit) {
+      process.exit();
+    }
   } catch (e) {
     log(e);
   }
