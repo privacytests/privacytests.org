@@ -99,6 +99,11 @@ const findElementWithClass = async (client, className) => {
   return elementObject.ELEMENT;
 };
 
+const findElementWithXPath = async (client, xpath) => {
+  const elementObject = await client.findElement("xpath", xpath);
+  return elementObject.ELEMENT;
+};
+
 const clickSeries = async (client, names) => {
 	for (let name of names) {
 		console.log(`clicking ${name}`)
@@ -167,27 +172,25 @@ class iOSBrowser {
 		//await sleepMs(500);
 		await clickElementWithName(this.client, "iPhone Storage");
 		await sleepMs(4000);
+		let elementFound = false;
 		if (this.browser === "safari") {
-			const elements = await this.client.findElements("name", "Title");
-			console.log(elements);
-			for (let element of elements.reverse()) {
-				const label = await this.client.getElementAttribute(element.ELEMENT, "label");
-				console.log(label);
-				if (label && label.startsWith("iOS")) {
-				  await this.client.elementClick(element.ELEMENT);
-					break;
-				}
-			}
+			// Safari version number is the same as the iOS version.
+			const element = await findElementWithXPath(this.client, "//XCUIElementTypeCell[contains(@name,'iOS,')]");
+			await this.client.elementClick(element);
 		} else {
-			for (let i = 0; i < 12; ++i) {
+			for (let i = 0; i < 20; ++i) {
 				await sleepMs(1000);
 				try {
 					await clickElementWithName(this.client,  `App:${this.name}`);
+					elementFound = true;
 					break;
 				} catch (e) {
 					// Keep trying
 				}
 			}
+			if (!elementFound) {
+				throw new Error("version not found");
+			}	
 		}
 		await sleepMs(1000);
 		const infoElement = await findElementWithName(this.client, "Info");
