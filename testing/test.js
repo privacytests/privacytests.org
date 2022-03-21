@@ -331,11 +331,15 @@ const runTests = async (browserObject, categories) => {
     Object.assign(results, { "tracker_cookies": trackingCookieResult });
   }  // HTTPS tests
   if (!categories || categories.includes("https")) {
+    log (`running HTTPS tests for ${browserObject.browser}`);
     const upgradableAddressResult = await runPageTest(browserObject, `${upgradable_root}/upgradable.html?source=address`);
     const { insecureResult, insecurePassed } = await runInsecureTest(browserObject);
     // HSTS supercookie test
     const hstsResult = await runHstsTest(browserObject, insecurePassed);
-    Object.assign(results["https"], upgradableAddressResult, insecureResult);
+    results["https"] = Object.assign({}, upgradableAddressResult, insecureResult);
+    if (!results["supercookies"]) {
+      results["supercookies"] = {};
+    }
     Object.assign(results["supercookies"], { "HSTS cache": hstsResult });
   }
   return results;
