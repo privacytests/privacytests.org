@@ -336,7 +336,7 @@ const runTests = async (browserObject, categories) => {
     const { insecureResult, insecurePassed } = await runInsecureTest(browserObject);
     // HSTS supercookie test
     const hstsResult = await runHstsTest(browserObject, insecurePassed);
-    results["https"] = Object.assign({}, upgradableAddressResult, insecureResult);
+    results["https"] = Object.assign({}, results["https"], upgradableAddressResult, insecureResult);
     if (!results["supercookies"]) {
       results["supercookies"] = {};
     }
