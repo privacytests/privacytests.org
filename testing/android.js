@@ -50,7 +50,7 @@ const browserInfo = {
   },
   focus: {
     releasePackageName: "org.mozilla.focus",
-    urlBarClick: "mozac_browser_toolbar_edit_url_view",
+    urlBarClick: "mozac_browser_toolbar_url_view",
     urlBarKeys: "mozac_browser_toolbar_edit_url_view"
   },
   mi: {
