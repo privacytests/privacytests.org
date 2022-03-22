@@ -1,8 +1,31 @@
 # News
 
-## [Issue 18](/): 2022-03-11
 
-### New browsers
+## [Issue 19](/): 2022-03-22
+
+### New browser
+
+In this issue, we have added Firefox Focus to the set of Android browsers
+
+### New browser versions
+
+New iOS browser versions are:
+* Brave 1.36
+* Chrome 99.4844
+* Firefox 98.1
+* Focus 98.0
+* Yandex 2203.2
+
+New android browser versions are:
+* Brave 1.36
+* Bromite 99.0
+* DuckDuckGo 5.116
+* Firefox 98.2
+* Yandex 22.3
+
+## [Issue 18](/archive/issue18/): 2022-03-11
+
+### New browser versions
 
 New desktop browser versions are:
 * Chrome 99.0
