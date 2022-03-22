@@ -172,25 +172,20 @@ class iOSBrowser {
 		//await sleepMs(500);
 		await clickElementWithName(this.client, "iPhone Storage");
 		await sleepMs(4000);
-		let elementFound = false;
-		if (this.browser === "safari") {
-			// Safari version number is the same as the iOS version.
-			const element = await findElementWithXPath(this.client, "//XCUIElementTypeCell[contains(@name,'iOS,')]");
-			await this.client.elementClick(element);
-		} else {
-			for (let i = 0; i < 20; ++i) {
-				await sleepMs(1000);
-				try {
-					await clickElementWithName(this.client,  `App:${this.name}`);
-					elementFound = true;
-					break;
-				} catch (e) {
-					// Keep trying
-				}
+		let element = undefined;
+		for (let i = 0; i < 20 && element === undefined; ++i) {
+			await sleepMs(1000);
+			if (this.browser === "safari") {
+				// Safari version number is the same as the iOS version.
+				element = await findElementWithXPath(this.client, "//XCUIElementTypeCell[contains(@name,'iOS,')]");
+			} else {
+				element = await findElementWithName(this.client,  `App:${this.name}`);
 			}
-			if (!elementFound) {
-				throw new Error("version not found");
-			}	
+		}
+		if (!element) {
+			throw new Error("version element not found");
+		}	else {
+			await this.client.elementClick(element);
 		}
 		await sleepMs(1000);
 		const infoElement = await findElementWithName(this.client, "Info");
