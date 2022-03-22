@@ -3,6 +3,10 @@
 
 ## [Issue 19](/): 2022-03-22
 
+### Correction
+
+The Brave team [reported](https://github.com/arthuredelstein/privacytests.org/issues/101) a bug that resulted in incorrect results for the Alt-Svc test on the Brave browser. Apologies for the bug; I have corrected the issue. Thanks to Aleksey Khoroshilov and Pete Snyder for alerting me to the issue.
+
 ### New browser
 
 In this issue, we have added Firefox Focus to the set of Android browsers
