@@ -1,4 +1,4 @@
-import { runAllTests, sleepMs } from "./test_utils.js";
+import { runAllTests, sleepMs, fetchText } from "./test_utils.js";
 
 const baseURI = "https://arthuredelstein.net/browser-privacy-live/";
 
@@ -155,6 +155,31 @@ let tests = {
         throw new Error("No requests received");
       }
       return countString;
+    }
+  },
+  "Alt-Svc": {
+    description: "Alt-Svc allows the server to indicate to the web browser that a resource should be loaded on a different server. Because this is a persistent setting, it could be used to track users across websites if it is not correctly partitioned.",
+    write: async () => {
+      // Clear Alt-Svc caching first.
+      let responseText = "";
+      await fetch("https://altsvc.arthuredelstein.net:4433/clear");
+      await sleepMs(100);
+      responseText = await fetchText("https://altsvc.arthuredelstein.net:4433/protocol");
+      console.log("after clear:", responseText);
+      // Store "h3" state in Alt-Svc cache
+      await fetch("https://altsvc.arthuredelstein.net:4433/set");
+      await sleepMs(100);
+      responseText = await fetchText("https://altsvc.arthuredelstein.net:4433/protocol");
+      console.log("after set:", responseText);
+    },
+    read: async () => {
+      const protocol = await fetchText("https://altsvc.arthuredelstein.net:4433/protocol");
+      if ((new URL(location)).searchParams.get("thirdparty") === "same") {
+        if (protocol !== "h3") {
+          throw new Error("Unsupported");
+        }
+      }
+      return protocol;
     }
   },
 };

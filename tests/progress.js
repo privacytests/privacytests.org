@@ -18,5 +18,4 @@ const progressBar = (parent, fraction) => {
   return progressOuter;
 };
 
-progressBar(document.body, 0.14);
 console.log("test1");

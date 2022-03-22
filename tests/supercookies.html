@@ -12,28 +12,40 @@
     (async () => {
       const iframe_root_same = "https://arthuredelstein.net/test-pages";
       const param = (key) => new URLSearchParams(window.location.search).get(key);
+      const mode = param("mode");
+      const me = param("me");
+      const thirdparty = param("thirdparty");
       const sessionId = param("sessionId");
+      console.log({mode, me, thirdparty, sessionId});
       let favicon = document.getElementById("favicon");
       const baseURI = "https://arthuredelstein.net/browser-privacy-live";
       favicon.setAttribute("href", `${baseURI}/resource?type=favicon&key=${sessionId}`);
       addEventListener("message", ({data}) => {
         document.body.setAttribute("data-test-results", JSON.stringify(data));
-        const mode = param("mode");
-        const me = param("me");
-        const thirdparty = param("thirdparty");
         const category = `supercookies_${mode}_${thirdparty}`;
         if (mode === "read") {
-          await sleep(5000);
-  //         document.body.style.backgroundColor = "green";
-    postDataAndCarryOn(data, category);
-  //         document.body.style.backgroundColor = "red";
-        } else if (!me) {
-          document.documentElement.addEventListener("click", () => {
-            window.open(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`, "_blank");
-          });
+          // document.body.style.backgroundColor = "green";
+          postDataAndCarryOn(data, category);
+          // document.body.style.backgroundColor = "red";
+        } else {
+          if (!me) {
+            document.documentElement.addEventListener("click", () => {
+              window.open(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`, "_blank");
+            });
+          }
           postData(data, category);
         }
       }, {once: true});
+      if (mode === "read" && me === "true" && thirdparty === "same") {
+        while (true) {
+          let response = await fetch(`https://results.privacytests.org/step?sessionId=${sessionId}`, { cache: "no-store"});
+          let {step} = await response.json();
+          if (step > 0) {
+            break;
+          }
+          await sleep(1000);
+        }
+      }
       let iframe = document.createElement("iframe");
       document.body.appendChild(iframe);
       iframe_root = (location.hostname === "localhost" ||
