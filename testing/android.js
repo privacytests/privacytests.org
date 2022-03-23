@@ -58,6 +58,11 @@ const browserInfo = {
     urlBarClick: "search_hint",
     urlBarKeys: "url"
   },
+  mull: {
+    releasePackageName: "us.spotco.fennec_dos",
+    urlBarClick: "mozac_browser_toolbar_url_view",
+    urlBarKeys: "mozac_browser_toolbar_edit_url_view"
+  },
   opera: {
     releasePackageName: "com.opera.browser",
     nightlyPackageName: "com.opera.browser.beta",
