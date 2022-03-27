@@ -500,6 +500,7 @@ const main = async () => {
     log({ config });
     if (config.update) {
       await updateAll(config);
+      process.exit();
       return;
     }
     const expandedBrowserList = configToExpandedBrowserList(config);
