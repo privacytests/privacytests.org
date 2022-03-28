@@ -61,6 +61,7 @@ const browserInfo = {
   mull: {
     releasePackageName: "us.spotco.fennec_dos",
     urlBarClick: "mozac_browser_toolbar_url_view",
+    urlBarClick2: "bottom_bar",
     urlBarKeys: "mozac_browser_toolbar_edit_url_view"
   },
   opera: {
