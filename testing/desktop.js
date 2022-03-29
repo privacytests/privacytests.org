@@ -225,8 +225,7 @@ class DesktopBrowser {
         await this.launch();
         exec(`osascript updateBrowser.applescript "${menuName}" "${aboutItemName}"`);
         // Wait 5 minutes for the update binary to download
-        await sleepMs(5000);
-        //await sleepMs(300000);
+        await sleepMs(300000);
         await this.kill();
       }
     } else if (updateCommand) {
