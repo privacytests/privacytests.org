@@ -70,7 +70,7 @@ const macOSdefaultBrowserSettings = {
     dataDir: "LibreWolf/Profiles/",
     profileCommand: "-profile ",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
-    //updateCommand: "/opt/homebrew/bin/brew upgrade librewolf",
+    updateCommand: "/opt/homebrew/bin/brew upgrade librewolf --no-quarantine",
   },
   edge: {
     name: "Microsoft Edge",
@@ -115,7 +115,7 @@ const macOSdefaultBrowserSettings = {
     binaryName: "Chromium",
     privateFlag: "incognito",
     dataDir: "Google/Chrome",
-    updateCommand: "mv '/Applications/Ungoogled Chromium.app' /Applications/Chromium.app && /opt/homebrew/bin/brew upgrade eloston-chromium && mv /Applications/Chromium.app '/Applications/Ungoogled Chromium.app'",
+    updateCommand: "mv '/Applications/Ungoogled Chromium.app' /Applications/Chromium.app && /opt/homebrew/bin/brew upgrade eloston-chromium --no-quarantine && mv /Applications/Chromium.app '/Applications/Ungoogled Chromium.app'",
 //    profileCommand: chromiumProfileFlags,
   },
   vivaldi: {
@@ -126,11 +126,20 @@ const macOSdefaultBrowserSettings = {
     nightlyDataDir: "Vivaldi Snapshot",
     preLaunchDelay: 10000,
     postLaunchDelay: 10000,
-//    profileCommand: chromiumProfileFlags,
-// Assumes Vivaldi is on automatic updates:
+    //    profileCommand: chromiumProfileFlags,
+    // Assumes Vivaldi is on automatic updates:
     update: ["Vivaldi", "About Vivaldi"],
     updateNightly: ["Vivaldi Snapshot", "About Vivaldi"],
-}
+  },
+  waterfox: {
+    name: "waterfox",
+    nightlyName: "Firefox Nightly",
+    privateFlag: "private-window",
+    dataDir: "Waterfox/Profiles/",
+    profileCommand: "-profile ",
+    env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
+    update: ["Waterfox", "About Waterfox"]
+  }
 };
 
 const browserPath = ({browser, nightly}) => {
