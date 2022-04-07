@@ -1,7 +1,44 @@
 # News
 
+## [Issue 20](/): 2022-04-07
 
-## [Issue 19](/): 2022-03-22
+### New browser
+
+In this issue I have added Mull to the set of Android browsers.
+
+### System font fingerprinting in Brave
+
+Brave 1.39 (currently Nightly) has introduced a [new protection against system font fingerprinting](https://brave.com/privacy-updates/17-language-fingerprinting/). It works by randomizing the user-installed fonts that are exposed to a web page. I am investigating how to test this new protection, so no "pass" or "fail" decision has yet been made.
+
+### New browser versions
+
+New Desktop browser versions are:
+* Brave 1.37
+* Chrome 100.0
+* Edge 100.0
+* LibreWolf 98.0
+* Opera 85.0
+* Ungoogled 100.0
+* Vivaldi 5.2
+
+New iOS browser versions are:
+* DuckDuckGo 7.66
+* Firefox 98.2
+* Focus 98.1
+* Safari 15.4
+
+New Android browser versions are:
+* Brave 1.37
+* Bromite 100.0
+* Chrome 1.00.0
+* DuckDuckGo 5.119
+* Edge ?
+* Firefox 99.1
+* Focus 98.3
+* Opera 68.2
+* Vivaldi 5.2
+
+## [Issue 19](/archive/issue19/): 2022-03-22
 
 ### Correction
 
@@ -9,7 +46,7 @@ The Brave team [reported](https://github.com/arthuredelstein/privacytests.org/is
 
 ### New browser
 
-In this issue, we have added Firefox Focus to the set of Android browsers
+In this issue, we have added Firefox Focus to the set of Android browsers.
 
 ### New browser versions
 
