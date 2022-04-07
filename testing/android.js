@@ -38,8 +38,10 @@ const browserInfo = {
   edge: {
     releasePackageName: "com.microsoft.emmx",
     nightlyPackageName: "com.microsoft.emmx.canary",
-    urlBarClick: "search_box_text",
-    urlBarKeys: "url_bar"
+    urlBarClick: "url_bar",
+    urlBarClick2: "search_box_text",
+    urlBarKeys: "url_bar",
+    goButton: "line_1"
   },
   firefox: {
     releasePackageName: "org.mozilla.firefox",
@@ -192,7 +194,13 @@ class AndroidBrowser {
       await this.client.elementClick(clearButton);
 		}
     const urlBarToSendKeys = await findElement(this.client, this.packageName, this.urlBarKeys);
-    await this.client.elementSendKeys(urlBarToSendKeys, url + "\\n");
+    if (this.goButton) {
+      await this.client.elementSendKeys(urlBarToSendKeys, url);
+      const goButton = await findElement(this.client, this.packageName, this.goButton);
+      await this.client.elementClick(goButton);
+    } else {
+      await this.client.elementSendKeys(urlBarToSendKeys, url + "\\n");
+    }
   }
   // Open the url in a new tab.
   async openUrl(url) {
