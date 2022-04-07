@@ -32,7 +32,7 @@ New Android browser versions are:
 * Bromite 100.0
 * Chrome 1.00.0
 * DuckDuckGo 5.119
-* Edge ?
+* Edge 100.0
 * Firefox 99.1
 * Focus 98.3
 * Opera 68.2
