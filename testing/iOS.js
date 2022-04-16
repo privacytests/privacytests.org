@@ -89,7 +89,7 @@ const findElementWithName = async (client, name) => {
 const clickElementWithName = async (client, name) => {
 	const element = await findElementWithName(client, name);
 	if (!element) {
-		throw new Error(`no element with name #{name} found`);
+		throw new Error(`no element with name ${name} found`);
 	}
 	return await client.elementClick(element);
 };
@@ -239,10 +239,9 @@ class iOSBrowser {
 module.exports = { iOSBrowser };
 
 async function main() {
-	const browser = new iOSBrowser({browser:"safari"});
-	await browser.launch();
-	console.log(await browser.version());
-
+  const browser = new iOSBrowser({browser:"firefox"});
+  await browser.launch();
+  console.log(await browser.version());
 //	await browser.openUrl("https://youtube.com");
 }
 
