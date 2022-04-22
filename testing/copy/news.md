@@ -1,6 +1,24 @@
 # News
 
-## [Issue 20](/): 2022-04-07
+## [Issue 21](/): 2022-04-22
+
+New Desktop browser versions are:
+* Firefox 99.0
+* Librewolf 99.0
+
+New iOS browser versions are:
+* Brave 1.37
+* Chrome 100.4896
+* Edge 2203.6
+* Yandex 2203.6
+
+New Android browser versions are:
+* DuckDuckGo 5.121
+* Firefox 99.2
+* Focus 99.2
+* Opera 68.3
+
+## [Issue 20](/archive/issue20/): 2022-04-07
 
 ### New browser
 
