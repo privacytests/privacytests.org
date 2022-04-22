@@ -30,7 +30,6 @@ const copyPublishableFiles = (resultsPath) => {
   const archivePath = `out/archive/issue${versionNumber}`;
   console.log("version found:", versionNumber);
   createDir(archivePath);
-  const files = fs.readdirSync(resultsPath);
   copyDirFiles(resultsPath, archivePath, allowedSuffixes);
   copyDirFiles(resultsPath, indexPath, allowedSuffixes);
 };
