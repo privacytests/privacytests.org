@@ -111,30 +111,42 @@ const clickSeries = async (client, names) => {
 	}
 }
 
+// Global iOS WebDriver client. We re-use it for all iOS browsers.
+let client = undefined;
+
+const getClient = async () => {
+	if (client !== undefined) {
+		return client;
+	}
+	client = await WebDriver.newSession({
+		port: 4723,
+		hostname: "0.0.0.0",
+		path: "/wd/hub",
+		capabilities: {
+			"appium:bundleId": this.bundleId,
+			"platformName": "iOS",
+			"appium:udid": "auto",
+			"appium:xcodeOrgId": "MGQ2CFRT2X",
+			"appium:xcodeSigningId": "iPhone Developer",
+			"appium:automationName": "XCUITest",
+			"appium:deviceName": "iPhone 7",
+			"appium:wdaLaunchTimeout": 30000,
+			"appium:wdaConnectionTimeout": 30000,
+		//	"appium:platformVersion": "15.1"
+		}
+	});
+	console.log({client});
+	return client;
+}
+
 class iOSBrowser {
   constructor({browser, incognito, tor, nightly}) {
     Object.assign(this, { browser, incognito, tor, nightly }, browserInfo[browser]);
   }
+
   // Launch the browser.
   async launch() {
-		const client = await WebDriver.newSession({
-			port: 4723,
-			hostname: "0.0.0.0",
-			path: "/wd/hub",
-			capabilities: {
-				"appium:bundleId": this.bundleId,
-				"platformName": "iOS",
-				"appium:udid": "auto",
-				"appium:xcodeOrgId": "MGQ2CFRT2X",
-				"appium:xcodeSigningId": "iPhone Developer",
-				"appium:automationName": "XCUITest",
-				"appium:deviceName": "iPhone 7",
-				"appium:wdaLaunchTimeout": 30000,
-				"appium:wdaConnectionTimeout": 30000,
-			//	"appium:platformVersion": "15.1"
-			}
-		});
-    this.client = client;
+    this.client = await getClient();
 		if (this.postLaunchDelay) {
 			await sleepMs(this.postLaunchDelay);
 		}
@@ -158,6 +170,7 @@ class iOSBrowser {
   }
   // Get the browser version.
   async version() {
+		this.client = await getClient();
 		const browserSpec = `${this.browser}|${this.nightly}`;
 		const maybeSeen = versionsSeen[browserSpec];
 		if (maybeSeen) {
