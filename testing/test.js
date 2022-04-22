@@ -346,13 +346,13 @@ const runTests = async (browserObject, categories) => {
 };
 
 // Creates the browser object whether android, iOS, or desktop.
-const createBrowserObject = ({config, android, iOS}) => {
-  return android ? new AndroidBrowser(config) : (iOS ? new iOSBrowser(config) : new DesktopBrowser(config));
+const createBrowserObject = ({config, android, ios}) => {
+  return android ? new AndroidBrowser(config) : (ios ? new iOSBrowser(config) : new DesktopBrowser(config));
 }
 
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
-const runTestsBatch = async (browserList, { shouldQuit, android, iOS, categories } = { shouldQuit: true }) => {
+const runTestsBatch = async (browserList, { shouldQuit, android, ios, categories } = { shouldQuit: true }) => {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
   cookieProxy.simulateTrackingCookies(cookieProxyPort);
@@ -360,7 +360,7 @@ const runTestsBatch = async (browserList, { shouldQuit, android, iOS, categories
     log("\nnext test:", config);
     const { browser, incognito, tor, nightly } = config;
     const timeStarted = new Date().toISOString();
-    const browserObject = createBrowserObject({config, android, iOS});
+    const browserObject = createBrowserObject({config, android, ios});
         browserObject._websocket = await createWebsocket();
     try {
       await browserObject.launch();
@@ -388,7 +388,7 @@ const runTestsBatch = async (browserList, { shouldQuit, android, iOS, categories
   let platform;
   if (android) {
     platform = "Android";
-  } else if (iOS) {
+  } else if (ios) {
     platform = "iOS";
   } else {
     platform = "Desktop";
@@ -478,9 +478,10 @@ const cleanup = async () => {
 // Output all versions of browsers in config to the console.
 const showVersions = async (config) => {
   const browserList = configToBrowserList(config);
-  const { android, iOS } = config;
+  const { android, ios } = config;
+  console.log(config, android, ios);
   const versionData = await Promise.all(browserList.map(async browserSpec => {
-    const browserObject = createBrowserObject({config: browserSpec, android, iOS});
+    const browserObject = createBrowserObject({config: browserSpec, android, ios});
     const version = await browserObject.version();
     return { name: browserSpec.browser, version };
   }));
@@ -534,7 +535,7 @@ const main = async () => {
     const testResults = await runTestsBatch(expandedBrowserList,
       {
         shouldQuit: !config.debug, android: config.android,
-        iOS: config.ios,
+        ios: config.ios,
         categories: config.categories
       });
     let dataFile = writeDataSync(config.filename, testResults);
