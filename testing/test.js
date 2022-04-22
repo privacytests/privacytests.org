@@ -345,6 +345,11 @@ const runTests = async (browserObject, categories) => {
   return results;
 };
 
+// Creates the browser object whether android, iOS, or desktop.
+const createBrowserObject = ({config, android, iOS}) => {
+  return android ? new AndroidBrowser(config) : (iOS ? new iOSBrowser(config) : new DesktopBrowser(config));
+}
+
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
 const runTestsBatch = async (browserList, { shouldQuit, android, iOS, categories } = { shouldQuit: true }) => {
@@ -355,8 +360,8 @@ const runTestsBatch = async (browserList, { shouldQuit, android, iOS, categories
     log("\nnext test:", config);
     const { browser, incognito, tor, nightly } = config;
     const timeStarted = new Date().toISOString();
-    const browserObject = android ? new AndroidBrowser(config) : (iOS ? new iOSBrowser(config) : new DesktopBrowser(config));
-    browserObject._websocket = await createWebsocket();
+    const browserObject = createBrowserObject({config, android, iOS});
+        browserObject._websocket = await createWebsocket();
     try {
       await browserObject.launch();
       const testResults = await deadlinePromise(`${browser} tests`, runTests(browserObject, categories), 300000);
@@ -459,15 +464,6 @@ const configToExpandedBrowserList = (config) => {
   return expandBrowserList(browserList, config.repeat);
 };
 
-const updateAll = async (config) => {
-  const browserList = configToBrowserList(config);
-  await Promise.all(browserList.map(async browserSpec => {
-    const browserObject = new DesktopBrowser(browserSpec);
-    log(browserObject);
-    await browserObject.update();
-  }));
-};
-
 let cleanupRan = false;
 const cleanup = async () => {
   if (cleanupRan) {
@@ -477,6 +473,32 @@ const cleanup = async () => {
   await disableProxies();
   killAllChildProcesses();
   cleanupRan = true;
+};
+
+// Output all versions of browsers in config to the console.
+const showVersions = async (config) => {
+  const browserList = configToBrowserList(config);
+  const { android, iOS } = config;
+  const versionData = await Promise.all(browserList.map(async browserSpec => {
+    const browserObject = createBrowserObject({config: browserSpec, android, iOS});
+    const version = await browserObject.version();
+    return { name: browserSpec.browser, version };
+  }));
+  const versionDataSorted = versionData.sort((a,b) => a.name < b.name ? -1 : 1);
+  for (let { name, version } of versionDataSorted) {
+    console.log(name, version);
+  }
+}
+
+// Update all browsers listed in config.
+const updateAll = async (config) => {
+  const browserList = configToBrowserList(config);
+  await Promise.all(browserList.map(async browserSpec => {
+    const browserObject = new DesktopBrowser(browserSpec);
+    log(browserObject);
+    await browserObject.update();
+  }));
+  await showVersions(config);
 };
 
 // ## Main program
@@ -501,6 +523,10 @@ const main = async () => {
     if (config.update) {
       await updateAll(config);
       process.exit();
+      return;
+    }
+    if (config.versions || config.version) {
+      await showVersions(config);
       return;
     }
     const expandedBrowserList = configToExpandedBrowserList(config);
