@@ -1,4 +1,6 @@
 const { default: WebDriver}  = require("webdriver");
+const plist = require('plist');
+const { compact } = require("lodash");
 
 const browserInfo = {
   brave: {
@@ -77,7 +79,26 @@ const browserInfo = {
   }
 };
 
-let versionsSeen = {};
+let appVersions = undefined;
+
+const getAppVersions = () => {
+	if (appVersions !== undefined) {
+		return appVersions;
+	}
+	appVersions = {};
+	const child_process = require('child_process');
+	const plistRaw = child_process.execSync("/opt/homebrew/bin/ideviceinstaller  -l -o xml").toString();
+	const plistJson = plist.parse(plistRaw);
+	for (let plistItem of plistJson) {
+		appVersions[plistItem.CFBundleIdentifier] = plistItem.CFBundleShortVersionString;
+	}
+	const productVersion = child_process.execSync(
+		"/opt/homebrew/bin/ideviceinfo --key ProductVersion")
+		.toString().trim();
+	appVersions["com.apple.mobilesafari"] = productVersion;
+	return appVersions;
+}
+
 
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
@@ -158,44 +179,8 @@ class iOSBrowser {
   }
   // Get the browser version.
   async version() {
-		const browserSpec = `${this.browser}|${this.nightly}`;
-		const maybeSeen = versionsSeen[browserSpec];
-		if (maybeSeen) {
-			return maybeSeen;
-		}
-		// We don't have the browser version yet. Go get it.
-		await this.client.terminateApp("com.apple.Preferences");
-		//await sleepMs(1000);
-		await this.client.activateApp("com.apple.Preferences");
-		//await sleepMs(500);
-		await clickElementWithName(this.client, "General");
-		//await sleepMs(500);
-		await clickElementWithName(this.client, "iPhone Storage");
-		await sleepMs(4000);
-		let element = undefined;
-		for (let i = 0; i < 20 && element === undefined; ++i) {
-			await sleepMs(1000);
-			if (this.browser === "safari") {
-				// Safari version number is the same as the iOS version.
-				element = await findElementWithXPath(this.client, "//XCUIElementTypeCell[contains(@name,'iOS,')]");
-			} else {
-				element = await findElementWithName(this.client,  `App:${this.name}`);
-			}
-		}
-		if (!element) {
-			throw new Error("version element not found");
-		}	else {
-			await this.client.elementClick(element);
-		}
-		await sleepMs(1000);
-		const infoElement = await findElementWithName(this.client, "Info");
-		console.log(infoElement);
-		const infoText = await this.client.getElementText(infoElement);
-		// Remove the word "Version" from the info text if it's present.
-		const versionText = infoText.replace("Version ", "").trim();
-		await this.client.terminateApp("com.apple.Preferences");
-		versionsSeen[browserSpec] = versionText;
-		return versionText;
+		const versions = getAppVersions();
+		return versions[this.bundleId];
   }
   // Open the url in a new tab.
   async openUrl(url) {
@@ -239,10 +224,8 @@ class iOSBrowser {
 module.exports = { iOSBrowser };
 
 async function main() {
-  const browser = new iOSBrowser({browser:"firefox"});
-  await browser.launch();
+  const browser = new iOSBrowser({browser:process.argv[2]});
   console.log(await browser.version());
-//	await browser.openUrl("https://youtube.com");
 }
 
 if (require.main === module) {
