@@ -92,6 +92,7 @@ const getAppVersions = () => {
 	for (let plistItem of plistJson) {
 		appVersions[plistItem.CFBundleIdentifier] = plistItem.CFBundleShortVersionString;
 	}
+	// Safari version number is the same as the iOS version:
 	const productVersion = child_process.execSync(
 		"/opt/homebrew/bin/ideviceinfo --key ProductVersion")
 		.toString().trim();
