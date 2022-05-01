@@ -10,6 +10,11 @@ First on Linux (for when it is supported in the future):
 
 `sudo apt-get install libpng-dev libxtst-dev libx11-dev`
 
+On MacOS, we need:
+
+`brew install ideviceinstaller`
+`brew install ideviceinfo`
+
 Then, on all platforms:
 
 `npm install`
