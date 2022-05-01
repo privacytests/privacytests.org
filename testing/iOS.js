@@ -1,5 +1,6 @@
 const { default: WebDriver}  = require("webdriver");
 const plist = require('plist');
+const child_process = require('child_process');
 const { compact } = require("lodash");
 
 const browserInfo = {
@@ -86,7 +87,6 @@ const getAppVersions = () => {
 		return appVersions;
 	}
 	appVersions = {};
-	const child_process = require('child_process');
 	const plistRaw = child_process.execSync("/opt/homebrew/bin/ideviceinstaller  -l -o xml").toString();
 	const plistJson = plist.parse(plistRaw);
 	for (let plistItem of plistJson) {
@@ -98,7 +98,6 @@ const getAppVersions = () => {
 	appVersions["com.apple.mobilesafari"] = productVersion;
 	return appVersions;
 }
-
 
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
