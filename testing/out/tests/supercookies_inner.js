@@ -283,7 +283,7 @@ let tests = {
     // Borrowed from https://github.com/samyk/evercookie
     write: async (key) => {
       if (!window.openDatabase) {
-        throw new Error("Unsupported");
+        throw new Error("gported");
       }
       let database = window.openDatabase("sqlite_supercookie", "", "supercookie", 1024 * 1024);
       let tx = new Promise((resolve) => database.transaction(tx => {
@@ -347,11 +347,11 @@ let tests = {
     write: async (secret) => {
       // Ensure that we can switch over to h3 via alt-svc:
       for (let i = 0; i<3; ++i) {
-        await fetch(`https://h3.arthuredelstein.net:4434/connection_id`, {cache: "no-store"});
+        await fetch(`https://h3.arthuredelstein.net:4433/connection_id`, {cache: "no-store"});
         await sleepMs(500);
       }
       // Are we now connecting over h3?
-      let response = await fetch(`https://h3.arthuredelstein.net:4434/connection_id`, {cache: "no-store"});
+      let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`, {cache: "no-store"});
       let text = await response.text();
       // Empty response text indicates we are not connecting over h3:
       if (text.trim() === "") {
@@ -359,7 +359,7 @@ let tests = {
       }
     },
     read: async () => {
-      let response = await fetch(`https://h3.arthuredelstein.net:4434/connection_id`);
+      let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
       return await response.text();
     }
   },
@@ -376,6 +376,32 @@ let tests = {
       } else {
         throw new Error("Unsupported");
       }
+    }
+  },
+  'CookieStore': {
+    // Test originally written by Steven Englehardt
+    description: "The Cookie Store API is an alternative asynchronous API for managing cookies, supported by some browsers.",
+    write: (data) => {
+      const msPerHour = 60 * 60 * 1000;
+      if (!window.cookieStore) {
+        throw new Error("Unsupported");
+      }
+      window.cookieStore.set({
+        name: "partition_test",
+        value: data,
+        expires: Date.now() + msPerHour,
+        sameSite: "none"
+      });
+    },
+    read: async () => {
+      if (!window.cookieStore) {
+        throw new Error("Unsupported");
+      }
+      const cookie = await window.cookieStore.get("partition_test");
+      if (!cookie) {
+        return null;
+      }
+      return cookie.value;
     }
   }
 };
