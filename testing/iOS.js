@@ -1,7 +1,6 @@
 const { default: WebDriver}  = require("webdriver");
 const plist = require('plist');
 const child_process = require('child_process');
-const { compact } = require("lodash");
 
 const browserInfo = {
   brave: {
