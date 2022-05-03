@@ -377,6 +377,32 @@ let tests = {
         throw new Error("Unsupported");
       }
     }
+  },
+  'CookieStore': {
+    // Test originally written by Steven Englehardt
+    description: "The Cookie Store API is an alternative asynchronous API for managing cookies, supported by some browsers.",
+    write: (data) => {
+      const msPerHour = 60 * 60 * 1000;
+      if (!window.cookieStore) {
+        throw new Error("Unsupported");
+      }
+      window.cookieStore.set({
+        name: "partition_test",
+        value: data,
+        expires: Date.now() + msPerHour,
+        sameSite: "none"
+      });
+    },
+    read: async () => {
+      if (!window.cookieStore) {
+        throw new Error("Unsupported");
+      }
+      const cookie = await window.cookieStore.get("partition_test");
+      if (!cookie) {
+        return null;
+      }
+      return cookie.value;
+    }
   }
 };
 
