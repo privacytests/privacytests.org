@@ -1,6 +1,36 @@
 # News
 
-## [Issue 21](/): 2022-04-22
+## [Issue 22](/): 2022-05-03
+
+### New test
+
+Thanks to [Steven Englehardt](https://twitter.com/s_englehardt) for contributing a test of the [Cookie Store API](https://developer.mozilla.org/en-US/docs/Web/API/Cookie_Store_API).
+
+### Updated browsers
+
+New Desktop browser versions are:
+
+* Brave 1.38
+* Chrome 101.0
+* Edge 101.0
+* Ungoogled Chromium 101.0
+
+New iOS browser versions are:
+
+* Chrome 101.4951
+* DuckDuckGo 7.67
+* Edge 100.1185
+* Firefox 99.3
+* Yandex 2203.7
+
+New Android browser versions are:
+
+* Brave 1.38
+* Chrome 101.0
+* DuckDuckGo 5.123
+* Edge 101.0
+
+## [Issue 21](/archive/issue21/): 2022-04-22
 
 New Desktop browser versions are:
 * Firefox 99.0
