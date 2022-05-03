@@ -4,12 +4,14 @@ const { execSync } = require('child_process');
 
 // Constants
 const allowedSuffixes = [".html", ".json", ".png"];
-const indexPath = "out";
 
 // Ensure a directory exists.
 const createDir = (path) => {
   if (!fs.existsSync(path)) {
+    console.log(`creating directory ${path}`);
     fs.mkdirSync(path, {options: {recursive: true}});
+  } else {
+    console.log(`directory found: ${path}`);
   }
 };
 
@@ -24,30 +26,27 @@ const copyDirFiles = (src, dest, suffixes) => {
   }
 };
 
-// Copy files to archive and main directory for publishing.
-const copyPublishableFiles = (resultsPath) => {
-  const versionNumber = fs.readFileSync("issue-number").toString().trim();
-  const archivePath = `out/archive/issue${versionNumber}`;
-  console.log("version found:", versionNumber);
-  createDir(archivePath);
-  copyDirFiles(resultsPath, archivePath, allowedSuffixes);
-  copyDirFiles(resultsPath, indexPath, allowedSuffixes);
-};
-
 // Add files in path with given suffixes to git (but don't commit yet)
 const gitAddFiles = (path, suffixes) => {
   const wildcards = ["",...suffixes].join(" *");
   const command = `git add ${wildcards}`;
   console.log(`In directory ${path}:`, command);
-  execSync(`git add ${wildcards}`, {cwd: path});
+  execSync(command, {cwd: path});
 };
 
 // The main function. Copy publishable files, and add them to git.
 const main = () => {
+  const indexPath = "out";
+  const versionNumber = fs.readFileSync("issue-number").toString().trim();
+  console.log("version found:", versionNumber);
+  const archivePath = `out/archive/issue${versionNumber}`;
+  createDir(archivePath);
   const date = process.argv[2]
   const resultsPath = `out/results/${date}`;
-  copyPublishableFiles(resultsPath);
+  copyDirFiles(resultsPath, archivePath, allowedSuffixes);
+  copyDirFiles(resultsPath, indexPath, allowedSuffixes);  
   gitAddFiles(resultsPath, allowedSuffixes);
+  gitAddFiles(archivePath, allowedSuffixes);
   gitAddFiles(indexPath, allowedSuffixes);
 };
 
