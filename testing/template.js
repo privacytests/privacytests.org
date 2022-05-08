@@ -64,12 +64,10 @@ const htmlPage = ({ content, cssFiles, previewImageUrl }) => {
     <style>${inlineCSS}</style>
   </head>
   <body>
-    <div class="gutter"></div>
     <div class="wrapper">
     ${header()}
     ${content}
     </div>
-    <div class="gutter"></div>
   </body>
 </html>
 `;
