@@ -1,6 +1,27 @@
 # News
 
-## [Issue 22](/): 2022-05-03
+## [Issue 23](/): 2022-05-16
+
+New Desktop browser versions are:
+
+* Firefox 100.0
+* LibreWolf 100.0
+* Opera 86.0
+
+New iOS browser versions are:
+
+* Firefox 100.1
+* Focus 99.0
+
+New Android browser versions are:
+
+* DuckDuckGo 5.124
+* Firefox 100.1
+* Focus 100.1
+* Opera 69.1
+* Samsung 17.0
+
+## [Issue 22](/archive/issue22/): 2022-05-03
 
 ### New test
 
