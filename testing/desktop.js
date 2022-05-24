@@ -40,7 +40,7 @@ const macOSdefaultBrowserSettings = {
     torFlag: "tor",
     dataDir: "BraveSoftware/Brave-Browser",
     nightlyDataDir: "BraveSoftware/Brave-Browser-Nightly",
-//    profileCommand: chromiumProfileFlags,
+    profileCommand: chromiumProfileFlags,
     update: ["Brave", "About Brave"],
     updateNightly: ["Brave", "About Brave"],
   },

@@ -28,8 +28,14 @@
          }
          testElement.src = url2.href;
          let result = await resultPromise;
-         passed = false;
-         console.log(url, result);
+         if (window.pSUPERFLY &&
+             window.pSUPERFLY.__proto__.toString() === '() => {}') {
+           passed = true;
+           console.log(url, "ddg surrogate, https://github.com/duckduckgo/tracker-surrogates/blob/main/surrogates/chartbeat.js");
+         } else {;
+           passed = false;
+           console.log(url, result);
+         }
        } catch (err) {
          passed = true;
          console.log(url, err);

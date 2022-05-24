@@ -7,6 +7,15 @@ const minimist = require('minimist');
 const template = require('./template.js');
 const _ = require('lodash');
 
+const escapeHtml = str => str.replace(/[&<>'"]/g, 
+  tag => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[tag]));
+
 // The names used by browser-logos for nightly browsers.
 const nightlyIconNames = {
   brave: "brave-nightly",
@@ -50,7 +59,7 @@ const htmlTable = ({ headers, body, className }) => {
       if (item.subheading) {
         let description = (item.description ?? "").replaceAll(/\s+/g, " ").trim();
         className = firstSubheading ? "first subheading" : "subheading";
-        elements.push(`<th colspan="4" class="${className} tooltipParent">${item.subheading}<span class="tooltipText">${description}</span></th>`);
+        elements.push(`<th colspan="4" class="${className} tooltipParent">${escapeHtml(item.subheading)}<span class="tooltipText">${escapeHtml(description)}</span></th>`);
         firstSubheading = false;
       } else {
         elements.push(`<td>${item}</td>`);
@@ -144,8 +153,6 @@ const allHaveValue = (x, value) => {
   return Array.isArray(x) ? x.every(item => item === value) : x === value;
 };
 
-const htmlEscape = (s) => s.replace(/'/g, "&#39;");
-
 // Generates a table cell which indicates whether
 // a test passed, and includes the tooltip with
 // more information.
@@ -155,7 +162,7 @@ const testBody = ({passed, testFailed, tooltip, unsupported}) => {
   let anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : (passed === false);
   return `<div class='dataPoint tooltipParent ${(allUnsupported) ? "na" : (anyDidntPass ? "bad" : "good")}'
 > ${allUnsupported ? "&ndash;" : "&nbsp;"}
-<span class="tooltipText">${htmlEscape(tooltip)}</span>
+<span class="tooltipText">${escapeHtml(tooltip)}</span>
 </div>`;
 };
 
@@ -396,12 +403,17 @@ const readJSONFile = (file) =>
 // Returns the path to the latest results file in
 // the given directory.
 const latestResultsFile = (dir) => {
-  let files = fs.readdirSync(dir);
-  let stem = files
-      .filter(f => f.match("^(.*?)\.json$"))
-      .sort()
-      .pop();
-  return dir + "/" + stem;
+  const files = fs.readdirSync(dir, {withFileTypes:true});
+  const stem = files
+          .filter(d => d.isDirectory())
+          .map(d => d.name)
+          .sort()
+          .pop();
+  const todayPath = dir + "/" + stem;
+  console.log(todayPath);
+  const todayFiles = fs.readdirSync(todayPath);
+  const latestFile = todayFiles.filter(d => d.endsWith(".json")).sort().pop();
+  return todayPath + "/" + latestFile;
 };
 
 // List of results keys that should be collected in an array
@@ -502,9 +514,9 @@ const renderPage = ({ dataFiles, live, aggregate }) => {
 };
 
 const render = async ({dataFiles, live, aggregate }) => {
-  const createPreviewImage = (await import('./prepare.mjs')).createPreviewImage;
   const { resultsFileHTML, resultsFilePreviewImage} = renderPage({dataFiles, live, aggregate});
-  createPreviewImage(resultsFileHTML, resultsFilePreviewImage);
+  const createPreviewImage = (await import('./preview.mjs')).createPreviewImage;
+  await createPreviewImage(resultsFileHTML, resultsFilePreviewImage);
   if (!live) {
     open(fileUrl(resultsFileHTML));
   }
