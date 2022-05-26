@@ -46,6 +46,7 @@ const browserInfo = {
     bundleId: "org.mozilla.ios.Focus",
 		urlBarClick: "URLBar.urlText",
 		urlBarKeys: "URLBar.urlText",
+		urlBarClear: "icon clear",
   },
   onion: {
 		name: "Onion Browser",
@@ -152,7 +153,7 @@ class iOSBrowser {
 				"appium:deviceName": "iPhone 7",
 				"appium:wdaLaunchTimeout": 30000,
 				"appium:wdaConnectionTimeout": 30000,
-			//	"appium:platformVersion": "15.1"
+				"appium:platformVersion": "15.4.1"
 			}
 		});
     this.client = client;
@@ -205,7 +206,11 @@ class iOSBrowser {
     await this.client.elementClick(urlBarToClick);
     await sleepMs(1000);
 		if (this.urlBarClear) {
-			await clickElementWithName(this.client, this.urlBarClear);
+			try {
+				await clickElementWithName(this.client, this.urlBarClear);
+			} catch (e) {
+				console.log(e);
+			}
 		}
     const urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys);
     await this.client.elementSendKeys(urlBarToSendKeys, url);
