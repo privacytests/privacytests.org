@@ -1,6 +1,33 @@
 # News
 
-## [Issue 23](/): 2022-05-16
+## [Issue 24](/): 2022-05-25
+
+### A faulty test fixed
+
+It was brought to my attention that the "Tracker content blocking" test for Chartbeat was incorrectly reporting a "fail" for the DuckDuckGo Android browser. DuckDuckGo browser blocks third-party Chartbeat tracking scripts, but then provides the host page with a surrogate script to prevent breakage of the page's functionality. The original design of my test did not take into account this kind of surrogate, and so was incorrectly concluding that the original tracking script had been loaded into the page. I have now enhanced the test so it detects the presence of this surrogate and reports a "pass" for DuckDuckGo. Thanks to Peter Dolanjski for informing me of this problem.
+
+### New browser versions
+
+On Desktop:
+
+* Brave 1.39
+* Chrome 102.0
+
+On iOS:
+
+* Brave 1.38
+* Edge 101.1210
+* Focus 100
+* Yandex 2205.3
+
+On Android:
+
+* DuckDuckGo 5.125
+* Firefox 100.3
+* Focus 100.3
+* Opera 69.2
+
+## [Issue 23](/archive/issue23): 2022-05-16
 
 New Desktop browser versions are:
 
