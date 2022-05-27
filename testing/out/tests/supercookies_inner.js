@@ -347,11 +347,11 @@ let tests = {
     write: async (secret) => {
       // Ensure that we can switch over to h3 via alt-svc:
       for (let i = 0; i<3; ++i) {
-        await fetch(`https://h3.arthuredelstein.net:4433/connection_id`, {cache: "no-store"});
+        await fetch(`https://h3.arthuredelstein.net:4434/connection_id`, {cache: "no-store"});
         await sleepMs(500);
       }
       // Are we now connecting over h3?
-      let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`, {cache: "no-store"});
+      let response = await fetch(`https://h3.arthuredelstein.net:4434/connection_id`, {cache: "no-store"});
       let text = await response.text();
       // Empty response text indicates we are not connecting over h3:
       if (text.trim() === "") {
@@ -359,7 +359,7 @@ let tests = {
       }
     },
     read: async () => {
-      let response = await fetch(`https://h3.arthuredelstein.net:4433/connection_id`);
+      let response = await fetch(`https://h3.arthuredelstein.net:4434/connection_id`);
       return await response.text();
     }
   },
