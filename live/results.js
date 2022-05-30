@@ -7,12 +7,13 @@ const { contentPage } = require('../testing/render.js');
 
 const app = express();
 const { WebSocketServer } = require('ws');
-
+const ExpiryMap = require('expiry-map');
 
 let websockets = {};
 
 // Map from sessionId to results.
-let sessionResults = {};
+//let sessionResults = {};
+const sessionResults = new ExpiryMap(30000000);
 
 // We use two domains for supercookies and navigation tests.
 // The "same" domain is the one that is used for simluated third-party tracker
@@ -124,10 +125,10 @@ const nextUrl = (sessionId, nextStepIndex) => {
 
 // Store the result data for a particular category.
 const accumulateResultData = (sessionId, category, data) => {
-    if (sessionResults[sessionId] === undefined) {
-      sessionResults[sessionId] = {};
-    }
-    sessionResults[sessionId][category] = data;
+  if (sessionResults.get(sessionId) === undefined) {
+    sessionResults.set(sessionId, {});
+  }
+  sessionResults.get(sessionId)[category] = data;
 };
 
 
@@ -208,9 +209,9 @@ app.get('/', (req, res) => res.send('Hello World!'));
 app.get('/results', (req, res) => {
   const {raw, sessionId} = req.query;
   if (raw) {
-    res.json(sessionResults[sessionId]);
+    res.json(sessionResults.get(sessionId));
   } else {
-    res.json(processResults(sessionResults[sessionId]));
+    res.json(processResults(sessionResults.get(sessionId)));
   }
 });
 
@@ -222,7 +223,7 @@ app.get('/step', (req, res) => {
 
 app.get('/me', (req, res) => {
   const { sessionId } = req.query;
-  const testResults = processResults(sessionResults[sessionId]);
+  const testResults = processResults(sessionResults.get(sessionId));
   const data = { all_tests: [{browser: "mine", incognito: false, nightly: false, testResults}], git: "fake_git_string"};
   const page = contentPage({results: data, title: "PrivacyTests.org: my browser", basename: "basename",
                             previewImageUrl: null, tableTitle: "my browser", nightly: false, incognito: false});
@@ -239,6 +240,7 @@ const websocketSend = (sessionId, data) => {
 
 app.post('/post', (req, res) => {
   console.log("post received.");
+  console.log(req.body);
   let { sessionId, data, category } = req.body;
   console.log("RECEIVED: ", category);
   if (false) { // (!sessionId || !websockets[sessionId]) {
@@ -263,9 +265,9 @@ app.post('/post', (req, res) => {
     console.log({nextStepIndex, pageSequenceLength: pageSequence.length});
     if (nextStepIndex === pageSequence.length - 1) {
       if (websockets[sessionId]) {
-        websocketSend(sessionId, processResults(sessionResults[sessionId]));
+        websocketSend(sessionId, processResults(sessionResults.get(sessionId)));
       }
-      console.log(Object.keys(sessionResults[sessionId]));
+      console.log(Object.keys(sessionResults.get(sessionId)));
     }
     if (nextStepIndex === 1) {
       if (websockets[sessionId]) {
