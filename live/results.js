@@ -7,12 +7,15 @@ const { contentPage } = require('../testing/render.js');
 
 const app = express();
 const { WebSocketServer } = require('ws');
+const ExpiryMap = require('expiry-map');
 
+const oneHourInMilliseconds = 3600000;
 
-let websockets = {};
+// Map from sessionID to websocket
+let websockets = new ExpiryMap(oneHourInMilliseconds);
 
 // Map from sessionId to results.
-let sessionResults = {};
+const sessionResults = new ExpiryMap(oneHourInMilliseconds);
 
 // We use two domains for supercookies and navigation tests.
 // The "same" domain is the one that is used for simluated third-party tracker
@@ -124,10 +127,10 @@ const nextUrl = (sessionId, nextStepIndex) => {
 
 // Store the result data for a particular category.
 const accumulateResultData = (sessionId, category, data) => {
-    if (sessionResults[sessionId] === undefined) {
-      sessionResults[sessionId] = {};
-    }
-    sessionResults[sessionId][category] = data;
+  if (sessionResults.get(sessionId) === undefined) {
+    sessionResults.set(sessionId, {});
+  }
+  sessionResults.get(sessionId)[category] = data;
 };
 
 
@@ -208,9 +211,9 @@ app.get('/', (req, res) => res.send('Hello World!'));
 app.get('/results', (req, res) => {
   const {raw, sessionId} = req.query;
   if (raw) {
-    res.json(sessionResults[sessionId]);
+    res.json(sessionResults.get(sessionId));
   } else {
-    res.json(processResults(sessionResults[sessionId]));
+    res.json(processResults(sessionResults.get(sessionId)));
   }
 });
 
@@ -222,7 +225,7 @@ app.get('/step', (req, res) => {
 
 app.get('/me', (req, res) => {
   const { sessionId } = req.query;
-  const testResults = processResults(sessionResults[sessionId]);
+  const testResults = processResults(sessionResults.get(sessionId));
   const data = { all_tests: [{browser: "mine", incognito: false, nightly: false, testResults}], git: "fake_git_string"};
   const page = contentPage({results: data, title: "PrivacyTests.org: my browser", basename: "basename",
                             previewImageUrl: null, tableTitle: "my browser", nightly: false, incognito: false});
@@ -231,17 +234,18 @@ app.get('/me', (req, res) => {
 });
 
 const websocketSend = (sessionId, data) => {
-  if (!websockets[sessionId]) {
+  if (!websockets.get(sessionId)) {
     throw new Error(`no websocket exists for sessionId=${sessionId}`);
   }
-  websockets[sessionId].send(JSON.stringify({sessionId, data}));
+  websockets.get(sessionId).send(JSON.stringify({sessionId, data}));
 };
 
 app.post('/post', (req, res) => {
   console.log("post received.");
+  console.log(req.body);
   let { sessionId, data, category } = req.body;
   console.log("RECEIVED: ", category);
-  if (false) { // (!sessionId || !websockets[sessionId]) {
+  if (false) { // (!sessionId || !websockets.get(sessionId)) {
     // We don't recognized this as an existing sessionId.
     console.log(`Unknown sessionId '${sessionId}'; Sending 404.`);
     res.sendStatus(404);
@@ -262,13 +266,13 @@ app.post('/post', (req, res) => {
     const nextStepIndex = getNextStepIndex(sessionId);
     console.log({nextStepIndex, pageSequenceLength: pageSequence.length});
     if (nextStepIndex === pageSequence.length - 1) {
-      if (websockets[sessionId]) {
-        websocketSend(sessionId, processResults(sessionResults[sessionId]));
+      if (websockets.get(sessionId)) {
+        websocketSend(sessionId, processResults(sessionResults.get(sessionId)));
       }
-      console.log(Object.keys(sessionResults[sessionId]));
+      console.log(Object.keys(sessionResults.get(sessionId)));
     }
     if (nextStepIndex === 1) {
-      if (websockets[sessionId]) {
+      if (websockets.get(sessionId)) {
         websocketSend(sessionId, { supercookie_write_finished: true });
       }
     }
@@ -293,7 +297,7 @@ wss.on('connection', function connection(ws) {
   const sessionId = uuidv4();
   const message = JSON.stringify({sessionId, "connected": true});
   console.log("sending to ws:", message);
-  websockets[sessionId] = ws;
+  websockets.set(sessionId, ws);
   ws.send(message);
 });
 
