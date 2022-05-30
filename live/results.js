@@ -9,11 +9,13 @@ const app = express();
 const { WebSocketServer } = require('ws');
 const ExpiryMap = require('expiry-map');
 
-let websockets = {};
+const oneHourInMilliseconds = 3600000;
+
+// Map from sessionID to websocket
+let websockets = new ExpiryMap(oneHourInMilliseconds);
 
 // Map from sessionId to results.
-//let sessionResults = {};
-const sessionResults = new ExpiryMap(30000000);
+const sessionResults = new ExpiryMap(oneHourInMilliseconds);
 
 // We use two domains for supercookies and navigation tests.
 // The "same" domain is the one that is used for simluated third-party tracker
@@ -232,10 +234,10 @@ app.get('/me', (req, res) => {
 });
 
 const websocketSend = (sessionId, data) => {
-  if (!websockets[sessionId]) {
+  if (!websockets.get(sessionId)) {
     throw new Error(`no websocket exists for sessionId=${sessionId}`);
   }
-  websockets[sessionId].send(JSON.stringify({sessionId, data}));
+  websockets.get(sessionId).send(JSON.stringify({sessionId, data}));
 };
 
 app.post('/post', (req, res) => {
@@ -243,7 +245,7 @@ app.post('/post', (req, res) => {
   console.log(req.body);
   let { sessionId, data, category } = req.body;
   console.log("RECEIVED: ", category);
-  if (false) { // (!sessionId || !websockets[sessionId]) {
+  if (false) { // (!sessionId || !websockets.get(sessionId)) {
     // We don't recognized this as an existing sessionId.
     console.log(`Unknown sessionId '${sessionId}'; Sending 404.`);
     res.sendStatus(404);
@@ -264,13 +266,13 @@ app.post('/post', (req, res) => {
     const nextStepIndex = getNextStepIndex(sessionId);
     console.log({nextStepIndex, pageSequenceLength: pageSequence.length});
     if (nextStepIndex === pageSequence.length - 1) {
-      if (websockets[sessionId]) {
+      if (websockets.get(sessionId)) {
         websocketSend(sessionId, processResults(sessionResults.get(sessionId)));
       }
       console.log(Object.keys(sessionResults.get(sessionId)));
     }
     if (nextStepIndex === 1) {
-      if (websockets[sessionId]) {
+      if (websockets.get(sessionId)) {
         websocketSend(sessionId, { supercookie_write_finished: true });
       }
     }
@@ -295,7 +297,7 @@ wss.on('connection', function connection(ws) {
   const sessionId = uuidv4();
   const message = JSON.stringify({sessionId, "connected": true});
   console.log("sending to ws:", message);
-  websockets[sessionId] = ws;
+  websockets.set(sessionId, ws);
   ws.send(message);
 });
 
