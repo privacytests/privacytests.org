@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Upgradable http privacy tests</title>
+    <meta charset="utf8">
+    <link rel="stylesheet" href="test.css">
+  </head>
+  <body>
+    <script src="./post_data.js"></script>
+    <script>
+     const runTests = async () => {
+       const urlParams = new URLSearchParams(window.location.search);
+       const source = urlParams.get("source");
+       const upgraded = window.location.protocol === "https:";
+       const resultKey = `Upgradable ${source}`;
+       const description = (source === "address") ?
+         "Checks to see if an insecure address entered into the browser's address bar is upgraded to HTTPS whenever possible." :
+         "Checks to see if the user has clicked on a hyperlink to an insecure address, if the browser upgrades that address to HTTPS whenever possible."
+       let resultsJSON = {};
+       resultsJSON[resultKey] = {
+         upgraded,
+         passed: upgraded,
+         description
+       };
+       await postDataAndCarryOn(resultsJSON, `upgradable_${source}`);
+     };
+     runTests();
+    </script>
+  </body>
+</html>

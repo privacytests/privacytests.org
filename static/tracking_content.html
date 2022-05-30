@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8"/>
+    <link rel="shortcut icon" href="#">
+  </head>
+  <body>
+    <script id="testScript"></script>
+    <script src="./post_data.js"></script>
+    <script>
+     const testUrl = async ({url, sessionId, readCookies, writeCookies, type}) => {
+       let passed;
+       try {
+         const isScript = url.includes(".js") || type === "script";
+         const testElement = document.createElement(isScript ? "script" : "img");
+         document.body.appendChild(testElement);
+         const resultPromise = new Promise((resolve, reject) => {
+           testElement.addEventListener("load", e => resolve(e), { once: true});
+           testElement.addEventListener("error", e => reject(e), { once: true});
+         });
+         const url2 = new URL(url);
+         url2.searchParams.append("sessionId", sessionId);
+         if (readCookies) {
+           url2.searchParams.append("pto_read_cookie", "true");
+         }
+         if (writeCookies) {
+           url2.searchParams.append("pto_write_cookie", "true");
+         }
+         testElement.src = url2.href;
+         let result = await resultPromise;
+         if (window.pSUPERFLY &&
+             window.pSUPERFLY.__proto__.toString() === '() => {}') {
+           passed = true;
+           console.log(url, "ddg surrogate, https://github.com/duckduckgo/tracker-surrogates/blob/main/surrogates/chartbeat.js");
+         } else {;
+           passed = false;
+           console.log(url, result);
+         }
+       } catch (err) {
+         passed = true;
+         console.log(url, err);
+       }
+       return passed;
+     };
+
+     const runTest = async () => {
+       const searchParams = new URLSearchParams(window.location.search);
+       const sessionId = searchParams.get("sessionId");
+       const readCookies = searchParams.get("read_cookies") === "true";
+       const writeCookies = searchParams.get("write_cookies") === "true";
+       const response = await fetch("./trackers.json",   { headers: {'Accept': 'application/json' } });
+       const tests = await response.json();
+       let results = {};
+       for (const {name, url, type} of tests) {
+         const passed = await testUrl({url, sessionId, readCookies, writeCookies, type});
+         const description = `Tests whether the browser blocks the page from loading the tracker at ${url}`;
+         results[name] = { url, passed, description };
+       }
+       await postDataAndCarryOn(results, (readCookies || writeCookies) ? "tracking_cookies" : "trackers");
+     };
+     runTest();
+    </script>
+  </body>
+</html>
