@@ -476,12 +476,12 @@ const getMergedResults = (dataFiles) => {
 }
 
 const renderPage = ({ dataFiles, live, aggregate }) => {
-  let resultsFilesJSON = (dataFiles && dataFiles.length > 0) ? dataFiles : [latestResultsFile("./out/results")];
+  let resultsFilesJSON = (dataFiles && dataFiles.length > 0) ? dataFiles : [latestResultsFile("../results")];
   console.log(resultsFilesJSON);
-  const resultsFileHTMLLatest = "./out/results/latest.html";
+  const resultsFileHTMLLatest = "../results/latest.html";
   const resultsFileHTML = resultsFilesJSON[0].replace(/\.json$/, ".html");
   const resultsFilePreviewImage = resultsFileHTML.replace(".html", "-preview.png");
-//  fs.copyFile(resultsFile, "./out/results/" + path.basename(resultsFile), fs.constants.COPYFILE_EXCL);
+//  fs.copyFile(resultsFile, "../results/" + path.basename(resultsFile), fs.constants.COPYFILE_EXCL);
   console.log(`Reading from raw results files: ${resultsFilesJSON}`);
   let results = getMergedResults(resultsFilesJSON);
   console.log(results.all_tests.length);

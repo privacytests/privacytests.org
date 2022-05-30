@@ -403,7 +403,7 @@ const runTestsBatch = async (browserList, { shouldQuit, android, ios, categories
 const writeDataSync = (filename, data) => {
   const dateString = dateFormat(new Date(), "yyyymmdd", true);
   const fileStub = filename ?? dateFormat(new Date(), "HHMMss", true);
-  const dir = `out/results/${dateString}`;
+  const dir = `../results/${dateString}`;
   fs.mkdirSync(dir, { recursive: true });
   const filePath = `${dir}/${fileStub}.json`;
   fs.writeFileSync(filePath, JSON.stringify(data));
