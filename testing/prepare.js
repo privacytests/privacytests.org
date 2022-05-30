@@ -26,6 +26,10 @@ const copyDirFiles = (src, dest, suffixes) => {
   }
 };
 
+// Copy files to archive and main directory for publishing.
+const copyPublishableFiles = ({indexPath, archivePath, resultsPath}) => {
+};
+
 // Add files in path with given suffixes to git (but don't commit yet)
 const gitAddFiles = (path, suffixes) => {
   const wildcards = ["",...suffixes].join(" *");
