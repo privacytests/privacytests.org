@@ -259,7 +259,7 @@ const runHstsTest = async (browserObject, insecurePassed) => {
 };
 
 const analyzeTrackingCookieTestResults = (leakyHosts) => {
-  const trackers = JSON.parse(fs.readFileSync("./out/tests/trackers.json"));
+  const trackers = JSON.parse(fs.readFileSync("../static/trackers.json"));
   let analyzedResults = {};
   for (let { name, url } of trackers) {
     let host = new URL(url).host;
@@ -364,7 +364,7 @@ const runTestsBatch = async (browserList, { shouldQuit, android, ios, categories
         browserObject._websocket = await createWebsocket();
     try {
       await browserObject.launch();
-      const testResults = await deadlinePromise(`${browser} tests`, runTests(browserObject, categories), 300000);
+      const testResults = await deadlinePromise(`${browser} tests`, runTests(browserObject, categories), 600000);
       all_tests.push({
         browser, incognito, tor, nightly,
         testResults, timeStarted,
