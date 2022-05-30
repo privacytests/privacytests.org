@@ -3,7 +3,7 @@
 const { v4: uuidv4 } = require('uuid');
 const express = require('express');
 const cors = require('cors');
-const { contentPage } = require('../testing/render.js');
+const { contentPage } = require('../test/render.js');
 
 const app = express();
 const { WebSocketServer } = require('ws');
