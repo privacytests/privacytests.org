@@ -28,8 +28,6 @@
     "nodemon": "^2.0.5"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "publish": "gh-pages -d out",
     "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render --live\" -e css,js,md & ./node_modules/@compodoc/live-server/live-server.js --open=results/latest.html out",
     "copy-dev": "./node_modules/nodemon/bin/nodemon.js --exec \"node copy\" --watch copy --watch . -e js,md,css & ./node_modules/@compodoc/live-server/live-server.js out"
   },
