@@ -1,0 +1,30 @@
+const template = require('./template.js');
+const fs = require('fs');
+
+const scriptHtml = `
+<script>
+  function runTest() {
+    const sessionId = Math.random().toString().substr(2);
+    window.open(\`https://arthuredelstein.net/test-pages/supercookies.html?mode=read&thirdparty=same&sessionId=\${sessionId}&me=true\`, "_blank");
+    window.location.href = \`https://arthuredelstein.net/test-pages/supercookies.html?mode=write&thirdparty=same&sessionId=\${sessionId}&me=true\`;
+  }
+</script>
+`
+
+const testButtonElement = `
+<div class="content-container">
+  <button type="button" id="run-test" onclick="runTest()">Test my Browser</button>
+</div>
+`
+
+const contentHtml = scriptHtml + testButtonElement;
+
+const main = () => {
+  fs.writeFileSync(`${__dirname}/out/me.html`,
+  template.htmlPage({
+    content: contentHtml,
+    cssFiles: [`${__dirname}/me.css`]
+  }));
+};
+
+main();
