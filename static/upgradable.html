@@ -24,7 +24,11 @@
        };
        await postDataAndCarryOn(resultsJSON, `upgradable_${source}`);
      };
-     runTests();
+     try {
+       runTests();
+     } catch (e) {
+       showError(e);
+     }
     </script>
   </body>
 </html>

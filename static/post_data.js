@@ -34,24 +34,32 @@ const showData = (name, data) => {
   document.body.appendChild(dataDiv);
 };
 
+const showError = (e) => {
+  showData("error", { message: e.toString(), stack: e.stack });
+}
+
 const postData = async (results, category) => {
-  const sessionId = urlParams.get("sessionId");
-  showData("posted", {sessionId, results});
-  if (!urlParams.has("sessionId")) {
-    return;
+  try {
+    const sessionId = urlParams.get("sessionId");
+    showData("posted", {sessionId, results});
+    if (!urlParams.has("sessionId")) {
+      return;
+    }
+    console.log("posting", {sessionId, results});
+    const isLocal = window.location.host.endsWith(".example");
+    const postURL = isLocal ? "https://results.pto2.example/post" : "https://results.privacytests.org/post";
+    const response = await fetch(postURL, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({sessionId, url: window.location.href, "data": results, category })
+    });
+    return await response.json();
+  } catch (e) {
+    showError(e);
   }
-  console.log("posting", {sessionId, results});
-  const isLocal = window.location.host.endsWith(".example");
-  const postURL = isLocal ? "https://results.pto2.example/post" : "https://results.privacytests.org/post";
-  const response = await fetch(postURL, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({sessionId, url: window.location.href, "data": results, category })
-  });
-  return await response.json();
 };
 
 const postDataAndCarryOn = async (results, category) => {
@@ -74,7 +82,7 @@ const postDataAndCarryOn = async (results, category) => {
       window.location.href = navigateUrl;
     }
   } catch (e) {
-    showData("error", { message: e.toString(), stack: e.stack });
+    showError(e);
   }
 };
 
