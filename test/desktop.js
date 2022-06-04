@@ -50,7 +50,7 @@ const macOSdefaultBrowserSettings = {
     privateFlag: "incognito",
     dataDir: "Google/Chrome",
     nightlyDataDir: "Google/Chrome Canary",
-//    profileCommand: chromiumProfileFlags,
+    profileCommand: chromiumProfileFlags,
     update: ["Chrome", "About Google Chrome"],
     updateNightly: ["Chrome Canary", "About Google Chrome"],
   },
@@ -66,6 +66,7 @@ const macOSdefaultBrowserSettings = {
   },
   librewolf: {
     name: "librewolf",
+    displayName: "LibreWolf",
     privateFlag: "private-window",
     dataDir: "LibreWolf/Profiles/",
     profileCommand: "-profile ",
@@ -78,7 +79,7 @@ const macOSdefaultBrowserSettings = {
     privateFlag: "inprivate",
     dataDir: "Microsoft Edge",
     nightlyDataDir: "Microsoft Edge Canary",
-//    profileCommand: chromiumProfileFlags,
+    profileCommand: chromiumProfileFlags,
     update: ["Microsoft Edge", "About Microsoft Edge"],
     updateNightly: ["Microsoft Edge Canary", "About Microsoft Edge"],
 },
@@ -88,7 +89,7 @@ const macOSdefaultBrowserSettings = {
     privateFlag: "private",
     dataDir: "com.operasoftware.Opera",
     nightlyDataDir: "com.operasoftware.OperaDeveloper",
-//    profileCommand: chromiumProfileFlags,
+    profileCommand: chromiumProfileFlags,
     update: ["Opera", "About Opera"],
     updateNightly: ["Opera Developer", "About Opera"],
   },
@@ -116,7 +117,7 @@ const macOSdefaultBrowserSettings = {
     privateFlag: "incognito",
     dataDir: "Google/Chrome",
     updateCommand: "mv '/Applications/Ungoogled Chromium.app' /Applications/Chromium.app && /opt/homebrew/bin/brew upgrade eloston-chromium --no-quarantine && mv /Applications/Chromium.app '/Applications/Ungoogled Chromium.app'",
-//    profileCommand: chromiumProfileFlags,
+    profileCommand: chromiumProfileFlags,
   },
   vivaldi: {
     name: "Vivaldi",
@@ -126,7 +127,7 @@ const macOSdefaultBrowserSettings = {
     nightlyDataDir: "Vivaldi Snapshot",
     preLaunchDelay: 10000,
     postLaunchDelay: 10000,
-    //    profileCommand: chromiumProfileFlags,
+    profileCommand: chromiumProfileFlags,
     // Assumes Vivaldi is on automatic updates:
     update: ["Vivaldi", "About Vivaldi"],
     updateNightly: ["Vivaldi Snapshot", "About Vivaldi"],
@@ -163,7 +164,7 @@ class DesktopBrowser {
     this._path = path ?? browserPath({browser, nightly});
     this._appPath = this._path.split(".app")[0] + ".app";
     this._appName = nightly ? this._defaults.nightlyName : this._defaults.name;
-    this._profilePath = this._defaults.profileCommand ? joinDir(__dirname, `${browser}_profile`) : undefined;
+    this._profilePath = this._defaults.profileCommand ? joinDir(__dirname, `profiles/${browser}${nightly ? "_nightly" : ""}_profile`) : undefined;
     if (this._defaults.useOpen) {
       this._command = `open -a "${this._appPath}"`;
     } else {
