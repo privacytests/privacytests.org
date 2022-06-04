@@ -2,20 +2,6 @@ const child_process = require('child_process');
 const fs = require("fs");
 const { join: joinDir } = require("path");
 
-const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
-
-const execSync = (command, options) => {
-  console.log(command);
-  return child_process.execSync(command, options);
-};
-
-const exec = (command, options) => {
-  console.log(command);
-  return child_process.exec(command, options);
-};
-
-const chromiumProfileFlags = "--no-first-run --no-default-browser-check --user-data-dir=";
-
 /*
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --incognito "https://example.com"
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --tor "https://example.com"
@@ -38,7 +24,7 @@ const macOSdefaultBrowserSettings = {
     nightlyName: "Brave Browser Nightly",
     privateFlag: "incognito",
     torFlag: "tor",
-    profileCommand: chromiumProfileFlags,
+    basedOn: "chromium",
     update: ["Brave", "About Brave"],
     updateNightly: ["Brave", "About Brave"],
   },
@@ -46,7 +32,7 @@ const macOSdefaultBrowserSettings = {
     name: "Google Chrome",
     nightlyName: "Google Chrome Canary",
     privateFlag: "incognito",
-    profileCommand: chromiumProfileFlags,
+    basedOn: "chromium",
     update: ["Chrome", "About Google Chrome"],
     updateNightly: ["Chrome Canary", "About Google Chrome"],
   },
@@ -54,7 +40,7 @@ const macOSdefaultBrowserSettings = {
     name: "firefox",
     nightlyName: "Firefox Nightly",
     privateFlag: "private-window",
-    profileCommand: "-profile ",
+    basedOn: "firefox",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
     update: ["Firefox", "About Firefox"],
     updateNightly: ["Firefox Nightly", "About Nightly"],
@@ -63,7 +49,7 @@ const macOSdefaultBrowserSettings = {
     name: "librewolf",
     displayName: "LibreWolf",
     privateFlag: "private-window",
-    profileCommand: "-profile ",
+    basedOn: "firefox",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
     updateCommand: "/opt/homebrew/bin/brew upgrade librewolf --no-quarantine",
   },
@@ -71,7 +57,7 @@ const macOSdefaultBrowserSettings = {
     name: "Microsoft Edge",
     nightlyName: "Microsoft Edge Canary",
     privateFlag: "inprivate",
-    profileCommand: chromiumProfileFlags,
+    basedOn: "chromium",
     update: ["Microsoft Edge", "About Microsoft Edge"],
     updateNightly: ["Microsoft Edge Canary", "About Microsoft Edge"],
 },
@@ -79,7 +65,7 @@ const macOSdefaultBrowserSettings = {
     name: "Opera",
     nightlyName: "Opera Developer",
     privateFlag: "private",
-    profileCommand: chromiumProfileFlags,
+    basedOn: "chromium",
     update: ["Opera", "About Opera"],
     updateNightly: ["Opera Developer", "About Opera"],
   },
@@ -88,12 +74,14 @@ const macOSdefaultBrowserSettings = {
     nightlyName: "Safari Technology Preview",
     useOpen: true,
     incognitoCommand: "osascript safariPBM.applescript",
-    postLaunchDelay: 6000
+    postLaunchDelay: 6000,
+    basedOn: "safari",
   },
   tor: {
     name: "Tor Browser",
     nightlyName: "Tor Browser Nightly",
     binaryName: "firefox",
+    basedOn: "firefox",
     useOpen: true,
     preLaunchDelay: 10000,
     postLaunchDelay: 10000,
@@ -105,7 +93,7 @@ const macOSdefaultBrowserSettings = {
     binaryName: "Chromium",
     privateFlag: "incognito",
     updateCommand: "mv '/Applications/Ungoogled Chromium.app' /Applications/Chromium.app && /opt/homebrew/bin/brew upgrade eloston-chromium --no-quarantine && mv /Applications/Chromium.app '/Applications/Ungoogled Chromium.app'",
-    profileCommand: chromiumProfileFlags,
+    basedOn: "chromium",
   },
   vivaldi: {
     name: "Vivaldi",
@@ -113,19 +101,36 @@ const macOSdefaultBrowserSettings = {
     privateFlag: "incognito",
     preLaunchDelay: 10000,
     postLaunchDelay: 10000,
-    profileCommand: chromiumProfileFlags,
+    basedOn: "chromium",
     // Assumes Vivaldi is on automatic updates:
     update: ["Vivaldi", "About Vivaldi"],
     updateNightly: ["Vivaldi Snapshot", "About Vivaldi"],
   },
   waterfox: {
     name: "waterfox",
-    nightlyName: "Firefox Nightly",
     privateFlag: "private-window",
-    profileCommand: "-profile ",
+    basedOn: "firefox",
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
     update: ["Waterfox", "About Waterfox"]
   }
+};
+
+const profileFlags = {
+  "chromium": "--no-first-run --no-default-browser-check --user-data-dir=",
+  "firefox": "-profile ",
+  "safari": "undefined ",
+};
+
+const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
+
+const execSync = (command, options) => {
+  console.log(command);
+  return child_process.execSync(command, options);
+};
+
+const exec = (command, options) => {
+  console.log(command);
+  return child_process.exec(command, options);
 };
 
 const browserPath = ({browser, nightly}) => {
@@ -149,11 +154,12 @@ class DesktopBrowser {
     this._path = path ?? browserPath({browser, nightly});
     this._appPath = this._path.split(".app")[0] + ".app";
     this._appName = nightly ? this._defaults.nightlyName : this._defaults.name;
-    this._profilePath = this._defaults.profileCommand ? joinDir(__dirname, `profiles/${browser}${nightly ? "_nightly" : ""}_profile`) : undefined;
+    const profileCommand = profileFlags[this._defaults.basedOn];
+    this._profilePath = profileCommand ? joinDir(__dirname, `profiles/${browser}${nightly ? "_nightly" : ""}_profile`) : undefined;
     if (this._defaults.useOpen) {
       this._command = `open -a "${this._appPath}"`;
     } else {
-      const flags = `${incognito ? "--" + this._defaults.privateFlag : ""} ${tor ? "--" + this._defaults.torFlag : ""} ${this._profilePath ? `${this._defaults.profileCommand}"${this._profilePath}"` : ""}`;
+      const flags = `${incognito ? "--" + this._defaults.privateFlag : ""} ${tor ? "--" + this._defaults.torFlag : ""} ${this._profilePath ? `${profileCommand}"${this._profilePath}"` : ""}`;
       this._command = `"${this._path}" ${flags}`.trim();
     }
   }
