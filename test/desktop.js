@@ -14,7 +14,7 @@ open -a Safari "https://example.com"
 */
 
 // macOS parts of the browser launch command
-const macOSdefaultBrowserSettings = {
+const macOSdefaultBrowserSettings = {
   defaultValues: {
     appDirectory: "/Applications",
     binaryPath: "Contents/MacOS"
@@ -60,7 +60,7 @@ const macOSdefaultBrowserSettings = {
     basedOn: "chromium",
     update: ["Microsoft Edge", "About Microsoft Edge"],
     updateNightly: ["Microsoft Edge Canary", "About Microsoft Edge"],
-},
+  },
   opera: {
     name: "Opera",
     nightlyName: "Opera Developer",
@@ -133,7 +133,7 @@ const exec = (command, options) => {
   return child_process.exec(command, options);
 };
 
-const browserPath = ({browser, nightly}) => {
+const browserPath = ({ browser, nightly }) => {
   const { appDirectory, binaryPath } = macOSdefaultBrowserSettings.defaultValues;
   const browserValues = macOSdefaultBrowserSettings[browser];
   const binaryName = browserValues.binaryName ?? browserValues.name;
@@ -146,12 +146,12 @@ const browserPath = ({browser, nightly}) => {
 
 // A Browser object represents a browser we run tests on.
 class DesktopBrowser {
-  constructor({browser, path, incognito, tor, nightly}) {
-    Object.assign(this, {browser, incognito, tor, nightly});
+  constructor({ browser, path, incognito, tor, nightly }) {
+    Object.assign(this, { browser, incognito, tor, nightly });
     this._defaults = macOSdefaultBrowserSettings[browser];
     this._version = undefined;
     this._keepAlivePingId = null;
-    this._path = path ?? browserPath({browser, nightly});
+    this._path = path ?? browserPath({ browser, nightly });
     this._appPath = this._path.split(".app")[0] + ".app";
     this._appName = nightly ? this._defaults.nightlyName : this._defaults.name;
     const profileCommand = profileFlags[this._defaults.basedOn];
@@ -176,8 +176,8 @@ class DesktopBrowser {
     await sleepMs(this._defaults.postLaunchDelay ?? 0);
     await sleepMs(5000);
     if (this.incognito && this._defaults.incognitoCommand) {
-        exec(`${this._defaults.incognitoCommand} "${this._appName}"`);
-        await sleepMs(5000);
+      exec(`${this._defaults.incognitoCommand} "${this._appName}"`);
+      await sleepMs(5000);
     }
   }
   // Get the browser version.
@@ -220,7 +220,7 @@ class DesktopBrowser {
     const update = this.nightly ? this._defaults.updateNightly : this._defaults.update;
     const updateCommand = this._defaults.updateCommand;
     if (update) {
-      console.log({this_nightly: this._nightly, update});
+      console.log({ this_nightly: this._nightly, update });
       const [menuName, aboutItemName] = update;
       if (menuName) {
         await this.launch();
