@@ -15,10 +15,6 @@ open -a Safari "https://example.com"
 
 // macOS parts of the browser launch command
 const macOSdefaultBrowserSettings = {
-  defaultValues: {
-    appDirectory: "/Applications",
-    binaryPath: "Contents/MacOS"
-  },
   brave: {
     name: "Brave Browser",
     nightlyName: "Brave Browser Nightly",
@@ -115,10 +111,13 @@ const macOSdefaultBrowserSettings = {
   }
 };
 
+const defaultAppDirectory = "/Applications";
+const defaultBinaryPath = "Contents/MacOS";
+
 const profileFlags = {
   "chromium": "--no-first-run --no-default-browser-check --user-data-dir=",
   "firefox": "-profile ",
-  "safari": "undefined ",
+  "safari": undefined,
 };
 
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
@@ -134,11 +133,10 @@ const exec = (command, options) => {
 };
 
 const browserPath = ({ browser, nightly }) => {
-  const { appDirectory, binaryPath } = macOSdefaultBrowserSettings.defaultValues;
   const browserValues = macOSdefaultBrowserSettings[browser];
   const binaryName = browserValues.binaryName ?? browserValues.name;
   const appName = nightly ? browserValues.nightlyName : browserValues.name;
-  const fullBinaryPath = `${appDirectory}/${appName}.app/${binaryPath}`;
+  const fullBinaryPath = `${defaultAppDirectory}/${appName}.app/${defaultBinaryPath}`;
   const executablePath1 = `${fullBinaryPath}/${binaryName}`;
   const executablePath2 = `${fullBinaryPath}/${appName}`;
   return fs.existsSync(executablePath1) ? executablePath1 : executablePath2;
@@ -196,22 +194,18 @@ class DesktopBrowser {
   async openUrl(url) {
     exec(`${this._command} "${url}"`);
   }
-  // Clean up and close the browser.
+  // Close the browser.
   async kill() {
-    try {
-      await sleepMs(1000);
+    clearInterval(this._keepAlivePingId);
+    if (profileFlags[this._defaults.basedOn] === undefined) {
       execSync(`osascript closeAllWindows.applescript "${this._appName}"`);
       await sleepMs(1000);
-    } catch (e) {
-      console.log(e);
     }
-    try {
-      clearInterval(this._keepAlivePingId);
+    if (this._defaults.useOpen) {
       execSync(`osascript -e 'quit app "${this._path}"'`);
       await sleepMs(5000);
-    } catch (e) {
-      console.log(e);
-      this._process.kill();
+    } else {
+      this._process.kill("SIGKILL");
     }
   }
   // Update the browser to the latest version.
