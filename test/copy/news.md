@@ -1,6 +1,37 @@
 # News
 
-## [Issue 24](/): 2022-05-25
+## [Issue 25(/): 2022-06-05
+
+### New browser versions
+
+On Desktop:
+
+* Edge 102.0
+* Librewolf 101.0-2
+* Opera 87.0
+* Safari 15.5
+* Ungoogled 102.0
+* Vivaldi 5.3
+
+On iOS:
+
+* Chrome 102.5005
+* Safari 15.5
+* Yandex 2205.4
+
+On Android:
+
+* Brave 1.39
+* Bromite 101.0
+* Chrome 102.0
+* DuckDuckGo 5.127
+* Edge 102.0
+* Firefox 101.1
+* Focus 101.1
+* Opera 69.3
+* Vivaldi 5.3
+
+## [Issue 24](/archive/issue23): 2022-05-25
 
 ### A faulty test fixed
 
