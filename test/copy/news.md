@@ -1,6 +1,6 @@
 # News
 
-## [Issue 25(/): 2022-06-05
+## [Issue 25](/): 2022-06-05
 
 ### New browser versions
 
