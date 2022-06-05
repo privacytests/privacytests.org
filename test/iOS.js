@@ -24,6 +24,7 @@ const browserInfo = {
   },
   duckduckgo: {
 		name: "DuckDuckGo",
+		displayName: "DuckDuckGo",
     bundleId: "com.duckduckgo.mobile.ios",
 		urlBarClick: "searchEntry",
 		urlBarKeys: "searchEntry",
@@ -77,7 +78,7 @@ const browserInfo = {
 		urlBarClick: "Address bar",
 		urlBarClick2: "Enter a search query or URL",
 		urlBarClear: "Clear the input field",
-		urlBarKeys: "Yandex", // Just send keys to the application and hope our focus is correct
+		urlBarKeys: "Яндекс Браузер", // Just send keys to the application and hope our focus is correct
   }
 };
 
