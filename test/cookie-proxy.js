@@ -1,4 +1,5 @@
 const mockttp = require('mockttp');
+const fs = require('fs');
 const { execSync } = require('child_process');
 
 let server;
@@ -27,14 +28,20 @@ const simulateTrackingCookies = async (port, debug = false) => {
   let idToUrlMapping = new Map();
   // Create a proxy server with a self-signed HTTPS CA certificate:
   const mkcertPath = execSync("mkcert -CAROOT").toString().trim();
+  const certPaths = {
+    keyPath: `${mkcertPath}/rootCA-key.pem`,
+    certPath: `${mkcertPath}/rootCA.pem`,
+  };
   server = mockttp.getLocal({
-    https: {
-      keyPath: `${mkcertPath}/rootCA-key.pem`,
-      certPath: `${mkcertPath}/rootCA.pem`,
-    },
+    https: certPaths,
     cors: true
   });
-  server.forGet().thenPassThrough({});
+  const certFile = fs.readFileSync(certPaths.certPath).toString();
+
+  server.forGet("http://p.test").thenReply(200, `<html><body><h1><a href="ca">Download Certificate</a></h1></body></html>`);
+  server.forGet("http://p.test/ca").thenReply(200, certFile, 
+    {"content-type": "application/x-x509-ca-cert",
+     "content-disposition": "inline; filename=ptoCA.pem"});
   server.forAnyRequest().thenPassThrough({
     // Inject cookies for responses
     beforeResponse: (response) => {
