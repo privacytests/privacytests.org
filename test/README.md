@@ -26,7 +26,7 @@ Then, on all platforms:
 
 To run tests, point to a .yaml file:
 
-`node test desktop.yaml`
+`node test config/desktop.yaml`
 
 Config files are YAML arrays. Each item in the array is an object
 that describes what should go into a single test. All parameters
