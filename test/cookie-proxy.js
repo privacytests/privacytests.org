@@ -1,7 +1,13 @@
 const mockttp = require('mockttp');
+const fs = require('fs');
 
 let server;
 let hostsThatLeak = {};
+
+const certPaths = {
+  keyPath: '../../.pto_certs/key.pem',
+  certPath: '../../.pto_certs/cert.pem'
+};
 
 // Takes a cookie string and returns a map with key-values.
 const parseCookies = (cookieString) => {
@@ -26,13 +32,15 @@ const simulateTrackingCookies = async (port, debug = false) => {
   let idToUrlMapping = new Map();
   // Create a proxy server with a self-signed HTTPS CA certificate:
   server = mockttp.getLocal({
-    https: {
-      keyPath: '../../.pto_certs/key.pem',
-      certPath: '../../.pto_certs/cert.pem'
-    },
+    https: certPaths,
     cors: true
   });
-  server.forGet().thenPassThrough({});
+  const certFile = fs.readFileSync("../../.pto_certs/cert.pem"); //(certPaths.certPath).toString();
+
+  server.forGet("http://p.test").thenReply(200, `<html><body><h1><a href="ca">Download Certificate</a></h1></body></html>`);
+  server.forGet("http://p.test/ca").thenReply(200, certFile, 
+    {"content-type": "application/x-x509-ca-cert",
+     "content-disposition": "inline; filename=ptoCA.pem"});
   server.forAnyRequest().thenPassThrough({
     // Inject cookies for responses
     beforeResponse: (response) => {
