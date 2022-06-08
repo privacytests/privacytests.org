@@ -1,13 +1,9 @@
 const mockttp = require('mockttp');
 const fs = require('fs');
+const { execSync } = require('child_process');
 
 let server;
 let hostsThatLeak = {};
-
-const certPaths = {
-  keyPath: '../../.pto_certs/key.pem',
-  certPath: '../../.pto_certs/cert.pem'
-};
 
 // Takes a cookie string and returns a map with key-values.
 const parseCookies = (cookieString) => {
@@ -27,15 +23,20 @@ const parseCookies = (cookieString) => {
 // that reads and writes third-party cookies. Injects a tracking
 // cookie if URL has "pto_write_cookie" query parameter; looks
 // for a cookie if URL has "pto_read_cookie" query parameter.
-const simulateTrackingCookies = async (port, debug = false) => { 
+const simulateTrackingCookies = async (port, debug = false) => {
   // Allows us to match requests to responses.
   let idToUrlMapping = new Map();
   // Create a proxy server with a self-signed HTTPS CA certificate:
+  const mkcertPath = execSync("mkcert -CAROOT").toString().trim();
+  const certPaths = {
+    keyPath: `${mkcertPath}/rootCA-key.pem`,
+    certPath: `${mkcertPath}/rootCA.pem`,
+  };
   server = mockttp.getLocal({
     https: certPaths,
     cors: true
   });
-  const certFile = fs.readFileSync("../../.pto_certs/cert.pem"); //(certPaths.certPath).toString();
+  const certFile = fs.readFileSync(certPaths.certPath).toString();
 
   server.forGet("http://p.test").thenReply(200, `<html><body><h1><a href="ca">Download Certificate</a></h1></body></html>`);
   server.forGet("http://p.test/ca").thenReply(200, certFile, 
