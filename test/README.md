@@ -10,14 +10,21 @@ First on Linux (for when it is supported in the future):
 
 `sudo apt-get install libpng-dev libxtst-dev libx11-dev`
 
-On MacOS, we need:
+For iOS testing (run on MacOS), we need:
 
 `brew install ideviceinstaller`
-`brew install ideviceinfo`
 
 Then, on all platforms:
 
 `npm install`
+
+Next run
+```
+brew install mkcert
+mkcert -install
+```
+
+You're ready to go!
 
 * test.js runs the browser tests.
 * render.js takes the results of the browser tests and renders them to a web page.
