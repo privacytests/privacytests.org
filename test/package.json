@@ -28,9 +28,9 @@
     "nodemon": "^2.0.5"
   },
   "scripts": {
-    "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render --live\" -e css,js,md & ./node_modules/@compodoc/live-server/live-server.js --open=../results/latest.html out",
-    "copy-dev": "./node_modules/nodemon/bin/nodemon.js --exec \"node copy\" --watch copy --watch . -e js,md,css & ./node_modules/@compodoc/live-server/live-server.js out",
-    "publish": "gh-pages -d ../website"
+    "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render --live\" -e css,js,md & ./node_modules/@compodoc/live-server/live-server.js --open=../results/latest.html ..",
+    "copy-dev": "./node_modules/nodemon/bin/nodemon.js --exec \"node copy\" --watch copy --watch . -e js,md,css & ./node_modules/@compodoc/live-server/live-server.js ../website/",
+    "publish": "cd .. && git subtree push --prefix website origin gh-pages"
   },
   "jshintConfig": {
     "esversion": 11,
