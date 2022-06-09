@@ -18,7 +18,7 @@ const generateHtmlFile = (filename) => {
     cssFiles: ["template.css"]
   });
 //  console.log(htmlOutput);
-  fs.writeFileSync(`out/${newFilename}`, htmlOutput, "utf8");
+  fs.writeFileSync(`../website/${newFilename}`, htmlOutput, "utf8");
 };
 
 // The main program. Read all the Markdown files in the "copy" directory and
