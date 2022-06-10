@@ -27,7 +27,7 @@ const simulateTrackingCookies = async (port, debug = false) => {
   // Allows us to match requests to responses.
   let idToUrlMapping = new Map();
   // Create a proxy server with a self-signed HTTPS CA certificate:
-  const mkcertPath = execSync("mkcert -CAROOT").toString().trim();
+  const mkcertPath = execSync("/opt/homebrew/bin/mkcert -CAROOT").toString().trim();
   const certPaths = {
     keyPath: `${mkcertPath}/rootCA-key.pem`,
     certPath: `${mkcertPath}/rootCA.pem`,
@@ -37,11 +37,10 @@ const simulateTrackingCookies = async (port, debug = false) => {
     cors: true
   });
   const certFile = fs.readFileSync(certPaths.certPath).toString();
-
   server.forGet("http://p.test").thenReply(200, `<html><body><h1><a href="ca">Download Certificate</a></h1></body></html>`);
   server.forGet("http://p.test/ca").thenReply(200, certFile, 
     {"content-type": "application/x-x509-ca-cert",
-     "content-disposition": "inline; filename=ptoCA.pem"});
+     "content-disposition": "inline; filename=rootCA.pem"});
   server.forAnyRequest().thenPassThrough({
     // Inject cookies for responses
     beforeResponse: (response) => {
