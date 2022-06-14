@@ -10,16 +10,6 @@ let tests = {
     write: (secret) => sessionStorage.setItem("secret", secret),
     read: () => sessionStorage.getItem("secret"),
   },
-  "document.referrer": {
-    description: "The Referer [sic] request header is a mechanism used by browsers to let a website know where the user is visiting from. This header is inherently tracking users across websites. In recent times, browsers have switched to a policy of trimming a referrer to convey less tracking information, but Referer continues to convey cross-site tracking data by default.",
-    write: (secret) => { /* do nothing */ },
-    read: () => new Promise((resolve) => {
-      parent.postMessage({"read document.referrer": true}, "*");
-      addEventListener("message", ({data}) => {
-        resolve(data["document_referrer"]);
-      }, { once: true });
-    })
-  },
   "ServiceWorker": {
     description: "The ServiceWorker API allows websites to run code in the background and store content in the browser for offline use. If a ServiceWorker can be accessed from multiple websites, it can be abused to track users across sites.",
     write: async (key) => {
