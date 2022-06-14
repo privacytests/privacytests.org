@@ -8,7 +8,15 @@
   <body>
     <iframe id="inner"/></iframe>
     <script src="./post_data.js"></script>
-    <script>
+    <script type="module">
+     import { runAllTests, sleepMs, fetchText } from "./test_utils.js"
+     const topLevelTests = {
+       "window.name": {
+         description: "The window.name API allows websites to store data that will persist after the user has navigated the tab to a different website. This mechanism could be partitioned so that data is not allowed to persist between websites.",
+         write: (secret) => window.name = "name_" + secret,
+         read: () => window.name
+       }
+     }
      const searchParams = new URLSearchParams(window.location.search);
      const thirdparty = searchParams.get("thirdparty");
      const mode = searchParams.get("mode");
@@ -19,17 +27,14 @@
      addEventListener("message", async ({data}) => {
        console.log("navigation.html received message:", data);
        const iframe = document.getElementById("inner");
-       if (data["write window.name"]) {
-         window.name = data["write window.name"];
-       } else if (data["read window.name"]) {
-         iframe.contentWindow.postMessage(window.name, "*");
-         console.log("send window.name:", window.name);
-       } else if (data["read document.referrer"]) {
-         iframe.contentWindow.postMessage(document.referrer, "*");
+       if (data["read document.referrer"]) {
+         iframe.contentWindow.postMessage({"document_referrer": document.referrer}, "*");
          console.log("send document.referrer:", document.referrer);
        } else {
-         document.body.setAttribute("data-test-results", JSON.stringify(data));
-         await postDataAndCarryOn(data, `navigation_${mode}_${thirdparty}`);
+         const topLevelResults = await runAllTests(topLevelTests);
+         const allData = {...data, ...topLevelResults};
+         document.body.setAttribute("data-test-results", JSON.stringify(allData));
+         await postDataAndCarryOn(allData, `navigation_${mode}_${thirdparty}`);
        }
      }, false);
      const iframe = document.getElementById("inner");
