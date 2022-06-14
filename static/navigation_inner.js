@@ -10,23 +10,13 @@ let tests = {
     write: (secret) => sessionStorage.setItem("secret", secret),
     read: () => sessionStorage.getItem("secret"),
   },
-  "window.name": {
-    description: "The window.name API allows websites to store data that will persist after the user has navigated the tab to a different website. This mechanism could be partitioned so that data is not allowed to persist between websites.",
-    write: (secret) => parent.postMessage({"write window.name": secret}),
-    read: () => new Promise((resolve) => {
-      parent.postMessage({"read window.name": true}, "*");
-      addEventListener("message", ({data}) => {
-        resolve(data);
-      }, { once: true });
-    })
-  },
   "document.referrer": {
     description: "The Referer [sic] request header is a mechanism used by browsers to let a website know where the user is visiting from. This header is inherently tracking users across websites. In recent times, browsers have switched to a policy of trimming a referrer to convey less tracking information, but Referer continues to convey cross-site tracking data by default.",
     write: (secret) => { /* do nothing */ },
     read: () => new Promise((resolve) => {
       parent.postMessage({"read document.referrer": true}, "*");
       addEventListener("message", ({data}) => {
-        resolve(data);
+        resolve(data["document_referrer"]);
       }, { once: true });
     })
   },

@@ -60,9 +60,9 @@ export let runAllTests = async (tests) => {
     await removeAllServiceWorkers();
   }
   let results = await runTests(tests, params["mode"], params);
-  console.log("results", results);
+  console.log("results:",results);
   if (window.location !== parent.location) {
-    console.log("results:",results);
     parent.postMessage(results, "*");
   }
+  return results;
 };
