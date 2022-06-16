@@ -76,10 +76,11 @@ const browserInfo = {
 		//startupClick: "Решить проблемы",
 		startupClick: "Fix problems",
 		urlBarClick: "Address bar",
-		urlBarClick2: "Enter a search query or URL",
+    urlBarClick2: "Enter a search query or URL",
 		urlBarClear: "Clear the input field",
-		urlBarKeys: "Яндекс Браузер", // Just send keys to the application and hope our focus is correct
-  }
+//		urlBarKeys: "Яндекс Браузер", // Just send keys to the application and hope our focus is correct
+		urlBarKeys: "Yandex Browser", // Just send keys to the application and hope our focus is correct
+}
 };
 
 let appVersions = undefined;
