@@ -1,5 +1,28 @@
 # News
 
+## [Issue 26](/): 2022-06-16
+
+### New browser versions
+
+On Desktop:
+
+* Firefox 101.0
+* Librewolf 101.0
+
+On iOS:
+
+* Brave 1.39
+* Edge 102.1245
+* Firefox 101.0
+* Yandex 2205.6
+
+On Android:
+
+* DuckDuckGo 5.128
+* Firefox 101.2
+* Focus 101.2
+* Mull 98.2
+
 ## [Issue 25](/): 2022-06-05
 
 ### New browser versions
