@@ -86,7 +86,7 @@ const installTestFontIfNeeded = () => {
   }
   const fontDestination = `${userFontDir}/Monoton-Regular.ttf`;
   if (!fs.existsSync(fontDestination)) {
-    fs.copyFileSync(`${__dirname}/Monoton-Regular.ttf`, fontDestination);
+    fs.copyFileSync(`${__dirname}/../assets/fonts/Monoton-Regular.ttf`, fontDestination);
   }
 };
 
