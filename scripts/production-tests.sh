@@ -1,5 +1,5 @@
-/usr/local/bin/node test config/desktop.yaml --update
-/usr/local/bin/node test config/nightly.yaml --update
+#/usr/local/bin/node test config/desktop.yaml --update
+#/usr/local/bin/node test config/nightly.yaml --update
 /usr/local/bin/node test config/desktop.yaml >> desktop-log.txt
 /usr/local/bin/node test config/desktop.yaml --incognito --filename private >> private-log.txt
 /usr/local/bin/node test config/nightly.yaml >> nightly-log.txt
