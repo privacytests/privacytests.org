@@ -15,6 +15,12 @@ const createDir = (path) => {
   }
 };
 
+// Copy a file from src dir to dest dir.
+const copyFile = (src, dest, file) => {
+  fs.copyFileSync(`${src}/${file}`, `${dest}/${file}`);
+  console.log(`copied ${src}/${file} to ${dest}/${file}`);
+};
+
 // `git add` a file in given directory.
 const gitAdd = (dir, filename) => {
   const command = `git add ${filename}`;
@@ -28,8 +34,7 @@ const copyDirFilesAndGitAdd = (src, dest, suffixes) => {
   const files = fs.readdirSync(src);
   for (let file of files) {
     if (suffixes.some(suffix => file.endsWith(suffix))) {
-      fs.copyFileSync(`${src}/${file}`, `${dest}/${file}`);
-      console.log(`copied ${src}/${file} to ${dest}/${file}`);
+      copyFile(src, dest, file);
       gitAdd(dest, file);
     }
   }
