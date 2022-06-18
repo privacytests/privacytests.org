@@ -31,6 +31,7 @@ const browserInfo = {
     urlBarKeys: "url_bar"
   },
   duckduckgo: {
+    displayName: "DuckDuckGo",
     releasePackageName: "com.duckduckgo.mobile.android",
     urlBarClick: "omnibarTextInput",
     urlBarKeys: "omnibarTextInput"
