@@ -15,27 +15,24 @@ const createDir = (path) => {
   }
 };
 
-// Copy files with given suffixes from src to dest.
-const copyDirFiles = (src, dest, suffixes) => {
+// `git add` a file in given directory.
+const gitAdd = (dir, filename) => {
+  const command = `git add ${filename}`;
+  execSync(command, {cwd: dir});
+  console.log(command);
+}
+
+// Copy files with given suffixes from src dir to dest dir
+// and `git add` them.
+const copyDirFilesAndGitAdd = (src, dest, suffixes) => {
   const files = fs.readdirSync(src);
   for (let file of files) {
     if (suffixes.some(suffix => file.endsWith(suffix))) {
       fs.copyFileSync(`${src}/${file}`, `${dest}/${file}`);
       console.log(`copied ${src}/${file} to ${dest}/${file}`);
+      gitAdd(dest, file);
     }
   }
-};
-
-// Copy files to archive and main directory for publishing.
-const copyPublishableFiles = ({indexPath, archivePath, resultsPath}) => {
-};
-
-// Add files in path with given suffixes to git (but don't commit yet)
-const gitAddFiles = (path, suffixes) => {
-  const wildcards = ["",...suffixes].join(" *");
-  const command = `git add ${wildcards}`;
-  console.log(`In directory ${path}:`, command);
-  execSync(command, {cwd: path});
 };
 
 // The main function. Copy publishable files, and add them to git.
@@ -47,10 +44,8 @@ const main = () => {
   createDir(archivePath);
   const date = process.argv[2]
   const resultsPath = `../results/${date}`;
-  copyDirFiles(resultsPath, archivePath, allowedSuffixes);
-  copyDirFiles(resultsPath, indexPath, allowedSuffixes);  
-  gitAddFiles(archivePath, allowedSuffixes);
-  gitAddFiles(indexPath, allowedSuffixes);
+  copyDirFilesAndGitAdd(resultsPath, archivePath, allowedSuffixes);
+  copyDirFilesAndGitAdd(resultsPath, indexPath, allowedSuffixes);
 };
 
 main();
