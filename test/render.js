@@ -36,7 +36,7 @@ const browserLogoDataUri = _.memoize((browserName, nightly) => {
     iconUri = template.dataUriFromFile(`node_modules/browser-logos/src/${browserIconName}/${browserIconName}_128x128.png`);
     return iconUri;
   } catch (e) {
-    return template.dataUriFromFile(`icons/${browserIconName}.png`);
+    return template.dataUriFromFile(`../assets/icons/${browserIconName}.png`);
   }
 });
 
@@ -392,7 +392,7 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
 const contentPage = ({results, title, basename, previewImageUrl, tableTitle, nightly, incognito}) =>
       template.htmlPage({
         title, previewImageUrl,
-        cssFiles: [`${__dirname}/template.css`, `${__dirname}/table.css`],
+        cssFiles: [`${__dirname}/../assets/css/template.css`, `${__dirname}/../assets/css/table.css`],
         content: content(results, basename, tableTitle, nightly, incognito),
       });
 
