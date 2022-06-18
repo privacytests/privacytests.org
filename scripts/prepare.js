@@ -149,5 +149,4 @@ const main = () => {
   updateNewsCopy({issueNumber, date});
 };
 
-console.log(diffBrowserVersions("25", "26"));
 main();
