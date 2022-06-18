@@ -182,7 +182,7 @@ Feedback is welcome!"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cD
 <li>Focus 101.2</li>
 <li>Mull 98.2</li>
 </ul>
-<h2 id="issue-25-2022-06-05"><a href="/">Issue 25</a>: 2022-06-05</h2>
+<h2 id="issue-25-2022-06-05"><a href="/archive/issue25">Issue 25</a>: 2022-06-05</h2>
 <h3 id="new-browser-versions-1">New browser versions</h3>
 <p>On Desktop:</p>
 <ul>
@@ -211,7 +211,7 @@ Feedback is welcome!"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cD
 <li>Opera 69.3</li>
 <li>Vivaldi 5.3</li>
 </ul>
-<h2 id="issue-24-2022-05-25"><a href="/archive/issue23">Issue 24</a>: 2022-05-25</h2>
+<h2 id="issue-24-2022-05-25"><a href="/archive/issue24">Issue 24</a>: 2022-05-25</h2>
 <h3 id="a-faulty-test-fixed">A faulty test fixed</h3>
 <p>It was brought to my attention that the &quot;Tracker content blocking&quot; test for Chartbeat was incorrectly reporting a &quot;fail&quot; for the DuckDuckGo Android browser. DuckDuckGo browser blocks third-party Chartbeat tracking scripts, but then provides the host page with a surrogate script to prevent breakage of the page&#39;s functionality. The original design of my test did not take into account this kind of surrogate, and so was incorrectly concluding that the original tracking script had been loaded into the page. I have now enhanced the test so it detects the presence of this surrogate and reports a &quot;pass&quot; for DuckDuckGo. Thanks to Peter Dolanjski for informing me of this problem.</p>
 <h3 id="new-browser-versions-2">New browser versions</h3>
@@ -580,7 +580,7 @@ Feedback is welcome!"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cD
 <h2 id="issue-2-2021-10-25"><a href="/archive/issue2.html">Issue 2</a> (2021-10-25)</h2>
 <h3 id="correction-1">Correction</h3>
 <p>The first issue of PrivacyTests.org had an important error in the results, incorrectly indicating that Safari does not stop tracking via third-party cookies. Safari cookie protections were assigned an <img src="/x-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="fail"> when it should have been a <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="pass">. This incorrect results seems to have happened because the Selenium Webdriver library I had been using to launch and control the various web browsers <a href="https://bugs.webkit.org/show_bug.cgi?id=222583">likely disables Safari&#39;s Intelligent Tracking Protection feature</a>. This new issue of PrivacyTests.org results shows the correct <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="pass"> for cookie protections in Safari.</p>
-<p>My apologies for the error. Thanks to John Wilander and Steven Englehardt for bringing this issue to my attention. </p>
+<p>My apologies for the error. Thanks to John Wilander and Steven Englehardt for bringing this issue to my attention.</p>
 <h3 id="code-updates">Code updates</h3>
 <p>Major updates have been made to the <a href="https://github.com/arthuredelstein/privacytests.org">testing code</a>. Because of the error mentioned above, I decided to discontinue the use of Selenium Webdriver altogether in the PrivacyTests.org. Instead, the code has now been extensively rewritten to launch each web browser by executing a shell command, and to direct the web browsers to testing pages via shell commands as well. This new approach has the advantage of more closely mimicking a web browser in its &quot;natural&quot; state. The new code also makes it possible to launch Safari in both standard windows and Private Windows.</p>
 <p>Follwing this rewrite, the PrivacyTests.org testing code now runs on macOS only. I plan to extend the new code to be compatible with Linux and Windows in the future.</p>
