@@ -23,7 +23,7 @@ const main = () => {
   fs.writeFileSync(`${__dirname}/out/me.html`,
   template.htmlPage({
     content: contentHtml,
-    cssFiles: [`${__dirname}/me.css`]
+    cssFiles: [`${__dirname}/../assets/css/me.css`]
   }));
 };
 
