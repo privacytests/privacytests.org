@@ -43,6 +43,8 @@ const copyDirFilesAndGitAdd = (src, dest, suffixes) => {
 const shortVersion = (version) =>
       version.split(".").slice(0, 2).join(".");
 
+const titleCase = (str) => str.replace(/(^|\s)\S/g, t => t.toUpperCase());
+
 const readBrowserVersions = (issueNumber) => {
   const platformToDataFile = {"desktop": "index.json",
                               "ios": "ios.json",
@@ -84,7 +86,7 @@ const diffBrowserLists = (issueNumber1, issueNumber2) => {
   for (let platform of ["desktop", "ios", "android"]) {
     let lines = "";
     for (let browser of Object.keys(diffBrowsers[platform]).sort()) {
-      lines += `* ${browser} ${diffBrowsers[platform][browser]}\n`;
+      lines += `* ${titleCase(browser)} ${diffBrowsers[platform][browser]}\n`;
     }
     results[platform] = lines;
   }
@@ -114,14 +116,21 @@ ${android}
 
 `};
 
+const getLastIssueNumber = (newsCopy) => {
+  const re = /\#\# \[Issue (\S+)\]/g;
+  const results = [...newsCopy.matchAll(re)];
+  return results.map(r => r[1])[0];
+};
+
 const updateNewsCopy = ({issueNumber, date}) => {
   const newsCopyFile = `${__dirname}/../assets/copy/news.md`;
   const newsCopy = fs.readFileSync(newsCopyFile).toString();
-  if (newsCopy.includes(`[Issue ${issueNumber}]`)) {
+  const lastIssueNumber = getLastIssueNumber(newsCopy);
+  if (lastIssueNumber === issueNumber) {
     // We already have an entry for this issue; don't add anything.
     return;
   }
-  let { desktop, android, ios } = diffBrowserLists("25", "26");
+  let { desktop, android, ios } = diffBrowserLists(lastIssueNumber, issueNumber);
   const newNewsCopy = newsCopy.replace("# News\n", "# News\n" + latestNews({issueNumber, date, desktop, android, ios}));
   fs.writeFileSync(newsCopyFile, newNewsCopy);
 };
@@ -137,8 +146,8 @@ const main = () => {
   const resultsPath = `../results/${date}`;
   copyDirFilesAndGitAdd(resultsPath, archivePath, allowedSuffixes);
   copyDirFilesAndGitAdd(resultsPath, indexPath, allowedSuffixes);
-//  updateNewsCopy({issueNumber, date});
+  updateNewsCopy({issueNumber, date});
 };
 
-//console.log(diffBrowserVersions("25", "26"));
+console.log(diffBrowserVersions("25", "26"));
 main();
