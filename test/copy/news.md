@@ -23,7 +23,7 @@ On Android:
 * Focus 101.2
 * Mull 98.2
 
-## [Issue 25](/): 2022-06-05
+## [Issue 25](/archive/issue25): 2022-06-05
 
 ### New browser versions
 
@@ -54,7 +54,7 @@ On Android:
 * Opera 69.3
 * Vivaldi 5.3
 
-## [Issue 24](/archive/issue23): 2022-05-25
+## [Issue 24](/archive/issue24): 2022-05-25
 
 ### A faulty test fixed
 
@@ -487,7 +487,7 @@ Three new tests have been added. These are:
 
 The first issue of PrivacyTests.org had an important error in the results, incorrectly indicating that Safari does not stop tracking via third-party cookies. Safari cookie protections were assigned an <img src="/x-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="fail"> when it should have been a <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="pass">. This incorrect results seems to have happened because the Selenium Webdriver library I had been using to launch and control the various web browsers [likely disables Safari's Intelligent Tracking Protection feature](https://bugs.webkit.org/show_bug.cgi?id=222583). This new issue of PrivacyTests.org results shows the correct <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);" title="pass"> for cookie protections in Safari.
 
-My apologies for the error. Thanks to John Wilander and Steven Englehardt for bringing this issue to my attention. 
+My apologies for the error. Thanks to John Wilander and Steven Englehardt for bringing this issue to my attention.
 
 ### Code updates
 
