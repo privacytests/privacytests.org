@@ -392,7 +392,7 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
 const contentPage = ({results, title, basename, previewImageUrl, tableTitle, nightly, incognito}) =>
       template.htmlPage({
         title, previewImageUrl,
-        cssFiles: [`${__dirname}/template.css`, `${__dirname}/inline.css`],
+        cssFiles: [`${__dirname}/template.css`, `${__dirname}/table.css`],
         content: content(results, basename, tableTitle, nightly, incognito),
       });
 
