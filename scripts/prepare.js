@@ -93,28 +93,24 @@ const diffBrowserLists = (issueNumber1, issueNumber2) => {
   return results;
 }
 
-const latestNews = ({issueNumber, date,
-                     desktop, ios, android}) => {
+const latestNews = ({issueNumber, date, desktop, ios, android}) => {
   const formattedDate =
-        `${date.slice(0,4)}-${date.slice(4,6)}-${date.slice(6,8)}`;
-  return `
-## [Issue ${issueNumber}](/): ${formattedDate}
-
-### New browser versions
-
-On Desktop:
-
-${desktop}
-
-On iOS:
-
-${ios}
-
-On Android:
-
-${android}
-
-`};
+	`${date.slice(0,4)}-${date.slice(4,6)}-${date.slice(6,8)}`;
+  let latestNewsString = `## [Issue ${issueNumber}](/): ${formattedDate}\n\n`;
+  if (desktop.length > 0 || android.length > 0 || ios.length > 0) {
+    latestNewsString += "### New browser versions\n\n";
+  }
+  if (desktop.length > 0) {
+    latestNewsString += `On Desktop:\n${desktop}\n`;
+  }
+  if (android.length > 0) {
+    latestNewsString += `On iOS:\n${android}\n`;
+  }
+  if (ios.length > 0) {
+    latestNewsString += `On Android:\n${ios}\n`;
+  }
+  return latestNewsString;
+};
 
 const getLastIssueNumber = (newsCopy) => {
   const re = /\#\# \[Issue (\S+)\]/g;
@@ -126,6 +122,7 @@ const updateNewsCopy = ({issueNumber, date}) => {
   const newsCopyFile = `${__dirname}/../assets/copy/news.md`;
   const newsCopy = fs.readFileSync(newsCopyFile).toString();
   const lastIssueNumber = getLastIssueNumber(newsCopy);
+  console.log({issueNumber, lastIssueNumber});
   if (lastIssueNumber === issueNumber) {
     // We already have an entry for this issue; don't add anything.
     return;
@@ -139,7 +136,6 @@ const updateNewsCopy = ({issueNumber, date}) => {
 const main = () => {
   const indexPath = "../website";
   const issueNumber = fs.readFileSync("issue-number").toString().trim();
-  console.log("version found:", issueNumber);
   const archivePath = `../website/archive/issue${issueNumber}`;
   createDir(archivePath);
   const date = process.argv[2]
