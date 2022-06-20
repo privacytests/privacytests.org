@@ -333,8 +333,7 @@ const resultsToTable = (results, title, includeTrackingCookies) => {
 
 // Create the title HTML for a results table.
 const tableTitleHTML = (title) => `
-  <div class="table-title">${title}</div>
-  <div class="instructions">(click anywhere for more info)</a>`;
+  <div class="table-title">${title}</div>`;
 
 // Create dateString from the given date and time string.
 const dateString = (dateTime) => {
@@ -379,6 +378,7 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
       <div><span class="marker good">&nbsp;</span>= Passed privacy test</div>
       <div><span class="marker bad">&nbsp;</span>= Failed privacy test</div>
       <div><span class="marker na">–</span>= No such feature</div>
+      <div><span class="click-anywhere">(Click anywhere for more info.)</span></div>
     </div>` +
   htmlTable({headers, body,
                     className:"comparison-table"}) +
