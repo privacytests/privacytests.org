@@ -148,7 +148,6 @@ class DesktopBrowser {
     Object.assign(this, { browser, incognito, tor, nightly });
     this._defaults = macOSdefaultBrowserSettings[browser];
     this._version = undefined;
-    this._keepAlivePingId = null;
     this._path = path ?? browserPath({ browser, nightly });
     this._appPath = this._path.split(".app")[0] + ".app";
     this._appName = nightly ? this._defaults.nightlyName : this._defaults.name;
@@ -196,7 +195,6 @@ class DesktopBrowser {
   }
   // Close the browser.
   async kill() {
-    clearInterval(this._keepAlivePingId);
     if (profileFlags[this._defaults.basedOn] === undefined) {
       execSync(`osascript closeAllWindows.applescript "${this._appName}"`);
       await sleepMs(1000);
