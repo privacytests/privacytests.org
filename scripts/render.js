@@ -375,10 +375,14 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
       </div>
     </div>
     <div class="banner" id="legend">
-      <div><span class="marker good">&nbsp;</span>= Passed privacy test</div>
-      <div><span class="marker bad">&nbsp;</span>= Failed privacy test</div>
-      <div><span class="marker na">–</span>= No such feature</div>
-      <div><span class="click-anywhere">(Click anywhere for more info.)</span></div>
+      <div id="key">
+        <div><span class="marker good">&nbsp;</span>= Passed privacy test</div>
+        <div><span class="marker bad">&nbsp;</span>= Failed privacy test</div>
+        <div><span class="marker na">–</span>= No such feature</div>
+      </div>
+      <div class="banner" id="instructions">
+        <div><span class="click-anywhere">(Click anywhere for more info.)</span></div>
+      </div>
     </div>` +
   htmlTable({headers, body,
                     className:"comparison-table"}) +

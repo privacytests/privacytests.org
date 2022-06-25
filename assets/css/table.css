@@ -128,13 +128,21 @@ table.comparison-table .date {
   opacity: 100%;
 }
 #legend {
+  flex-direction: column;
   font-size: 14px;
   justify-content: center;
   align-content: stretch;
   vertical-align: top;
-  border-bottom:  lightgray dotted 1px;
 }
-#legend div {
+#key {
+    display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  justify-content: center;
+  align-content: stretch;
+  vertical-align: top;
+}
+#key div {
   padding: 0px 10px;
   vertical-align: top;
 }
@@ -142,11 +150,17 @@ table.comparison-table .date {
   display: inline-block;
   width: 20px;
 }
-#legend .click-anywhere {
+#instructions {
+  font-size: 16px;
+  justify-content: center;
+  align-content: stretch;
+  vertical-align: top;
+  border-bottom:  lightgray dotted 1px;
+}
+.banner .click-anywhere {
   color: gray;
-  font-size: 12px;
+  font-size: 14px;
   display: inline-block;
-  padding: 3px 20px;
 }
 .dataPoint {
   display: inline-block;
