@@ -25,6 +25,7 @@ let tests = {
       document.cookie = `secret=${secret}_js; SameSite=None; Secure`;
     },
     read: () => document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null,
+    session: true,
    },
    "cookie (HTTP)": {
     description: "The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website's behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.",
@@ -37,7 +38,8 @@ let tests = {
       let response = await fetch(`${baseURI}headers`);
       let cookie = (await response.json())["cookie"];
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
-    }
+    },
+    session: true,
    },
   "localStorage": {
     description: "The localStorage API gives websites access to a key-value database that will remain available across visits. If the localStorage API is not partitioned or blocked, it can also be used to track users across websites.",
@@ -53,7 +55,8 @@ let tests = {
         throw new Error("Unsupported");
       }
     },
-    read: () => IdbKeyVal.get("secret")
+    read: () => IdbKeyVal.get("secret"),
+    session: true,
   },
   "SharedWorker": {
     description: "The SharedWorker API allows scripts from multiple tabs to share a background thread of computation. If SharedWorker is not partitioned, then it can be abused to shared data between websites in your browser.",
@@ -132,7 +135,8 @@ let tests = {
       let countResponse = await fetch(testURI("ctr", "fetch", key),
                                       {cache: "reload"});
       return (await countResponse.text()).trim();
-    }
+    },
+    session: true,
   },
   "XMLHttpRequest cache": {
     description: "Similar to the newer Fetch API, any resource received may be cached by the browser. The cache is potentially vulnerable to cross-site tracking attack.",
@@ -153,7 +157,8 @@ let tests = {
       let countResponse = await fetch(testURI("ctr", "xhr", key),
                                       {cache: "reload"});
       return (await countResponse.text()).trim();
-    }
+    },
+    session: true,
   },
   "iframe cache": {
     description: "An iframe is an element in a web page than allows websites to embed a second web page. Caching of this web page could be abused for cross-site tracking.",
@@ -175,7 +180,8 @@ let tests = {
       let response = await fetch(
         testURI("ctr", "page", key), {"cache": "reload"});
       return (await response.text()).trim();
-    }
+    },
+    session: true,
   },
   "CacheStorage": {
     description: "The Cache API is a content storage mechanism originally introduced to support ServiceWorkers. If the same Cache object is accessible to multiple websites, it can be abused to track users.",
@@ -192,7 +198,8 @@ let tests = {
       let cacheKeys = await cache.keys();
       let url = cacheKeys[0].url;
       return (new URL(url)).searchParams.get("key");
-    }
+    },
+    session: true,
   },
   "favicon cache": {
     description: "A favicon is an icon that represents a website, typically shown in browser tab and bookmarks menu. If the favicon cache is not partitioned, it can be used to track users across websites.",
@@ -207,7 +214,8 @@ let tests = {
         throw new Error("No requests received");
       }
       return count;
-    }
+    },
+    session: true,
   },
 /*  "video": {
     write: (key) => new Promise((resolve, reject) => {
@@ -311,7 +319,8 @@ let tests = {
           (tx, err) => reject(err));
       }));
       return result.rows.item(0).value;
-    }
+    },
+    session: true,
   },
 /*  "basic_auth": {
     write: async (key) => {
@@ -321,7 +330,7 @@ let tests = {
       let response = await fetch(`${baseURI}/auth`, {"cache": "reload"});
       return (await response.json()).password;
     }
-    },*/
+  },*/
   "H1 connection": {
     description: "HTTP/1.x are the classic web connection protocols. If these connections are re-used across websites, they can be used to track users.",
     write: async (secret) => {
@@ -402,7 +411,8 @@ let tests = {
         return null;
       }
       return cookie.value;
-    }
+    },
+    session: true,
   }
 };
 
