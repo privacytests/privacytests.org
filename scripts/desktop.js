@@ -70,7 +70,6 @@ const macOSdefaultBrowserSettings = {
     nightlyName: "Safari Technology Preview",
     useOpen: true,
     incognitoCommand: "osascript safariPBM.applescript",
-    postLaunchDelay: 6000,
     basedOn: "safari",
   },
   tor: {
@@ -79,7 +78,6 @@ const macOSdefaultBrowserSettings = {
     binaryName: "firefox",
     basedOn: "firefox",
     useOpen: true,
-    preLaunchDelay: 10000,
     postLaunchDelay: 10000,
     update: ["Tor Browser", "About Tor Browser"],
     updateNightly: ["Tor Browser", "About Tor Browser"],
@@ -95,8 +93,7 @@ const macOSdefaultBrowserSettings = {
     name: "Vivaldi",
     nightlyName: "Vivaldi Snapshot",
     privateFlag: "incognito",
-    preLaunchDelay: 10000,
-    postLaunchDelay: 10000,
+//    postLaunchDelay: 10000,
     basedOn: "chromium",
     // Assumes Vivaldi is on automatic updates:
     update: ["Vivaldi", "About Vivaldi"],
@@ -162,7 +159,6 @@ class DesktopBrowser {
   }
   // Launch the browser.
   async launch() {
-    await sleepMs(this._defaults.preLaunchDelay ?? 0);
     console.log(this._defaults);
     if (this._profilePath) {
       // Delete old profiles if they exist.
@@ -171,10 +167,9 @@ class DesktopBrowser {
     }
     this._process = exec(this._command, { env: this._defaults.env });
     await sleepMs(this._defaults.postLaunchDelay ?? 0);
-    await sleepMs(5000);
     if (this.incognito && this._defaults.incognitoCommand) {
       exec(`${this._defaults.incognitoCommand} "${this._appName}"`);
-      await sleepMs(5000);
+      await sleepMs(1000);
     }
   }
   // Get the browser version.
