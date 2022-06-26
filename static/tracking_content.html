@@ -50,12 +50,11 @@
        const writeCookies = searchParams.get("write_cookies") === "true";
        const response = await fetch("./trackers.json",   { headers: {'Accept': 'application/json' } });
        const tests = await response.json();
-       let results = {};
-       for (const {name, url, type} of tests) {
+       const results = Object.fromEntires(await Promise.all(tests.map(async {name, url, type} => {
          const passed = await testUrl({url, sessionId, readCookies, writeCookies, type});
          const description = `Tests whether the browser blocks the page from loading the tracker at ${url}`;
-         results[name] = { url, passed, description };
-       }
+         return [name, { url, passed, description }];
+       })));
        await postDataAndCarryOn(results, (readCookies || writeCookies) ? "tracking_cookies" : "trackers");
      };
      runTest();
