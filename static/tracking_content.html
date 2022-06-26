@@ -48,13 +48,14 @@
        const sessionId = searchParams.get("sessionId");
        const readCookies = searchParams.get("read_cookies") === "true";
        const writeCookies = searchParams.get("write_cookies") === "true";
-       const response = await fetch("./trackers.json",   { headers: {'Accept': 'application/json' } });
+       const response = await fetch("./trackers.json", { headers: {'Accept': 'application/json' } });
        const tests = await response.json();
-       const results = Object.fromEntries(await Promise.all(tests.map(async {name, url, type} => {
+       const results = Object.fromEntries(await Promise.all(tests.map(async ({name, url, type}) => {
          const passed = await testUrl({url, sessionId, readCookies, writeCookies, type});
          const description = `Tests whether the browser blocks the page from loading the tracker at ${url}`;
          return [name, { url, passed, description }];
        })));
+       console.log(results);
        await postDataAndCarryOn(results, (readCookies || writeCookies) ? "tracking_cookies" : "trackers");
      };
      runTest();
