@@ -1,6 +1,31 @@
 # News
 
-## [Issue 26](/): 2022-06-16
+## [Issue 27](/): 2022-06-30
+
+### New browser versions
+
+On Desktop:
+* Brave 1.40
+* Chrome 103.0
+* Edge 103.0
+* Opera 88.0
+* Ungoogled 103.0
+
+On iOS:
+* Brave 1.40
+* Duckduckgo 5.129
+* Edge 103.0
+* Firefox 102.1
+* Yandex 22.7
+
+On Android:
+* Chrome 103.5060
+* Duckduckgo 7.68
+* Firefox 101.1
+* Yandex 2207.0
+
+
+## [Issue 26](/archive/issue26): 2022-06-16
 
 ### New browser versions
 
