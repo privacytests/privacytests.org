@@ -4,7 +4,7 @@
 
 ### Firefox improvement
 
-For the first time, fresh profiles of Firefox are now passing all State Partitioning tests, thanks to the [worldwide rollout of Total Cookie Protection](https://blog.mozilla.org/products/firefox/firefox-rolls-out-total-cookie-protection-by-default-to-all-users-worldwide/). Congratulations to the Firefox team! I am informed that existing profiles will also received Total Cookie Protection in the next few months.
+For the first time, fresh profiles of Firefox are now passing all State Partitioning tests, thanks to the [worldwide rollout of Total Cookie Protection](https://blog.mozilla.org/products/firefox/firefox-rolls-out-total-cookie-protection-by-default-to-all-users-worldwide/). Congratulations to the Firefox team! I am informed that existing profiles will also receive Total Cookie Protection in the next few months.
 
 ### New browser versions
 
