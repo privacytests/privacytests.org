@@ -6,7 +6,7 @@ const scriptHtml = `
   function runTest() {
     const sessionId = Math.random().toString().substr(2);
     window.open(\`https://arthuredelstein.net/test-pages/supercookies.html?mode=read&thirdparty=same&sessionId=\${sessionId}&me=true\`, "_blank");
-    window.location.href = \`https://arthuredelstein.net/test-pages/supercookies.html?mode=write&thirdparty=same&sessionId=\${sessionId}&me=true\`;
+    window.location.href = \`https://arthuredelstein.net/test-pages/navigation.html?mode=write&thirdparty=same&sessionId=\${sessionId}&me=true\`;
   }
 </script>
 `
@@ -20,7 +20,7 @@ const testButtonElement = `
 const contentHtml = scriptHtml + testButtonElement;
 
 const main = () => {
-  fs.writeFileSync(`${__dirname}/out/me.html`,
+  fs.writeFileSync(`${__dirname}/../website/me.html`,
   template.htmlPage({
     content: contentHtml,
     cssFiles: [`${__dirname}/../assets/css/me.css`]
