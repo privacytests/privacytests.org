@@ -74,10 +74,7 @@ const postDataAndCarryOn = async (results, category) => {
     if (!response) {
       return;
     }
-    const { newTabUrl, navigateUrl } = response;
-    if (newTabUrl) {
-      window.open(newTabUrl, "_blank");
-    }
+    const { navigateUrl } = response;
     if (navigateUrl) {
       window.location.href = navigateUrl;
     }
