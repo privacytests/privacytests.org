@@ -8,18 +8,18 @@ On Desktop:
 * Opera 89.0
 
 On iOS:
+* Brave 1.40
+* Firefox 102.0
+* Opera 3.3
+* Yandex 2207.1
+
+On Android:
 * Bromite 102.0
 * Chrome 103.0
 * Firefox 102.2
 * Focus 102.2
 * Mull 101.1
 * Opera 70.3
-
-On Android:
-* Brave 1.40
-* Firefox 102.0
-* Opera 3.3
-* Yandex 2207.1
 
 
 ## [Issue 27](/archive/issue27): 2022-06-30
