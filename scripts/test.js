@@ -351,6 +351,24 @@ const createBrowserObject = ({config, android, ios}) => {
   return android ? new AndroidBrowser(config) : (ios ? new iOSBrowser(config) : new DesktopBrowser(config));
 }
 
+// Call asyncFunction on items in array in parallel.
+const asyncMapParallel = async (asyncFunction, array) => {
+  return Promise.all(Array.prototype.map.call(array, asyncFunction));
+};
+
+// Call asyncFunction on items in array in series.
+const asyncMapSeries = async (asyncFunction, array) => {
+  let results = [];
+  for (const item of array) {
+    results.push(await asyncFunction(item));
+  }
+  return results;
+};
+
+// Call asyncFunction on items in array in series or parallel.
+const asyncMap = (parallel, asyncFunction, array) =>
+  (parallel ? asyncMapParallel : asyncMapSeries)(asyncFunction, array);
+
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
 const runTestsBatch = async (browserList, { shouldQuit, android, ios, categories } = { shouldQuit: true }) => {
