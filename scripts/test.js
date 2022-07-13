@@ -273,16 +273,10 @@ const analyzeTrackingCookieTestResults = (leakyHosts) => {
 }
 
 const runTrackingCookieTest = async (browserObject) => {
-  if (browserObject instanceof DesktopBrowser) {
-    await enableProxies(cookieProxyPort);
-  }
   await runPageTest(
     browserObject, `${iframe_root_same}/tracking_content.html?manual=true&write_cookies=true`);
   await runPageTest(
     browserObject, `${iframe_root_different}/tracking_content.html?manual=true&read_cookies=true`);
-  if (browserObject instanceof DesktopBrowser) {  
-    await disableProxies(cookieProxyPort);
-  }
   const leakyHosts = cookieProxy.getLeakyHosts(browserObject._websocket._sessionId);
   return analyzeTrackingCookieTestResults(leakyHosts);
 };
@@ -295,7 +289,7 @@ const runTrackingCookieTest = async (browserObject) => {
 //   "https" : { ... },
 //   "navigation" : { ... },
 //   "supercookies" : { ... } }
-const runTests = async (browserObject, categories) => {
+const runTestsStage1 = async ({browserObject, categories}) => {
   await disableProxies();
   let results = {};
   log({ categories });
@@ -322,14 +316,7 @@ const runTests = async (browserObject, categories) => {
       ipAddressLeak,
       { "GPC enabled first-party": topLevelResults["GPC enabled first-party"] });
   }
-  // Tracking cookies
-  if (browserObject instanceof DesktopBrowser &&
-      (!categories || categories.includes("trackingCookies"))) {
-    // Now compile the results into a final format.
-    log("running trackingCookies");
-    const trackingCookieResult = await runTrackingCookieTest(browserObject);
-    Object.assign(results, { "tracker_cookies": trackingCookieResult });
-  }  // HTTPS tests
+  // HTTPS tests
   if (!categories || categories.includes("https")) {
     log (`running HTTPS tests for ${browserObject.browser}`);
     const upgradableAddressResult = await runPageTest(browserObject, `${upgradable_root}/upgradable.html?source=address`);
@@ -344,6 +331,20 @@ const runTests = async (browserObject, categories) => {
   }
   return results;
 };
+
+const runTestsStage2 = async ({browserObject, categories}) => {
+  let results = {};
+  // Tracking cookies
+  if (browserObject instanceof DesktopBrowser &&
+      (!categories || categories.includes("trackingCookies"))) {
+    // Now compile the results into a final format.
+    log("running trackingCookies");
+    const trackingCookieResult = await runTrackingCookieTest(browserObject);
+    Object.assign(results, { "tracker_cookies": trackingCookieResult });
+  }
+  return results;
+};
+
 
 // Creates the browser object whether android, iOS, or desktop.
 const createBrowserObject = ({config, android, ios}) => {
@@ -364,7 +365,14 @@ const runTestsBatch = async (browserList, { shouldQuit, android, ios, categories
         browserObject._websocket = await createWebsocket();
     try {
       await browserObject.launch();
-      const testResults = await deadlinePromise(`${browser} tests`, runTests(browserObject, categories), 600000);
+      const testResultsStage1 = await deadlinePromise(`${browser} tests`, runTestsStage1({browserObject, categories}), 600000);
+      let testResultsStage2;
+      if (browserObject instanceof DesktopBrowser) {
+        await enableProxies(cookieProxyPort);
+        testResultsStage2 = await deadlinePromise(`${browser} tests`, runTestsStage2({browserObject, categories}), 100000);
+        await disableProxies(cookieProxyPort);
+      }
+      const testResults = Object.assign({}, testResultsStage1, testResultsStage2);
       all_tests.push({
         browser, incognito, tor, nightly,
         testResults, timeStarted,
