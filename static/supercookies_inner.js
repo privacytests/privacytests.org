@@ -69,14 +69,15 @@ let tests = {
         throw new Error("Unsupported");
       }
     },
-    read: () =>
-      new Promise((resolve, reject) => {
-        let worker = new SharedWorker("supercookies_sharedworker.js");
-        worker.port.start();
+    read: () => {
+      let worker = new SharedWorker("supercookies_sharedworker.js");
+      worker.port.start();
+      return new Promise((resolve, reject) => {
         worker.port.postMessage("request");
         worker.port.onmessage = (e) => resolve(e.data);
         setTimeout(() => reject("no SharedWorker message received"), 100);
-      })
+      });
+    }
   },
   "blob": {
     description: "A 'blob URL' is a local reference to some raw data. Trackers can use a blob URL to share data between websites.",
