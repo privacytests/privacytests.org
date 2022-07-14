@@ -356,77 +356,60 @@ const asyncMapParallel = async (asyncFunction, array) => {
   return Promise.all(Array.prototype.map.call(array, asyncFunction));
 };
 
-const runSetup = async ({config, android, ios}) => {
-  log("\nnext test:", config);
-  const { browser, incognito, tor, nightly } = config;
-  const timeStarted = new Date().toISOString();
-  const browserObject = createBrowserObject({config, android, ios});
-  browserObject._websocket = await createWebsocket();
-  await browserObject.launch();
-  return { browserObject };
+// Call asyncFunction on items in array in series.
+const asyncMapSeries = async (asyncFunction, array) => {
+  let results = [];
+  for (const item of array) {
+    results.push(await asyncFunction(item));
+  }
+  return results;
 };
 
-const runStageOne = async ({ browserObject, categories }) => {
-  try {
-    return await deadlinePromise(`stage 1 tests`, runTestsStage1({browserObject, categories}), 600000);
-  } catch (e) {
-    log (e);
-  }
-};
-
-const runStageTwo = async ({ browserObject, categories }) => {
-  try {
-    return await deadlinePromise(`stage 2 tests`, runTestsStage2({browserObject, categories}), 100000);
-  } catch (e) {
-    log(e);
-  }
-};
-
-const runShutdown = async ({ browserObject }) => {
-  await destroyWebSocket(browserObject._websocket);
-  try {
-    await browserObject.kill();
-  } catch (e) {
-    log(e);
-  }
-};
+// Call asyncFunction on items in array in series or parallel.
+const asyncMap = (parallel, asyncFunction, array) =>
+  (parallel ? asyncMapParallel : asyncMapSeries)(asyncFunction, array);
 
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
 const runTestsBatch = async (browserList, { shouldQuit, android, ios, categories } = { shouldQuit: true }) => {
+  let all_tests = [];
   let timeStarted = new Date().toISOString();
   cookieProxy.simulateTrackingCookies(cookieProxyPort);
-  //  for (let config of browserList) {
-  const setupResults = await asyncMapParallel(
-    (config) => runSetup({config, android, ios}), browserList);
-  console.log({setupResults});
-  const stageOneResults = await asyncMapParallel(runStageOne, setupResults);
-  let stageTwoResults;
-  if (android !== true && ios !== true) {
-    await enableProxies(cookieProxyPort);
+  for (let config of browserList) {
+    log("\nnext test:", config);
+    const { browser, incognito, tor, nightly } = config;
+    const timeStarted = new Date().toISOString();
+    const browserObject = createBrowserObject({config, android, ios});
+        browserObject._websocket = await createWebsocket();
     try {
-      stageTwoResults = await asyncMapParallel(runStageTwo, setupResults);
+      await browserObject.launch();
+      const testResultsStage1 = await deadlinePromise(`${browser} tests`, runTestsStage1({browserObject, categories}), 600000);
+      let testResultsStage2;
+      if (browserObject instanceof DesktopBrowser) {
+        await enableProxies(cookieProxyPort);
+        testResultsStage2 = await deadlinePromise(`${browser} tests`, runTestsStage2({browserObject, categories}), 100000);
+        await disableProxies(cookieProxyPort);
+      }
+      const testResults = Object.assign({}, testResultsStage1, testResultsStage2);
+      all_tests.push({
+        browser, incognito, tor, nightly,
+        testResults, timeStarted,
+        reportedVersion: await browserObject.version(),
+        os: os.type(), os_version: os.version(),
+      });
     } catch (e) {
       log(e);
     }
-    await disableProxies(cookieProxyPort);
-  }
-  let all_tests = [];
-  for (let i = 0; i < browserList.length; ++i) {
-    const { browser, incognito, tor, nightly } = browserList[i];
-    const { browserObject } = setupResults[i];
-    const testResults = Object.assign({}, stageOneResults[i], stageTwoResults[i]);
-    all_tests.push({
-      browser, incognito, tor, nightly,
-      testResults, timeStarted,
-      reportedVersion: await browserObject.version(),
-      os: os.type(), os_version: os.version(),
-    });
+    if (shouldQuit) {
+      await destroyWebSocket(browserObject._websocket);
+      try {
+        await browserObject.kill();
+      } catch (e) {
+        log(e);
+      }
+    }
   }
   cookieProxy.stopTrackingCookieSimulation();
-  if (shouldQuit) {
-    await asyncMapParallel(runShutdown, setupResults);
-  }
   const timeStopped = new Date().toISOString();
   let platform;
   if (android) {
