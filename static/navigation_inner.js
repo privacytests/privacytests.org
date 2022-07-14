@@ -1,5 +1,8 @@
 import { runAllTests, sleepMs, fetchText } from "./test_utils.js";
 
+// Wrap the code for any browsers that don't support top-level await.
+(async () => {
+
 const baseURI = "https://arthuredelstein.net/browser-privacy-live/";
 
 let testURI = (path, type, key) => `${baseURI}${path}?type=${type}&key=${key}`;
@@ -164,6 +167,8 @@ let tests = {
   },
 };
 
-runAllTests(tests);
+await runAllTests(tests);
 
 console.log("hello from navigation_inner.js");
+
+})();
