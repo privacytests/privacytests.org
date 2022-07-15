@@ -20,12 +20,12 @@
       let favicon = document.getElementById("favicon");
       const baseURI = "https://arthuredelstein.net/browser-privacy-live";
       favicon.setAttribute("href", `${baseURI}/resource?type=favicon&key=${sessionId}`);
-      addEventListener("message", ({data}) => {
+      addEventListener("message", async ({data}) => {
         document.body.setAttribute("data-test-results", JSON.stringify(data));
         const category = `supercookies_${mode}_${thirdparty}`;
         if (mode === "read") {
           // document.body.style.backgroundColor = "green";
-          postDataAndCarryOn(data, category);
+          await postDataAndCarryOn(data, category);
           // document.body.style.backgroundColor = "red";
         } else {
           if (!me) {
@@ -33,7 +33,7 @@
               window.open(`${iframe_root_same}/supercookies.html?mode=read&thirdparty=same&sessionId=${sessionId}`, "_blank", "noopener");
             });
           }
-          postData(data, category);
+          await postData(data, category);
         }
       }, {once: true});
       if (mode === "read" && me === "true" && thirdparty === "same") {
