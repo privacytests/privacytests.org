@@ -417,7 +417,7 @@ let tests = {
   }
 };
 
-runAllTests(tests);
+await runAllTests(tests);
 
 console.log("hello from supercookies_inner.js");
 
