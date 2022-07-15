@@ -184,16 +184,16 @@ class AndroidBrowser {
       }
       if (urlBarToClick === undefined) {
         urlBarToClick = await findElement(this.client, this.packageName, this.urlBarKeys);
-//      await sleepMs(1000);
-//      urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarClick);
+        //      await sleepMs(1000);
+        //      urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarClick);
       }
     }
     await this.client.elementClick(urlBarToClick);
     await sleepMs(1000);
-		if (this.urlBarClear) {
-			const clearButton = await findElement(this.client, this.packageName, this.urlBarClear);
+    if (this.urlBarClear) {
+      const clearButton = await findElement(this.client, this.packageName, this.urlBarClear);
       await this.client.elementClick(clearButton);
-		}
+    }
     const urlBarToSendKeys = await findElement(this.client, this.packageName, this.urlBarKeys);
     if (this.goButton) {
       await this.client.elementSendKeys(urlBarToSendKeys, url);
