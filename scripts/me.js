@@ -6,7 +6,7 @@ const scriptHtml = `
   function runTest() {
     const sessionId = Math.random().toString().substr(2);
     window.open(\`https://arthuredelstein.net/test-pages/supercookies.html?mode=read&thirdparty=same&sessionId=\${sessionId}&me=true\`, "_blank", "noopener");
-    window.location.href = \`https://arthuredelstein.net/test-pages/navigation.html?mode=write&thirdparty=same&sessionId=\${sessionId}&me=true\`;
+    window.location.href = \`https://arthuredelstein.net/test-pages/supercookies.html?mode=write&thirdparty=same&sessionId=\${sessionId}&me=true\`;
   }
 </script>
 `
