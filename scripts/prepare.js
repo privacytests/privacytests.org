@@ -103,11 +103,11 @@ const latestNews = ({issueNumber, date, desktop, ios, android}) => {
   if (desktop.length > 0) {
     latestNewsString += `On Desktop:\n${desktop}\n`;
   }
-  if (android.length > 0) {
-    latestNewsString += `On iOS:\n${android}\n`;
-  }
   if (ios.length > 0) {
-    latestNewsString += `On Android:\n${ios}\n`;
+    latestNewsString += `On iOS:\n${ios}\n`;
+  }
+  if (android.length > 0) {
+    latestNewsString += `On Android:\n${android}\n`;
   }
   return latestNewsString;
 };
