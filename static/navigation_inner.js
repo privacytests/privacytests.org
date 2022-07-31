@@ -28,8 +28,15 @@ let tests = {
       await fetch(`serviceworker-write?secret=${key}`);
     },
     read: async () => {
-      let registration = await navigator.serviceWorker.register(
-        'serviceWorker.js');
+      console.log("trying to register the serviceworker now...");
+      const registration = await Promise.race([
+        navigator.serviceWorker.register('serviceWorker.js'),
+        sleepMs(500)
+      ]);
+      if (registration === undefined) {
+        // We timed out or otherwise failed.
+        throw new Error("ServiceWorker registration failed");
+      }
       console.log(registration);
       await navigator.serviceWorker.ready;
       console.log("service worker ready");

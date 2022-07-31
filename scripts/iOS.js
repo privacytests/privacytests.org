@@ -47,7 +47,7 @@ const browserInfo = {
     bundleId: "org.mozilla.ios.Focus",
     urlBarClick: "URLBar.urlText",
     urlBarKeys: "URLBar.urlText",
-    urlBarClear: "icon clear",
+   // urlBarClear: "icon clear",
   },
   onion: {
     name: "Onion Browser",
@@ -205,7 +205,7 @@ class iOSBrowser {
 	  //      urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarClick);
 	}
       }
-    }	
+    }
     await this.client.elementClick(urlBarToClick);
     await sleepMs(1000);
     if (this.urlBarClear) {
@@ -241,4 +241,3 @@ async function main() {
 if (require.main === module) {
   main();
 }
-

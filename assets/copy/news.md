@@ -1,5 +1,23 @@
 # News
-## [Issue 28](/): 2022-07-11
+## [Issue 29](/): 2022-07-26
+
+### New browser versions
+
+On Desktop:
+* Firefox 102.0
+* Librewolf 102.0
+* Tor 11.5
+
+On iOS:
+* Brave 1.41
+* Duckduckgo 5.130
+* Tor 99.0
+
+On Android:
+* Edge 103.1264
+* Yandex 2207.2
+
+## [Issue 28](/archive/issue28): 2022-07-11
 
 ### New browser versions
 
