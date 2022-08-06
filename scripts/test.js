@@ -255,7 +255,8 @@ const runMainTests = async (browserObject, categories) => {
 
 // Run the insecure connection test. Returns { insecureRsults, insecurePassed }.
 const runInsecureTest = async (browserObject) => {
-  const insecureResultPromise = nextBrowserValue(browserObject, 8000);
+  const timeout = browserObject instanceof iOSBrowser ? 20000 : 8000;
+  const insecureResultPromise = nextBrowserValue(browserObject, timeout);
   await openSessionUrl(browserObject, `${insecure_root}/insecure.html`);
   let insecureResult, insecurePassed;
   try {
