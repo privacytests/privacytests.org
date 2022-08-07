@@ -1,6 +1,7 @@
 const { default: WebDriver}  = require("webdriver");
-const plist = require('plist');
+const _ = require('lodash');
 const child_process = require('child_process');
+const plist = require('plist');
 
 const browserInfo = {
   brave: {
@@ -85,50 +86,39 @@ const browserInfo = {
   }
 };
 
-let gAppVersions = undefined;
-
-const getAppVersions = () => {
-  if (gAppVersions !== undefined) {
-    return gAppVersions;
-  }
-  gAppVersions = {};
+const getAppVersions = _.memoize(() => {
+  const appVersions = {};
   const plistRaw = child_process.execSync("/opt/homebrew/bin/ideviceinstaller  -l -o xml").toString();
   const plistJson = plist.parse(plistRaw);
   for (let plistItem of plistJson) {
-    gAppVersions[plistItem.CFBundleIdentifier] = plistItem.CFBundleShortVersionString;
+    appVersions[plistItem.CFBundleIdentifier] = plistItem.CFBundleShortVersionString;
   }
   // Safari version number is the same as the iOS version:
   const productVersion = child_process.execSync(
     "/opt/homebrew/bin/ideviceinfo --key ProductVersion")
 	.toString().trim();
-  gAppVersions["com.apple.mobilesafari"] = productVersion;
-  return gAppVersions;
-}
+  appVersions["com.apple.mobilesafari"] = productVersion;
+  return appVersions;
+});
 
-let gClient = undefined;
-
-const getClient = async () => {
-  if (gClient === undefined) {
-    gClient = await WebDriver.newSession({
-      port: 4723,
-      hostname: "0.0.0.0",
-      path: "/wd/hub",
-      capabilities: {
-        "appium:bundleId": "com.apple.mobilesafari",
-        "platformName": "iOS",
-        "appium:udid": "auto",
-        "appium:xcodeOrgId": "MGQ2CFRT2X",
-        "appium:xcodeSigningId": "iPhone Developer",
-        "appium:automationName": "XCUITest",
-        "appium:deviceName": "iPhone 7",
-        "appium:wdaLaunchTimeout": 30000,
-        "appium:wdaConnectionTimeout": 30000,
-        "appium:platformVersion": "15.4.1"
-      }
-    });
-  }
-  return gClient;
-}
+const webdriverSession = _.memoize(() =>
+  WebDriver.newSession({
+    port: 4723,
+    hostname: "0.0.0.0",
+    path: "/wd/hub",
+    capabilities: {
+      "appium:bundleId": "com.apple.mobilesafari",
+      "platformName": "iOS",
+      "appium:udid": "auto",
+      "appium:xcodeOrgId": "MGQ2CFRT2X",
+      "appium:xcodeSigningId": "iPhone Developer",
+      "appium:automationName": "XCUITest",
+      "appium:deviceName": "iPhone 7",
+      "appium:wdaLaunchTimeout": 30000,
+      "appium:wdaConnectionTimeout": 30000,
+      "appium:platformVersion": "15.4.1"
+    }
+  }));
 
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
@@ -168,7 +158,7 @@ class iOSBrowser {
   }
   // Launch the browser.
   async launch() {
-    this.client = await getClient();
+    this.client = await webdriverSession();
     await this.client.activateApp(this.bundleId);
     if (this.postLaunchDelay) {
       await sleepMs(this.postLaunchDelay);
