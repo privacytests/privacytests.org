@@ -140,15 +140,19 @@ const findElementWithClass = async (client, className) => {
   return elementObject.ELEMENT;
 };
 
-const webdriverSession = _.memoize(async () => {
-  const client = await WebDriver.newSession({
+const getAppVersion = _.memoize((packageName) => {
+  const cmd = `/opt/homebrew/bin/adb shell dumpsys package ${packageName} | /usr/bin/grep versionName`;
+  const raw = child_process.execSync(cmd).toString();
+  return raw.match(/versionName=(\S+)/)[1];
+});
+
+const webdriverSession = _.memoize(() =>
+  WebDriver.newSession({
     port: 4723,
     hostname: "0.0.0.0",
     path: "/wd/hub",
     capabilities: { platformName: "Android", "newCommandTimeout": 300 }
-  });
-  return client;
-});
+  }));
 
 class AndroidBrowser {
   constructor({browser, incognito, tor, nightly}) {
@@ -157,13 +161,12 @@ class AndroidBrowser {
   }
   // Launch the browser.
   async launch() {
-    const client = await webdriverSession();
-    this.client = client;
+    this.client = await webdriverSession();
     await this.client.activateApp(this.packageName);
     await sleepMs(5000);
     console.log("this.startupClick:",this.startupClick);
     if (this.startupClick) {
-      const startupButton = await findElement(client, this.packageName, this.startupClick);
+      const startupButton = await findElement(this.client, this.packageName, this.startupClick);
       if (startupButton) {
         await this.client.elementClick(startupButton)
         await sleepMs(20000);
@@ -172,9 +175,7 @@ class AndroidBrowser {
   }
   // Get the browser version.
   async version() {
-    const cmd = `/opt/homebrew/bin/adb shell dumpsys package ${this.packageName} | /usr/bin/grep versionName`;
-    const raw = child_process.execSync(cmd).toString();
-    return raw.match(/versionName=(\S+)/)[1];
+    return getAppVersion(this.packageName);
   }
   async openUrlOnce(url) {
     let urlBarToClick = await findElement(this.client, this.packageName, this.urlBarClick);
@@ -225,7 +226,7 @@ class AndroidBrowser {
     let theWebView;
     if (this.contentElement) {
       theWebView = await findElement(this.client, this.packageName, this.contentElement);
-    } else { 
+    } else {
       // Most browsers use a WebView
       theWebView = await findElementWithClass(this.client, "android.webkit.WebView");
     }
