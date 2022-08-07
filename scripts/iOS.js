@@ -74,6 +74,7 @@ const browserInfo = {
   yandex: {
     name: "Yandex",
     bundleId: "ru.yandex.mobile.search",
+    postLaunchDelay: 2000,
     //startupClick: "Решить проблемы",
     startupClick: "Fix problems",
     urlBarClick: "Address bar",
