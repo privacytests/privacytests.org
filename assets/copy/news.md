@@ -1,5 +1,30 @@
 # News
-## [Issue 29](/): 2022-07-26
+## [Issue 30](/): 2022-08-08
+
+Today, for the first time, Brave is now passing all State Partitioning tests. Congratulations to the team at Brave who worked on this!
+
+### New browser versions
+
+On Desktop:
+* Brave 1.41
+* Chrome 104.0
+* Edge 104.0
+* Firefox 103.0
+* Librewolf 103.0
+* Ungoogled 104.0
+
+On iOS:
+* Brave 1.41
+* Firefox 102.2
+* Focus 103.0
+* Yandex 2207.4
+
+On Android:
+* Duckduckgo 5.131
+* Firefox 103.2
+* Focus 103.2
+
+## [Issue 29](/archive/issue29): 2022-07-26
 
 ### New browser versions
 
@@ -44,7 +69,7 @@ On Android:
 
 ### Firefox improvement
 
-For the first time, fresh profiles of Firefox are now passing all State Partitioning tests, thanks to the [worldwide rollout of Total Cookie Protection](https://blog.mozilla.org/products/firefox/firefox-rolls-out-total-cookie-protection-by-default-to-all-users-worldwide/). Congratulations to the Firefox team! I am informed that existing profiles will also receive Total Cookie Protection in the next few months.
+For the first time, fresh profiles of Firefox are now passing (nearly) all State Partitioning tests, thanks to the [worldwide rollout of Total Cookie Protection](https://blog.mozilla.org/products/firefox/firefox-rolls-out-total-cookie-protection-by-default-to-all-users-worldwide/). Congratulations to the Firefox team! I am informed that existing profiles will also receive Total Cookie Protection in the next few months.
 
 ### New browser versions
 
