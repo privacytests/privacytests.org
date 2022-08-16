@@ -45,21 +45,18 @@ const removeAllServiceWorkers = async () => {
   }
 };
 
-export let fetchText = async (...args) => {
-  let response = await fetch(...args);
-  return await response.text();
+const filterObject = (obj, f) => {
+  const entries = Object.entries(obj);
+  return Object.fromEntries(entries.filter(f));
 };
 
-export let sleepMs = (timeMs) => new Promise(
-  (resolve, reject) => setTimeout(resolve, timeMs)
-);
-
-export let runAllTests = async (tests) => {
+export let runAllTests = async (tests, { category }) => {
   let params = queryParams(document.URL);
   if (params["mode"] === "write") {
     await removeAllServiceWorkers();
   }
-  let results = await runTests(tests, params["mode"], params);
+  const testsFiltered = filterObject(tests, ([k,v]) => v.category === category);
+  let results = await runTests(testsFiltered, params["mode"], params);
   console.log("results:",results);
   if (window.location !== parent.location) {
     parent.postMessage(results, "*");
