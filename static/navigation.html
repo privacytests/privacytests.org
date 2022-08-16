@@ -9,19 +9,9 @@
     <iframe id="inner"/></iframe>
     <script src="./post_data.js"></script>
     <script type="module">
-     import { runAllTests, sleepMs, fetchText } from "./test_utils.js"
-     const topLevelTests = {
-       "window.name": {
-         description: "The window.name API allows websites to store data that will persist after the user has navigated the tab to a different website. This mechanism could be partitioned so that data is not allowed to persist between websites.",
-         write: (secret) => window.name = "name_" + secret,
-         read: () => window.name
-       },
-       "document.referrer": {
-         description: "The Referer [sic] request header is a mechanism used by browsers to let a website know where the user is visiting from. This header is inherently tracking users across websites. In recent times, browsers have switched to a policy of trimming a referrer to convey less tracking information, but Referer continues to convey cross-site tracking data by default.",
-         write: (secret) => { /* do nothing */ },
-         read: () => document.referrer
-       },
-     }
+     import { runAllTests } from "./test_utils.js"
+     import { tests } from "./test_definitions.js";
+
      const searchParams = new URLSearchParams(window.location.search);
      const thirdparty = searchParams.get("thirdparty");
      const mode = searchParams.get("mode");
@@ -30,7 +20,7 @@
                           location.hostname === "")
                        ? "" : "https://arthuredelstein.net/test-pages";
      addEventListener("message", async ({data}) => {
-       const topLevelResults = await runAllTests(topLevelTests);
+       const topLevelResults = await runAllTests(tests, { category: "navigation_toplevel" });
        const allData = {...data, ...topLevelResults};
        document.body.setAttribute("data-test-results", JSON.stringify(allData));
        await postDataAndCarryOn(allData, `navigation_${mode}_${thirdparty}`);
