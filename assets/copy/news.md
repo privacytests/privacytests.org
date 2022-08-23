@@ -1,5 +1,32 @@
 # News
-## [Issue 30](/): 2022-08-08
+## [Issue 31](/): 2022-08-23
+
+### New browser versions
+
+On Desktop:
+* Brave 1.42
+* Opera 90.0
+* Safari 15.6
+* Vivaldi 5.4
+
+On iOS:
+* Chrome 104.5112
+* Duckduckgo 7.69
+* Firefox 103.1
+* Safari 15.6
+* Yandex 2207.8
+
+On Android:
+* Brave 1.42
+* Bromite 102.0
+* Chrome 104.0
+* Duckduckgo 5.133
+* Edge 104.0
+* Mull 101.1
+* Samsung 18.0
+* Vivaldi 5.4
+
+## [Issue 30](/archive/issue30): 2022-08-08
 
 Today, for the first time, Brave is now passing all State Partitioning tests. Congratulations to the team at Brave who worked on this!
 
