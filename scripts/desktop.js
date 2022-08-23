@@ -158,9 +158,9 @@ class DesktopBrowser {
     }
   }
   // Launch the browser.
-  async launch() {
+  async launch(clean = true) {
     console.log(this._defaults);
-    if (this._profilePath) {
+    if (clean && this._profilePath) {
       // Delete old profiles if they exist.
       console.log(`Deleting any old ${this._profilePath}`);
       fs.rmSync(this._profilePath, { recursive: true, force: true });
@@ -200,6 +200,11 @@ class DesktopBrowser {
     } else {
       this._process.kill("SIGKILL");
     }
+  }
+  // Restart the browser with same profile.
+  async restart() {
+    await this.kill();
+    await this.launch(false);
   }
   // Update the browser to the latest version.
   async update() {
