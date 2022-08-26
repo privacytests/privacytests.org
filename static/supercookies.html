@@ -9,7 +9,8 @@
     <script src="./post_data.js"></script>
     <script>
     const sleep = async (t) => new Promise(resolve => window.setTimeout(resolve, t));
-    (async () => {
+     (async () => {
+       try {
       const iframe_root_same = "https://arthuredelstein.net/test-pages";
       const param = (key) => new URLSearchParams(window.location.search).get(key);
       const mode = param("mode");
@@ -47,13 +48,17 @@
         }
       }
       let iframe = document.createElement("iframe");
+      iframe.height="1000px"
       document.body.appendChild(iframe);
       iframe_root = (location.hostname === "localhost" ||
                     location.hostname === "127.0.0.1" ||
                     location.hostname === "")
                   ? "" : "https://arthuredelstein.net/test-pages";
       iframe.src = `${iframe_root}/supercookies_inner.html${window.location.search}`;
-      iframe.allow = "geolocation camera microphone";
+         iframe.allow = "geolocation camera microphone";
+       } catch (e) {
+         showError(e);
+       }
     })();
     </script>
   </body>
