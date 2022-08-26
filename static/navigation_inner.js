@@ -8,7 +8,7 @@ const baseURI = "https://arthuredelstein.net/browser-privacy-live/";
 
 let testURI = (path, type, key) => `${baseURI}${path}?type=${type}&key=${key}`;
 
-await runAllTests(tests, { category: "navigation" });
+await runAllTests(await tests(), { category: "navigation" });
 
 console.log("hello from navigation_inner.js");
 

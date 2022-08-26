@@ -1,4 +1,7 @@
-import * as IdbKeyVal from 'https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs';
+// Wrap the code for any browsers that don't support top-level await.
+export let tests = (async () => {
+
+const IdbKeyVal = await import('https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs');
 
 const baseURI = "https://arthuredelstein.net/browser-privacy-live/";
 
@@ -23,7 +26,7 @@ const { ipAddress, usingTor } = await (async () => {
   return { ipAddress, usingTor };
 })();
 
-export let tests = {
+return {
   "cookie (JS)": {
     category: "supercookies",
     description: "The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website's behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.",
@@ -630,3 +633,6 @@ export let tests = {
     read: () => document.referrer
   },
 };
+
+});
+
