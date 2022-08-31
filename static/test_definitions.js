@@ -449,6 +449,31 @@ return {
     },
     session: true,
   },
+  "getDirectory": {
+    category: "supercookies",
+    description: "navigator.storage.getDirectory exposes a location for storing files to web content. In some cases, these files may be shared across tabs.",
+    write: async (secret) => {
+      try {
+        const root = await navigator.storage.getDirectory();
+        const fileHandle = await root.getFileHandle("secret.txt", { create: true });
+        const stream = await fileHandle.createWritable();
+        await stream.write(secret);
+        await stream.close();
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
+    },
+    read: async () => {
+      try {
+        const root = await navigator.storage.getDirectory();
+        const fileHandle = await root.getFileHandle("secret.txt");
+        const file = await fileHandle.getFile();
+        return file.text();
+      } catch (e) {
+        throw new Error("Unsupported");
+      }
+    }
+  },
   "sessionStorage": {
     category: "navigation",
     description: "The sessionStorage API is similar to the localStorage API, but it does not persist across tabs or across browser sessions. Nonetheless, it can be used to track users if they navigate from one website to another. This tracking can be thwarted by partitioning sessionStorage between websites.",
