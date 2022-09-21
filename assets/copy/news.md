@@ -1,5 +1,29 @@
 # News
-## [Issue 32](/): 2022-09-06
+## [Issue 33](/): 2022-09-20
+
+### New browser versions
+
+On Desktop:
+* Firefox 104.0
+* Librewolf 104.0
+* Safari 16.0
+
+On iOS:
+* Chrome 105.5195
+* Firefox 104.2
+
+On Android:
+* Bromite 105.0
+* Chrome 105.0
+* Duckduckgo 5.136
+* Edge 105.0
+* Firefox 104.2
+* Focus 104.2
+* Opera 71.3
+* Tor 99.0
+* Yandex 22.9
+
+## [Issue 32](/archive/issue32): 2022-09-06
 
 ### New browser versions
 
@@ -26,7 +50,7 @@ On Android:
 * Mull 104.1
 * Opera 71.2
 
-## [Issue 31](/): 2022-08-23
+## [Issue 31](/archive/issue31): 2022-08-23
 
 ### New browser versions
 
