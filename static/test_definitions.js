@@ -389,11 +389,11 @@ return {
     write: async (secret) => {
       // Ensure that we can switch over to h3 via alt-svc:
       for (let i = 0; i<3; ++i) {
-        await fetch(`https://h3.arthuredelstein.net:4434/connection_id`, {cache: "no-store"});
+        await fetch(`https://h3.privacytests2.org:4434/connection_id`, {cache: "no-store"});
         await sleepMs(500);
       }
       // Are we now connecting over h3?
-      let response = await fetch(`https://h3.arthuredelstein.net:4434/connection_id`, {cache: "no-store"});
+      let response = await fetch(`https://h3.privacytests2.org:4434/connection_id`, {cache: "no-store"});
       let text = await response.text();
       // Empty response text indicates we are not connecting over h3:
       if (text.trim() === "") {
@@ -401,7 +401,7 @@ return {
       }
     },
     read: async () => {
-      let response = await fetch(`https://h3.arthuredelstein.net:4434/connection_id`);
+      let response = await fetch(`https://h3.privacytests2.org:4434/connection_id`);
       return await response.text();
     }
   },
@@ -625,18 +625,18 @@ return {
     write: async () => {
       // Clear Alt-Svc caching first.
       let responseText = "";
-      await fetch("https://altsvc.arthuredelstein.net:4433/clear");
+      await fetch("https://altsvc.privaytests2.org:4433/clear");
       await sleepMs(100);
-      responseText = await fetchText("https://altsvc.arthuredelstein.net:4433/protocol");
+      responseText = await fetchText("https://altsvc.privaytests2.org:4433/protocol");
       console.log("after clear:", responseText);
       // Store "h3" state in Alt-Svc cache
-      await fetch("https://altsvc.arthuredelstein.net:4433/set");
+      await fetch("https://altsvc.privaytests2.org:4433/set");
       await sleepMs(100);
-      responseText = await fetchText("https://altsvc.arthuredelstein.net:4433/protocol");
+      responseText = await fetchText("https://altsvc.privaytests2.org:4433/protocol");
       console.log("after set:", responseText);
     },
     read: async () => {
-      const protocol = await fetchText("https://altsvc.arthuredelstein.net:4433/protocol");
+      const protocol = await fetchText("https://altsvc.privaytests2.org:4433/protocol");
       if ((new URL(location)).searchParams.get("thirdparty") === "same") {
         if (protocol !== "h3") {
           throw new Error("Unsupported");
