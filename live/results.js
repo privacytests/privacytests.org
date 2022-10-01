@@ -105,7 +105,7 @@ const pageSequence = [
   queryParameterTestUrl(TRACKING_QUERY_PARAMETERS),
   `${first_party_root_same}/https.html`,
   `http://upgradable.arthuredelstein.net/upgradable.html?source=hyperlink`,
-//  `http://insecure.arthuredelstein.net/insecure.html`,
+//  `http://insecure.privacytests2.org/insecure.html`,
   `${first_party_root_same}/done.html`
 ];
 
