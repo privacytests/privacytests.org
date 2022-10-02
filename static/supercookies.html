@@ -9,8 +9,9 @@
     <script src="./post_data.js"></script>
     <script>
     const sleep = async (t) => new Promise(resolve => window.setTimeout(resolve, t));
-    (async () => {
-      const iframe_root_same = "https://arthuredelstein.net/test-pages";
+     (async () => {
+       try {
+      const iframe_root_same = "https://test-pages.privacytests2.org";
       const param = (key) => new URLSearchParams(window.location.search).get(key);
       const mode = param("mode");
       const me = param("me");
@@ -18,7 +19,7 @@
       const sessionId = param("sessionId");
       console.log({mode, me, thirdparty, sessionId});
       let favicon = document.getElementById("favicon");
-      const baseURI = "https://arthuredelstein.net/browser-privacy-live";
+      const baseURI = "https://live.privacytests2.org";
       favicon.setAttribute("href", `${baseURI}/resource?type=favicon&key=${sessionId}`);
       addEventListener("message", async ({data}) => {
         document.body.setAttribute("data-test-results", JSON.stringify(data));
@@ -47,13 +48,17 @@
         }
       }
       let iframe = document.createElement("iframe");
+      iframe.height="1000px"
       document.body.appendChild(iframe);
       iframe_root = (location.hostname === "localhost" ||
                     location.hostname === "127.0.0.1" ||
                     location.hostname === "")
-                  ? "" : "https://arthuredelstein.net/test-pages";
+                  ? "" : "https://test-pages.privacytests2.org/";
       iframe.src = `${iframe_root}/supercookies_inner.html${window.location.search}`;
-      iframe.allow = "geolocation camera microphone";
+         iframe.allow = "geolocation camera microphone";
+       } catch (e) {
+         showError(e);
+       }
     })();
     </script>
   </body>

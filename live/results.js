@@ -21,7 +21,7 @@ const sessionResults = new ExpiryMap(oneHourInMilliseconds);
 // The "same" domain is the one that is used for simluated third-party tracker
 // and one of the two first parties. The "different" domain is the other
 // first party we use.
-const first_party_root_same = "https://arthuredelstein.net/test-pages";
+const first_party_root_same = "https://test-pages.privacytests2.org";
 const first_party_root_different = "https://test-pages.privacytests.org";
 
 
@@ -104,8 +104,8 @@ const pageSequence = [
   `${first_party_root_same}/misc.html`,
   queryParameterTestUrl(TRACKING_QUERY_PARAMETERS),
   `${first_party_root_same}/https.html`,
-  `http://upgradable.arthuredelstein.net/upgradable.html?source=hyperlink`,
-//  `http://insecure.arthuredelstein.net/insecure.html`,
+  `http://upgradable.privacytests2.org/upgradable.html?source=hyperlink`,
+//  `http://insecure.privacytests2.org/insecure.html`,
   `${first_party_root_same}/done.html`
 ];
 
