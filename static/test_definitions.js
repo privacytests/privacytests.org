@@ -365,10 +365,10 @@ return {
     category: "supercookies",
     description: "HTTP/1.x are the classic web connection protocols. If these connections are re-used across websites, they can be used to track users.",
     write: async (secret) => {
-      await fetch(`https://h1.arthuredelstein.net:8901/?mode=write&secret=${secret}`, {cache: "no-store"});
+      await fetch(`https://h1.privacytests2.org:8901/?mode=write&secret=${secret}`, {cache: "no-store"});
     },
     read: async () => {
-      let response = await fetch(`https://h1.arthuredelstein.net:8901/?mode=read`, {cache: "no-store"});
+      let response = await fetch(`https://h1.privacytests2.org:8901/?mode=read`, {cache: "no-store"});
       return await response.text();
     }
   },
