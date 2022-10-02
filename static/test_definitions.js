@@ -376,10 +376,10 @@ return {
     category: "supercookies",
     description: "HTTP/2 is a web connection protocol introduced in 2015. Some browsers re-use HTTP/2 connections across websites and can thus be used to track users.",
     write: async (secret) => {
-      await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`, {cache: "no-store"});
+      await fetch(`https://h2.privacytests2.org:8902/?mode=write&secret=${secret}`, {cache: "no-store"});
     },
     read: async () => {
-      let response = await fetch(`https://h2.arthuredelstein.net:8902/?mode=read`, {cache: "no-store"});
+      let response = await fetch(`https://h2.privacytests2.org:8902/?mode=read`, {cache: "no-store"});
       return await response.text();
     }
   },
