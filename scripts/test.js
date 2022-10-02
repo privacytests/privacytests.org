@@ -198,7 +198,7 @@ const closeWebSocket = (websocket) => {
 // root for a domain that can be upgraded to https.
 // Finally we have a live root for additional tests that require non-static
 // responses.
-const iframe_root_same = "https://arthuredelstein.net/test-pages";
+const iframe_root_same = "https://test-pages.privacytests2.org";
 const iframe_root_different = "https://test-pages.privacytests.org";
 const insecure_root = "http://insecure.privacytests2.org";
 const upgradable_root = "http://upgradable.privacytests2.org";
