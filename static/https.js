@@ -19,7 +19,7 @@ const loadSubresource = async(tagName, url) => {
 const insecureSubresourceTest = async (tag, fileName) => {
   let fileTypeNames = { "img": "image", "script": "script" };
   const description = `Checks to see if the browser attempts to upgrade an insecure address for an ${fileTypeNames[tag]} to HTTPS whenever possible.`;
-  let upgradableEvent = await loadSubresource(tag, `http://upgradable.arthuredelstein.net/content/${fileName}`);
+  let upgradableEvent = await loadSubresource(tag, `http://upgradable.privacytests2.org/content/${fileName}`);
   let insecureEvent = await loadSubresource(tag, `http://insecure.privacytests2.org/content/${fileName}`);
   let passed = insecureEvent.type === "error";
   let putativeUpgradeHandling = upgradableEvent.type === "load" ? "upgraded" : "blocked";

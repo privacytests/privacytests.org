@@ -201,7 +201,7 @@ const closeWebSocket = (websocket) => {
 const iframe_root_same = "https://arthuredelstein.net/test-pages";
 const iframe_root_different = "https://test-pages.privacytests.org";
 const insecure_root = "http://insecure.privacytests2.org";
-const upgradable_root = "http://upgradable.arthuredelstein.net";
+const upgradable_root = "http://upgradable.privacytests2.org";
 const live_root = "https://arthuredelstein.net/browser-privacy-live";
 
 const ipAddressTest = async (results) => {
