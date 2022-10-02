@@ -21,7 +21,7 @@ const sessionResults = new ExpiryMap(oneHourInMilliseconds);
 // The "same" domain is the one that is used for simluated third-party tracker
 // and one of the two first parties. The "different" domain is the other
 // first party we use.
-const first_party_root_same = "https://arthuredelstein.net/test-pages";
+const first_party_root_same = "https://test-pages.privacytests2.org";
 const first_party_root_different = "https://test-pages.privacytests.org";
 
 
