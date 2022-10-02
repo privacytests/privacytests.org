@@ -202,7 +202,7 @@ const iframe_root_same = "https://test-pages.privacytests2.org";
 const iframe_root_different = "https://test-pages.privacytests.org";
 const insecure_root = "http://insecure.privacytests2.org";
 const upgradable_root = "http://upgradable.privacytests2.org";
-const live_root = "https://arthuredelstein.net/browser-privacy-live";
+const live_root = "https://live.privacytests2.org";
 
 const ipAddressTest = async (results) => {
   const myIpAddress = await fetch_ipAddress();

@@ -19,7 +19,7 @@
       const sessionId = param("sessionId");
       console.log({mode, me, thirdparty, sessionId});
       let favicon = document.getElementById("favicon");
-      const baseURI = "https://arthuredelstein.net/browser-privacy-live";
+      const baseURI = "https://live.privacytests2.org";
       favicon.setAttribute("href", `${baseURI}/resource?type=favicon&key=${sessionId}`);
       addEventListener("message", async ({data}) => {
         document.body.setAttribute("data-test-results", JSON.stringify(data));
