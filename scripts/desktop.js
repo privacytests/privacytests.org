@@ -5,11 +5,11 @@ const { join: joinDir } = require("path");
 /*
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --incognito "https://example.com"
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --tor "https://example.com"
-/Applications/Firefox.app/Contents/MacOS/firefox --private-window https://arthuredelstein.net
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --incognito "https://arthuredelstein.net"
+/Applications/Firefox.app/Contents/MacOS/firefox --private-window "https://example.com"
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --incognito "example.com"
 /Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge --inprivate "https://example.com"
 /Applications/Opera.app/Contents/MacOS/Opera --private "https://example.com"
-/Applications/Vivaldi.app/Contents/MacOS/Vivaldi --incognito "https://arthuredelstein.net"
+/Applications/Vivaldi.app/Contents/MacOS/Vivaldi --incognito "https://example.com"
 open -a Safari "https://example.com"
 */
 
@@ -158,9 +158,9 @@ class DesktopBrowser {
     }
   }
   // Launch the browser.
-  async launch() {
+  async launch(clean = true) {
     console.log(this._defaults);
-    if (this._profilePath) {
+    if (clean && this._profilePath) {
       // Delete old profiles if they exist.
       console.log(`Deleting any old ${this._profilePath}`);
       fs.rmSync(this._profilePath, { recursive: true, force: true });
@@ -200,6 +200,11 @@ class DesktopBrowser {
     } else {
       this._process.kill("SIGKILL");
     }
+  }
+  // Restart the browser with same profile.
+  async restart() {
+    await this.kill();
+    await this.launch(false);
   }
   // Update the browser to the latest version.
   async update() {

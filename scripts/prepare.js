@@ -55,7 +55,9 @@ const readBrowserVersions = (issueNumber) => {
     const data = JSON.parse(fs.readFileSync(`../website/archive/issue${issueNumber}/${file}`));
     browserVersions[platform] = {};
     for (const test of data["all_tests"]) {
-      browserVersions[platform][test["browser"]] = shortVersion(test["reportedVersion"]);
+      if (test && test["browser"] !== undefined) {
+        browserVersions[platform][test["browser"]] = shortVersion(test["reportedVersion"]);
+      }
     }
   }
   return browserVersions;

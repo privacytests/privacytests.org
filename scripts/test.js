@@ -17,7 +17,7 @@ const { DesktopBrowser } = require("./desktop.js");
 const { AndroidBrowser } = require("./android.js");
 const { iOSBrowser } = require("./iOS.js");
 const proxy = require("./system-proxy");
-const { connect } = require("it-ws/client");
+const WebSocket = require('ws');
 const cookieProxy = require('./cookie-proxy');
 
 // ## Constants
@@ -130,26 +130,48 @@ const enableProxies = async (port) => {
 
 // ## Websocket utilities
 
+const eventPromise = async (eventSource, eventType, timeout) =>
+  new Promise((resolve, reject) => {
+    const listener = (e) => {
+      resolve(e);
+    }
+    if (timeout !== undefined) {
+      setTimeout(() => {
+        eventSource.removeEventListener(listener);
+        reject(new Error(`'${eventType}' event timed out after ${timeout} ms`));
+      }, timeout);
+    }
+    eventSource.addEventListener(eventType, listener, {once: true});
+  });
+
+const nextMessage = async (websocket, timeout) => {
+  const event = await eventPromise(websocket, "message", timeout);
+  return event.data;
+};
+
+const connect = async (address, protocols, options) => {
+  const websocket = new WebSocket(address, protocols, options);
+  await eventPromise(websocket, "open");
+  return websocket;
+};
+
 // Set up websocket.
 const createWebsocket = async () => {
   const websocket = await connect("wss://results.privacytests.org/ws");
-  const firstMessage = await websocket.source.next();
+  const firstMessage = await nextMessage(websocket);
   log("message received", (new Date()).toISOString());
   log(firstMessage);
-  const { sessionId } = JSON.parse(firstMessage.value);
+  const { sessionId } = JSON.parse(firstMessage);
   websocket._sessionId = sessionId;
-  websocket._keepAlivePingId = setInterval(() => websocket.socket.send('{"message":"ping"}'), 30000);
+  websocket._keepAlivePingId = setInterval(() => websocket.send('{"message":"ping"}'), 30000);
   return websocket;
 }
 
 // Get the next value from the websocket.
-const nextValue = async (websocket) => {
-  const message = await websocket.source.next();
+const nextValue = async (websocket, timeout) => {
+  const message = await nextMessage(websocket, timeout);
   log({ message });
-  if (message.value === undefined) {
-    throw new Error(`Unexpected message: ${JSON.stringify(message)}`);
-  }
-  const { sessionId, data } = JSON.parse(message.value);
+  const { sessionId, data } = JSON.parse(message);
   if (sessionId !== websocket._sessionId) {
     throw new Error("Unexpected sessionId");
   }
@@ -157,10 +179,10 @@ const nextValue = async (websocket) => {
 };
 
 // Close the websocket (stopping its keepalive ping)
-const destroyWebSocket = (websocket) => {
+const closeWebSocket = (websocket) => {
   try {
     clearInterval(websocket._keepAlivePingId);
-    websocket.destroy();
+    websocket.terminate();
   } catch (e) {
     log(e);
   }
@@ -176,11 +198,11 @@ const destroyWebSocket = (websocket) => {
 // root for a domain that can be upgraded to https.
 // Finally we have a live root for additional tests that require non-static
 // responses.
-const iframe_root_same = "https://arthuredelstein.net/test-pages";
+const iframe_root_same = "https://test-pages.privacytests2.org";
 const iframe_root_different = "https://test-pages.privacytests.org";
-const insecure_root = "http://insecure.arthuredelstein.net";
-const upgradable_root = "http://upgradable.arthuredelstein.net";
-const live_root = "https://arthuredelstein.net/browser-privacy-live";
+const insecure_root = "http://insecure.privacytests2.org";
+const upgradable_root = "http://upgradable.privacytests2.org";
+const live_root = "https://live.privacytests2.org";
 
 const ipAddressTest = async (results) => {
   const myIpAddress = await fetch_ipAddress();
@@ -196,16 +218,17 @@ const ipAddressTest = async (results) => {
 };
 
 // Get the next value from the websocket assigned to a particular browser.
-const nextBrowserValue = (browserObject) => nextValue(browserObject._websocket);
+const nextBrowserValue = (browserObject, timeout) => nextValue(browserObject._websocket, timeout);
 
 // Open a page at url, passing it the browser's assigned session id as a URL parameter.
 const openSessionUrl = (browserObject, url) => browserObject.openUrl(
   addSearchParam(url, "sessionId", browserObject._websocket._sessionId));
 
 // Open a page at url, and return the results once they are available.
-const runPageTest = async (browserObject, url) => {
+const runPageTest = async (browserObject, url, timeout) => {
+  const nextItemPromise = nextBrowserValue(browserObject, timeout);
   await openSessionUrl(browserObject, url);
-  return nextBrowserValue(browserObject);
+  return await nextItemPromise;
 };
 
 // Run the main browser tests.
@@ -214,6 +237,7 @@ const runMainTests = async (browserObject, categories) => {
   if (!signal.supercookie_write_finished) {
     throw new Error("failed to get signal that the supercookie write finished");
   }
+  const resultsPromise = nextBrowserValue(browserObject);
   if (browserObject.browser === "onion") {
     // Onion browser seems to need more handholding
     await browserObject.clickContent();
@@ -226,17 +250,20 @@ const runMainTests = async (browserObject, categories) => {
     await openSessionUrl(browserObject, `${iframe_root_same}/supercookies.html?mode=read&thirdparty=same`);
   }
   // Return the main results.
-  return nextBrowserValue(browserObject);
+  return resultsPromise;
 };
 
 // Run the insecure connection test. Returns { insecureRsults, insecurePassed }.
 const runInsecureTest = async (browserObject) => {
+  const timeout = browserObject instanceof iOSBrowser ? 30000 : 8000;
+  const insecureResultPromise = nextBrowserValue(browserObject, timeout);
   await openSessionUrl(browserObject, `${insecure_root}/insecure.html`);
   let insecureResult, insecurePassed;
   try {
-    insecureResult = await deadlinePromise("insecure test", nextBrowserValue(browserObject), 8000);
+    insecureResult = await insecureResultPromise;
     insecurePassed = false;
   } catch (e) {
+    console.log(e);
     insecureResult = { "Insecure website": { passed: true, result: "Insecure website never loaded" } };
     insecurePassed = true;
   }
@@ -401,7 +428,7 @@ const runTestsBatch = async (browserList, { shouldQuit, android, ios, categories
       log(e);
     }
     if (shouldQuit) {
-      await destroyWebSocket(browserObject._websocket);
+      await closeWebSocket(browserObject._websocket);
       try {
         await browserObject.kill();
       } catch (e) {
@@ -505,7 +532,7 @@ const cleanup = async () => {
 const showVersions = async (config) => {
   const browserList = configToBrowserList(config);
   const { android, ios } = config;
-  console.log(config, android, ios);
+  log(config, android, ios);
   const versionData = await Promise.all(browserList.map(async browserSpec => {
     const browserObject = createBrowserObject({config: browserSpec, android, ios});
     const version = await browserObject.version();
@@ -513,7 +540,7 @@ const showVersions = async (config) => {
   }));
   const versionDataSorted = versionData.sort((a,b) => a.name < b.name ? -1 : 1);
   for (let { name, version } of versionDataSorted) {
-    console.log(name, version);
+    log(name, version);
   }
 }
 

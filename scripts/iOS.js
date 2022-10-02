@@ -1,6 +1,7 @@
 const { default: WebDriver}  = require("webdriver");
-const plist = require('plist');
+const _ = require('lodash');
 const child_process = require('child_process');
+const plist = require('plist');
 
 const browserInfo = {
   brave: {
@@ -74,6 +75,7 @@ const browserInfo = {
   yandex: {
     name: "Yandex",
     bundleId: "ru.yandex.mobile.search",
+    postLaunchDelay: 2000,
     //startupClick: "Решить проблемы",
     startupClick: "Fix problems",
     urlBarClick: "Address bar",
@@ -84,13 +86,8 @@ const browserInfo = {
   }
 };
 
-let appVersions = undefined;
-
-const getAppVersions = () => {
-  if (appVersions !== undefined) {
-    return appVersions;
-  }
-  appVersions = {};
+const getAppVersions = _.memoize(() => {
+  const appVersions = {};
   const plistRaw = child_process.execSync("/opt/homebrew/bin/ideviceinstaller  -l -o xml").toString();
   const plistJson = plist.parse(plistRaw);
   for (let plistItem of plistJson) {
@@ -102,7 +99,26 @@ const getAppVersions = () => {
 	.toString().trim();
   appVersions["com.apple.mobilesafari"] = productVersion;
   return appVersions;
-}
+});
+
+const webdriverSession = _.memoize(() =>
+  WebDriver.newSession({
+    port: 4723,
+    hostname: "0.0.0.0",
+    path: "/wd/hub",
+    capabilities: {
+      "appium:bundleId": "com.apple.mobilesafari",
+      "platformName": "iOS",
+      "appium:udid": "auto",
+      "appium:xcodeOrgId": "MGQ2CFRT2X",
+      "appium:xcodeSigningId": "iPhone Developer",
+      "appium:automationName": "XCUITest",
+      "appium:deviceName": "iPhone 7",
+      "appium:wdaLaunchTimeout": 30000,
+      "appium:wdaConnectionTimeout": 30000,
+      "appium:platformVersion": "15.4.1"
+    }
+  }));
 
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
@@ -142,24 +158,8 @@ class iOSBrowser {
   }
   // Launch the browser.
   async launch() {
-    const client = await WebDriver.newSession({
-      port: 4723,
-      hostname: "0.0.0.0",
-      path: "/wd/hub",
-      capabilities: {
-	"appium:bundleId": this.bundleId,
-	"platformName": "iOS",
-	"appium:udid": "auto",
-	"appium:xcodeOrgId": "MGQ2CFRT2X",
-	"appium:xcodeSigningId": "iPhone Developer",
-	"appium:automationName": "XCUITest",
-	"appium:deviceName": "iPhone 7",
-	"appium:wdaLaunchTimeout": 30000,
-	"appium:wdaConnectionTimeout": 30000,
-	"appium:platformVersion": "15.4.1"
-      }
-    });
-    this.client = client;
+    this.client = await webdriverSession();
+    await this.client.activateApp(this.bundleId);
     if (this.postLaunchDelay) {
       await sleepMs(this.postLaunchDelay);
     }
@@ -223,7 +223,6 @@ class iOSBrowser {
   // Clean up and close the browser.
   async kill() {
     await this.client.terminateApp(this.bundleId);
-    await this.client.deleteSession();
   }
   async clickContent() {
     let theWebView = await findElementWithClass(this.client, "XCUIElementTypeWebView");

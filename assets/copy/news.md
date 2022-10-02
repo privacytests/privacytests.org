@@ -1,5 +1,108 @@
 # News
-## [Issue 29](/): 2022-07-26
+## [Issue 33](/): 2022-09-20
+
+### New browser versions
+
+On Desktop:
+* Firefox 104.0
+* Librewolf 104.0
+* Safari 16.0
+
+On iOS:
+* Chrome 105.5195
+* Firefox 104.2
+
+On Android:
+* Bromite 105.0
+* Chrome 105.0
+* Duckduckgo 5.136
+* Edge 105.0
+* Firefox 104.2
+* Focus 104.2
+* Opera 71.3
+* Tor 99.0
+* Yandex 22.9
+
+## [Issue 32](/archive/issue32): 2022-09-06
+
+### New browser versions
+
+On Desktop:
+* Chrome 105.0
+* Edge 105.0
+* Librewolf 104.0-1
+* Ungoogled 105.0
+
+On iOS:
+* Brave 1.42
+* DuckDuckGo 7.70
+* Edge 104.1293
+* Firefox 104.1
+* Focus 104.0
+* Yandex 2209.1
+
+On Android:
+* Brave 1.43
+* Bromite 104.0
+* Duckduckgo 5.135
+* Firefox 104.1
+* Focus 104.1
+* Mull 104.1
+* Opera 71.2
+
+## [Issue 31](/archive/issue31): 2022-08-23
+
+### New browser versions
+
+On Desktop:
+* Brave 1.42
+* Opera 90.0
+* Safari 15.6
+* Vivaldi 5.4
+
+On iOS:
+* Chrome 104.5112
+* Duckduckgo 7.69
+* Firefox 103.1
+* Safari 15.6
+* Yandex 2207.8
+
+On Android:
+* Brave 1.42
+* Bromite 102.0
+* Chrome 104.0
+* Duckduckgo 5.133
+* Edge 104.0
+* Mull 101.1
+* Samsung 18.0
+* Vivaldi 5.4
+
+## [Issue 30](/archive/issue30): 2022-08-08
+
+Today, for the first time, Brave is now passing all State Partitioning tests. Congratulations to the team at Brave who worked on this!
+
+### New browser versions
+
+On Desktop:
+* Brave 1.41
+* Chrome 104.0
+* Edge 104.0
+* Firefox 103.0
+* Librewolf 103.0
+* Ungoogled 104.0
+
+On iOS:
+* Brave 1.41
+* Firefox 102.2
+* Focus 103.0
+* Yandex 2207.4
+
+On Android:
+* Duckduckgo 5.131
+* Firefox 103.2
+* Focus 103.2
+
+## [Issue 29](/archive/issue29): 2022-07-26
 
 ### New browser versions
 
@@ -44,7 +147,7 @@ On Android:
 
 ### Firefox improvement
 
-For the first time, fresh profiles of Firefox are now passing all State Partitioning tests, thanks to the [worldwide rollout of Total Cookie Protection](https://blog.mozilla.org/products/firefox/firefox-rolls-out-total-cookie-protection-by-default-to-all-users-worldwide/). Congratulations to the Firefox team! I am informed that existing profiles will also receive Total Cookie Protection in the next few months.
+For the first time, fresh profiles of Firefox are now passing (nearly) all State Partitioning tests, thanks to the [worldwide rollout of Total Cookie Protection](https://blog.mozilla.org/products/firefox/firefox-rolls-out-total-cookie-protection-by-default-to-all-users-worldwide/). Congratulations to the Firefox team! I am informed that existing profiles will also receive Total Cookie Protection in the next few months.
 
 ### New browser versions
 
