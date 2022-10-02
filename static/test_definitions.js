@@ -307,11 +307,11 @@ return {
     category: "supercookies",
     description: "The TLS protocol is used by HTTPS to make connections secure. If the browser were to re-use a TLS session, then the session ID could be used to track users across websites.",
     write: async () => {
-      let results = await fetch("https://tls.arthuredelstein.net:8900/");
+      let results = await fetch("https://tls.privacytests2.org:8900/");
       return (await results.json()).sessionId;
     },
     read: async () => {
-      let results = await fetch("https://tls.arthuredelstein.net:8900/");
+      let results = await fetch("https://tls.privacytests2.org:8900/");
       return (await results.json()).sessionId;
     }
   },
