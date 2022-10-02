@@ -193,7 +193,7 @@ app.get('/toplevel', (req, res) => {
     <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
   </head>
   <body>
-    <script src="/test-pages/post_data.js"></script>
+    <script src="https://test-pages.privacytests2.org/post_data.js"></script>
     <script>
       const results = {
         "IP address leak": {
