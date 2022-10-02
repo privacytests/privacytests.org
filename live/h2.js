@@ -3,8 +3,8 @@ const url = require("url");
 const fs = require('fs');
 
 const options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/h2.arthuredelstein.net/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/h2.arthuredelstein.net/fullchain.pem')
+  key: fs.readFileSync('/etc/letsencrypt/live/h2.privacytests2.org/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/h2.privacytests2.org/fullchain.pem')
 };
 
 // Create a secure HTTP/2 server
