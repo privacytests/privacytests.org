@@ -45,6 +45,12 @@ let mimeTypes = {
   "xhr": "text/html",
 };
 
+app.use(function(req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+  next();
+});
+
 app.get('/', (req, res) => res.send('Hello World!'));
 
 app.get('/resource', (req, res) => {
@@ -57,7 +63,6 @@ app.get('/resource', (req, res) => {
   }
   console.log(`Requested: ${req.url} ; Count: ${countMap[key]}`);
   res.set({
-    'Access-Control-Allow-Origin': '*',
     "Cache-Control": "public, max-age=604800, immutable"
   });
   res.setHeader('content-type', mimeTypes[type]);
@@ -71,7 +76,6 @@ app.get('/resource', (req, res) => {
 app.get('/ctr', (req, res) => {
   let { key, type } = req.query;
   console.log(`                                                         Count checked for ${type}, ${key}: ${countMaps[type][key]}`);
-  res.setHeader('Access-Control-Allow-Origin', '*');
   res.send(`${countMaps[type][key] || 0}`);
 });
 
