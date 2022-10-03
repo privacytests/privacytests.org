@@ -173,11 +173,11 @@ app.get('/cookie', (req, res) => {
 
 app.get('/blob', (req, res) => {
   let { key, mode, blobUrl } = req.query;
+  console.log("hi from /blob", { key, mode, blobUrl} );
   if (mode === "write") {
     blobs[key] = blobUrl;
-  } else {
-    res.json({blobUrl: blobs[key]});
   }
+  res.json({blobUrl: blobs[key]});
 });
 
 app.get('/toplevel', (req, res) => {

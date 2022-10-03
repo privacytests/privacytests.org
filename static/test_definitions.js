@@ -104,13 +104,13 @@ return {
     write: (secret) => {
       try {
         let blobURL = URL.createObjectURL(new Blob([secret]));
-        fetch(`${baseURI}/blob?mode=write&key=${secret}&blobUrl=${encodeURIComponent(blobURL)}`);
+        fetch(`${baseURI}blob?mode=write&key=${secret}&blobUrl=${encodeURIComponent(blobURL)}`);
       } catch (e) {
         throw new Error("Unsupported");
       }
     },
     read: async (secret) => {
-      let response = await fetch(`${baseURI}/blob?mode=read&key=${secret}`);
+      let response = await fetch(`${baseURI}blob?mode=read&key=${secret}`);
       let result = await response.json();
       let blobUrl = decodeURIComponent(result.blobUrl);
       let blobResponse = await fetch(blobUrl);
@@ -354,10 +354,10 @@ return {
   },
 /*  "basic_auth": {
     write: async (key) => {
-      let response = await fetch(`${baseURI}/auth`, {"cache": "reload"});
+      let response = await fetch(`${baseURI}auth`, {"cache": "reload"});
     },
     read: async () => {
-      let response = await fetch(`${baseURI}/auth`, {"cache": "reload"});
+      let response = await fetch(`${baseURI}auth`, {"cache": "reload"});
       return (await response.json()).password;
     }
   },*/
