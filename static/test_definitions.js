@@ -625,18 +625,18 @@ return {
     write: async () => {
       // Clear Alt-Svc caching first.
       let responseText = "";
-      await fetch("https://altsvc.privaytests2.org:4433/clear");
+      await fetch("https://altsvc.privacytests2.org:4433/clear");
       await sleepMs(100);
-      responseText = await fetchText("https://altsvc.privaytests2.org:4433/protocol");
+      responseText = await fetchText("https://altsvc.privacytests2.org:4433/protocol");
       console.log("after clear:", responseText);
       // Store "h3" state in Alt-Svc cache
-      await fetch("https://altsvc.privaytests2.org:4433/set");
+      await fetch("https://altsvc.privacytests2.org:4433/set");
       await sleepMs(100);
-      responseText = await fetchText("https://altsvc.privaytests2.org:4433/protocol");
+      responseText = await fetchText("https://altsvc.privacytests2.org:4433/protocol");
       console.log("after set:", responseText);
     },
     read: async () => {
-      const protocol = await fetchText("https://altsvc.privaytests2.org:4433/protocol");
+      const protocol = await fetchText("https://altsvc.privacytests2.org:4433/protocol");
       if ((new URL(location)).searchParams.get("thirdparty") === "same") {
         if (protocol !== "h3") {
           throw new Error("Unsupported");
