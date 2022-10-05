@@ -38,27 +38,43 @@ const evaluate = (script) => {
 };
 
 const test_pairs = (pairs) => pairs.map(
-  ({name, expression, desired_expression, description }) => {
-    let actual_value, desired_value;
-    let failure = false;
-    try {
-      actual_value = evaluate(expression);
-    } catch (e) {
-      actual_value = e.message;
-      failure = true;
-      console.log(e);
-    }
-    try {
-      desired_value = evaluate(desired_expression);
-    } catch (e) {
-      desired_value = e.message;
-      failure = true;
-      console.log(e);
-    }
-    const passed = !failure && (actual_value === desired_value);
-    return { name, expression, desired_expression, actual_value, desired_value,
-             passed, description };
-  });
+  ({name, expression, desired_expression, description,
+    desired_min, desired_max }) => {
+      let actual_value, desired_value;
+      let failure = false;
+      let passed = false;
+      try {
+        actual_value = evaluate(expression);
+      } catch (e) {
+        actual_value = e.message;
+        failure = true;
+        console.log(e);
+      }
+      if (desired_value !== undefined) {
+        try {
+          desired_value = evaluate(desired_expression);
+        } catch (e) {
+          desired_value = e.message;
+          failure = true;
+          console.log(e);
+        }
+        passed = !failure && (actual_value === desired_value);
+      } else if (desired_min !== undefined && desired_max !== undefined) {
+        try {
+          desired_min_value = evaluate(desired_min);
+          desired_max_value = evaluate(desired_max);
+        } catch (e) {
+          desired_value = e.message;
+          failure = true;
+          console.log(e);
+        }
+        passed = !failure && (actual_value >= desired_min_value &&
+                              actual_value <= desired_max_value);
+      }
+      return { name, expression, desired_expression, actual_value, desired_value,
+               desired_min, desired_max, passed, description,
+               desired_min_value, desired_max_value };
+    });
 
 const run_all_tests = function () {
   return [].concat(
@@ -76,18 +92,16 @@ return { test_results: run_all_tests(),
 const window_property_tests = [
   { description: "Position, in pixels, of the left edge of the browser window on screen.",
     expression: `screenX`,
-    desired_expression: 0 },
+    desired_min: 0,
+    desired_max: 10},
   { description: "Position, in pixels, of the top edge of the browser window on screen.",
     expression: `screenY`,
-    desired_expression: 0},
- /* { description: "Width of the browser window in pixels, including browser chrome.",
-    expression: `outerWidth`,
-    desired_expression: `innerWidth`},*/
+    desired_min: 0,
+    desired_max: 10},
   { description: "Height of the browser window in pixels, including browser chrome.",
     expression: `outerHeight`,
-    desired_expression: `innerHeight`},
-// { expression: `devicePixelRatio`,
-//    desired_expression: 1 }
+    desired_min: `innerHeight - 10`,
+    desired_max: `innerHeight + 10`},
 ];
 
 const integerFromMediaQuery = (key, unit, maxValue) => {
@@ -102,18 +116,22 @@ const integerFromMediaQuery = (key, unit, maxValue) => {
 const screen_tests = [
   { description: "Width of the user's screen, in pixels.",
     expression: `screen.width`,
-    desired_expression: `innerWidth` },
+    desired_min: `innerWidth - 10`,
+    desired_max: `innerWidth + 10`},
   { description: "Height of the user's screen, in pixels.",
     expression: `screen.height`,
-    desired_expression: `innerHeight` },
+    desired_min: `innerHeight - 10`,
+    desired_max: `innerHeight + 10`},
   { description: "Width of the user's screen in pixels.",
     name: "Media query screen width",
     expression: () => integerFromMediaQuery("device-width", "px", 5000),
-    desired_expression: `innerWidth`},
+    desired_min: `innerWidth - 10`,
+    desired_max: `innerWidth + 10`},
   { description: "Height of the user's screen in pixels.",
     name: "Media query screen height",
     expression: () => integerFromMediaQuery("device-height", "px", 5000),
-    desired_expression: `innerHeight`},
+    desired_min: `innerHeight - 10`,
+    desired_max: `innerHeight + 10`},
 ];
 
 let navigator_tests = [

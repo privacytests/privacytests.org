@@ -3,16 +3,16 @@ const url = require("url");
 const fs = require('fs');
 
 const options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/h1.arthuredelstein.net/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/h1.arthuredelstein.net/fullchain.pem')
+  key: fs.readFileSync('/etc/letsencrypt/live/h1.privacytests2.org/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/h1.privacytests2.org/fullchain.pem')
 };
 
 let socketTags = new Map();
 
 // Create a secure HTTP1 server
-// Exampleas:
-// https://h1.arthuredelstein.net:8901/?mode=write&secret=123test
-// https://h1.arthuredelstein.net:8901/?mode=read
+// Examples:
+// https://h1.privacytests2.org:8901/?mode=write&secret=123test
+// https://h1.privacytests2.org:8901/?mode=read
 const server = https.createServer(options, (request, response) => {
   console.log(request.url);
   let parsedURL = url.parse(request.url, true);

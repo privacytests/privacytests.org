@@ -3,7 +3,7 @@ export let tests = (async () => {
 
 const IdbKeyVal = await import('https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs');
 
-const baseURI = "https://arthuredelstein.net/browser-privacy-live/";
+const baseURI = "https://live.privacytests2.org/";
 
 let testURI = (path, type, key) => `${baseURI}${path}?type=${type}&key=${key}`;
 
@@ -104,13 +104,13 @@ return {
     write: (secret) => {
       try {
         let blobURL = URL.createObjectURL(new Blob([secret]));
-        fetch(`${baseURI}/blob?mode=write&key=${secret}&blobUrl=${encodeURIComponent(blobURL)}`);
+        fetch(`${baseURI}blob?mode=write&key=${secret}&blobUrl=${encodeURIComponent(blobURL)}`);
       } catch (e) {
         throw new Error("Unsupported");
       }
     },
     read: async (secret) => {
-      let response = await fetch(`${baseURI}/blob?mode=read&key=${secret}`);
+      let response = await fetch(`${baseURI}blob?mode=read&key=${secret}`);
       let result = await response.json();
       let blobUrl = decodeURIComponent(result.blobUrl);
       let blobResponse = await fetch(blobUrl);
@@ -307,11 +307,11 @@ return {
     category: "supercookies",
     description: "The TLS protocol is used by HTTPS to make connections secure. If the browser were to re-use a TLS session, then the session ID could be used to track users across websites.",
     write: async () => {
-      let results = await fetch("https://tls.arthuredelstein.net:8900/");
+      let results = await fetch("https://tls.privacytests2.org:8900/");
       return (await results.json()).sessionId;
     },
     read: async () => {
-      let results = await fetch("https://tls.arthuredelstein.net:8900/");
+      let results = await fetch("https://tls.privacytests2.org:8900/");
       return (await results.json()).sessionId;
     }
   },
@@ -354,10 +354,10 @@ return {
   },
 /*  "basic_auth": {
     write: async (key) => {
-      let response = await fetch(`${baseURI}/auth`, {"cache": "reload"});
+      let response = await fetch(`${baseURI}auth`, {"cache": "reload"});
     },
     read: async () => {
-      let response = await fetch(`${baseURI}/auth`, {"cache": "reload"});
+      let response = await fetch(`${baseURI}auth`, {"cache": "reload"});
       return (await response.json()).password;
     }
   },*/
@@ -365,10 +365,10 @@ return {
     category: "supercookies",
     description: "HTTP/1.x are the classic web connection protocols. If these connections are re-used across websites, they can be used to track users.",
     write: async (secret) => {
-      await fetch(`https://h1.arthuredelstein.net:8901/?mode=write&secret=${secret}`, {cache: "no-store"});
+      await fetch(`https://h1.privacytests2.org:8901/?mode=write&secret=${secret}`, {cache: "no-store"});
     },
     read: async () => {
-      let response = await fetch(`https://h1.arthuredelstein.net:8901/?mode=read`, {cache: "no-store"});
+      let response = await fetch(`https://h1.privacytests2.org:8901/?mode=read`, {cache: "no-store"});
       return await response.text();
     }
   },
@@ -376,10 +376,10 @@ return {
     category: "supercookies",
     description: "HTTP/2 is a web connection protocol introduced in 2015. Some browsers re-use HTTP/2 connections across websites and can thus be used to track users.",
     write: async (secret) => {
-      await fetch(`https://h2.arthuredelstein.net:8902/?mode=write&secret=${secret}`, {cache: "no-store"});
+      await fetch(`https://h2.privacytests2.org:8902/?mode=write&secret=${secret}`, {cache: "no-store"});
     },
     read: async () => {
-      let response = await fetch(`https://h2.arthuredelstein.net:8902/?mode=read`, {cache: "no-store"});
+      let response = await fetch(`https://h2.privacytests2.org:8902/?mode=read`, {cache: "no-store"});
       return await response.text();
     }
   },
@@ -389,11 +389,11 @@ return {
     write: async (secret) => {
       // Ensure that we can switch over to h3 via alt-svc:
       for (let i = 0; i<3; ++i) {
-        await fetch(`https://h3.arthuredelstein.net:4434/connection_id`, {cache: "no-store"});
+        await fetch(`https://h3.privacytests2.org:4434/connection_id`, {cache: "no-store"});
         await sleepMs(500);
       }
       // Are we now connecting over h3?
-      let response = await fetch(`https://h3.arthuredelstein.net:4434/connection_id`, {cache: "no-store"});
+      let response = await fetch(`https://h3.privacytests2.org:4434/connection_id`, {cache: "no-store"});
       let text = await response.text();
       // Empty response text indicates we are not connecting over h3:
       if (text.trim() === "") {
@@ -401,7 +401,7 @@ return {
       }
     },
     read: async () => {
-      let response = await fetch(`https://h3.arthuredelstein.net:4434/connection_id`);
+      let response = await fetch(`https://h3.privacytests2.org:4434/connection_id`);
       return await response.text();
     }
   },
@@ -625,18 +625,18 @@ return {
     write: async () => {
       // Clear Alt-Svc caching first.
       let responseText = "";
-      await fetch("https://altsvc.arthuredelstein.net:4433/clear");
+      await fetch("https://altsvc.privaytests2.org:4433/clear");
       await sleepMs(100);
-      responseText = await fetchText("https://altsvc.arthuredelstein.net:4433/protocol");
+      responseText = await fetchText("https://altsvc.privaytests2.org:4433/protocol");
       console.log("after clear:", responseText);
       // Store "h3" state in Alt-Svc cache
-      await fetch("https://altsvc.arthuredelstein.net:4433/set");
+      await fetch("https://altsvc.privaytests2.org:4433/set");
       await sleepMs(100);
-      responseText = await fetchText("https://altsvc.arthuredelstein.net:4433/protocol");
+      responseText = await fetchText("https://altsvc.privaytests2.org:4433/protocol");
       console.log("after set:", responseText);
     },
     read: async () => {
-      const protocol = await fetchText("https://altsvc.arthuredelstein.net:4433/protocol");
+      const protocol = await fetchText("https://altsvc.privaytests2.org:4433/protocol");
       if ((new URL(location)).searchParams.get("thirdparty") === "same") {
         if (protocol !== "h3") {
           throw new Error("Unsupported");
