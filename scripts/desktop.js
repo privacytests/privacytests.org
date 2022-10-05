@@ -5,11 +5,11 @@ const { join: joinDir } = require("path");
 /*
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --incognito "https://example.com"
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --tor "https://example.com"
-/Applications/Firefox.app/Contents/MacOS/firefox --private-window https://arthuredelstein.net
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --incognito "https://arthuredelstein.net"
+/Applications/Firefox.app/Contents/MacOS/firefox --private-window "https://example.com"
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --incognito "example.com"
 /Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge --inprivate "https://example.com"
 /Applications/Opera.app/Contents/MacOS/Opera --private "https://example.com"
-/Applications/Vivaldi.app/Contents/MacOS/Vivaldi --incognito "https://arthuredelstein.net"
+/Applications/Vivaldi.app/Contents/MacOS/Vivaldi --incognito "https://example.com"
 open -a Safari "https://example.com"
 */
 
