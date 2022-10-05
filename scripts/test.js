@@ -253,16 +253,21 @@ const runMainTests = async (browserObject, categories) => {
   return resultsPromise;
 };
 
-// Run the insecure connection test. Returns { insecureRsults, insecurePassed }.
+// Run the insecure connection test. Returns { insecureResults, insecurePassed }.
 const runInsecureTest = async (browserObject) => {
-  const timeout = browserObject instanceof iOSBrowser ? 30000 : 8000;
+  const timeout = (browserObject instanceof DesktopBrowser) ? 8000 : 30000;
   const insecureResultPromise = nextBrowserValue(browserObject, timeout);
+  log("we have insecureResultPromise");
   await openSessionUrl(browserObject, `${insecure_root}/insecure.html`);
+  log("openSessionUrl returned");
   let insecureResult, insecurePassed;
   try {
+    log("now trying");
     insecureResult = await insecureResultPromise;
     insecurePassed = false;
+    log("failed!!!!");
   } catch (e) {
+    log("passed!!!");
     console.log(e);
     insecureResult = { "Insecure website": { passed: true, result: "Insecure website never loaded" } };
     insecurePassed = true;
