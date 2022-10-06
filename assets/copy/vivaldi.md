@@ -2,7 +2,7 @@
 
 Vivaldi Technologies, the company that makes Vivaldi browser, has posted a [statement on their website](https://web.archive.org/web/20221003174703/https://vivaldi.com/security/common-questions/#privacytests) regarding PrivacyTests.org. Unfortunately, Vivaldi's statement contains claims about this project that I believe are inaccurate and should be corrected.
 
-I address Vivaldi's claims below, but first I want to mention that criticism of the PrivacyTests.org project is very welcome. In this project I have striven for accuracy and transparency. If anyone discovers an inaccuracy or something that is not clear, I will be very grateful, and I will endeavor to fix the problem promptly.
+I address Vivaldi's claims below, but first I want to mention that criticism of the PrivacyTests.org project is very welcome. In undertaking this project, which regularly tests web browsers for their privacy properties, I have striven for accuracy and transparency. I will be very grateful to anyone who discovers an inaccuracy or something that is not clear, and I will endeavor to fix any problems promptly.
 
 In the remainder of this post I address three claims made by Vivaldi in their statement. I explain how each claim is not supported by the evidence.
 
