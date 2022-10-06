@@ -1,4 +1,4 @@
-# A response to Vivaldi's statement on PrivacyTests.org
+# A response to Vivaldi's statement regarding PrivacyTests.org
 
 Vivaldi Technologies, the company that makes Vivaldi browser, has posted a [statement on their website](https://web.archive.org/web/20221003174703/https://vivaldi.com/security/common-questions/#privacytests) regarding PrivacyTests.org. Unfortunately, Vivaldi's statement contains claims about this project that I believe are inaccurate and should be corrected.
 
