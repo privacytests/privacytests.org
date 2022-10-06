@@ -34,4 +34,4 @@ What about screen dimensions? Already, Tor Browser, LibreWolf, and Mull Browser 
 
 In summary, I hope Vivaldi will reconsider their position. PrivacyTests.org is intended to offer constructive feedback to browser makers on how they can improve the privacy in their web browsers. Given the high level of innovation at Vivaldi, I hope the company will work on bringing state-of-the-art privacy by default to its users.
 
--- Arthur Edelstein, 2022 October 3
+-- Arthur Edelstein, 2022 October 5
