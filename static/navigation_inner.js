@@ -4,7 +4,7 @@ import { tests } from "./test_definitions.js";
 // Wrap the code for any browsers that don't support top-level await.
 (async () => {
 
-const baseURI = "https://live.privacytests2.org/";
+const baseURI = "https://test-pages.privacytests2.org/live/";
 
 let testURI = (path, type, key) => `${baseURI}${path}?type=${type}&key=${key}`;
 
