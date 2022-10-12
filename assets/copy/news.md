@@ -1,5 +1,30 @@
 # News
-## [Issue 33](/): 2022-09-20
+## [Issue 34](/): 2022-10-11
+
+### New browser versions
+
+On Desktop:
+* Chrome 106.0
+* Edge 106.0
+* Librewolf 105.0
+* Opera 91.0
+* Ungoogled 106.0
+* Vivaldi 5.5
+
+On iOS:
+* Firefox 105.1
+* Safari 15.7
+
+On Android:
+* Duckduckgo 5.138
+* Firefox 105.2
+* Focus 105.2
+
+### Response to Vivaldi
+
+Last week's response to Vivaldi's claims is [here](/vivaldi.html).
+
+## [Issue 33](/archive/issue33): 2022-09-20
 
 ### New browser versions
 
