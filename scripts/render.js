@@ -20,6 +20,7 @@ const escapeHtml = str => str.replace(/[&<>'"]/g,
 const nightlyIconNames = {
   brave: "brave-nightly",
   chrome: "chrome-canary",
+  duckduckgo: "duckduckgo",
   edge: "edge-canary",
   firefox: "firefox-nightly",
   opera: "opera-developer",

@@ -32,6 +32,21 @@ const macOSdefaultBrowserSettings = {
     update: ["Chrome", "About Google Chrome"],
     updateNightly: ["Chrome Canary", "About Google Chrome"],
   },
+  duckduckgo: {
+    name: "DuckDuckGo",
+    nightlyName: "DuckDuckGo",
+    useOpen: true,
+//   incognitoCommand: "osascript safariPBM.applescript",
+//    basedOn: "safari",
+  },
+  edge: {
+    name: "Microsoft Edge",
+    nightlyName: "Microsoft Edge Canary",
+    privateFlag: "inprivate",
+    basedOn: "chromium",
+    update: ["Microsoft Edge", "About Microsoft Edge"],
+    updateNightly: ["Microsoft Edge Canary", "About Microsoft Edge"],
+  },
   firefox: {
     name: "firefox",
     nightlyName: "Firefox Nightly",
@@ -49,14 +64,6 @@ const macOSdefaultBrowserSettings = {
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
     updateCommand: "/opt/homebrew/bin/brew upgrade librewolf --no-quarantine",
   },
-  edge: {
-    name: "Microsoft Edge",
-    nightlyName: "Microsoft Edge Canary",
-    privateFlag: "inprivate",
-    basedOn: "chromium",
-    update: ["Microsoft Edge", "About Microsoft Edge"],
-    updateNightly: ["Microsoft Edge Canary", "About Microsoft Edge"],
-  },
   opera: {
     name: "Opera",
     nightlyName: "Opera Developer",
@@ -69,6 +76,7 @@ const macOSdefaultBrowserSettings = {
     name: "Safari",
     nightlyName: "Safari Technology Preview",
     useOpen: true,
+    closeWindows: true,
     incognitoCommand: "osascript safariPBM.applescript",
     basedOn: "safari",
   },
@@ -190,7 +198,7 @@ class DesktopBrowser {
   }
   // Close the browser.
   async kill() {
-    if (profileFlags[this._defaults.basedOn] === undefined) {
+    if (this._defaults.closeWindows) {
       execSync(`osascript closeAllWindows.applescript "${this._appName}"`);
       await sleepMs(1000);
     }
