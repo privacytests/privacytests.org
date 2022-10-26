@@ -487,6 +487,9 @@ const readConfig = () => {
   if (commandLineBrowsers) {
     commandLineConfig.browsers = commandLineBrowsers.split(",");
   }
+  if (commandLineConfig.except) {
+    commandLineConfig.except = commandLineConfig.except.split(",");
+  }
   const yamlConfig = configFile ? readYAMLFile(configFile) : null;
   return Object.assign({}, defaultConfig, yamlConfig, commandLineConfig);
 };
@@ -494,13 +497,15 @@ const readConfig = () => {
 const configToBrowserList = (config) => {
   let browserList = [];
   for (const browser of config.browsers) {
-    browserList.push({
-      browser,
-      nightly: config.nightly ? true : false,
-      incognito: config.incognito ? true : false,
-      android: config.android ? true : false,
-      ios: config.ios ? true : false,
-    })
+    if (!config.except.includes(browser)) {
+      browserList.push({
+        browser,
+        nightly: config.nightly ? true : false,
+        incognito: config.incognito ? true : false,
+        android: config.android ? true : false,
+        ios: config.ios ? true : false,
+      })
+    }
   }
   return browserList;
 };
