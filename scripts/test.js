@@ -415,6 +415,10 @@ const runTestsBatch = async (browserList, { shouldQuit, android, ios, categories
         browserObject._websocket = await createWebsocket();
     try {
       await browserObject.launch();
+      if (browserObject instanceof DesktopBrowser) {
+        await sleep(15000);
+        await browserObject.restart();
+      }
       const testResultsStage1 = await deadlinePromise(`${browser} tests`, runTestsStage1({browserObject, categories}), 600000);
       let testResultsStage2;
       if (browserObject instanceof DesktopBrowser) {
@@ -497,7 +501,7 @@ const readConfig = () => {
 const configToBrowserList = (config) => {
   let browserList = [];
   for (const browser of config.browsers) {
-    if (!config.except.includes(browser)) {
+    if (!(config.except && config.except.includes(browser))) {
       browserList.push({
         browser,
         nightly: config.nightly ? true : false,
