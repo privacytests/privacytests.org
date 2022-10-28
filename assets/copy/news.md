@@ -1,5 +1,43 @@
 # News
-## [Issue 34](/): 2022-10-11
+## [Issue 35](/): 2022-10-28
+
+### New browser versions
+
+On Desktop:
+* Brave 1.45
+* Chrome 107.0
+* Edge 107.0
+* Firefox 104.0
+* Librewolf 106.0
+* Opera 92.0
+* Safari 16.1
+
+On iOS:
+* Focus 106.0
+* Yandex 2209.7
+
+On Android:
+* Bromite 106.0
+* Chrome 106.0
+* Duckduckgo 5.141
+* Edge 106.0
+* Firefox 106.1
+* Mull 105.1
+* Opera 72.1
+* Samsung 18.0
+* Tor 102.2
+* Vivaldi 5.5
+* Yandex 22.9
+
+### What's new
+
+DuckDuckGo Desktop Beta (on MacOS) is now being tested -- results are shown in the Nightly section.
+
+We see on Safari Desktop that the favicon cache is now partitioned! In Safari, Blob URLs is the only remaining API we test that still leaks data across websites.
+
+In addition, Brave Nightly is now passing screen fingerprinting.
+
+## [Issue 34](/archive/issue34): 2022-10-11
 
 ### New browser versions
 
