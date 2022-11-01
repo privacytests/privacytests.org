@@ -151,7 +151,12 @@ const webdriverSession = _.memoize(() =>
     port: 4723,
     hostname: "0.0.0.0",
     path: "/wd/hub",
-    capabilities: { platformName: "Android", "newCommandTimeout": 300 }
+    capabilities: {
+      "platformName": "Android",
+      "appium:newCommandTimeout": 300,
+      "appium:automationName": "UiAutomator2",
+      "appium:uiautomator2ServerInstallTimeout": 90000
+    }
   }));
 
 class AndroidBrowser {
