@@ -113,10 +113,10 @@ const webdriverSession = _.memoize(() =>
       "appium:xcodeOrgId": "MGQ2CFRT2X",
       "appium:xcodeSigningId": "iPhone Developer",
       "appium:automationName": "XCUITest",
-      "appium:deviceName": "iPhone 7",
+      "appium:deviceName": "iPhone SE",
       "appium:wdaLaunchTimeout": 30000,
       "appium:wdaConnectionTimeout": 30000,
-      "appium:platformVersion": "15.4.1"
+      "appium:platformVersion": "16.1"
     }
   }));
 
