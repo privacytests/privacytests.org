@@ -167,6 +167,11 @@ class AndroidBrowser {
   // Launch the browser.
   async launch() {
     this.client = await webdriverSession();
+    // If app is already open, terminate it so we start with a clean slate.
+    const state = await this.client.queryAppState(this.packageName);
+    if (state >= 2) {
+      this.client.terminateApp(this.packageName);
+    }
     await this.client.activateApp(this.packageName);
     await sleepMs(5000);
     console.log("this.startupClick:",this.startupClick);
