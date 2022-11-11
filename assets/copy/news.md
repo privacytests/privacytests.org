@@ -1,5 +1,31 @@
 # News
-## [Issue 35](/): 2022-10-28
+## [Issue 36](/): 2022-11-10
+
+### New browser versions
+
+On Desktop:
+* Firefox 106.0
+* Tor 11.5
+* Ungoogled 107.0
+
+On iOS:
+* Brave 1.44
+* Chrome 107.5304
+* Duckduckgo 7.70
+* Firefox 106.1
+* Safari 16.1
+
+On Android:
+* Brave 1.45
+* Chrome 107.0
+* Duckduckgo 5.142
+* Edge 107.0
+* Focus 106.1
+* Opera 72.2
+* Samsung 19.0
+* Yandex 22.11
+
+## [Issue 35](/archive/issue35): 2022-10-28
 
 ### New browser versions
 
