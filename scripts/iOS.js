@@ -27,6 +27,8 @@ const browserInfo = {
     name: "DuckDuckGo",
     displayName: "DuckDuckGo",
     bundleId: "com.duckduckgo.mobile.ios",
+    postLaunchDelay: 4000,
+    startupClick: "Let’s Do It!",
     urlBarClick: "searchEntry",
     urlBarKeys: "searchEntry",
   },
@@ -79,7 +81,7 @@ const browserInfo = {
     //startupClick: "Решить проблемы",
     startupClick: "Fix problems",
     urlBarClick: "Address bar",
-    urlBarClick2: "Enter a search query or URL",
+    urlBarClick2: "sentryFakeOmniboxButton",
     urlBarClear: "Clear the input field",
     //		urlBarKeys: "Яндекс Браузер", // Just send keys to the application and hope our focus is correct
     urlBarKeys: "Yandex Browser", // Just send keys to the application and hope our focus is correct
@@ -159,6 +161,10 @@ class iOSBrowser {
   // Launch the browser.
   async launch() {
     this.client = await webdriverSession();
+    const state = await this.client.queryAppState(this.bundleId);
+    if (state >= 2) {
+      await this.client.terminateApp(this.bundleId);
+    }
     await this.client.activateApp(this.bundleId);
     if (this.postLaunchDelay) {
       await sleepMs(this.postLaunchDelay);
