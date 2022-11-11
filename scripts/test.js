@@ -401,47 +401,58 @@ const asyncMapSeries = async (asyncFunction, array) => {
 const asyncMap = (parallel, asyncFunction, array) =>
   (parallel ? asyncMapParallel : asyncMapSeries)(asyncFunction, array);
 
+const prepareBrowser = async ({config, android, ios}) => {
+  const browserObject = await createBrowserObject({config, android, ios});
+  browserObject._websocket = await createWebsocket();
+  await browserObject.launch();
+  if (browserObject instanceof DesktopBrowser) {
+    // Give browser the chance to load any feature flags.
+    await sleep(15000);
+    await browserObject.restart();
+  }
+  return browserObject;
+};
+
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
-const runTestsBatch = async (browserList, { shouldQuit, android, ios, categories } = { shouldQuit: true }) => {
+const runTestsBatch = async (browserList, { debug, android, ios, categories, repeat } = { debug: false, repeat: 1 }) => {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
   cookieProxy.simulateTrackingCookies(cookieProxyPort);
-  for (let config of browserList) {
-    log("\nnext test:", config);
-    const { browser, incognito, tor, nightly } = config;
+  for (let iter = 0; iter < repeat; ++iter) {
     const timeStarted = new Date().toISOString();
-    const browserObject = createBrowserObject({config, android, ios});
-        browserObject._websocket = await createWebsocket();
+    let browserObjects;
     try {
-      await browserObject.launch();
-      if (browserObject instanceof DesktopBrowser) {
-        await sleep(15000);
-        await browserObject.restart();
-      }
-      const testResultsStage1 = await deadlinePromise(`${browser} tests`, runTestsStage1({browserObject, categories}), 600000);
+      browserObjects = await asyncMapParallel((config) => prepareBrowser({config, android, ios}), browserList);
+      console.log({browserObjects});
+      const testResultsStage1 = await asyncMapParallel((browserObject) => deadlinePromise(`${browserObject.browser} tests`, runTestsStage1({browserObject, categories}), 600000), browserObjects);
       let testResultsStage2;
-      if (browserObject instanceof DesktopBrowser) {
+      if (!android && !ios) {
         await enableProxies(cookieProxyPort);
-        testResultsStage2 = await deadlinePromise(`${browser} tests`, runTestsStage2({browserObject, categories}), 100000);
+        testResultsStage2 = await asyncMapParallel((browserObject) => deadlinePromise(`${browserObject.browser} tests`, runTestsStage2({browserObject, categories}), 100000), browserObjects);
         await disableProxies(cookieProxyPort);
       }
-      const testResults = Object.assign({}, testResultsStage1, testResultsStage2);
-      all_tests.push({
-        browser, incognito, tor, nightly,
-        testResults, timeStarted,
-        reportedVersion: await browserObject.version(),
-        os: os.type(), os_version: os.version(),
-      });
+      for (let i = 0; i < browserList.length; ++i) {
+        const testResults = Object.assign({}, testResultsStage1[i], testResultsStage2[i]);
+        const { browser, incognito, tor, nightly } = browserList[i];
+        all_tests.push({
+          browser, incognito, tor, nightly,
+          testResults, timeStarted,
+          reportedVersion: await browserObjects[i].version(),
+          os: os.type(), os_version: os.version(),
+        });
+      }
     } catch (e) {
       log(e);
     }
-    if (shouldQuit) {
-      await closeWebSocket(browserObject._websocket);
-      try {
-        await browserObject.kill();
-      } catch (e) {
-        log(e);
+    if (!debug) {
+      for (const browserObject of browserObjects) {
+        await closeWebSocket(browserObject._websocket);
+        try {
+          await browserObject.kill();
+        } catch (e) {
+          log(e);
+        }
       }
     }
   }
@@ -514,23 +525,6 @@ const configToBrowserList = (config) => {
   return browserList;
 };
 
-const expandBrowserList = (browserList, repeat = 1) => {
-  let results = [];
-  for (let browserSpec of browserList) {
-    if (!browserSpec.disable) {
-      const config2 = deepCopy(browserSpec);
-      delete config2["repeat"];
-      results = [].concat(results, Array((browserSpec.repeat ?? 1) * (repeat ?? 1)).fill(config2));
-    }
-  }
-  return results;
-};
-
-const configToExpandedBrowserList = (config) => {
-  const browserList = configToBrowserList(config);
-  return expandBrowserList(browserList, config.repeat);
-};
-
 let cleanupRan = false;
 const cleanup = async () => {
   if (cleanupRan) {
@@ -597,14 +591,9 @@ const main = async () => {
       await showVersions(config);
       return;
     }
-    const expandedBrowserList = configToExpandedBrowserList(config);
+    const expandedBrowserList = configToBrowserList(config);
     log("List of browsers to run:", expandedBrowserList);
-    const testResults = await runTestsBatch(expandedBrowserList,
-      {
-        shouldQuit: !config.debug, android: config.android,
-        ios: config.ios,
-        categories: config.categories
-      });
+    const testResults = await runTestsBatch(expandedBrowserList, config);
     let dataFile = writeDataSync(config.filename, testResults);
     await render.render({ dataFiles: [dataFile], aggregate: config.aggregate });
     if (!config.debug) {
