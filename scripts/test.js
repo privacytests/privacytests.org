@@ -415,43 +415,45 @@ const prepareBrowser = async ({config, android, ios}) => {
 
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
-const runTestsBatch = async (browserList, { debug, android, ios, categories, repeat } = { debug: false, repeat: 1 }) => {
+const runTestsBatch = async (browserLists, { debug, android, ios, categories, repeat } = { debug: false, repeat: 1 }) => {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
   cookieProxy.simulateTrackingCookies(cookieProxyPort);
   for (let iter = 0; iter < repeat; ++iter) {
-    const timeStarted = new Date().toISOString();
-    let browserObjects;
-    try {
-      browserObjects = await asyncMapParallel((config) => prepareBrowser({config, android, ios}), browserList);
-      console.log({browserObjects});
-      const testResultsStage1 = await asyncMapParallel((browserObject) => deadlinePromise(`${browserObject.browser} tests`, runTestsStage1({browserObject, categories}), 600000), browserObjects);
-      let testResultsStage2;
-      if (!android && !ios) {
-        await enableProxies(cookieProxyPort);
-        testResultsStage2 = await asyncMapParallel((browserObject) => deadlinePromise(`${browserObject.browser} tests`, runTestsStage2({browserObject, categories}), 100000), browserObjects);
-        await disableProxies(cookieProxyPort);
+    for (let browserList of browserLists) {
+      const timeStarted = new Date().toISOString();
+      let browserObjects;
+      try {
+        browserObjects = await asyncMapParallel((config) => prepareBrowser({config, android, ios}), browserList);
+        console.log({browserObjects});
+        const testResultsStage1 = await asyncMapParallel((browserObject) => deadlinePromise(`${browserObject.browser} tests`, runTestsStage1({browserObject, categories}), 600000), browserObjects);
+        let testResultsStage2 = [];
+        if (!android && !ios) {
+          await enableProxies(cookieProxyPort);
+          testResultsStage2 = await asyncMapParallel((browserObject) => deadlinePromise(`${browserObject.browser} tests`, runTestsStage2({browserObject, categories}), 100000), browserObjects);
+          await disableProxies(cookieProxyPort);
+        }
+        for (let i = 0; i < browserList.length; ++i) {
+          const testResults = Object.assign({}, testResultsStage1[i], testResultsStage2[i]);
+          const { browser, incognito, tor, nightly } = browserList[i];
+          all_tests.push({
+            browser, incognito, tor, nightly,
+            testResults, timeStarted,
+            reportedVersion: await browserObjects[i].version(),
+            os: os.type(), os_version: os.version(),
+          });
+        }
+      } catch (e) {
+        log(e);
       }
-      for (let i = 0; i < browserList.length; ++i) {
-        const testResults = Object.assign({}, testResultsStage1[i], testResultsStage2[i]);
-        const { browser, incognito, tor, nightly } = browserList[i];
-        all_tests.push({
-          browser, incognito, tor, nightly,
-          testResults, timeStarted,
-          reportedVersion: await browserObjects[i].version(),
-          os: os.type(), os_version: os.version(),
-        });
-      }
-    } catch (e) {
-      log(e);
-    }
-    if (!debug) {
-      for (const browserObject of browserObjects) {
-        await closeWebSocket(browserObject._websocket);
-        try {
-          await browserObject.kill();
-        } catch (e) {
-          log(e);
+      if (!debug) {
+        for (const browserObject of browserObjects) {
+          await closeWebSocket(browserObject._websocket);
+          try {
+            await browserObject.kill();
+          } catch (e) {
+            log(e);
+          }
         }
       }
     }
@@ -593,7 +595,8 @@ const main = async () => {
     }
     const expandedBrowserList = configToBrowserList(config);
     log("List of browsers to run:", expandedBrowserList);
-    const testResults = await runTestsBatch(expandedBrowserList, config);
+    browserLists = (config.android || config.ios) ? expandedBrowserList.map(x => [x]) : [expandedBrowserList];
+    const testResults = await runTestsBatch(browserLists, config);
     let dataFile = writeDataSync(config.filename, testResults);
     await render.render({ dataFiles: [dataFile], aggregate: config.aggregate });
     if (!config.debug) {
