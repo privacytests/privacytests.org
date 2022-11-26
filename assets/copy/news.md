@@ -1,5 +1,29 @@
 # News
-## [Issue 36](/): 2022-11-10
+## [Issue 37](/): 2022-11-25
+
+### New browser versions
+
+On Desktop:
+* Chrome 107.0
+* Firefox 107.0
+* Librewolf 107.0-1
+* Opera 93.0
+
+On iOS:
+* Brave 1.45
+* Edge 107.1418
+* Firefox 107.0
+* Focus 107.0
+* Opera 3.3
+* Yandex 2211.3
+
+On Android:
+* Duckduckgo 5.143
+* Firefox 107.1
+* Focus 107.1
+* Opera 72.3
+
+## [Issue 36](/archive/issue36): 2022-11-10
 
 ### New browser versions
 
