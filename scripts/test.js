@@ -607,5 +607,6 @@ const main = async () => {
   }
 };
 
-main();
-
+if (require.main === module) {
+  main();
+}
