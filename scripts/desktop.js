@@ -194,6 +194,9 @@ class DesktopBrowser {
   }
   // Open the url in a new tab.
   async openUrl(url) {
+    if (!this._process) {
+      throw new Error("browser not launched");
+    }
     exec(`${this._command} "${url}"`);
   }
   // Close the browser.
@@ -208,6 +211,7 @@ class DesktopBrowser {
     } else {
       this._process.kill("SIGKILL");
     }
+    this._process = undefined;
   }
   // Restart the browser with same profile.
   async restart() {
