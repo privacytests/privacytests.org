@@ -53,6 +53,7 @@ repeat: 5                # Integer, how many times we should repeat this test (d
 aggregate: true          # Whether to combine repeated runs of a browser into a single column (default: true)
 debug: false             # Whether to leave browsers open after test is done (default: false)
 app-dir: /path/to/apps   # On desktop, set where browsers are located (default: "/Applications/")
+filename: my-results     # Specifies the filename prefix for results (defaults to time run)
 ```
 
 You can also use these flags on the command line, to supplement the yaml file or instead of one:
@@ -65,12 +66,13 @@ You can also use these flags on the command line, to supplement the yaml file or
 * `--repeat 10`: repeat the whole set of tests 10 times
 * `--aggregate`: Combine results from the same browser into a single column (enabled by default)
 * `--debug`: Don't close browser(s) after test is done
-* `--app-dir: /path/to/apps`: Use to point to directory containing browsers (default: `/Applications/`)
-* `--only brave`: Only run a single browser in the config file with the name given
+* `--app-dir=/path/to/apps`: Use to point to directory containing browsers (default: `/Applications/`)
+* `--filename=my-results`: Use this flag to specify a filename prefix for the results files.
+* `--only brave`: Override the browsers list (perhaps in the config file) to only run a single browser in the config file with the name given.
 
 So for example,
-`node test config/my-config.yaml --repeat=5
-runs the given config, but repeats tests for each browser 5 times.
+`node test config/my-config.yaml --repeat=5 --filename=temp
+runs the given config, but repeats tests for each browser 5 times and writes the results to temp*
 
 ## Development
 
