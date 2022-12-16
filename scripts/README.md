@@ -49,20 +49,28 @@ android: false,          # Set to true to run on Android platform (default: fals
 ios: false,              # Set to true to run on iOS platform (default: false)
 incognito: false,        # Set incognito to true for testing private browsing windows. (default: false)
 tor: true                # Set tor to true for 'Brave Private Window with Tor.' (default: false)
-repeat: 1                # Integer, how many times we should repeat this test (default: 1)
+repeat: 5                # Integer, how many times we should repeat this test (default: 1)
 aggregate: true          # Whether to combine repeated runs of a browser into a single column (default: true)
 debug: false             # Whether to leave browsers open after test is done (default: false)
+app-dir: /path/to/apps   # On desktop, set where browsers are located (default: "/Applications/")
 ```
 
-You can also use these flags on the command line, after the yaml file or instead of one:
+You can also use these flags on the command line, to supplement the yaml file or instead of one:
 
 * `--browsers chrome,firefox,vivaldi`: use the specified browsers, separated by commas
-* `--repeat 10`: repeat the whole set of tests 10 times
-* `--debug`: Don't close browser(s) after test is done
-* `--only brave`: Only run a single browser in the config file with the name given
-* `--aggregate`: Combine results from the same browser into a single column (enabled by default)
-* `--ios`: Add flag to run on iOS
 * `--android`: Add flag to run on Android
+* `--ios`: Add flag to run on iOS
+* `--incognito`: Run tests in private browsing windows
+* `--tor`: Run test in Tor windows (available in Brave)
+* `--repeat 10`: repeat the whole set of tests 10 times
+* `--aggregate`: Combine results from the same browser into a single column (enabled by default)
+* `--debug`: Don't close browser(s) after test is done
+* `--app-dir: /path/to/apps`: Use to point to directory containing browsers (default: `/Applications/`)
+* `--only brave`: Only run a single browser in the config file with the name given
+
+So for example,
+`node test config/my-config.yaml --repeat=5
+runs the given config, but repeats tests for each browser 5 times.
 
 ## Development
 

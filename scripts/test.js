@@ -522,6 +522,7 @@ const configToBrowserList = (config) => {
         incognito: config.incognito ? true : false,
         android: config.android ? true : false,
         ios: config.ios ? true : false,
+        appDir: config["app-dir"]
       })
     }
   }
