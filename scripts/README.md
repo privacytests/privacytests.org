@@ -1,8 +1,5 @@
 # PrivacyTests.org tests
-This project runs browser privacy tests (fingerprinting resistance, partitioning between websites, etc.), saves the results to a JSON file, and renders those results in web pages.
-
-**NOTE**: privacytests.org no longer uses selenium because it is incompatible with some privacy protections such as Safari's ITP. The code is undergoing many changes and currently only works on macOS. There is no longer
-browserstack support.
+This directory includes scripts to run browser privacy tests (fingerprinting resistance, partitioning between websites, etc.), save the results to a JSON file, and render those results in web pages.
 
 ## Set up
 
@@ -71,7 +68,7 @@ You can also use these flags on the command line, to supplement the yaml file or
 * `--only brave`: Override the browsers list (perhaps in the config file) to only run a single browser in the config file with the name given.
 
 So for example,
-`node test config/my-config.yaml --repeat=5 --filename=temp
+`node test config/my-config.yaml --repeat=5 --filename=temp`
 runs the given config, but repeats tests for each browser 5 times and writes the results to temp*
 
 ## Development
