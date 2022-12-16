@@ -137,23 +137,24 @@ const exec = (command, options) => {
   return child_process.exec(command, options);
 };
 
-const browserPath = ({ browser, nightly }) => {
+const browserPath = ({ browser, nightly, appDir }) => {
   const browserValues = macOSdefaultBrowserSettings[browser];
   const binaryName = browserValues.binaryName ?? browserValues.name;
   const appName = nightly ? browserValues.nightlyName : browserValues.name;
-  const fullBinaryPath = `${defaultAppDirectory}/${appName}.app/${defaultBinaryPath}`;
-  const executablePath1 = `${fullBinaryPath}/${binaryName}`;
-  const executablePath2 = `${fullBinaryPath}/${appName}`;
+  const appDirFinal = appDir ?? defaultAppDirectory;
+  const fullBinaryPath = joinDir(appDirFinal, `${appName}.app`, defaultBinaryPath);
+  const executablePath1 = joinDir(fullBinaryPath, binaryName);
+  const executablePath2 = joinDir(fullBinaryPath, appName);
   return fs.existsSync(executablePath1) ? executablePath1 : executablePath2;
 };
 
 // A Browser object represents a browser we run tests on.
 class DesktopBrowser {
-  constructor({ browser, path, incognito, tor, nightly }) {
+  constructor({ browser, path, incognito, tor, nightly, appDir }) {
     Object.assign(this, { browser, incognito, tor, nightly });
     this._defaults = macOSdefaultBrowserSettings[browser];
     this._version = undefined;
-    this._path = path ?? browserPath({ browser, nightly });
+    this._path = path ?? browserPath({ browser, nightly, appDir });
     this._appPath = this._path.split(".app")[0] + ".app";
     this._appName = nightly ? this._defaults.nightlyName : this._defaults.name;
     const profileCommand = profileFlags[this._defaults.basedOn];
