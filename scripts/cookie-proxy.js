@@ -1,7 +1,7 @@
 const mockttp = require('mockttp');
 const fs = require('fs');
 const { execSync } = require('child_process');
-
+const cert = require('./cert');
 let server;
 let hostsThatLeak = {};
 
@@ -23,15 +23,23 @@ const parseCookies = (cookieString) => {
 // that reads and writes third-party cookies. Injects a tracking
 // cookie if URL has "pto_write_cookie" query parameter; looks
 // for a cookie if URL has "pto_read_cookie" query parameter.
-const simulateTrackingCookies = async (port, debug = false) => {
-  // Allows us to match requests to responses.
+const simulateTrackingCookies = async (port, debug = false, nss = false) => {
+  console.log("simulateTrackingCookies");
+ // Allows us to match requests to responses.
   let idToUrlMapping = new Map();
+  let certPaths;
   // Create a proxy server with a self-signed HTTPS CA certificate:
-  const mkcertPath = execSync("/opt/homebrew/bin/mkcert -CAROOT").toString().trim();
-  const certPaths = {
-    keyPath: `${mkcertPath}/rootCA-key.pem`,
-    certPath: `${mkcertPath}/rootCA.pem`,
-  };
+  if (nss) {
+    certPaths = await cert.setupCertificate();
+  } else {
+    const mkcertPath = execSync("/opt/homebrew/bin/mkcert -CAROOT")
+          .toString().trim();
+    certPaths = {
+      keyPath: `${mkcertPath}/rootCA-key.pem`,
+      certPath: `${mkcertPath}/rootCA.pem`,
+    };
+  }
+  console.log("XXXXXXXXXXXXXXXXXXXXX", certPaths);
   server = mockttp.getLocal({
     https: certPaths,
     cors: true
