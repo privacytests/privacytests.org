@@ -416,10 +416,12 @@ const prepareBrowser = async ({config, android, ios}) => {
 
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
-const runTestsBatch = async (browserLists, { debug, android, ios, categories, repeat } = { debug: false, repeat: 1 }) => {
+const runTestsBatch = async (
+  browserLists, { debug, android, ios, categories, repeat, nss }
+    = { debug: false, repeat: 1 }) => {
   let all_tests = [];
   let timeStarted = new Date().toISOString();
-  cookieProxy.simulateTrackingCookies(cookieProxyPort);
+  cookieProxy.simulateTrackingCookies(cookieProxyPort, debug, nss);
   for (let iter = 0; iter < repeat; ++iter) {
     for (let browserList of browserLists) {
       const timeStarted = new Date().toISOString();

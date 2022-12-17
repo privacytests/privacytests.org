@@ -11,7 +11,7 @@ const execSyncExplicit = (command) => {
 };
 
 const cmd = memoize((shortCommand) =>
-  execSyncExplicit(`which ${shortCommand}`));
+  execSync(`which ${shortCommand}`).toString().trim());
 
 const nssdbPath = memoize(() => path.join(homedir(), ".pki", "nssdb"));
 
@@ -43,7 +43,7 @@ const generateCert = async () => {
   await mkdir(certsDir, { recursive: true });
   const keyPath = path.join(certsDir, "rootCA-key.pem");
   const certPath = path.join(certsDir, "rootCA.pem");
-  execSync(`${cmd('openssl')} req -x509 -sha256 -days 1 -nodes -newkey rsa:2048 -subj "/C=US/ST=CA/L=LA/O=PrivacyTests.Org/OU=./CN=privacytests.org" -keyout "${keyPath}" -out "${certPath}" -outform PEM`);
+  execSyncExplicit(`${cmd('openssl')} req -x509 -sha256 -days 1 -nodes -newkey rsa:2048 -subj "/C=US/ST=CA/L=LA/O=PrivacyTests.Org/OU=./CN=privacytests.org" -keyout "${keyPath}" -out "${certPath}" -outform PEM`);
   return { keyPath, certPath };
 };
 
