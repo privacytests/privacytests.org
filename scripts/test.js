@@ -380,9 +380,9 @@ const runTestsStage2 = async ({browserObject, categories}) => {
 
 
 // Creates the browser object whether android, iOS, or desktop.
-const createBrowserObject = ({config, android, ios}) => {
-  return android ? new AndroidBrowser(config) : (ios ? new iOSBrowser(config) : new DesktopBrowser(config));
-}
+const createBrowserObject = (config) => {
+  return config.android ? new AndroidBrowser(config) : (config.ios ? new iOSBrowser(config) : new DesktopBrowser(config));
+};
 
 // Call asyncFunction on items in array in parallel.
 const asyncMapParallel = async (asyncFunction, array) => {
@@ -402,8 +402,8 @@ const asyncMapSeries = async (asyncFunction, array) => {
 const asyncMap = (parallel, asyncFunction, array) =>
   (parallel ? asyncMapParallel : asyncMapSeries)(asyncFunction, array);
 
-const prepareBrowser = async ({config, android, ios}) => {
-  const browserObject = await createBrowserObject({config, android, ios});
+const prepareBrowser = async (config) => {
+  const browserObject = await createBrowserObject(config);
   browserObject._websocket = await createWebsocket();
   await browserObject.launch();
   if (browserObject instanceof DesktopBrowser) {
@@ -427,7 +427,7 @@ const runTestsBatch = async (
       const timeStarted = new Date().toISOString();
       let browserObjects;
       try {
-        browserObjects = await asyncMapParallel((config) => prepareBrowser({config, android, ios}), browserList);
+        browserObjects = await asyncMapParallel((config) => prepareBrowser(config), browserList);
         console.log({browserObjects});
         const testResultsStage1 = await asyncMapParallel((browserObject) => deadlinePromise(`${browserObject.browser} tests`, runTestsStage1({browserObject, categories}), 600000), browserObjects);
         let testResultsStage2 = [];
@@ -545,10 +545,8 @@ const cleanup = async () => {
 // Output all versions of browsers in config to the console.
 const showVersions = async (config) => {
   const browserList = configToBrowserList(config);
-  const { android, ios } = config;
-  log(config, android, ios);
   const versionData = await Promise.all(browserList.map(async browserSpec => {
-    const browserObject = createBrowserObject({config: browserSpec, android, ios});
+    const browserObject = createBrowserObject(browserSpec);
     const version = await browserObject.version();
     return { name: browserSpec.browser, version };
   }));
