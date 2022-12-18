@@ -65,7 +65,7 @@ You can also use these flags on the command line, to supplement the yaml file or
 * `--debug`: Don't close browser(s) after test is done
 * `--app-dir=/path/to/apps`: Use to point to directory containing browsers (default: `/Applications/`)
 * `--filename=my-results`: Use this flag to specify a filename prefix for the results files.
-* `--only brave`: Override the browsers list (perhaps in the config file) to only run a single browser in the config file with the name given.
+* `--categories=misc,https`: Limit tests to certain categories. Possible values: `main`, `supplementary`, `misc`, `https`. If this flag is omitted, all categories are run.
 
 So for example,
 `node test config/my-config.yaml --repeat=5 --filename=temp`
