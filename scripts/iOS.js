@@ -154,7 +154,7 @@ const clickSeries = async (client, names) => {
   }
 }
 
-class iOSBrowser {
+class IOSBrowser {
   constructor({browser, incognito, tor, nightly}) {
     Object.assign(this, { browser, incognito, tor, nightly }, browserInfo[browser]);
   }
@@ -236,10 +236,10 @@ class iOSBrowser {
   }
 }
 
-module.exports = { iOSBrowser };
+module.exports = { IOSBrowser };
 
 async function main() {
-  const browser = new iOSBrowser({browser:process.argv[2]});
+  const browser = new IOSBrowser({browser:process.argv[2]});
   console.log(await browser.version());
 }
 
