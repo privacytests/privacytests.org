@@ -342,7 +342,7 @@ const runTestsStage1 = async ({browserObject, categories}) => {
   }
   // Misc
   if (!categories || categories.includes("misc")) {
-    const topLevelResults = await runPageTest(browserObject, `${live_root}/toplevel`)
+    const topLevelResults = await runPageTest(browserObject, `${live_root}/toplevel.html`)
     console.log("misc results:", {topLevelResults});
     const ipAddressLeak = await ipAddressTest(topLevelResults);
     Object.assign(results["misc"],
