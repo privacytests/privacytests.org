@@ -15,7 +15,7 @@ const fetch = require('node-fetch');
 const render = require('./render');
 const { DesktopBrowser } = require('./desktop.js');
 const { AndroidBrowser } = require('./android.js');
-const { iOSBrowser } = require('./iOS.js');
+const { IOSBrowser } = require('./iOS.js');
 const proxy = require('./system-proxy');
 const WebSocket = require('ws');
 const cookieProxy = require('./cookie-proxy');
@@ -189,11 +189,11 @@ const closeWebSocket = (websocket) => {
 // root for a domain that can be upgraded to https.
 // Finally we have a live root for additional tests that require non-static
 // responses.
-const iframe_root_same = 'https://test-pages.privacytests2.org';
-const iframe_root_different = 'https://test-pages.privacytests.org';
-const insecure_root = 'http://insecure.privacytests2.org';
-const upgradable_root = 'http://upgradable.privacytests2.org';
-const live_root = 'https://test-pages.privacytests2.org/live';
+const kIframeRootSame = 'https://test-pages.privacytests2.org';
+const kIframeRootDifferent = 'https://test-pages.privacytests.org';
+const kInsecureRoot = 'http://insecure.privacytests2.org';
+const kUpgradableRoot = 'http://upgradable.privacytests2.org';
+const kLiveRoot = 'https://test-pages.privacytests2.org/live';
 
 const ipAddressTest = async (results) => {
   const myIpAddress = await fetchIpAddress();
@@ -224,7 +224,7 @@ const runPageTest = async (browserObject, url, timeout) => {
 
 // Run the main browser tests.
 const runMainTests = async (browserObject, categories) => {
-  const signal = await runPageTest(browserObject, `${iframe_root_same}/supercookies.html?mode=write&thirdparty=same`);
+  const signal = await runPageTest(browserObject, `${kIframeRootSame}/supercookies.html?mode=write&thirdparty=same`);
   if (!signal.supercookie_write_finished) {
     throw new Error('failed to get signal that the supercookie write finished');
   }
@@ -232,13 +232,13 @@ const runMainTests = async (browserObject, categories) => {
   if (browserObject.browser === 'onion') {
     // Onion browser seems to need more handholding
     await browserObject.clickContent();
-    await openSessionUrl(browserObject, `${iframe_root_same}/supercookies.html?mode=read&thirdparty=same`);
-  } else if (browserObject instanceof AndroidBrowser || browserObject instanceof iOSBrowser) {
+    await openSessionUrl(browserObject, `${kIframeRootSame}/supercookies.html?mode=read&thirdparty=same`);
+  } else if (browserObject instanceof AndroidBrowser || browserObject instanceof IOSBrowser) {
     // In mobile, we click the viewport to open a new tab.
     await browserObject.clickContent();
   } else {
     // In desktop, we manually open a new tab.
-    await openSessionUrl(browserObject, `${iframe_root_same}/supercookies.html?mode=read&thirdparty=same`);
+    await openSessionUrl(browserObject, `${kIframeRootSame}/supercookies.html?mode=read&thirdparty=same`);
   }
   // Return the main results.
   return resultsPromise;
@@ -249,7 +249,7 @@ const runInsecureTest = async (browserObject) => {
   const timeout = (browserObject instanceof DesktopBrowser) ? 8000 : 30000;
   const insecureResultPromise = nextBrowserValue(browserObject, timeout);
   log('we have insecureResultPromise');
-  await openSessionUrl(browserObject, `${insecure_root}/insecure.html`);
+  await openSessionUrl(browserObject, `${kInsecureRoot}/insecure.html`);
   log('openSessionUrl returned');
   let insecureResult, insecurePassed;
   try {
@@ -269,9 +269,9 @@ const runInsecureTest = async (browserObject) => {
 // Run the HSTS cache supercookie test.
 const runHstsTest = async (browserObject, insecurePassed) => {
   if (!insecurePassed) {
-    await runPageTest(browserObject, `${iframe_root_different}/clear_hsts.html`);
-    await runPageTest(browserObject, `${iframe_root_different}/set_hsts.html`);
-    return await runPageTest(browserObject, `${insecure_root}/test_hsts.html`);
+    await runPageTest(browserObject, `${kIframeRootDifferent}/clear_hsts.html`);
+    await runPageTest(browserObject, `${kIframeRootDifferent}/set_hsts.html`);
+    return await runPageTest(browserObject, `${kInsecureRoot}/test_hsts.html`);
   } else {
     return {
       write: null,
@@ -301,9 +301,9 @@ const analyzeTrackingCookieTestResults = (leakyHosts) => {
 
 const runTrackingCookieTest = async (browserObject) => {
   await runPageTest(
-    browserObject, `${iframe_root_same}/tracking_content.html?manual=true&write_cookies=true`);
+    browserObject, `${kIframeRootSame}/tracking_content.html?manual=true&write_cookies=true`);
   await runPageTest(
-    browserObject, `${iframe_root_different}/tracking_content.html?manual=true&read_cookies=true`);
+    browserObject, `${kIframeRootDifferent}/tracking_content.html?manual=true&read_cookies=true`);
   const leakyHosts = cookieProxy.getLeakyHosts(browserObject._websocket._sessionId);
   return analyzeTrackingCookieTestResults(leakyHosts);
 };
@@ -328,7 +328,7 @@ const runTestsStage1 = async ({ browserObject, categories }) => {
   }
   // Supplementary tests
   if (!categories || categories.includes('supplementary')) {
-    const supplementaryResults = await runPageTest(browserObject, `${iframe_root_same}/supplementary.html`);
+    const supplementaryResults = await runPageTest(browserObject, `${kIframeRootSame}/supplementary.html`);
     // For now, only include system font detection results in desktop
     if (browserObject instanceof DesktopBrowser) {
       Object.assign(results.fingerprinting,
@@ -337,7 +337,7 @@ const runTestsStage1 = async ({ browserObject, categories }) => {
   }
   // Misc
   if (!categories || categories.includes('misc')) {
-    const topLevelResults = await runPageTest(browserObject, `${live_root}/toplevel.html`);
+    const topLevelResults = await runPageTest(browserObject, `${kLiveRoot}/toplevel.html`);
     console.log('misc results:', { topLevelResults });
     const ipAddressLeak = await ipAddressTest(topLevelResults);
     Object.assign(results.misc,
@@ -347,7 +347,7 @@ const runTestsStage1 = async ({ browserObject, categories }) => {
   // HTTPS tests
   if (!categories || categories.includes('https')) {
     log(`running HTTPS tests for ${browserObject.browser}`);
-    const upgradableAddressResult = await runPageTest(browserObject, `${upgradable_root}/upgradable.html?source=address`);
+    const upgradableAddressResult = await runPageTest(browserObject, `${kUpgradableRoot}/upgradable.html?source=address`);
     const { insecureResult, insecurePassed } = await runInsecureTest(browserObject);
     // HSTS supercookie test
     const hstsResult = await runHstsTest(browserObject, insecurePassed);
@@ -375,7 +375,7 @@ const runTestsStage2 = async ({ browserObject, categories }) => {
 
 // Creates the browser object whether android, iOS, or desktop.
 const createBrowserObject = (config) => {
-  return config.android ? new AndroidBrowser(config) : (config.ios ? new iOSBrowser(config) : new DesktopBrowser(config));
+  return config.android ? new AndroidBrowser(config) : (config.ios ? new IOSBrowser(config) : new DesktopBrowser(config));
 };
 
 // Call asyncFunction on items in array in parallel.
@@ -383,6 +383,7 @@ const asyncMapParallel = async (asyncFunction, array) => {
   return Promise.all(Array.prototype.map.call(array, asyncFunction));
 };
 
+/*
 // Call asyncFunction on items in array in series.
 const asyncMapSeries = async (asyncFunction, array) => {
   const results = [];
@@ -395,6 +396,7 @@ const asyncMapSeries = async (asyncFunction, array) => {
 // Call asyncFunction on items in array in series or parallel.
 const asyncMap = (parallel, asyncFunction, array) =>
   (parallel ? asyncMapParallel : asyncMapSeries)(asyncFunction, array);
+*/
 
 const prepareBrowser = async (config) => {
   const browserObject = await createBrowserObject(config);
@@ -413,7 +415,7 @@ const prepareBrowser = async (config) => {
 const runTestsBatch = async (
   browserLists, { debug, android, ios, categories, repeat, nss }
   = { debug: false, repeat: 1 }) => {
-  const all_tests = [];
+  const allTests = [];
   const timeStarted = new Date().toISOString();
   cookieProxy.simulateTrackingCookies(cookieProxyPort, debug, nss);
   for (let iter = 0; iter < repeat; ++iter) {
@@ -433,7 +435,7 @@ const runTestsBatch = async (
         for (let i = 0; i < browserList.length; ++i) {
           const testResults = Object.assign({}, testResultsStage1[i], testResultsStage2[i]);
           const { browser, incognito, tor, nightly } = browserList[i];
-          all_tests.push({
+          allTests.push({
             browser,
             incognito,
             tor,
@@ -470,7 +472,7 @@ const runTestsBatch = async (
   } else {
     platform = 'Desktop';
   }
-  return { all_tests, git: gitHash(), timeStarted, timeStopped, platform };
+  return { all_tests: allTests, git: gitHash(), timeStarted, timeStopped, platform };
 };
 
 // ## Writing results
@@ -498,7 +500,7 @@ const readYAMLFile = (file) => {
 };
 
 const readConfig = () => {
-  const defaultConfig = { aggregate: true, repeat: 1, debug: false };
+  const defaultConfig = { aggregate: true, repeat: 1, debug: false, update: false };
   const commandLineConfig = minimist(process.argv.slice(2));
   const configFile = commandLineConfig._[0];
   delete commandLineConfig._;
@@ -588,7 +590,7 @@ const main = async () => {
     if (config.update) {
       await updateAll(config);
       process.exit();
-      return;
+      // Program has ended.
     }
     if (config.versions || config.version) {
       await showVersions(config);
