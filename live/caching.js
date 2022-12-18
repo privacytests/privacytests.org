@@ -180,11 +180,12 @@ app.get('/blob', (req, res) => {
   res.json({blobUrl: blobs[key]});
 });
 
-app.get('/toplevel', (req, res) => {
+app.get('/toplevel.html', (req, res) => {
   const ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
   const gpcHeaderValue = req.header('Sec-GPC');
   console.log(ip);
   console.log({gpcHeaderValue});
+  res.setHeader('content-type', 'text/html');
   res.send(`
 <!DOCTYPE html>
 <html>
