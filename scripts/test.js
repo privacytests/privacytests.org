@@ -85,14 +85,6 @@ const installTestFontIfNeeded = () => {
   }
 };
 
-const openProcesses = new Set();
-
-const killAllChildProcesses = () => {
-  for (const process of openProcesses) {
-    process.kill();
-  }
-};
-
 // ## Proxies
 
 let preferredNetworkService;
@@ -537,7 +529,6 @@ const cleanup = async () => {
   }
   log('cleaning up');
   await disableProxies();
-  killAllChildProcesses();
   cleanupRan = true;
 };
 
