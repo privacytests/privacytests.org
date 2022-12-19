@@ -2,6 +2,7 @@ const { default: WebDriver}  = require("webdriver");
 const _ = require('lodash');
 const child_process = require('child_process');
 const plist = require('plist');
+const { sleepMs } = require('.utils');
 
 const browserInfo = {
   brave: {
@@ -121,8 +122,6 @@ const webdriverSession = _.memoize(() =>
       "appium:platformVersion": "16.1"
     }
   }));
-
-const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
 const findElementWithName = async (client, name) => {
   const elementObject = await client.findElement("name", name);

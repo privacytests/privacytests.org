@@ -1,6 +1,7 @@
 const { default: WebDriver}  = require("webdriver");
 const _ = require('lodash');
 const child_process = require('child_process');
+const { sleepMs } = require('.utils')
 
 const browserInfo = {
   baidu: {
@@ -114,8 +115,6 @@ const browserInfo = {
     urlBarKeys: "suggest_omnibox_query_edit"
   }
 };
-
-const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
 const findElementWithId = async (client, packageName, id) => {
   const elementObject = await client.findElement("id", `${packageName}:id/${id}`);

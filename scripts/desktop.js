@@ -1,6 +1,6 @@
-const child_process = require('child_process');
 const fs = require("fs");
 const { join: joinDir } = require("path");
+const { exec, execSync, sleepMs } = require("./utils");
 
 /*
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --incognito "https://example.com"
@@ -123,18 +123,6 @@ const profileFlags = {
   "chromium": "--no-first-run --no-default-browser-check --user-data-dir=",
   "firefox": "-profile ",
   "safari": undefined,
-};
-
-const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
-
-const execSync = (command, options) => {
-  console.log(command);
-  return child_process.execSync(command, options);
-};
-
-const exec = (command, options) => {
-  console.log(command);
-  return child_process.exec(command, options);
 };
 
 const browserPath = ({ browser, nightly, appDir }) => {
