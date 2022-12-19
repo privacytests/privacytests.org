@@ -1,4 +1,5 @@
 const child_process = require('child_process');
+const { exec, execSync, killProcessAndDescendants } = require('./utils');
 
 const linuxDefaultBrowserSettings = {
   brave: {
@@ -28,40 +29,6 @@ const profileFlags = {
   "safari": undefined,
 };
 
-// Execute a command asynchronously.
-const exec = (command, options) => {
-  console.log(command);
-  return child_process.exec(command, options);
-};
-
-// Execute a synchronous command.
-const execSync = (command, options) => {
-  console.log(command);
-  return child_process.exec(command, options).toString();
-};
-
-// Returns an list of the PIDs for immediate children
-const childProcesses = (pid) => {
-  try {
-    const list = child_process.execSync(`pgrep -P ${pid}`).toString();
-    return list.split(/\s+/).filter(s => s.length > 0);
-  } catch (e) {
-    return [];
-  }
-}
-
-// Returns all processes that are descendants of PID, including
-// the original PID itself.
-const descendantProcesses = (pid) => {
-  const children = childProcesses(pid);
-  descendants = children.map(descendantProcesses).flat();
-  return [pid, ...descendants];
-};
-
-// Kill all processes in the list of PIDs.
-const killProcesses = (pids) => {
-  pids.map(pid => process.kill(pid, process.SIGTERM));
-};
 
 // Declares a class that represents a browser on Linux.
 class DesktopBrowserLinux {
@@ -84,7 +51,7 @@ class DesktopBrowserLinux {
   }
 
   async kill() {
-    killProcesses(descendantProcesses(this._process.pid));
+    killProcessAndDescendants(this._process.pid);
   }
 
   async restart() {

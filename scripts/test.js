@@ -19,6 +19,7 @@ const { IOSBrowser } = require('./iOS.js');
 const proxy = require('./system-proxy');
 const WebSocket = require('ws');
 const cookieProxy = require('./cookie-proxy');
+const { sleepMs } = require('./utils');
 
 // ## Constants
 
@@ -29,9 +30,6 @@ const cookieProxyPort = 9090;
 const log = (...args) => {
   console.log(new Date().toISOString(), ...args);
 };
-
-// Returns a promise that sleeps for the given millseconds.
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Wraps a promise. If the promise resolves before timeMs, then
 // resolves to the promise's result. Otherwise rejects with a timeout error.
@@ -106,7 +104,7 @@ const disableProxies = async () => {
     secureweb: { enabled: false }
   });
   // Wait for proxy settings to propagate.
-  await sleep(1000);
+  await sleepMs(1000);
 };
 
 const enableProxies = async (port) => {
@@ -116,7 +114,7 @@ const enableProxies = async (port) => {
     secureweb: { enabled: true, domain: '127.0.0.1', port }
   });
   // Wait for proxy settings to propagate.
-  await sleep(1000);
+  await sleepMs(1000);
 };
 
 // ## Websocket utilities
@@ -324,7 +322,7 @@ const runTestsStage1 = async ({ browserObject, categories }) => {
   if (!categories || categories.includes('main')) {
     const mainResults = await runMainTests(browserObject, categories);
     Object.assign(results, mainResults);
-    await sleep(1000);
+    await sleepMs(1000);
   }
   // Supplementary tests
   if (!categories || categories.includes('supplementary')) {
@@ -404,7 +402,7 @@ const prepareBrowser = async (config) => {
   await browserObject.launch();
   if (browserObject instanceof DesktopBrowser) {
     // Give browser the chance to load any feature flags.
-    await sleep(15000);
+    await sleepMs(15000);
     await browserObject.restart();
   }
   return browserObject;
