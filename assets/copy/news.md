@@ -1,5 +1,30 @@
 # News
-## [Issue 38](/): 2022-12-08
+## [Issue 39](/): 2022-12-23
+
+### New browser versions
+
+On Desktop:
+* Firefox 108.0
+* Librewolf 108.0
+* Opera 94.0
+* Safari 16.2
+* Ungoogled 108.0
+
+On iOS:
+* Firefox 108.1
+* Focus 108.0
+* Safari 16.1
+* Yandex 2211.7
+
+On Android:
+* Duckduckgo 5.145
+* Edge 108.0
+* Firefox 108.1
+* Focus 108.1
+* Opera 72.5
+* Vivaldi 5.6
+
+## [Issue 38](/archive/issue38): 2022-12-08
 
 ### New browser versions
 
