@@ -199,48 +199,46 @@ const ipAddressTest = async (results) => {
 };
 
 // Get the next value from the websocket assigned to a particular browser.
-const nextBrowserValue = (browserObject, timeout) => nextValue(browserObject._websocket, timeout);
+const nextBrowserValue = (browserSession, timeout) => nextValue(browserSession.websocket, timeout);
 
 // Open a page at url, passing it the browser's assigned session id as a URL parameter.
-const openSessionUrl = (browserObject, url) => browserObject.openUrl(
-  addSearchParam(url, 'sessionId', browserObject._websocket._sessionId));
+const openSessionUrl = (browserSession, url) => browserSession.browser.openUrl(
+  addSearchParam(url, 'sessionId', browserSession.websocket._sessionId));
 
 // Open a page at url, and return the results once they are available.
-const runPageTest = async (browserObject, url, timeout) => {
-  const nextItemPromise = nextBrowserValue(browserObject, timeout);
-  await openSessionUrl(browserObject, url);
+const runPageTest = async (browserSession, url, timeout) => {
+  const nextItemPromise = nextBrowserValue(browserSession, timeout);
+  await openSessionUrl(browserSession, url);
   return await nextItemPromise;
 };
 
 // Run the main browser tests.
-const runMainTests = async (browserObject, categories) => {
-  const signal = await runPageTest(browserObject, `${kIframeRootSame}/supercookies.html?mode=write&thirdparty=same`);
+const runMainTests = async (browserSession, categories) => {
+  const signal = await runPageTest(browserSession, `${kIframeRootSame}/supercookies.html?mode=write&thirdparty=same`);
   if (!signal.supercookie_write_finished) {
     throw new Error('failed to get signal that the supercookie write finished');
   }
-  const resultsPromise = nextBrowserValue(browserObject);
-  if (browserObject.browser === 'onion') {
+  const resultsPromise = nextBrowserValue(browserSession);
+  if (browserSession.browser.browser === 'onion') {
     // Onion browser seems to need more handholding
-    await browserObject.clickContent();
-    await openSessionUrl(browserObject, `${kIframeRootSame}/supercookies.html?mode=read&thirdparty=same`);
-  } else if (browserObject instanceof AndroidBrowser || browserObject instanceof IOSBrowser) {
+    await browserSession.browser.clickContent();
+    await openSessionUrl(browserSession, `${kIframeRootSame}/supercookies.html?mode=read&thirdparty=same`);
+  } else if (browserSession.browser instanceof AndroidBrowser || browserSession.browser instanceof IOSBrowser) {
     // In mobile, we click the viewport to open a new tab.
-    await browserObject.clickContent();
+    await browserSession.browser.clickContent();
   } else {
     // In desktop, we manually open a new tab.
-    await openSessionUrl(browserObject, `${kIframeRootSame}/supercookies.html?mode=read&thirdparty=same`);
+    await openSessionUrl(browserSession, `${kIframeRootSame}/supercookies.html?mode=read&thirdparty=same`);
   }
   // Return the main results.
   return resultsPromise;
 };
 
 // Run the insecure connection test. Returns { insecureResults, insecurePassed }.
-const runInsecureTest = async (browserObject) => {
-  const timeout = (browserObject instanceof DesktopBrowser) ? 8000 : 30000;
-  const insecureResultPromise = nextBrowserValue(browserObject, timeout);
-  log('we have insecureResultPromise');
-  await openSessionUrl(browserObject, `${kInsecureRoot}/insecure.html`);
-  log('openSessionUrl returned');
+const runInsecureTest = async (browserSession) => {
+  const timeout = (browserSession.browser instanceof DesktopBrowser) ? 8000 : 30000;
+  const insecureResultPromise = nextBrowserValue(browserSession, timeout);
+  await openSessionUrl(browserSession, `${kInsecureRoot}/insecure.html`);
   let insecureResult, insecurePassed;
   try {
     log('now trying');
@@ -257,11 +255,11 @@ const runInsecureTest = async (browserObject) => {
 };
 
 // Run the HSTS cache supercookie test.
-const runHstsTest = async (browserObject, insecurePassed) => {
+const runHstsTest = async (browserSession, insecurePassed) => {
   if (!insecurePassed) {
-    await runPageTest(browserObject, `${kIframeRootDifferent}/clear_hsts.html`);
-    await runPageTest(browserObject, `${kIframeRootDifferent}/set_hsts.html`);
-    return await runPageTest(browserObject, `${kInsecureRoot}/test_hsts.html`);
+    await runPageTest(browserSession, `${kIframeRootDifferent}/clear_hsts.html`);
+    await runPageTest(browserSession, `${kIframeRootDifferent}/set_hsts.html`);
+    return await runPageTest(browserSession, `${kInsecureRoot}/test_hsts.html`);
   } else {
     return {
       write: null,
@@ -289,12 +287,12 @@ const analyzeTrackingCookieTestResults = (leakyHosts) => {
   return analyzedResults;
 };
 
-const runTrackingCookieTest = async (browserObject) => {
+const runTrackingCookieTest = async (browserSession) => {
   await runPageTest(
-    browserObject, `${kIframeRootSame}/tracking_content.html?manual=true&write_cookies=true`);
+    browserSession, `${kIframeRootSame}/tracking_content.html?manual=true&write_cookies=true`);
   await runPageTest(
-    browserObject, `${kIframeRootDifferent}/tracking_content.html?manual=true&read_cookies=true`);
-  const leakyHosts = cookieProxy.getLeakyHosts(browserObject._websocket._sessionId);
+    browserSession, `${kIframeRootDifferent}/tracking_content.html?manual=true&read_cookies=true`);
+  const leakyHosts = cookieProxy.getLeakyHosts(browserSession.websocket._sessionId);
   return analyzeTrackingCookieTestResults(leakyHosts);
 };
 
@@ -306,58 +304,64 @@ const runTrackingCookieTest = async (browserObject) => {
 //   "https" : { ... },
 //   "navigation" : { ... },
 //   "supercookies" : { ... } }
-const runTestsStage1 = async ({ browserObject, categories }) => {
+const runTestsStage1 = async ({ browserSession, categories }) => {
   await disableProxies();
-  const results = {};
+  let results = {};
   log({ categories });
   // Main tests
   if (!categories || categories.includes('main')) {
-    const mainResults = await runMainTests(browserObject, categories);
-    Object.assign(results, mainResults);
+    const mainResults = await runMainTests(browserSession, categories);
+    results = { ...results, ...mainResults };
     await sleepMs(1000);
   }
   // Supplementary tests
   if (!categories || categories.includes('supplementary')) {
-    const supplementaryResults = await runPageTest(browserObject, `${kIframeRootSame}/supplementary.html`);
+    const supplementaryResults = await runPageTest(browserSession, `${kIframeRootSame}/supplementary.html`);
     // For now, only include system font detection results in desktop
-    if (browserObject instanceof DesktopBrowser) {
-      Object.assign(results.fingerprinting,
-        { 'System font detection': supplementaryResults['System font detection'] });
+    if (browserSession.browser instanceof DesktopBrowser) {
+      results.fingerprinting = {
+        ...results.fingerprinting,
+        ...{ 'System font detection': supplementaryResults['System font detection'] }
+      };
     }
   }
   // Misc
   if (!categories || categories.includes('misc')) {
-    const topLevelResults = await runPageTest(browserObject, `${kLiveRoot}/toplevel.html`);
-    console.log('misc results:', { topLevelResults });
+    const topLevelResults = await runPageTest(browserSession, `${kLiveRoot}/toplevel.html`);
     const ipAddressLeak = await ipAddressTest(topLevelResults);
-    Object.assign(results.misc,
-      ipAddressLeak,
-      { 'GPC enabled first-party': topLevelResults['GPC enabled first-party'] });
+    results.misc = {
+      ...results.misc,
+      ...ipAddressLeak,
+      ...{ 'GPC enabled first-party': topLevelResults['GPC enabled first-party'] }
+    };
   }
   // HTTPS tests
   if (!categories || categories.includes('https')) {
-    log(`running HTTPS tests for ${browserObject.browser}`);
-    const upgradableAddressResult = await runPageTest(browserObject, `${kUpgradableRoot}/upgradable.html?source=address`);
-    const { insecureResult, insecurePassed } = await runInsecureTest(browserObject);
+    const upgradableAddressResult = await runPageTest(browserSession, `${kUpgradableRoot}/upgradable.html?source=address`);
+    const { insecureResult, insecurePassed } = await runInsecureTest(browserSession);
     // HSTS supercookie test
-    const hstsResult = await runHstsTest(browserObject, insecurePassed);
-    results.https = Object.assign({}, results.https, upgradableAddressResult, insecureResult);
-    if (!results.supercookies) {
-      results.supercookies = {};
-    }
-    Object.assign(results.supercookies, { 'HSTS cache': hstsResult });
+    const hstsResult = await runHstsTest(browserSession, insecurePassed);
+    results.https = {
+      ...results.https,
+      ...upgradableAddressResult,
+      ...insecureResult
+    };
+    results.supercookies = {
+      ...results.supercookies,
+      ...{ 'HSTS cache': hstsResult }
+    };
   }
   return results;
 };
 
-const runTestsStage2 = async ({ browserObject, categories }) => {
+const runTestsStage2 = async ({ browserSession, categories }) => {
   const results = {};
   // Tracking cookies
-  if (browserObject instanceof DesktopBrowser &&
+  if (browserSession.browser instanceof DesktopBrowser &&
       (!categories || categories.includes('trackingCookies'))) {
     // Now compile the results into a final format.
     log('running trackingCookies');
-    const trackingCookieResult = await runTrackingCookieTest(browserObject);
+    const trackingCookieResult = await runTrackingCookieTest(browserSession);
     Object.assign(results, { tracker_cookies: trackingCookieResult });
   }
   return results;
@@ -388,16 +392,16 @@ const asyncMap = (parallel, asyncFunction, array) =>
   (parallel ? asyncMapParallel : asyncMapSeries)(asyncFunction, array);
 */
 
-const prepareBrowser = async (config) => {
-  const browserObject = await createBrowserObject(config);
-  browserObject._websocket = await createWebsocket();
-  await browserObject.launch();
-  if (browserObject instanceof DesktopBrowser) {
+const prepareBrowserSession = async (config) => {
+  const browser = await createBrowserObject(config);
+  const websocket = await createWebsocket();
+  await browser.launch();
+  if (browser instanceof DesktopBrowser) {
     // Give browser the chance to load any feature flags.
     await sleepMs(15000);
-    await browserObject.restart();
+    await browser.restart();
   }
-  return browserObject;
+  return { browser, websocket };
 };
 
 // Runs a batch of tests (multiple browsers).
@@ -411,15 +415,15 @@ const runTestsBatch = async (
   for (let iter = 0; iter < repeat; ++iter) {
     for (const browserList of browserLists) {
       const timeStarted = new Date().toISOString();
-      let browserObjects;
+      let browserSessions;
       try {
-        browserObjects = await asyncMapParallel((config) => prepareBrowser(config), browserList);
-        console.log({ browserObjects });
-        const testResultsStage1 = await asyncMapParallel((browserObject) => deadlinePromise(`${browserObject.browser} tests`, runTestsStage1({ browserObject, categories }), 600000), browserObjects);
+        browserSessions = await asyncMapParallel((config) => prepareBrowserSession(config), browserList);
+        console.log({ browserSessions });
+        const testResultsStage1 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage1({ browserSession, categories }), 600000), browserSessions);
         let testResultsStage2 = [];
         if (!android && !ios) {
           await enableProxies(cookieProxyPort);
-          testResultsStage2 = await asyncMapParallel((browserObject) => deadlinePromise(`${browserObject.browser} tests`, runTestsStage2({ browserObject, categories }), 100000), browserObjects);
+          testResultsStage2 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage2({ browserSession, categories }), 100000), browserSessions);
           await disableProxies(cookieProxyPort);
         }
         for (let i = 0; i < browserList.length; ++i) {
@@ -432,7 +436,7 @@ const runTestsBatch = async (
             nightly,
             testResults,
             timeStarted,
-            reportedVersion: await browserObjects[i].version(),
+            reportedVersion: await browserSessions[i].browser.version(),
             os: os.type(),
             os_version: os.version()
           });
@@ -441,10 +445,10 @@ const runTestsBatch = async (
         log(e);
       }
       if (!debug) {
-        for (const browserObject of browserObjects) {
-          await closeWebSocket(browserObject._websocket);
+        for (const browserSession of browserSessions) {
+          await closeWebSocket(browserSession.websocket);
           try {
-            await browserObject.kill();
+            await browserSession.browser.kill();
           } catch (e) {
             log(e);
           }
