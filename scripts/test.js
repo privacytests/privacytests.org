@@ -315,15 +315,13 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
     await sleepMs(1000);
   }
   // Supplementary tests
-  if (!categories || categories.includes('supplementary')) {
+  if (browserSession.browser instanceof DesktopBrowser &&
+    (!categories || categories.includes('supplementary'))) {
     const supplementaryResults = await runPageTest(browserSession, `${kIframeRootSame}/supplementary.html`);
-    // For now, only include system font detection results in desktop
-    if (browserSession.browser instanceof DesktopBrowser) {
-      results.fingerprinting = {
-        ...results.fingerprinting,
-        ...{ 'System font detection': supplementaryResults['System font detection'] }
-      };
-    }
+    results.fingerprinting = {
+      ...results.fingerprinting,
+      ...{ 'System font detection': supplementaryResults['System font detection'] }
+    };
   }
   // Misc
   if (!categories || categories.includes('misc')) {
