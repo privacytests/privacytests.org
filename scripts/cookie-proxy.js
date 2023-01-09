@@ -14,6 +14,9 @@ const parseCookies = (cookieString) => {
   const cookieKVs = cookieString.split(";");
   for (let cookieKV of cookieKVs) {
     let [key, val] = cookieKV.split("=");
+    if (val === undefined) {
+      throw new Error("no key/val pairs found");
+    }
     result[key.trim()] = val.trim();
   }
   return result;
