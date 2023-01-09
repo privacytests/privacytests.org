@@ -1,5 +1,19 @@
 # News
-## [Issue 39](/): 2022-12-23
+## [Issue 40](/): 2023-01-08
+
+### New browser versions
+
+On iOS:
+* Brave 1.46
+* Edge 108.1462
+* Focus 108.1
+* Yandex 2211.8
+
+On Android:
+* Firefox 108.2
+* Focus 108.2
+
+## [Issue 39](/archive/issue39): 2022-12-23
 
 ### New browser versions
 
