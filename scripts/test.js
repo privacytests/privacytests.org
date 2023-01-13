@@ -13,10 +13,9 @@ const os = require('os');
 const process = require('process');
 const fetch = require('node-fetch');
 const render = require('./render');
-const { DesktopBrowser } = require('./desktop.js');
+const { DesktopBrowser } = os.platform() === 'darwin' ? require('./desktop.js') : require('./desktop-linux.js');
 const { AndroidBrowser } = require('./android.js');
 const { IOSBrowser } = require('./iOS.js');
-const proxy = require('./system-proxy');
 const WebSocket = require('ws');
 const cookieProxy = require('./cookie-proxy');
 const { sleepMs } = require('./utils');
@@ -83,30 +82,6 @@ const installTestFontIfNeeded = () => {
   if (!fs.existsSync(fontDestination)) {
     fs.copyFileSync([__dirname, '../assets/fonts/Monoton-Regular.ttf'], fontDestination);
   }
-};
-
-// ## Proxies
-
-let preferredNetworkService;
-
-const disableProxies = async () => {
-  preferredNetworkService ??= proxy.getPreferredNetworkService();
-  proxy.setProxies(preferredNetworkService, {
-    web: { enabled: false },
-    secureweb: { enabled: false }
-  });
-  // Wait for proxy settings to propagate.
-  await sleepMs(1000);
-};
-
-const enableProxies = async (port) => {
-  preferredNetworkService ??= proxy.getPreferredNetworkService();
-  proxy.setProxies(preferredNetworkService, {
-    web: { enabled: true, domain: '127.0.0.1', port },
-    secureweb: { enabled: true, domain: '127.0.0.1', port }
-  });
-  // Wait for proxy settings to propagate.
-  await sleepMs(1000);
 };
 
 // ## Websocket utilities
@@ -305,7 +280,7 @@ const runTrackingCookieTest = async (browserSession) => {
 //   "navigation" : { ... },
 //   "supercookies" : { ... } }
 const runTestsStage1 = async ({ browserSession, categories }) => {
-  await disableProxies();
+  await DesktopBrowser.setGlobalProxyUsageEnabled(false);
   let results = {};
   log({ categories });
   // Main tests
@@ -420,9 +395,9 @@ const runTestsBatch = async (
         const testResultsStage1 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage1({ browserSession, categories }), 600000), browserSessions);
         let testResultsStage2 = [];
         if (!android && !ios) {
-          await enableProxies(cookieProxyPort);
+          await DesktopBrowser.setGlobalProxyUsageEnabled(true, cookieProxyPort);
           testResultsStage2 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage2({ browserSession, categories }), 100000), browserSessions);
-          await disableProxies(cookieProxyPort);
+          await DesktopBrowser.setGlobalProxyUsageEnabled(false);
         }
         for (let i = 0; i < browserList.length; ++i) {
           const testResults = Object.assign({}, testResultsStage1[i], testResultsStage2[i]);
@@ -530,7 +505,7 @@ const cleanup = async () => {
     return;
   }
   log('cleaning up');
-  await disableProxies();
+  await DesktopBrowser.setGlobalProxyUsageEnabled(false);
   cleanupRan = true;
 };
 
@@ -574,7 +549,7 @@ const main = async () => {
   });
   try {
     installTestFontIfNeeded();
-    await disableProxies();
+    await DesktopBrowser.setGlobalProxyUsageEnabled(false);
     // Read config file and flags from command line
     const config = readConfig();
     log({ config });
