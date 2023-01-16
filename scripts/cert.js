@@ -3,7 +3,8 @@ const { mkdir, rm, access } = require('fs/promises');
 const fs = require('fs');
 const { homedir } = require('os');
 const path = require('path');
-const { _ : {memoize} } = require('lodash');
+const os = require('os');
+const { _: { memoize } } = require('lodash');
 
 const execSyncExplicit = (command) => {
   console.log(command);
@@ -47,13 +48,30 @@ const generateCert = async () => {
   return { keyPath, certPath };
 };
 
-const setupCertificate = async () => {
+const setupCertificateNss = async () => {
   const { keyPath, certPath } = await generateCert();
   if (!(await fileExists(nssdbPath()))) {
     await createDB(nssdbPath());
   }
   await addCertificateToDB(nssdbPath(), certPath);
   return { keyPath, certPath };
+};
+
+const setupCertificateDarwin = async () => {
+  const mkcertPath = execSync("/opt/homebrew/bin/mkcert -CAROOT")
+    .toString().trim();
+  return {
+    keyPath: `${mkcertPath}/rootCA-key.pem`,
+    certPath: `${mkcertPath}/rootCA.pem`,
+  };
+};
+
+const setupCertificate = async () => {
+  if (os.platform() === "darwin") {
+    return setupCertificateDarwin();
+  } else {
+    return setupCertificateNss();
+  }
 };
 
 module.exports = { setupCertificate };
