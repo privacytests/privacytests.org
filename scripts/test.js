@@ -366,7 +366,7 @@ const asyncMap = (parallel, asyncFunction, array) =>
 */
 
 const prepareBrowserSession = async (config) => {
-  const browser = await createBrowserObject(config);
+  const browser = createBrowserObject(config);
   const websocket = await createWebsocket();
   await browser.launch();
   if (browser instanceof DesktopBrowser) {
