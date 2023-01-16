@@ -1,6 +1,7 @@
 const fs = require("fs");
 const { join: joinDir } = require("path");
 const { exec, execSync, sleepMs } = require("./utils");
+const proxy = require('./system-proxy');
 
 /*
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --incognito "https://example.com"
@@ -226,6 +227,25 @@ class DesktopBrowser {
       execSync(updateCommand);
     }
   }
+
+  static preferredNetworkService;
+  static proxyUsageState = false;
+
+  static async setGlobalProxyUsageEnabled (enabled, port = null) {
+    if (enabled === this.proxyUsageState) {
+      return;
+    }
+    this.proxyUsageState = enabled;
+    this.preferredNetworkService ??= proxy.getPreferredNetworkService();
+    const setting = { enabled };
+    if (enabled) {
+      Object.assign(setting,  {domain: '127.0.0.1', port });
+    }
+    proxy.setProxies(this.preferredNetworkService,
+      { web: setting, secureweb: setting });
+    // Wait for proxy settings to propagate.
+    await sleepMs(1000);
+  };
 }
 
 module.exports = { DesktopBrowser };
