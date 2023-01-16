@@ -22,7 +22,7 @@ const childProcesses = (pid) => {
   } catch (e) {
     return [];
   }
-}
+};
 
 // Returns all processes that are descendants of PID, including
 // the original PID itself.
@@ -34,12 +34,18 @@ const descendantProcesses = (pid) => {
 
 // Kill all processes in the list of PIDs.
 const killProcesses = (pids) => {
-  pids.map(pid => process.kill(pid, process.SIGTERM));
+  pids.map(pid => {
+    try {
+      process.kill(pid, process.SIGTERM);
+    } catch (e) {
+      console.log(e);
+    }
+  });
 };
 
 // Kill a process and all of its descendants.
 const killProcessAndDescendants = (pid) => {
   killProcesses(descendantProcesses(pid));
-}
+};
 
 module.exports = { sleepMs, execSync, exec, killProcessAndDescendants };

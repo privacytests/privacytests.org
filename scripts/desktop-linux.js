@@ -46,40 +46,60 @@ const standardFlags = {
   "webkit": "--profile "
 };
 
+let globalProxyUsageEnabled = false;
+let globalProxyPort = null;
+
 // Declares a class that represents a browser on Linux.
-class DesktopBrowserLinux {
+class DesktopBrowser {
   constructor({ browser, path, incognito, tor, nightly, appDir }) {
     this._defaults = linuxDefaultBrowserSettings[browser];
-    const flags = `${incognito ? "--" + this._defaults.privateFlag : ""} ${tor ? "--" + this._defaults.torFlag : ""} ` + standardFlags[this._defaults.basedOn];
-    const profilePath = join("profiles",browser);
-    fs.mkdirSync(profilePath, {recursive: true});
-    this._command = `${this._defaults.command} ${flags}${profilePath}`;
+    this._flags = `${incognito ? "--" + this._defaults.privateFlag : ""} ${tor ? "--" + this._defaults.torFlag : ""} ` + standardFlags[this._defaults.basedOn];
+    this._profilePath = join("profiles", browser);
+    fs.mkdirSync(this._profilePath, { recursive: true });
+    this._usingProxy = globalProxyUsageEnabled;
   }
 
-  async launch(clean = true) {
-    this._process = exec(this._command);// , { env: this._defaults.env });
+  command () {
+    let result = `${this._defaults.command} ${this._flags}${this._profilePath}`;
+    if (globalProxyUsageEnabled) {
+      result += ` --proxy-server="http://127.0.0.1:${globalProxyPort}"`;
+    }
+    return result;
   }
 
-  async version() {
+  async launch (clean = true) {
+    this._process = exec(this.command());// , { env: this._defaults.env });
+  }
+
+  async version () {
     return execSync(`${this._defaults.command} --version`).toString().trim();
   }
 
-  async openUrl(url) {
-    exec(`${this._command} "${url}"`);
+  async openUrl (url) {
+    if (this._usingProxy !== globalProxyUsageEnabled) {
+      await this.restart();
+      this._usingProxy = globalProxyUsageEnabled;
+    }
+    exec(`${this.command()} "${url}"`);
   }
 
-  async kill() {
+  async kill () {
     killProcessAndDescendants(this._process.pid);
   }
 
-  async restart() {
+  async restart () {
     await this.kill();
     await this.launch();
   }
 
-  async update() {
+  async update () {
     throw new Error("not implemented");
+  }
+
+  static async setGlobalProxyUsageEnabled (enabled, port = null) {
+    globalProxyUsageEnabled = enabled;
+    globalProxyPort = port;
   }
 }
 
-module.exports = { DesktopBrowserLinux };
+module.exports = { DesktopBrowser };
