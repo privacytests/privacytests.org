@@ -26,32 +26,23 @@ const parseCookies = (cookieString) => {
 // that reads and writes third-party cookies. Injects a tracking
 // cookie if URL has "pto_write_cookie" query parameter; looks
 // for a cookie if URL has "pto_read_cookie" query parameter.
-const simulateTrackingCookies = async (port, debug = false, nss = false) => {
+const simulateTrackingCookies = async (port, debug = false) => {
   console.log("simulateTrackingCookies");
- // Allows us to match requests to responses.
+  // Allows us to match requests to responses.
   let idToUrlMapping = new Map();
-  let certPaths;
+  const certPaths = await cert.setupCertificate();
   // Create a proxy server with a self-signed HTTPS CA certificate:
-  if (nss) {
-    certPaths = await cert.setupCertificate();
-  } else {
-    const mkcertPath = execSync("/opt/homebrew/bin/mkcert -CAROOT")
-          .toString().trim();
-    certPaths = {
-      keyPath: `${mkcertPath}/rootCA-key.pem`,
-      certPath: `${mkcertPath}/rootCA.pem`,
-    };
-  }
-  console.log("XXXXXXXXXXXXXXXXXXXXX", certPaths);
   server = mockttp.getLocal({
     https: certPaths,
     cors: true
   });
   const certFile = fs.readFileSync(certPaths.certPath).toString();
   server.forGet("http://p.test").thenReply(200, `<html><body><h1><a href="ca">Download Certificate</a></h1></body></html>`);
-  server.forGet("http://p.test/ca").thenReply(200, certFile, 
-    {"content-type": "application/x-x509-ca-cert",
-     "content-disposition": "inline; filename=rootCA.pem"});
+  server.forGet("http://p.test/ca").thenReply(200, certFile,
+    {
+      "content-type": "application/x-x509-ca-cert",
+      "content-disposition": "inline; filename=rootCA.pem"
+    });
   server.forAnyRequest().thenPassThrough({
     // Inject cookies for responses
     beforeResponse: (response) => {
@@ -70,8 +61,8 @@ const simulateTrackingCookies = async (port, debug = false, nss = false) => {
         setCookieHeader = `pto_cookie=${sessionId}; max-age=3600; Secure; SameSite=None`;
         headers["set-cookie"] = setCookieHeader;
         let time = new Date().toUTCString();
-        console.log({time, url, sessionId, writeCookie, setCookieHeader});
-        return { headers }
+        console.log({ time, url, sessionId, writeCookie, setCookieHeader });
+        return { headers };
       }
       return undefined;
     },
@@ -91,7 +82,7 @@ const simulateTrackingCookies = async (port, debug = false, nss = false) => {
       }
       if (readCookie) {
         let time = new Date().toUTCString();
-        console.log({time, url, readCookie, sessionId, pto_cookie});
+        console.log({ time, url, readCookie, sessionId, pto_cookie });
       }
     }
   });
