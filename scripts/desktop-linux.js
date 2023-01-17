@@ -30,6 +30,7 @@ const linuxDefaultBrowserSettings = {
   },
   firefox: {
     command: "/snap/bin/firefox",
+    env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
     name: "firefox",
     nightlyName: "Firefox Nightly",
     privateFlag: "private-window",
@@ -57,22 +58,39 @@ class DesktopBrowser {
     this._profilePath = join("profiles", browser);
     fs.mkdirSync(this._profilePath, { recursive: true });
     this._usingProxy = globalProxyUsageEnabled;
+    this._processes = new Set();
+    this._browser = browser;
   }
 
   command () {
     let result = `${this._defaults.command} ${this._flags}${this._profilePath}`;
-    if (globalProxyUsageEnabled) {
+    if (globalProxyUsageEnabled && this._defaults.basedOn === "chromium") {
       result += ` --proxy-server="http://127.0.0.1:${globalProxyPort}"`;
     }
     return result;
   }
 
+  env () {
+    let result = { ...process.env, ...this._defaults.env };
+    if (globalProxyUsageEnabled && this._defaults.basedOn === "firefox") {
+      const proxyAddress = `http://127.0.0.1:${globalProxyPort}`;
+      result = { ...result, ...process.env };
+    }
+    return result;
+  }
+
   async launch (clean = true) {
-    this._process = exec(this.command());// , { env: this._defaults.env });
+    const process = exec(this.command(), { env: this.env() });
+    this._processes.add(process);
   }
 
   async version () {
-    return execSync(`${this._defaults.command} --version`).toString().trim();
+    let versionString = child_process.execSync(`${this._defaults.command} --version`).toString()
+      .replace(/^[^\d]+/, "").trim();
+    if (this._browser === "brave") {
+      versionString = versionString.replace(/^\d+\./, "");
+    }
+    return versionString;
   }
 
   async openUrl (url) {
@@ -80,11 +98,15 @@ class DesktopBrowser {
       await this.restart();
       this._usingProxy = globalProxyUsageEnabled;
     }
-    exec(`${this.command()} "${url}"`);
+    const process = exec(`${this.command()} "${url}"`, { env: this.env() });
+    this._processes.add(process);
   }
 
   async kill () {
-    killProcessAndDescendants(this._process.pid);
+    for (const process of this._processes) {
+      killProcessAndDescendants(process.pid);
+    }
+    this._processes.clear();
   }
 
   async restart () {
