@@ -8,7 +8,6 @@ const fs = require('fs');
 const { execSync } = require('child_process');
 const minimist = require('minimist');
 const dateFormat = require('dateformat');
-const YAML = require('yaml');
 const os = require('os');
 const process = require('process');
 const fetch = require('node-fetch');
@@ -18,7 +17,7 @@ const { AndroidBrowser } = require('./android.js');
 const { IOSBrowser } = require('./iOS.js');
 const WebSocket = require('ws');
 const cookieProxy = require('./cookie-proxy');
-const { sleepMs } = require('./utils');
+const { sleepMs, readYAMLFile } = require('./utils');
 
 // ## Constants
 
@@ -458,13 +457,6 @@ const writeDataSync = (filename, data) => {
 };
 
 // ## Config files
-
-// Takes a list of browser configs, and repeats or removes them as needed.
-// Read a YAML file from disk.
-const readYAMLFile = (file) => {
-  const fileContents = fs.readFileSync(file, 'utf8');
-  return YAML.parse(fileContents);
-};
 
 const readConfig = () => {
   const defaultConfig = { aggregate: true, repeat: 1, debug: false, update: false };

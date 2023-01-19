@@ -6,15 +6,16 @@ const open = require('open');
 const minimist = require('minimist');
 const template = require('./template.js');
 const _ = require('lodash');
+const { readYAMLFile } = require('./utils');
 
-const escapeHtml = str => str.replace(/[&<>'"]/g, 
+const escapeHtml = str => str.replace(/[&<>'"]/g,
   tag => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      "'": '&#39;',
-      '"': '&quot;'
-    }[tag]));
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;'
+  }[tag]));
 
 // The names used by browser-logos for nightly browsers.
 const nightlyIconNames = {
@@ -49,8 +50,10 @@ const htmlTable = ({ headers, body, className }) => {
   elements = [];
   elements.push(`<table class="${className}">`);
   elements.push("<tr>");
-  for (let header of headers) {
-    elements.push(`<th class="table-header" style="text-transform: capitalize;">${header}</th>`);
+  if (headers) {
+    for (let header of headers) {
+      elements.push(`<th class="table-header" style="text-transform: capitalize;">${header}</th>`);
+    }
   }
   elements.push("</tr>");
   let firstSubheading = true;
@@ -73,7 +76,7 @@ const htmlTable = ({ headers, body, className }) => {
 };
 
 const dropMicroVersion = (version) =>
-  version ? version.split(".").slice(0,2).join(".") : version;
+  version ? version.split(".").slice(0, 2).join(".") : version;
 
 // An inline script that shows a tooltip if the user clicks on any table element
 const tooltipScript = `
@@ -127,7 +130,7 @@ const resultsToDescription = ({
   let browserVersionLong = reportedVersion;
   let browserVersionShort = dropMicroVersion(browserVersionLong) || "???";
   let platformFinal = os;
-//  let platformVersionFinal = platformVersion || "";
+  //  let platformVersionFinal = platformVersion || "";
   let finalText = `
   <span>
     <img class="browser-logo-image" src="${browserLogoDataUri(browser, nightly)}" width="32" height="32"><br>
@@ -157,7 +160,7 @@ const allHaveValue = (x, value) => {
 // Generates a table cell which indicates whether
 // a test passed, and includes the tooltip with
 // more information.
-const testBody = ({passed, testFailed, tooltip, unsupported}) => {
+const testBody = ({ passed, testFailed, tooltip, unsupported }) => {
   let allTestsFailed = allHaveValue(testFailed, true);
   let allUnsupported = allHaveValue(unsupported, true);
   let anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : (passed === false);
@@ -167,24 +170,26 @@ const testBody = ({passed, testFailed, tooltip, unsupported}) => {
 </div>`;
 };
 
+const tooltipFunctions = {};
+
 // Creates a tooltip with fingerprinting test results
 // including the test expressions, the actual
 // and desired values, and whether the test passed.
-const fingerprintingTooltip = fingerprintingItem => {
+tooltipFunctions["fingerprinting"] = fingerprintingItem => {
   let { expression, desired_expression, actual_value,
-        desired_value, passed, worker } = fingerprintingItem;
+    desired_value, passed, worker } = fingerprintingItem;
   return `
-expression: ${ expression }
-desired expression: ${ desired_expression }
-actual value: ${ actual_value }
-desired value: ${ desired_value }
-passed: ${ passed }
-${ worker ? "[Worker]" : "" }
+expression: ${expression}
+desired expression: ${desired_expression}
+actual value: ${actual_value}
+desired value: ${desired_value}
+passed: ${passed}
+${worker ? "[Worker]" : ""}
   `.trim();
 };
 
 // For simple tests, creates a tooltip that shows detailed results.
-const simpleToolTip = (result) => {
+tooltipFunctions["simple"] = (result) => {
   let text = "";
   for (let key in result) {
     if (key !== "description") {
@@ -196,43 +201,44 @@ const simpleToolTip = (result) => {
 
 const joinIfArray = x => Array.isArray(x) ? x.join(", ") : x;
 
-const crossSiteTooltip = (
+tooltipFunctions["crossSite"] = (
   { write, read, readSameFirstParty, readDifferentFirstParty, passed, testFailed, unsupported }
 ) => {
   return `
-write: ${ write }
+write: ${write}
 
-read: ${ read }
+read: ${read}
 
-result, same first party: ${ joinIfArray(readSameFirstParty) }
+result, same first party: ${joinIfArray(readSameFirstParty)}
 
-result, different first party: ${ joinIfArray(readDifferentFirstParty) }
+result, different first party: ${joinIfArray(readDifferentFirstParty)}
 
-unsupported: ${ joinIfArray(unsupported) }
+unsupported: ${joinIfArray(unsupported)}
 
-passed: ${ joinIfArray(passed) }
+passed: ${joinIfArray(passed)}
 
-test failed: ${ joinIfArray(testFailed) }
+test failed: ${joinIfArray(testFailed)}
 `.trim();
 };
 
-const resultsSection = ({bestResults, category, tooltipFunction}) => {
-//  console.log(results);
-let section = [];
-let bestResultsForCategory = bestResults[0]["testResults"][category];
-if (!bestResultsForCategory) {
-  return [];
-}
-let rowNames = Object.keys(bestResultsForCategory)
-      .sort(Intl.Collator().compare);
+const resultsSection = ({ bestResults, category, tooltipFunction }) => {
+  //  console.log(results);
+  let section = [];
+  let bestResultsForCategory = bestResults[0]["testResults"][category];
+  if (!bestResultsForCategory) {
+    return [];
+  }
+  let rowNames = Object.keys(bestResultsForCategory)
+    .sort(Intl.Collator().compare);
   let resultMaps = bestResults
-      .map(m => m["testResults"][category]);
+    .map(m => m["testResults"][category]);
   for (let rowName of rowNames) {
     let row = [];
     let description = bestResultsForCategory[rowName]["description"] ?? "";
     row.push(`<div class="tooltipParent">${rowName}<span class="tooltipText">${description}</span></div>`);
     for (let resultMap of resultMaps) {
       try {
+        console.log({tooltipFunction});
         let tooltip = tooltipFunction(resultMap[rowName]);
         let { passed, testFailed, unsupported } = resultMap[rowName];
         row.push(testBody({ passed, testFailed, tooltip, unsupported }));
@@ -246,88 +252,28 @@ let rowNames = Object.keys(bestResultsForCategory)
   return section;
 };
 
-const sectionDescription = {
-  statePartitioning: `
-    A common vulnerability of web browsers is that they allow tracking companies
-    to 'tag' your browser with some data ('state') that identifies you. When third-party trackers
-    are embedded in websites, they can see this identifying data as you browse to different
-    websites. Fortunately, it is possible for this category of leaks to be fixed by partitioning
-    all data stored in the browser such that no data can be shared between websites.`,
-  navigation: `
-    When you click a hyperlink to navigate your browser from one site to another, certain
-    browser APIs allow the first site to communicate to the second site. These privacy
-    vulnerabilities can be fixed by introducing new limits on how much data is transfered
-    between sites.`,
-  https: `
-    HTTPS is the protocol that web browsers use to connect securely to websites. When
-    HTTPS is being used, the connection is encrypted so
-    that third parties on the network cannot read content being sent between the
-    server and your browser. In the past, insecure connections were the default and websites
-    would need to actively request that a browser use HTTPS. Now the status quo is shifting,
-    and browser makers are moving toward a world where HTTPS is the default protocol.`,
-  misc: `This category includes tests for the presence of miscellaneous privacy features.`,
-  fingerprinting: `
-    Fingerprinting is a technique trackers use to uniquely identify you as you browse the web.
-    A fingerprinting script will measure several characteristics of your browser and, combining
-    this data, will build a fingerprint that may uniquely identify you among web users.
-    Browsers can introduce countermeasures, such as minimizing the distinguishing information
-    disclosed by certain web APIs so your browser is harder to pick out from the crowd
-    (so-called 'fingerprinting resistance').`,
-  queryParameters: `
-    When you browse from one web page to another, tracking companies will frequently attach
-    a 'tracking query parameter' to the address of the second web page. That query parameter
-    may contain a unique identifier that tracks you individually as you browse the web. And
-    these query parameters are frequently synchronized with cookies, making them a powerful
-    tracking vector. Web browsers can protect you from known tracking query parameters by
-    stripping them from web addresses before your browser sends them. (The set of
-    tracking query parameters tested here was largely borrowed from Brave.)`,
-  trackers: `
-    When you visit a web page, it frequently has third-party embedded tracking content, such
-    as scripts and tracking pixels. These embedded components spy on you. Some browsers and
-    browser extensions maintain list of tracking companies and block their content from
-    being loaded.
-    
-    This section checks to see if a browser blocks 20 of the largest trackers listed
-    by https://whotracks.me.`,
-  tracker_cookies: `
-    A large fraction of web pages on the web have hidden third-party trackers that read and
-    write cookies in your browser. These cookies can be used to track your browsing across
-    websites.
-
-    This section checks to see if a browser stops cross-site tracking by cookies from 20 of
-    the largest trackers listed by https://whotracks.me.
-  `};
-
 const resultsToTable = (results, title, includeTrackingCookies) => {
   console.log(results);
   let bestResults = results
-      .filter(m => m["testResults"])
-      .filter(m => m["testResults"]["supercookies"])
-      .sort((m1, m2) => m1["browser"] ? m1["browser"].localeCompare(m2["browser"]) : -1);
-      console.log(bestResults[0]);
+    .filter(m => m["testResults"])
+    //  .filter(m => m["testResults"]["supercookies"])
+    .sort((m1, m2) => m1["browser"] ? m1["browser"].localeCompare(m2["browser"]) : -1);
+  console.log(bestResults[0]);
   let headers = bestResults.map(resultsToDescription);
   headers.unshift(`<h1 class="title">${title}</h1>`);
   let body = [];
   if (bestResults.length === 0) {
     return [];
   }
-  body.push([{subheading:"State Partitioning tests", description: sectionDescription.statePartitioning}]);
-  body = body.concat(resultsSection({bestResults, category:"supercookies", tooltipFunction: crossSiteTooltip}));
-  body.push([{subheading:"Navigation tests", description: sectionDescription.navigation}]);
-  body = body.concat(resultsSection({bestResults, category:"navigation", tooltipFunction: crossSiteTooltip}));
-  body.push([{subheading:"HTTPS tests", description: sectionDescription.https }]);
-  body = body.concat(resultsSection({bestResults, category:"https", tooltipFunction: simpleToolTip}));
-  body.push([{subheading:"Misc tests", description: sectionDescription.misc}]);
-  body = body.concat(resultsSection({bestResults, category:"misc", tooltipFunction: simpleToolTip}));
-  body.push([{subheading:"Fingerprinting resistance tests", description: sectionDescription.fingerprinting}]);
-  body = body.concat(resultsSection({bestResults, category:"fingerprinting", tooltipFunction: fingerprintingTooltip} ));
-  body.push([{subheading:"Tracking query parameter tests", description: sectionDescription.queryParameters}]);
-  body = body.concat(resultsSection({bestResults, category:"query", tooltipFunction: simpleToolTip}));
-  body.push([{subheading:"Tracker content blocking", description: sectionDescription.trackers}]);
-  body = body.concat(resultsSection({bestResults, category:"trackers", tooltipFunction: simpleToolTip}));
-  if (includeTrackingCookies) {
-    body.push([{subheading:"Tracking cookie protection", description: sectionDescription.tracker_cookies}]);
-    body = body.concat(resultsSection({bestResults, category:"tracker_cookies", tooltipFunction: simpleToolTip}));
+  const sections = readYAMLFile('../assets/copy/sections.yaml')
+  for (const { category, name, description, tooltipType } of sections) {
+    if (includeTrackingCookies || !(category == tracker_cookies)) {
+      body.push([{ subheading: name, description }]);
+      body = body.concat(resultsSection({
+        bestResults, category,
+        tooltipFunction: tooltipFunctions[tooltipType]
+      }));
+    }
   }
   return { headers, body };
 };
@@ -385,35 +331,37 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
         <div><span class="click-anywhere">(Click anywhere for more info.)</span></div>
       </div>
     </div>` +
-  htmlTable({headers, body,
-                    className:"comparison-table"}) +
-	`<p class="footer">Tests ran at ${results.timeStarted ? results.timeStarted.replace("T"," ").replace(/\.[0-9]{0,3}Z/, " UTC") : "??"}.
+    htmlTable({
+      headers, body,
+      className: "comparison-table"
+    }) +
+    `<p class="footer">Tests ran at ${results.timeStarted ? results.timeStarted.replace("T", " ").replace(/\.[0-9]{0,3}Z/, " UTC") : "??"}.
          Source version: <a href="https://github.com/arthuredelstein/browser-privacy/tree/${results.git}"
-    >${results.git.slice(0,8)}</a>.
+    >${results.git.slice(0, 8)}</a>.
     Raw data in <a href="${jsonFilename}">JSON</a>.
     </p>` + `<script type="module">${tooltipScript}</script>`;
 };
 
-const contentPage = ({results, title, basename, previewImageUrl, tableTitle, nightly, incognito}) =>
-      template.htmlPage({
-        title, previewImageUrl,
-        cssFiles: [`${__dirname}/../assets/css/template.css`, `${__dirname}/../assets/css/table.css`],
-        content: content(results, basename, tableTitle, nightly, incognito),
-      });
+const contentPage = ({ results, title, basename, previewImageUrl, tableTitle, nightly, incognito }) =>
+  template.htmlPage({
+    title, previewImageUrl,
+    cssFiles: [`${__dirname}/../assets/css/template.css`, `${__dirname}/../assets/css/table.css`],
+    content: content(results, basename, tableTitle, nightly, incognito),
+  });
 
 // Reads in a file and parses it to a JSON object.
 const readJSONFile = (file) =>
-    JSON.parse(fs.readFileSync(file));
+  JSON.parse(fs.readFileSync(file));
 
 // Returns the path to the latest results file in
 // the given directory.
 const latestResultsFile = (dir) => {
-  const files = fs.readdirSync(dir, {withFileTypes:true});
+  const files = fs.readdirSync(dir, { withFileTypes: true });
   const stem = files
-          .filter(d => d.isDirectory())
-          .map(d => d.name)
-          .sort()
-          .pop();
+    .filter(d => d.isDirectory())
+    .map(d => d.name)
+    .sort()
+    .pop();
   const todayPath = dir + "/" + stem;
   console.log(todayPath);
   const todayFiles = fs.readdirSync(todayPath);
@@ -442,8 +390,8 @@ const aggregateRepeatedTrials = (results) => {
       if (aggregatedResults.has(key)) {
         let theseTestResults = aggregatedResults.get(key).testResults;
         if (theseTestResults) {
-            for (let subcategory of ["supercookies", "fingerprinting", "https", "misc", "navigation",
-				     "query", "trackers", "tracker_cookies"]) {
+          for (let subcategory of ["supercookies", "fingerprinting", "https", "misc", "navigation",
+            "query", "trackers", "tracker_cookies"]) {
             let someTests = theseTestResults[subcategory];
             for (let testName in test.testResults[subcategory]) {
               for (let value in test.testResults[subcategory][testName]) {
@@ -486,18 +434,18 @@ const renderPage = ({ dataFiles, live, aggregate }) => {
   const resultsFileHTMLLatest = "../results/latest.html";
   const resultsFileHTML = resultsFilesJSON[0].replace(/\.json$/, ".html");
   const resultsFilePreviewImage = resultsFileHTML.replace(".html", "-preview.png");
-//  fs.copyFile(resultsFile, "../results/" + path.basename(resultsFile), fs.constants.COPYFILE_EXCL);
+  //  fs.copyFile(resultsFile, "../results/" + path.basename(resultsFile), fs.constants.COPYFILE_EXCL);
   console.log(`Reading from raw results files: ${resultsFilesJSON}`);
   let results = getMergedResults(resultsFilesJSON);
   console.log(results.all_tests.length);
   let processedResults = aggregate ? aggregateRepeatedTrials(results) : results;
-//  console.log(results.all_tests[0]);
-//  console.log(JSON.stringify(results));
+  //  console.log(results.all_tests[0]);
+  //  console.log(JSON.stringify(results));
   const nightly = results.all_tests.every(t => (t.nightly === true));
   const incognito = results.all_tests.every(t => (t.incognito === true || t.tor === true));
   let tableTitle;
   if (nightly) {
-    tableTitle = incognito ? "Nightly private modes" : "Nightly Builds";     
+    tableTitle = incognito ? "Nightly private modes" : "Nightly Builds";
   } else if (results.platform === "Android") {
     tableTitle = "Android Browsers";
   } else if (results.platform === "iOS") {
@@ -518,8 +466,8 @@ const renderPage = ({ dataFiles, live, aggregate }) => {
   return { resultsFileHTML, resultsFilePreviewImage };
 };
 
-const render = async ({dataFiles, live, aggregate }) => {
-  const { resultsFileHTML, resultsFilePreviewImage} = renderPage({dataFiles, live, aggregate});
+const render = async ({ dataFiles, live, aggregate }) => {
+  const { resultsFileHTML, resultsFilePreviewImage } = renderPage({ dataFiles, live, aggregate });
   const createPreviewImage = (await import('./preview.mjs')).createPreviewImage;
   await createPreviewImage(resultsFileHTML, resultsFilePreviewImage);
   if (!live) {
@@ -529,7 +477,7 @@ const render = async ({dataFiles, live, aggregate }) => {
 
 const main = async () => {
   let { _: dataFiles, live, aggregate } = minimist(process.argv.slice(2),
-                                     opts = { default: { aggregate: true }});
+    opts = { default: { aggregate: true } });
   await render({ dataFiles, live, aggregate: (aggregate === true) });
 };
 
