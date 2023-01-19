@@ -379,8 +379,7 @@ const prepareBrowserSession = async (config) => {
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
 const runTestsBatch = async (
-  browserLists, { debug, android, ios, categories, repeat }
-    = { debug: false, repeat: 1 }) => {
+  browserLists, { debug, android, ios, categories, repeat } = { debug: false, repeat: 1 }) => {
   const allTests = [];
   const timeStarted = new Date().toISOString();
   cookieProxy.simulateTrackingCookies(cookieProxyPort, debug);
