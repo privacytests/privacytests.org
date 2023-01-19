@@ -1,5 +1,8 @@
 // # General utility functions for javascript
 
+const fs = require('fs');
+const YAML = require('yaml');
+
 const child_process = require('child_process');
 
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
@@ -42,4 +45,10 @@ const killProcessAndDescendants = (pid) => {
   killProcesses(descendantProcesses(pid));
 }
 
-module.exports = { sleepMs, execSync, exec, killProcessAndDescendants };
+// Read a YAML file from disk.
+const readYAMLFile = (file) => {
+  const fileContents = fs.readFileSync(file, 'utf8');
+  return YAML.parse(fileContents);
+};
+
+module.exports = { sleepMs, execSync, exec, killProcessAndDescendants, readYAMLFile };
