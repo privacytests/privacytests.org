@@ -63,7 +63,14 @@ const htmlTable = ({ headers, body, className }) => {
       if (item.subheading) {
         let description = (item.description ?? "").replaceAll(/\s+/g, " ").trim();
         className = firstSubheading ? "first subheading" : "subheading";
-        elements.push(`<th colspan="4" class="${className} tooltipParent">${escapeHtml(item.subheading)}<span class="tooltipText">${escapeHtml(description)}</span></th>`);
+        elements.push(`
+        <th colspan="8" class="${className} tooltipParent">
+          <div>
+            <span class="subheading-title">${escapeHtml(item.subheading)}</span>
+            <span class="tagline">${item.tagline}</span>
+          </div>
+          <span class="tooltipText">${escapeHtml(description)}</span>
+        </th>`);
         firstSubheading = false;
       } else {
         elements.push(`<td>${item}</td>`);
@@ -103,8 +110,9 @@ const tooltipScript = `
     visibleTooltip = tooltip;
   }
   document.addEventListener("mousedown", e => {
-    if (e.target.classList.contains("tooltipParent")) {
-      const tooltip = e.target.querySelector(".tooltipText");
+    const tooltipParent = e.path.filter(element => element.classList?.contains("tooltipParent"))[0];
+    if (tooltipParent) {
+      const tooltip = tooltipParent.querySelector(".tooltipText");
       if (tooltip) {
         tooltip === visibleTooltip ? hide() : show(tooltip);
       }
@@ -238,7 +246,6 @@ const resultsSection = ({ bestResults, category, tooltipFunction }) => {
     row.push(`<div class="tooltipParent">${rowName}<span class="tooltipText">${description}</span></div>`);
     for (let resultMap of resultMaps) {
       try {
-        console.log({tooltipFunction});
         let tooltip = tooltipFunction(resultMap[rowName]);
         let { passed, testFailed, unsupported } = resultMap[rowName];
         row.push(testBody({ passed, testFailed, tooltip, unsupported }));
@@ -252,7 +259,7 @@ const resultsSection = ({ bestResults, category, tooltipFunction }) => {
   return section;
 };
 
-const resultsToTable = (results, title, includeTrackingCookies) => {
+const resultsToTable = (results, title, subtitle, includeTrackingCookies) => {
   console.log(results);
   let bestResults = results
     .filter(m => m["testResults"])
@@ -260,15 +267,15 @@ const resultsToTable = (results, title, includeTrackingCookies) => {
     .sort((m1, m2) => m1["browser"] ? m1["browser"].localeCompare(m2["browser"]) : -1);
   console.log(bestResults[0]);
   let headers = bestResults.map(resultsToDescription);
-  headers.unshift(`<h1 class="title">${title}</h1>`);
+  headers.unshift(`<h1 class="title">${title}</h1><span class="subtitle">${subtitle}</span>`);
   let body = [];
   if (bestResults.length === 0) {
     return [];
   }
   const sections = readYAMLFile('../assets/copy/sections.yaml')
-  for (const { category, name, description, tooltipType } of sections) {
+  for (const { category, name, description, tagline, tooltipType } of sections) {
     if (includeTrackingCookies || !(category == tracker_cookies)) {
-      body.push([{ subheading: name, description }]);
+      body.push([{ subheading: name, description, tagline }]);
       body = body.concat(resultsSection({
         bestResults, category,
         tooltipFunction: tooltipFunctions[tooltipType]
@@ -290,7 +297,7 @@ const dateString = (dateTime) => {
 
 // Creates the content for a page.
 const content = (results, jsonFilename, title, nightly, incognito) => {
-  let { headers, body } = resultsToTable(results.all_tests, tableTitleHTML(title), results.platform === "Desktop");
+  let { headers, body } = resultsToTable(results.all_tests, tableTitleHTML(title), "(default settings)",results.platform === "Desktop");
   const issueNumberExists = fs.existsSync(`${__dirname}/issue-number`);
   const issueNumber = issueNumberExists ? fs.readFileSync(`${__dirname}/issue-number`).toString().trim() : undefined;
   const leftHeaderText = issueNumber ? `No. ${issueNumber}` : "";
