@@ -330,7 +330,7 @@ const runTestsStage2 = async ({ browserSession, categories }) => {
   const results = {};
   // Tracking cookies
   if (browserSession.browser instanceof DesktopBrowser &&
-      (!categories || categories.includes('trackingCookies'))) {
+    (!categories || categories.includes('trackingCookies'))) {
     // Now compile the results into a final format.
     log('running trackingCookies');
     const trackingCookieResult = await runTrackingCookieTest(browserSession);
@@ -365,7 +365,7 @@ const asyncMap = (parallel, asyncFunction, array) =>
 */
 
 const prepareBrowserSession = async (config) => {
-  const browser = await createBrowserObject(config);
+  const browser = createBrowserObject(config);
   const websocket = await createWebsocket();
   await browser.launch();
   if (browser instanceof DesktopBrowser) {
@@ -379,11 +379,11 @@ const prepareBrowserSession = async (config) => {
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
 const runTestsBatch = async (
-  browserLists, { debug, android, ios, categories, repeat, nss }
-  = { debug: false, repeat: 1 }) => {
+  browserLists, { debug, android, ios, categories, repeat }
+    = { debug: false, repeat: 1 }) => {
   const allTests = [];
   const timeStarted = new Date().toISOString();
-  cookieProxy.simulateTrackingCookies(cookieProxyPort, debug, nss);
+  cookieProxy.simulateTrackingCookies(cookieProxyPort, debug);
   for (let iter = 0; iter < repeat; ++iter) {
     for (const browserList of browserLists) {
       const timeStarted = new Date().toISOString();
