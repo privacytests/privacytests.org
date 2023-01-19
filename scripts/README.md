@@ -1,30 +1,43 @@
 # PrivacyTests.org tests
+
 This directory includes scripts to run browser privacy tests (fingerprinting resistance, partitioning between websites, etc.), save the results to a JSON file, and render those results in web pages.
 
 ## Set up
 
-First on Linux (for when it is supported in the future):
+PrivacyTests can run tests on browser on Mac, Linux (partial), iOS and Android. Depending on the platform, you will need to install a few things.
 
-`sudo apt-get install libpng-dev libxtst-dev libx11-dev`
+### On Mac
 
-For iOS testing (run on MacOS), we need:
-
-`brew install ideviceinstaller`
-
-Then, on all platforms:
-
-`npm install`
-
-Next run
 ```
 brew install mkcert
 mkcert -install
 ```
 
-You're ready to go!
+### On Linux
 
-* test.js runs the browser tests.
-* render.js takes the results of the browser tests and renders them to a web page.
+`sudo apt-get install libpng-dev libxtst-dev libx11-dev`
+
+### iOS
+
+You will need to use a Mac to run iOS tests. On the command line, enter:
+
+```
+brew install ideviceinstaller
+```
+
+### Android
+
+```
+brew cask install android-platform-tools
+```
+
+### Finally
+
+On all platforms:
+
+`npm install`
+
+You're ready to go!
 
 ## Usage
 

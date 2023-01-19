@@ -30,6 +30,7 @@ const linuxDefaultBrowserSettings = {
   },
   firefox: {
     command: "/snap/bin/firefox",
+    env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
     name: "firefox",
     nightlyName: "Firefox Nightly",
     privateFlag: "private-window",
@@ -46,40 +47,81 @@ const standardFlags = {
   "webkit": "--profile "
 };
 
+let globalProxyUsageEnabled = false;
+let globalProxyPort = null;
+
 // Declares a class that represents a browser on Linux.
-class DesktopBrowserLinux {
+class DesktopBrowser {
   constructor({ browser, path, incognito, tor, nightly, appDir }) {
     this._defaults = linuxDefaultBrowserSettings[browser];
-    const flags = `${incognito ? "--" + this._defaults.privateFlag : ""} ${tor ? "--" + this._defaults.torFlag : ""} ` + standardFlags[this._defaults.basedOn];
-    const profilePath = join("profiles",browser);
-    fs.mkdirSync(profilePath, {recursive: true});
-    this._command = `${this._defaults.command} ${flags}${profilePath}`;
+    this._flags = `${incognito ? "--" + this._defaults.privateFlag : ""} ${tor ? "--" + this._defaults.torFlag : ""} ` + standardFlags[this._defaults.basedOn];
+    this._profilePath = join("profiles", browser);
+    fs.mkdirSync(this._profilePath, { recursive: true });
+    this._usingProxy = globalProxyUsageEnabled;
+    this._processes = new Set();
+    this._browser = browser;
   }
 
-  async launch(clean = true) {
-    this._process = exec(this._command);// , { env: this._defaults.env });
+  command () {
+    let result = `${this._defaults.command} ${this._flags}${this._profilePath}`;
+    if (globalProxyUsageEnabled && this._defaults.basedOn === "chromium") {
+      result += ` --proxy-server="http://127.0.0.1:${globalProxyPort}"`;
+    }
+    return result;
   }
 
-  async version() {
-    return execSync(`${this._defaults.command} --version`).toString().trim();
+  env () {
+    let result = { ...process.env, ...this._defaults.env };
+    if (globalProxyUsageEnabled && this._defaults.basedOn === "firefox") {
+      const proxyAddress = `http://127.0.0.1:${globalProxyPort}`;
+      result = { ...result, ...process.env };
+    }
+    return result;
   }
 
-  async openUrl(url) {
-    exec(`${this._command} "${url}"`);
+  async launch (clean = true) {
+    const process = exec(this.command(), { env: this.env() });
+    this._processes.add(process);
   }
 
-  async kill() {
-    killProcessAndDescendants(this._process.pid);
+  async version () {
+    let versionString = child_process.execSync(`${this._defaults.command} --version`).toString()
+      .replace(/^[^\d]+/, "").trim();
+    if (this._browser === "brave") {
+      versionString = versionString.replace(/^\d+\./, "");
+    }
+    return versionString;
   }
 
-  async restart() {
+  async openUrl (url) {
+    if (this._usingProxy !== globalProxyUsageEnabled) {
+      await this.restart();
+      this._usingProxy = globalProxyUsageEnabled;
+    }
+    const process = exec(`${this.command()} "${url}"`, { env: this.env() });
+    this._processes.add(process);
+  }
+
+  async kill () {
+    for (const process of this._processes) {
+      killProcessAndDescendants(process.pid);
+    }
+    this._processes.clear();
+  }
+
+  async restart () {
     await this.kill();
     await this.launch();
   }
 
-  async update() {
+  async update () {
     throw new Error("not implemented");
+  }
+
+  static async setGlobalProxyUsageEnabled (enabled, port = null) {
+    globalProxyUsageEnabled = enabled;
+    globalProxyPort = port;
   }
 }
 
-module.exports = { DesktopBrowserLinux };
+module.exports = { DesktopBrowser };
