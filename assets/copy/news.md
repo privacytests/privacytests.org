@@ -1,5 +1,29 @@
 # News
-## [Issue 40](/): 2023-01-08
+## [Issue 41](/): 2023-01-19
+
+### New browser versions
+
+On Desktop:
+* Chrome 109.0
+* Edge 109.0
+* Librewolf 109.0-1
+
+On iOS:
+* Chrome 109.5414
+* Duckduckgo 7.71
+* Safari 16.2
+* Yandex 2301.0
+
+On Android:
+* Chrome 109.0
+* Duckduckgo 5.146
+* Edge 109.0
+* Focus 109.1
+* Mull 108.1
+* Opera 73.0
+* Yandex 23.1
+
+## [Issue 40](/archive/issue40): 2023-01-08
 
 ### New browser versions
 
