@@ -48,4 +48,4 @@ By keeping this project fully open source, I endeavor to provide the maximum pos
 
 ## Thanks
 
-Many thanks to the people who have offered suggestions, critiques, bug reports and code contributions, including: Peter Dolanjski, Steven Englehardt, Aleksey Khoroshilov, Simon Mainey, Pete Snyder, and John Wilander.
+Many thanks to the people who have offered suggestions, critiques, bug reports and code contributions, including: Peter Dolanjski, Steven Englehardt, Aleksey Khoroshilov, Simon Mainey, Jasper Rebane, Pete Snyder, and John Wilander.
