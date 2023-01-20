@@ -110,7 +110,7 @@ const tooltipScript = `
     visibleTooltip = tooltip;
   }
   document.addEventListener("mousedown", e => {
-    const tooltipParent = e.path.filter(element => element.classList?.contains("tooltipParent"))[0];
+    const tooltipParent = e.composedPath().filter(element => element.classList?.contains("tooltipParent"))[0];
     if (tooltipParent) {
       const tooltip = tooltipParent.querySelector(".tooltipText");
       if (tooltip) {
