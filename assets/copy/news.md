@@ -1,5 +1,27 @@
 # News
-## [Issue 41](/): 2023-01-19
+## [Issue 42](/): 2023-01-27
+
+### New browser versions
+
+On Desktop:
+* Firefox 109.0
+* Safari 16.3
+
+On iOS:
+* Firefox 109.0
+* Focus 109.0
+* Opera 3.5
+* Safari 16.3
+* Yandex 2301.2
+
+On Android:
+* Brave 1.47
+* Firefox 109.1
+* Mull 109.1
+* Opera 73.1
+
+
+## [Issue 41](/archive/issue41): 2023-01-19
 
 ### New browser versions
 
