@@ -1,4 +1,22 @@
 # News
+## [Issue 43](/): 2023-02-03
+
+### New browser versions
+
+On Desktop:
+* Librewolf 109.0
+* Opera 95.0
+* Ungoogled 109.0
+
+On iOS:
+* Yandex 2301.4
+
+On Android:
+* Duckduckgo 5.148
+* Firefox 109.2
+* Focus 109.2
+* Opera 73.2
+
 ## [Issue 42](/): 2023-01-27
 
 ### New browser versions
