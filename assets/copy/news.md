@@ -1,5 +1,18 @@
 # News
-## [Issue 45](/): 2023-02-23
+## [Issue 46](/): 2023-03-03
+
+### New browser versions
+
+On iOS:
+* Yandex 2301.7
+
+On Android:
+* Duckduckgo 5.151
+* Firefox 110.1
+* Focus 110.1
+* Yandex 23.1
+
+## [Issue 45](/archive/issue45): 2023-02-23
 
 ### New browser versions
 
