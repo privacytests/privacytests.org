@@ -64,7 +64,6 @@ const TRACKING_QUERY_PARAMETERS = {
   "hsCtaTracking": "HubSpot tracking parameter",
   // https://github.com/jparise/chrome-utm-stripper
   "mkt_tok": "Adobe Marketo tracking parameter",
-  "igshid": "Instagram tracking parameter",
 };
 
 // Map sessionId to the step.
