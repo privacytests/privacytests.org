@@ -18,6 +18,7 @@ const { IOSBrowser } = require('./iOS.js');
 const WebSocket = require('ws');
 const cookieProxy = require('./cookie-proxy');
 const { sleepMs, readYAMLFile } = require('./utils');
+const path = require('node:path');
 
 // ## Constants
 
@@ -79,7 +80,8 @@ const installTestFontIfNeeded = () => {
   }
   const fontDestination = `${userFontDir}/Monoton-Regular.ttf`;
   if (!fs.existsSync(fontDestination)) {
-    fs.copyFileSync([__dirname, '../assets/fonts/Monoton-Regular.ttf'], fontDestination);
+    fs.copyFileSync(path.join(__dirname, '../assets/fonts/Monoton-Regular.ttf'),
+                    fontDestination);
   }
 };
 
@@ -444,12 +446,17 @@ const runTestsBatch = async (
 
 // Takes our results in a JSON object and writes them to disk.
 // The file name looks like `yyyymmdd__HHMMss.json`.
-const writeDataSync = (filename, data) => {
-  const dateString = dateFormat(new Date(), 'yyyymmdd', true);
-  const fileStub = filename ?? dateFormat(new Date(), 'HHMMss', true);
-  const dir = `../results/${dateString}`;
-  fs.mkdirSync(dir, { recursive: true });
-  const filePath = `${dir}/${fileStub}.json`;
+const writeDataSync = ({path, filename, data}) => {
+  let filePath;
+  if (path !== null) {
+    filePath = path;
+  } else {
+    const dateString = dateFormat(new Date(), 'yyyymmdd', true);
+    const fileStub = filename ?? dateFormat(new Date(), 'HHMMss', true);
+    const dir = `../results/${dateString}`;
+    fs.mkdirSync(dir, { recursive: true });
+    filePath = `${dir}/${fileStub}.json`;
+  }
   fs.writeFileSync(filePath, JSON.stringify(data));
   log(`Wrote results to "${filePath}".`);
   return filePath;
@@ -557,7 +564,9 @@ const main = async () => {
     log('List of browsers to run:', expandedBrowserList);
     const browserLists = (config.android || config.ios) ? expandedBrowserList.map(x => [x]) : [expandedBrowserList];
     const testResults = await runTestsBatch(browserLists, config);
-    const dataFile = writeDataSync(config.filename, testResults);
+    const dataFile = writeDataSync({filename: config.filename,
+                                    data: testResults,
+                                    path: config.out});
     await render.render({ dataFiles: [dataFile], aggregate: config.aggregate });
     if (!config.debug) {
       process.exit();
