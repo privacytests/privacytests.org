@@ -18,6 +18,7 @@ const { IOSBrowser } = require('./iOS.js');
 const WebSocket = require('ws');
 const cookieProxy = require('./cookie-proxy');
 const { sleepMs, readYAMLFile } = require('./utils');
+const path = require('node:path');
 
 // ## Constants
 
@@ -79,7 +80,8 @@ const installTestFontIfNeeded = () => {
   }
   const fontDestination = `${userFontDir}/Monoton-Regular.ttf`;
   if (!fs.existsSync(fontDestination)) {
-    fs.copyFileSync([__dirname, '../assets/fonts/Monoton-Regular.ttf'], fontDestination);
+    fs.copyFileSync(path.join(__dirname, '../assets/fonts/Monoton-Regular.ttf'),
+                    fontDestination);
   }
 };
 
