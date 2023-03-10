@@ -38,7 +38,11 @@ const browserLogoDataUri = _.memoize((browserName, nightly) => {
     iconUri = template.dataUriFromFile(`node_modules/browser-logos/src/${browserIconName}/${browserIconName}_128x128.png`);
     return iconUri;
   } catch (e) {
-    return template.dataUriFromFile(`../assets/icons/${browserIconName}.png`);
+    try {
+      return template.dataUriFromFile(`../assets/icons/${browserIconName}.png`);
+    } catch (e) {
+      return template.dataUriFromFile('../assets/icons/unknown.svg');
+    }
   }
 });
 
