@@ -64,6 +64,7 @@ aggregate: true          # Whether to combine repeated runs of a browser into a 
 debug: false             # Whether to leave browsers open after test is done (default: false)
 app-dir: /path/to/apps   # On desktop, set where browsers are located (default: "/Applications/")
 filename: my-results     # Specifies the filename prefix for results (defaults to time run)
+out: ./results.json      # Specifies a full path for output results (overrides filename)
 ```
 
 You can also use these flags on the command line, to supplement the yaml file or instead of one:
@@ -78,6 +79,7 @@ You can also use these flags on the command line, to supplement the yaml file or
 * `--debug`: Don't close browser(s) after test is done
 * `--app-dir=/path/to/apps`: Use to point to directory containing browsers (default: `/Applications/`)
 * `--filename=my-results`: Use this flag to specify a filename prefix for the results files.
+* `--out=./results.json`: Use this flag to specific a full path for the results file.
 * `--categories=misc,https`: Limit tests to certain categories. Possible values: `main`, `supplementary`, `misc`, `https`. If this flag is omitted, all categories are run.
 
 So for example,
