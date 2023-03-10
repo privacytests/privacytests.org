@@ -448,7 +448,7 @@ const runTestsBatch = async (
 // The file name looks like `yyyymmdd__HHMMss.json`.
 const writeDataSync = ({path, filename, data}) => {
   let filePath;
-  if (path !== null) {
+  if (path !== undefined) {
     filePath = path;
   } else {
     const dateString = dateFormat(new Date(), 'yyyymmdd', true);
