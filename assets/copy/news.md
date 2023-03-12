@@ -1,5 +1,22 @@
 # News
-## [Issue 46](/): 2023-03-03
+## [Issue 47](/): 2023-03-11
+
+### New browser versions
+
+On Desktop:
+* Brave 1.49
+* Chrome 111.0
+
+On iOS:
+* Brave 1.48
+* Firefox 110.1
+* Opera 3.5
+* Yandex 2301.8
+
+On Android:
+* Duckduckgo 5.152
+
+## [Issue 46](/archive/issue46): 2023-03-03
 
 ### New browser versions
 
