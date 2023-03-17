@@ -1,5 +1,23 @@
 # News
-## [Issue 47](/): 2023-03-11
+## [Issue 48](/): 2023-03-17
+
+### New browser versions
+
+On Desktop:
+* Edge 111.0
+* Firefox 111.0
+
+On iOS:
+* Chrome 111.5563
+* Firefox 110.2
+* Yandex 2303.0
+
+On Android:
+* Brave 1.49
+* Chrome 111.0
+* Opera 74.0
+
+## [Issue 47](/archive/issue47): 2023-03-11
 
 ### New browser versions
 
