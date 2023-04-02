@@ -1,5 +1,19 @@
 # News
-## [Issue 49](/): 2023-03-24
+## [Issue 50](/): 2023-04-01
+
+On Desktop:
+* Librewolf 111.0
+
+On iOS:
+* Edge 111.1661
+* Firefox 111.1
+* Focus 111.1
+* Yandex 2303.3
+
+On Android:
+* DuckDuckGo 5.154
+
+## [Issue 49](/archive/issue49): 2023-03-24
 
 ### New browser versions
 
