@@ -180,20 +180,25 @@ app.get('/blob', (req, res) => {
   res.json({blobUrl: blobs[key]});
 });
 
-app.get('/toplevel.html', (req, res) => {
-  const ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
-  const gpcHeaderValue = req.header('Sec-GPC');
-  console.log(ip);
-  console.log({gpcHeaderValue});
-  res.setHeader('content-type', 'text/html');
-  res.send(`
-<!DOCTYPE html>
+const pageTemplate = (contents) =>
+`<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf8">
     <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
   </head>
   <body>
+${contents}
+  </body>
+</html>`;
+
+app.get('/toplevel.html', (req, res) => {
+  const ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
+  const gpcHeaderValue = req.header('Sec-GPC');
+  console.log(ip);
+  console.log({gpcHeaderValue});
+  res.setHeader('content-type', 'text/html');
+  res.send(pageTemplate(`
     <script src="https://test-pages.privacytests2.org/post_data.js"></script>
     <script>
       const results = {
@@ -209,9 +214,50 @@ app.get('/toplevel.html', (req, res) => {
       };
       postData(results, "toplevel");
     </script>
-  </body>
-</html>
-`);
+`));
+});
+
+// A list of Client Hints header names:
+const clientHints = [
+  'Sec-CH-UA',
+  'Sec-CH-UA-Arch',
+  'Sec-CH-UA-Bitness',
+  'Sec-CH-UA-Full-Version-List',
+  'Sec-CH-UA-Full-Version',
+  'Sec-CH-UA-Mobile',
+  'Sec-CH-UA-Model',
+  'Sec-CH-UA-Platform',
+  'Sec-CH-UA-Platform-Version',
+  'Sec-CH-Prefers-Reduced-Motion',
+  'Sec-CH-Prefers-Color-Scheme',
+  'Device-Memory',
+  'DPR, Width',
+  'Viewport-Width',
+  'Save-Data',
+  'Downlink',
+  'ECT',
+  'RTT'
+];
+
+const clientHintsHeaders = (req) => {
+  const results = {};
+  const clientHintsLower = clientHints.map(h => h.toLowerCase());
+  for ([k, v] of Object.entries(req.headers)) {
+    if (clientHintsLower.includes(k.toLowerCase())) {
+      results[k] = v;
+    }
+  }
+  return results; 
+};
+
+app.get('/client_hints.html', (req, res) => {
+  console.log(req.headers);
+  res.setHeader('content-type', 'text/html');
+  res.setHeader('Accept-CH', clientHints.join(', '));
+  const isIframe = req.query["iframe"] === "true";
+  res.send(pageTemplate(
+    isIframe ? JSON.stringify(clientHintsHeaders(req))
+      : `<iframe width="100%" height="100%" src='/live/client_hints.html?iframe=true'></iframe>`));
 });
 
 app.listen(port, () => console.log(`listening for file requests on ${port}`));

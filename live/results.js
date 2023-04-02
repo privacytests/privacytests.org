@@ -236,12 +236,14 @@ const websocketSend = (sessionId, data) => {
   if (!websockets.get(sessionId)) {
     throw new Error(`no websocket exists for sessionId=${sessionId}`);
   }
-  websockets.get(sessionId).send(JSON.stringify({sessionId, data}));
+  const payload = JSON.stringify({sessionId, data});
+  console.log("sending payload:", payload);
+  websockets.get(sessionId).send(payload);
 };
 
 app.post('/post', (req, res) => {
   console.log("post received.");
-  console.log(req.body);
+  //console.log(req.body);
   let { sessionId, data, category } = req.body;
   console.log("RECEIVED: ", category);
   if (false) { // (!sessionId || !websockets.get(sessionId)) {
@@ -249,8 +251,12 @@ app.post('/post', (req, res) => {
     console.log(`Unknown sessionId '${sessionId}'; Sending 404.`);
     res.sendStatus(404);
   } else if (["supplementary", "insecure", "upgradable_address", "toplevel", "nothing", "hsts", "tracking_cookies"].includes(category)) {
-    console.log({category, sessionId, data});
-    websocketSend(sessionId, data);
+    //console.log({category, sessionId, data});
+    try {
+      websocketSend(sessionId, data);
+    } catch (e) {
+      console.log(`invalid sessionId: ${sessionId}. Ignoring`);
+    }
     res.json({}); // No instructions for page
   } else {
     // We received some data for a valid session. Forward
@@ -268,7 +274,6 @@ app.post('/post', (req, res) => {
       if (websockets.get(sessionId)) {
         websocketSend(sessionId, processResults(sessionResults.get(sessionId)));
       }
-      console.log(Object.keys(sessionResults.get(sessionId)));
     }
     if (nextStepIndex === 1) {
       if (websockets.get(sessionId)) {
