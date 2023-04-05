@@ -6,7 +6,7 @@ const open = require('open');
 const minimist = require('minimist');
 const template = require('./template.js');
 const _ = require('lodash');
-const { readYAMLFile } = require('./utils');
+const { readYAMLFile, dataUriFromFile } = require('./utils.js');
 
 const escapeHtml = str => str.replace(/[&<>'"]/g,
   tag => ({
@@ -35,13 +35,13 @@ const browserLogoDataUri = _.memoize((browserName, nightly) => {
   const browserIconName = nightly ? nightlyIconNames[browserName] : browserName;
   let iconUri;
   try {
-    iconUri = template.dataUriFromFile(`node_modules/browser-logos/src/${browserIconName}/${browserIconName}_128x128.png`);
+    iconUri = dataUriFromFile(`node_modules/browser-logos/src/${browserIconName}/${browserIconName}_128x128.png`);
     return iconUri;
   } catch (e) {
     try {
-      return template.dataUriFromFile(`../assets/icons/${browserIconName}.png`);
+      return dataUriFromFile(`../assets/icons/${browserIconName}.png`);
     } catch (e) {
-      return template.dataUriFromFile('../assets/icons/unknown.svg');
+      return dataUriFromFile('../assets/icons/unknown.svg');
     }
   }
 });
