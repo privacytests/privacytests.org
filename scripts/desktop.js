@@ -65,6 +65,14 @@ const macOSdefaultBrowserSettings = {
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
     updateCommand: "/opt/homebrew/bin/brew upgrade librewolf --no-quarantine",
   },
+  mullvad: {
+    name: "Mullvad Browser",
+    binaryName: "mullvadbrowser",
+    basedOn: "firefox",
+    useOpen: true,
+    env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
+    update: ["Mullvad Browser", "About Mullvad Browser"],
+  },
   opera: {
     name: "Opera",
     nightlyName: "Opera Developer",
