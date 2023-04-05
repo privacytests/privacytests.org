@@ -2,8 +2,8 @@
 
 const fs = require('fs');
 const YAML = require('yaml');
-
 const child_process = require('child_process');
+const datauri = require('datauri/sync');
 
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
@@ -57,4 +57,6 @@ const readYAMLFile = (file) => {
   return YAML.parse(fileContents);
 };
 
-module.exports = { sleepMs, execSync, exec, killProcessAndDescendants, readYAMLFile };
+const dataUriFromFile = path => datauri(`${__dirname}/${path}`).content;
+
+module.exports = { sleepMs, execSync, exec, killProcessAndDescendants, readYAMLFile, dataUriFromFile };
