@@ -1,5 +1,24 @@
 # News
-## [Issue 50](/): 2023-04-01
+## [Issue 51](/): 2023-04-07
+
+### New browser versions
+
+On Desktop:
+* Chrome 112.0
+* Edge 112.0
+* Mullvad 12.0
+* Ungoogled 111.0
+
+On iOS:
+* Chrome 112.5615
+* Firefox 111.2
+* Opera 3.5
+* Yandex 2303.4
+
+On Android:
+* Chrome 112.0
+
+## [Issue 50](/archive/issue50): 2023-04-01
 
 On Desktop:
 * Librewolf 111.0
