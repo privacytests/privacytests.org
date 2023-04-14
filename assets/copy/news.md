@@ -1,5 +1,21 @@
 # News
-## [Issue 51](/): 2023-04-07
+## [Issue 52](/): 2023-04-14
+
+### New browser versions
+
+On Desktop:
+* Brave 1.50
+* Firefox 112.0
+* Librewolf 112.0-1
+
+On iOS:
+* Brave 1.49
+
+On Android:
+* Brave 1.50
+* Duckduckgo 5.155
+
+## [Issue 51](/archive/issue51): 2023-04-07
 
 ### New browser versions
 
