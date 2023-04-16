@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 // imports
 const fs = require('fs');
 const path = require('path');
@@ -19,15 +21,15 @@ const escapeHtml = str => str.replace(/[&<>'"]/g,
 
 // The names used by browser-logos for nightly browsers.
 const nightlyIconNames = {
-  brave: "brave-nightly",
-  chrome: "chrome-canary",
-  duckduckgo: "duckduckgo",
-  edge: "edge-canary",
-  firefox: "firefox-nightly",
-  opera: "opera-developer",
-  safari: "safari-technology-preview",
-  tor: "tor-nightly",
-  vivaldi: "vivaldi-snapshot",
+  brave: 'brave-nightly',
+  chrome: 'chrome-canary',
+  duckduckgo: 'duckduckgo',
+  edge: 'edge-canary',
+  firefox: 'firefox-nightly',
+  opera: 'opera-developer',
+  safari: 'safari-technology-preview',
+  tor: 'tor-nightly',
+  vivaldi: 'vivaldi-snapshot'
 };
 
 // Returns a data: URI browser logo for the given browser.
@@ -51,22 +53,22 @@ const deepCopy = (json) => JSON.parse(JSON.stringify(json));
 
 // An HTML table with styling
 const htmlTable = ({ headers, body, className }) => {
-  elements = [];
+  const elements = [];
   elements.push(`<table class="${className}">`);
-  elements.push("<tr>");
+  elements.push('<tr>');
   if (headers) {
-    for (let header of headers) {
+    for (const header of headers) {
       elements.push(`<th class="table-header" style="text-transform: capitalize;">${header}</th>`);
     }
   }
-  elements.push("</tr>");
+  elements.push('</tr>');
   let firstSubheading = true;
-  for (let row of body) {
-    elements.push("<tr>");
-    for (let item of row) {
+  for (const row of body) {
+    elements.push('<tr>');
+    for (const item of row) {
       if (item.subheading) {
-        let description = (item.description ?? "").replaceAll(/\s+/g, " ").trim();
-        className = firstSubheading ? "first subheading" : "subheading";
+        const description = (item.description ?? '').replaceAll(/\s+/g, ' ').trim();
+        className = firstSubheading ? 'first subheading' : 'subheading';
         elements.push(`
         <th colspan="8" class="${className} tooltipParent">
           <div>
@@ -80,14 +82,14 @@ const htmlTable = ({ headers, body, className }) => {
         elements.push(`<td>${item}</td>`);
       }
     }
-    elements.push("</tr>");
+    elements.push('</tr>');
   }
-  elements.push("</table>");
-  return elements.join("");
+  elements.push('</table>');
+  return elements.join('');
 };
 
 const dropMicroVersion = (version) =>
-  version ? version.split(".").slice(0, 2).join(".") : version;
+  version ? version.split('.').slice(0, 2).join('.') : version;
 
 // An inline script that shows a tooltip if the user clicks on any table element
 const tooltipScript = `
@@ -138,10 +140,10 @@ const resultsToDescription = ({
   os, os_version,
   prefs, incognito, tor, nightly
 }) => {
-  let browserFinal = browser;
-  let browserVersionLong = reportedVersion;
-  let browserVersionShort = dropMicroVersion(browserVersionLong) || "???";
-  let platformFinal = os;
+  const browserFinal = browser;
+  const browserVersionLong = reportedVersion;
+  const browserVersionShort = dropMicroVersion(browserVersionLong) || '???';
+  // const platformFinal = os;
   //  let platformVersionFinal = platformVersion || "";
   let finalText = `
   <span>
@@ -150,17 +152,17 @@ const resultsToDescription = ({
     ${browserVersionShort}
   </span>`;
   if (prefs) {
-    for (let key of Object.keys(prefs).sort()) {
-      if (key !== "extensions.torlauncher.prompt_at_startup") {
+    for (const key of Object.keys(prefs).sort()) {
+      if (key !== 'extensions.torlauncher.prompt_at_startup') {
         finalText += `<br>${key}: ${prefs[key]}`;
       }
     }
   }
   if (incognito === true) {
-    finalText += "<br>private";
+    finalText += '<br>private';
   }
   if (tor === true) {
-    finalText += "<br>Tor";
+    finalText += '<br>Tor';
   }
   return finalText;
 };
@@ -173,11 +175,10 @@ const allHaveValue = (x, value) => {
 // a test passed, and includes the tooltip with
 // more information.
 const testBody = ({ passed, testFailed, tooltip, unsupported }) => {
-  let allTestsFailed = allHaveValue(testFailed, true);
-  let allUnsupported = allHaveValue(unsupported, true);
-  let anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : (passed === false);
-  return `<div class='dataPoint tooltipParent ${(allUnsupported) ? "na" : (anyDidntPass ? "bad" : "good")}'
-> ${allUnsupported ? "&ndash;" : "&nbsp;"}
+  const allUnsupported = allHaveValue(unsupported, true);
+  const anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : (passed === false);
+  return `<div class='dataPoint tooltipParent ${(allUnsupported) ? 'na' : (anyDidntPass ? 'bad' : 'good')}'
+> ${allUnsupported ? '&ndash;' : '&nbsp;'}
 <span class="tooltipText">${escapeHtml(tooltip)}</span>
 </div>`;
 };
@@ -187,33 +188,35 @@ const tooltipFunctions = {};
 // Creates a tooltip with fingerprinting test results
 // including the test expressions, the actual
 // and desired values, and whether the test passed.
-tooltipFunctions["fingerprinting"] = fingerprintingItem => {
-  let { expression, desired_expression, actual_value,
-    desired_value, passed, worker } = fingerprintingItem;
+tooltipFunctions.fingerprinting = fingerprintingItem => {
+  const {
+    expression, desired_expression, actual_value,
+    desired_value, passed, worker
+  } = fingerprintingItem;
   return `
 expression: ${expression}
 desired expression: ${desired_expression}
 actual value: ${actual_value}
 desired value: ${desired_value}
 passed: ${passed}
-${worker ? "[Worker]" : ""}
+${worker ? '[Worker]' : ''}
   `.trim();
 };
 
 // For simple tests, creates a tooltip that shows detailed results.
-tooltipFunctions["simple"] = (result) => {
-  let text = "";
-  for (let key in result) {
-    if (key !== "description") {
+tooltipFunctions.simple = (result) => {
+  let text = '';
+  for (const key in result) {
+    if (key !== 'description') {
       text += `${key}: ${result[key]}\n`;
     }
   }
   return text.trim();
 };
 
-const joinIfArray = x => Array.isArray(x) ? x.join(", ") : x;
+const joinIfArray = x => Array.isArray(x) ? x.join(', ') : x;
 
-tooltipFunctions["crossSite"] = (
+tooltipFunctions.crossSite = (
   { write, read, readSameFirstParty, readDifferentFirstParty, passed, testFailed, unsupported }
 ) => {
   return `
@@ -235,23 +238,23 @@ test failed: ${joinIfArray(testFailed)}
 
 const resultsSection = ({ bestResults, category, tooltipFunction }) => {
   //  console.log(results);
-  let section = [];
-  let bestResultsForCategory = bestResults[0]["testResults"][category];
+  const section = [];
+  const bestResultsForCategory = bestResults[0].testResults[category];
   if (!bestResultsForCategory) {
     return [];
   }
-  let rowNames = Object.keys(bestResultsForCategory)
+  const rowNames = Object.keys(bestResultsForCategory)
     .sort(Intl.Collator().compare);
-  let resultMaps = bestResults
-    .map(m => m["testResults"][category]);
-  for (let rowName of rowNames) {
-    let row = [];
-    let description = bestResultsForCategory[rowName]["description"] ?? "";
+  const resultMaps = bestResults
+    .map(m => m.testResults[category]);
+  for (const rowName of rowNames) {
+    const row = [];
+    const description = bestResultsForCategory[rowName].description ?? '';
     row.push(`<div class="tooltipParent">${rowName}<span class="tooltipText">${description}</span></div>`);
-    for (let resultMap of resultMaps) {
+    for (const resultMap of resultMaps) {
       try {
-        let tooltip = tooltipFunction(resultMap[rowName]);
-        let { passed, testFailed, unsupported } = resultMap[rowName];
+        const tooltip = tooltipFunction(resultMap[rowName]);
+        const { passed, testFailed, unsupported } = resultMap[rowName];
         row.push(testBody({ passed, testFailed, tooltip, unsupported }));
       } catch (e) {
         console.log(e, category, rowName, resultMap, resultMap[rowName]);
@@ -265,23 +268,24 @@ const resultsSection = ({ bestResults, category, tooltipFunction }) => {
 
 const resultsToTable = (results, title, subtitle, includeTrackingCookies) => {
   console.log(results);
-  let bestResults = results
-    .filter(m => m["testResults"])
+  const bestResults = results
+    .filter(m => m.testResults)
     //  .filter(m => m["testResults"]["supercookies"])
-    .sort((m1, m2) => m1["browser"] ? m1["browser"].localeCompare(m2["browser"]) : -1);
+    .sort((m1, m2) => m1.browser ? m1.browser.localeCompare(m2.browser) : -1);
   console.log(bestResults[0]);
-  let headers = bestResults.map(resultsToDescription);
+  const headers = bestResults.map(resultsToDescription);
   headers.unshift(`<h1 class="title">${title}</h1><span class="subtitle">${subtitle}</span>`);
   let body = [];
   if (bestResults.length === 0) {
     return [];
   }
-  const sections = readYAMLFile('../assets/copy/sections.yaml')
+  const sections = readYAMLFile('../assets/copy/sections.yaml');
   for (const { category, name, description, tagline, tooltipType } of sections) {
-    if (includeTrackingCookies || !(category == "tracker_cookies")) {
+    if (includeTrackingCookies || !(category === 'tracker_cookies')) {
       body.push([{ subheading: name, description, tagline }]);
       body = body.concat(resultsSection({
-        bestResults, category,
+        bestResults,
+        category,
         tooltipFunction: tooltipFunctions[tooltipType]
       }));
     }
@@ -295,40 +299,41 @@ const tableTitleHTML = (title) => `
 
 // Create dateString from the given date and time string.
 const dateString = (dateTime) => {
-  let dateTimeObject = new Date(dateTime);
-  return dateTimeObject.toISOString().split("T")[0];
+  const dateTimeObject = new Date(dateTime);
+  return dateTimeObject.toISOString().split('T')[0];
 };
 
 // Creates the content for a page.
 const content = (results, jsonFilename, title, nightly, incognito) => {
-  let { headers, body } = resultsToTable(results.all_tests, tableTitleHTML(title), "(default settings)",results.platform === "Desktop");
-  const issueNumberExists = fs.existsSync(`${__dirname}/issue-number`);
-  const issueNumber = issueNumberExists ? fs.readFileSync(`${__dirname}/issue-number`).toString().trim() : undefined;
-  const leftHeaderText = issueNumber ? `No. ${issueNumber}` : "";
+  const { headers, body } = resultsToTable(results.all_tests, tableTitleHTML(title), '(default settings)', results.platform === 'Desktop');
+  const issueNumberPath = path.join(__dirname, 'issue-number');
+  const issueNumberExists = fs.existsSync(issueNumberPath);
+  const issueNumber = issueNumberExists ? fs.readFileSync(issueNumberPath).toString().trim() : undefined;
+  const leftHeaderText = issueNumber ? `No. ${issueNumber}` : '';
   console.log(results.platform);
   return `
     <div class="banner" id="issueBanner">
       <div class="left-heading">${leftHeaderText}</div>
       <div class="middle-heading">Open-source tests of web browser privacy.</div>
-      <div class="right-heading">Updated ${results.timeStarted ? dateString(results.timeStarted) : "??"}</div>
+      <div class="right-heading">Updated ${results.timeStarted ? dateString(results.timeStarted) : '??'}</div>
     </div>
     <div class="banner" id="navBanner">
-      <div class="navItem ${!incognito && !nightly && results.platform !== "Android" && results.platform !== "iOS" ? "selectedItem" : ""}">
+      <div class="navItem ${!incognito && !nightly && results.platform !== 'Android' && results.platform !== 'iOS' ? 'selectedItem' : ''}">
         <a href=".">Desktop browsers</a>
       </div>
-      <div class="navItem ${incognito && !nightly && results.platform !== "Android" && results.platform !== "iOS" ? "selectedItem" : ""}">
+      <div class="navItem ${incognito && !nightly && results.platform !== 'Android' && results.platform !== 'iOS' ? 'selectedItem' : ''}">
         <a href="private.html">Desktop private modes</a>
       </div>
-      <div class="navItem ${results.platform === "iOS" ? "selectedItem" : ""}">
+      <div class="navItem ${results.platform === 'iOS' ? 'selectedItem' : ''}">
         <a href="ios.html">iOS browsers</a>
       </div>
-      <div class="navItem ${results.platform === "Android" ? "selectedItem" : ""}">
+      <div class="navItem ${results.platform === 'Android' ? 'selectedItem' : ''}">
         <a href="android.html">Android browsers</a>
       </div>
-      <div class="navItem ${nightly && !incognito ? "selectedItem" : ""}">
+      <div class="navItem ${nightly && !incognito ? 'selectedItem' : ''}">
         <a href="nightly.html">Nightly builds</a>
       </div>
-      <div class="navItem ${nightly && incognito ? "selectedItem" : ""}">
+      <div class="navItem ${nightly && incognito ? 'selectedItem' : ''}">
         <a href="nightly-private.html">Nightly private modes</a>
       </div>
     </div>
@@ -343,10 +348,11 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
       </div>
     </div>` +
     htmlTable({
-      headers, body,
-      className: "comparison-table"
+      headers,
+      body,
+      className: 'comparison-table'
     }) +
-    `<p class="footer">Tests ran at ${results.timeStarted ? results.timeStarted.replace("T", " ").replace(/\.[0-9]{0,3}Z/, " UTC") : "??"}.
+    `<p class="footer">Tests ran at ${results.timeStarted ? results.timeStarted.replace('T', ' ').replace(/\.[0-9]{0,3}Z/, ' UTC') : '??'}.
          Source version: <a href="https://github.com/privacytests/privacytests.org/tree/${results.git}"
     >${results.git.slice(0, 8)}</a>.
     Raw data in <a href="${jsonFilename}">JSON</a>.
@@ -355,9 +361,13 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
 
 const contentPage = ({ results, title, basename, previewImageUrl, tableTitle, nightly, incognito }) =>
   template.htmlPage({
-    title, previewImageUrl,
-    cssFiles: [`${__dirname}/../assets/css/template.css`, `${__dirname}/../assets/css/table.css`],
-    content: content(results, basename, tableTitle, nightly, incognito),
+    title,
+    previewImageUrl,
+    cssFiles: [
+      path.join(__dirname, '/../assets/css/template.css'),
+      path.join(__dirname, '../assets/css/table.css')
+    ],
+    content: content(results, basename, tableTitle, nightly, incognito)
   });
 
 // Reads in a file and parses it to a JSON object.
@@ -373,39 +383,39 @@ const latestResultsFile = (dir) => {
     .map(d => d.name)
     .sort()
     .pop();
-  const todayPath = dir + "/" + stem;
+  const todayPath = dir + '/' + stem;
   console.log(todayPath);
   const todayFiles = fs.readdirSync(todayPath);
-  const latestFile = todayFiles.filter(d => d.endsWith(".json")).sort().pop();
-  return todayPath + "/" + latestFile;
+  const latestFile = todayFiles.filter(d => d.endsWith('.json')).sort().pop();
+  return todayPath + '/' + latestFile;
 };
 
 // List of results keys that should be collected in an array
 const resultsKeys = [
-  "passed", "testFailed",
-  "readSameFirstParty", "readDifferentFirstParty",
-  "actual_value", "desired_value",
-  "IsTorExit", "cloudflareDoH", "nextDoH", "result",
-  "unsupported", "upgraded", "cookieFound"
+  'passed', 'testFailed',
+  'readSameFirstParty', 'readDifferentFirstParty',
+  'actual_value', 'desired_value',
+  'IsTorExit', 'cloudflareDoH', 'nextDoH', 'result',
+  'unsupported', 'upgraded', 'cookieFound'
 ];
 
 // Finds any repeated trials of tests and aggregate the results
 // for a simpler rendering.
 const aggregateRepeatedTrials = (results) => {
-  let aggregatedResults = new Map();
+  const aggregatedResults = new Map();
   let testIndex = 0;
-  for (let test of results.all_tests) {
+  for (const test of results.all_tests) {
     if (test && test.testResults) {
-      let key = resultsToDescription(test);
-      //console.log(key);
+      const key = resultsToDescription(test);
+      // console.log(key);
       if (aggregatedResults.has(key)) {
-        let theseTestResults = aggregatedResults.get(key).testResults;
+        const theseTestResults = aggregatedResults.get(key).testResults;
         if (theseTestResults) {
-          for (let subcategory of ["supercookies", "fingerprinting", "https", "misc", "navigation",
-            "query", "trackers", "tracker_cookies"]) {
-            let someTests = theseTestResults[subcategory];
-            for (let testName in test.testResults[subcategory]) {
-              for (let value in test.testResults[subcategory][testName]) {
+          for (const subcategory of ['supercookies', 'fingerprinting', 'https', 'misc', 'navigation',
+            'query', 'trackers', 'tracker_cookies']) {
+            const someTests = theseTestResults[subcategory];
+            for (const testName in test.testResults[subcategory]) {
+              for (const value in test.testResults[subcategory][testName]) {
                 if (resultsKeys.includes(value)) {
                   if (!someTests[testName]) {
                     throw new Error(`Can't find the "${testName}" ${subcategory} test in testing round ${testIndex}`);
@@ -425,49 +435,52 @@ const aggregateRepeatedTrials = (results) => {
     }
     ++testIndex;
   }
-  let resultsCopy = deepCopy(results);
+  const resultsCopy = deepCopy(results);
   resultsCopy.all_tests = [...aggregatedResults.values()];
   return resultsCopy;
 };
 
 const getMergedResults = (dataFiles) => {
-  let resultItems = dataFiles.map(readJSONFile);
-  let finalResults = resultItems[0];
-  for (let resultItem of resultItems.slice(1)) {
+  const resultItems = dataFiles.map(readJSONFile);
+  const finalResults = resultItems[0];
+  for (const resultItem of resultItems.slice(1)) {
     finalResults.all_tests = finalResults.all_tests.concat(resultItem.all_tests);
   }
   return finalResults;
-}
+};
 
 const renderPage = ({ dataFiles, live, aggregate }) => {
-  let resultsFilesJSON = (dataFiles && dataFiles.length > 0) ? dataFiles : [latestResultsFile("../results")];
+  const resultsFilesJSON = (dataFiles && dataFiles.length > 0) ? dataFiles : [latestResultsFile('../results')];
   console.log(resultsFilesJSON);
-  const resultsFileHTMLLatest = "../results/latest.html";
-  const resultsFileHTML = resultsFilesJSON[0].replace(/\.json$/, ".html");
-  const resultsFilePreviewImage = resultsFileHTML.replace(".html", "-preview.png");
+  const resultsFileHTMLLatest = '../results/latest.html';
+  const resultsFileHTML = resultsFilesJSON[0].replace(/\.json$/, '.html');
+  const resultsFilePreviewImage = resultsFileHTML.replace('.html', '-preview.png');
   //  fs.copyFile(resultsFile, "../results/" + path.basename(resultsFile), fs.constants.COPYFILE_EXCL);
   console.log(`Reading from raw results files: ${resultsFilesJSON}`);
-  let results = getMergedResults(resultsFilesJSON);
+  const results = getMergedResults(resultsFilesJSON);
   console.log(results.all_tests.length);
-  let processedResults = aggregate ? aggregateRepeatedTrials(results) : results;
+  const processedResults = aggregate ? aggregateRepeatedTrials(results) : results;
   //  console.log(results.all_tests[0]);
   //  console.log(JSON.stringify(results));
   const nightly = results.all_tests.every(t => (t.nightly === true));
   const incognito = results.all_tests.every(t => (t.incognito === true || t.tor === true));
   let tableTitle;
   if (nightly) {
-    tableTitle = incognito ? "Nightly private modes" : "Nightly Builds";
-  } else if (results.platform === "Android") {
-    tableTitle = "Android Browsers";
-  } else if (results.platform === "iOS") {
-    tableTitle = "iOS Browsers";
+    tableTitle = incognito ? 'Nightly private modes' : 'Nightly Builds';
+  } else if (results.platform === 'Android') {
+    tableTitle = 'Android Browsers';
+  } else if (results.platform === 'iOS') {
+    tableTitle = 'iOS Browsers';
   } else {
-    tableTitle = incognito ? "Desktop private modes" : "Desktop Browsers";
+    tableTitle = incognito ? 'Desktop private modes' : 'Desktop Browsers';
   }
   const basename = path.basename(resultsFilesJSON[0]);
   fs.writeFileSync(resultsFileHTMLLatest, contentPage({
-    title: "PrivacyTests.org",
-    tableTitle, nightly, incognito, basename,
+    title: 'PrivacyTests.org',
+    tableTitle,
+    nightly,
+    incognito,
+    basename,
     results: processedResults,
     previewImageUrl: path.basename(resultsFilePreviewImage)
   }));
@@ -484,11 +497,11 @@ const render = async ({ dataFiles, live, aggregate }) => {
   if (!live) {
     open(fileUrl(resultsFileHTML));
   }
-}
+};
 
 const main = async () => {
-  let { _: dataFiles, live, aggregate } = minimist(process.argv.slice(2),
-    opts = { default: { aggregate: true } });
+  const { _: dataFiles, live, aggregate } = minimist(process.argv.slice(2),
+    { default: { aggregate: true } });
   await render({ dataFiles, live, aggregate: (aggregate === true) });
 };
 
