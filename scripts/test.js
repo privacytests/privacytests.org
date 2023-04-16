@@ -81,7 +81,7 @@ const installTestFontIfNeeded = () => {
   const fontDestination = `${userFontDir}/Monoton-Regular.ttf`;
   if (!fs.existsSync(fontDestination)) {
     fs.copyFileSync(path.join(__dirname, '../assets/fonts/Monoton-Regular.ttf'),
-                    fontDestination);
+      fontDestination);
   }
 };
 
@@ -446,7 +446,7 @@ const runTestsBatch = async (
 
 // Takes our results in a JSON object and writes them to disk.
 // The file name looks like `yyyymmdd__HHMMss.json`.
-const writeDataSync = ({path, filename, data}) => {
+const writeDataSync = ({ path, filename, data }) => {
   let filePath;
   if (path !== undefined) {
     filePath = path;
@@ -564,9 +564,11 @@ const main = async () => {
     log('List of browsers to run:', expandedBrowserList);
     const browserLists = (config.android || config.ios) ? expandedBrowserList.map(x => [x]) : [expandedBrowserList];
     const testResults = await runTestsBatch(browserLists, config);
-    const dataFile = writeDataSync({filename: config.filename,
-                                    data: testResults,
-                                    path: config.out});
+    const dataFile = writeDataSync({
+      filename: config.filename,
+      data: testResults,
+      path: config.out
+    });
     await render.render({ dataFiles: [dataFile], aggregate: config.aggregate });
     if (!config.debug) {
       process.exit();
