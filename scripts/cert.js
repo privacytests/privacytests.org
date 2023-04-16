@@ -1,5 +1,5 @@
 const { execSync } = require('child_process');
-const { mkdir, rm, access } = require('fs/promises');
+const { mkdir, access } = require('fs/promises');
 const fs = require('fs');
 const { homedir } = require('os');
 const path = require('path');
