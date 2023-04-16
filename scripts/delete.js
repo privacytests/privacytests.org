@@ -7,7 +7,7 @@ const main = () => {
   const inputObject = JSON.parse(fs.readFileSync(inputFile).toString());
   delete inputObject.all_tests[parseInt(indexString)];
   inputObject.all_tests = inputObject.all_tests.filter(test => test);
-  fs.copyFileSync(inputFile, inputFile + ".original");
+  fs.copyFileSync(inputFile, inputFile + '.original');
   fs.writeFileSync(inputFile, JSON.stringify(inputObject));
 };
 
