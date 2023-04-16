@@ -1,21 +1,22 @@
+/* eslint-disable camelcase */
+
 const mockttp = require('mockttp');
 const fs = require('fs');
-const { execSync } = require('child_process');
 const cert = require('./cert');
 let server;
-let hostsThatLeak = {};
+const hostsThatLeak = {};
 
 // Takes a cookie string and returns a map with key-values.
 const parseCookies = (cookieString) => {
   if (!cookieString) {
     return {};
   }
-  let result = {};
-  const cookieKVs = cookieString.split(";");
-  for (let cookieKV of cookieKVs) {
-    let [key, val] = cookieKV.split("=");
+  const result = {};
+  const cookieKVs = cookieString.split(';');
+  for (const cookieKV of cookieKVs) {
+    const [key, val] = cookieKV.split('=');
     if (val === undefined) {
-      throw new Error("no key/val pairs found");
+      throw new Error('no key/val pairs found');
     }
     result[key.trim()] = val.trim();
   }
@@ -27,9 +28,9 @@ const parseCookies = (cookieString) => {
 // cookie if URL has "pto_write_cookie" query parameter; looks
 // for a cookie if URL has "pto_read_cookie" query parameter.
 const simulateTrackingCookies = async (port, debug = false) => {
-  console.log("simulateTrackingCookies");
+  console.log('simulateTrackingCookies');
   // Allows us to match requests to responses.
-  let idToUrlMapping = new Map();
+  const idToUrlMapping = new Map();
   const certPaths = await cert.setupCertificate();
   // Create a proxy server with a self-signed HTTPS CA certificate:
   server = mockttp.getLocal({
@@ -37,11 +38,11 @@ const simulateTrackingCookies = async (port, debug = false) => {
     cors: true
   });
   const certFile = fs.readFileSync(certPaths.certPath).toString();
-  server.forGet("http://p.test").thenReply(200, `<html><body><h1><a href="ca">Download Certificate</a></h1></body></html>`);
-  server.forGet("http://p.test/ca").thenReply(200, certFile,
+  server.forGet('http://p.test').thenReply(200, '<html><body><h1><a href="ca">Download Certificate</a></h1></body></html>');
+  server.forGet('http://p.test/ca').thenReply(200, certFile,
     {
-      "content-type": "application/x-x509-ca-cert",
-      "content-disposition": "inline; filename=rootCA.pem"
+      'content-type': 'application/x-x509-ca-cert',
+      'content-disposition': 'inline; filename=rootCA.pem'
     });
   server.forAnyRequest().thenPassThrough({
     // Inject cookies for responses
@@ -52,15 +53,14 @@ const simulateTrackingCookies = async (port, debug = false) => {
       }
       idToUrlMapping.delete(response.id);
       const searchParams = (new URL(url)).searchParams;
-      const sessionId = searchParams.get("sessionId");
-      const writeCookie = searchParams.get("pto_write_cookie") === "true";
-      let headers;
-      headers = response.headers;
+      const sessionId = searchParams.get('sessionId');
+      const writeCookie = searchParams.get('pto_write_cookie') === 'true';
+      const headers = response.headers;
       let setCookieHeader;
       if (writeCookie && sessionId) {
         setCookieHeader = `pto_cookie=${sessionId}; max-age=3600; Secure; SameSite=None`;
-        headers["set-cookie"] = setCookieHeader;
-        let time = new Date().toUTCString();
+        headers['set-cookie'] = setCookieHeader;
+        const time = new Date().toUTCString();
         console.log({ time, url, sessionId, writeCookie, setCookieHeader });
         return { headers };
       }
@@ -71,17 +71,17 @@ const simulateTrackingCookies = async (port, debug = false) => {
       const url = request.url;
       idToUrlMapping.set(request.id, request.url);
       const searchParams = (new URL(url)).searchParams;
-      const sessionId = searchParams.get("sessionId");
-      const readCookie = searchParams.get("pto_read_cookie") === "true";
+      const sessionId = searchParams.get('sessionId');
+      const readCookie = searchParams.get('pto_read_cookie') === 'true';
       const hostname = (new URL(request.url)).hostname;
-      const pto_cookie = parseCookies(request.headers.cookie)["pto_cookie"];
+      const pto_cookie = parseCookies(request.headers.cookie).pto_cookie;
       if (readCookie && pto_cookie === sessionId) {
         // We have found cookie sharing.
         hostsThatLeak[sessionId] ??= new Set();
         hostsThatLeak[sessionId].add(hostname);
       }
       if (readCookie) {
-        let time = new Date().toUTCString();
+        const time = new Date().toUTCString();
         console.log({ time, url, readCookie, sessionId, pto_cookie });
       }
     }
@@ -100,8 +100,8 @@ const stopTrackingCookieSimulation = () => {
 
 if (require.main === module) {
   simulateTrackingCookies(9090, true);
-  //console.log(getLeakyHosts());
-  //stopTrackingCookieSimulation();
+  // console.log(getLeakyHosts());
+  // stopTrackingCookieSimulation();
 }
 
 module.exports = { simulateTrackingCookies, getLeakyHosts, stopTrackingCookieSimulation };
