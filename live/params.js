@@ -2,8 +2,8 @@ const express = require('express');
 const app = express();
 const port = 3334;
 
-app.get('/', (req, res) => 
-        res.send(`
+app.get('/', (req, res) =>
+  res.send(`
 <html>
   <head>
     <title>Query parameter tests</title>
