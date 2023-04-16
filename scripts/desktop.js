@@ -1,6 +1,6 @@
-const fs = require("fs");
-const { join: joinDir } = require("path");
-const { exec, execSync, sleepMs } = require("./utils");
+const fs = require('fs');
+const { join: joinDir } = require('path');
+const { exec, execSync, sleepMs } = require('./utils');
 const proxy = require('./system-proxy');
 
 /*
@@ -17,121 +17,121 @@ open -a Safari "https://example.com"
 // macOS parts of the browser launch command
 const macOSdefaultBrowserSettings = {
   brave: {
-    name: "Brave Browser",
-    nightlyName: "Brave Browser Nightly",
-    privateFlag: "incognito",
-    torFlag: "tor",
-    basedOn: "chromium",
-    update: ["Brave", "About Brave"],
-    updateNightly: ["Brave", "About Brave"],
+    name: 'Brave Browser',
+    nightlyName: 'Brave Browser Nightly',
+    privateFlag: 'incognito',
+    torFlag: 'tor',
+    basedOn: 'chromium',
+    update: ['Brave', 'About Brave'],
+    updateNightly: ['Brave', 'About Brave']
   },
   chrome: {
-    name: "Google Chrome",
-    nightlyName: "Google Chrome Canary",
-    privateFlag: "incognito",
-    basedOn: "chromium",
-    update: ["Chrome", "About Google Chrome"],
-    updateNightly: ["Chrome Canary", "About Google Chrome"],
+    name: 'Google Chrome',
+    nightlyName: 'Google Chrome Canary',
+    privateFlag: 'incognito',
+    basedOn: 'chromium',
+    update: ['Chrome', 'About Google Chrome'],
+    updateNightly: ['Chrome Canary', 'About Google Chrome']
   },
   duckduckgo: {
-    name: "DuckDuckGo",
-    nightlyName: "DuckDuckGo",
-    useOpen: true,
-//   incognitoCommand: "osascript safariPBM.applescript",
-//    basedOn: "safari",
+    name: 'DuckDuckGo',
+    nightlyName: 'DuckDuckGo',
+    useOpen: true
+    //   incognitoCommand: "osascript safariPBM.applescript",
+    //    basedOn: "safari",
   },
   edge: {
-    name: "Microsoft Edge",
-    nightlyName: "Microsoft Edge Canary",
-    privateFlag: "inprivate",
-    basedOn: "chromium",
-    update: ["Microsoft Edge", "About Microsoft Edge"],
-    updateNightly: ["Microsoft Edge Canary", "About Microsoft Edge"],
+    name: 'Microsoft Edge',
+    nightlyName: 'Microsoft Edge Canary',
+    privateFlag: 'inprivate',
+    basedOn: 'chromium',
+    update: ['Microsoft Edge', 'About Microsoft Edge'],
+    updateNightly: ['Microsoft Edge Canary', 'About Microsoft Edge']
   },
   firefox: {
-    name: "firefox",
-    nightlyName: "Firefox Nightly",
-    privateFlag: "private-window",
-    basedOn: "firefox",
-    env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
-    update: ["Firefox", "About Firefox"],
-    updateNightly: ["Firefox Nightly", "About Nightly"],
+    name: 'firefox',
+    nightlyName: 'Firefox Nightly',
+    privateFlag: 'private-window',
+    basedOn: 'firefox',
+    env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
+    update: ['Firefox', 'About Firefox'],
+    updateNightly: ['Firefox Nightly', 'About Nightly']
   },
   librewolf: {
-    name: "librewolf",
-    displayName: "LibreWolf",
-    privateFlag: "private-window",
-    basedOn: "firefox",
-    env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
-    updateCommand: "/opt/homebrew/bin/brew upgrade librewolf --no-quarantine",
+    name: 'librewolf',
+    displayName: 'LibreWolf',
+    privateFlag: 'private-window',
+    basedOn: 'firefox',
+    env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
+    updateCommand: '/opt/homebrew/bin/brew upgrade librewolf --no-quarantine'
   },
   mullvad: {
-    name: "Mullvad Browser",
-    binaryName: "mullvadbrowser",
-    basedOn: "firefox",
+    name: 'Mullvad Browser',
+    binaryName: 'mullvadbrowser',
+    basedOn: 'firefox',
     useOpen: true,
-    env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
-    update: ["Mullvad Browser", "About Mullvad Browser"],
+    env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
+    update: ['Mullvad Browser', 'About Mullvad Browser']
   },
   opera: {
-    name: "Opera",
-    nightlyName: "Opera Developer",
-    privateFlag: "private",
-    basedOn: "chromium",
-    update: ["Opera", "About Opera"],
-    updateNightly: ["Opera Developer", "About Opera"],
+    name: 'Opera',
+    nightlyName: 'Opera Developer',
+    privateFlag: 'private',
+    basedOn: 'chromium',
+    update: ['Opera', 'About Opera'],
+    updateNightly: ['Opera Developer', 'About Opera']
   },
   safari: {
-    name: "Safari",
-    nightlyName: "Safari Technology Preview",
+    name: 'Safari',
+    nightlyName: 'Safari Technology Preview',
     useOpen: true,
     closeWindows: true,
-    incognitoCommand: "osascript safariPBM.applescript",
-    basedOn: "safari",
+    incognitoCommand: 'osascript safariPBM.applescript',
+    basedOn: 'safari'
   },
   tor: {
-    name: "Tor Browser",
-    nightlyName: "Tor Browser Nightly",
-    binaryName: "firefox",
-    basedOn: "firefox",
+    name: 'Tor Browser',
+    nightlyName: 'Tor Browser Nightly',
+    binaryName: 'firefox',
+    basedOn: 'firefox',
     useOpen: true,
     postLaunchDelay: 10000,
-    update: ["Tor Browser", "About Tor Browser"],
-    updateNightly: ["Tor Browser", "About Tor Browser"],
+    update: ['Tor Browser', 'About Tor Browser'],
+    updateNightly: ['Tor Browser', 'About Tor Browser']
   },
   ungoogled: {
-    name: "Ungoogled Chromium",
-    binaryName: "Chromium",
-    privateFlag: "incognito",
+    name: 'Ungoogled Chromium',
+    binaryName: 'Chromium',
+    privateFlag: 'incognito',
     updateCommand: "mv '/Applications/Ungoogled Chromium.app' /Applications/Chromium.app && /opt/homebrew/bin/brew upgrade eloston-chromium --no-quarantine && mv /Applications/Chromium.app '/Applications/Ungoogled Chromium.app'",
-    basedOn: "chromium",
+    basedOn: 'chromium'
   },
   vivaldi: {
-    name: "Vivaldi",
-    nightlyName: "Vivaldi Snapshot",
-    privateFlag: "incognito",
-//    postLaunchDelay: 10000,
-    basedOn: "chromium",
+    name: 'Vivaldi',
+    nightlyName: 'Vivaldi Snapshot',
+    privateFlag: 'incognito',
+    //    postLaunchDelay: 10000,
+    basedOn: 'chromium',
     // Assumes Vivaldi is on automatic updates:
-    update: ["Vivaldi", "About Vivaldi"],
-    updateNightly: ["Vivaldi Snapshot", "About Vivaldi"],
+    update: ['Vivaldi', 'About Vivaldi'],
+    updateNightly: ['Vivaldi Snapshot', 'About Vivaldi']
   },
   waterfox: {
-    name: "waterfox",
-    privateFlag: "private-window",
-    basedOn: "firefox",
-    env: { MOZ_DISABLE_AUTO_SAFE_MODE: "1" },
-    update: ["Waterfox", "About Waterfox"]
+    name: 'waterfox',
+    privateFlag: 'private-window',
+    basedOn: 'firefox',
+    env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
+    update: ['Waterfox', 'About Waterfox']
   }
 };
 
-const defaultAppDirectory = "/Applications";
-const defaultBinaryPath = "Contents/MacOS";
+const defaultAppDirectory = '/Applications';
+const defaultBinaryPath = 'Contents/MacOS';
 
 const profileFlags = {
-  "chromium": "--no-first-run --no-default-browser-check --user-data-dir=",
-  "firefox": "-profile ",
-  "safari": undefined,
+  chromium: '--no-first-run --no-default-browser-check --user-data-dir=',
+  firefox: '-profile ',
+  safari: undefined
 };
 
 const browserPath = ({ browser, nightly, appDir }) => {
@@ -145,26 +145,31 @@ const browserPath = ({ browser, nightly, appDir }) => {
   return fs.existsSync(executablePath1) ? executablePath1 : executablePath2;
 };
 
+// global state
+let proxyUsageState = false;
+let preferredNetworkService;
+
 // A Browser object represents a browser we run tests on.
 class DesktopBrowser {
-  constructor({ browser, path, incognito, tor, nightly, appDir }) {
+  constructor ({ browser, path, incognito, tor, nightly, appDir }) {
     Object.assign(this, { browser, incognito, tor, nightly });
     this._defaults = macOSdefaultBrowserSettings[browser];
     this._version = undefined;
     this._path = path ?? browserPath({ browser, nightly, appDir });
-    this._appPath = this._path.split(".app")[0] + ".app";
+    this._appPath = this._path.split('.app')[0] + '.app';
     this._appName = nightly ? this._defaults.nightlyName : this._defaults.name;
     const profileCommand = profileFlags[this._defaults.basedOn];
-    this._profilePath = profileCommand ? joinDir(__dirname, `profiles/${browser}${nightly ? "_nightly" : ""}_profile`) : undefined;
+    this._profilePath = profileCommand ? joinDir(__dirname, `profiles/${browser}${nightly ? '_nightly' : ''}_profile`) : undefined;
     if (this._defaults.useOpen) {
       this._command = `open -a "${this._appPath}"`;
     } else {
-      const flags = `${incognito ? "--" + this._defaults.privateFlag : ""} ${tor ? "--" + this._defaults.torFlag : ""} ${this._profilePath ? `${profileCommand}"${this._profilePath}"` : ""}`;
+      const flags = `${incognito ? '--' + this._defaults.privateFlag : ''} ${tor ? '--' + this._defaults.torFlag : ''} ${this._profilePath ? `${profileCommand}"${this._profilePath}"` : ''}`;
       this._command = `"${this._path}" ${flags}`.trim();
     }
   }
+
   // Launch the browser.
-  async launch(clean = true) {
+  async launch (clean = true) {
     console.log(this._defaults);
     if (clean && this._profilePath) {
       // Delete old profiles if they exist.
@@ -178,27 +183,30 @@ class DesktopBrowser {
       await sleepMs(1000);
     }
   }
+
   // Get the browser version.
-  async version() {
+  async version () {
     if (!this._version) {
       this._version = execSync(`mdls -name kMDItemVersion -raw "${this._appPath}"`).toString();
     }
-    if (this.browser === "brave") {
+    if (this.browser === 'brave') {
       // Weird brave thing. When the version is 1.31.87, kMDItemVersion is 95.1.31.87,
       // where "95" refers to the Chromium major version.
       this._version = this._version.split('.').slice(1).join('.');
     }
     return this._version;
   }
+
   // Open the url in a new tab.
-  async openUrl(url) {
+  async openUrl (url) {
     if (!this._process) {
-      throw new Error("browser not launched");
+      throw new Error('browser not launched');
     }
     exec(`${this._command} "${url}"`);
   }
+
   // Close the browser.
-  async kill() {
+  async kill () {
     if (this._defaults.closeWindows) {
       execSync(`osascript closeAllWindows.applescript "${this._appName}"`);
       await sleepMs(1000);
@@ -207,17 +215,19 @@ class DesktopBrowser {
       execSync(`osascript -e 'quit app "${this._path}"'`);
       await sleepMs(5000);
     } else {
-      this._process.kill("SIGKILL");
+      this._process.kill('SIGKILL');
     }
     this._process = undefined;
   }
+
   // Restart the browser with same profile.
-  async restart() {
+  async restart () {
     await this.kill();
     await this.launch(false);
   }
+
   // Update the browser to the latest version.
-  async update() {
+  async update () {
     // For most browsers, we use the "About" menu item to get the browser to check for udpates.
     const update = this.nightly ? this._defaults.updateNightly : this._defaults.update;
     const updateCommand = this._defaults.updateCommand;
@@ -236,24 +246,21 @@ class DesktopBrowser {
     }
   }
 
-  static preferredNetworkService;
-  static proxyUsageState = false;
-
   static async setGlobalProxyUsageEnabled (enabled, port = null) {
-    if (enabled === this.proxyUsageState) {
+    if (enabled === proxyUsageState) {
       return;
     }
-    this.proxyUsageState = enabled;
-    this.preferredNetworkService ??= proxy.getPreferredNetworkService();
+    proxyUsageState = enabled;
+    preferredNetworkService ??= proxy.getPreferredNetworkService();
     const setting = { enabled };
     if (enabled) {
-      Object.assign(setting,  {domain: '127.0.0.1', port });
+      Object.assign(setting, { domain: '127.0.0.1', port });
     }
-    proxy.setProxies(this.preferredNetworkService,
+    proxy.setProxies(preferredNetworkService,
       { web: setting, secureweb: setting });
     // Wait for proxy settings to propagate.
     await sleepMs(1000);
-  };
+  }
 }
 
 module.exports = { DesktopBrowser };
