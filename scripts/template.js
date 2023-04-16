@@ -6,6 +6,7 @@ const imageDir = '../assets/images';
 const twitterDataURI = dataUriFromFile(`${imageDir}/twitter.svg`);
 const githubDataURI = dataUriFromFile(`${imageDir}/github.svg`);
 const emailDataURI = dataUriFromFile(`${imageDir}/email.svg`);
+const mastodonDataURI = dataUriFromFile(`${imageDir}/mastodon.svg`);
 const logoDataURI = dataUriFromFile(`${imageDir}/privacyTestsLogo.png`);
 
 // The header common to all pages on the site.
@@ -31,6 +32,9 @@ const header = () => `
     </div>
     <div class="link-header">
       <a href="https://twitter.com/privacytests" title="@privacytests on Twitter.\nJoin the discussion!"><img src="${twitterDataURI}" width=20></a>
+    </div>
+    <div class="link-header">
+      <a href="https://mastodon.social/@privacytests" title="@privacytests on Mastodon.\nJoin the discussion!"><img src="${mastodonDataURI}" width=20></a>
     </div>
     <div class="link-header">
       <a href="mailto:contact@privacytests.org" title="Contact me directly via email:\ncontact@privacytests.org.\nFeedback is welcome!"><img src="${emailDataURI}" width=20></a>
