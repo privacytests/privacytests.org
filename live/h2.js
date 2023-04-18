@@ -1,5 +1,5 @@
 const http2 = require('http2');
-const url = require('url');
+const url = require("url");
 const fs = require('fs');
 
 const options = {
@@ -10,20 +10,20 @@ const options = {
 // Create a secure HTTP/2 server
 const server = http2.createSecureServer(options);
 
-const sessionTags = new Map();
+let sessionTags = new Map();
 
 // Exampleas:
 // https://h2.privacytests2.org:8902/?mode=write&secret=123test
 // https://h2.privacytests2.org:8902/?mode=read
 server.on('request', (request, response) => {
-  const path = request.headers[':path'];
-  const parsedURL = new url.URL(path, true);
-  const query = parsedURL.query;
-  const session = request.stream.session;
-  if (query.mode === 'write') {
-    sessionTags.set(session, query.secret);
+  let path = request.headers[":path"];
+  let parsedURL = url.parse(path, true);
+  let query = parsedURL.query;
+  let session = request.stream.session;
+  if (query["mode"] === "write") {
+    sessionTags.set(session, query["secret"]);
   }
-  console.log('h2 request. session tag found:', sessionTags.get(session));
+  console.log("h2 request. session tag found:",sessionTags.get(session));
   response.setHeader('Content-Type', 'text/plain');
   response.setHeader('Cache-Control', 'no-store');
   response.setHeader('Access-Control-Allow-Origin', '*');
@@ -32,4 +32,4 @@ server.on('request', (request, response) => {
 
 server.timeout = 300000;
 server.listen(8902);
-console.log('listening for h2 connections on 8902');
+console.log("listening for h2 connections on 8902");
