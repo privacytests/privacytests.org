@@ -15,7 +15,7 @@ On Android:
 * Opera 74.3
 * Vivaldi 6.0
 
-## [Issue 53](/): 2023-04-20
+## [Issue 53](/archive/issue/53): 2023-04-20
 
 ### New browser versions
 
