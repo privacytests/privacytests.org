@@ -1,4 +1,20 @@
 # News
+## [Issue 54](/): 2023-04-28
+
+### New browser versions
+
+On iOS:
+* Firefox 112.2
+* Safari 16.4
+* Yandex 2303.6
+
+On Android:
+* Firefox 112.2
+* Focus 112.2
+* Mull 112.1
+* Opera 74.3
+* Vivaldi 6.0
+
 ## [Issue 53](/): 2023-04-20
 
 ### New browser versions
