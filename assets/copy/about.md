@@ -24,11 +24,11 @@ Fortunately, most browser makers have acknowledged their responsibility to stop 
 
 ## How the tests work
 
-To understand and compare the privacy characteristics of popular web browsers, each browser is subjected to the same suite of rigorous automated tests. Each privacy test examines whether the browser protects against a specific kind of data leak.
+To understand and compare the privacy characteristics of popular web browsers, each browser is subjected to the same suite of rigorous automated tests. Each privacy test examines whether the browser, on default settings, protects against a specific kind of data leak.
 
 The results for all browsers and tests are presented in a [unified table](https://privacytests.org). If a browser is found to protect users from a given data leak, it receives a green <img src="/check-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);">, but if it leaks user data, it receives a red <img src="/x-mark.png" width=16 height=16 style="transform:translate(0px, 0.15em);">.
 
-These tests will be run on a regular basis, to monitor the privacy improvements of each browser. As browser developers fix a privacy vulnerability, it will be reflected in the latest results.
+These tests are run on a regular basis, to monitor the privacy improvements of each browser. As browser developers fix a privacy vulnerability, the fix will be reflected in the latest results.
 
 ## Work in progress
 
