@@ -220,10 +220,7 @@ const runInsecureTest = async (browserSession) => {
     log('now trying');
     insecureResult = await insecureResultPromise;
     insecurePassed = false;
-    log('failed!!!!');
   } catch (e) {
-    log('passed!!!');
-    console.log(e);
     insecureResult = { 'Insecure website': { passed: true, result: 'Insecure website never loaded' } };
     insecurePassed = true;
   }
