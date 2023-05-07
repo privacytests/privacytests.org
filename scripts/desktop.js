@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { join: joinDir } = require('path');
 const { exec, execSync, sleepMs } = require('./utils');
-const proxy = require('./system-proxy');
+const proxy = require('./system-proxy-settings');
 
 /*
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --incognito "https://example.com"
