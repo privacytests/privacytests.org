@@ -1,5 +1,22 @@
 # News
-## [Issue 54](/): 2023-04-28
+## [Issue 55](/): 2023-05-06
+
+### New browser versions
+
+On Desktop:
+* Brave 1.51
+* Chrome 113.0
+* Edge 113.0
+
+On iOS:
+* Yandex 2303.7
+
+On Android:
+* Chrome 113.0
+* Duckduckgo 5.157
+* Edge 112.0
+
+## [Issue 54](/archive/issue54): 2023-04-28
 
 ### New browser versions
 
