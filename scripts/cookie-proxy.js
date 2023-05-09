@@ -23,6 +23,51 @@ const parseCookies = (cookieString) => {
   return result;
 };
 
+const idToUrlMapping = new Map();
+
+const beforeResponseWriteCookie = (response, debug) => {
+  const url = idToUrlMapping.get(response.id);
+  if (debug) {
+    console.log(url, response.headers);
+  }
+  idToUrlMapping.delete(response.id);
+  const searchParams = (new URL(url)).searchParams;
+  const sessionId = searchParams.get('sessionId');
+  const writeCookie = searchParams.get('pto_write_cookie') === 'true';
+  const headers = response.headers;
+  let setCookieHeader;
+  if (writeCookie && sessionId) {
+    setCookieHeader = `pto_cookie=${sessionId}; max-age=3600; Secure; SameSite=None`;
+    headers['set-cookie'] = setCookieHeader;
+    const time = new Date().toUTCString();
+    console.log({ time, url, sessionId, writeCookie, setCookieHeader });
+    return { headers };
+  }
+  return undefined;
+};
+
+const beforeRequestReadCookie = async (request, debug) => {
+  console.log({ request });
+  const url = request.url;
+  idToUrlMapping.set(request.id, request.url);
+  const searchParams = (new URL(url)).searchParams;
+  const sessionId = searchParams.get('sessionId');
+  const readCookie = searchParams.get('pto_read_cookie') === 'true';
+  const hostname = (new URL(request.url)).hostname;
+  const pto_cookie = parseCookies(request.headers.cookie).pto_cookie;
+  if (readCookie && pto_cookie === sessionId) {
+    // We have found cookie sharing.
+    hostsThatLeak[sessionId] ??= new Set();
+    hostsThatLeak[sessionId].add(hostname);
+  }
+  if (readCookie) {
+    const time = new Date().toUTCString();
+    if (debug) {
+      console.log({ request, time, url, readCookie, sessionId, pto_cookie });
+    }
+  }
+};
+
 // Start the simulation of tracking cookies by launching a proxy
 // that reads and writes third-party cookies. Injects a tracking
 // cookie if URL has "pto_write_cookie" query parameter; looks
@@ -30,7 +75,6 @@ const parseCookies = (cookieString) => {
 const simulateTrackingCookies = async (port, debug = false) => {
   console.log('simulateTrackingCookies');
   // Allows us to match requests to responses.
-  const idToUrlMapping = new Map();
   const certPaths = await cert.setupCertificate();
   // Create a proxy server with a self-signed HTTPS CA certificate:
   server = mockttp.getLocal({
@@ -47,43 +91,11 @@ const simulateTrackingCookies = async (port, debug = false) => {
   server.forAnyRequest().thenPassThrough({
     // Inject cookies for responses
     beforeResponse: (response) => {
-      const url = idToUrlMapping.get(response.id);
-      if (debug) {
-        console.log(url, response.headers);
-      }
-      idToUrlMapping.delete(response.id);
-      const searchParams = (new URL(url)).searchParams;
-      const sessionId = searchParams.get('sessionId');
-      const writeCookie = searchParams.get('pto_write_cookie') === 'true';
-      const headers = response.headers;
-      let setCookieHeader;
-      if (writeCookie && sessionId) {
-        setCookieHeader = `pto_cookie=${sessionId}; max-age=3600; Secure; SameSite=None`;
-        headers['set-cookie'] = setCookieHeader;
-        const time = new Date().toUTCString();
-        console.log({ time, url, sessionId, writeCookie, setCookieHeader });
-        return { headers };
-      }
-      return undefined;
+      return beforeResponseWriteCookie(response, debug);
     },
     // Look for cookies in requests
     beforeRequest: (request) => {
-      const url = request.url;
-      idToUrlMapping.set(request.id, request.url);
-      const searchParams = (new URL(url)).searchParams;
-      const sessionId = searchParams.get('sessionId');
-      const readCookie = searchParams.get('pto_read_cookie') === 'true';
-      const hostname = (new URL(request.url)).hostname;
-      const pto_cookie = parseCookies(request.headers.cookie).pto_cookie;
-      if (readCookie && pto_cookie === sessionId) {
-        // We have found cookie sharing.
-        hostsThatLeak[sessionId] ??= new Set();
-        hostsThatLeak[sessionId].add(hostname);
-      }
-      if (readCookie) {
-        const time = new Date().toUTCString();
-        console.log({ time, url, readCookie, sessionId, pto_cookie });
-      }
+      return beforeRequestReadCookie(request, debug);
     }
   });
   await server.start(port);
