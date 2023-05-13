@@ -1,7 +1,9 @@
 const fs = require('fs');
+const fsPromises = require('node:fs/promises');
 const { join: joinDir } = require('path');
 const { exec, execSync, sleepMs } = require('./utils');
 const proxy = require('./system-proxy-settings');
+const { killProcessAndDescendants } = require('./utils');
 
 /*
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --incognito "https://example.com"
@@ -174,7 +176,7 @@ class DesktopBrowser {
     if (clean && this._profilePath) {
       // Delete old profiles if they exist.
       console.log(`Deleting any old ${this._profilePath}`);
-      fs.rmSync(this._profilePath, { recursive: true, force: true });
+      await fsPromises.rm(this._profilePath, { recursive: true, force: true });
     }
     this._process = exec(this._command, { env: this._defaults.env });
     await sleepMs(this._defaults.postLaunchDelay ?? 0);
@@ -215,7 +217,8 @@ class DesktopBrowser {
       execSync(`osascript -e 'quit app "${this._path}"'`);
       await sleepMs(5000);
     } else {
-      this._process.kill('SIGKILL');
+      console.log('killing process id:', this._process.pid);
+      killProcessAndDescendants(this._process.pid);// .kill('SIGKILL');
     }
     this._process = undefined;
   }
