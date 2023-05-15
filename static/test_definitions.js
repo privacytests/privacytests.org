@@ -514,6 +514,7 @@ return {
     }
   },
   "CSS cache": {
+    session: true,
     category: "navigation",
     description: "CSS stylesheets are cached, and if that cache is shared between websites, it can be used to track users across sites.",
     write: async (key) => {
@@ -550,6 +551,7 @@ return {
     }
   },
   "image cache": {
+    session: true,
     category: "navigation",
     description: "Caching of images in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.",
     write: (key) => new Promise((resolve, reject) => {
@@ -572,6 +574,7 @@ return {
     }
   },
   "font cache": {
+    session: true,
     category: "navigation",
     description: "Web fonts are sometimes stored in their own cache, which is vulnerable to being abused for cross-site tracking.",
     write: async (key) => {
@@ -595,6 +598,7 @@ return {
     }
   },
   "prefetch cache": {
+    session: true,
     category: "navigation",
     description: "A <link rel='prefetch'...> suggests to browsers they should fetch a resource ahead of time and cache it. But if browsers don't partition this cache, it can be used to track users across websites.",
     write: async (key) => {
@@ -620,6 +624,7 @@ return {
     }
   },
   "Alt-Svc": {
+    session: true,
     category: "navigation",
     description: "Alt-Svc allows the server to indicate to the web browser that a resource should be loaded on a different server. Because this is a persistent setting, it could be used to track users across websites if it is not correctly partitioned.",
     write: async () => {
