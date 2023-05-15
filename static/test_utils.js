@@ -50,7 +50,7 @@ const filterObject = (obj, f) => {
   return Object.fromEntries(entries.filter(f));
 };
 
-export let runAllTests = async (tests, { category }) => {
+export let runAllTests = async (tests, { category } = {category:undefined}) => {
   let params = queryParams(document.URL);
   if (params["mode"] === "write") {
     await removeAllServiceWorkers();
