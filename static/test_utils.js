@@ -50,12 +50,12 @@ const filterObject = (obj, f) => {
   return Object.fromEntries(entries.filter(f));
 };
 
-export let runAllTests = async (tests, { category }) => {
+export let runAllTests = async (tests, { category } = {category:undefined}) => {
   let params = queryParams(document.URL);
   if (params["mode"] === "write") {
     await removeAllServiceWorkers();
   }
-  const testsFiltered = filterObject(tests, ([k,v]) => v.category === category);
+  const testsFiltered = category ? filterObject(tests, ([k,v]) => v.category === category) : tests;
   let results = await runTests(testsFiltered, params["mode"], params);
   console.log("results:",results);
   if (window.location !== parent.location) {
