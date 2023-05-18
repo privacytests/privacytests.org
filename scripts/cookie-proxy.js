@@ -47,7 +47,7 @@ const beforeResponseWriteCookie = (response, debug) => {
 };
 
 const beforeRequestReadCookie = async (request, debug) => {
-  console.log({ request });
+//  console.log({ request });
   const url = request.url;
   idToUrlMapping.set(request.id, request.url);
   const searchParams = (new URL(url)).searchParams;
