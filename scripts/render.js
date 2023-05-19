@@ -236,6 +236,26 @@ test failed: ${joinIfArray(testFailed)}
 `.trim();
 };
 
+tooltipFunctions.crossSession = (
+  { write, read, readSameSession, readDifferentSession, passed, testFailed, unsupported }
+) => {
+  return `
+write: ${write}
+
+read: ${read}
+
+result, same session: ${joinIfArray(readSameSession)}
+
+result, different session: ${joinIfArray(readDifferentSession)}
+
+unsupported: ${joinIfArray(unsupported)}
+
+passed: ${joinIfArray(passed)}
+
+test failed: ${joinIfArray(testFailed)}
+`.trim();
+};
+
 const resultsSection = ({ bestResults, category, tooltipFunction }) => {
   //  console.log(results);
   const section = [];
@@ -411,7 +431,7 @@ const aggregateRepeatedTrials = (results) => {
       if (aggregatedResults.has(key)) {
         const theseTestResults = aggregatedResults.get(key).testResults;
         if (theseTestResults) {
-          for (const subcategory of ['supercookies', 'fingerprinting', 'https', 'misc', 'navigation',
+          for (const subcategory of ['supercookies', 'session', 'fingerprinting', 'https', 'misc', 'navigation',
             'query', 'trackers', 'tracker_cookies']) {
             const someTests = theseTestResults[subcategory];
             for (const testName in test.testResults[subcategory]) {

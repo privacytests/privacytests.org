@@ -210,6 +210,45 @@ const runMainTests = async (browserSession, categories) => {
   return resultsPromise;
 };
 
+// Combine same-session results with cross-session results.
+const analyzeSessionResults = (writeResults, readResults) => {
+  const results = {};
+  for (const [name, writeData] of Object.entries(writeResults)) {
+    results[name] = {};
+    const readData = readResults[name];
+    const unsupported = writeData.result.startsWith('Error:') ||
+      (name === 'Alt-Svc' && writeData.result.startsWith('h2'));
+    const passed = !unsupported && (readData.result !== writeData.result);
+    results[name] = {
+      unsupported,
+      passed,
+      testFailed: false,
+      write: writeData.write,
+      read: writeData.read,
+      description: writeData.description,
+      readSameSession: writeData.result,
+      readDifferentSession: readData.result
+    };
+  }
+  return results;
+};
+
+// Run the cross-session state tests and return raw results.
+const runSessionTestsRaw = async (browserSession) => {
+  await runPageTest(browserSession, `${kIframeRootSame}/session.html?mode=write`);
+  const writeResults = await runPageTest(browserSession, `${kIframeRootSame}/session.html?mode=read`);
+  await browserSession.browser.restart();
+  await sleepMs(1000);
+  const readResults = await runPageTest(browserSession, `${kIframeRootSame}/session.html?mode=read`);
+  return { writeResults, readResults };
+};
+
+// Run the cross-session state tests and return analyzed results.
+const runSessionTests = async (browserSession) => {
+  const { writeResults, readResults } = await runSessionTestsRaw(browserSession);
+  return analyzeSessionResults(writeResults, readResults);
+};
+
 // Run the insecure connection test. Returns { insecureResults, insecurePassed }.
 const runInsecureTest = async (browserSession) => {
   const timeout = (browserSession.browser instanceof DesktopBrowser) ? 8000 : 30000;
@@ -322,6 +361,10 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
       ...{ 'HSTS cache': hstsResult }
     };
   }
+  if (!categories || categories.includes('session')) {
+    const sessionTestResults = await runSessionTests(browserSession);
+    results.session = sessionTestResults;
+  }
   return results;
 };
 
@@ -363,11 +406,11 @@ const asyncMap = (parallel, asyncFunction, array) =>
   (parallel ? asyncMapParallel : asyncMapSeries)(asyncFunction, array);
 */
 
-const prepareBrowserSession = async (config) => {
+const prepareBrowserSession = async (config, hurry) => {
   const browser = createBrowserObject(config);
   const websocket = await createWebsocket();
   await browser.launch();
-  if (browser instanceof DesktopBrowser) {
+  if (!hurry && browser instanceof DesktopBrowser) {
     // Give browser the chance to load any feature flags.
     await sleepMs(15000);
     await browser.restart();
@@ -378,7 +421,7 @@ const prepareBrowserSession = async (config) => {
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
 const runTestsBatch = async (
-  browserLists, { debug, android, ios, categories, repeat } = { debug: false, repeat: 1 }) => {
+  browserLists, { debug, android, ios, categories, repeat, hurry } = { debug: false, repeat: 1, hurry: false }) => {
   const allTests = [];
   const timeStarted = new Date().toISOString();
   cookieProxy.simulateTrackingCookies(cookieProxyPort, debug);
@@ -387,7 +430,7 @@ const runTestsBatch = async (
       const timeStarted = new Date().toISOString();
       let browserSessions;
       try {
-        browserSessions = await asyncMapParallel((config) => prepareBrowserSession(config), browserList);
+        browserSessions = await asyncMapParallel((config) => prepareBrowserSession(config, hurry), browserList);
         console.log({ browserSessions });
         const testResultsStage1 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage1({ browserSession, categories }), 600000), browserSessions);
         let testResultsStage2 = [];
@@ -418,6 +461,7 @@ const runTestsBatch = async (
         for (const browserSession of browserSessions) {
           await closeWebSocket(browserSession.websocket);
           try {
+            console.log('killing the browser...');
             await browserSession.browser.kill();
           } catch (e) {
             log(e);
