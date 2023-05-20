@@ -170,7 +170,7 @@ app.get('/headers', (req, res) => {
 
 app.get('/cookie', (req, res) => {
   const secret = req.query.secret;
-  const cookieHeader = `secret=${secret}; HTTPOnly; SameSite=None; Secure`;
+  const cookieHeader = `secret=${secret}; HTTPOnly; max-age=3600; SameSite=None; Secure`;
   res.set({
     'set-cookie': cookieHeader
   });
