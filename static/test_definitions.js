@@ -31,7 +31,7 @@ return {
     category: "supercookies",
     description: "The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website's behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.",
     write: (secret) => {
-      document.cookie = `secret=${secret}_js; SameSite=None; Secure`;
+      document.cookie = `secret=${secret}_js; max-age=3600; SameSite=None; Secure`;
     },
     read: () => document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null,
     session: true,
@@ -56,6 +56,7 @@ return {
     description: "The localStorage API gives websites access to a key-value database that will remain available across visits. If the localStorage API is not partitioned or blocked, it can also be used to track users across websites.",
     write: (secret) => localStorage.setItem("secret", secret),
     read: () => localStorage.getItem("secret"),
+    session: true,
   },
   "indexedDB": {
     category: "supercookies",
