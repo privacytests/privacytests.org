@@ -1,5 +1,23 @@
 # News
-## [Issue 56](/): 2023-05-13
+## [Issue 57](/archive/issue57): 2023-05-20
+
+### New browser versions
+
+On Desktop:
+* Firefox 113.0
+* Librewolf 113.0-1
+* Opera 99.0
+
+On iOS:
+* Edge 113.1774
+* Firefox 113.0
+* Focus 113.0
+* Yandex 2305.2
+
+On Android:
+* Mull 113.0
+
+## [Issue 56](/archive/issue56): 2023-05-13
 
 ### New browser versions
 
