@@ -1,4 +1,22 @@
 # News
+## [Issue 58](/archive/issue58): 2023-05-26
+
+### New browser versions
+
+On iOS:
+* Brave 1.51
+* Duckduckgo 7.74
+* Firefox 113.1
+
+On Android:
+* Brave 1.51
+* Edge 113.0
+* Firefox 113.2
+* Focus 113.2
+* Opera 75.3
+* Samsung 21.0
+* Yandex 23.5
+
 ## [Issue 57](/archive/issue57): 2023-05-20
 
 ### New browser versions
