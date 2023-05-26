@@ -101,7 +101,7 @@ const diffBrowserLists = (issueNumber1, issueNumber2) => {
 const latestNews = ({ issueNumber, date, desktop, ios, android }) => {
   const formattedDate =
     `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}`;
-  let latestNewsString = `## [Issue ${issueNumber}](/): ${formattedDate}\n\n`;
+  let latestNewsString = `## [Issue ${issueNumber}](/archive/issue${issueNumber}): ${formattedDate}\n\n`;
   if (desktop.length > 0 || android.length > 0 || ios.length > 0) {
     latestNewsString += '### New browser versions\n\n';
   }
