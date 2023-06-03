@@ -1,4 +1,21 @@
 # News
+## [Issue 59](/archive/issue59): 2023-06-02
+
+### New browser versions
+
+On Desktop:
+* Brave 1.52
+* Chrome 114.0
+* Librewolf 113.0
+
+On iOS:
+* Duckduckgo 7.75
+* Firefox 113.2
+* Yandex 2305.3
+
+On Android:
+* Duckduckgo 5.159
+
 ## [Issue 58](/archive/issue58): 2023-05-26
 
 ### New browser versions
