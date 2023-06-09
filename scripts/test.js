@@ -209,7 +209,7 @@ const runMainTests = async (browserSession, categories) => {
   // Return the main results.
   return resultsPromise;
 };
-/*
+
 // Combine same-session results with cross-session results.
 const analyzeSessionResults = (writeResults, readResults) => {
   console.log({ readResults, writeResults, test: 'session' });
@@ -250,7 +250,7 @@ const runSessionTests = async (browserSession) => {
   const { writeResults, readResults } = await runSessionTestsRaw(browserSession);
   return analyzeSessionResults(writeResults, readResults);
 };
-*/
+
 // Run the insecure connection test. Returns { insecureResults, insecurePassed }.
 const runInsecureTest = async (browserSession) => {
   const timeout = (browserSession.browser instanceof DesktopBrowser) ? 8000 : 30000;
@@ -363,10 +363,11 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
       ...{ 'HSTS cache': hstsResult }
     };
   }
-  // if (!categories || categories.includes('session')) {
-  //   const sessionTestResults = await runSessionTests(browserSession);
-  //   results.session = sessionTestResults;
-  // }
+  // Cross-session tests
+  if (browserSession.browser instanceof DesktopBrowser && !categories || categories.includes('session')) {
+     const sessionTestResults = await runSessionTests(browserSession);
+     results.session = sessionTestResults;
+  }
   return results;
 };
 
