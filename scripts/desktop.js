@@ -4,6 +4,7 @@ const { join: joinDir } = require('path');
 const { exec, execSync, sleepMs } = require('./utils');
 const proxy = require('./system-proxy-settings');
 const { killProcessAndDescendants } = require('./utils');
+const path = require('node:path');
 
 /*
 /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --incognito "https://example.com"
@@ -48,7 +49,8 @@ const macOSdefaultBrowserSettings = {
     privateFlag: 'inprivate',
     basedOn: 'chromium',
     update: ['Microsoft Edge', 'About Microsoft Edge'],
-    updateNightly: ['Microsoft Edge Canary', 'About Microsoft Edge']
+    updateNightly: ['Microsoft Edge Canary', 'About Microsoft Edge'],
+    useAppleScriptToQuit: true
   },
   firefox: {
     name: 'firefox',
@@ -65,7 +67,8 @@ const macOSdefaultBrowserSettings = {
     privateFlag: 'private-window',
     basedOn: 'firefox',
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
-    updateCommand: '/opt/homebrew/bin/brew upgrade librewolf --no-quarantine'
+    updateCommand: '/opt/homebrew/bin/brew upgrade librewolf --no-quarantine',
+    postLaunchDelay: 2000
   },
   mullvad: {
     name: 'Mullvad Browser',
@@ -81,7 +84,9 @@ const macOSdefaultBrowserSettings = {
     privateFlag: 'private',
     basedOn: 'chromium',
     update: ['Opera', 'About Opera'],
-    updateNightly: ['Opera Developer', 'About Opera']
+    updateNightly: ['Opera Developer', 'About Opera'],
+    useAppleScriptToQuit: true,
+    // preferences: {ui: {"warn_on_closing_multiple_tabs":false, "warn_on_quitting_opera_with_multiple_tabs":false}}
   },
   safari: {
     name: 'Safari',
@@ -106,7 +111,8 @@ const macOSdefaultBrowserSettings = {
     binaryName: 'Chromium',
     privateFlag: 'incognito',
     updateCommand: "mv '/Applications/Ungoogled Chromium.app' /Applications/Chromium.app ; /opt/homebrew/bin/brew upgrade eloston-chromium --no-quarantine && mv /Applications/Chromium.app '/Applications/Ungoogled Chromium.app'",
-    basedOn: 'chromium'
+    basedOn: 'chromium',
+    useAppleScriptToQuit: true
   },
   vivaldi: {
     name: 'Vivaldi',
@@ -116,7 +122,9 @@ const macOSdefaultBrowserSettings = {
     basedOn: 'chromium',
     // Assumes Vivaldi is on automatic updates:
     update: ['Vivaldi', 'About Vivaldi'],
-    updateNightly: ['Vivaldi Snapshot', 'About Vivaldi']
+    updateNightly: ['Vivaldi Snapshot', 'About Vivaldi'],
+    closeWindows: true,
+    useAppleScriptToQuit: true
   },
   waterfox: {
     name: 'waterfox',
@@ -151,6 +159,14 @@ const browserPath = ({ browser, nightly, appDir }) => {
 let proxyUsageState = false;
 let preferredNetworkService;
 
+// TODO: Make this a generic capability for any browser
+const fixOperaPreferences = async (file) => {
+  const raw = await fsPromises.readFile(file);
+  const json = JSON.parse(raw);
+  json["ui"]["warn_on_quitting_opera_with_multiple_tabs"] = false;
+  await fsPromises.writeFile(file, JSON.stringify(json));
+};
+
 // A Browser object represents a browser we run tests on.
 class DesktopBrowser {
   constructor ({ browser, path, incognito, tor, nightly, appDir }) {
@@ -177,9 +193,13 @@ class DesktopBrowser {
       // Delete old profiles if they exist.
       console.log(`Deleting any old ${this._profilePath}`);
       await fsPromises.rm(this._profilePath, { recursive: true, force: true });
+    } else {
+      if (this.browser === "opera") {
+        fixOperaPreferences(path.join(this._profilePath, "Preferences"));
+      }
     }
     this._process = exec(this._command, { env: this._defaults.env });
-    await sleepMs(this._defaults.postLaunchDelay ?? 0);
+    await sleepMs(this._defaults.postLaunchDelay ?? 500);
     if (this.incognito && this._defaults.incognitoCommand) {
       exec(`${this._defaults.incognitoCommand} "${this._appName}"`);
       await sleepMs(1000);
@@ -213,7 +233,7 @@ class DesktopBrowser {
       execSync(`osascript closeAllWindows.applescript "${this._appName}"`);
       await sleepMs(1000);
     }
-    if (this._defaults.useOpen) {
+    if (this._defaults.useOpen || this._defaults.useAppleScriptToQuit) {
       execSync(`osascript -e 'quit app "${this._path}"'`);
       await sleepMs(5000);
     } else {
