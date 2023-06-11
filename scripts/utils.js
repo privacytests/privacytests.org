@@ -22,7 +22,7 @@ const exec = (command, options) => {
 const childProcesses = (pid) => {
   try {
     const list = childProcess.execSync(`pgrep -P ${pid}`).toString();
-    return list.split(/\s+/).filter(s => s.length > 0);
+    return list.split(/\s+/).filter(s => s.length > 0).map(s => parseInt(s));
   } catch (e) {
     return [];
   }
