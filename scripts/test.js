@@ -212,6 +212,7 @@ const runMainTests = async (browserSession, categories) => {
 
 // Combine same-session results with cross-session results.
 const analyzeSessionResults = (writeResults, readResults) => {
+  console.log({ readResults, writeResults, test: 'session' });
   const results = {};
   for (const [name, writeData] of Object.entries(writeResults)) {
     results[name] = {};
@@ -237,6 +238,7 @@ const analyzeSessionResults = (writeResults, readResults) => {
 const runSessionTestsRaw = async (browserSession) => {
   await runPageTest(browserSession, `${kIframeRootSame}/session.html?mode=write`);
   const writeResults = await runPageTest(browserSession, `${kIframeRootSame}/session.html?mode=read`);
+  await sleepMs(10000);
   await browserSession.browser.restart();
   await sleepMs(1000);
   const readResults = await runPageTest(browserSession, `${kIframeRootSame}/session.html?mode=read`);
@@ -320,6 +322,14 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
   await DesktopBrowser.setGlobalProxyUsageEnabled(false);
   let results = {};
   log({ categories });
+
+  // Cross-session tests
+  if (browserSession.browser instanceof DesktopBrowser &&
+    (!categories || categories.includes('session'))) {
+    const sessionTestResults = await runSessionTests(browserSession);
+    results.session = sessionTestResults;
+  }
+
   // Main tests
   if (!categories || categories.includes('main')) {
     const mainResults = await runMainTests(browserSession, categories);
@@ -360,10 +370,6 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
       ...results.supercookies,
       ...{ 'HSTS cache': hstsResult }
     };
-  }
-  if (!categories || categories.includes('session')) {
-    const sessionTestResults = await runSessionTests(browserSession);
-    results.session = sessionTestResults;
   }
   return results;
 };
@@ -412,7 +418,7 @@ const prepareBrowserSession = async (config, hurry) => {
   await browser.launch();
   if (!hurry && browser instanceof DesktopBrowser) {
     // Give browser the chance to load any feature flags.
-    await sleepMs(15000);
+    await sleepMs(60000);
     await browser.restart();
   }
   return { browser, websocket };
