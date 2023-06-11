@@ -414,6 +414,7 @@ const latestResultsFile = (dir) => {
 const resultsKeys = [
   'passed', 'testFailed',
   'readSameFirstParty', 'readDifferentFirstParty',
+  'readSameSession', 'readDifferentSession',
   'actual_value', 'desired_value',
   'IsTorExit', 'cloudflareDoH', 'nextDoH', 'result',
   'unsupported', 'upgraded', 'cookieFound'
