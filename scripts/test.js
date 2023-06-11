@@ -322,6 +322,14 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
   await DesktopBrowser.setGlobalProxyUsageEnabled(false);
   let results = {};
   log({ categories });
+
+  // Cross-session tests
+  if (browserSession.browser instanceof DesktopBrowser &&
+    (!categories || categories.includes('session'))) {
+    const sessionTestResults = await runSessionTests(browserSession);
+    results.session = sessionTestResults;
+  }
+
   // Main tests
   if (!categories || categories.includes('main')) {
     const mainResults = await runMainTests(browserSession, categories);
@@ -362,11 +370,6 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
       ...results.supercookies,
       ...{ 'HSTS cache': hstsResult }
     };
-  }
-  // Cross-session tests
-  if (browserSession.browser instanceof DesktopBrowser && !categories || categories.includes('session')) {
-     const sessionTestResults = await runSessionTests(browserSession);
-     results.session = sessionTestResults;
   }
   return results;
 };
