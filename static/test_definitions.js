@@ -587,12 +587,21 @@ return {
       return key;
     },
     read: async (key) => {
+      const text = document.createElement("span");
+      text.id = "text";
+      text.innerText = "test";
+      document.body.appendChild(text);
+      const originalWidth = text.getBoundingClientRect().width;
       let style = document.createElement("style");
       style.type='text/css';
       let fontURI = testURI("resource", "font", key);
-      style.innerHTML = `@font-face {font-family: "myFont"; src: url("${fontURI}"); } body { font-family: "myFont" }`;
+      style.innerHTML = `@font-face {font-family: "myFont"; src: url("${fontURI}"); } #text { font-family: "myFont" }`;
       document.getElementsByTagName("head")[0].appendChild(style);
-      await sleepMs(500);
+      let newWidth;
+      do {
+        await sleepMs(100);
+        newWidth = text.getBoundingClientRect().width;
+      } while (newWidth < 0 || newWidth === originalWidth)
       let response = await fetch(
         testURI("ctr", "font", key), {"cache": "reload"});
       return (await response.text()).trim();
