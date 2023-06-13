@@ -23,6 +23,7 @@
         document.body.setAttribute("data-test-results", JSON.stringify(data));
         const category = `session_${mode}`;
         await postData(data, category);
+        location.href = "./blank.html";
       }, {once: true});
       let iframe = document.createElement("iframe");
       iframe.height="1000px"
