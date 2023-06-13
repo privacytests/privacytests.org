@@ -34,7 +34,8 @@ const macOSdefaultBrowserSettings = {
     privateFlag: 'incognito',
     basedOn: 'chromium',
     update: ['Chrome', 'About Google Chrome'],
-    updateNightly: ['Chrome Canary', 'About Google Chrome']
+    updateNightly: ['Chrome Canary', 'About Google Chrome'],
+    useAppleScriptToQuit: true
   },
   duckduckgo: {
     name: 'DuckDuckGo',
@@ -86,7 +87,7 @@ const macOSdefaultBrowserSettings = {
     update: ['Opera', 'About Opera'],
     updateNightly: ['Opera Developer', 'About Opera'],
     useAppleScriptToQuit: true,
-    // preferences: {ui: {"warn_on_closing_multiple_tabs":false, "warn_on_quitting_opera_with_multiple_tabs":false}}
+    // preferences: [[["ui","warn_on_quitting_opera_with_multiple_tabs"], false]]
   },
   safari: {
     name: 'Safari',
@@ -167,6 +168,20 @@ const fixOperaPreferences = async (file) => {
   await fsPromises.writeFile(file, JSON.stringify(json));
 };
 
+// TODO: Make this a generic capability for any browser
+const fixChromePreferences = async (file) => {
+  const raw = await fsPromises.readFile(file);
+  const json = JSON.parse(raw);
+  if (json["privacy_sandbox"] === undefined) {
+    json["privacy_sandbox"] = {};
+  }
+  if (json["privacy_sandbox"]["m1"] === undefined) {
+    json["privacy_sandbox"]["m1"] = {};
+  }
+  json["privacy_sandbox"]["m1"]["row_notice_acknowledged"] = true;
+  await fsPromises.writeFile(file, JSON.stringify(json));
+}
+
 // A Browser object represents a browser we run tests on.
 class DesktopBrowser {
   constructor ({ browser, path, incognito, tor, nightly, appDir }) {
@@ -196,6 +211,9 @@ class DesktopBrowser {
     } else {
       if (this.browser === "opera") {
         fixOperaPreferences(path.join(this._profilePath, "Preferences"));
+      }
+      if (this.browser === "chrome") {
+        fixChromePreferences(path.join(this._profilePath, "Default", "Preferences"));
       }
     }
     this._process = exec(this._command, { env: this._defaults.env });
