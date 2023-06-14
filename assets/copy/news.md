@@ -1,4 +1,32 @@
 # News
+## [Issue 60](/archive/issue60): 2023-06-13
+
+### New browser versions
+
+On Desktop:
+* Edge 114.0
+* Firefox 114.0
+* Librewolf 114.0
+* Ungoogled 114.0
+* Vivaldi 6.1
+
+On iOS:
+* Chrome 114.5735
+* Edge 114.1823
+* Firefox 114.1
+* Focus 114.0
+* Opera 4.0
+* Safari 16.5
+* Yandex 2305.5
+
+On Android:
+* Brave 1.52
+* Chrome 114.0
+* Edge 114.0
+* Focus 114.1
+* Opera 75.4
+* Vivaldi 6.1
+
 ## [Issue 59](/archive/issue59): 2023-06-02
 
 ### New browser versions
