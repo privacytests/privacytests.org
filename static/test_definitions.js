@@ -234,7 +234,7 @@ return {
     write: (key) => key,
     read: async (key) => {
       // Wait for the favicon to load (defined in supercookies.html)
-      await sleepMs(500);
+      await sleepMs(2000);
       let response = await fetch(
         testURI("ctr", "favicon", key), {"cache": "reload"});
       let count = (await response.text()).trim();
