@@ -1,6 +1,8 @@
 const fs = require('node:fs');
 const { exec, execSync, killProcessAndDescendants } = require('./utils');
 const { join } = require('node:path');
+const os = require('node:os');
+const path = require('node:path');
 
 const linuxDefaultBrowserSettings = {
   brave: {
@@ -39,6 +41,20 @@ const linuxDefaultBrowserSettings = {
   }
 };
 
+const windowsDefaultBrowserSettings = {
+  brave: {
+    command: 'C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe',
+    name: 'Brave Browser',
+    nightlyName: 'Brave Browser Nightly',
+    privateFlag: 'incognito',
+    basedOn: 'chromium',
+    update: ['Brave', 'About Brave'],
+    updateNightly: ['Brave', 'About Brave']
+  }
+}
+
+const platform = os.platform();
+
 const standardFlags = {
   chromium: '--no-first-run --no-default-browser-check --user-data-dir=',
   firefox: '--profile ',
@@ -51,9 +67,11 @@ let globalProxyPort = null;
 // Declares a class that represents a browser on Linux.
 class DesktopBrowser {
   constructor ({ browser, path, incognito, tor, nightly, appDir }) {
-    this._defaults = linuxDefaultBrowserSettings[browser];
+    this._defaults = platform === "win32" ?
+      windowsDefaultBrowserSettings[browser] :
+      linuxDefaultBrowserSettings[browser];
     this._flags = `${incognito ? '--' + this._defaults.privateFlag : ''} ${tor ? '--' + this._defaults.torFlag : ''} ` + standardFlags[this._defaults.basedOn];
-    this._profilePath = join('profiles', browser);
+    this._profilePath = join(process.cwd(), 'profiles', browser);
     fs.mkdirSync(this._profilePath, { recursive: true });
     this._usingProxy = globalProxyUsageEnabled;
     this._processes = new Set();
@@ -61,7 +79,7 @@ class DesktopBrowser {
   }
 
   command () {
-    let result = `${this._defaults.command} ${this._flags}${this._profilePath}`;
+    let result = `"${path.normalize(this._defaults.command)}" ${this._flags}${this._profilePath}`;
     if (globalProxyUsageEnabled && this._defaults.basedOn === 'chromium') {
       result += ` --proxy-server="http://127.0.0.1:${globalProxyPort}"`;
     }
@@ -82,7 +100,7 @@ class DesktopBrowser {
   }
 
   async version () {
-    let versionString = execSync(`${this._defaults.command} --version`).toString()
+    let versionString = execSync(`"${path.normalize(this._defaults.command)}" --version`).toString()
       .replace(/^[^\d]+/, '').trim();
     if (this._browser === 'brave') {
       versionString = versionString.replace(/^\d+\./, '');
