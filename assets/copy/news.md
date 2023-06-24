@@ -1,4 +1,27 @@
 # News
+## [Issue 61](/archive/issue61): 2023-06-23
+
+### New browser versions
+
+On Desktop:
+* Safari 16.5
+* Tor 12.5
+
+On iOS:
+* Duckduckgo 7.76
+* Firefox 114.2
+* Yandex 2305.6
+
+On Android:
+* Duckduckgo 5.160
+* Firefox 114.2
+* Focus 114.2
+* Opera 76.1
+
+## New tests
+
+This week's issue introduces cross-session tracking tests. We begin by testing Desktop Nightly browser builds to examine whether data is leaked across browser sessions so that a website can re-identify you when you visit a second time.
+
 ## [Issue 60](/archive/issue60): 2023-06-13
 
 ### New browser versions
