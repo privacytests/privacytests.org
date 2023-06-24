@@ -18,7 +18,7 @@ On Android:
 * Focus 114.2
 * Opera 76.1
 
-## New tests
+### New tests
 
 This week's issue introduces cross-session tracking tests. We begin by testing Desktop Nightly browser builds to examine whether data is leaked across browser sessions so that a website can re-identify you when you visit a second time.
 
