@@ -51,6 +51,15 @@ const windowsDefaultBrowserSettings = {
     basedOn: 'chromium',
     update: ['Brave', 'About Brave'],
     updateNightly: ['Brave', 'About Brave']
+  },
+  duckduckgo: {
+    command: 'C:/Users/arthu_3rura6m/AppData/Local/Microsoft/WindowsApps/DuckDuckGo.exe',
+    name: 'DuckDuckGo',
+    nightlyName: 'DuckDuckGo Beta',
+    privateFlag: 'incognito',
+    basedOn: 'chromium',
+    update: ['DuckDuckGo', 'About DuckDuckGo'],
+    updateNightly: ['DuckDuckGo', 'About DuckDuckGo']
   }
 }
 
@@ -101,7 +110,7 @@ class DesktopBrowser {
       flags.push("--" + this._defaults.torFlag);
     }
     if (globalProxyUsageEnabled && this._defaults.basedOn === 'chromium') {
-      flags.push(`--proxy-server="http://127.0.0.1:${globalProxyPort}"`);
+      flags.push(`--proxy-server="http://127.0.0.1:${globalProxyPort}/"`);
     }
     return { binary, flags };
   }
@@ -109,7 +118,12 @@ class DesktopBrowser {
   env () {
     let result = { ...process.env, ...this._defaults.env };
     if (globalProxyUsageEnabled && this._defaults.basedOn === 'firefox') {
-      result = { ...result, ...process.env };
+      result = { ...result,
+                 ...{ "http_proxy": "127.0.0.1",
+                      "http_port": globalProxyPort } };
+    }
+    if (platform === "win32" && globalProxyUsageEnabled) {
+      result["http_proxy"] = `http://localhost:${globalProxyPort}`;
     }
     return result;
   }
@@ -158,8 +172,16 @@ class DesktopBrowser {
   }
 
   static async setGlobalProxyUsageEnabled (enabled, port = null) {
-    globalProxyUsageEnabled = enabled;
-    globalProxyPort = port;
+    if (platform === "win32") {
+      if (enabled) {
+       // execSync(`netsh winhttp set proxy localhost:${port}`);
+      } else {
+       // execSync(`netsh winhttp reset proxy`);
+      }
+    } else {
+      globalProxyUsageEnabled = enabled;
+      globalProxyPort = port;
+    }
   }
 }
 

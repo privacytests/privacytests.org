@@ -11,8 +11,9 @@ const execSyncExplicit = (command) => {
   return execSync(command).toString().trim();
 };
 
-const cmd = memoize((shortCommand) =>
-  execSync(`which ${shortCommand}`).toString().trim());
+const cmd = os.platform() === "win32" ?
+  (shortCommand) => shortCommand :
+  memoize((shortCommand) => execSync(`which ${shortCommand}`).toString().trim());
 
 const nssdbPath = memoize(() => path.join(homedir(), '.pki', 'nssdb'));
 
@@ -62,9 +63,19 @@ const setupCertificateDarwin = async () => {
   };
 };
 
+const setupCertificateWindows = async () => {
+  //const { keyPath, certPath } = await generateCert();
+  const certsDir = '/tmp/pto_certs';
+  const keyPath = path.join(certsDir, 'rootCA-key.pem');
+  const certPath = path.join(certsDir, 'rootCA.pem');
+  return { keyPath, certPath };
+};
+
 const setupCertificate = async () => {
   if (os.platform() === 'darwin') {
     return setupCertificateDarwin();
+  } else if (os.platform() === 'win32') {
+    return setupCertificateWindows();
   } else {
     return setupCertificateNss();
   }
