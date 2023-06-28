@@ -15,13 +15,14 @@
          const mode = param("mode");
          const sessionId = param("sessionId");
          const firstParty = param("firstParty");
+         const label = param("label");
          console.log({mode, sessionId, firstParty});
          const favicon = document.getElementById("favicon");
          const baseURI = `https://test-pages.privacytests${firstParty === "true" ? "3" : "2"}.org`;
-         favicon.setAttribute("href", `${baseURI}/live/resource?type=favicon&key=${sessionId}`);
+         favicon.setAttribute("href", `${baseURI}/live/resource?type=favicon&key=${sessionId}_${label}`);
          addEventListener("message", async ({data}) => {
            document.body.setAttribute("data-test-results", JSON.stringify(data));
-           const category = `session_${mode}`;
+           const category = `session_${mode}_${firstParty ? "1p" : "3p"}`;
            await postData(data, category);
            location.href = "./blank.html";
          }, {once: true});

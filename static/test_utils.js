@@ -9,7 +9,8 @@ let runTests = async (tests, mode, params) => {
     }
     console.log(`running ${test}...`);
     try {
-      let input = params["sessionId"];
+      const label = params["label"] ? ("_" + params["label"]) : "";
+      const input = params["sessionId"] + label;
       console.log("input", input);
       result = await tests[test][mode](input);
     } catch (e) {
