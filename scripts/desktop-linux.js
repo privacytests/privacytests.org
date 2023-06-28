@@ -1,6 +1,9 @@
 const fs = require('node:fs');
 const { exec, execSync, killProcessAndDescendants } = require('./utils');
 const { join } = require('node:path');
+const os = require('node:os');
+const path = require('node:path');
+const child_process = require('node:child_process');
 
 const linuxDefaultBrowserSettings = {
   brave: {
@@ -39,10 +42,39 @@ const linuxDefaultBrowserSettings = {
   }
 };
 
+const windowsDefaultBrowserSettings = {
+  brave: {
+    command: 'C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe',
+    name: 'Brave Browser',
+    nightlyName: 'Brave Browser Nightly',
+    privateFlag: 'incognito',
+    basedOn: 'chromium',
+    update: ['Brave', 'About Brave'],
+    updateNightly: ['Brave', 'About Brave']
+  },
+  duckduckgo: {
+    command: 'C:/Users/arthu_3rura6m/AppData/Local/Microsoft/WindowsApps/DuckDuckGo.exe',
+    name: 'DuckDuckGo',
+    nightlyName: 'DuckDuckGo Beta',
+    privateFlag: 'incognito',
+    basedOn: 'chromium',
+    update: ['DuckDuckGo', 'About DuckDuckGo'],
+    updateNightly: ['DuckDuckGo', 'About DuckDuckGo']
+  }
+}
+
+const platform = os.platform();
+
 const standardFlags = {
-  chromium: '--no-first-run --no-default-browser-check --user-data-dir=',
-  firefox: '--profile ',
-  webkit: '--profile '
+  chromium: {
+    profile: '--user-data-dir=',
+    other: [
+      '--no-first-run',
+      '--no-default-browser-check',
+    ],
+  },
+  firefox: { profile: '--profile '},
+  webkit: { profile: '--profile '},
 };
 
 let globalProxyUsageEnabled = false;
@@ -51,38 +83,60 @@ let globalProxyPort = null;
 // Declares a class that represents a browser on Linux.
 class DesktopBrowser {
   constructor ({ browser, path, incognito, tor, nightly, appDir }) {
-    this._defaults = linuxDefaultBrowserSettings[browser];
-    this._flags = `${incognito ? '--' + this._defaults.privateFlag : ''} ${tor ? '--' + this._defaults.torFlag : ''} ` + standardFlags[this._defaults.basedOn];
-    this._profilePath = join('profiles', browser);
+    this._defaults = platform === "win32" ?
+      windowsDefaultBrowserSettings[browser] :
+      linuxDefaultBrowserSettings[browser];
+    this._flags = standardFlags[this._defaults.basedOn];
+    this._profilePath = join(process.cwd(), 'profiles', browser);
     fs.mkdirSync(this._profilePath, { recursive: true });
     this._usingProxy = globalProxyUsageEnabled;
-    this._processes = new Set();
+    this._pids = new Set();
     this._browser = browser;
+    this._incognito = incognito;
+    this._tor = tor;
   }
 
   command () {
-    let result = `${this._defaults.command} ${this._flags}${this._profilePath}`;
-    if (globalProxyUsageEnabled && this._defaults.basedOn === 'chromium') {
-      result += ` --proxy-server="http://127.0.0.1:${globalProxyPort}"`;
+    const binary = path.normalize(this._defaults.command);
+    const flags = [];
+    flags.push(this._flags.profile + this._profilePath);
+    for (const flag of this._flags.other) {
+      flags.push(flag);
     }
-    return result;
+    if (this._incognito) {
+      flags.push("--" + this._defaults.privacyFlags);
+    }
+    if (this._tor) {
+      flags.push("--" + this._defaults.torFlag);
+    }
+    if (globalProxyUsageEnabled && this._defaults.basedOn === 'chromium') {
+      flags.push(`--proxy-server="http://127.0.0.1:${globalProxyPort}/"`);
+    }
+    return { binary, flags };
   }
 
   env () {
     let result = { ...process.env, ...this._defaults.env };
     if (globalProxyUsageEnabled && this._defaults.basedOn === 'firefox') {
-      result = { ...result, ...process.env };
+      result = { ...result,
+                 ...{ "http_proxy": "127.0.0.1",
+                      "http_port": globalProxyPort } };
+    }
+    if (platform === "win32" && globalProxyUsageEnabled) {
+      result["http_proxy"] = `http://localhost:${globalProxyPort}`;
     }
     return result;
   }
 
   async launch (clean = true) {
-    const process = exec(this.command(), { env: this.env() });
-    this._processes.add(process);
+    const { binary, flags } = this.command();
+    const process = child_process.execFile(binary, flags, { env: this.env() });
+    this._pids.add(process.pid);
   }
 
   async version () {
-    let versionString = execSync(`${this._defaults.command} --version`).toString()
+    const { binary } = this.command();
+    let versionString = child_process.execFileSync(binary, ["--version"]).toString()
       .replace(/^[^\d]+/, '').trim();
     if (this._browser === 'brave') {
       versionString = versionString.replace(/^\d+\./, '');
@@ -95,15 +149,17 @@ class DesktopBrowser {
       await this.restart();
       this._usingProxy = globalProxyUsageEnabled;
     }
-    const process = exec(`${this.command()} "${url}"`, { env: this.env() });
-    this._processes.add(process);
+    const { binary, flags } = this.command();
+    const extendedFlags = [...flags, url];
+    const process = child_process.execFile(binary, extendedFlags, { env: this.env() });
+    this._pids.add(process.pid);
   }
 
   async kill () {
-    for (const process of this._processes) {
-      killProcessAndDescendants(process.pid);
+    for (const pid of this._pids) {
+      killProcessAndDescendants(pid);
     }
-    this._processes.clear();
+    this._pids.clear();
   }
 
   async restart () {
@@ -116,8 +172,16 @@ class DesktopBrowser {
   }
 
   static async setGlobalProxyUsageEnabled (enabled, port = null) {
-    globalProxyUsageEnabled = enabled;
-    globalProxyPort = port;
+    if (platform === "win32") {
+      if (enabled) {
+       // execSync(`netsh winhttp set proxy localhost:${port}`);
+      } else {
+       // execSync(`netsh winhttp reset proxy`);
+      }
+    } else {
+      globalProxyUsageEnabled = enabled;
+      globalProxyPort = port;
+    }
   }
 }
 
