@@ -3,7 +3,7 @@ export let tests = (async () => {
 
 const IdbKeyVal = await import('https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs');
 
-const baseURI = "https://test-pages.privacytests2.org/live/";
+const baseURI = document.location.origin + "/live/";
 
 let testURI = (path, type, key) => `${baseURI}${path}?type=${type}&key=${key}`;
 
