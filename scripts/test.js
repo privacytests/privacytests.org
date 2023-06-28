@@ -75,7 +75,8 @@ const installTestFontIfNeeded = () => {
   const homedir = os.homedir();
   const userFontDir = {
     darwin: `${homedir}/Library/Fonts`,
-    linux: `${homedir}/.local/share/fonts`
+    linux: `${homedir}/.local/share/fonts`,
+    win32: `${homedir}/AppData/Local/Microsoft/Windows/Fonts`
   }[process.platform];
   if (!fs.existsSync(userFontDir)) {
     fs.mkdirSync(userFontDir, { recursive: true });
