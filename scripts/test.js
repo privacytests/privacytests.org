@@ -4,6 +4,8 @@
 
 // ## imports
 
+/* eslint-disable camelcase */
+
 const fs = require('fs');
 const { execSync } = require('child_process');
 const minimist = require('minimist');
@@ -157,6 +159,7 @@ const closeWebSocket = (websocket) => {
 // responses.
 const kIframeRootSame = 'https://test-pages.privacytests2.org';
 const kIframeRootDifferent = 'https://test-pages.privacytests.org';
+const kIframeRootThird = 'https://test-pages.privacytests3.org';
 const kInsecureRoot = 'http://insecure.privacytests2.org';
 const kUpgradableRoot = 'http://upgradable.privacytests2.org';
 const kLiveRoot = 'https://test-pages.privacytests2.org/live';
@@ -217,9 +220,11 @@ const analyzeSessionResults = (writeResults, readResults) => {
   for (const [name, writeData] of Object.entries(writeResults)) {
     results[name] = {};
     const readData = readResults[name];
-    const unsupported = writeData.result.startsWith('Error:') ||
-      (name === 'Alt-Svc' && writeData.result.startsWith('h2'));
-    const passed = !unsupported && (readData.result !== writeData.result);
+    const unsupported = ((typeof writeData.result) === 'string' &&
+      writeData.result.startsWith('Error:')) ||
+      (name === 'Alt-Svc' && writeData.result.startsWith('h2')) ||
+      writeData.result === undefined || writeData.result === null;
+    const passed = unsupported ? undefined : (readData.result !== writeData.result);
     results[name] = {
       unsupported,
       passed,
@@ -236,19 +241,24 @@ const analyzeSessionResults = (writeResults, readResults) => {
 
 // Run the cross-session state tests and return raw results.
 const runSessionTestsRaw = async (browserSession) => {
-  await runPageTest(browserSession, `${kIframeRootSame}/session.html?mode=write`);
-  const writeResults = await runPageTest(browserSession, `${kIframeRootSame}/session.html?mode=read`);
-  await sleepMs(10000);
+  await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=write&label=3p`);
+  await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=write&firstParty=true&label=1p`);
+  const writeResults_3p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&label=3p`);
+  const writeResults_1p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&firstParty=true&label=1p`);
+  await sleepMs(1000);
   await browserSession.browser.restart();
   await sleepMs(1000);
-  const readResults = await runPageTest(browserSession, `${kIframeRootSame}/session.html?mode=read`);
-  return { writeResults, readResults };
+  const readResults_3p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&label=3p`);
+  const readResults_1p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&firstParty=true&label=1p`);
+  return { writeResults_3p, readResults_3p, writeResults_1p, readResults_1p };
 };
 
 // Run the cross-session state tests and return analyzed results.
 const runSessionTests = async (browserSession) => {
-  const { writeResults, readResults } = await runSessionTestsRaw(browserSession);
-  return analyzeSessionResults(writeResults, readResults);
+  const { writeResults_3p, readResults_3p, writeResults_1p, readResults_1p } = await runSessionTestsRaw(browserSession);
+  const sessionResults_3p = analyzeSessionResults(writeResults_3p, readResults_3p);
+  const sessionResults_1p = analyzeSessionResults(writeResults_1p, readResults_1p);
+  return { sessionResults_3p, sessionResults_1p };
 };
 
 // Run the insecure connection test. Returns { insecureResults, insecurePassed }.
@@ -326,8 +336,9 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
   // Cross-session tests
   if (browserSession.browser instanceof DesktopBrowser &&
     (!categories || categories.includes('session'))) {
-    const sessionTestResults = await runSessionTests(browserSession);
-    results.session = sessionTestResults;
+    const { sessionResults_1p, sessionResults_3p } = await runSessionTests(browserSession);
+    results.session_1p = sessionResults_1p;
+    results.session_3p = sessionResults_3p;
   }
 
   // Main tests
