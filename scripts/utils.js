@@ -5,6 +5,8 @@ const YAML = require('yaml');
 const childProcess = require('child_process');
 const datauri = require('datauri/sync');
 const path = require('node:path');
+const os = require('node:os');
+const { split } = require('lodash');
 
 const sleepMs = (t) => new Promise((resolve, reject) => setTimeout(resolve, t));
 
@@ -20,11 +22,17 @@ const exec = (command, options) => {
 
 // Returns an list of the PIDs for immediate children
 const childProcesses = (pid) => {
-  try {
-    const list = childProcess.execSync(`pgrep -P ${pid}`).toString();
-    return list.split(/\s+/).filter(s => s.length > 0).map(s => parseInt(s));
-  } catch (e) {
-    return [];
+  if (os.platform() === "win32") {
+    const raw = childProcess.execSync(`wmic process where ParentProcessId="${pid}" get ProcessId`).toString();
+    const lines = raw.trim().split("\n").map(x => x.trim()).slice(1);
+    return lines.map(x => parseInt(x));
+  } else {
+    try {
+      const list = childProcess.execSync(`pgrep -P ${pid}`).toString();
+      return list.split(/\s+/).filter(s => s.length > 0).map(s => parseInt(s));
+    } catch (e) {
+      return [];
+    }
   }
 };
 
@@ -42,7 +50,7 @@ const killProcesses = (pids) => {
     try {
       process.kill(pid, process.SIGTERM);
     } catch (e) {
-      console.log(e);
+      //console.log(e);
     }
   });
 };
