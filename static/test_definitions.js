@@ -5,6 +5,9 @@ const IdbKeyVal = await import('https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/i
 
 const baseURI = document.location.origin + "/live/";
 
+const altSvcOrigin = document.location.origin.includes("privacytests3.org") ?
+      "https://altsvc.privacytests3.org:4435" : "https://altsvc.privacytests2.org:4433";
+
 let testURI = (path, type, key) => `${baseURI}${path}?type=${type}&key=${key}`;
 
 let sleepMs = (timeMs) => new Promise(
@@ -640,18 +643,18 @@ return {
     write: async () => {
       // Clear Alt-Svc caching first.
       let responseText = "";
-      await fetch("https://altsvc.privacytests2.org:4433/clear");
+      await fetch(altSvcOrigin + "/clear");
       await sleepMs(100);
-      responseText = await fetchText("https://altsvc.privacytests2.org:4433/protocol");
+      responseText = await fetchText(altSvcOrigin + "/protocol");
       console.log("after clear:", responseText);
       // Store "h3" state in Alt-Svc cache
-      await fetch("https://altsvc.privacytests2.org:4433/set");
+      await fetch(altSvcOrigin + "/set");
       await sleepMs(100);
-      responseText = await fetchText("https://altsvc.privacytests2.org:4433/protocol");
+      responseText = await fetchText(altSvcOrigin + "/protocol");
       console.log("after set:", responseText);
     },
     read: async () => {
-      const protocol = await fetchText("https://altsvc.privacytests2.org:4433/protocol");
+      const protocol = await fetchText(altSvcOrigin + "/protocol");
       if ((new URL(location)).searchParams.get("thirdparty") === "same") {
         if (protocol !== "h3") {
           throw new Error("Unsupported");
