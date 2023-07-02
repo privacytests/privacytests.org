@@ -215,26 +215,26 @@ const runMainTests = async (browserSession, categories) => {
 };
 
 // Combine same-session results with cross-session results.
-const analyzeSessionResults = (writeResults, readResults) => {
-  console.log({ readResults, writeResults, test: 'session' });
+const analyzeSessionResults = (sameSessionResults, crossSessionResults) => {
+  console.log({ crossSessionResults, sameSessionResults, test: 'session' });
   const results = {};
-  for (const [name, writeData] of Object.entries(writeResults)) {
+  for (const [name, sameSessionData] of Object.entries(sameSessionResults)) {
     results[name] = {};
-    const readData = readResults[name];
-    const unsupported = ((typeof writeData.result) === 'string' &&
-      writeData.result.startsWith('Error:')) ||
-      (name === 'Alt-Svc' && writeData.result.startsWith('h2')) ||
-      writeData.result === undefined || writeData.result === null;
-    const passed = unsupported ? undefined : (readData.result !== writeData.result);
+    const crossSessionData = crossSessionResults[name];
+    const unsupported = ((typeof sameSessionData.result) === 'string' &&
+      sameSessionData.result.startsWith('Error:')) ||
+      (name === 'Alt-Svc' && sameSessionData.result.startsWith('h2')) ||
+      sameSessionData.result === undefined || sameSessionData.result === null;
+    const passed = unsupported ? undefined : (crossSessionData.result !== sameSessionData.result);
     results[name] = {
       unsupported,
       passed,
       testFailed: false,
-      write: writeData.write,
-      read: writeData.read,
-      description: writeData.description,
-      readSameSession: writeData.result,
-      readDifferentSession: readData.result
+      write: sameSessionData.write,
+      read: sameSessionData.read,
+      description: sameSessionData.description,
+      readSameSession: sameSessionData.result,
+      readDifferentSession: crossSessionData.result
     };
   }
   return results;
@@ -244,21 +244,21 @@ const analyzeSessionResults = (writeResults, readResults) => {
 const runSessionTestsRaw = async (browserSession) => {
   await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=write&label=3p`);
   await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=write&firstParty=true&label=1p`);
-  const writeResults_3p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&label=3p`);
-  const writeResults_1p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&firstParty=true&label=1p`);
+  const sameSessionResults_3p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&label=3p`);
+  const sameSessionResults_1p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&firstParty=true&label=1p`);
   await sleepMs(1000);
   await browserSession.browser.restart();
   await sleepMs(1000);
-  const readResults_3p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&label=3p`);
-  const readResults_1p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&firstParty=true&label=1p`);
-  return { writeResults_3p, readResults_3p, writeResults_1p, readResults_1p };
+  const crossSessionResults_3p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&label=3p`);
+  const crossSessionResults_1p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&firstParty=true&label=1p`);
+  return { sameSessionResults_3p, crossSessionResults_3p, sameSessionResults_1p, crossSessionResults_1p };
 };
 
 // Run the cross-session state tests and return analyzed results.
 const runSessionTests = async (browserSession) => {
-  const { writeResults_3p, readResults_3p, writeResults_1p, readResults_1p } = await runSessionTestsRaw(browserSession);
-  const sessionResults_3p = analyzeSessionResults(writeResults_3p, readResults_3p);
-  const sessionResults_1p = analyzeSessionResults(writeResults_1p, readResults_1p);
+  const { sameSessionResults_3p, crossSessionResults_3p, sameSessionResults_1p, crossSessionResults_1p } = await runSessionTestsRaw(browserSession);
+  const sessionResults_3p = analyzeSessionResults(sameSessionResults_3p, crossSessionResults_3p);
+  const sessionResults_1p = analyzeSessionResults(sameSessionResults_1p, crossSessionResults_1p);
   return { sessionResults_3p, sessionResults_1p };
 };
 
