@@ -1,4 +1,24 @@
 # News
+## [Issue 62](/archive/issue62): 2023-07-02
+
+### New browser versions
+
+On Desktop:
+* Mullvad 12.5
+
+On iOS:
+* Duckduckgo 7.77
+* Yandex 2305.7
+
+On Android:
+* Duckduckgo 5.162
+* Firefox 115.0
+* Opera 76.2
+
+### New tests
+
+In this week's issue, we have expanded the cross-session tracking tests to examine first-party tracking and third-party tracking in Nightly browser builds. In general, we see that websites and trackers are mostly able to track user across sessions, with the exception of Tor Browser, which deletes all history every time you quit.
+
 ## [Issue 61](/archive/issue61): 2023-06-23
 
 ### New browser versions
