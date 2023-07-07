@@ -26,7 +26,7 @@ const macOSdefaultBrowserSettings = {
     torFlag: 'tor',
     basedOn: 'chromium',
     update: ['Brave', 'About Brave'],
-    updateNightly: ['Brave', 'About Brave']
+    updateNightly: ['Brave', 'About Brave'],
   },
   chrome: {
     name: 'Google Chrome',
@@ -35,7 +35,6 @@ const macOSdefaultBrowserSettings = {
     basedOn: 'chromium',
     update: ['Chrome', 'About Google Chrome'],
     updateNightly: ['Chrome Canary', 'About Google Chrome'],
-    useAppleScriptToQuit: true
   },
   duckduckgo: {
     name: 'DuckDuckGo',
@@ -51,7 +50,6 @@ const macOSdefaultBrowserSettings = {
     basedOn: 'chromium',
     update: ['Microsoft Edge', 'About Microsoft Edge'],
     updateNightly: ['Microsoft Edge Canary', 'About Microsoft Edge'],
-    useAppleScriptToQuit: true
   },
   firefox: {
     name: 'firefox',
@@ -60,7 +58,7 @@ const macOSdefaultBrowserSettings = {
     basedOn: 'firefox',
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
     update: ['Firefox', 'About Firefox'],
-    updateNightly: ['Firefox Nightly', 'About Nightly']
+    updateNightly: ['Firefox Nightly', 'About Nightly'],
   },
   librewolf: {
     name: 'librewolf',
@@ -69,7 +67,7 @@ const macOSdefaultBrowserSettings = {
     basedOn: 'firefox',
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
     updateCommand: '/opt/homebrew/bin/brew upgrade librewolf --no-quarantine',
-    postLaunchDelay: 2000
+    postLaunchDelay: 2000,
   },
   mullvad: {
     name: 'Mullvad Browser',
@@ -86,7 +84,6 @@ const macOSdefaultBrowserSettings = {
     basedOn: 'chromium',
     update: ['Opera', 'About Opera'],
     updateNightly: ['Opera Developer', 'About Opera'],
-    useAppleScriptToQuit: true,
     // preferences: [[["ui","warn_on_quitting_opera_with_multiple_tabs"], false]]
   },
   safari: {
@@ -113,7 +110,6 @@ const macOSdefaultBrowserSettings = {
     privateFlag: 'incognito',
     updateCommand: "mv '/Applications/Ungoogled Chromium.app' /Applications/Chromium.app ; /opt/homebrew/bin/brew upgrade eloston-chromium --no-quarantine && mv /Applications/Chromium.app '/Applications/Ungoogled Chromium.app'",
     basedOn: 'chromium',
-    useAppleScriptToQuit: true
   },
   vivaldi: {
     name: 'Vivaldi',
@@ -125,7 +121,6 @@ const macOSdefaultBrowserSettings = {
     update: ['Vivaldi', 'About Vivaldi'],
     updateNightly: ['Vivaldi Snapshot', 'About Vivaldi'],
     closeWindows: true,
-    useAppleScriptToQuit: true
   },
   waterfox: {
     name: 'waterfox',
@@ -251,14 +246,8 @@ class DesktopBrowser {
       execSync(`osascript closeAllWindows.applescript "${this._appName}"`);
       await sleepMs(1000);
     }
-    if (this._defaults.useOpen || this._defaults.useAppleScriptToQuit) {
-      execSync(`osascript -e 'quit app "${this._path}"'`);
-      await sleepMs(5000);
-    } else {
-      console.log('killing process id:', this._process.pid);
-      killProcessAndDescendants(this._process.pid);// .kill('SIGKILL');
-    }
-    this._process = undefined;
+    execSync(`osascript -e 'quit app "${this._path}"'`);
+    await sleepMs(5000);
   }
 
   // Restart the browser with same profile.
