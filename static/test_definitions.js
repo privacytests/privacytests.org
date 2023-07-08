@@ -101,7 +101,7 @@ return {
       worker.port.postMessage("request");
       const message = await messagePromise;
       if (message === "none") {
-        throw new Error("no message received");
+        throw new Error("Unsupported");
       }
       return message;
     }
