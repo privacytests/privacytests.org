@@ -24,7 +24,7 @@
            document.body.setAttribute("data-test-results", JSON.stringify(data));
            const category = `session_${mode}_${firstParty ? "1p" : "3p"}`;
            await postData(data, category);
-           location.href = "./blank.html";
+           location.href = "https://example.com";
          }, {once: true});
          let iframe = document.createElement("iframe");
          iframe.height="1000px"
