@@ -205,7 +205,7 @@ class DesktopBrowser {
       await fsPromises.rm(this._profilePath, { recursive: true, force: true });
     } else {
       if (this.browser === "opera") {
-        fixOperaPreferences(path.join(this._profilePath, "Preferences"));
+        fixOperaPreferences(path.join(this._profilePath, "default", "Preferences"));
       }
       if (this.browser === "chrome") {
         fixChromePreferences(path.join(this._profilePath, "Default", "Preferences"));
