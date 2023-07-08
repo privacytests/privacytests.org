@@ -1,4 +1,75 @@
 # News
+## [Issue 62](/archive/issue62): 2023-07-02
+
+### New browser versions
+
+On Desktop:
+* Mullvad 12.5
+
+On iOS:
+* Duckduckgo 7.77
+* Yandex 2305.7
+
+On Android:
+* Duckduckgo 5.162
+* Firefox 115.0
+* Opera 76.2
+
+### New tests
+
+In this week's issue, we have expanded the cross-session tracking tests to examine first-party tracking and third-party tracking in Nightly browser builds. In general, we see that websites and trackers are mostly able to track user across sessions, except if you are using Tor Browser, which deletes all history every time you quit.
+
+## [Issue 61](/archive/issue61): 2023-06-23
+
+### New browser versions
+
+On Desktop:
+* Safari 16.5
+* Tor 12.5
+
+On iOS:
+* Duckduckgo 7.76
+* Firefox 114.2
+* Yandex 2305.6
+
+On Android:
+* Duckduckgo 5.160
+* Firefox 114.2
+* Focus 114.2
+* Opera 76.1
+
+### New tests
+
+This week's issue introduces cross-session tracking tests. We begin by testing Desktop Nightly browser builds to examine whether data is leaked across browser sessions so that a website can re-identify you when you visit a second time.
+
+## [Issue 60](/archive/issue60): 2023-06-13
+
+### New browser versions
+
+On Desktop:
+* Edge 114.0
+* Firefox 114.0
+* Librewolf 114.0
+* Ungoogled 114.0
+* Vivaldi 6.1
+
+On iOS:
+* Chrome 114.5735
+* Edge 114.1823
+* Firefox 114.1
+* Focus 114.0
+* Opera 4.0
+* Safari 16.5
+* Yandex 2305.5
+
+On Android:
+* Brave 1.52
+* Chrome 114.0
+* Edge 114.0
+* Focus 114.1
+* Opera 75.4
+* Vivaldi 6.1
+
 ## [Issue 59](/archive/issue59): 2023-06-02
 
 ### New browser versions

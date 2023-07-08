@@ -4,6 +4,8 @@
 
 // ## imports
 
+/* eslint-disable camelcase */
+
 const fs = require('fs');
 const { execSync } = require('child_process');
 const minimist = require('minimist');
@@ -158,6 +160,7 @@ const closeWebSocket = (websocket) => {
 // responses.
 const kIframeRootSame = 'https://test-pages.privacytests2.org';
 const kIframeRootDifferent = 'https://test-pages.privacytests.org';
+const kIframeRootThird = 'https://test-pages.privacytests3.org';
 const kInsecureRoot = 'http://insecure.privacytests2.org';
 const kUpgradableRoot = 'http://upgradable.privacytests2.org';
 const kLiveRoot = 'https://test-pages.privacytests2.org/live';
@@ -212,24 +215,26 @@ const runMainTests = async (browserSession, categories) => {
 };
 
 // Combine same-session results with cross-session results.
-const analyzeSessionResults = (writeResults, readResults) => {
-  console.log({ readResults, writeResults, test: 'session' });
+const analyzeSessionResults = (sameSessionResults, crossSessionResults) => {
+  console.log({ crossSessionResults, sameSessionResults, test: 'session' });
   const results = {};
-  for (const [name, writeData] of Object.entries(writeResults)) {
+  for (const [name, sameSessionData] of Object.entries(sameSessionResults)) {
     results[name] = {};
-    const readData = readResults[name];
-    const unsupported = writeData.result.startsWith('Error:') ||
-      (name === 'Alt-Svc' && writeData.result.startsWith('h2'));
-    const passed = !unsupported && (readData.result !== writeData.result);
+    const crossSessionData = crossSessionResults[name];
+    const unsupported = ((typeof sameSessionData.result) === 'string' &&
+      sameSessionData.result.startsWith('Error:')) ||
+      (name === 'Alt-Svc' && sameSessionData.result.startsWith('h2')) ||
+      sameSessionData.result === undefined || sameSessionData.result === null;
+    const passed = unsupported ? undefined : (crossSessionData.result !== sameSessionData.result);
     results[name] = {
       unsupported,
       passed,
       testFailed: false,
-      write: writeData.write,
-      read: writeData.read,
-      description: writeData.description,
-      readSameSession: writeData.result,
-      readDifferentSession: readData.result
+      write: sameSessionData.write,
+      read: sameSessionData.read,
+      description: sameSessionData.description,
+      readSameSession: sameSessionData.result,
+      readDifferentSession: crossSessionData.result
     };
   }
   return results;
@@ -237,19 +242,24 @@ const analyzeSessionResults = (writeResults, readResults) => {
 
 // Run the cross-session state tests and return raw results.
 const runSessionTestsRaw = async (browserSession) => {
-  await runPageTest(browserSession, `${kIframeRootSame}/session.html?mode=write`);
-  const writeResults = await runPageTest(browserSession, `${kIframeRootSame}/session.html?mode=read`);
-  await sleepMs(10000);
+  await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=write&label=3p`);
+  await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=write&firstParty=true&label=1p`);
+  const sameSessionResults_3p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&label=3p`);
+  const sameSessionResults_1p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&firstParty=true&label=1p`);
+  await sleepMs(1000);
   await browserSession.browser.restart();
   await sleepMs(1000);
-  const readResults = await runPageTest(browserSession, `${kIframeRootSame}/session.html?mode=read`);
-  return { writeResults, readResults };
+  const crossSessionResults_3p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&label=3p`);
+  const crossSessionResults_1p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&firstParty=true&label=1p`);
+  return { sameSessionResults_3p, crossSessionResults_3p, sameSessionResults_1p, crossSessionResults_1p };
 };
 
 // Run the cross-session state tests and return analyzed results.
 const runSessionTests = async (browserSession) => {
-  const { writeResults, readResults } = await runSessionTestsRaw(browserSession);
-  return analyzeSessionResults(writeResults, readResults);
+  const { sameSessionResults_3p, crossSessionResults_3p, sameSessionResults_1p, crossSessionResults_1p } = await runSessionTestsRaw(browserSession);
+  const sessionResults_3p = analyzeSessionResults(sameSessionResults_3p, crossSessionResults_3p);
+  const sessionResults_1p = analyzeSessionResults(sameSessionResults_1p, crossSessionResults_1p);
+  return { sessionResults_3p, sessionResults_1p };
 };
 
 // Run the insecure connection test. Returns { insecureResults, insecurePassed }.
@@ -327,8 +337,9 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
   // Cross-session tests
   if (browserSession.browser instanceof DesktopBrowser &&
     (!categories || categories.includes('session'))) {
-    const sessionTestResults = await runSessionTests(browserSession);
-    results.session = sessionTestResults;
+    const { sessionResults_1p, sessionResults_3p } = await runSessionTests(browserSession);
+    results.session_1p = sessionResults_1p;
+    results.session_3p = sessionResults_3p;
   }
 
   // Main tests

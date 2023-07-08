@@ -99,7 +99,11 @@ return {
         setTimeout(() => reject(new Error("no SharedWorker message received")), 200);
       });
       worker.port.postMessage("request");
-      return messagePromise;
+      const message = await messagePromise;
+      if (message === "none") {
+        return null;
+      }
+      return message;
     }
   },
   "blob": {
