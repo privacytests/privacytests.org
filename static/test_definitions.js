@@ -643,13 +643,17 @@ return {
     write: async () => {
       // Clear Alt-Svc caching first.
       let responseText = "";
-      await fetch(altSvcOrigin + "/clear");
-      await sleepMs(100);
+      for (let i = 0; i < 3; ++i) {
+        await fetch(altSvcOrigin + "/clear");
+        await sleepMs(100);
+      }
       responseText = await fetchText(altSvcOrigin + "/protocol");
       console.log("after clear:", responseText);
       // Store "h3" state in Alt-Svc cache
-      await fetch(altSvcOrigin + "/set");
-      await sleepMs(100);
+      for (let i = 0; i < 3; ++i) {
+        await fetch(altSvcOrigin + "/set");
+        await sleepMs(100);
+      }
       responseText = await fetchText(altSvcOrigin + "/protocol");
       console.log("after set:", responseText);
     },
