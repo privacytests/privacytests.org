@@ -101,7 +101,7 @@ return {
       worker.port.postMessage("request");
       const message = await messagePromise;
       if (message === "none") {
-        return null;
+        throw new Error("no message received");
       }
       return message;
     }
