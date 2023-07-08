@@ -19,22 +19,6 @@
     between sites.',
   tooltipType: crossSite
 
-- category: session
-  name: Cross-session tracking tests
-  tagline: Which browsers prevent websites from tracking you across browser sessions?
-  description: >
-    A common vulnerability of web browsers is that they allow websites
-    to 'tag' your browser with some tracking data. This tag
-    can be used by the website to re-identify you when you return to a website
-    you visited before. This category of leaks can be prevented by browser
-    if they clean or isolate data between browser sessions. (In cases where
-    a user has logged into a website or entered detailed information, it may
-    be justifiable for a browser to retain information across sessions.
-    These tests check when no such justification exists: when a user has entered
-    no information into a website, will the browser still retain tracking
-    data?)
-  tooltipType: crossSession
-
 - category: https
   name: HTTPS tests
   tagline: Which browsers use encrypted network connections whenever possible?
@@ -104,3 +88,36 @@
     This section checks to see if a browser stops cross-site tracking by cookies from 20 of
     the largest trackers listed by https://whotracks.me.`,
   tooltipType: simple
+
+- category: session_1p
+  name: Cross-session first-party tracking tests
+  tagline: Which browsers prevent websites from tracking you across browser sessions?
+  description: >
+    A common vulnerability of web browsers is that they allow websites ("first parties")
+    to 'tag' your browser with some tracking data. This tag
+    can be used to re-identify you when you return to a website
+    you visited before. This category of leaks can be prevented by browser
+    if they clean or isolate data between browser sessions. (In cases where
+    a user has logged into a website or entered detailed information, it may
+    be justifiable for a browser to retain information across sessions.
+    These tests check when no such justification exists: when you have entered
+    no significant information into a website, will the browser still retain data that
+    allows you to be tracked across sessions?)
+  tooltipType: crossSession
+
+- category: session_3p
+  name: Cross-session third-party tracking tests
+  tagline: Which browsers prevent third-party trackers from tracking you across browser sessions?
+  description: >
+    A common vulnerability of web browsers is that they allow third-party trackers
+    to 'tag' your browser with some tracking data. This tag
+    can be used to re-identify you when you return to a website
+    you visited before. This category of leaks can be prevented by browser
+    if they clean or isolate data between browser sessions. (In cases where
+    a user has logged into a website or entered detailed information, it may
+    be justifiable for a browser to retain information across sessions.
+    These tests check when no such justification exists: when you have entered
+    no significant information into a website, will the browser still retain data that
+    allows you to be tracked across sessions?)
+  tooltipType: crossSession
+

@@ -301,7 +301,7 @@ const resultsToTable = (results, title, subtitle, includeTrackingCookies) => {
   }
   const sections = readYAMLFile('../assets/copy/sections.yaml');
   for (const { category, name, description, tagline, tooltipType } of sections) {
-    if (includeTrackingCookies || !(category === 'tracker_cookies')) {
+    if ((includeTrackingCookies || !(category === 'tracker_cookies'))) {
       body.push([{ subheading: name, description, tagline }]);
       body = body.concat(resultsSection({
         bestResults,
@@ -432,7 +432,7 @@ const aggregateRepeatedTrials = (results) => {
       if (aggregatedResults.has(key)) {
         const theseTestResults = aggregatedResults.get(key).testResults;
         if (theseTestResults) {
-          for (const subcategory of ['supercookies', 'session', 'fingerprinting', 'https', 'misc', 'navigation',
+          for (const subcategory of ['supercookies', 'session_1p', 'session_3p', 'fingerprinting', 'https', 'misc', 'navigation',
             'query', 'trackers', 'tracker_cookies']) {
             const someTests = theseTestResults[subcategory];
             for (const testName in test.testResults[subcategory]) {
