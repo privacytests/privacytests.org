@@ -112,7 +112,8 @@ const browserInfo = {
     nightlyPackageName: 'com.yandex.browser.alpha',
     urlBarClick: 'bro_omnibar_address_title_text',
     urlBarClick2: "//android.widget.Button[@text='search or site']",
-    urlBarKeys: 'suggest_omnibox_query_edit'
+    urlBarKeys: 'suggest_omnibox_query_edit',
+    contentElement: 'renderView'
   }
 };
 
