@@ -1,4 +1,23 @@
 # News
+## [Issue 63](/archive/issue63): 2023-07-08
+
+### New browser versions
+
+On Desktop:
+* Opera 100.0
+
+On iOS:
+* Duckduckgo 7.78
+* Firefox 114.4
+* Yandex 2307.1
+
+On Android:
+* Focus 115.0
+
+### New tests
+
+In this weeks' issue, we have expanded the cross-session tracking tests to Desktop builds. LibreWolf, Mullvad, and Tor Browsers show especially strong protection against tracking between browser sessions.
+
 ## [Issue 62](/archive/issue62): 2023-07-02
 
 ### New browser versions
