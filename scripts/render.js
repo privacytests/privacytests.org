@@ -513,10 +513,10 @@ const renderPage = ({ dataFiles, live, aggregate }) => {
 
 const render = async ({ dataFiles, live, aggregate }) => {
   const { resultsFileHTML, resultsFilePreviewImage } = renderPage({ dataFiles, live, aggregate });
-  const createPreviewImage = (await import('./preview.mjs')).createPreviewImage;
-  await createPreviewImage(resultsFileHTML, resultsFilePreviewImage);
   if (!live) {
     open(fileUrl(resultsFileHTML));
+    const createPreviewImage = (await import('./preview.mjs')).createPreviewImage;
+    await createPreviewImage(resultsFileHTML, resultsFilePreviewImage);
   }
 };
 
