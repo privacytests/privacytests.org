@@ -1,4 +1,26 @@
 # News
+## [Issue 64](/archive/issue64): 2023-07-16
+
+### New browser versions
+
+On Desktop:
+* Firefox 115.0
+* Librewolf 115.0
+
+On iOS:
+* Duckduckgo 7.79
+* Firefox 115.0
+* Focus 115.0
+* Opera 4.1
+* Yandex 2307.2
+
+On Android:
+* Duckduckgo 5.163
+* Firefox 115.2
+* Focus 115.2
+* Samsung 22.0
+* Yandex 23.7
+
 ## [Issue 63](/archive/issue63): 2023-07-08
 
 ### New browser versions
