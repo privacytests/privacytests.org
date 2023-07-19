@@ -301,7 +301,7 @@ const resultsToTable = (results, title, subtitle, includeTrackingCookies) => {
   }
   const sections = readYAMLFile('../assets/copy/sections.yaml');
   for (const { category, name, description, tagline, tooltipType } of sections) {
-    if ((includeTrackingCookies || !(category === 'tracker_cookies'))) {
+    if (!(!includeTrackingCookies && category === 'tracker_cookies')) {
       body.push([{ subheading: name, description, tagline }]);
       body = body.concat(resultsSection({
         bestResults,
