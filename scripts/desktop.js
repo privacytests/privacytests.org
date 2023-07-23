@@ -1,7 +1,7 @@
 const fs = require('fs');
 const fsPromises = require('node:fs/promises');
 const { join: joinDir } = require('path');
-const { exec, execSync, sleepMs } = require('./utils');
+const { exec, execSync, execAsync, sleepMs } = require('./utils');
 const proxy = require('./system-proxy-settings');
 const { killProcessAndDescendants } = require('./utils');
 const path = require('node:path');
@@ -120,7 +120,7 @@ const macOSdefaultBrowserSettings = {
     // Assumes Vivaldi is on automatic updates:
     update: ['Vivaldi', 'About Vivaldi'],
     updateNightly: ['Vivaldi Snapshot', 'About Vivaldi'],
-    closeWindows: true,
+//    closeWindows: true,
   },
   waterfox: {
     name: 'waterfox',
@@ -202,10 +202,14 @@ class DesktopBrowser {
     if (clean && this._profilePath) {
       // Delete old profiles if they exist.
       console.log(`Deleting any old ${this._profilePath}`);
-      await fsPromises.rm(this._profilePath, { recursive: true, force: true });
+      await fsPromises.rm(this._profilePath, { recursive: true, force: true, maxRetries: 3 });
     } else {
       if (this.browser === "opera") {
-        fixOperaPreferences(path.join(this._profilePath, "default", "Preferences"));
+        try {
+          await fixOperaPreferences(path.join(this._profilePath, "Default", "Preferences"));
+        } catch (e) {
+          await fixOperaPreferences(path.join(this._profilePath, "Preferences"));
+        }
       }
       if (this.browser === "chrome") {
         fixChromePreferences(path.join(this._profilePath, "Default", "Preferences"));
@@ -246,7 +250,7 @@ class DesktopBrowser {
       execSync(`osascript closeAllWindows.applescript "${this._appName}"`);
       await sleepMs(1000);
     }
-    execSync(`osascript -e 'quit app "${this._path}"'`);
+    await execAsync(`osascript -e 'quit app "${this._path}"'`);
     await sleepMs(5000);
   }
 
