@@ -90,7 +90,6 @@ const macOSdefaultBrowserSettings = {
     name: 'Safari',
     nightlyName: 'Safari Technology Preview',
     useOpen: true,
-    closeWindows: true,
     incognitoCommand: 'osascript safariPBM.applescript',
     basedOn: 'safari'
   },
@@ -120,7 +119,6 @@ const macOSdefaultBrowserSettings = {
     // Assumes Vivaldi is on automatic updates:
     update: ['Vivaldi', 'About Vivaldi'],
     updateNightly: ['Vivaldi Snapshot', 'About Vivaldi'],
-//    closeWindows: true,
   },
   waterfox: {
     name: 'waterfox',
@@ -246,10 +244,6 @@ class DesktopBrowser {
 
   // Close the browser.
   async kill () {
-    if (this._defaults.closeWindows) {
-      execSync(`osascript closeAllWindows.applescript "${this._appName}"`);
-      await sleepMs(1000);
-    }
     await execAsync(`osascript -e 'quit app "${this._path}"'`);
     await sleepMs(5000);
   }
