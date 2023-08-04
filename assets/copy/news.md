@@ -1,4 +1,23 @@
 # News
+## [Issue 66](/archive/issue66): 2023-08-02
+
+### New browser versions
+
+On Desktop:
+* Chrome 115.0
+
+On iOS:
+* Chrome 115.5790
+* Duckduckgo 7.82
+* Firefox 115.1
+* Yandex 2307.4
+
+On Android:
+* Brave 1.56
+* Chrome 115.0
+* Edge 115.0
+* Focus 116.0
+
 ## [Issue 65](/archive/issue65): 2023-07-23
 
 ### New browser versions
