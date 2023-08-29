@@ -1,4 +1,47 @@
 # News
+## [Issue 68](/archive/issue68): 2023-08-28
+
+### New browser versions
+
+On Desktop:
+* Edge 116.0
+
+On iOS:
+* Duckduckgo 7.85
+* Edge 115.1901
+* Firefox 116.4
+* Yandex 2307.8
+
+On Android:
+* Brave 1.57
+* Chrome 116.0
+* Duckduckgo 5.167
+
+## [Issue 67](/archive/issue67): 2023-08-20
+
+### New browser versions
+
+On Desktop:
+* Brave 1.57
+* Chrome 116.0
+* Firefox 116.0
+* Librewolf 116.0
+* Opera 101.0
+* Ungoogled 115.0
+
+On iOS:
+* Brave 1.56
+* Chrome 116.5845
+* Duckduckgo 7.84
+* Focus 116.0
+* Opera 4.2
+* Yandex 2307.7
+
+On Android:
+* Duckduckgo 5.166
+* Firefox 116.3
+* Focus 116.3
+
 ## [Issue 66](/archive/issue66): 2023-08-02
 
 ### New browser versions
