@@ -236,6 +236,12 @@ class IOSBrowser {
     await this.client.terminateApp(this.bundleId);
   }
 
+  async restart() {
+    await this.kill();
+    await sleepMs(2000);
+    await this.launch();
+  }
+
   async clickContent () {
     const theWebView = await findElementWithClass(this.client, 'XCUIElementTypeWebView');
     await this.client.elementClick(theWebView);
