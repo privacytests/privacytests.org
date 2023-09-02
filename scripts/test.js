@@ -205,6 +205,7 @@ const runMainTests = async (browserSession, categories) => {
     await openSessionUrl(browserSession, `${kIframeRootSame}/supercookies.html?mode=read&thirdparty=same`);
   } else if (browserSession.browser instanceof AndroidBrowser || browserSession.browser instanceof IOSBrowser) {
     // In mobile, we click the viewport to open a new tab.
+    await sleepMs(1000);
     await browserSession.browser.clickContent();
   } else {
     // In desktop, we manually open a new tab.
@@ -335,8 +336,7 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
   log({ categories });
 
   // Cross-session tests
-  if (browserSession.browser instanceof DesktopBrowser &&
-    (!categories || categories.includes('session'))) {
+  if (!categories || categories.includes('session')) {
     const { sessionResults_1p, sessionResults_3p } = await runSessionTests(browserSession);
     results.session_1p = sessionResults_1p;
     results.session_3p = sessionResults_3p;
