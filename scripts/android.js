@@ -112,7 +112,8 @@ const browserInfo = {
     nightlyPackageName: 'com.yandex.browser.alpha',
     urlBarClick: 'bro_omnibar_address_title_text',
     urlBarClick2: "//android.widget.Button[@text='search or site']",
-    urlBarKeys: 'suggest_omnibox_query_edit'
+    urlBarKeys: 'suggest_omnibox_query_edit',
+    contentElement: 'renderView'
   }
 };
 
@@ -173,7 +174,7 @@ class AndroidBrowser {
       this.client.terminateApp(this.packageName);
     }
     await this.client.activateApp(this.packageName);
-    await sleepMs(5000);
+    await sleepMs(8000);
     console.log('this.startupClick:', this.startupClick);
     if (this.startupClick) {
       const startupButton = await findElement(this.client, this.packageName, this.startupClick);
@@ -235,6 +236,12 @@ class AndroidBrowser {
   // Clean up and close the browser.
   async kill () {
     await this.client.terminateApp(this.packageName);
+  }
+
+  async restart() {
+    await this.kill();
+    await sleepMs(2000);
+    await this.launch();
   }
 
   async clickContent () {

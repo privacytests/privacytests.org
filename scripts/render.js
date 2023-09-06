@@ -301,7 +301,7 @@ const resultsToTable = (results, title, subtitle, includeTrackingCookies) => {
   }
   const sections = readYAMLFile('../assets/copy/sections.yaml');
   for (const { category, name, description, tagline, tooltipType } of sections) {
-    if ((includeTrackingCookies || !(category === 'tracker_cookies'))) {
+    if (!(!includeTrackingCookies && category === 'tracker_cookies')) {
       body.push([{ subheading: name, description, tagline }]);
       body = body.concat(resultsSection({
         bestResults,
@@ -513,10 +513,10 @@ const renderPage = ({ dataFiles, live, aggregate }) => {
 
 const render = async ({ dataFiles, live, aggregate }) => {
   const { resultsFileHTML, resultsFilePreviewImage } = renderPage({ dataFiles, live, aggregate });
-  const createPreviewImage = (await import('./preview.mjs')).createPreviewImage;
-  await createPreviewImage(resultsFileHTML, resultsFilePreviewImage);
   if (!live) {
     open(fileUrl(resultsFileHTML));
+    const createPreviewImage = (await import('./preview.mjs')).createPreviewImage;
+    await createPreviewImage(resultsFileHTML, resultsFilePreviewImage);
   }
 };
 

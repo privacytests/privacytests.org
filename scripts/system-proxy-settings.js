@@ -47,7 +47,13 @@ const getNetworkServices = () => {
   return parseNetworkServiceList(result);
 };
 
-const getPreferredNetworkService = () => getNetworkServices()[getPreferredDevice()];
+const getPreferredNetworkService = () => {
+  const preferredNetworkService = getNetworkServices()[getPreferredDevice()]
+  if (preferredNetworkService === undefined) {
+    throw new Error("Preferred network service not found. Is a VPN running?");
+  }
+  return preferredNetworkService;
+};
 
 const setProxyState = (networkService, type, enabled) => {
   const state = enabled ? 'on' : 'off';
