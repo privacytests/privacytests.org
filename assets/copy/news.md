@@ -1,4 +1,124 @@
 # News
+## [Issue 68](/archive/issue68): 2023-08-28
+
+### New browser versions
+
+On Desktop:
+* Edge 116.0
+
+On iOS:
+* Duckduckgo 7.85
+* Edge 115.1901
+* Firefox 116.4
+* Yandex 2307.8
+
+On Android:
+* Brave 1.57
+* Chrome 116.0
+* Duckduckgo 5.167
+
+## [Issue 67](/archive/issue67): 2023-08-20
+
+### New browser versions
+
+On Desktop:
+* Brave 1.57
+* Chrome 116.0
+* Firefox 116.0
+* Librewolf 116.0
+* Opera 101.0
+* Ungoogled 115.0
+
+On iOS:
+* Brave 1.56
+* Chrome 116.5845
+* Duckduckgo 7.84
+* Focus 116.0
+* Opera 4.2
+* Yandex 2307.7
+
+On Android:
+* Duckduckgo 5.166
+* Firefox 116.3
+* Focus 116.3
+
+## [Issue 66](/archive/issue66): 2023-08-02
+
+### New browser versions
+
+On Desktop:
+* Chrome 115.0
+
+On iOS:
+* Chrome 115.5790
+* Duckduckgo 7.82
+* Firefox 115.1
+* Yandex 2307.4
+
+On Android:
+* Brave 1.56
+* Chrome 115.0
+* Edge 115.0
+* Focus 116.0
+
+## [Issue 65](/archive/issue65): 2023-07-23
+
+### New browser versions
+
+On Desktop:
+* Brave 1.56
+* Edge 115.0
+
+On iOS:
+* Brave 1.52
+* Duckduckgo 7.80
+* Yandex 2307.3
+
+On Android:
+* Brave 1.52
+* Duckduckgo 5.164
+
+## [Issue 64](/archive/issue64): 2023-07-16
+
+### New browser versions
+
+On Desktop:
+* Firefox 115.0
+* Librewolf 115.0
+
+On iOS:
+* Duckduckgo 7.79
+* Firefox 115.0
+* Focus 115.0
+* Opera 4.1
+* Yandex 2307.2
+
+On Android:
+* Duckduckgo 5.163
+* Firefox 115.2
+* Focus 115.2
+* Samsung 22.0
+* Yandex 23.7
+
+## [Issue 63](/archive/issue63): 2023-07-08
+
+### New browser versions
+
+On Desktop:
+* Opera 100.0
+
+On iOS:
+* Duckduckgo 7.78
+* Firefox 114.4
+* Yandex 2307.1
+
+On Android:
+* Focus 115.0
+
+### New tests
+
+In this weeks' issue, we have expanded the cross-session tracking tests to Desktop builds. LibreWolf, Mullvad, and Tor Browsers show especially strong protection against tracking between browser sessions.
+
 ## [Issue 62](/archive/issue62): 2023-07-02
 
 ### New browser versions
