@@ -37,7 +37,7 @@ const browserLogoDataUri = _.memoize((browserName, nightly) => {
   const browserIconName = nightly ? nightlyIconNames[browserName] : browserName;
   let iconUri;
   try {
-    iconUri = dataUriFromFile(`node_modules/browser-logos/src/${browserIconName}/${browserIconName}_128x128.png`);
+    iconUri = dataUriFromFile(`node_modules/@browser-logos/${browserIconName}/${browserIconName}_128x128.png`);
     return iconUri;
   } catch (e) {
     try {
