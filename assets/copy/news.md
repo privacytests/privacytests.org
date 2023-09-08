@@ -1,4 +1,33 @@
 # News
+## [Issue 69](/archive/issue69): 2023-09-07
+
+### New test
+
+We are now testing whether Encrypted Client Hello has been enabled by default. Short answer: not in any browsers yet.
+
+### New browser versions
+
+On Desktop:
+* Firefox 117.0
+* Librewolf 117.0-1
+* Vivaldi 6.2
+
+On iOS:
+* Duckduckgo 7.87
+* Edge 116.1938
+* Firefox 117.2
+* Focus 117.0
+* Safari 16.6
+* Yandex 2309.0
+
+On Android:
+* Duckduckgo 5.168
+* Edge 116.0
+* Firefox 117.0
+* Focus 117.0
+* Opera 77.1
+* Vivaldi 6.2
+
 ## [Issue 68](/archive/issue68): 2023-08-28
 
 ### New browser versions
