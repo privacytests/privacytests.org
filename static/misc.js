@@ -18,7 +18,23 @@ const testTor = async () => {
       passed: IsTorExit,
       description: "The Tor network sends the browser's web requests through a series of relays to hide a user's IP address, thereby helping to mask their identity and location. This test checks to see if the Tor network is being used by default."
     }
-  }
+  };
+};
+
+const testECH = async () => {
+  const response = await fetch(
+    "https://encryptedsni.com/cdn-cgi/trace",
+    { mode: 'cors', cache: 'reload' });
+  const rawText = await response.text();
+  const json = Object.fromEntries(rawText.split('\n').map(line => line.split('=')));
+  const SNI_status = json['sni']
+  return {
+    "ECH enabled": {
+      SNI_status,
+      passed: SNI_status === 'encrypted',
+      description: "Encrypted Client Hello (ECH) is a new protocol that hides the website you are visiting from third-party network eavesdroppers."
+    }
+  };
 };
 
 const testDoH = async () => {
@@ -51,7 +67,7 @@ const testGPC = async () => {
 };
 
 const runTests = async () => {
-  let resultsJSON = Object.assign({}, await testTor(), await testGPC());
+  let resultsJSON = Object.assign({}, await testTor(), await testGPC(), await testECH());
   document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
   await postDataAndCarryOn(resultsJSON, "misc");
 };
