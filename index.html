@@ -842,15 +842,15 @@ read: async () =&gt; {
       return protocol;
     }
 
-result, same first party: Error: Unsupported, Error: Unsupported, Error: Unsupported, Error: Unsupported
+result, same first party: Error: Unsupported, Error: Unsupported, Error: Unsupported
 
-result, different first party: h2, h2, h2, h2
+result, different first party: h2, h2, h2
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async () =&gt; {
@@ -1172,15 +1172,15 @@ read: async (secret) =&gt; {
       return blobResponse.text();
     }
 
-result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321, fe5b9a15-4b97-44fa-8d7d-f09bee9ef297
+result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321
 
-result, different first party: Error: NetworkError when attempting to fetch resource., Error: NetworkError when attempting to fetch resource., Error: NetworkError when attempting to fetch resource., Error: NetworkError when attempting to fetch resource.
+result, different first party: Error: NetworkError when attempting to fetch resource., Error: NetworkError when attempting to fetch resource., Error: NetworkError when attempting to fetch resource.
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (secret) =&gt; {
@@ -1552,15 +1552,15 @@ read: () =&gt;
         setTimeout(() =&gt; reject({message: &quot;no BroadcastChannel message&quot;}), 3000);
       })
 
-result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321, fe5b9a15-4b97-44fa-8d7d-f09bee9ef297
+result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321
 
-result, different first party: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
+result, different first party: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (secret) =&gt; {
@@ -1867,15 +1867,15 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 
-result, same first party: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
+result, same first party: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
 
-result, different first party: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
+result, different first party: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -2128,15 +2128,15 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 
-result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965_http, d5928c66-b235-44b2-9102-3f26de4a8959_http, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321_http, fe5b9a15-4b97-44fa-8d7d-f09bee9ef297_http
+result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965_http, d5928c66-b235-44b2-9102-3f26de4a8959_http, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321_http
 
-result, different first party: , , , 
+result, different first party: , , 
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (secret) =&gt; {
@@ -2327,15 +2327,15 @@ test failed: false, false, false, false, false</span>
 
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 
-result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965_js, d5928c66-b235-44b2-9102-3f26de4a8959_js, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321_js, fe5b9a15-4b97-44fa-8d7d-f09bee9ef297_js
+result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965_js, d5928c66-b235-44b2-9102-3f26de4a8959_js, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321_js
 
-result, different first party: , , , 
+result, different first party: , , 
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: (secret) =&gt; {
@@ -2676,15 +2676,15 @@ read: async () =&gt; {
       return cookie.value;
     }
 
-result, same first party: Error: Unsupported, Error: Unsupported, Error: Unsupported, Error: Unsupported
+result, same first party: Error: Unsupported, Error: Unsupported, Error: Unsupported
 
-result, different first party: Error: Unsupported, Error: Unsupported, Error: Unsupported, Error: Unsupported
+result, different first party: Error: Unsupported, Error: Unsupported, Error: Unsupported
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: (data) =&gt; {
@@ -3151,15 +3151,15 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 
-result, same first party: fake_9964804869092183, fake_5218782532161828, fake_1502467095067943, fake_15659806478055782
+result, same first party: fake_9964804869092183, fake_5218782532161828, fake_1502467095067943
 
-result, different first party: fake_38763212009493153, fake_4643233505068687, fake_05473642504936005, fake_28685365456635736
+result, different first party: fake_38763212009493153, fake_4643233505068687, fake_05473642504936005
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -3466,15 +3466,15 @@ read: async (key) =&gt; {
       return count;
     }
 
-result, same first party: 1, 1, 1, 1
+result, same first party: 1, 1, 1
 
-result, different first party: 2, 2, 2, 2
+result, different first party: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: (key) =&gt; key
@@ -3741,15 +3741,15 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same first party: 1, 1, 1, 1
+result, same first party: 1, 1, 1
 
-result, different first party: 2, 2, 2, 2
+result, different first party: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -4160,15 +4160,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same first party: 1, 1, 1, 1
+result, same first party: 1, 1, 1
 
-result, different first party: 2, 2, 2, 2
+result, different first party: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -4548,15 +4548,15 @@ read: async () =&gt; {
       }
     }
 
-result, same first party: Error: Unsupported, Error: Unsupported, Error: Unsupported, Error: Unsupported
+result, same first party: Error: Unsupported, Error: Unsupported, Error: Unsupported
 
-result, different first party: Error: Unsupported, Error: Unsupported, Error: Unsupported, Error: Unsupported
+result, different first party: Error: Unsupported, Error: Unsupported, Error: Unsupported
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (secret) =&gt; {
@@ -4796,15 +4796,15 @@ read: async () =&gt; {
       return await response.text();
     }
 
-result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321, fe5b9a15-4b97-44fa-8d7d-f09bee9ef297
+result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321
 
-result, different first party: , , , 
+result, different first party: , , 
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (secret) =&gt; {
@@ -5016,15 +5016,15 @@ read: async () =&gt; {
       return await response.text();
     }
 
-result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321, fe5b9a15-4b97-44fa-8d7d-f09bee9ef297
+result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321
 
-result, different first party: , , , 
+result, different first party: , , 
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (secret) =&gt; {
@@ -5335,15 +5335,15 @@ read: async () =&gt; {
       return await response.text();
     }
 
-result, same first party: , , , 
+result, same first party: , , 
 
-result, different first party: , , , 
+result, different first party: , , 
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (secret) =&gt; {
@@ -5532,15 +5532,15 @@ test failed: false, false, false, false, false</span>
 
 read: null
 
-result, same first party: , , , 
+result, same first party: , , 
 
-result, different first party: HTTPS used by default; no HSTS cache issue expected, HTTPS used by default; no HSTS cache issue expected, HTTPS used by default; no HSTS cache issue expected, HTTPS used by default; no HSTS cache issue expected
+result, different first party: HTTPS used by default; no HSTS cache issue expected, HTTPS used by default; no HSTS cache issue expected, HTTPS used by default; no HSTS cache issue expected
 
-unsupported: , , , 
+unsupported: , , 
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: set HSTS flag
@@ -5850,15 +5850,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same first party: 1, 1, 1, 1
+result, same first party: 1, 1, 1
 
-result, different first party: 2, 2, 2, 2
+result, different first party: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
@@ -6193,15 +6193,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same first party: 1, 1, 1, 1
+result, same first party: 1, 1, 1
 
-result, different first party: 2, 2, 2, 2
+result, different first party: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
@@ -6444,15 +6444,15 @@ test failed: false, false, false, false, false</span>
 
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 
-result, same first party: Error: A mutation operation was attempted on a database that did not allow mutations., Error: A mutation operation was attempted on a database that did not allow mutations., Error: A mutation operation was attempted on a database that did not allow mutations., Error: A mutation operation was attempted on a database that did not allow mutations.
+result, same first party: Error: A mutation operation was attempted on a database that did not allow mutations., Error: A mutation operation was attempted on a database that did not allow mutations., Error: A mutation operation was attempted on a database that did not allow mutations.
 
-result, different first party: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
+result, different first party: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (secret) =&gt; {
@@ -6621,15 +6621,15 @@ test failed: false, false, false, false, false</span>
 
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 
-result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321, fe5b9a15-4b97-44fa-8d7d-f09bee9ef297
+result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321
 
-result, different first party: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
+result, different first party: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
@@ -6903,15 +6903,15 @@ read: async () =&gt; {
       }
     }
 
-result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321, fe5b9a15-4b97-44fa-8d7d-f09bee9ef297
+result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321
 
-result, different first party: Error: LockManager.query: query() is not allowed in this context, Error: LockManager.query: query() is not allowed in this context, Error: LockManager.query: query() is not allowed in this context, Error: LockManager.query: query() is not allowed in this context
+result, different first party: Error: LockManager.query: query() is not allowed in this context, Error: LockManager.query: query() is not allowed in this context, Error: LockManager.query: query() is not allowed in this context
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -7265,15 +7265,15 @@ read: async (key) =&gt; {
       return countString;
     }
 
-result, same first party: Error: No requests received, Error: No requests received, Error: No requests received, Error: No requests received
+result, same first party: Error: No requests received, Error: No requests received, Error: No requests received
 
-result, different first party: Error: No requests received, Error: No requests received, Error: No requests received, Error: No requests received
+result, different first party: Error: No requests received, Error: No requests received, Error: No requests received
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -7919,15 +7919,15 @@ read: async () =&gt; {
       return await response.text();
     }
 
-result, same first party: Error: navigator.serviceWorker is undefined, Error: navigator.serviceWorker is undefined, Error: navigator.serviceWorker is undefined, Error: navigator.serviceWorker is undefined
+result, same first party: Error: navigator.serviceWorker is undefined, Error: navigator.serviceWorker is undefined, Error: navigator.serviceWorker is undefined
 
-result, different first party: Error: navigator.serviceWorker is undefined, Error: navigator.serviceWorker is undefined, Error: navigator.serviceWorker is undefined, Error: navigator.serviceWorker is undefined
+result, different first party: Error: navigator.serviceWorker is undefined, Error: navigator.serviceWorker is undefined, Error: navigator.serviceWorker is undefined
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -8476,15 +8476,15 @@ read: async () =&gt; {
       return message;
     }
 
-result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321, fe5b9a15-4b97-44fa-8d7d-f09bee9ef297
+result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321
 
-result, different first party: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
+result, different first party: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (secret) =&gt; {
@@ -8747,15 +8747,15 @@ read: async () =&gt; {
       return (await results.json()).sessionId;
     }
 
-result, same first party: b045c5e8baefeeffb2b9058b64c9802ae3708e141b26442ee9bd721c2ea390f5, 25fb706a5239f2c04914c9d0f88103ee172eaadc06d22638e6e5402e0f012f1c, 748a4f65f92c25079a26ceb7d695f23470b6076b93f9c082a4db69c330610bb9, 27e65ea19efd3cbf17df22b0affc70df72d879aad2eb4bfccfd742e815b53f59
+result, same first party: b045c5e8baefeeffb2b9058b64c9802ae3708e141b26442ee9bd721c2ea390f5, 25fb706a5239f2c04914c9d0f88103ee172eaadc06d22638e6e5402e0f012f1c, 748a4f65f92c25079a26ceb7d695f23470b6076b93f9c082a4db69c330610bb9
 
-result, different first party: 487524ee7262ffbfb69a65653c7cafb01e0906887fd7e6fd591b2d37f2ff4c3e, f5e139748bbda2e3a3505809849e94def2bb9a0bf90c2e17c1243d9adb8f98ae, 24c3cb65d47747a3a40e5d7934f774bf2bd0e6fbabc1862880797910fb97a353, b3ef7d434c8a881505c9c80af2c653e39f8afd897a7e4c302499d73ed89fc1fd
+result, different first party: 487524ee7262ffbfb69a65653c7cafb01e0906887fd7e6fd591b2d37f2ff4c3e, f5e139748bbda2e3a3505809849e94def2bb9a0bf90c2e17c1243d9adb8f98ae, 24c3cb65d47747a3a40e5d7934f774bf2bd0e6fbabc1862880797910fb97a353
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async () =&gt; {
@@ -9185,15 +9185,15 @@ read: async () =&gt; {
       return result.rows.item(0).value;
     }
 
-result, same first party: Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function
+result, same first party: Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function
 
-result, different first party: Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function
+result, different first party: Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
 passed: undefined
 
-test failed: true, true, true, true</span>
+test failed: true, true, true</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -9552,15 +9552,15 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same first party: 1, 1, 1, 1
+result, same first party: 1, 1, 1
 
-result, different first party: 2, 2, 2, 2
+result, different first party: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -9756,15 +9756,15 @@ test failed: false, false, false, false, false</span>
 
 read: () =&gt; document.referrer
 
-result, same first party: https://test-pages.privacytests2.org/, https://test-pages.privacytests2.org/, https://test-pages.privacytests2.org/, https://test-pages.privacytests2.org/
+result, same first party: https://test-pages.privacytests2.org/, https://test-pages.privacytests2.org/, https://test-pages.privacytests2.org/
 
-result, different first party: https://test-pages.privacytests2.org/, https://test-pages.privacytests2.org/, https://test-pages.privacytests2.org/, https://test-pages.privacytests2.org/
+result, different first party: https://test-pages.privacytests2.org/, https://test-pages.privacytests2.org/, https://test-pages.privacytests2.org/
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: false, false, false, false
+passed: false, false, false
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (secret) =&gt; { /* do nothing */ }
@@ -9921,15 +9921,15 @@ test failed: false, false, false, false, false</span>
 
 read: () =&gt; sessionStorage.getItem(&quot;secret&quot;)
 
-result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321, fe5b9a15-4b97-44fa-8d7d-f09bee9ef297
+result, same first party: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965, d5928c66-b235-44b2-9102-3f26de4a8959, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321
 
-result, different first party: , , , 
+result, different first party: , , 
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: (secret) =&gt; sessionStorage.setItem(&quot;secret&quot;, secret)
@@ -10086,15 +10086,15 @@ test failed: false, false, false, false, false</span>
 
 read: () =&gt; window.name
 
-result, same first party: name_3a2a2a4e-663f-4326-9d1e-f0df0b84d965, name_d5928c66-b235-44b2-9102-3f26de4a8959, name_9ce5f657-7aee-4c78-a7d9-67bf5de6d321, name_fe5b9a15-4b97-44fa-8d7d-f09bee9ef297
+result, same first party: name_3a2a2a4e-663f-4326-9d1e-f0df0b84d965, name_d5928c66-b235-44b2-9102-3f26de4a8959, name_9ce5f657-7aee-4c78-a7d9-67bf5de6d321
 
-result, different first party: , , , 
+result, different first party: , , 
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (secret) =&gt; window.name = &quot;name_&quot; + secret
@@ -10166,8 +10166,8 @@ result: Insecure website loaded,Insecure website loaded,Insecure website loaded,
 result: Insecure website loaded,Insecure website loaded,Insecure website loaded,Insecure website loaded,Insecure website loaded</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
-result: Insecure website never loaded,Insecure website never loaded,Insecure website never loaded,Insecure website never loaded</span>
+<span class="tooltipText">passed: true,true,true
+result: Insecure website never loaded,Insecure website never loaded,Insecure website never loaded</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">passed: false,false,false,false
@@ -10210,8 +10210,8 @@ passed: false,false,false,false</span>
 passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">upgraded: true,true,true,true
-passed: true,true,true,true</span>
+<span class="tooltipText">upgraded: true,true,true
+passed: true,true,true</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">upgraded: false,false,false,false
@@ -10254,8 +10254,8 @@ passed: false,false,false,false</span>
 passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">upgraded: true,true,true,true
-passed: true,true,true,true</span>
+<span class="tooltipText">upgraded: true,true,true
+passed: true,true,true</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">upgraded: false,false,false,false
@@ -10298,8 +10298,8 @@ result: upgraded,upgraded,upgraded,upgraded</span>
 result: loaded insecurely,loaded insecurely,loaded insecurely,loaded insecurely,loaded insecurely</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
-result: upgraded,upgraded,upgraded,upgraded</span>
+<span class="tooltipText">passed: true,true,true
+result: upgraded,upgraded,upgraded</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -10342,8 +10342,8 @@ result: blocked,blocked,blocked,blocked</span>
 result: blocked,blocked,blocked,blocked,blocked</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
-result: upgraded,upgraded,upgraded,upgraded</span>
+<span class="tooltipText">passed: true,true,true
+result: upgraded,upgraded,upgraded</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -10394,7 +10394,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">SNI_status: plaintext
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">SNI_status: plaintext
@@ -10438,7 +10438,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">header value: undefined
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">header value: undefined
@@ -10474,7 +10474,7 @@ passed: true,true,true,true</span>
 <span class="tooltipText">passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
-<span class="tooltipText">passed: false,false,false,false</span>
+<span class="tooltipText">passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">passed: false,false,false,false</span>
@@ -10507,7 +10507,7 @@ passed: true,true,true,true</span>
 <span class="tooltipText">passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true</span>
+<span class="tooltipText">passed: true,true,true</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">passed: false,false,false,false</span>
@@ -10672,11 +10672,11 @@ read: async () =&gt; {
         throw new Error(&quot;Unsupported&quot;);
       }
     }
-unsupported: false,false,false,true
-readSameFirstParty: 2a0b:f4c2:1::1,46.166.139.111,2a0b:f4c0:16c:2::1,Error: Unsupported
-readDifferentFirstParty: 2a0b:f4c2:2::32,193.31.24.154,2a0b:f4c0:16c:10::1,2620:18c:0:192::138
+unsupported: false,false,false
+readSameFirstParty: 2a0b:f4c2:1::1,46.166.139.111,2a0b:f4c0:16c:2::1
+readDifferentFirstParty: 2a0b:f4c2:2::32,193.31.24.154,2a0b:f4c0:16c:10::1
 passed: true,true,true
-testFailed: false,false,false,false</span>
+testFailed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent na'
 > &ndash;
 <span class="tooltipText">write: () =&gt; {
@@ -10745,10 +10745,10 @@ passed: false,false,false,false</span>
 > &nbsp;
 <span class="tooltipText">IsTorExit: false,false,false,false,false
 passed: false,false,false,false,false</span>
-</div></td><td><div class='dataPoint tooltipParent bad'
+</div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">IsTorExit: true,true,true,false
-passed: true,true,true,false</span>
+<span class="tooltipText">IsTorExit: true,true,true
+passed: true,true,true</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">IsTorExit: false,false,false,false
@@ -10824,9 +10824,9 @@ passed: false,false,false,false,false</span>
 > &nbsp;
 <span class="tooltipText">expression: undefined
 desired expression: undefined
-actual value: 1000,1000,1000,1000
+actual value: 1000,1000,1000
 desired value: undefined
-passed: true,true,true,true</span>
+passed: true,true,true</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">expression: undefined
@@ -10901,9 +10901,9 @@ passed: false,false,false,false,false</span>
 > &nbsp;
 <span class="tooltipText">expression: undefined
 desired expression: undefined
-actual value: 1000,1000,1000,1000
+actual value: 1000,1000,1000
 desired value: undefined
-passed: true,true,true,true</span>
+passed: true,true,true</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">expression: undefined
@@ -10978,9 +10978,9 @@ passed: false,false,false,false,false</span>
 > &nbsp;
 <span class="tooltipText">expression: outerHeight
 desired expression: undefined
-actual value: 1000,1000,1000,1000
+actual value: 1000,1000,1000
 desired value: undefined
-passed: true,true,true,true</span>
+passed: true,true,true</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">expression: outerHeight
@@ -11055,9 +11055,9 @@ passed: false,false,false,false,false</span>
 > &nbsp;
 <span class="tooltipText">expression: screen.height
 desired expression: undefined
-actual value: 1000,1000,1000,1000
+actual value: 1000,1000,1000
 desired value: undefined
-passed: true,true,true,true</span>
+passed: true,true,true</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">expression: screen.height
@@ -11132,9 +11132,9 @@ passed: false,false,false,false,false</span>
 > &nbsp;
 <span class="tooltipText">expression: screen.width
 desired expression: undefined
-actual value: 1000,1000,1000,1000
+actual value: 1000,1000,1000
 desired value: undefined
-passed: true,true,true,true</span>
+passed: true,true,true</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">expression: screen.width
@@ -11209,9 +11209,9 @@ passed: false,false,false,false,false</span>
 > &nbsp;
 <span class="tooltipText">expression: screenX
 desired expression: undefined
-actual value: 0,0,0,0
+actual value: 0,0,0
 desired value: undefined
-passed: true,true,true,true</span>
+passed: true,true,true</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">expression: screenX
@@ -11286,9 +11286,9 @@ passed: false,false,false,false,false</span>
 > &nbsp;
 <span class="tooltipText">expression: screenY
 desired expression: undefined
-actual value: 0,0,0,0
+actual value: 0,0,0
 desired value: undefined
-passed: true,true,true,true</span>
+passed: true,true,true</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">expression: screenY
@@ -11365,7 +11365,7 @@ passed: true,true,true,true,true</span>
 desired expression: undefined
 actual value: undefined
 desired value: undefined
-passed: true,true,true,true</span>
+passed: true,true,true</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">expression: undefined
@@ -11419,7 +11419,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -11460,7 +11460,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -11501,7 +11501,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -11543,7 +11543,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -11584,7 +11584,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -11625,7 +11625,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -11666,7 +11666,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -11707,7 +11707,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -11748,7 +11748,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -11789,7 +11789,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -11830,7 +11830,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -11871,7 +11871,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -11912,7 +11912,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -11953,7 +11953,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -11994,7 +11994,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -12035,7 +12035,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -12076,7 +12076,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -12117,7 +12117,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -12158,7 +12158,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -12199,7 +12199,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -12240,7 +12240,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -12281,7 +12281,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -12322,7 +12322,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">value: 6460730637534513
@@ -12373,7 +12373,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://munchkin.marketo.net/munchkin.js
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://munchkin.marketo.net/munchkin.js
@@ -12417,7 +12417,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://dpm.demdex.net/ibs
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://dpm.demdex.net/ibs
@@ -12461,7 +12461,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://s.amazon-adsystem.com/dcm
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://s.amazon-adsystem.com/dcm
@@ -12505,7 +12505,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://ib.adnxs.com/px?id=178248&amp;t=1
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://ib.adnxs.com/px?id=178248&amp;t=1
@@ -12549,7 +12549,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://bat.bing.com/bat.js
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://bat.bing.com/bat.js
@@ -12593,7 +12593,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://static.chartbeat.com/js/chartbeat.js
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://static.chartbeat.com/js/chartbeat.js
@@ -12637,7 +12637,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://dis.criteo.com/dis/rtb/appnexus/cookiematch.aspx
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://dis.criteo.com/dis/rtb/appnexus/cookiematch.aspx
@@ -12681,7 +12681,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://securepubads.g.doubleclick.net/static/glade.js
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://securepubads.g.doubleclick.net/static/glade.js
@@ -12725,7 +12725,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://connect.facebook.net/en_US/fbevents.js
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://connect.facebook.net/en_US/fbevents.js
@@ -12769,7 +12769,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://www.google.com/pagead/1p-user-list/
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://www.google.com/pagead/1p-user-list/
@@ -12813,7 +12813,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://google-analytics.com/urchin.js
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://google-analytics.com/urchin.js
@@ -12857,7 +12857,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL
@@ -12901,7 +12901,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&amp;external_user_id=629685505537&amp;C=1
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&amp;external_user_id=629685505537&amp;C=1
@@ -12945,7 +12945,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://js-agent.newrelic.com/nr-1212.min.js
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://js-agent.newrelic.com/nr-1212.min.js
@@ -12989,7 +12989,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://pixel.quantserve.com/pixel
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://pixel.quantserve.com/pixel
@@ -13033,7 +13033,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://sb.scorecardresearch.com/internal-c2/default/cs.js
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://sb.scorecardresearch.com/internal-c2/default/cs.js
@@ -13077,7 +13077,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://trc.taboola.com/futureplc-tomsguide/trc/3/json
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://trc.taboola.com/futureplc-tomsguide/trc/3/json
@@ -13121,7 +13121,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://t.co/i/adsct
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://t.co/i/adsct
@@ -13165,7 +13165,7 @@ passed: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://yandex.ru/ads/system/header-bidding.js
-passed: false,false,false,false</span>
+passed: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">url: https://yandex.ru/ads/system/header-bidding.js
@@ -13223,9 +13223,9 @@ url: https://munchkin.marketo.net/munchkin.js
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://munchkin.marketo.net/munchkin.js
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -13278,9 +13278,9 @@ url: https://dpm.demdex.net/ibs
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://dpm.demdex.net/ibs
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -13333,9 +13333,9 @@ url: https://s.amazon-adsystem.com/dcm
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://s.amazon-adsystem.com/dcm
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -13388,9 +13388,9 @@ url: https://ib.adnxs.com/px?id=178248&amp;t=1
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://ib.adnxs.com/px?id=178248&amp;t=1
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -13443,9 +13443,9 @@ url: https://bat.bing.com/bat.js
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://bat.bing.com/bat.js
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -13498,9 +13498,9 @@ url: https://static.chartbeat.com/js/chartbeat.js
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://static.chartbeat.com/js/chartbeat.js
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -13553,9 +13553,9 @@ url: https://dis.criteo.com/dis/rtb/appnexus/cookiematch.aspx
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://dis.criteo.com/dis/rtb/appnexus/cookiematch.aspx
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -13608,9 +13608,9 @@ url: https://securepubads.g.doubleclick.net/static/glade.js
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://securepubads.g.doubleclick.net/static/glade.js
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -13663,9 +13663,9 @@ url: https://connect.facebook.net/en_US/fbevents.js
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://connect.facebook.net/en_US/fbevents.js
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -13718,9 +13718,9 @@ url: https://www.google.com/pagead/1p-user-list/
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://www.google.com/pagead/1p-user-list/
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -13773,9 +13773,9 @@ url: https://google-analytics.com/urchin.js
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://google-analytics.com/urchin.js
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -13828,9 +13828,9 @@ url: https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -13883,9 +13883,9 @@ url: https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&amp;external_user_id=629
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&amp;external_user_id=629685505537&amp;C=1
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -13938,9 +13938,9 @@ url: https://js-agent.newrelic.com/nr-1212.min.js
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://js-agent.newrelic.com/nr-1212.min.js
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -13993,9 +13993,9 @@ url: https://pixel.quantserve.com/pixel
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://pixel.quantserve.com/pixel
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -14048,9 +14048,9 @@ url: https://sb.scorecardresearch.com/internal-c2/default/cs.js
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://sb.scorecardresearch.com/internal-c2/default/cs.js
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -14103,9 +14103,9 @@ url: https://trc.taboola.com/futureplc-tomsguide/trc/3/json
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://trc.taboola.com/futureplc-tomsguide/trc/3/json
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -14158,9 +14158,9 @@ url: https://t.co/i/adsct
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://t.co/i/adsct
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -14213,9 +14213,9 @@ url: https://yandex.ru/ads/system/header-bidding.js
 cookieFound: false,false,false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
-<span class="tooltipText">passed: true,true,true,true
+<span class="tooltipText">passed: true,true,true
 url: https://yandex.ru/ads/system/header-bidding.js
-cookieFound: false,false,false,false</span>
+cookieFound: false,false,false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">passed: true,true,true,true
@@ -14575,15 +14575,15 @@ read: async () =&gt; {
       return protocol;
     }
 
-result, same session: h2, h2, h2, h2
+result, same session: h2, h2, h2
 
-result, different session: h2, h2, h2, h2
+result, different session: h2, h2, h2
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async () =&gt; {
@@ -14896,15 +14896,15 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 
-result, same session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
+result, same session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
 
-result, different session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
+result, different session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -15157,15 +15157,15 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 
-result, same session: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965_1p_http, d5928c66-b235-44b2-9102-3f26de4a8959_1p_http, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321_1p_http, fe5b9a15-4b97-44fa-8d7d-f09bee9ef297_1p_http
+result, same session: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965_1p_http, d5928c66-b235-44b2-9102-3f26de4a8959_1p_http, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321_1p_http
 
-result, different session: , , , 
+result, different session: , , 
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (secret) =&gt; {
@@ -15356,15 +15356,15 @@ test failed: false, false, false, false, false</span>
 
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 
-result, same session: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965_1p_js, d5928c66-b235-44b2-9102-3f26de4a8959_1p_js, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321_1p_js, fe5b9a15-4b97-44fa-8d7d-f09bee9ef297_1p_js
+result, same session: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965_1p_js, d5928c66-b235-44b2-9102-3f26de4a8959_1p_js, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321_1p_js
 
-result, different session: , , , 
+result, different session: , , 
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: (secret) =&gt; {
@@ -15705,15 +15705,15 @@ read: async () =&gt; {
       return cookie.value;
     }
 
-result, same session: Error: Unsupported, Error: Unsupported, Error: Unsupported, Error: Unsupported
+result, same session: Error: Unsupported, Error: Unsupported, Error: Unsupported
 
-result, different session: Error: Unsupported, Error: Unsupported, Error: Unsupported, Error: Unsupported
+result, different session: Error: Unsupported, Error: Unsupported, Error: Unsupported
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: (data) =&gt; {
@@ -16180,15 +16180,15 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 
-result, same session: fake_2922349924875842, fake_5260894470478128, fake_28433465590368523, fake_7338621605371971
+result, same session: fake_2922349924875842, fake_5260894470478128, fake_28433465590368523
 
-result, different session: fake_48225653714207106, fake_3822839474531916, fake_25701539981755017, fake_7420249464079196
+result, different session: fake_48225653714207106, fake_3822839474531916, fake_25701539981755017
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -16495,15 +16495,15 @@ read: async (key) =&gt; {
       return count;
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 1, 1, 1
 
-result, different session: 2, 2, 2, 2
+result, different session: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (key) =&gt; key
@@ -16770,15 +16770,15 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 1, 1, 1
 
-result, different session: 2, 2, 2, 2
+result, different session: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -17189,15 +17189,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 1, 1, 1
 
-result, different session: 2, 2, 2, 2
+result, different session: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -17559,15 +17559,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 1, 1, 1
 
-result, different session: 2, 2, 2, 2
+result, different session: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
@@ -17902,15 +17902,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 1, 1, 1
 
-result, different session: 2, 2, 2, 2
+result, different session: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
@@ -18153,15 +18153,15 @@ test failed: false, false, false, false, false</span>
 
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 
-result, same session: Error: A mutation operation was attempted on a database that did not allow mutations., Error: A mutation operation was attempted on a database that did not allow mutations., Error: A mutation operation was attempted on a database that did not allow mutations., Error: A mutation operation was attempted on a database that did not allow mutations.
+result, same session: Error: A mutation operation was attempted on a database that did not allow mutations., Error: A mutation operation was attempted on a database that did not allow mutations., Error: A mutation operation was attempted on a database that did not allow mutations.
 
-result, different session: Error: A mutation operation was attempted on a database that did not allow mutations., Error: A mutation operation was attempted on a database that did not allow mutations., Error: A mutation operation was attempted on a database that did not allow mutations., Error: A mutation operation was attempted on a database that did not allow mutations.
+result, different session: Error: A mutation operation was attempted on a database that did not allow mutations., Error: A mutation operation was attempted on a database that did not allow mutations., Error: A mutation operation was attempted on a database that did not allow mutations.
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (secret) =&gt; {
@@ -18330,15 +18330,15 @@ test failed: false, false, false, false, false</span>
 
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 
-result, same session: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965_1p, d5928c66-b235-44b2-9102-3f26de4a8959_1p, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321_1p, fe5b9a15-4b97-44fa-8d7d-f09bee9ef297_1p
+result, same session: 3a2a2a4e-663f-4326-9d1e-f0df0b84d965_1p, d5928c66-b235-44b2-9102-3f26de4a8959_1p, 9ce5f657-7aee-4c78-a7d9-67bf5de6d321_1p
 
-result, different session: , , , 
+result, different session: , , 
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
@@ -18666,15 +18666,15 @@ read: async (key) =&gt; {
       return countString;
     }
 
-result, same session: Error: No requests received, Error: No requests received, Error: No requests received, Error: No requests received
+result, same session: Error: No requests received, Error: No requests received, Error: No requests received
 
-result, different session: Error: No requests received, Error: No requests received, Error: No requests received, Error: No requests received
+result, different session: Error: No requests received, Error: No requests received, Error: No requests received
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -19130,15 +19130,15 @@ read: async () =&gt; {
       return result.rows.item(0).value;
     }
 
-result, same session: Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function
+result, same session: Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function
 
-result, different session: Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function
+result, different session: Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent good'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -19497,15 +19497,15 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 1, 1, 1
 
-result, different session: 2, 2, 2, 2
+result, different session: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -19917,15 +19917,15 @@ read: async () =&gt; {
       return protocol;
     }
 
-result, same session: h2, h2, h2, h2
+result, same session: h2, h2, h2
 
-result, different session: h2, h2, h2, h2
+result, different session: h2, h2, h2
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async () =&gt; {
@@ -20238,15 +20238,15 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 
-result, same session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
+result, same session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
 
-result, different session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
+result, different session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent na'
 > &ndash;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -20499,15 +20499,15 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 
-result, same session: , , , 
+result, same session: , , 
 
-result, different session: , , , 
+result, different session: , , 
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent na'
 > &ndash;
 <span class="tooltipText">write: async (secret) =&gt; {
@@ -20698,15 +20698,15 @@ test failed: false, false, false, false, false</span>
 
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 
-result, same session: , , , 
+result, same session: , , 
 
-result, different session: , , , 
+result, different session: , , 
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent na'
 > &ndash;
 <span class="tooltipText">write: (secret) =&gt; {
@@ -21047,15 +21047,15 @@ read: async () =&gt; {
       return cookie.value;
     }
 
-result, same session: Error: Unsupported, Error: Unsupported, Error: Unsupported, Error: Unsupported
+result, same session: Error: Unsupported, Error: Unsupported, Error: Unsupported
 
-result, different session: Error: Unsupported, Error: Unsupported, Error: Unsupported, Error: Unsupported
+result, different session: Error: Unsupported, Error: Unsupported, Error: Unsupported
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent na'
 > &ndash;
 <span class="tooltipText">write: (data) =&gt; {
@@ -21522,15 +21522,15 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 
-result, same session: fake_5568622551552842, fake_322569567515121, fake_32278663568997534, fake_4368171045109752
+result, same session: fake_5568622551552842, fake_322569567515121, fake_32278663568997534
 
-result, different session: fake_6693775633453884, fake_9502493343457119, fake_8453670463450664, fake_32249978082601993
+result, different session: fake_6693775633453884, fake_9502493343457119, fake_8453670463450664
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -21837,15 +21837,15 @@ read: async (key) =&gt; {
       return count;
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 1, 1, 1
 
-result, different session: 2, 2, 2, 2
+result, different session: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (key) =&gt; key
@@ -22112,15 +22112,15 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 1, 1, 1
 
-result, different session: 2, 2, 2, 2
+result, different session: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -22531,15 +22531,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 1, 1, 1
 
-result, different session: 2, 2, 2, 2
+result, different session: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -22901,15 +22901,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 1, 1, 1
 
-result, different session: 2, 2, 2, 2
+result, different session: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
@@ -23244,15 +23244,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 1, 1, 1
 
-result, different session: 2, 2, 2, 2
+result, different session: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
@@ -23495,15 +23495,15 @@ test failed: false, false, false, false, false</span>
 
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 
-result, same session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
+result, same session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
 
-result, different session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
+result, different session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent na'
 > &ndash;
 <span class="tooltipText">write: async (secret) =&gt; {
@@ -23672,15 +23672,15 @@ test failed: false, false, false, false, false</span>
 
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 
-result, same session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
+result, same session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
 
-result, different session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
+result, different session: Error: The operation is insecure., Error: The operation is insecure., Error: The operation is insecure.
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent na'
 > &ndash;
 <span class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
@@ -24008,15 +24008,15 @@ read: async (key) =&gt; {
       return countString;
     }
 
-result, same session: Error: No requests received, Error: No requests received, Error: No requests received, Error: No requests received
+result, same session: Error: No requests received, Error: No requests received, Error: No requests received
 
-result, different session: Error: No requests received, Error: No requests received, Error: No requests received, Error: No requests received
+result, different session: Error: No requests received, Error: No requests received, Error: No requests received
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -24472,15 +24472,15 @@ read: async () =&gt; {
       return result.rows.item(0).value;
     }
 
-result, same session: Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function
+result, same session: Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function
 
-result, different session: Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function
+result, different session: Error: window.openDatabase is not a function, Error: window.openDatabase is not a function, Error: window.openDatabase is not a function
 
-unsupported: true, true, true, true
+unsupported: true, true, true
 
 passed: undefined
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent na'
 > &ndash;
 <span class="tooltipText">write: async (key) =&gt; {
@@ -24839,15 +24839,15 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 1, 1, 1
 
-result, different session: 2, 2, 2, 2
+result, different session: 2, 2, 2
 
-unsupported: false, false, false, false
+unsupported: false, false, false
 
-passed: true, true, true, true
+passed: true, true, true
 
-test failed: false, false, false, false</span>
+test failed: false, false, false</span>
 </div></td><td><div class='dataPoint tooltipParent bad'
 > &nbsp;
 <span class="tooltipText">write: async (key) =&gt; {
