@@ -1,4 +1,29 @@
 # News
+## [Issue 70](/archive/issue70): 2023-09-17
+
+### New browser versions
+
+On Desktop:
+* Brave 1.58
+* Edge 117.0
+* Librewolf 117.0
+* Opera 102.0
+* Ungoogled 116.0
+
+On iOS:
+* Brave 1.57
+* Chrome 117.5938
+* Duckduckgo 7.88
+* Yandex 2309.2
+
+On Android:
+* Duckduckgo 5.170
+* Firefox 117.1
+* Focus 117.1
+* Mull 117.0
+* Opera 77.2
+* Yandex 23.9
+
 ## [Issue 69](/archive/issue69): 2023-09-07
 
 ### New test
