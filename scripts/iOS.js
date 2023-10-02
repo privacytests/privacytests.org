@@ -76,10 +76,11 @@ const browserInfo = {
     urlBarKeys: 'URL'
   },
   vivaldi: {
-    name: 'Safari',
-    bundleId: 'com.apple.mobilesafari',
-    urlBarClick: 'TabBarItemTitle',
-    urlBarKeys: 'URL'
+    name: 'Vivaldi',
+    bundleId: 'com.vivaldi.browser',
+    urlBarClick: 'Address and search bar',
+    urlBarKeys: 'Address',
+    urlBarClear: 'Clear Text'
   },
   yandex: {
     name: 'Yandex',
