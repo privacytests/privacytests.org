@@ -1,4 +1,4 @@
-const { default: WebDriver } = require('webdriver');
+const WebDriver = require('webdriver');
 const _ = require('lodash');
 const { execSync } = require('child_process');
 const { sleepMs } = require('./utils');
@@ -117,6 +117,8 @@ const browserInfo = {
   }
 };
 
+const KEY_ENTER = 66;
+
 const findElementWithId = async (client, packageName, id) => {
   const elementObject = await client.findElement('id', `${packageName}:id/${id}`);
   return elementObject.ELEMENT;
@@ -214,7 +216,8 @@ class AndroidBrowser {
       const goButton = await findElement(this.client, this.packageName, this.goButton);
       await this.client.elementClick(goButton);
     } else {
-      await this.client.elementSendKeys(urlBarToSendKeys, url + '\\n');
+      await this.client.elementSendKeys(urlBarToSendKeys, url);
+      await this.client.pressKeyCode(KEY_ENTER);
     }
   }
 
@@ -271,7 +274,8 @@ const demoBrowser = async (client, browserName, url) => {
   await client.elementClick(urlBarToClick);
   await sleepMs(1000);
   const urlBarToSendKeys = await findElement(client, packageName, urlBarKeys);
-  await client.elementSendKeys(urlBarToSendKeys, url + '\\n');
+  await client.elementSendKeys(urlBarToSendKeys, url);
+  await client.pressKeyCode(KEY_ENTER);
   await sleepMs(8000);
   await client.terminateApp(packageName);
 };

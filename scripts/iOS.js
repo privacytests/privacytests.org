@@ -1,4 +1,4 @@
-const { default: WebDriver } = require('webdriver');
+const WebDriver = require('webdriver');
 const _ = require('lodash');
 const { execSync } = require('child_process');
 const plist = require('plist');
@@ -75,6 +75,13 @@ const browserInfo = {
     urlBarClick: 'TabBarItemTitle',
     urlBarKeys: 'URL'
   },
+  vivaldi: {
+    name: 'Vivaldi',
+    bundleId: 'com.vivaldi.browser',
+    urlBarClick: 'Address and search bar',
+    urlBarKeys: 'Address',
+    urlBarClear: 'Clear Text'
+  },
   yandex: {
     name: 'Yandex',
     bundleId: 'ru.yandex.mobile.search',
@@ -119,7 +126,8 @@ const webdriverSession = _.memoize(() =>
       'appium:deviceName': 'iPhone SE',
       'appium:wdaLaunchTimeout': 30000,
       'appium:wdaConnectionTimeout': 30000,
-      'appium:platformVersion': '16.1'
+      'appium:platformVersion': '17.0',
+      'appium:showXcodeLog': true
     }
   }));
 
