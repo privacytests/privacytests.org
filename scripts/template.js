@@ -22,10 +22,10 @@ const header = () => `
   </div>
   <div class="links">
     <div class="link-header">
-      <a href="/news.html">News</a>
+      <a href="/news">News</a>
     </div>
     <div class="link-header">
-      <a href="/about.html">About</a>
+      <a href="/about">About</a>
     </div>
     <div class="link-header">
       <a href="https://github.com/privacytests/privacytests.org" title="Source code on github.\nIssues are welcome!"><img src="${githubDataURI}" width=20></a>
