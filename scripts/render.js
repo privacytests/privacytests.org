@@ -342,19 +342,19 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
         <a href=".">Desktop browsers</a>
       </div>
       <div class="navItem ${incognito && !nightly && results.platform !== 'Android' && results.platform !== 'iOS' ? 'selectedItem' : ''}">
-        <a href="private.html">Desktop private modes</a>
+        <a href="private">Desktop private modes</a>
       </div>
       <div class="navItem ${results.platform === 'iOS' ? 'selectedItem' : ''}">
-        <a href="ios.html">iOS browsers</a>
+        <a href="ios">iOS browsers</a>
       </div>
       <div class="navItem ${results.platform === 'Android' ? 'selectedItem' : ''}">
-        <a href="android.html">Android browsers</a>
+        <a href="android">Android browsers</a>
       </div>
       <div class="navItem ${nightly && !incognito ? 'selectedItem' : ''}">
-        <a href="nightly.html">Nightly builds</a>
+        <a href="nightly">Nightly builds</a>
       </div>
       <div class="navItem ${nightly && incognito ? 'selectedItem' : ''}">
-        <a href="nightly-private.html">Nightly private modes</a>
+        <a href="nightly-private">Nightly private modes</a>
       </div>
     </div>
     <div class="banner" id="legend">
