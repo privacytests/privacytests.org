@@ -1,4 +1,34 @@
 # News
+## [Issue 73](/archive/issue73): 2023-10-21
+
+### New browser versions
+
+On Desktop:
+* Brave 1.59
+* Chrome 118.0
+* Edge 118.0
+* Mullvad 13.0
+* Safari 17.0
+* Tor 13.0
+
+On iOS:
+* Chrome 118.5993
+* Duckduckgo 7.93
+* Edge 117.2045
+* Firefox 118.2
+* Yandex 2309.6
+
+On Android:
+* Brave 1.59
+* Chrome 118.0
+* Duckduckgo 5.175
+* Firefox 118.2
+* Focus 118.2
+* Mull 117.1
+* Opera 78.1
+* Samsung 23.0
+* Tor 115.2
+
 ## [Issue 72](/archive/issue72): 2023-10-10
 
 ### New browser versions
