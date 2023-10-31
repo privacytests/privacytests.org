@@ -2,7 +2,7 @@ const fs = require('fs');
 const fsPromises = require('node:fs/promises');
 const { join: joinDir } = require('path');
 const { exec, execSync, execAsync, sleepMs } = require('./utils');
-const proxy = require('./system-network-settings');
+const systemNetworkSettings = require('./system-network-settings');
 const { killProcessAndDescendants } = require('./utils');
 const path = require('node:path');
 
@@ -281,12 +281,12 @@ class DesktopBrowser {
       return;
     }
     proxyUsageState = enabled;
-    preferredNetworkService ??= proxy.getPreferredNetworkService();
+    preferredNetworkService ??= systemNetworkSettings.getPreferredNetworkService();
     const setting = { enabled };
     if (enabled) {
       Object.assign(setting, { domain: '127.0.0.1', port });
     }
-    proxy.setProxies(preferredNetworkService,
+    systemNetworkSettings.setProxies(preferredNetworkService,
       { web: setting, secureweb: setting });
     // Wait for proxy settings to propagate.
     await sleepMs(1000);
