@@ -48,9 +48,9 @@ const getNetworkServices = () => {
 };
 
 const getPreferredNetworkService = () => {
-  const preferredNetworkService = getNetworkServices()[getPreferredDevice()]
+  const preferredNetworkService = getNetworkServices()[getPreferredDevice()];
   if (preferredNetworkService === undefined) {
-    throw new Error("Preferred network service not found. Is a VPN running?");
+    throw new Error('Preferred network service not found. Is a VPN running?');
   }
   return preferredNetworkService;
 };
@@ -62,18 +62,18 @@ const getDNS = (networkService) => {
   } else {
     return response.split('\n').map(line => line.trim()).filter(line => line.length > 0);
   }
-}
+};
 
 const setDNS = (networkService, dnsAddresses) => {
   let addressCommands;
   if (dnsAddresses === undefined || (dnsAddresses && dnsAddresses.length === 0)) {
-    addressCommands = `"Empty"`;
+    addressCommands = '"Empty"';
   } else {
-    addressCommands = dnsAddresses.map(address => `"${address}"`).join(" ");
+    addressCommands = dnsAddresses.map(address => `"${address}"`).join(' ');
   }
   const command = `networksetup -setdnsservers "${networkService}" ${addressCommands}`;
   run(command);
-}
+};
 
 const setProxyState = (networkService, type, enabled) => {
   const state = enabled ? 'on' : 'off';
@@ -156,4 +156,11 @@ if (require.main === module) {
   runTests();
 }
 
-module.exports = { setProxies, getProxies, getNetworkServices, getPreferredNetworkService };
+module.exports = {
+  setProxies,
+  getProxies,
+  getNetworkServices,
+  getPreferredNetworkService,
+  setDNS,
+  getDNS
+};
