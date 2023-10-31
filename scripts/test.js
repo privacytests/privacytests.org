@@ -406,7 +406,7 @@ const createBrowserObject = (config) => {
 
 // Call asyncFunction on items in array in parallel.
 const asyncMapParallel = async (asyncFunction, array) => {
-  return Promise.all(Array.prototype.map.call(array, asyncFunction));
+  return await Promise.allSettled(Array.prototype.map.call(array, asyncFunction));
 };
 
 /*
@@ -448,7 +448,7 @@ const runTestsBatch = async (
       const timeStarted = new Date().toISOString();
       let browserSessions;
       try {
-        browserSessions = await asyncMapParallel((config) => prepareBrowserSession(config, hurry), browserList);
+        browserSessions = (await asyncMapParallel((config) => prepareBrowserSession(config, hurry), browserList)).map(item => item.value);
         console.log({ browserSessions });
         const testResultsStage1 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage1({ browserSession, categories }), 600000), browserSessions);
         let testResultsStage2 = [];
@@ -458,7 +458,10 @@ const runTestsBatch = async (
           await DesktopBrowser.setGlobalProxyUsageEnabled(false);
         }
         for (let i = 0; i < browserList.length; ++i) {
-          const testResults = Object.assign({}, testResultsStage1[i], testResultsStage2[i]);
+          if (testResultsStage1[i].status === 'rejected' || (!android && !ios && testResultsStage2[i].status === 'rejected')) {
+            continue;
+          }
+          const testResults = Object.assign({}, testResultsStage1[i].value, testResultsStage2[i]?.value);
           const { browser, incognito, tor, nightly } = browserList[i];
           allTests.push({
             browser,
@@ -474,12 +477,13 @@ const runTestsBatch = async (
         }
       } catch (e) {
         log(e);
+        await DesktopBrowser.setGlobalProxyUsageEnabled(false);
       }
       if (!debug) {
         for (const browserSession of browserSessions) {
           await closeWebSocket(browserSession.websocket);
           try {
-            console.log('killing the browser...');
+            console.log(`killing ${browserSession.browser.browser}`);
             await browserSession.browser.kill();
           } catch (e) {
             log(e);
