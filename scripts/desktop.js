@@ -159,6 +159,7 @@ const fixOperaPreferences = async (file) => {
   const json = JSON.parse(raw);
   json["ui"]["warn_on_quitting_opera_with_multiple_tabs"] = false;
   await fsPromises.writeFile(file, JSON.stringify(json));
+  console.log("fixed Opera preferences in", file);
 };
 
 // TODO: Make this a generic capability for any browser
@@ -173,6 +174,7 @@ const fixChromePreferences = async (file) => {
   }
   json["privacy_sandbox"]["m1"]["row_notice_acknowledged"] = true;
   await fsPromises.writeFile(file, JSON.stringify(json));
+  console.log("fixed Chrome preferences in", file);
 }
 
 // A Browser object represents a browser we run tests on.
