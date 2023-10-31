@@ -55,6 +55,26 @@ const getPreferredNetworkService = () => {
   return preferredNetworkService;
 };
 
+const getDNS = (networkService) => {
+  const response = run(`networksetup -getdnsservers "${networkService}"`);
+  if (response.trim() === 'There aren\'t any DNS Servers set on Wi-Fi.') {
+    return [];
+  } else {
+    return response.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+  }
+}
+
+const setDNS = (networkService, dnsAddresses) => {
+  let addressCommands;
+  if (dnsAddresses === undefined || (dnsAddresses && dnsAddresses.length === 0)) {
+    addressCommands = `"Empty"`;
+  } else {
+    addressCommands = dnsAddresses.map(address => `"${address}"`).join(" ");
+  }
+  const command = `networksetup -setdnsservers "${networkService}" ${addressCommands}`;
+  run(command);
+}
+
 const setProxyState = (networkService, type, enabled) => {
   const state = enabled ? 'on' : 'off';
   return run(`/usr/sbin/networksetup -set${type}proxystate "${networkService}" "${state}"`);
