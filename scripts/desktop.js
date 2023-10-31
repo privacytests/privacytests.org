@@ -2,7 +2,7 @@ const fs = require('fs');
 const fsPromises = require('node:fs/promises');
 const { join: joinDir } = require('path');
 const { exec, execSync, execAsync, sleepMs } = require('./utils');
-const proxy = require('./system-proxy-settings');
+const proxy = require('./system-network-settings');
 const { killProcessAndDescendants } = require('./utils');
 const path = require('node:path');
 
