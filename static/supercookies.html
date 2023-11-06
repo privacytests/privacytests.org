@@ -21,7 +21,9 @@
       let favicon = document.getElementById("favicon");
       const baseURI = "https://test-pages.privacytests2.org/live";
       favicon.setAttribute("href", `${baseURI}/resource?type=favicon&key=${sessionId}`);
-      addEventListener("message", async ({data}) => {
+      addEventListener("message", async (event) => {
+        showData(JSON.stringify(event));
+        const data = event.data;
         document.body.setAttribute("data-test-results", JSON.stringify(data));
         const category = `supercookies_${mode}_${thirdparty}`;
         if (mode === "read") {
