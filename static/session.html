@@ -20,12 +20,17 @@
          const favicon = document.getElementById("favicon");
          const baseURI = `https://test-pages.privacytests${firstParty === "true" ? "3" : "2"}.org`;
          favicon.setAttribute("href", `${baseURI}/live/resource?type=favicon&key=${sessionId}_${label}`);
-         addEventListener("message", async ({data}) => {
+         const listener = async ({data, origin}) => {
+           if (!origin.includes("privacytests")) {
+             return;
+           }
            document.body.setAttribute("data-test-results", JSON.stringify(data));
            const category = `session_${mode}_${firstParty ? "1p" : "3p"}`;
            await postData(data, category);
            location.href = "https://example.com";
-         }, {once: true});
+           removeEventListener(listener);
+         };
+         addEventListener("message", listener);
          let iframe = document.createElement("iframe");
          iframe.height="1000px"
          document.body.appendChild(iframe);
