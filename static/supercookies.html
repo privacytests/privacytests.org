@@ -21,7 +21,13 @@
       let favicon = document.getElementById("favicon");
       const baseURI = "https://test-pages.privacytests2.org/live";
       favicon.setAttribute("href", `${baseURI}/resource?type=favicon&key=${sessionId}`);
-      addEventListener("message", async ({data}) => {
+      const listener = async (event) => {
+        if (!event.origin.includes("privacytests")) {
+          return;
+        }
+        removeEventListener("message", listener);
+        showData("origin", event.origin);
+        const data = event.data;
         document.body.setAttribute("data-test-results", JSON.stringify(data));
         const category = `supercookies_${mode}_${thirdparty}`;
         if (mode === "read") {
@@ -36,7 +42,8 @@
           }
           await postData(data, category);
         }
-      }, {once: true});
+      };
+      addEventListener("message", listener);
       if (mode === "read" && me === "true" && thirdparty === "same") {
         while (true) {
           let response = await fetch(`https://results.privacytests.org/step?sessionId=${sessionId}`, { cache: "no-store"});

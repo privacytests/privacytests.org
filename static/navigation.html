@@ -19,12 +19,18 @@
                           location.hostname === "127.0.0.1" ||
                           location.hostname === "")
                        ? "" : "https://test-pages.privacytests2.org";
-     addEventListener("message", async ({data}) => {
+     const listener = async (event) => {
+       if (!event.origin.includes("privacytests")) {
+         return;
+       }
+       removeEventListener("message", listener);
+       const data = event.data;
        const topLevelResults = await runAllTests(await tests(), { category: "navigation_toplevel" });
        const allData = {...data, ...topLevelResults};
        document.body.setAttribute("data-test-results", JSON.stringify(allData));
        await postDataAndCarryOn(allData, `navigation_${mode}_${thirdparty}`);
-     }, false);
+     };
+     addEventListener("message", listener);
      const iframe = document.getElementById("inner");
      iframe.src = `${iframe_root}/navigation_inner.html${window.location.search}`;
     </script>
