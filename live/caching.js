@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const port = 3333;
+const path = require('node:path');
 
 const countMaps = {
   css: {},
@@ -92,6 +93,13 @@ app.get('/etag', (req, res) => {
 });
 
 // ## HSTS cache tests
+
+app.get('/set_hsts.html|/test_hsts.html|/clear_hsts.html|/hsts.js|/post_data.js|/test.css', (req, res) => {
+  const headers = {
+    'Cache-Control': 'no-store',
+  };
+  res.sendFile(path.normalize(__dirname + '/../static' + req.path), { headers });
+});
 
 app.get('/set_hsts.js', (req, res) => {
   const headers = {
