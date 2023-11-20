@@ -161,9 +161,10 @@ const closeWebSocket = (websocket) => {
 const kIframeRootSame = 'https://test-pages.privacytests2.org';
 const kIframeRootDifferent = 'https://test-pages.privacytests.org';
 const kIframeRootThird = 'https://test-pages.privacytests3.org';
-const kInsecureRoot = 'http://insecure.privacytests2.org';
+const kInsecureRoot = 'http://insecure.privacytests3.org';
 const kUpgradableRoot = 'http://upgradable.privacytests2.org';
 const kLiveRoot = 'https://test-pages.privacytests2.org/live';
+const kHstsRoot = 'https://hsts.privacytests2.org';
 
 const ipAddressTest = async (results) => {
   const myIpAddress = await fetchIpAddress();
@@ -283,8 +284,9 @@ const runInsecureTest = async (browserSession) => {
 // Run the HSTS cache supercookie test.
 const runHstsTest = async (browserSession, insecurePassed) => {
   if (!insecurePassed) {
-    await runPageTest(browserSession, `${kIframeRootDifferent}/clear_hsts.html`);
-    await runPageTest(browserSession, `${kIframeRootDifferent}/set_hsts.html`);
+    const temp1 = await runPageTest(browserSession, `${kHstsRoot}/clear_hsts.html`);
+    const temp2 = await runPageTest(browserSession, `${kHstsRoot}/set_hsts.html`);
+    console.log({ temp1, temp2 });
     return await runPageTest(browserSession, `${kInsecureRoot}/test_hsts.html`);
   } else {
     return {
@@ -527,20 +529,19 @@ const writeDataSync = ({ path, filename, data }) => {
 
 // ## Config files
 
-const readConfig = () => {
+const readConfig = (commandLineData) => {
   const defaultConfig = { aggregate: true, repeat: 1, debug: false, update: false };
-  const commandLineConfig = minimist(process.argv.slice(2));
-  const configFile = commandLineConfig._[0];
-  delete commandLineConfig._;
-  const commandLineBrowsers = commandLineConfig.browsers ?? commandLineConfig.browser;
+  const configFile = commandLineData._[0];
+  delete commandLineData._;
+  const commandLineBrowsers = commandLineData.browsers ?? commandLineData.browser;
   if (commandLineBrowsers) {
-    commandLineConfig.browsers = commandLineBrowsers.split(',');
+    commandLineData.browsers = commandLineBrowsers.split(',');
   }
-  if (commandLineConfig.except) {
-    commandLineConfig.except = commandLineConfig.except.split(',');
+  if (commandLineData.except) {
+    commandLineData.except = commandLineData.except.split(',');
   }
   const yamlConfig = configFile ? readYAMLFile(configFile) : null;
-  return Object.assign({}, defaultConfig, yamlConfig, commandLineConfig);
+  return Object.assign({}, defaultConfig, yamlConfig, commandLineData);
 };
 
 const configToBrowserList = (config) => {
@@ -612,7 +613,8 @@ const main = async () => {
     installTestFontIfNeeded();
     await DesktopBrowser.setGlobalProxyUsageEnabled(false);
     // Read config file and flags from command line
-    const config = readConfig();
+    const commandLineData = minimist(process.argv.slice(2));
+    const config = readConfig(commandLineData);
     log({ config });
     if (config.update) {
       await updateAll(config);
