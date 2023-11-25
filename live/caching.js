@@ -94,33 +94,14 @@ app.get('/etag', (req, res) => {
 
 // ## HSTS cache tests
 
-app.get('/set_hsts.html|/test_hsts.html|/clear_hsts.html|/hsts.js|/post_data.js|/test.css', (req, res) => {
-  const headers = {
-    'Cache-Control': 'no-store',
-  };
-  res.sendFile(path.normalize(__dirname + '/../static' + req.path), { headers });
-});
-
-app.get('/set_hsts.js', (req, res) => {
-  const headers = {
-    'Strict-Transport-Security': 'max-age=30',
-    'Cache-Control': 'no-store'
-  };
-  res.sendFile('test.js', { root: __dirname, headers });
-});
-
-app.get('/test_hsts.js', (req, res) => {
-  const headers = { 'Cache-Control': 'no-store' };
-  res.sendFile('test.js', { root: __dirname, headers });
-});
-
-app.get('/clear_hsts.js', (req, res) => {
-  const headers = {
-    'Strict-Transport-Security': 'max-age=0',
-    'Cache-Control': 'no-store'
-  };
-  res.sendFile('test.js', { root: __dirname, headers });
-});
+app.get('/set_hsts.html|/test_hsts.html|/clear_hsts.html|/set_hsts2.html|/test_hsts2.html|/clear_hsts2.html|/hsts.js|/hsts2.js|/post_data.js|/test.css|/set_hsts.js|/test_hsts.js|/clear_hsts.js',
+        (req, res) => {
+          const headers = {
+            'Cache-Control': 'no-store',
+            'Access-Control-Allow-Origin': '*',
+          };
+          res.sendFile(path.normalize(__dirname + '/../static' + req.path), { headers });
+        });
 
 app.get('/set_hsts.png', (req, res) => {
   const headers = {
@@ -143,32 +124,26 @@ app.get('/clear_hsts.png', (req, res) => {
   res.sendFile('image.png', { root: __dirname, headers });
 });
 
-const passwordCounts = {};
+app.get('/set_hsts2_file.html', (req, res) => {
+  const headers = {
+    'Strict-Transport-Security': 'max-age=30',
+    'Cache-Control': 'max-age=0'
+  };
+  res.sendFile('page.html', { root: __dirname, headers });
+});
 
-// HTTP Basic Auth (not used for now)
-app.get('/auth', (req, res) => {
-  const auth = req.get('authorization');
-  console.log(auth);
-  if (auth) {
-    const decodedAuth = Buffer.from(auth.split('Basic ')[1], 'base64')
-      .toString('utf-8');
-    const [username, password] = decodedAuth.split(':');
-    if (passwordCounts[password]) {
-      passwordCounts[password] = passwordCounts[password] + 1;
-    } else {
-      passwordCounts[password] = 1;
-    }
-    const results = { username, password, count: passwordCounts[password] };
-    res.status(200);
-    res.send(JSON.stringify(results));
-  } else {
-    res.set({
-      'WWW-Authenticate': 'Basic realm="User Visible Realm", charset="UTF-8"',
-      'Cache-Control': 'max-age=0'
-    });
-    res.status(401);
-    res.send('empty');
-  }
+app.get('/test_hsts2_file.html', (req, res) => {
+  const headers = { 'Cache-Control': 'max-age=0',
+                    'Content-Type': 'text/html'};
+  res.sendFile('page.html', { root: __dirname, headers });
+});
+
+app.get('/clear_hsts2_file.html', (req, res) => {
+  const headers = {
+    'Strict-Transport-Security': 'max-age=0',
+    'Cache-Control': 'max-age=0'
+  };
+  res.sendFile('page.html', { root: __dirname, headers });
 });
 
 app.get('/headers', (req, res) => {

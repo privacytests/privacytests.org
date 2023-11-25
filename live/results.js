@@ -251,7 +251,7 @@ app.post('/post', (req, res) => {
     console.log(`Unknown sessionId '${sessionId}'; Sending 404.`);
     res.sendStatus(404);
   } else if (["supplementary", "insecure", "upgradable_address", "toplevel",
-              "nothing", "hsts", "tracking_cookies",
+              "nothing", "hsts", "hsts2", "tracking_cookies",
               "session_read_3p", "session_write_3p",
               "session_read_1p", "session_write_1p"].includes(category)) {
     try {
