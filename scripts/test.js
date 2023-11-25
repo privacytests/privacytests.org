@@ -301,6 +301,26 @@ const runHstsTest = async (browserSession, insecurePassed) => {
   }
 };
 
+// Run the HSTS cache supercookie test.
+const runHsts2Test = async (browserSession, insecurePassed) => {
+  if (!insecurePassed) {
+    const temp1 = await runPageTest(browserSession, `${kHstsRoot}/clear_hsts2.html`);
+    const temp2 = await runPageTest(browserSession, `${kHstsRoot}/set_hsts2.html`);
+    console.log({ temp1, temp2 });
+    return await runPageTest(browserSession, `${kInsecureRoot}/test_hsts2.html`);
+  } else {
+    return {
+      write: null,
+      read: null,
+      readSameFirstParty: null,
+      readDifferentFirstParty: 'HTTPS used by default; no HSTS cache issue expected',
+      passed: true,
+      testFailed: false,
+      unsupported: null
+    };
+  }
+};
+
 const analyzeTrackingCookieTestResults = (leakyHosts) => {
   const trackers = JSON.parse(fs.readFileSync('../static/trackers.json'));
   const analyzedResults = {};
@@ -373,8 +393,9 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
   if (!categories || categories.includes('https')) {
     const upgradableAddressResult = await runPageTest(browserSession, `${kUpgradableRoot}/upgradable.html?source=address`);
     const { insecureResult, insecurePassed } = await runInsecureTest(browserSession);
-    // HSTS supercookie test
+    // HSTS supercookie tests
     const hstsResult = await runHstsTest(browserSession, insecurePassed);
+    const hsts2Result = await runHsts2Test(browserSession, insecurePassed);
     results.https = {
       ...results.https,
       ...upgradableAddressResult,
@@ -382,7 +403,7 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
     };
     results.supercookies = {
       ...results.supercookies,
-      ...{ 'HSTS cache': hstsResult }
+      ...{ 'HSTS cache': hstsResult, 'HSTS cache (fetch)': hsts2Result }
     };
   }
   return results;
