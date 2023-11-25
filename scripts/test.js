@@ -635,7 +635,7 @@ const main = async () => {
     await DesktopBrowser.setGlobalProxyUsageEnabled(false);
     const activeVpnCount = await DesktopBrowser.countActiveVpns();
     if (activeVpnCount > 0) {
-      console.log(`VPNs detected: ${activeVpnCount}. Please disabled all VPNs.`);
+      console.log(`VPNs detected: ${activeVpnCount}. Please disable all VPNs.`);
       throw new Error('Active VPN detected.');
     }
     // Read config file and flags from command line
