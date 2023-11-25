@@ -633,6 +633,11 @@ const main = async () => {
   try {
     installTestFontIfNeeded();
     await DesktopBrowser.setGlobalProxyUsageEnabled(false);
+    const activeVpnCount = await DesktopBrowser.countActiveVpns();
+    if (activeVpnCount > 0) {
+      console.log(`VPNs detected: ${activeVpnCount}. Please disabled all VPNs.`);
+      throw new Error('Active VPN detected.');
+    }
     // Read config file and flags from command line
     const commandLineData = minimist(process.argv.slice(2));
     const config = readConfig(commandLineData);
