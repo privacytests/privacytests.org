@@ -200,18 +200,8 @@ const runMainTests = async (browserSession, categories) => {
     throw new Error('failed to get signal that the supercookie write finished');
   }
   const resultsPromise = nextBrowserValue(browserSession);
-  if (browserSession.browser.browser === 'onion') {
-    // Onion browser seems to need more handholding
-    await browserSession.browser.clickContent();
-    await openSessionUrl(browserSession, `${kIframeRootSame}/supercookies.html?mode=read&thirdparty=same`);
-  } else if (browserSession.browser instanceof AndroidBrowser || browserSession.browser instanceof IOSBrowser) {
-    // In mobile, we click the viewport to open a new tab.
-    await sleepMs(1000);
-    await browserSession.browser.clickContent();
-  } else {
-    // In desktop, we manually open a new tab.
-    await openSessionUrl(browserSession, `${kIframeRootSame}/supercookies.html?mode=read&thirdparty=same`);
-  }
+  // Open a new tab.
+  await openSessionUrl(browserSession, `${kIframeRootSame}/supercookies.html?mode=read&thirdparty=same`);
   // Return the main results.
   return resultsPromise;
 };
