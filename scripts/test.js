@@ -456,6 +456,7 @@ const runTestsBatch = async (
   const allTests = [];
   const timeStarted = new Date().toISOString();
   cookieProxy.simulateTrackingCookies(cookieProxyPort, debug);
+  const failures = [];
   for (let iter = 0; iter < repeat; ++iter) {
     for (const browserList of browserLists) {
       const timeStarted = new Date().toISOString();
@@ -472,6 +473,7 @@ const runTestsBatch = async (
         }
         for (let i = 0; i < browserList.length; ++i) {
           if (testResultsStage1[i].status === 'rejected' || (!android && !ios && testResultsStage2[i].status === 'rejected')) {
+            failures.push([browserList[i], testResultsStage1[i], testResultsStage2[i]]);
             continue;
           }
           const testResults = Object.assign({}, testResultsStage1[i].value, testResultsStage2[i]?.value);
@@ -504,6 +506,7 @@ const runTestsBatch = async (
         }
       }
     }
+    log('FAILURES: ', failures);
   }
   cookieProxy.stopTrackingCookieSimulation();
   const timeStopped = new Date().toISOString();
