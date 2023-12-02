@@ -506,8 +506,8 @@ const runTestsBatch = async (
         }
       }
     }
-    log('FAILURES: ', failures);
   }
+  log('FAILURES: ', failures);
   cookieProxy.stopTrackingCookieSimulation();
   const timeStopped = new Date().toISOString();
   let platform;
