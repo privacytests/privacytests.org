@@ -291,6 +291,17 @@ class DesktopBrowser {
     // Wait for proxy settings to propagate.
     await sleepMs(1000);
   }
+
+  static async countActiveVpns () {
+    try {
+      const response = execSync('ifconfig -v | grep VPN').toString();
+      const lines = response.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+      console.log(lines);
+      return lines.length;
+    } catch (e) {
+      return 0;
+    }
+  }
 }
 
 module.exports = { DesktopBrowser };
