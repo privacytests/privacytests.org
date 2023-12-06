@@ -23,6 +23,10 @@
        if (!event.origin.includes("privacytests")) {
          return;
        }
+       if (event.data.command === "disableDarkMode" || event.data.command === "enableDarkMode") {
+         return;
+       }
+       showData('event.data', event.data);
        removeEventListener("message", listener);
        const data = event.data;
        const topLevelResults = await runAllTests(await tests(), { category: "navigation_toplevel" });
