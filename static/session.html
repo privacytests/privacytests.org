@@ -24,6 +24,9 @@
            if (!origin.includes("privacytests")) {
              return;
            }
+           if (event.data.command === "disableDarkMode" || event.data.command === "enableDarkMode") {
+             return;
+           }
            document.body.setAttribute("data-test-results", JSON.stringify(data));
            const category = `session_${mode}_${firstParty ? "1p" : "3p"}`;
            await postData(data, category);
