@@ -12,19 +12,22 @@ const createSocket = () => new Promise((resolve, reject) => {
   }
 });
 
-const domainRegex = /\s([a-z0-9\-]+\.privacytests3\.org)[\s.]/;
+const domainRegex = /\s([a-z0-9\-]+\.privacytests3\.org)[\s.]/g;
 
 export const observeDomains = async () => {
   const socket = await createSocket();
   socket.on('data', (data) => {
     const text = data.toString();
-    const match = text.match(domainRegex);
-    if (match) {
-      domainsSeen.add(match[1]);
+    const matches = [...text.matchAll(domainRegex)];
+    for (const match of matches) {
+      const domain = match[1];
+      domainsSeen.add(domain);
+      console.log(`${Date.now()}-- observed domain: ${domain}`);
     }
   });
 };
 
 export const hasSeenDomain = (domain) => {
+  console.log(`${Date.now()}-- reporting ${domain}: ${domainsSeen.has(domain)}`);
   return domainsSeen.has(domain);
 };
