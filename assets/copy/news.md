@@ -1,4 +1,58 @@
 # News
+## [Issue 76](/archive/issue76): 2023-12-09
+
+### New browser versions
+
+On Desktop:
+* Brave 1.61
+* Chrome 120.0
+* Edge 120.0
+* Librewolf 120.0
+* Ungoogled 119.0
+
+On iOS:
+* Brave 1.60
+* Duckduckgo 7.99
+* Firefox 120.4
+* Yandex 2311.3
+
+On Android:
+* Duckduckgo 5.181
+* Firefox 120.1
+* Focus 120.1
+* Mull 120.0
+* Opera 79.1
+
+## [Issue 75](/archive/issue75): 2023-11-28
+
+### New browser versions
+
+On Desktop:
+* Firefox 120.0
+* Librewolf 120.0-2
+* Opera 105.0
+
+On iOS:
+* Brave 1.58
+* Duckduckgo 7.97
+* Edge 119.2151
+* Firefox 119.2
+* Focus 120.0
+* Opera 4.4
+* Safari 17.1
+* Yandex 2311.2
+
+On Android:
+* Brave 1.60
+* Chrome 119.0
+* Duckduckgo 5.179
+* Edge 119.0
+* Firefox 120.0
+* Focus 120.0
+* Opera 78.5
+* Vivaldi 6.4
+* Yandex 23.11
+
 ## [Issue 74](/archive/issue74): 2023-11-08
 
 ### New browser versions

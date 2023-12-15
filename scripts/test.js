@@ -201,18 +201,8 @@ const runMainTests = async (browserSession, categories) => {
     throw new Error('failed to get signal that the supercookie write finished');
   }
   const resultsPromise = nextBrowserValue(browserSession);
-  if (browserSession.browser.browser === 'onion') {
-    // Onion browser seems to need more handholding
-    await browserSession.browser.clickContent();
-    await openSessionUrl(browserSession, `${kIframeRootSame}/supercookies.html?mode=read&thirdparty=same`);
-  } else if (browserSession.browser instanceof AndroidBrowser || browserSession.browser instanceof IOSBrowser) {
-    // In mobile, we click the viewport to open a new tab.
-    await sleepMs(1000);
-    await browserSession.browser.clickContent();
-  } else {
-    // In desktop, we manually open a new tab.
-    await openSessionUrl(browserSession, `${kIframeRootSame}/supercookies.html?mode=read&thirdparty=same`);
-  }
+  // Open a new tab.
+  await openSessionUrl(browserSession, `${kIframeRootSame}/supercookies.html?mode=read&thirdparty=same`);
   // Return the main results.
   return resultsPromise;
 };
@@ -467,6 +457,7 @@ const runTestsBatch = async (
   const allTests = [];
   const timeStarted = new Date().toISOString();
   cookieProxy.simulateTrackingCookies(cookieProxyPort, debug);
+  const failures = [];
   for (let iter = 0; iter < repeat; ++iter) {
     for (const browserList of browserLists) {
       const timeStarted = new Date().toISOString();
@@ -483,6 +474,7 @@ const runTestsBatch = async (
         }
         for (let i = 0; i < browserList.length; ++i) {
           if (testResultsStage1[i].status === 'rejected' || (!android && !ios && testResultsStage2[i].status === 'rejected')) {
+            failures.push([browserList[i], testResultsStage1[i], testResultsStage2[i]]);
             continue;
           }
           const testResults = Object.assign({}, testResultsStage1[i].value, testResultsStage2[i]?.value);
@@ -516,6 +508,7 @@ const runTestsBatch = async (
       }
     }
   }
+  log('FAILURES: ', failures);
   cookieProxy.stopTrackingCookieSimulation();
   const timeStopped = new Date().toISOString();
   let platform;
