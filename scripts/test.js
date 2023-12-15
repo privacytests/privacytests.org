@@ -21,6 +21,7 @@ const WebSocket = require('ws');
 const cookieProxy = require('./cookie-proxy');
 const { sleepMs, readYAMLFile } = require('./utils');
 const path = require('node:path');
+const { runDnsTests } = require('./dns-test.js');
 
 // ## Constants
 
@@ -275,7 +276,7 @@ const runInsecureTest = async (browserSession) => {
     insecureResult = await insecureResultPromise;
     insecurePassed = false;
   } catch (e) {
-    insecureResult = { 'Insecure website': { passed: true, result: 'Insecure website never loaded' } };
+    insecureResult = { 'Insecure website warning': { passed: true, result: 'Insecure website never loaded' } };
     insecurePassed = true;
   }
   return { insecureResult, insecurePassed };
