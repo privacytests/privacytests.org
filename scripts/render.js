@@ -147,7 +147,7 @@ const resultsToDescription = ({
   //  let platformVersionFinal = platformVersion || "";
   let finalText = `
   <span>
-    <img class="browser-logo-image" src="${browserLogoDataUri(browser, nightly)}" width="32" height="32"><br>
+    <img class="browser-logo-image" alt="${browserFinal} logo" src="${browserLogoDataUri(browser, nightly)}" width="32" height="32"><br>
     ${browserFinal}<br>
     ${browserVersionShort}
   </span>`;
