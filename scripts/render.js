@@ -79,7 +79,7 @@ const htmlTable = ({ headers, body, className }) => {
         </th>`);
         firstSubheading = false;
       } else {
-        elements.push(`<td>${item}</td>`);
+        elements.push(`${item}`);
       }
     }
     elements.push('</tr>');
@@ -116,6 +116,9 @@ const tooltipScript = `
     visibleTooltip = tooltip;
   }
   document.addEventListener("mousedown", e => {
+    if (e.button !== 0) {
+      return;
+    }
     const tooltipParent = e.composedPath().filter(element => element.classList?.contains("tooltipParent"))[0];
     if (tooltipParent) {
       const tooltip = tooltipParent.querySelector(".tooltipText");
@@ -177,12 +180,12 @@ const allHaveValue = (x, value) => {
 const testBody = ({ passed, testFailed, tooltip, unsupported }) => {
   const allUnsupported = allHaveValue(unsupported, true);
   const anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : (passed === false);
-  return `<div class='dataPoint tooltipParent ${(allUnsupported) ? 'na' : (anyDidntPass ? 'bad' : 'good')}'
-> ${allUnsupported ? '&ndash;' : '&nbsp;'}
-<span class="tooltipText">${escapeHtml(tooltip)}</span>
-</div>`;
+  const altText = allUnsupported ? 'Unsupported' : (anyDidntPass ? 'Failed' : 'Passed');
+  return `<td class='tooltipParent'><img alt='${altText}' src='' class='dataPoint ${(allUnsupported) ? 'na' : (anyDidntPass ? 'bad' : 'good')}'
+>
+<span class="tooltipText">${escapeHtml(tooltip)}</span></td>`;
 };
-
+//  ${allUnsupported ? '&ndash;' : '&nbsp;'}
 const tooltipFunctions = {};
 
 // Creates a tooltip with fingerprinting test results
@@ -270,7 +273,7 @@ const resultsSection = ({ bestResults, category, tooltipFunction }) => {
   for (const rowName of rowNames) {
     const row = [];
     const description = bestResultsForCategory[rowName].description ?? '';
-    row.push(`<div class="tooltipParent">${rowName}<span class="tooltipText">${description}</span></div>`);
+    row.push(`<td><div class="tooltipParent">${rowName}<span class="tooltipText">${description}</span></div></td>`);
     for (const resultMap of resultMaps) {
       try {
         const tooltip = tooltipFunction(resultMap[rowName]);
@@ -359,9 +362,9 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
     </div>
     <div class="banner" id="legend">
       <div id="key">
-        <div><span class="marker good">&nbsp;</span>= Passed privacy test</div>
-        <div><span class="marker bad">&nbsp;</span>= Failed privacy test</div>
-        <div><span class="marker na">–</span>= No such feature</div>
+        <div><img class="marker good" alt="Passed"> = Passed privacy test</div>
+        <div><img class="marker bad" alt="Failed"> = Failed privacy test</div>
+        <div><img class="marker na" alt="Unsupported"> = No such feature</div>
       </div>
       <div class="banner" id="instructions">
         <div><span class="click-anywhere">(Click anywhere for more info.)</span></div>
