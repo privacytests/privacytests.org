@@ -15,7 +15,7 @@ const header = () => `
   <div class="title-wrapper">
     <div class="title">
       <a href="/">
-        <img height="48px" alt="PrivacyTests.org logo" src="${logoDataURI}">
+        <img class="pto-logo" alt="PrivacyTests.org logo" src="${logoDataURI}">
         <span>PrivacyTests.org</span>
       </a>
     </div>
@@ -28,16 +28,16 @@ const header = () => `
       <a href="/about">About</a>
     </div>
     <div class="link-header">
-      <a href="https://github.com/privacytests/privacytests.org" title="Source code on github.\nIssues are welcome!"><img alt="Github icon" src="${githubDataURI}" width=20></a>
+      <a href="https://github.com/privacytests/privacytests.org" title="Source code on github.\nIssues are welcome!"><img alt="Github icon" src="${githubDataURI}"></a>
     </div>
     <div class="link-header">
-      <a href="https://twitter.com/privacytests" title="@privacytests on Twitter.\nJoin the discussion!"><img alt="Twitter icon" src="${twitterDataURI}" width=20></a>
+      <a href="https://twitter.com/privacytests" title="@privacytests on Twitter.\nJoin the discussion!"><img alt="Twitter icon" src="${twitterDataURI}"></a>
     </div>
     <div class="link-header">
-      <a href="https://mastodon.social/@privacytests" title="@privacytests on Mastodon.\nJoin the discussion!" rel="me"><img alt="Mastodon icon" src="${mastodonDataURI}" width=20></a>
+      <a href="https://mastodon.social/@privacytests" title="@privacytests on Mastodon.\nJoin the discussion!" rel="me"><img alt="Mastodon icon" src="${mastodonDataURI}"></a>
     </div>
     <div class="link-header">
-      <a href="mailto:contact@privacytests.org" title="Contact me directly via email:\ncontact@privacytests.org.\nFeedback is welcome!"><img alt="Email icon" src="${emailDataURI}" width=20></a>
+      <a href="mailto:contact@privacytests.org" title="Contact me directly via email:\ncontact@privacytests.org.\nFeedback is welcome!"><img alt="Email icon" src="${emailDataURI}"></a>
     </div>
   </div>
 </div>`;
