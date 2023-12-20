@@ -11,7 +11,10 @@ const _ = require('lodash');
 const { readYAMLFile, dataUriFromFile } = require('./utils.js');
 const cleaner = require('clean-html');
 
-const cleanHtml = (content) => new Promise(resolve => cleaner.clean(content, { wrap: 0 }, resolve));
+const cleanHtml = (content) => new Promise(resolve => cleaner.clean(
+  content,
+  { wrap: 0, 'preserve-tags': ['script', 'style', 'pre'] },
+  resolve));
 
 const escapeHtml = str => str.replace(/[&<>'"]/g,
   tag => ({
@@ -186,7 +189,7 @@ const testBody = ({ passed, testFailed, tooltip, unsupported }) => {
   const altText = allUnsupported ? 'Unsupported' : (anyDidntPass ? 'Failed' : 'Passed');
   return `<td class='tooltipParent'><img alt='${altText}' src='' class='dataPoint ${(allUnsupported) ? 'na' : (anyDidntPass ? 'bad' : 'good')}'
 >
-<span class="tooltipText">${escapeHtml(tooltip)}</span></td>`;
+<pre class="tooltipText">${escapeHtml(tooltip)}</pre></td>`;
 };
 //  ${allUnsupported ? '&ndash;' : '&nbsp;'}
 const tooltipFunctions = {};
