@@ -223,7 +223,12 @@ tooltipFunctions.simple = (result) => {
   return text.trim();
 };
 
-const joinIfArray = x => Array.isArray(x) ? x.join(', ') : x;
+const joinIfArray = x => {
+  const isArray = Array.isArray(x);
+  const joined = isArray ? x.join(', ') : x;
+  const final = isArray && x[0] && x[0].length > 10 ? '\n' + joined.replaceAll(', ', ',\n') : joined;
+  return final;
+};
 
 tooltipFunctions.crossSite = (
   { write, read, readSameFirstParty, readDifferentFirstParty, passed, testFailed, unsupported }
