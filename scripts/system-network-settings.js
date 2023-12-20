@@ -1,4 +1,5 @@
 const { execSync } = require('child_process');
+const { _: { memoize } } = require('lodash');
 
 /*
 const exampleOutput = `
@@ -47,13 +48,13 @@ const getNetworkServices = () => {
   return parseNetworkServiceList(result);
 };
 
-const getPreferredNetworkService = () => {
+const getPreferredNetworkService = memoize(() => {
   const preferredNetworkService = getNetworkServices()[getPreferredDevice()];
   if (preferredNetworkService === undefined) {
     throw new Error('Preferred network service not found. Is a VPN running?');
   }
   return preferredNetworkService;
-};
+});
 
 const getDNS = (networkService) => {
   const response = run(`networksetup -getdnsservers "${networkService}"`);
@@ -68,6 +69,8 @@ const setDNS = (networkService, dnsAddresses) => {
   let addressCommands;
   if (dnsAddresses === undefined || (dnsAddresses && dnsAddresses.length === 0)) {
     addressCommands = '"Empty"';
+  } else if (dnsAddresses.map === undefined) {
+    addressCommands = `${dnsAddresses}`;
   } else {
     addressCommands = dnsAddresses.map(address => `"${address}"`).join(' ');
   }
