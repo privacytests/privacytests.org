@@ -284,10 +284,9 @@ const resultsSection = ({ bestResults, category, tooltipFunction }) => {
   for (const rowName of rowNames) {
     const row = [];
     const description = bestResultsForCategory[rowName].description ?? '';
-    row.push(`<td>
-                <div class="tooltipParent">${rowName}
-                  <span class="tooltipText">${escapeHtml(description)}</span>
-                </div>
+    row.push(`<td class="tooltipParent">
+                <div>${rowName}</div>
+                <span class="tooltipText">${escapeHtml(description)}</span>
               </td>`);
     for (const resultMap of resultMaps) {
       try {
@@ -295,7 +294,7 @@ const resultsSection = ({ bestResults, category, tooltipFunction }) => {
         const { passed, testFailed, unsupported } = resultMap[rowName];
         row.push(testBody({ passed, testFailed, tooltip, unsupported }));
       } catch (e) {
-        console.log("----", rowName, resultMap[rowName])
+        console.log('----', rowName, resultMap[rowName]);
         console.log(e, category, rowName, resultMap, resultMap[rowName]);
         throw e;
       }
