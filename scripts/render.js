@@ -277,6 +277,7 @@ const resultsSection = ({ bestResults, category, tooltipFunction }) => {
         const { passed, testFailed, unsupported } = resultMap[rowName];
         row.push(testBody({ passed, testFailed, tooltip, unsupported }));
       } catch (e) {
+        console.log("----", rowName, resultMap[rowName])
         console.log(e, category, rowName, resultMap, resultMap[rowName]);
         throw e;
       }
@@ -430,11 +431,11 @@ const aggregateRepeatedTrials = (results) => {
       const key = resultsToDescription(test);
       // console.log(key);
       if (aggregatedResults.has(key)) {
-        const theseTestResults = aggregatedResults.get(key).testResults;
-        if (theseTestResults) {
+        const testResultsForRound = aggregatedResults.get(key).testResults;
+        if (testResultsForRound) {
           for (const subcategory of ['supercookies', 'session_1p', 'session_3p', 'fingerprinting', 'https', 'misc', 'navigation',
             'query', 'trackers', 'tracker_cookies']) {
-            const someTests = theseTestResults[subcategory];
+            const someTests = testResultsForRound[subcategory];
             for (const testName in test.testResults[subcategory]) {
               for (const value in test.testResults[subcategory][testName]) {
                 if (resultsKeys.includes(value)) {
@@ -470,7 +471,7 @@ const getMergedResults = (dataFiles) => {
   return finalResults;
 };
 
-const renderPage = ({ dataFiles, live, aggregate }) => {
+const renderPage = ({ dataFiles, aggregate }) => {
   const resultsFilesJSON = (dataFiles && dataFiles.length > 0) ? dataFiles : [latestResultsFile('../results')];
   console.log(resultsFilesJSON);
   const resultsFileHTMLLatest = '../results/latest.html';
@@ -512,7 +513,7 @@ const renderPage = ({ dataFiles, live, aggregate }) => {
 };
 
 const render = async ({ dataFiles, live, aggregate }) => {
-  const { resultsFileHTML, resultsFilePreviewImage } = renderPage({ dataFiles, live, aggregate });
+  const { resultsFileHTML, resultsFilePreviewImage } = renderPage({ dataFiles, aggregate });
   if (!live) {
     open(fileUrl(resultsFileHTML));
     const createPreviewImage = (await import('./preview.mjs')).createPreviewImage;
