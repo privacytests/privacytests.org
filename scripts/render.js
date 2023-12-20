@@ -286,7 +286,7 @@ const resultsSection = ({ bestResults, category, tooltipFunction }) => {
     const description = bestResultsForCategory[rowName].description ?? '';
     row.push(`<td class="tooltipParent">
                 <div>${rowName}</div>
-                <span class="tooltipText">${escapeHtml(description)}</span>
+                <pre class="tooltipText">${escapeHtml(description)}</span>
               </td>`);
     for (const resultMap of resultMaps) {
       try {
