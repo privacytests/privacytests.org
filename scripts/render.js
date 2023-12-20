@@ -9,6 +9,9 @@ const minimist = require('minimist');
 const template = require('./template.js');
 const _ = require('lodash');
 const { readYAMLFile, dataUriFromFile } = require('./utils.js');
+const cleaner = require('clean-html');
+
+const cleanHtml = (content) => new Promise(resolve => cleaner.clean(content, { wrap: 0 }, resolve));
 
 const escapeHtml = str => str.replace(/[&<>'"]/g,
   tag => ({
@@ -383,15 +386,16 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
 };
 
 const contentPage = ({ results, title, basename, previewImageUrl, tableTitle, nightly, incognito }) =>
-  template.htmlPage({
-    title,
-    previewImageUrl,
-    cssFiles: [
-      path.join(__dirname, '/../assets/css/template.css'),
-      path.join(__dirname, '../assets/css/table.css')
-    ],
-    content: content(results, basename, tableTitle, nightly, incognito)
-  });
+  cleanHtml(
+    template.htmlPage({
+      title,
+      previewImageUrl,
+      cssFiles: [
+        path.join(__dirname, '/../assets/css/template.css'),
+        path.join(__dirname, '../assets/css/table.css')
+      ],
+      content: content(results, basename, tableTitle, nightly, incognito)
+    }));
 
 // Reads in a file and parses it to a JSON object.
 const readJSONFile = (file) =>
@@ -473,7 +477,7 @@ const getMergedResults = (dataFiles) => {
   return finalResults;
 };
 
-const renderPage = ({ dataFiles, live, aggregate }) => {
+const renderPage = async ({ dataFiles, live, aggregate }) => {
   const resultsFilesJSON = (dataFiles && dataFiles.length > 0) ? dataFiles : [latestResultsFile('../results')];
   console.log(resultsFilesJSON);
   const resultsFileHTMLLatest = '../results/latest.html';
@@ -499,7 +503,7 @@ const renderPage = ({ dataFiles, live, aggregate }) => {
     tableTitle = incognito ? 'Desktop private modes' : 'Desktop Browsers';
   }
   const basename = path.basename(resultsFilesJSON[0]);
-  fs.writeFileSync(resultsFileHTMLLatest, contentPage({
+  const content = await contentPage({
     title: 'PrivacyTests.org',
     tableTitle,
     nightly,
@@ -507,7 +511,8 @@ const renderPage = ({ dataFiles, live, aggregate }) => {
     basename,
     results: processedResults,
     previewImageUrl: path.basename(resultsFilePreviewImage)
-  }));
+  });
+  fs.writeFileSync(resultsFileHTMLLatest, content);
   console.log(`Wrote out ${fileUrl(resultsFileHTMLLatest)}`);
   fs.copyFileSync(resultsFileHTMLLatest, resultsFileHTML);
   console.log(`Wrote out ${fileUrl(resultsFileHTML)}`);
@@ -515,7 +520,7 @@ const renderPage = ({ dataFiles, live, aggregate }) => {
 };
 
 const render = async ({ dataFiles, live, aggregate }) => {
-  const { resultsFileHTML, resultsFilePreviewImage } = renderPage({ dataFiles, live, aggregate });
+  const { resultsFileHTML, resultsFilePreviewImage } = await renderPage({ dataFiles, live, aggregate });
   if (!live) {
     open(fileUrl(resultsFileHTML));
     const createPreviewImage = (await import('./preview.mjs')).createPreviewImage;
