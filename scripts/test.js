@@ -21,7 +21,7 @@ const WebSocket = require('ws');
 const cookieProxy = require('./cookie-proxy');
 const { sleepMs, readYAMLFile } = require('./utils');
 const path = require('node:path');
-const { runDnsTests } = require('./dns-test.js');
+// const { runDnsTests } = require('./dns-test.js');
 
 // ## Constants
 
