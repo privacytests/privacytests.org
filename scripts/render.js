@@ -81,7 +81,7 @@ const htmlTable = ({ headers, body, className }) => {
             <span class="subheading-title">${escapeHtml(item.subheading)}</span>
             <span class="tagline">${item.tagline}</span>
           </div>
-          <span class="tooltipText">${escapeHtml(description)}</span>
+          <pre class="tooltipText">${escapeHtml(description)}</span>
         </th>`);
         firstSubheading = false;
       } else {
@@ -117,7 +117,7 @@ const tooltipScript = `
     const tableRight = table.getClientRects()[0].right;
     const overflowX = tooltipRight- tableRight + 8;
     if (overflowX > 0) {
-      tooltip.style.transform="translate(" + (-overflowX) +"px, 0px)";
+      tooltip.style.transform="translate(" + (-overflowX) +"px, -12px)";
     }
     visibleTooltip = tooltip;
   }
