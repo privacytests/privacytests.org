@@ -9,6 +9,12 @@ const minimist = require('minimist');
 const template = require('./template.js');
 const _ = require('lodash');
 const { readYAMLFile, dataUriFromFile } = require('./utils.js');
+const cleaner = require('clean-html');
+
+const cleanHtml = (content) => new Promise(resolve => cleaner.clean(
+  content,
+  { wrap: 0, 'preserve-tags': ['script', 'style', 'pre'] },
+  resolve));
 
 const escapeHtml = str => str.replace(/[&<>'"]/g,
   tag => ({
@@ -79,7 +85,7 @@ const htmlTable = ({ headers, body, className }) => {
         </th>`);
         firstSubheading = false;
       } else {
-        elements.push(`<td>${item}</td>`);
+        elements.push(`${item}`);
       }
     }
     elements.push('</tr>');
@@ -116,6 +122,9 @@ const tooltipScript = `
     visibleTooltip = tooltip;
   }
   document.addEventListener("mousedown", e => {
+    if (e.button !== 0) {
+      return;
+    }
     const tooltipParent = e.composedPath().filter(element => element.classList?.contains("tooltipParent"))[0];
     if (tooltipParent) {
       const tooltip = tooltipParent.querySelector(".tooltipText");
@@ -147,7 +156,7 @@ const resultsToDescription = ({
   //  let platformVersionFinal = platformVersion || "";
   let finalText = `
   <span>
-    <img class="browser-logo-image" src="${browserLogoDataUri(browser, nightly)}" width="32" height="32"><br>
+    <img class="browser-logo-image" alt="${browserFinal} logo" src="${browserLogoDataUri(browser, nightly)}" width="32" height="32"><br>
     ${browserFinal}<br>
     ${browserVersionShort}
   </span>`;
@@ -177,12 +186,12 @@ const allHaveValue = (x, value) => {
 const testBody = ({ passed, testFailed, tooltip, unsupported }) => {
   const allUnsupported = allHaveValue(unsupported, true);
   const anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : (passed === false);
-  return `<div class='dataPoint tooltipParent ${(allUnsupported) ? 'na' : (anyDidntPass ? 'bad' : 'good')}'
-> ${allUnsupported ? '&ndash;' : '&nbsp;'}
-<span class="tooltipText">${escapeHtml(tooltip)}</span>
-</div>`;
+  const altText = allUnsupported ? 'Unsupported' : (anyDidntPass ? 'Failed' : 'Passed');
+  return `<td class='tooltipParent'><img alt='${altText}' src='' class='dataPoint ${(allUnsupported) ? 'na' : (anyDidntPass ? 'bad' : 'good')}'
+>
+<pre class="tooltipText">${escapeHtml(tooltip)}</pre></td>`;
 };
-
+//  ${allUnsupported ? '&ndash;' : '&nbsp;'}
 const tooltipFunctions = {};
 
 // Creates a tooltip with fingerprinting test results
@@ -270,7 +279,11 @@ const resultsSection = ({ bestResults, category, tooltipFunction }) => {
   for (const rowName of rowNames) {
     const row = [];
     const description = bestResultsForCategory[rowName].description ?? '';
-    row.push(`<div class="tooltipParent">${rowName}<span class="tooltipText">${description}</span></div>`);
+    row.push(`<td>
+                <div class="tooltipParent">${rowName}
+                  <span class="tooltipText">${escapeHtml(description)}</span>
+                </div>
+              </td>`);
     for (const resultMap of resultMaps) {
       try {
         const tooltip = tooltipFunction(resultMap[rowName]);
@@ -360,9 +373,9 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
     </div>
     <div class="banner" id="legend">
       <div id="key">
-        <div><span class="marker good">&nbsp;</span>= Passed privacy test</div>
-        <div><span class="marker bad">&nbsp;</span>= Failed privacy test</div>
-        <div><span class="marker na">–</span>= No such feature</div>
+        <div><img class="marker good" alt="Passed"> = Passed privacy test</div>
+        <div><img class="marker bad" alt="Failed"> = Failed privacy test</div>
+        <div><img class="marker na" alt="Unsupported"> = No such feature</div>
       </div>
       <div class="banner" id="instructions">
         <div><span class="click-anywhere">(Click anywhere for more info.)</span></div>
@@ -381,15 +394,16 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
 };
 
 const contentPage = ({ results, title, basename, previewImageUrl, tableTitle, nightly, incognito }) =>
-  template.htmlPage({
-    title,
-    previewImageUrl,
-    cssFiles: [
-      path.join(__dirname, '/../assets/css/template.css'),
-      path.join(__dirname, '../assets/css/table.css')
-    ],
-    content: content(results, basename, tableTitle, nightly, incognito)
-  });
+  cleanHtml(
+    template.htmlPage({
+      title,
+      previewImageUrl,
+      cssFiles: [
+        path.join(__dirname, '/../assets/css/template.css'),
+        path.join(__dirname, '../assets/css/table.css')
+      ],
+      content: content(results, basename, tableTitle, nightly, incognito)
+    }));
 
 // Reads in a file and parses it to a JSON object.
 const readJSONFile = (file) =>
@@ -471,7 +485,7 @@ const getMergedResults = (dataFiles) => {
   return finalResults;
 };
 
-const renderPage = ({ dataFiles, aggregate }) => {
+const renderPage = async ({ dataFiles, aggregate }) => {
   const resultsFilesJSON = (dataFiles && dataFiles.length > 0) ? dataFiles : [latestResultsFile('../results')];
   console.log(resultsFilesJSON);
   const resultsFileHTMLLatest = '../results/latest.html';
@@ -497,7 +511,7 @@ const renderPage = ({ dataFiles, aggregate }) => {
     tableTitle = incognito ? 'Desktop private modes' : 'Desktop Browsers';
   }
   const basename = path.basename(resultsFilesJSON[0]);
-  fs.writeFileSync(resultsFileHTMLLatest, contentPage({
+  const content = await contentPage({
     title: 'PrivacyTests.org',
     tableTitle,
     nightly,
@@ -505,7 +519,8 @@ const renderPage = ({ dataFiles, aggregate }) => {
     basename,
     results: processedResults,
     previewImageUrl: path.basename(resultsFilePreviewImage)
-  }));
+  });
+  fs.writeFileSync(resultsFileHTMLLatest, content);
   console.log(`Wrote out ${fileUrl(resultsFileHTMLLatest)}`);
   fs.copyFileSync(resultsFileHTMLLatest, resultsFileHTML);
   console.log(`Wrote out ${fileUrl(resultsFileHTML)}`);
@@ -513,7 +528,7 @@ const renderPage = ({ dataFiles, aggregate }) => {
 };
 
 const render = async ({ dataFiles, live, aggregate }) => {
-  const { resultsFileHTML, resultsFilePreviewImage } = renderPage({ dataFiles, aggregate });
+  const { resultsFileHTML, resultsFilePreviewImage } = await renderPage({ dataFiles, aggregate });
   if (!live) {
     open(fileUrl(resultsFileHTML));
     const createPreviewImage = (await import('./preview.mjs')).createPreviewImage;
