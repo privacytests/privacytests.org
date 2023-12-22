@@ -1,4 +1,24 @@
 # News
+## [Issue 77](/archive/issue77): 2023-12-20
+
+### New browser versions
+
+On Desktop:
+* Firefox 121.0
+* Ungoogled 120.0
+* Vivaldi 6.5
+
+On iOS:
+* Chrome 120.6099
+* Duckduckgo 7.101
+* Vivaldi 6.3212
+
+On Android:
+* Brave 1.61
+* Chrome 120.0
+* Duckduckgo 5.182
+* Opera 79.2
+
 ## [Issue 76](/archive/issue76): 2023-12-09
 
 ### New browser versions
