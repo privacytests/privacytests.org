@@ -1,4 +1,6 @@
 # News
+## [Issue 77](/archive/issue77): 2023-12-20
+
 ## [Issue 76](/archive/issue76): 2023-12-09
 
 ### New browser versions
