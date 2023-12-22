@@ -222,11 +222,11 @@ app.get('/step', (req, res) => {
   res.json({step: stepCounters[sessionId] ?? 0, length: pageSequence.length});
 });
 
-app.get('/me', (req, res) => {
+app.get('/me', async (req, res) => {
   const { sessionId } = req.query;
   const testResults = processResults(sessionResults.get(sessionId));
   const data = { all_tests: [{browser: "mine", incognito: false, nightly: false, testResults}], git: "fake_git_string"};
-  const page = contentPage({results: data, title: "PrivacyTests.org: my browser", basename: "basename",
+  const page = await contentPage({results: data, title: "PrivacyTests.org: my browser", basename: "basename",
                             previewImageUrl: null, tableTitle: "my browser", nightly: false, incognito: false});
   console.log(page);
   res.send(page);
