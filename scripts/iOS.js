@@ -9,8 +9,8 @@ const browserInfo = {
     name: 'Brave',
     bundleId: 'com.brave.ios.browser',
     startupClick: 'No',
-    urlBarClick: 'url',
-    urlBarKeys: 'url',
+    urlBarClick: 'Search or enter address',
+    urlBarKeys: 'Search or enter address',
     privateWindow: ['TabToolbar.tabsButton', 'Private Mode', 'TabTrayController.doneButton']
     // Brave starts in normal window mode.
   },
