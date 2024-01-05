@@ -492,7 +492,7 @@ const getMergedResults = (dataFiles) => {
 
 const createTitle = ({ nightly, incognito, timeStarted, platform }) => {
   const year = (new Date(timeStarted)).getFullYear().toString();
-  return `Best private ${nightly ? 'alpha ' : ''}${incognito ? 'incognito modes' : 'browsers'} on ${platform} in ${year}`;
+  return `Best ${nightly ? 'alpha ' : ''}${incognito ? 'incognito modes' : 'private browsers'} on ${platform} in ${year}`;
 };
 
 const renderPage = async ({ dataFiles, aggregate }) => {
