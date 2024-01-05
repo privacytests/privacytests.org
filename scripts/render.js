@@ -401,6 +401,7 @@ const contentPage = ({ results, title, basename, previewImageUrl, tableTitle, ni
   cleanHtml(
     template.htmlPage({
       title,
+      date: new Date(results.timeStarted),
       previewImageUrl,
       cssFiles: [
         path.join(__dirname, '/../assets/css/template.css'),
@@ -489,6 +490,11 @@ const getMergedResults = (dataFiles) => {
   return finalResults;
 };
 
+const createTitle = ({ nightly, incognito, timeStarted, platform }) => {
+  const year = (new Date(timeStarted)).getFullYear().toString();
+  return `Best private ${nightly ? 'alpha ' : ''}${incognito ? 'incognito modes' : 'browsers'} on ${platform} in ${year}`;
+};
+
 const renderPage = async ({ dataFiles, aggregate }) => {
   const resultsFilesJSON = (dataFiles && dataFiles.length > 0) ? dataFiles : [latestResultsFile('../results')];
   console.log(resultsFilesJSON);
@@ -516,7 +522,7 @@ const renderPage = async ({ dataFiles, aggregate }) => {
   }
   const basename = path.basename(resultsFilesJSON[0]);
   const content = await contentPage({
-    title: 'PrivacyTests.org',
+    title: createTitle({ platform: results.platform, nightly, incognito, timeStarted: processedResults.timeStarted }),
     tableTitle,
     nightly,
     incognito,
