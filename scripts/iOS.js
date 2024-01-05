@@ -9,8 +9,10 @@ const browserInfo = {
     name: 'Brave',
     bundleId: 'com.brave.ios.browser',
     startupClick: 'No',
-    urlBarClick: 'url',
-    urlBarKeys: 'url',
+    urlBarClick: 'Search or enter address',
+    urlBarClick2: 'url',
+    urlBarKeys: 'Search or enter address',
+    urlBarKeys2: 'url',
     privateWindow: ['TabToolbar.tabsButton', 'Private Mode', 'TabTrayController.doneButton']
     // Brave starts in normal window mode.
   },
@@ -18,7 +20,6 @@ const browserInfo = {
     name: 'Chrome',
     bundleId: 'com.google.chrome.ios',
     urlBarClick: 'NTPHomeFakeOmniboxAccessibilityID',
-    // urlBarClick2: "Toolbar",
     urlBarClick2: 'Address and search bar',
     urlBarKeys: 'Address',
     privateWindow: ['kToolbarStackButtonIdentifier', 'TabGridIncognitoTabsPageButtonIdentifier', 'TabGridDoneButtonIdentifier'],
@@ -219,8 +220,6 @@ class IOSBrowser {
         }
         if (urlBarToClick === undefined) {
           urlBarToClick = await findElementWithName(this.client, this.urlBarKeys);
-          // await sleepMs(1000);
-          // urlBarToClick = await findElementWithId(this.client, this.packageName, this.urlBarClick);
         }
       }
     }
@@ -233,7 +232,10 @@ class IOSBrowser {
         console.log(e);
       }
     }
-    const urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys);
+    let urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys);
+    if (urlBarToSendKeys === undefined && this.urlBarKeys2) {
+      urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys2);
+    }
     await this.client.elementSendKeys(urlBarToSendKeys, url);
     const goButton = await findElementWithName(this.client, 'Go');
     await this.client.elementClick(goButton);
