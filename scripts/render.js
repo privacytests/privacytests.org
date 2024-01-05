@@ -493,7 +493,7 @@ const getMergedResults = (dataFiles) => {
 const createTitle = ({ nightly, incognito, timeStarted, platform }) => {
   const year = (new Date(timeStarted)).getFullYear().toString();
   const onPlatformPhrase = platform === "Desktop" ? "" : `on ${platform} `;
-  return `Best ${nightly ? 'alpha ' : ''}${incognito ? 'incognito modes' : 'private browsers'} ${onPlatformPhrase}in ${year}`;
+  return `What are the best ${nightly ? 'alpha ' : ''}${incognito ? 'incognito modes' : 'private browsers'} ${onPlatformPhrase}in ${year}?`;
 };
 
 const renderPage = async ({ dataFiles, aggregate }) => {

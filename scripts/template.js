@@ -63,7 +63,7 @@ const htmlPage = ({ content, cssFiles, previewImageUrl, title }) => {
     <meta charset='utf8'/>
     ${ogImageIfNeeded}
     <link href="${faviconDataURI}" rel="icon" type="image/x-icon">
-    <title>PrivacyTests.org | ${title}</title>
+    <title>${title}</title>
     <meta name="description" content="PrivacyTests.org subjects major web browsers to a suite of automated tests to find out: which web browsers offer the best privacy protections?">
     <meta name="format-detection" content="telephone=no">
     <style>${inlineCSS}</style>
