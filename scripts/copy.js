@@ -15,7 +15,7 @@ const generateHtmlFile = async (filename) => {
   const newFilename = filename.replace('.md', '.html');
   const previewFilename = filename.replace('.md', '-preview.png');
   const htmlOutput = template.htmlPage({
-    title: 'Browser Privacy Tests',
+    title: 'Open-source tests of web browser privacy',
     content: wrapCopy(marked.parse(copy)),
     cssFiles: ['../assets/css/template.css'],
     previewImageUrl: previewFilename

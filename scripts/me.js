@@ -26,7 +26,8 @@ const main = () => {
       cssFiles: [
         path.join(__dirname, '/../assets/css/me.css'),
         path.join(__dirname, '/../assets/css/template.css')
-      ]
+      ],
+      title: 'Test my browser'
     }));
 };
 
