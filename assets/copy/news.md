@@ -1,4 +1,25 @@
 # News
+## [Issue 78](/archive/issue78): 2024-01-05
+
+### New browser versions
+
+On Desktop:
+* Librewolf 121.0-1
+
+On iOS:
+* Edge 120.2210
+* Firefox 121.0
+* Focus 121.0
+* Safari 17.2
+* Yandex 2311.7
+
+On Android:
+* Edge 120.0
+* Firefox 121.0
+* Focus 121.0
+* Mull 121.0
+* Opera 79.3
+
 ## [Issue 77](/archive/issue77): 2023-12-20
 
 ### New browser versions
