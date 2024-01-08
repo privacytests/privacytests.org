@@ -5,10 +5,10 @@ const net = require('node:net');
 
 const domainsSeen = new Set();
 
-const createSocket = () => new Promise((resolve, reject) => {
+const createSocket = (port) => new Promise((resolve, reject) => {
   try {
     const socket = net.createConnection(
-      9999,
+      port,
       () => resolve(socket));
   } catch (e) {
     reject(e);
@@ -18,7 +18,7 @@ const createSocket = () => new Promise((resolve, reject) => {
 const domainRegex = /\s([a-z0-9\-]+\.privacytests3\.org)[\s.]/g;
 
 const observeDomains = async () => {
-  const socket = await createSocket();
+  const socket = await createSocket(9999);
   socket.on('data', (data) => {
     const text = data.toString();
     const matches = [...text.matchAll(domainRegex)];
@@ -117,40 +117,13 @@ const dnsTestDefinitions = [
   }
 ];
 
-const testTestDefinitions = [
-  {
-    name: 'South Africa',
-    country: 'za'
-  },
-  {
-    name: 'South Africa',
-    country: 'za'
-  },
-  {
-    name: 'South Africa',
-    country: 'za'
-  },
-  {
-    name: 'South Africa',
-    country: 'za'
-  },
-  {
-    name: 'South Africa',
-    country: 'za'
-  }
-];
-
 const checkForSecureDns = async (browserSession) => {
   await sleepMs(60000);
   const testDomain = generateRandomTestDomain();
   console.log(`${Date.now()} -- opening ${testDomain}`);
   browserSession.browser.openUrl(`http://${testDomain}/`);
-  /* for (let i = 0; i < 10; ++i) {
-    await sleepMs(i * 500);
-    dnsMonitor.hasSeenDomain(testDomain);
-  } */
   await sleepMs(2000);
-  const unencrypted = dnsMonitor.hasSeenDomain(testDomain);
+  const unencrypted = hasSeenDomain(testDomain);
   return !unencrypted;
 };
 
@@ -174,15 +147,6 @@ const runDnsTests = async (browserSessions) => {
   }
   systemNetworkSettings.setDNS(preferredNetworkService, originalDnsIps);
   await disableVpn();
-  return results;
-};
-
-const expt = async () => {
-  const results = [];
-  for (let i = 0; i < 10; ++i) {
-    const r = await runDnsTests([bs2]);
-    results.push(r);
-  }
   return results;
 };
 
