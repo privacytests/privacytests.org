@@ -1,5 +1,5 @@
 const systemNetworkSettings = require('./system-network-settings');
-const { sleepMs, execAsync } = require('./utils');
+const { sleepMs } = require('./utils');
 const domainCharacters = 'abcdefghijklmnopqrstuvwxyz0123456789';
 const net = require('node:net');
 
@@ -149,10 +149,16 @@ const runDnsTests = async (browserSessions) => {
   const stopObserving = await observeDomains();
   const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
   const originalDnsIps = systemNetworkSettings.getDNS(preferredNetworkService);
+  // Restart all browsers with a fresh profile:
+  await Promise.all(browserSessions.map(session => session.browser.restart(true)));
   const results = [];
   for (const testDef of dnsTestDefinitions) {
-    const passed = await testIfDnsIsEncrypted(browserSessions, testDef);
-    results.push({ ...testDef, passed });
+    const passedList = await testIfDnsIsEncrypted(browserSessions, testDef);
+    const n = passedList.length;
+    for (let i = 0; i < n; ++i) {
+      results[i] ??= { dns: {} };
+      results[i].dns[testDef.name] = { passed: passedList[i] };
+    }
   }
   systemNetworkSettings.setDNS(preferredNetworkService, originalDnsIps);
   stopObserving();

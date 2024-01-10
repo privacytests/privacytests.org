@@ -21,7 +21,7 @@ const WebSocket = require('ws');
 const cookieProxy = require('./cookie-proxy');
 const { sleepMs, readYAMLFile } = require('./utils');
 const path = require('node:path');
-// const { runDnsTests } = require('./dns-test.js');
+const { runDnsTests } = require('./dns-test.js');
 
 // ## Constants
 
@@ -467,17 +467,19 @@ const runTestsBatch = async (
         console.log({ browserSessions });
         const testResultsStage1 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage1({ browserSession, categories }), 600000), browserSessions);
         let testResultsStage2 = [];
+        let testResultsStage3 = [];
         if (!android && !ios) {
           await DesktopBrowser.setGlobalProxyUsageEnabled(true, cookieProxyPort);
           testResultsStage2 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage2({ browserSession, categories }), 100000), browserSessions);
           await DesktopBrowser.setGlobalProxyUsageEnabled(false);
+          testResultsStage3 = await runDnsTests(browserSessions);
         }
         for (let i = 0; i < browserList.length; ++i) {
           if (testResultsStage1[i].status === 'rejected' || (!android && !ios && testResultsStage2[i].status === 'rejected')) {
             failures.push([browserList[i], testResultsStage1[i], testResultsStage2[i]]);
             continue;
           }
-          const testResults = Object.assign({}, testResultsStage1[i].value, testResultsStage2[i]?.value);
+          const testResults = Object.assign({}, testResultsStage1[i].value, testResultsStage2[i]?.value, testResultsStage3[i]);
           const { browser, incognito, tor, nightly } = browserList[i];
           allTests.push({
             browser,
