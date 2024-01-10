@@ -28,6 +28,11 @@ const observeDomains = async () => {
       console.log(`${Date.now()}-- observed domain: ${domain}`);
     }
   });
+  const stop = () => {
+    socket.destroy();
+    domainsSeen.clear();
+  };
+  return stop;
 };
 
 const hasSeenDomain = (domain) => {
@@ -44,13 +49,16 @@ const generateRandomTestDomain = () => {
   return `${subdomain}.privacytests3.org`;
 };
 
-const enableVpn = () => execAsync('mullvad connect');
+// const enableVpn = () => execAsync('mullvad connect');
 
-const disableVpn = () => execAsync('mullvad disconnect');
+// const disableVpn = () => execAsync('mullvad disconnect');
 
 const setCountry = (browserSessions, countryCode) =>
   Promise.allSettled(browserSessions.map(async (browserSession) => {
     const browser = browserSession.browser;
+    // Right now we override the Firefox country. Other browsers
+    // don't seem to have locale-based settings, so we do nothing
+    // for those.
     if (browser._defaults.basedOn === 'firefox') {
       await browser.setPref('doh-rollout.home-region', countryCode.toUpperCase());
     }
@@ -138,16 +146,17 @@ const testIfDnsIsEncrypted = async (browserSessions, { ip, country }) => {
 };
 
 const runDnsTests = async (browserSessions) => {
+  const stopObserving = await observeDomains();
   const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
   const originalDnsIps = systemNetworkSettings.getDNS(preferredNetworkService);
   const results = [];
-  for (const testDef of /* testTestDefinitions */ dnsTestDefinitions) {
+  for (const testDef of dnsTestDefinitions) {
     const passed = await testIfDnsIsEncrypted(browserSessions, testDef);
     results.push({ ...testDef, passed });
   }
   systemNetworkSettings.setDNS(preferredNetworkService, originalDnsIps);
-  await disableVpn();
+  stopObserving();
   return results;
 };
 
-module.exports = { observeDomains, runDnsTests };
+module.exports = { runDnsTests };
