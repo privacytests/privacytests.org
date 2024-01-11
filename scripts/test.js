@@ -257,11 +257,11 @@ const runSessionTests = async (browserSession) => {
 
 // Run the insecure connection test. Returns { insecureResults, insecurePassed }.
 const runInsecureTest = async (browserSession) => {
-  const timeout = (browserSession.browser instanceof DesktopBrowser) ? 8000 : 30000;
-  const insecureResultPromise = nextBrowserValue(browserSession, timeout);
-  await openSessionUrl(browserSession, `${kInsecureRoot}/insecure.html`);
   let insecureResult, insecurePassed;
   try {
+    const timeout = (browserSession.browser instanceof DesktopBrowser) ? 8000 : 30000;
+    const insecureResultPromise = nextBrowserValue(browserSession, timeout);
+    await openSessionUrl(browserSession, `${kInsecureRoot}/insecure.html`);
     log('now trying');
     insecureResult = await insecureResultPromise;
     insecurePassed = false;
@@ -568,6 +568,7 @@ const configToBrowserList = (config) => {
         nightly: !!config.nightly,
         incognito: !!config.incognito,
         android: !!config.android,
+        tor: !!config.tor,
         ios: !!config.ios,
         appDir: config['app-dir']
       });
