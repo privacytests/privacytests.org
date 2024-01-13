@@ -258,11 +258,11 @@ const runSessionTests = async (browserSession) => {
 
 // Run the insecure connection test. Returns { insecureResults, insecurePassed }.
 const runInsecureTest = async (browserSession) => {
-  const timeout = (browserSession.browser instanceof DesktopBrowser) ? 8000 : 30000;
-  const insecureResultPromise = nextBrowserValue(browserSession, timeout);
-  await openSessionUrl(browserSession, `${kInsecureRoot}/insecure.html`);
   let insecureResult, insecurePassed;
   try {
+    const timeout = (browserSession.browser instanceof DesktopBrowser) ? 8000 : 30000;
+    const insecureResultPromise = nextBrowserValue(browserSession, timeout);
+    await openSessionUrl(browserSession, `${kInsecureRoot}/insecure.html`);
     log('now trying');
     insecureResult = await insecureResultPromise;
     insecurePassed = false;
@@ -468,7 +468,7 @@ const runTestsBatch = async (
         console.log({ browserSessions });
         const testResultsStage1 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage1({ browserSession, categories }), 600000), browserSessions);
         let testResultsStage2 = [];
-        let testResultsStage3 = [];
+        const testResultsStage3 = [];
         if (!android && !ios) {
           await DesktopBrowser.setGlobalProxyUsageEnabled(true, cookieProxyPort);
           testResultsStage2 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage2({ browserSession, categories }), 100000), browserSessions);
@@ -573,6 +573,7 @@ const configToBrowserList = (config) => {
         nightly: !!config.nightly,
         incognito: !!config.incognito,
         android: !!config.android,
+        tor: !!config.tor,
         ios: !!config.ios,
         appDir: config['app-dir']
       });
