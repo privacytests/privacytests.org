@@ -24,6 +24,7 @@ const macOSdefaultBrowserSettings = {
     nightlyName: 'Brave Browser Nightly',
     privateFlag: 'incognito',
     torFlag: 'tor',
+    torPostLaunchDelay: 10000,
     basedOn: 'chromium',
     update: ['Brave', 'About Brave'],
     updateNightly: ['Brave', 'About Brave']
@@ -216,7 +217,7 @@ class DesktopBrowser {
       }
     }
     this._process = exec(this._command, { env: this._defaults.env });
-    await sleepMs(this._defaults.postLaunchDelay ?? 500);
+    await sleepMs(this.tor ? this._defaults.torPostLaunchDelay : (this._defaults.postLaunchDelay ?? 500));
     if (this.incognito && this._defaults.incognitoCommand) {
       exec(`${this._defaults.incognitoCommand} "${this._appName}"`);
       await sleepMs(1000);
@@ -317,6 +318,10 @@ class DesktopBrowser {
     } catch (e) {
       return 0;
     }
+  }
+
+  static hasTorWindows (browserName) {
+    return !!macOSdefaultBrowserSettings[browserName].torFlag;
   }
 }
 
