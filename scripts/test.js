@@ -203,8 +203,13 @@ const runMainTests = async (browserSession, categories) => {
   const resultsPromise = nextBrowserValue(browserSession);
   // Open a new tab.
   await openSessionUrl(browserSession, `${kIframeRootSame}/supercookies.html?mode=read&thirdparty=same`);
+  const results = await resultsPromise;
+  // DuckDuckGo needs some personal validation
+  if (browserSession.browser instanceof AndroidBrowser) {
+    await browserSession.browser.highFiveIfNecessary();
+  }
   // Return the main results.
-  return resultsPromise;
+  return results;
 };
 
 // Combine same-session results with cross-session results.
