@@ -237,8 +237,9 @@ class IOSBrowser {
       urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys2);
     }
     await this.client.elementSendKeys(urlBarToSendKeys, url);
-    const goButton = await findElementWithName(this.client, 'Go');
-    await this.client.elementClick(goButton);
+//    const goButton = await findElementWithName(this.client, 'Go');
+//    await this.client.elementClick(goButton);
+    await this.client.elementSendKeys(urlBarToSendKeys, "\r")
   }
 
   // Clean up and close the browser.
