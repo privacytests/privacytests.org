@@ -473,7 +473,7 @@ const runTestsBatch = async (
         console.log({ browserSessions });
         const testResultsStage1 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage1({ browserSession, categories }), 600000), browserSessions);
         let testResultsStage2 = [];
-        const testResultsStage3 = [];
+        let testResultsStage3 = [];
         if (!android && !ios) {
           await DesktopBrowser.setGlobalProxyUsageEnabled(true, cookieProxyPort);
           testResultsStage2 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage2({ browserSession, categories }), 100000), browserSessions);
