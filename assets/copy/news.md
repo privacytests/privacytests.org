@@ -1,4 +1,25 @@
 # News
+## [Issue 79](/archive/issue79): 2024-01-18
+
+### New browser versions
+
+On Desktop:
+* Opera 106.0
+* Safari 17.2
+
+On iOS:
+* Brave 1.61
+* Duckduckgo 7.104
+* Firefox 121.2
+* Vivaldi 6.3212
+
+On Android:
+* Duckduckgo 5.183
+* Firefox 121.1
+* Focus 121.1
+* Opera 79.5
+* Vivaldi 6.5
+
 ## [Issue 78](/archive/issue78): 2024-01-05
 
 ### New browser versions
