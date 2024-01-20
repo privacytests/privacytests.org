@@ -21,7 +21,8 @@ const WebSocket = require('ws');
 const cookieProxy = require('./cookie-proxy');
 const { sleepMs, readYAMLFile } = require('./utils');
 const path = require('node:path');
-// const { runDnsTests } = require('./dns-test.js');
+const { runDnsTests } = require('./dns-test.js');
+const systemNetworkSettings = require('./system-network-settings');
 
 // ## Constants
 
@@ -477,7 +478,9 @@ const runTestsBatch = async (
           await DesktopBrowser.setGlobalProxyUsageEnabled(true, cookieProxyPort);
           testResultsStage2 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage2({ browserSession, categories }), 100000), browserSessions);
           await DesktopBrowser.setGlobalProxyUsageEnabled(false);
-          // testResultsStage3 = await runDnsTests(browserSessions);
+          if (!categories || categories.includes('dns')) {
+            testResultsStage3 = await runDnsTests(browserSessions);
+          }
         }
         for (let i = 0; i < browserList.length; ++i) {
           if (testResultsStage1[i].status === 'rejected' || (!android && !ios && testResultsStage2[i].status === 'rejected')) {
@@ -585,12 +588,15 @@ const configToBrowserList = (config) => {
 };
 
 let cleanupRan = false;
+let originalDnsIps;
 const cleanup = async () => {
   if (cleanupRan) {
     return;
   }
   log('cleaning up');
   await DesktopBrowser.setGlobalProxyUsageEnabled(false);
+  const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
+  systemNetworkSettings.setDNS(preferredNetworkService, originalDnsIps);
   cleanupRan = true;
 };
 
@@ -629,12 +635,14 @@ const main = async () => {
     process.on(eventType, (code) => {
       log(eventType, code);
       cleanup(eventType);
-      process.exit(code);
+      process.exit(eventType === 'uncaughtException' ? 1 : 0);
     });
   });
   try {
     installTestFontIfNeeded();
     await DesktopBrowser.setGlobalProxyUsageEnabled(false);
+    const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
+    originalDnsIps = systemNetworkSettings.getDNS(preferredNetworkService);
     const activeVpnCount = await DesktopBrowser.countActiveVpns();
     if (activeVpnCount > 0) {
       console.log(`VPNs detected: ${activeVpnCount}. Please disable all VPNs.`);

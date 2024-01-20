@@ -66,63 +66,42 @@ const setCountry = (browserSessions, countryCode) =>
 
 // execAsync(`mullvad relay set location ${countryCode}`);
 
+const ispDescription = (name) => `
+  Checks whether the browser decides to use
+  encrypted DNS if the operating system's default DNS provider is ${name}.`;
+
+const ispDefinition = (isp, ip) =>
+  ({
+    name: `OS DNS: ${isp}`,
+    ip,
+    description: ispDescription(isp)
+  });
+
+const locationDescription = (name) => `
+  Checks whether the browser decides to use
+  encrypted DNS if the computer is located in ${name}.`;
+
+const locationDefinition = (countryName, countryCode) =>
+  ({
+    name: `Location: ${countryName}`,
+    country: countryCode,
+    description: locationDescription(countryName)
+  });
+
 const dnsTestDefinitions = [
-  {
-    name: 'OS DNS = Comcast',
-    ip: '75.75.75.75'
-  },
-  {
-    name: 'OS DNS = Comodo',
-    ip: '8.26.56.26'
-  },
-  {
-    name: 'OS DNS = Cox',
-    ip: '68.105.28.11'
-  },
-  {
-    name: 'OS DNS = Cloudflare',
-    ip: '1.1.1.1'
-  },
-  {
-    name: 'OS DNS = Google',
-    ip: '8.8.8.8'
-  },
-  {
-    name: 'OS DNS = Quad9',
-    ip: '9.9.9.9'
-  },
-  {
-    name: 'Brazil',
-    country: 'br'
-  },
-  {
-    name: 'China',
-    country: 'cn'
-  },
-  {
-    name: 'Germany',
-    country: 'de'
-  },
-  {
-    name: 'India',
-    country: 'in'
-  },
-  {
-    name: 'Indonesia',
-    country: 'id'
-  },
-  {
-    name: 'Nigeria',
-    country: 'ng'
-  },
-  {
-    name: 'Russia',
-    country: 'ru'
-  },
-  {
-    name: 'United States',
-    country: 'us'
-  }
+  ispDefinition('Comcast', '75.75.75.75'),
+  ispDefinition('Comodo', '8.26.56.26'),
+  ispDefinition('Cox', '68.105.28.11'),
+  ispDefinition('Cloudflare', '1.1.1.1'),
+  ispDefinition('Google', '8.8.8.8'),
+  ispDefinition('Quad9', '9.9.9.9'),
+  locationDefinition('Brazil', 'br'),
+  locationDefinition('China', 'cn'),
+  locationDefinition('Germany', 'de'),
+  locationDefinition('India', 'in'),
+  locationDefinition('Nigeria', 'ng'),
+  locationDefinition('Russia', 'ru'),
+  locationDefinition('United States', 'us')
 ];
 
 const checkForSecureDns = async (browserSession) => {
@@ -156,8 +135,9 @@ const runDnsTests = async (browserSessions) => {
     const passedList = await testIfDnsIsEncrypted(browserSessions, testDef);
     const n = passedList.length;
     for (let i = 0; i < n; ++i) {
+      const passed = passedList[i];
       results[i] ??= { dns: {} };
-      results[i].dns[testDef.name] = { passed: passedList[i] };
+      results[i].dns[testDef.name] = { passed, description: testDef.description, 'leak detected': !passed };
     }
   }
   systemNetworkSettings.setDNS(preferredNetworkService, originalDnsIps);

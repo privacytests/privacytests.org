@@ -57,7 +57,7 @@ const macOSdefaultBrowserSettings = {
     nightlyName: 'Firefox Nightly',
     privateFlag: 'private-window',
     basedOn: 'firefox',
-    env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
+    env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1', MOZ_CRASHREPORTER_DISABLE: '1' },
     update: ['Firefox', 'About Firefox'],
     updateNightly: ['Firefox Nightly', 'About Nightly']
   },
