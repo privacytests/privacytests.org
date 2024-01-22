@@ -20,7 +20,12 @@ let fetchText = async (...args) => {
 };
 
 const { ipAddress, usingTor } = await (async () => {
-  const response = await fetch("https://wtfismyip.com/json");
+  let response = null;
+  for (let i = 0; i < 4 && response === null; ++i) {
+    try {
+      response = await fetch("https://wtfismyip.com/json");
+    } catch (e) { }
+  }
   const wtfJSON = await response.json();
   const ipAddress = wtfJSON["YourFuckingIPAddress"];
   const onionooResponse = await fetch(`https://onionoo.torproject.org/details?limit=1&search=${ipAddress}`);
@@ -578,6 +583,29 @@ return {
       await imgLoadPromise;
       let response = await fetch(
         testURI("ctr", "image", key), {"cache": "reload"});
+      return (await response.text()).trim();
+    }
+  },
+  "script cache": {
+    session: true,
+    category: "navigation",
+    description: "Caching of scripts in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.",
+    write: (key) => new Promise((resolve, reject) => {
+      let script = document.createElement("script");
+      document.body.appendChild(script);
+      script.addEventListener("load", () => resolve(key), {once: true});
+      script.src = testURI("resource", "script", key);
+    }),
+    read: async (key) => {
+      let script = document.createElement("script");
+      document.body.appendChild(script);
+      let scriptLoadPromise = new Promise((resolve, reject) => {
+        script.addEventListener("load", resolve, {once: true});
+      });
+      script.src = testURI("resource", "script", key);
+      await scriptLoadPromise;
+      let response = await fetch(
+        testURI("ctr", "script", key), {"cache": "reload"});
       return (await response.text()).trim();
     }
   },

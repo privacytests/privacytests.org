@@ -12,6 +12,7 @@ const countMaps = {
   page: {},
   preload: {},
   prefetch: {},
+  script: {},
   xhr: {}
 };
 
@@ -27,6 +28,7 @@ const resourceFiles = {
   page: 'page.html',
   preload: 'page.html',
   prefetch: 'page.html',
+  script: 'test.js',
   xhr: 'page.html'
 };
 
@@ -43,6 +45,7 @@ const mimeTypes = {
   preload: 'text/html',
   prefetch: 'text/html',
   css: 'text/css',
+  script: 'application/javascript',
   xhr: 'text/html'
 };
 
