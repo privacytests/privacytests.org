@@ -35,7 +35,8 @@ const browserInfo = {
     displayName: 'DuckDuckGo',
     releasePackageName: 'com.duckduckgo.mobile.android',
     urlBarClick: 'omnibarTextInput',
-    urlBarKeys: 'omnibarTextInput'
+    urlBarKeys: 'omnibarTextInput',
+    highFiveButton: 'primaryCta'
   },
   edge: {
     releasePackageName: 'com.microsoft.emmx',
@@ -233,6 +234,18 @@ class AndroidBrowser {
         // Sleep a bit before we try again.
         await sleepMs(3000);
       }
+    }
+  }
+
+  async highFiveIfNecessary () {
+    if (!this.highFiveButton) {
+      return;
+    }
+    try {
+      const highFive = await findElement(this.client, this.packageName, this.highFiveButton);
+      this.client.elementClick(highFive);
+    } catch (e) {
+      console.log("No high five button found");
     }
   }
 

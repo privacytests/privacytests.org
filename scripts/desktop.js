@@ -24,9 +24,10 @@ const macOSdefaultBrowserSettings = {
     nightlyName: 'Brave Browser Nightly',
     privateFlag: 'incognito',
     torFlag: 'tor',
+    torPostLaunchDelay: 10000,
     basedOn: 'chromium',
     update: ['Brave', 'About Brave'],
-    updateNightly: ['Brave', 'About Brave'],
+    updateNightly: ['Brave', 'About Brave']
   },
   chrome: {
     name: 'Google Chrome',
@@ -34,7 +35,7 @@ const macOSdefaultBrowserSettings = {
     privateFlag: 'incognito',
     basedOn: 'chromium',
     update: ['Chrome', 'About Google Chrome'],
-    updateNightly: ['Chrome Canary', 'About Google Chrome'],
+    updateNightly: ['Chrome Canary', 'About Google Chrome']
   },
   duckduckgo: {
     name: 'DuckDuckGo',
@@ -49,16 +50,16 @@ const macOSdefaultBrowserSettings = {
     privateFlag: 'inprivate',
     basedOn: 'chromium',
     update: ['Microsoft Edge', 'About Microsoft Edge'],
-    updateNightly: ['Microsoft Edge Canary', 'About Microsoft Edge'],
+    updateNightly: ['Microsoft Edge Canary', 'About Microsoft Edge']
   },
   firefox: {
     name: 'firefox',
     nightlyName: 'Firefox Nightly',
     privateFlag: 'private-window',
     basedOn: 'firefox',
-    env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
+    env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1', MOZ_CRASHREPORTER_DISABLE: '1' },
     update: ['Firefox', 'About Firefox'],
-    updateNightly: ['Firefox Nightly', 'About Nightly'],
+    updateNightly: ['Firefox Nightly', 'About Nightly']
   },
   librewolf: {
     name: 'librewolf',
@@ -67,7 +68,7 @@ const macOSdefaultBrowserSettings = {
     basedOn: 'firefox',
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
     updateCommand: '/opt/homebrew/bin/brew upgrade librewolf --no-quarantine',
-    postLaunchDelay: 2000,
+    postLaunchDelay: 2000
   },
   mullvad: {
     name: 'Mullvad Browser',
@@ -83,7 +84,7 @@ const macOSdefaultBrowserSettings = {
     privateFlag: 'private',
     basedOn: 'chromium',
     update: ['Opera', 'About Opera'],
-    updateNightly: ['Opera Developer', 'About Opera'],
+    updateNightly: ['Opera Developer', 'About Opera']
     // preferences: [[["ui","warn_on_quitting_opera_with_multiple_tabs"], false]]
   },
   safari: {
@@ -108,7 +109,7 @@ const macOSdefaultBrowserSettings = {
     binaryName: 'Chromium',
     privateFlag: 'incognito',
     updateCommand: "mv '/Applications/Ungoogled Chromium.app' /Applications/Chromium.app ; /opt/homebrew/bin/brew upgrade eloston-chromium --no-quarantine && mv /Applications/Chromium.app '/Applications/Ungoogled Chromium.app'",
-    basedOn: 'chromium',
+    basedOn: 'chromium'
   },
   vivaldi: {
     name: 'Vivaldi',
@@ -118,7 +119,7 @@ const macOSdefaultBrowserSettings = {
     basedOn: 'chromium',
     // Assumes Vivaldi is on automatic updates:
     update: ['Vivaldi', 'About Vivaldi'],
-    updateNightly: ['Vivaldi Snapshot', 'About Vivaldi'],
+    updateNightly: ['Vivaldi Snapshot', 'About Vivaldi']
   },
   waterfox: {
     name: 'waterfox',
@@ -157,25 +158,25 @@ let preferredNetworkService;
 const fixOperaPreferences = async (file) => {
   const raw = await fsPromises.readFile(file);
   const json = JSON.parse(raw);
-  json["ui"]["warn_on_quitting_opera_with_multiple_tabs"] = false;
+  json.ui.warn_on_quitting_opera_with_multiple_tabs = false;
   await fsPromises.writeFile(file, JSON.stringify(json));
-  console.log("fixed Opera preferences in", file);
+  console.log('fixed Opera preferences in', file);
 };
 
 // TODO: Make this a generic capability for any browser
 const fixChromePreferences = async (file) => {
   const raw = await fsPromises.readFile(file);
   const json = JSON.parse(raw);
-  if (json["privacy_sandbox"] === undefined) {
-    json["privacy_sandbox"] = {};
+  if (json.privacy_sandbox === undefined) {
+    json.privacy_sandbox = {};
   }
-  if (json["privacy_sandbox"]["m1"] === undefined) {
-    json["privacy_sandbox"]["m1"] = {};
+  if (json.privacy_sandbox.m1 === undefined) {
+    json.privacy_sandbox.m1 = {};
   }
-  json["privacy_sandbox"]["m1"]["row_notice_acknowledged"] = true;
+  json.privacy_sandbox.m1.row_notice_acknowledged = true;
   await fsPromises.writeFile(file, JSON.stringify(json));
-  console.log("fixed Chrome preferences in", file);
-}
+  console.log('fixed Chrome preferences in', file);
+};
 
 // A Browser object represents a browser we run tests on.
 class DesktopBrowser {
@@ -204,19 +205,19 @@ class DesktopBrowser {
       console.log(`Deleting any old ${this._profilePath}`);
       await fsPromises.rm(this._profilePath, { recursive: true, force: true, maxRetries: 3 });
     } else {
-      if (this.browser === "opera") {
+      if (this.browser === 'opera') {
         try {
-          await fixOperaPreferences(path.join(this._profilePath, "Default", "Preferences"));
+          await fixOperaPreferences(path.join(this._profilePath, 'Default', 'Preferences'));
         } catch (e) {
-          await fixOperaPreferences(path.join(this._profilePath, "Preferences"));
+          await fixOperaPreferences(path.join(this._profilePath, 'Preferences'));
         }
       }
-      if (this.browser === "chrome") {
-        fixChromePreferences(path.join(this._profilePath, "Default", "Preferences"));
+      if (this.browser === 'chrome') {
+        fixChromePreferences(path.join(this._profilePath, 'Default', 'Preferences'));
       }
     }
     this._process = exec(this._command, { env: this._defaults.env });
-    await sleepMs(this._defaults.postLaunchDelay ?? 500);
+    await sleepMs(this.tor ? this._defaults.torPostLaunchDelay : (this._defaults.postLaunchDelay ?? 500));
     if (this.incognito && this._defaults.incognitoCommand) {
       exec(`${this._defaults.incognitoCommand} "${this._appName}"`);
       await sleepMs(1000);
@@ -251,9 +252,25 @@ class DesktopBrowser {
   }
 
   // Restart the browser with same profile.
-  async restart () {
+  async restart (clean = false) {
     await this.kill();
-    await this.launch(false);
+    await this.launch(clean);
+  }
+
+  async setPref (prefName, prefValue) {
+    console.log('setting pref: ', prefName, prefValue);
+    const prefsPath = path.join(this._profilePath, 'prefs.js');
+    const buf = await fsPromises.readFile(prefsPath);
+    const rawString = buf.toString();
+    const regex = new RegExp(`user_pref\\("${prefName}",\\s?".*?"\\)`, 'g');
+    let finalString;
+    const finalPrefLine = `user_pref("${prefName}", "${prefValue}")`;
+    if (rawString.match(regex)) {
+      finalString = rawString.replace(regex, finalPrefLine);
+    } else {
+      finalString = rawString + '\n' + finalPrefLine;
+    }
+    await fsPromises.writeFile(prefsPath, finalString);
   }
 
   // Update the browser to the latest version.
@@ -301,6 +318,10 @@ class DesktopBrowser {
     } catch (e) {
       return 0;
     }
+  }
+
+  static hasTorWindows (browserName) {
+    return !!macOSdefaultBrowserSettings[browserName].torFlag;
   }
 }
 
