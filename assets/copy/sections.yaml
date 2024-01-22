@@ -121,3 +121,20 @@
     allows you to be tracked across sessions?)
   tooltipType: crossSession
 
+- category: dns
+  name: DNS privacy tests
+  tagline: Which browsers keep their DNS queries encrypted?
+  description: >
+    The Domain Name System (DNS) is the method by which web browsers look
+    up the IP address for each website you visit. In a DNS query, a web browser
+    will ask a DNS resolver (somewhere on the internet) for the IP address
+    corresponding to a domain name (such as nytimes.com) for a website you
+    want to visit. Traditionally, most web browsers have sent their DNS queries
+    unencrypted, which means your ISP or anyone else on the network between your
+    computer and the DNS resolver can eavesdrop on the websites you visit.
+    In recent years, web browsers and operating systems have begun to introduce
+    encrypted DNS, including the DNS over HTTPS (DoH) protocol, to encrypt the
+    DNS request from your browser and the response from the resolver to keep
+    your browsing history from leaking. These tests check whether a browser is
+    still protecting its DNS requests by sending them encrypted.
+  tooltipType: simple

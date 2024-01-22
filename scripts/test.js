@@ -21,7 +21,8 @@ const WebSocket = require('ws');
 const cookieProxy = require('./cookie-proxy');
 const { sleepMs, readYAMLFile } = require('./utils');
 const path = require('node:path');
-// const { runDnsTests } = require('./dns-test.js');
+const { runDnsTests } = require('./dns-test.js');
+const systemNetworkSettings = require('./system-network-settings');
 
 // ## Constants
 
@@ -203,8 +204,13 @@ const runMainTests = async (browserSession, categories) => {
   const resultsPromise = nextBrowserValue(browserSession);
   // Open a new tab.
   await openSessionUrl(browserSession, `${kIframeRootSame}/supercookies.html?mode=read&thirdparty=same`);
+  const results = await resultsPromise;
+  // DuckDuckGo needs some personal validation
+  if (browserSession.browser instanceof AndroidBrowser) {
+    await browserSession.browser.highFiveIfNecessary();
+  }
   // Return the main results.
-  return resultsPromise;
+  return results;
 };
 
 // Combine same-session results with cross-session results.
@@ -257,11 +263,11 @@ const runSessionTests = async (browserSession) => {
 
 // Run the insecure connection test. Returns { insecureResults, insecurePassed }.
 const runInsecureTest = async (browserSession) => {
-  const timeout = (browserSession.browser instanceof DesktopBrowser) ? 8000 : 30000;
-  const insecureResultPromise = nextBrowserValue(browserSession, timeout);
-  await openSessionUrl(browserSession, `${kInsecureRoot}/insecure.html`);
   let insecureResult, insecurePassed;
   try {
+    const timeout = (browserSession.browser instanceof DesktopBrowser) ? 8000 : 30000;
+    const insecureResultPromise = nextBrowserValue(browserSession, timeout);
+    await openSessionUrl(browserSession, `${kInsecureRoot}/insecure.html`);
     log('now trying');
     insecureResult = await insecureResultPromise;
     insecurePassed = false;
@@ -467,17 +473,21 @@ const runTestsBatch = async (
         console.log({ browserSessions });
         const testResultsStage1 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage1({ browserSession, categories }), 600000), browserSessions);
         let testResultsStage2 = [];
+        let testResultsStage3 = [];
         if (!android && !ios) {
           await DesktopBrowser.setGlobalProxyUsageEnabled(true, cookieProxyPort);
           testResultsStage2 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage2({ browserSession, categories }), 100000), browserSessions);
           await DesktopBrowser.setGlobalProxyUsageEnabled(false);
+          if (!categories || categories.includes('dns')) {
+            testResultsStage3 = await runDnsTests(browserSessions);
+          }
         }
         for (let i = 0; i < browserList.length; ++i) {
           if (testResultsStage1[i].status === 'rejected' || (!android && !ios && testResultsStage2[i].status === 'rejected')) {
             failures.push([browserList[i], testResultsStage1[i], testResultsStage2[i]]);
             continue;
           }
-          const testResults = Object.assign({}, testResultsStage1[i].value, testResultsStage2[i]?.value);
+          const testResults = Object.assign({}, testResultsStage1[i].value, testResultsStage2[i]?.value, testResultsStage3[i]);
           const { browser, incognito, tor, nightly } = browserList[i];
           allTests.push({
             browser,
@@ -568,6 +578,7 @@ const configToBrowserList = (config) => {
         nightly: !!config.nightly,
         incognito: !!config.incognito,
         android: !!config.android,
+        tor: !!config.tor,
         ios: !!config.ios,
         appDir: config['app-dir']
       });
@@ -577,12 +588,15 @@ const configToBrowserList = (config) => {
 };
 
 let cleanupRan = false;
+let originalDnsIps;
 const cleanup = async () => {
   if (cleanupRan) {
     return;
   }
   log('cleaning up');
   await DesktopBrowser.setGlobalProxyUsageEnabled(false);
+  const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
+  systemNetworkSettings.setDNS(preferredNetworkService, originalDnsIps);
   cleanupRan = true;
 };
 
@@ -621,12 +635,14 @@ const main = async () => {
     process.on(eventType, (code) => {
       log(eventType, code);
       cleanup(eventType);
-      process.exit(code);
+      process.exit(eventType === 'uncaughtException' ? 1 : 0);
     });
   });
   try {
     installTestFontIfNeeded();
     await DesktopBrowser.setGlobalProxyUsageEnabled(false);
+    const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
+    originalDnsIps = systemNetworkSettings.getDNS(preferredNetworkService);
     const activeVpnCount = await DesktopBrowser.countActiveVpns();
     if (activeVpnCount > 0) {
       console.log(`VPNs detected: ${activeVpnCount}. Please disable all VPNs.`);
