@@ -177,28 +177,33 @@ const moveTestBetweenCategories = (testName, src, dest) => {
 };
 
 const processResults = (rawResults) => {
-  const {
-    misc, https, upgradable_hyperlink, fingerprinting, query, trackers,
-    navigation_write_same, navigation_read_same, navigation_read_different,
-    supercookies_write_same, supercookies_read_same, supercookies_read_different
-  } = rawResults;
-  let supercookies = getJointResult(supercookies_write_same, supercookies_read_same, supercookies_read_different);
-  let navigation = getJointResult(navigation_write_same, navigation_read_same, navigation_read_different);
-  moveTestBetweenCategories("ServiceWorker", navigation, supercookies);
-  moveTestBetweenCategories("CSS cache", navigation, supercookies);
-  moveTestBetweenCategories("font cache", navigation, supercookies);
-  moveTestBetweenCategories("image cache", navigation, supercookies);
-  moveTestBetweenCategories("prefetch cache", navigation, supercookies);
-  moveTestBetweenCategories("Alt-Svc", navigation, supercookies);
-  moveTestBetweenCategories("Stream isolation", supercookies, misc);
-  return {
-    misc,
-    query: processQueryResults(query),
-    https: Object.assign({}, https, upgradable_hyperlink),
-    fingerprinting,
-    navigation,
-    supercookies,
-    trackers,
+  try {
+    const {
+      misc, https, upgradable_hyperlink, fingerprinting, query, trackers,
+      navigation_write_same, navigation_read_same, navigation_read_different,
+      supercookies_write_same, supercookies_read_same, supercookies_read_different
+    } = rawResults;
+    let supercookies = getJointResult(supercookies_write_same, supercookies_read_same, supercookies_read_different);
+    let navigation = getJointResult(navigation_write_same, navigation_read_same, navigation_read_different);
+    moveTestBetweenCategories("ServiceWorker", navigation, supercookies);
+    moveTestBetweenCategories("CSS cache", navigation, supercookies);
+    moveTestBetweenCategories("font cache", navigation, supercookies);
+    moveTestBetweenCategories("image cache", navigation, supercookies);
+    moveTestBetweenCategories("script cache", navigation, supercookies);
+    moveTestBetweenCategories("prefetch cache", navigation, supercookies);
+    moveTestBetweenCategories("Alt-Svc", navigation, supercookies);
+    moveTestBetweenCategories("Stream isolation", supercookies, misc);
+    return {
+      misc,
+      query: processQueryResults(query),
+      https: Object.assign({}, https, upgradable_hyperlink),
+      fingerprinting,
+      navigation,
+      supercookies,
+      trackers,
+    }
+  } catch (e) {
+    console.log(e);
   }
 };
 
@@ -223,13 +228,17 @@ app.get('/step', (req, res) => {
 });
 
 app.get('/me', async (req, res) => {
-  const { sessionId } = req.query;
-  const testResults = processResults(sessionResults.get(sessionId));
-  const data = { all_tests: [{browser: "mine", incognito: false, nightly: false, testResults}], git: "fake_git_string"};
-  const page = await contentPage({results: data, title: "PrivacyTests.org: my browser", basename: "basename",
-                            previewImageUrl: null, tableTitle: "my browser", nightly: false, incognito: false});
-  console.log(page);
-  res.send(page);
+  try {
+    const { sessionId } = req.query;
+    const testResults = processResults(sessionResults.get(sessionId));
+    const data = { all_tests: [{browser: "mine", incognito: false, nightly: false, testResults}], git: "fake_git_string"};
+    const page = await contentPage({results: data, title: "PrivacyTests.org: my browser", basename: "basename",
+                                    previewImageUrl: null, tableTitle: "my browser", nightly: false, incognito: false});
+    console.log(page);
+    res.send(page);
+  } catch (e) {
+    res.send("not found");
+  }
 });
 
 const websocketSend = (sessionId, data) => {
@@ -257,7 +266,7 @@ app.post('/post', (req, res) => {
     try {
       websocketSend(sessionId, data);
     } catch (e) {
-      console.log(`invalid sessionId: ${sessionId}. Ignoring`);
+      console.log(e);
     }
     res.json({}); // No instructions for page
   } else {
