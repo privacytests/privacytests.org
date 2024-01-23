@@ -26,11 +26,13 @@ const server = https.createServer(options, (request, response) => {
   response.setHeader('Keep-Alive', 'timeout=300, max=1000');
   if (query["mode"] === "write") {
     socketTags.set(socket, query["secret"]);
-    response.end("empty");
+    response.end();
   } else if (query["mode"] === "read") {
     let tagFound = socketTags.get(socket);
     console.log("h1 read request. socket tag found:", tagFound);
     response.end(tagFound);
+  } else if (query["mode"] === "ip") {
+    response.end(socket.remoteAddress);
   } else {
     response.end();
   }

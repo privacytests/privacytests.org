@@ -27,7 +27,11 @@ server.on('request', (request, response) => {
   response.setHeader('Content-Type', 'text/plain');
   response.setHeader('Cache-Control', 'no-store');
   response.setHeader('Access-Control-Allow-Origin', '*');
-  response.end(sessionTags.get(session));
+  if (query["mode"] === "ip") {
+    response.end(request.socket.remoteAddress);
+  } else {
+    response.end(sessionTags.get(session));
+  }
 });
 
 server.timeout = 300000;
