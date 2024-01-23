@@ -3,23 +3,6 @@ const app = express();
 const port = 3333;
 const path = require('node:path');
 
-const countMaps = {
-  css: {},
-  favicon: {},
-  fetch: {},
-  font: {},
-  image: {},
-  page: {},
-  preload: {},
-  prefetch: {},
-  script: {},
-  xhr: {}
-};
-
-const blobs = {
-
-};
-
 const resourceFiles = {
   favicon: 'favicon.png',
   fetch: 'page.html',
@@ -49,6 +32,30 @@ const mimeTypes = {
   xhr: 'text/html'
 };
 
+
+const countMaps = {
+  css: {},
+  favicon: {},
+  fetch: {},
+  font: {},
+  image: {},
+  page: {},
+  preload: {},
+  prefetch: {},
+  script: {},
+  xhr: {}
+};
+
+const blobs = {
+
+};
+
+const ipAddresses = {
+
+};
+
+const getIpAddress = (req) => req.header('x-forwarded-for') || req.connection.remoteAddress;
+
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
@@ -58,7 +65,11 @@ app.use(function (req, res, next) {
 app.get('/', (req, res) => res.send('Hello World!'));
 
 app.get('/resource', (req, res) => {
+  const ip = getIpAddress(req);
   const { key, type } = req.query;
+  ipAddresses[key] ||= {};
+  ipAddresses[key][type] = ip;
+  console.log({ip, key, type});
   const countMap = countMaps[type];
   if (countMap[key]) {
     countMap[key] = countMap[key] + 1;
@@ -81,6 +92,11 @@ app.get('/ctr', (req, res) => {
   const { key, type } = req.query;
   console.log(`                                                         Count checked for ${type}, ${key}: ${countMaps[type][key]}`);
   res.send(`${countMaps[type][key] || 0}`);
+});
+
+app.get('/ips', (req, res) => {
+  const { key } = req.query;
+  res.send(`${JSON.stringify(ipAddresses[key] || {})}`);
 });
 
 app.get('/etag', (req, res) => {
@@ -185,7 +201,7 @@ ${contents}
 </html>`;
 
 app.get('/toplevel.html', (req, res) => {
-  const ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
+  const ip = getIpAddress(req);
   const gpcHeaderValue = req.header('Sec-GPC');
   console.log(ip);
   console.log({ gpcHeaderValue });

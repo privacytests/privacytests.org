@@ -27,7 +27,7 @@ let runTests = async (tests, mode, params) => {
   return results;
 };
 
-let queryParams = (urlString) => {
+export let queryParams = (urlString) => {
   let searchParams = new URL(urlString).searchParams;
   return Object.fromEntries(searchParams.entries());
 };
@@ -51,8 +51,10 @@ const filterObject = (obj, f) => {
   return Object.fromEntries(entries.filter(f));
 };
 
-export let runAllTests = async (tests, { category } = {category:undefined}) => {
+export let runAllTests = async (tests, { category, sessionId, mode } = {category:undefined, sessionId:undefined, mode:undefined}) => {
   let params = queryParams(document.URL);
+  params["sessionId"] ||= sessionId;
+  params["mode"] ||= mode;
   if (params["mode"] === "write") {
     await removeAllServiceWorkers();
   }
