@@ -6,7 +6,6 @@ const childProcess = require('child_process');
 const datauri = require('datauri/sync');
 const path = require('node:path');
 const os = require('node:os');
-const { split } = require('lodash');
 const util = require('util');
 
 const execAsync = util.promisify(require('child_process').exec);
