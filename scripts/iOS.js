@@ -125,8 +125,8 @@ const webdriverSession = _.memoize(() =>
       'appium:xcodeSigningId': 'iPhone Developer',
       'appium:automationName': 'XCUITest',
       'appium:deviceName': 'iPhone SE',
-      'appium:wdaLaunchTimeout': 30000,
-      'appium:wdaConnectionTimeout': 30000,
+      'appium:wdaLaunchTimeout': 60000,
+      'appium:wdaConnectionTimeout': 60000,
       'appium:platformVersion': '17.0',
       'appium:showXcodeLog': true
     }
