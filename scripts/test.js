@@ -349,27 +349,27 @@ const runTrackingCookieTest = async (browserSession) => {
 //   "https" : { ... },
 //   "navigation" : { ... },
 //   "supercookies" : { ... } }
-const runTestsStage1 = async ({ browserSession, categories }) => {
+const runTestsStage1 = async ({ browserSession, categories, skip }) => {
   await DesktopBrowser.setGlobalProxyUsageEnabled(false);
   let results = {};
   log({ categories });
 
   // Cross-session tests
-  if (!categories || categories.includes('session')) {
+  if (categories.includes('session')) {
     const { sessionResults_1p, sessionResults_3p } = await runSessionTests(browserSession);
     results.session_1p = sessionResults_1p;
     results.session_3p = sessionResults_3p;
   }
 
   // Main tests
-  if (!categories || categories.includes('main')) {
+  if (categories.includes('main')) {
     const mainResults = await runMainTests(browserSession, categories);
     results = { ...results, ...mainResults };
     await sleepMs(1000);
   }
   // Supplementary tests
   if (browserSession.browser instanceof DesktopBrowser &&
-    (!categories || categories.includes('supplementary'))) {
+    (categories.includes('supplementary'))) {
     const supplementaryResults = await runPageTest(browserSession, `${kIframeRootSame}/supplementary.html`);
     results.fingerprinting = {
       ...results.fingerprinting,
@@ -377,7 +377,7 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
     };
   }
   // Misc
-  if (!categories || categories.includes('misc')) {
+  if (categories.includes('misc')) {
     const topLevelResults = await runPageTest(browserSession, `${kLiveRoot}/toplevel.html`);
     const ipAddressLeak = await ipAddressTest(topLevelResults);
     results.misc = {
@@ -387,7 +387,7 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
     };
   }
   // HTTPS tests
-  if (!categories || categories.includes('https')) {
+  if (categories.includes('https')) {
     const upgradableAddressResult = await runPageTest(browserSession, `${kUpgradableRoot}/upgradable.html?source=address`);
     const { insecureResult, insecurePassed } = await runInsecureTest(browserSession);
     // HSTS supercookie tests
@@ -410,7 +410,7 @@ const runTestsStage2 = async ({ browserSession, categories }) => {
   const results = {};
   // Tracking cookies
   if (browserSession.browser instanceof DesktopBrowser &&
-    (!categories || categories.includes('trackingCookies'))) {
+    (categories.includes('trackingCookies'))) {
     // Now compile the results into a final format.
     log('running trackingCookies');
     const trackingCookieResult = await runTrackingCookieTest(browserSession);
@@ -461,6 +461,7 @@ const prepareBrowserSession = async (config, hurry) => {
 const runTestsBatch = async (
   browserLists, { debug, android, ios, categories, repeat, hurry } = { debug: false, repeat: 1, hurry: false }) => {
   const allTests = [];
+  console.log(categories);
   const timeStarted = new Date().toISOString();
   cookieProxy.simulateTrackingCookies(cookieProxyPort, debug);
   const failures = [];
@@ -478,7 +479,7 @@ const runTestsBatch = async (
           await DesktopBrowser.setGlobalProxyUsageEnabled(true, cookieProxyPort);
           testResultsStage2 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage2({ browserSession, categories }), 100000), browserSessions);
           await DesktopBrowser.setGlobalProxyUsageEnabled(false);
-          if (!categories || categories.includes('dns')) {
+          if (categories.includes('dns')) {
             testResultsStage3 = await runDnsTests(browserSessions);
           }
         }
@@ -565,8 +566,22 @@ const readConfig = (commandLineData) => {
   if (commandLineData.except) {
     commandLineData.except = commandLineData.except.split(',');
   }
+  if (commandLineData.skip) {
+    commandLineData.skip = commandLineData.skip.split(',');
+  }
   const yamlConfig = configFile ? readYAMLFile(configFile) : null;
-  return Object.assign({}, defaultConfig, yamlConfig, commandLineData);
+  const config = Object.assign({}, defaultConfig, yamlConfig, commandLineData);
+  if (!config.categories) {
+    config.categories = [
+      'session', 'main', 'supplementary', 'misc', 'https', 'trackingCookies', 'dns'
+    ];
+  }
+  if (config.skip) {
+    for (const skipCategory of config.skip) {
+      config.categories = config.categories.filter(cat => cat !== skipCategory);
+    }
+  }
+  return config;
 };
 
 const configToBrowserList = (config) => {
