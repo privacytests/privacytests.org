@@ -6,8 +6,9 @@ const clients = new Set();
 const setupServer = () => {
   const unixServer = net.createServer(function (client) {
     // Allow local connections only
-    if (!['::1', '127.0.0.1', 'localhost'].includes(client.remoteAddress)) {
+    if (!['::1', '127.0.0.1', 'localhost', '::ffff:127.0.0.1'].includes(client.remoteAddress)) {
       client.destroy();
+      console.log(`Rejected connection from ${client.remoteAddress}.`)
       return;
     }
     client.on('data', () => {

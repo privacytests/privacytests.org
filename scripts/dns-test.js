@@ -89,7 +89,7 @@ const locationDefinition = (countryName, countryCode) =>
   });
 
 const dnsTestDefinitions = [
-  ispDefinition('Comcast', '75.75.75.75'),
+  //ispDefinition('Comcast', '75.75.76.76'),
   ispDefinition('Comodo', '8.26.56.26'),
   ispDefinition('Cox', '68.105.28.11'),
   ispDefinition('Cloudflare', '1.1.1.1'),
