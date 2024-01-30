@@ -17,7 +17,13 @@ const createSocket = (port) => new Promise((resolve, reject) => {
 
 const domainRegex = /\s([a-z0-9\-]+\.privacytests3\.org)[\s.]/g;
 
+let isObserving = false;
+
 const observeDomains = async () => {
+  if (isObserving) {
+    // We are already observing.
+    return;
+  }
   const socket = await createSocket(9999);
   socket.on('data', (data) => {
     const text = data.toString();
@@ -30,11 +36,7 @@ const observeDomains = async () => {
       }
     }
   });
-  const stop = () => {
-    socket.destroy();
-    domainsSeen.clear();
-  };
-  return stop;
+  isObserving = true;
 };
 
 const hasSeenDomain = (domain) => {
@@ -130,7 +132,7 @@ const testIfDnsIsEncrypted = async (browserSessions, { ip, country }) => {
 };
 
 const runDnsTests = async (browserSessions) => {
-  const stopObserving = await observeDomains();
+  await observeDomains();
   const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
   const originalDnsIps = systemNetworkSettings.getDNS(preferredNetworkService);
   // Restart all browsers with a fresh profile:
@@ -146,7 +148,6 @@ const runDnsTests = async (browserSessions) => {
     }
   }
   systemNetworkSettings.setDNS(preferredNetworkService, originalDnsIps);
-  stopObserving();
   return results;
 };
 
