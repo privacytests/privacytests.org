@@ -130,7 +130,7 @@ const testIfDnsIsEncrypted = async (browserSessions, { ip, country }) => {
   await Promise.all(browserSessions.map(session => session.browser.kill()));
   const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
   await systemNetworkSettings.setDNS(preferredNetworkService, ip ?? '162.243.184.122');
-  await setCountry(browserSessions, country ?? 'us');
+  await setCountry(browserSessions, country ?? 'aq'); // Antarctica by default
   await sleepMs(2000);
   await Promise.all(browserSessions.map(session => session.browser.launch(false)));
   return await Promise.all(browserSessions.map(checkForSecureDns));
