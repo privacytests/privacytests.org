@@ -96,12 +96,17 @@ const locationDefinition = (countryName, countryCode) =>
   });
 
 const dnsTestDefinitions = [
-  // ispDefinition('Comcast', '75.75.76.76'),
-  ispDefinition('Comodo', '8.26.56.26'),
-  ispDefinition('Cox', '68.105.28.11'),
+  //ispDefinition('Comcast', '75.75.75.75'),
+  //ispDefinition('Spectrum (Charter)', '209.18.47.61'),
+  //ispDefinition('AT&T', '68.94.156.1'),
+  //ispDefinition('Verizon', '8.238.64.14'),
+  //ispDefinition('Cox', '68.105.28.11'),
+  //ispDefinition('Orange', '80.10.246.2'),
+  //ispDefinition('BT', '62.6.40.178'),
   ispDefinition('Cloudflare', '1.1.1.1'),
   ispDefinition('Google', '8.8.8.8'),
   ispDefinition('Quad9', '9.9.9.9'),
+  ispDefinition('Comodo', '8.26.56.26'),
   locationDefinition('Brazil', 'br'),
   locationDefinition('China', 'cn'),
   locationDefinition('Germany', 'de'),
@@ -137,6 +142,7 @@ const runDnsTests = async (browserSessions) => {
   const originalDnsIps = systemNetworkSettings.getDNS(preferredNetworkService);
   // Restart all browsers with a fresh profile:
   await Promise.all(browserSessions.map(session => session.browser.restart(true)));
+  await sleepMs(4000);
   const results = [];
   for (const testDef of dnsTestDefinitions) {
     const passedList = await testIfDnsIsEncrypted(browserSessions, testDef);
@@ -147,7 +153,7 @@ const runDnsTests = async (browserSessions) => {
       results[i].dns[testDef.name] = { passed, description: testDef.description, 'leak detected': !passed };
     }
   }
-  systemNetworkSettings.setDNS(preferredNetworkService, originalDnsIps);
+  systemNetworkSettings.setDNS(preferredNetworkService, []);
   return results;
 };
 
