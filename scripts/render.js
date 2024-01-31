@@ -212,22 +212,23 @@ ${worker ? '[Worker]' : ''}
   `.trim();
 };
 
-// For simple tests, creates a tooltip that shows detailed results.
-tooltipFunctions.simple = (result) => {
-  let text = '';
-  for (const key in result) {
-    if (key !== 'description') {
-      text += `${key}: ${result[key]}\n`;
-    }
-  }
-  return text.trim();
-};
-
 const joinIfArray = x => {
   const isArray = Array.isArray(x);
   const joined = isArray ? x.join(', ') : x;
   const final = isArray && x[0] && x[0].length > 10 ? '\n' + joined.replaceAll(', ', ',\n') : joined;
   return final;
+};
+
+// For simple tests, creates a tooltip that shows detailed results.
+tooltipFunctions.simple = (result) => {
+  let text = '';
+  for (const key in result) {
+    console.log(key, result[key]);
+    if (key !== 'description') {
+      text += `${key}: ${joinIfArray(result[key])}\n`;
+    }
+  }
+  return text.trim();
 };
 
 tooltipFunctions.crossSite = (
@@ -437,7 +438,7 @@ const resultsKeys = [
   'readSameSession', 'readDifferentSession',
   'actual_value', 'desired_value',
   'IsTorExit', 'cloudflareDoH', 'nextDoH', 'result',
-  'unsupported', 'upgraded', 'cookieFound'
+  'unsupported', 'upgraded', 'cookieFound', 'leak detected',
 ];
 
 // Finds any repeated trials of tests and aggregate the results
@@ -453,7 +454,7 @@ const aggregateRepeatedTrials = (results) => {
         const testResultsForRound = aggregatedResults.get(key).testResults;
         if (testResultsForRound) {
           for (const subcategory of ['supercookies', 'session_1p', 'session_3p', 'fingerprinting', 'https', 'misc', 'navigation',
-            'query', 'trackers', 'tracker_cookies']) {
+            'query', 'trackers', 'tracker_cookies', 'dns']) {
             const someTests = testResultsForRound[subcategory];
             for (const testName in test.testResults[subcategory]) {
               for (const value in test.testResults[subcategory][testName]) {
