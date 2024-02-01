@@ -25,14 +25,16 @@ const setupServer = () => {
 
 const runTcpDump = () => {
   const proc = exec('tcpdump -l udp port 53');
-  proc.stdout.on('data', data => clients.forEach(client => {
+  proc.stdout.on('data', data => {
     console.log(data);
-    try {
-      client.write(data);
-    } catch (e) {
-      console.log(e);
-    }
-  }));
+    clients.forEach(client => {
+      try {
+        client.write(data);
+      } catch (e) {
+        console.log(e);
+      }
+    })
+  });
   proc.on('exit', () => {
     runTcpDump();
   });
