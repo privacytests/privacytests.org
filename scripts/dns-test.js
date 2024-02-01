@@ -117,7 +117,7 @@ const dnsTestDefinitions = [
 ];
 
 const checkForSecureDns = async (browserSession) => {
-  await sleepMs(60000);
+  await sleepMs(20000);  // Wait enough time for browsers to enable DoH.
   const testDomain = generateRandomTestDomain();
   console.log(`${Date.now()} -- opening ${testDomain}`);
   browserSession.browser.openUrl(`http://${testDomain}/`);
