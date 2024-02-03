@@ -1,0 +1,3602 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:image" content="https://privacytests.org/tor-android2-preview.png">
+    <meta property="og:title" content="Which browsers are best for privacy?">
+    <meta property="og:description" content="An open-source privacy audit of popular web browsers.">
+    <meta property="og:type" content="website">
+    <link href="data:image/png;base64,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" rel="icon" type="image/x-icon">
+    <title>What are the best private browsers on Android in 2024?</title>
+    <meta name="description" content="PrivacyTests.org subjects major web browsers to a suite of automated tests to find out: which web browsers offer the best privacy protections?">
+    <meta name="format-detection" content="telephone=no">
+    <style>body {
+  font-family: sans-serif;
+  margin:0px;
+  display: flex;
+  flex-direction: row;
+  overflow-y: scroll;
+}
+
+.wrapper {
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header {
+  background-color: #eee;
+ /* border-bottom: darkgreen 1px solid; */
+  color: rgb(80, 80, 80);
+  /*display:table-cell;*/
+  display: flex;
+  /*flex-flow: row wrap;*/
+  flex-direction: row;
+  font-family: sans-serif;
+  align-items: center;
+  overflow: hidden;
+  padding: 20px 18px;
+  position: relative;
+  top: 0px;
+  /*margin: 0px auto;*/
+  vertical-align: top;
+ /* z-index: 4;*/
+}
+
+.header div.title-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.header div.title {
+  display: flex;
+  font-size: 28px;
+  font-weight:bold;
+  font-family: sans-serif;
+  flex-grow: 0;
+  align-items: center;
+}
+
+.header div.title a {
+  display: flex;
+  align-items: center;
+}
+.header div.title img {
+  padding-right: 16px;
+}
+
+.header .title-wrapper div.version {
+  font-size: 14px;
+  padding-top: 8px;
+}
+
+.header div.links {
+  align-items: center;
+  flex-grow: 1;
+  display:flex;
+  flex-direction: row;
+  justify-content: right;
+  -webkit-justify-content: flex-end;
+  padding: 0px 0px;
+  opacity: 85%;
+}
+
+.header div.link-header {
+  display: table-cell;
+  font-weight: bold;
+  padding: 0px 15px;
+  font-size: 16px;
+}
+
+.header div.link-header img {
+  width: 20px;
+}
+.pto-logo {
+  height:48px;
+}
+
+.header a {
+  text-decoration: none;
+  color:black;
+}
+
+.title {
+  font-weight: bold;
+  margin: 0px -1px;
+  text-align: left;
+  padding-left: 0px;
+  padding-right: 20px;
+}
+
+blockquote {
+/*  font-style: italic;*/
+  font-size: 16px;
+  background-color: #eee;
+  padding: 2px 1em;
+  margin: 5px;
+}
+
+.copy {
+  padding: 20px 100px;
+  margin: auto;
+}
+
+.copy p {
+  padding: 0.2em 0;
+  line-height: 1.3em;
+}
+
+p.footer {
+  padding: 0px 20px;
+}
+
+h1.title {
+  text-transform: none;
+}
+table.comparison-table {
+  border-collapse:collapse;
+  margin-top: 10px;
+  position: relative;
+  margin: 10px 10px;
+}
+table.comparison-table tr th.table-header {
+  background-color: white;
+  text-align: center;
+  word-break: break-all;  
+  vertical-align: top;
+  top: 0px;
+  font-size: 12px;
+  font-weight: normal;
+  table-layout: fixed;
+  width: 120px;
+  position: sticky;
+  position: -webkit-sticky;
+  padding: 10px 0px;
+  z-index: 1;
+}
+table.comparison-table .subtitle {
+  text-align: left;
+  text-transform: lowercase;
+  font-size: 14px;
+  padding-top: 10px;
+  line-height: 22px;
+  color: gray
+}
+table.comparison-table tr th.table-header:not(:first-child) {
+  white-space: nowrap;
+}
+table.comparison-table tr:first-child th:first-child {
+  z-index: 2;
+}
+table.comparison-table tr:nth-child(2n+1) td {
+  background-color: #eee;
+}
+table.comparison-table tr:nth-child(2n) td {
+  background-color: white;
+}
+table.comparison-table tr td {
+  min-width: 49px;
+  max-width: 49px;
+  height: 26px;
+  padding: 0px;
+  text-align: center;
+}
+table.comparison-table .subheading {
+  padding-top: 30px;
+  padding-bottom: 5px;
+  font-weight: bold;
+  display: table-cell;
+}
+table.comparison-table .subheading > div {
+  display: flex;
+  flex-direction: column;
+}
+table.comparison-table .subheading-title {
+  font-size: 18px;
+  color:#222;
+}
+table.comparison-table .subheading .tagline {
+  font-weight: normal;
+  font-size: 16px;
+  color:#222;
+  padding: 8px 0px;
+}
+table.comparison-table .first.subheading {
+  padding-top: 10px;
+}
+.good, .bad, .na {
+  font-size: 16px;
+}
+.good {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='245.353' height='196.632' fill='%23009edc'%3E%3Cpath d='M831.592 57.676h49.588v228.491h-49.588z' style='fill:%2303a904;stroke:none' transform='rotate(45 590.562 -721.141)'/%3E%3Cpath d='M236.579-881.18h49.588v118.491h-49.588z' style='fill:%2303a904;stroke:none' transform='rotate(135 -38.246 -384.189)'/%3E%3C/svg%3E");
+  width: 12px;
+}
+.bad {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='187.124' height='187.124' fill='%23009edc'%3E%3Cg transform='translate(-9.232 -1.218)'%3E%3Crect width='38.255' height='227.157' x='-24.794' y='-253.285' ry='.667' style='fill:%23d10000;stroke:none' transform='rotate(135)'/%3E%3Crect width='38.255' height='227.157' x='-158.834' y='-107.912' ry='.667' style='fill:%23d10000;stroke:none' transform='rotate(-135)'/%3E%3C/g%3E%3C/svg%3E");
+  width: 10px;
+}
+.na {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='50'%3E%3Cpath d='M0 0h250v50H0z' style='fill:%2303a904;stroke:none'/%3E%3C/svg%3E");
+  width: 10px;
+}
+table.comparison-table tr td:first-child,th:first-child {
+  text-align: left;
+  left: 0px;
+  padding-left: 8px;
+/*  position: sticky;
+  position: -webkit-sticky;*/
+}
+table.comparison-table tr td:first-child {
+  max-width: 150px;
+  min-width: 150px;
+ /* font-size: 16px;*/
+}
+table.comparison-table .table-title {
+  word-break: normal;
+  font-size: 22px;
+  text-align: left;
+  padding-left: 8px;
+}
+table.comparison-table .date {
+  text-align: center;
+  font-size: 14px;
+  padding-top: 6px;
+  color: rgb(70, 70, 70);
+}
+.banner {
+  padding: 10px;
+  flex-direction: row;
+  display: flex;
+}
+#issueBanner {
+  font-style: italic;
+  font-size: 16px;
+  border-bottom: 1px lightgray solid;
+}
+#navBanner {
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 1px lightgray solid;
+  justify-content: center;
+  align-content: stretch;
+}
+#navBanner a {
+  text-decoration: none;
+}
+.navItem:hover {
+  opacity: 100%;
+}
+.navItem {
+  padding: 4px 0px 4px 0px;
+  margin: 0px 10px;
+  text-align: center;
+}
+.selectedItem {
+  font-weight: bold;
+  border-bottom: 4px #a9e6a9 solid;
+}
+.navItem:not(.selectedItem) {
+  opacity: 60%;
+}
+.navItem:hover {
+  opacity: 100%;
+}
+#legend {
+  flex-direction: column;
+  font-size: 14px;
+  justify-content: center;
+  align-content: stretch;
+  vertical-align: top;
+}
+#key {
+    display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  justify-content: center;
+  align-content: stretch;
+  vertical-align: top;
+}
+#key div {
+  padding: 0px 10px;
+  vertical-align: top;
+}
+#legend .marker {
+  display: inline-block;
+  transform: scale(1.1);
+  padding: 0px 1px;
+  vertical-align: middle;
+}
+#instructions {
+  font-size: 16px;
+  justify-content: center;
+  align-content: stretch;
+  vertical-align: top;
+  border-bottom:  lightgray dotted 1px;
+}
+.banner .click-anywhere {
+  color: gray;
+  font-size: 14px;
+  display: inline-block;
+}
+.dataPoint {
+  display: inline-block;
+  padding: 6px 0px;
+  vertical-align: middle;
+}
+.left-heading {
+  text-align: start;
+  width: 25%;
+}
+.middle-heading {
+  text-align: center;
+  width: 50%;
+}
+.right-heading {
+  text-align: end;
+  width: 25%
+}
+.tooltipParent {
+  cursor: pointer;
+}
+.tooltipText {
+  background-color: #fffff7;
+  border-radius: 4px;
+  border: 1px solid gray;
+  color: black;
+  font-family: sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  max-width: 400px;
+  opacity: 0.97;
+  padding: 20px;
+  position:absolute;
+  text-align: start;
+  transform: translate(0px, -12px);
+  display: none;
+  white-space: pre-wrap;
+  width: max-content;
+  z-index: 1;
+}
+.browser-logo-image {
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+}
+</style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="header">
+        <div class="title-wrapper">
+          <div class="title"><a href="/"><img class="pto-logo" alt="PrivacyTests.org logo" src="data:image/png;base64,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"><span>PrivacyTests.org</span></a></div>
+        </div>
+        <div class="links">
+          <div class="link-header"><a href="/news">News</a></div>
+          <div class="link-header"><a href="/about">About</a></div>
+          <div class="link-header"><a href="https://github.com/privacytests/privacytests.org" title="Source code on github. Issues are welcome!"><img alt="Github icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHBhdGggZD0iTTEyIDBDNS4zNzQgMCAwIDUuMzczIDAgMTJjMCA1LjMwMiAzLjQzOCA5LjggOC4yMDcgMTEuMzg3LjU5OS4xMTEuNzkzLS4yNjEuNzkzLS41Nzd2LTIuMjM0Yy0zLjMzOC43MjYtNC4wMzMtMS40MTYtNC4wMzMtMS40MTYtLjU0Ni0xLjM4Ny0xLjMzMy0xLjc1Ni0xLjMzMy0xLjc1Ni0xLjA4OS0uNzQ1LjA4My0uNzI5LjA4My0uNzI5IDEuMjA1LjA4NCAxLjgzOSAxLjIzNyAxLjgzOSAxLjIzNyAxLjA3IDEuODM0IDIuODA3IDEuMzA0IDMuNDkyLjk5Ny4xMDctLjc3NS40MTgtMS4zMDUuNzYyLTEuNjA0LTIuNjY1LS4zMDUtNS40NjctMS4zMzQtNS40NjctNS45MzEgMC0xLjMxMS40NjktMi4zODEgMS4yMzYtMy4yMjEtLjEyNC0uMzAzLS41MzUtMS41MjQuMTE3LTMuMTc2IDAgMCAxLjAwOC0uMzIyIDMuMzAxIDEuMjNBMTEuNTA5IDExLjUwOSAwIDAgMSAxMiA1LjgwM2MxLjAyLjAwNSAyLjA0Ny4xMzggMy4wMDYuNDA0IDIuMjkxLTEuNTUyIDMuMjk3LTEuMjMgMy4yOTctMS4yMy42NTMgMS42NTMuMjQyIDIuODc0LjExOCAzLjE3Ni43Ny44NCAxLjIzNSAxLjkxMSAxLjIzNSAzLjIyMSAwIDQuNjA5LTIuODA3IDUuNjI0LTUuNDc5IDUuOTIxLjQzLjM3Mi44MjMgMS4xMDIuODIzIDIuMjIydjMuMjkzYzAgLjMxOS4xOTIuNjk0LjgwMS41NzZDMjAuNTY2IDIxLjc5NyAyNCAxNy4zIDI0IDEyYzAtNi42MjctNS4zNzMtMTItMTItMTIiLz48L3N2Zz4="></a></div>
+          <div class="link-header"><a href="https://twitter.com/privacytests" title="@privacytests on Twitter. Join the discussion!"><img alt="Twitter icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHBhdGggZD0iTTI0IDQuNTU3YTkuODMgOS44MyAwIDAgMS0yLjgyOC43NzUgNC45MzIgNC45MzIgMCAwIDAgMi4xNjUtMi43MjQgOS44NjQgOS44NjQgMCAwIDEtMy4xMjcgMS4xOTUgNC45MTYgNC45MTYgMCAwIDAtMy41OTQtMS41NTVjLTMuMTc5IDAtNS41MTUgMi45NjYtNC43OTcgNi4wNDVBMTMuOTc4IDEzLjk3OCAwIDAgMSAxLjY3MSAzLjE0OWE0LjkzIDQuOTMgMCAwIDAgMS41MjMgNi41NzQgNC45MDMgNC45MDMgMCAwIDEtMi4yMjktLjYxNmMtLjA1NCAyLjI4MSAxLjU4MSA0LjQxNSAzLjk0OSA0Ljg5YTQuOTM1IDQuOTM1IDAgMCAxLTIuMjI0LjA4NCA0LjkyOCA0LjkyOCAwIDAgMCA0LjYgMy40MTlBOS45IDkuOSAwIDAgMSAwIDE5LjU0YTEzLjk0IDEzLjk0IDAgMCAwIDcuNTQ4IDIuMjEyYzkuMTQyIDAgMTQuMzA3LTcuNzIxIDEzLjk5NS0xNC42NDZBMTAuMDI1IDEwLjAyNSAwIDAgMCAyNCA0LjU1NyIvPjwvc3ZnPg=="></a></div>
+          <div class="link-header"><a href="https://mastodon.social/@privacytests" title="@privacytests on Mastodon. Join the discussion!" rel="me"><img alt="Mastodon icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiI+PHBhdGggZD0iTTE1LjkxNy4wNzNDMTEuODk5LjA4OSA3LjkwOS41OTkgNS44MzMgMS41NTZjMCAwLTQuNDY2IDIuMDMzLTQuNDY2IDguOTU5IDAgOC4yNDQtLjAwNiAxOC41OTcgNy40IDIwLjYgMi44MzYuNzYxIDUuMjc1LjkyNSA3LjIzNi44MTIgMy41NTgtLjIgNS4zMTgtMS4yOTEgNS4zMTgtMS4yOTFsLS4xMi0yLjYzcy0yLjMwNi44MTMtNS4xNjIuNzJjLTIuODMtLjEtNS44MS0uMzEyLTYuMjc1LTMuODQ1YTcuNTA0IDcuNTA0IDAgMCAxLS4wNjItLjk5M2M1Ljk5NiAxLjQ4OSAxMS4xMDguNjQ5IDEyLjUxNi40NzggMy45My0uNDc3IDcuMzUtMi45NDEgNy43ODctNS4xOTQuNjg0LTMuNTQ5LjYyNi04LjY1Ny42MjYtOC42NTcgMC02LjkyNi00LjQ1OS04Ljk1OS00LjQ1OS04Ljk1OUMyMy45ODMuNTM0IDE5LjkzNS4wNTYgMTUuOTE3LjA3M20tNC4zIDUuMjgyYzEuMzc3LjAzNyAyLjczNy42NTMgMy41NzUgMS45NTRsLjgxIDEuMzc3LjgwOS0xLjM3N2MxLjY4My0yLjYxNyA1LjQ1NC0yLjQ1NCA3LjI0OS0uNDI5IDEuNjU1IDEuOTI2IDEuMjg2IDMuMTcgMS4yODYgMTEuNzc1di4wMDNoLTMuMjU1VjExLjE3YzAtMy41MDYtNC40Ny0zLjY0MS00LjQ3LjQ4NnY0LjMzOWgtMy4yMzR2LTQuMzRjMC00LjEyNi00LjQ2Ny0zLjk5My00LjQ2Ny0uNDg4djcuNDg4SDYuNjU3YzAtOC42MTItLjM2Mi05Ljg2MyAxLjI4Ni0xMS43NzUuOTA0LTEuMDE5IDIuMjk3LTEuNTYyIDMuNjc0LTEuNTI1IiBzdHlsZT0ic3Ryb2tlLXdpZHRoOjEuMzMwMzEiLz48L3N2Zz4="></a></div>
+          <div class="link-header"><a href="mailto:contact@privacytests.org" title="Contact me directly via email: contact@privacytests.org. Feedback is welcome!"><img alt="Email icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHBhdGggZD0iTTEyIDEyLjcxMy4wMTUgM2gyMy45NzF6bS01LjQyNS0xLjgyMkwwIDUuNTYydjEyLjUwMXptMTAuODUgMEwyNCAxOC4wNjNWNS41NjJ6bS0xLjU1NyAxLjI2MUwxMiAxNS4yODdsLTMuODY4LTMuMTM1TC4wMjIgMjFoMjMuOTU2eiIvPjwvc3ZnPg=="></a></div>
+        </div>
+      </div>
+      <div class="banner" id="issueBanner">
+        <div class="left-heading">No. 80</div>
+        <div class="middle-heading">Open-source tests of web browser privacy.</div>
+        <div class="right-heading">Updated 2024-02-03</div>
+      </div>
+      <div class="banner" id="navBanner">
+        <div class="navItem "><a href=".">Desktop browsers</a></div>
+        <div class="navItem "><a href="private">Desktop private modes</a></div>
+        <div class="navItem "><a href="ios">iOS browsers</a></div>
+        <div class="navItem selectedItem"><a href="android">Android browsers</a></div>
+        <div class="navItem "><a href="nightly">Nightly builds</a></div>
+        <div class="navItem "><a href="nightly-private">Nightly private modes</a></div>
+      </div>
+      <div class="banner" id="legend">
+        <div id="key">
+          <div><img class="marker good" alt="Passed"> = Passed privacy test</div>
+          <div><img class="marker bad" alt="Failed"> = Failed privacy test</div>
+          <div><img class="marker na" alt="Unsupported"> = No such feature</div>
+        </div>
+        <div class="banner" id="instructions">
+          <div><span class="click-anywhere">(Click anywhere for more info.)</span></div>
+        </div>
+      </div>
+      <table class="comparison-table">
+        <tr>
+          <th class="table-header" style="text-transform: capitalize;">
+            <h1 class="title">
+              <div class="table-title">Android Browsers</div>
+            </h1>
+            <span class="subtitle">(default settings)</span>
+          </th>
+          <th class="table-header" style="text-transform: capitalize;">
+            <span>
+              <img class="browser-logo-image" alt="tor logo" src="data:image/png;base64,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">
+              <br>
+              tor
+              <br>
+              115.2
+            </span>
+          </th>
+        </tr>
+        <tr>
+          <th colspan="8" class="first subheading tooltipParent">
+            <div><span class="subheading-title">State Partitioning tests</span><span class="tagline">Which browsers isolate websites to prevent them from sharing data to track you?</span></div>
+            <pre class="tooltipText">A common vulnerability of web browsers is that they allow tracking companies to &#39;tag&#39; your browser with some data (&#39;state&#39;) that identifies you. When third-party trackers are embedded in websites, they can see this identifying data as you browse to different websites. Fortunately, it is possible for this category of leaks to be fixed by partitioning all data stored in the browser such that no data can be shared between websites.</span>
+        </th></tr><tr><td class="tooltipParent">
+                <div>Alt-Svc</div>
+                <pre class="tooltipText">Alt-Svc allows the server to indicate to the web browser that a resource should be loaded on a different server. Because this is a persistent setting, it could be used to track users across websites if it is not correctly partitioned.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async () =&gt; {
+      // Clear Alt-Svc caching first.
+      let responseText = &quot;&quot;;
+      for (let i = 0; i &lt; 3; ++i) {
+        await fetch(altSvcOrigin + &quot;/clear&quot;);
+        await sleepMs(100);
+      }
+      responseText = await fetchText(altSvcOrigin + &quot;/protocol&quot;);
+      console.log(&quot;after clear:&quot;, responseText);
+      // Store &quot;h3&quot; state in Alt-Svc cache
+      for (let i = 0; i &lt; 3; ++i) {
+        await fetch(altSvcOrigin + &quot;/set&quot;);
+        await sleepMs(100);
+      }
+      responseText = await fetchText(altSvcOrigin + &quot;/protocol&quot;);
+      console.log(&quot;after set:&quot;, responseText);
+    }
+
+read: async () =&gt; {
+      const protocol = await fetchText(altSvcOrigin + &quot;/protocol&quot;);
+      if ((new URL(location)).searchParams.get(&quot;thirdparty&quot;) === &quot;same&quot;) {
+        if (protocol !== &quot;h3&quot;) {
+          throw new Error(&quot;Unsupported&quot;);
+        }
+      }
+      return protocol;
+    }
+
+result, same first party: 
+Error: Unsupported,
+Error: Unsupported
+
+result, different first party: h2, h2
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </th>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>blob</div>
+            <pre class="tooltipText">A &#39;blob URL&#39; is a local reference to some raw data. Trackers can use a blob URL to share data between websites.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (secret) =&gt; {
+      try {
+        let blobURL = URL.createObjectURL(new Blob([secret]));
+        fetch(`${baseURI}blob?mode=write&amp;key=${secret}&amp;blobUrl=${encodeURIComponent(blobURL)}`);
+      } catch (e) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+    }
+
+read: async (secret) =&gt; {
+      let response = await fetch(`${baseURI}blob?mode=read&amp;key=${secret}`);
+      let result = await response.json();
+      let blobUrl = decodeURIComponent(result.blobUrl);
+      let blobResponse = await fetch(blobUrl);
+      return blobResponse.text();
+    }
+
+result, same first party: 
+Error: NetworkError when attempting to fetch resource.,
+Error: NetworkError when attempting to fetch resource.
+
+result, different first party: 
+Error: NetworkError when attempting to fetch resource.,
+Error: NetworkError when attempting to fetch resource.
+
+unsupported: false, false
+
+passed: undefined
+
+test failed: true, true</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>BroadcastChannel</div>
+            <pre class="tooltipText">A BroadcastChannel is designed to send messages between tabs. In some browsers it can be used for cross-site communication and tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (secret) =&gt; {
+      try {
+        let bc = new BroadcastChannel(&quot;secrets&quot;);
+        bc.onmessage = (event) =&gt; {
+          if (event.data === &quot;request&quot;) {
+            bc.postMessage(secret);
+          }
+        };
+      } catch (e) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+    }
+
+read: () =&gt;
+      new Promise((resolve, reject) =&gt; {
+        let bc = new BroadcastChannel(&quot;secrets&quot;);
+        bc.onmessage = (event) =&gt; {
+          if (event.data !== &quot;request&quot;) {
+            resolve(event.data);
+          }
+        };
+        bc.postMessage(&quot;request&quot;);
+        setTimeout(() =&gt; reject({message: &quot;no BroadcastChannel message&quot;}), 3000);
+      })
+
+result, same first party: 
+Error: no BroadcastChannel message,
+Error: no BroadcastChannel message
+
+result, different first party: 
+Error: The operation is insecure.,
+Error: The operation is insecure.
+
+unsupported: false, false
+
+passed: undefined
+
+test failed: true, true</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>CacheStorage</div>
+            <pre class="tooltipText">The Cache API is a content storage mechanism originally introduced to support ServiceWorkers. If the same Cache object is accessible to multiple websites, it can be abused to track users.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      try {
+        let cache = await caches.open(&quot;supercookies&quot;);
+        cache.addAll([`test.css?key=${key}`]);
+      } catch (e) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+    }
+
+read: async () =&gt; {
+      let cache = await caches.open(&quot;supercookies&quot;);
+      let cacheKeys = await cache.keys();
+      let url = cacheKeys[0].url;
+      return (new URL(url)).searchParams.get(&quot;key&quot;);
+    }
+
+result, same first party: 
+Error: The operation is insecure.,
+Error: The operation is insecure.
+
+result, different first party: 
+Error: The operation is insecure.,
+Error: The operation is insecure.
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>cookie (HTTP)</div>
+            <pre class="tooltipText">The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website&#39;s behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (secret) =&gt; {
+      // Request a page that will send an HTTPOnly &#39;set-cookie&#39; response header with secret value.
+      await fetch(`${baseURI}cookie?secret=${secret}_http`);
+    }
+
+read: async () =&gt; {
+      // Test if we now send a requests with a &#39;cookie&#39; header containing the secret.
+      let response = await fetch(`${baseURI}headers`);
+      let cookie = (await response.json())[&quot;cookie&quot;];
+      return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
+    }
+
+result, same first party: 
+8248c3d7-7819-436d-9381-07ed98dae446_http,
+6f34075d-f334-4ced-b376-29d9abe02bbf_http
+
+result, different first party: , 
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>cookie (JS)</div>
+            <pre class="tooltipText">The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website&#39;s behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (secret) =&gt; {
+      document.cookie = `secret=${secret}_js; max-age=3600; SameSite=None; Secure`;
+    }
+
+read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
+
+result, same first party: 
+8248c3d7-7819-436d-9381-07ed98dae446_js,
+6f34075d-f334-4ced-b376-29d9abe02bbf_js
+
+result, different first party: , 
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>CookieStore</div>
+            <pre class="tooltipText">The Cookie Store API is an alternative asynchronous API for managing cookies, supported by some browsers.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: (data) =&gt; {
+      const msPerHour = 60 * 60 * 1000;
+      if (!window.cookieStore) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+      window.cookieStore.set({
+        name: &quot;partition_test&quot;,
+        value: data,
+        expires: Date.now() + msPerHour,
+        sameSite: &quot;none&quot;
+      });
+    }
+
+read: async () =&gt; {
+      if (!window.cookieStore) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+      const cookie = await window.cookieStore.get(&quot;partition_test&quot;);
+      if (!cookie) {
+        return null;
+      }
+      return cookie.value;
+    }
+
+result, same first party: 
+Error: Unsupported,
+Error: Unsupported
+
+result, different first party: 
+Error: Unsupported,
+Error: Unsupported
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>CSS cache</div>
+            <pre class="tooltipText">CSS stylesheets are cached, and if that cache is shared between websites, it can be used to track users across sites.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      const href = testURI(&quot;resource&quot;, &quot;css&quot;, key);
+      const head = document.getElementsByTagName(&quot;head&quot;)[0];
+      head.innerHTML += `&lt;link type=&quot;text/css&quot; rel=&quot;stylesheet&quot; href=&quot;${href}&quot;&gt;`;
+      const testElement = document.querySelector(&quot;#css&quot;);
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith(&quot;fake&quot;)) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return key;
+    }
+
+read: async (key) =&gt; {
+      const href = testURI(&quot;resource&quot;, &quot;css&quot;, key);
+      const head = document.getElementsByTagName(&quot;head&quot;)[0];
+      head.innerHTML += `&lt;link type=&quot;text/css&quot; rel=&quot;stylesheet&quot; href=&quot;${href}&quot;&gt;`;
+      const testElement = document.querySelector(&quot;#css&quot;);
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith(&quot;fake&quot;)) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return fontFamily;
+    }
+
+result, same first party: 
+fake_9768211334140251,
+fake_045453779760668
+
+result, different first party: 
+fake_8163610094485734,
+fake_9534777567384636
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>favicon cache</div>
+            <pre class="tooltipText">A favicon is an icon that represents a website, typically shown in browser tab and bookmarks menu. If the favicon cache is not partitioned, it can be used to track users across websites.</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">write: (key) =&gt; key
+
+read: async (key) =&gt; {
+      // Wait for the favicon to load (defined in supercookies.html)
+      await sleepMs(2000);
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;favicon&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      let count = (await response.text()).trim();
+      if (count === &quot;0&quot;) {
+        throw new Error(&quot;No requests received&quot;);
+      }
+      return count;
+    }
+
+result, same first party: 1, 1
+
+result, different first party: 1, 1
+
+unsupported: false, false
+
+passed: false, false
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>fetch cache</div>
+            <pre class="tooltipText">When a resource is received via the Fetch API, it is frequently cached. That cache can potentially be abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      let response = await fetch(testURI(&quot;resource&quot;, &quot;fetch&quot;, key),
+                                 {cache: &quot;force-cache&quot;});
+      return key;
+    }
+
+read: async (key) =&gt; {
+      let response = await fetch(testURI(&quot;resource&quot;, &quot;fetch&quot;, key),
+                                 {cache: &quot;force-cache&quot;});
+      let countResponse = await fetch(testURI(&quot;ctr&quot;, &quot;fetch&quot;, key),
+                                      {cache: &quot;reload&quot;});
+      return (await countResponse.text()).trim();
+    }
+
+result, same first party: 1, 1
+
+result, different first party: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>font cache</div>
+            <pre class="tooltipText">Web fonts are sometimes stored in their own cache, which is vulnerable to being abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      let style = document.createElement(&quot;style&quot;);
+      style.type=&#39;text/css&#39;;
+      let fontURI = testURI(&quot;resource&quot;, &quot;font&quot;, key);
+      style.innerHTML = `@font-face {font-family: &quot;myFont&quot;; src: url(&quot;${fontURI}&quot;); } body { font-family: &quot;myFont&quot; }`;
+      document.getElementsByTagName(&quot;head&quot;)[0].appendChild(style);
+      return key;
+    }
+
+read: async (key) =&gt; {
+      const text = document.createElement(&quot;span&quot;);
+      text.id = &quot;text&quot;;
+      text.innerText = &quot;test&quot;;
+      document.body.appendChild(text);
+      const originalWidth = text.getBoundingClientRect().width;
+      let style = document.createElement(&quot;style&quot;);
+      style.type=&#39;text/css&#39;;
+      let fontURI = testURI(&quot;resource&quot;, &quot;font&quot;, key);
+      style.innerHTML = `@font-face {font-family: &quot;myFont&quot;; src: url(&quot;${fontURI}&quot;); } #text { font-family: &quot;myFont&quot; }`;
+      document.getElementsByTagName(&quot;head&quot;)[0].appendChild(style);
+      let newWidth;
+      do {
+        await sleepMs(100);
+        newWidth = text.getBoundingClientRect().width;
+      } while (newWidth &lt; 0 || newWidth === originalWidth)
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;font&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      return (await response.text()).trim();
+    }
+
+result, same first party: 1, 1
+
+result, different first party: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>getDirectory</div>
+            <pre class="tooltipText">navigator.storage.getDirectory exposes a location for storing files to web content. In some cases, these files may be shared across tabs.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (secret) =&gt; {
+      try {
+        const root = await navigator.storage.getDirectory();
+        const fileHandle = await root.getFileHandle(&quot;secret.txt&quot;, { create: true });
+        const stream = await fileHandle.createWritable();
+        await stream.write(secret);
+        await stream.close();
+      } catch (e) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+    }
+
+read: async () =&gt; {
+      try {
+        const root = await navigator.storage.getDirectory();
+        const fileHandle = await root.getFileHandle(&quot;secret.txt&quot;);
+        const file = await fileHandle.getFile();
+        return file.text();
+      } catch (e) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+    }
+
+result, same first party: 
+Error: Unsupported,
+Error: Unsupported
+
+result, different first party: 
+Error: Unsupported,
+Error: Unsupported
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>H1 connection</div>
+            <pre class="tooltipText">HTTP/1.x are the classic web connection protocols. If these connections are re-used across websites, they can be used to track users.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (secret) =&gt; {
+      await fetch(`https://h1.privacytests2.org:8901/?mode=write&amp;secret=${secret}`, {cache: &quot;no-store&quot;});
+    }
+
+read: async () =&gt; {
+      let response = await fetch(`https://h1.privacytests2.org:8901/?mode=read`, {cache: &quot;no-store&quot;});
+      return await response.text();
+    }
+
+result, same first party: 
+8248c3d7-7819-436d-9381-07ed98dae446,
+6f34075d-f334-4ced-b376-29d9abe02bbf
+
+result, different first party: , 
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>H2 connection</div>
+            <pre class="tooltipText">HTTP/2 is a web connection protocol introduced in 2015. Some browsers re-use HTTP/2 connections across websites and can thus be used to track users.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (secret) =&gt; {
+      await fetch(`https://h2.privacytests2.org:8902/?mode=write&amp;secret=${secret}`, {cache: &quot;no-store&quot;});
+    }
+
+read: async () =&gt; {
+      let response = await fetch(`https://h2.privacytests2.org:8902/?mode=read`, {cache: &quot;no-store&quot;});
+      return await response.text();
+    }
+
+result, same first party: 
+8248c3d7-7819-436d-9381-07ed98dae446,
+6f34075d-f334-4ced-b376-29d9abe02bbf
+
+result, different first party: , 
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>H3 connection</div>
+            <pre class="tooltipText">HTTP/3 is a new standard HTTP connection protocol, still in draft but widely supported by browsers. If it is not partitioned, it can be used to track users across websites.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (secret) =&gt; {
+      // Ensure that we can switch over to h3 via alt-svc:
+      for (let i = 0; i&lt;3; ++i) {
+        await fetch(`https://h3.privacytests2.org:4434/connection_id`, {cache: &quot;no-store&quot;});
+        await sleepMs(500);
+      }
+      // Are we now connecting over h3?
+      let response = await fetch(`https://h3.privacytests2.org:4434/connection_id`, {cache: &quot;no-store&quot;});
+      let text = await response.text();
+      // Empty response text indicates we are not connecting over h3:
+      if (text.trim() === &quot;&quot;) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+    }
+
+read: async () =&gt; {
+      let response = await fetch(`https://h3.privacytests2.org:4434/connection_id`);
+      return await response.text();
+    }
+
+result, same first party: , 
+
+result, different first party: , 
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>HSTS cache</div>
+            <pre class="tooltipText"></span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: null
+
+read: null
+
+result, same first party: , 
+
+result, different first party: 
+HTTPS used by default; no HSTS cache issue expected,
+HTTPS used by default; no HSTS cache issue expected
+
+unsupported: , 
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>HSTS cache (fetch)</div>
+            <pre class="tooltipText"></span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: null
+
+read: null
+
+result, same first party: , 
+
+result, different first party: 
+HTTPS used by default; no HSTS cache issue expected,
+HTTPS used by default; no HSTS cache issue expected
+
+unsupported: , 
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>iframe cache</div>
+            <pre class="tooltipText">An iframe is an element in a web page than allows websites to embed a second web page. Caching of this web page could be abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
+      let iframe = document.createElement(&quot;iframe&quot;);
+      document.body.appendChild(iframe);
+      iframe.addEventListener(&quot;load&quot;, () =&gt; resolve(key), {once: true});
+      iframe.src = testURI(&quot;resource&quot;, &quot;page&quot;, key);
+    })
+
+read: async (key) =&gt; {
+      let iframe = document.createElement(&quot;iframe&quot;);
+      document.body.appendChild(iframe);
+      let iframeLoadPromise = new Promise((resolve, reject) =&gt; {
+        iframe.addEventListener(&quot;load&quot;, resolve, {once: true});
+      });
+      let address = testURI(&quot;resource&quot;, &quot;page&quot;, key);
+      iframe.src = address;
+      await iframeLoadPromise;
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;page&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      return (await response.text()).trim();
+    }
+
+result, same first party: 1, 1
+
+result, different first party: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>image cache</div>
+            <pre class="tooltipText">Caching of images in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
+      let img = document.createElement(&quot;img&quot;);
+      document.body.appendChild(img);
+      img.addEventListener(&quot;load&quot;, () =&gt; resolve(key), {once: true});
+      img.src = testURI(&quot;resource&quot;, &quot;image&quot;, key);
+    })
+
+read: async (key) =&gt; {
+      let img = document.createElement(&quot;img&quot;);
+      document.body.appendChild(img);
+      let imgLoadPromise = new Promise((resolve, reject) =&gt; {
+        img.addEventListener(&quot;load&quot;, resolve, {once: true});
+      });
+      img.src = testURI(&quot;resource&quot;, &quot;image&quot;, key);
+      await imgLoadPromise;
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;image&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      return (await response.text()).trim();
+    }
+
+result, same first party: 1, 1
+
+result, different first party: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>indexedDB</div>
+            <pre class="tooltipText">The IndexedDB API exposes a transactional database to web pages. That database can be used to track users across websites, unless it is partitioned.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (secret) =&gt; {
+      try {
+        return await IdbKeyVal.set(&quot;secret&quot;, secret);
+      } catch (e) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+    }
+
+read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
+
+result, same first party: 
+8248c3d7-7819-436d-9381-07ed98dae446,
+6f34075d-f334-4ced-b376-29d9abe02bbf
+
+result, different first party: 
+Error: The operation is insecure.,
+Error: The operation is insecure.
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>localStorage</div>
+            <pre class="tooltipText">The localStorage API gives websites access to a key-value database that will remain available across visits. If the localStorage API is not partitioned or blocked, it can also be used to track users across websites.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
+
+read: () =&gt; localStorage.getItem(&quot;secret&quot;)
+
+result, same first party: 
+8248c3d7-7819-436d-9381-07ed98dae446,
+6f34075d-f334-4ced-b376-29d9abe02bbf
+
+result, different first party: 
+Error: The operation is insecure.,
+Error: The operation is insecure.
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>locks</div>
+            <pre class="tooltipText">navigator.locks (only supported in some browsers) allows scripts on multiple tabs to coordinate. If this API is not partitioned, it can be used for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      if (navigator.locks) {
+        navigator.locks.request(key, lock =&gt; new Promise((f,r) =&gt; {}));
+        let queryResult = await navigator.locks.query();
+        return queryResult.held[0].clientId;
+      } else {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+    }
+
+read: async () =&gt; {
+      if (navigator.locks) {
+        let queryResult = await navigator.locks.query();
+        return queryResult.held[0].name;
+      }
+    }
+
+result, same first party: 
+Error: queryResult.held[0] is undefined,
+Error: queryResult.held[0] is undefined
+
+result, different first party: 
+Error: LockManager.query: query() is not allowed in this context,
+Error: LockManager.query: query() is not allowed in this context
+
+unsupported: false, false
+
+passed: undefined
+
+test failed: true, true</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>prefetch cache</div>
+            <pre class="tooltipText">A &lt;link rel=&#39;prefetch&#39;...&gt; suggests to browsers they should fetch a resource ahead of time and cache it. But if browsers don&#39;t partition this cache, it can be used to track users across websites.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      let link = document.createElement(&quot;link&quot;);
+      link.rel = &quot;prefetch&quot;;
+      link.href = testURI(&quot;resource&quot;, &quot;prefetch&quot;, key);
+      document.getElementsByTagName(&quot;head&quot;)[0].appendChild(link);
+      return key;
+    }
+
+read: async (key) =&gt; {
+      let link = document.createElement(&quot;link&quot;);
+      link.rel = &quot;prefetch&quot;;
+      link.href = testURI(&quot;resource&quot;, &quot;prefetch&quot;, key);
+      document.getElementsByTagName(&quot;head&quot;)[0].appendChild(link);
+      await sleepMs(500);
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;prefetch&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      let countString = (await response.text()).trim();
+      if (parseInt(countString) === 0) {
+        throw new Error(&quot;No requests received&quot;);
+      }
+      return countString;
+    }
+
+result, same first party: 
+Error: No requests received,
+Error: No requests received
+
+result, different first party: 
+Error: No requests received,
+Error: No requests received
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>script cache</div>
+            <pre class="tooltipText">Caching of scripts in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
+      let script = document.createElement(&quot;script&quot;);
+      document.body.appendChild(script);
+      script.addEventListener(&quot;load&quot;, () =&gt; resolve(key), {once: true});
+      script.src = testURI(&quot;resource&quot;, &quot;script&quot;, key);
+    })
+
+read: async (key) =&gt; {
+      let script = document.createElement(&quot;script&quot;);
+      document.body.appendChild(script);
+      let scriptLoadPromise = new Promise((resolve, reject) =&gt; {
+        script.addEventListener(&quot;load&quot;, resolve, {once: true});
+      });
+      script.src = testURI(&quot;resource&quot;, &quot;script&quot;, key);
+      await scriptLoadPromise;
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;script&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      return (await response.text()).trim();
+    }
+
+result, same first party: 1, 1
+
+result, different first party: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>ServiceWorker</div>
+            <pre class="tooltipText">The ServiceWorker API allows websites to run code in the background and store content in the browser for offline use. If a ServiceWorker can be accessed from multiple websites, it can be abused to track users across sites.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      if (!navigator.serviceWorker) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+      let registration = await navigator.serviceWorker.register(
+        &#39;serviceWorker.js&#39;);
+      console.log(registration);
+      await navigator.serviceWorker.ready;
+      console.log(&quot;service worker ready&quot;);
+      await sleepMs(100);
+      await fetch(`serviceworker-write?secret=${key}`);
+    }
+
+read: async () =&gt; {
+      console.log(&quot;trying to register the serviceworker now...&quot;);
+      const registration = await Promise.race([
+        navigator.serviceWorker.register(&#39;serviceWorker.js&#39;),
+        sleepMs(500)
+      ]);
+      if (registration === undefined) {
+        // We timed out or otherwise failed.
+        throw new Error(&quot;ServiceWorker registration failed&quot;);
+      }
+      console.log(registration);
+      await navigator.serviceWorker.ready;
+      console.log(&quot;service worker ready&quot;);
+      await sleepMs(100);
+      let response = await fetch(&quot;serviceworker-read&quot;);
+      return await response.text();
+    }
+
+result, same first party: 
+Error: navigator.serviceWorker is undefined,
+Error: navigator.serviceWorker is undefined
+
+result, different first party: 
+Error: navigator.serviceWorker is undefined,
+Error: navigator.serviceWorker is undefined
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>SharedWorker</div>
+            <pre class="tooltipText">The SharedWorker API allows scripts from multiple tabs to share a background thread of computation. If SharedWorker is not partitioned, then it can be abused to shared data between websites in your browser.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (secret) =&gt; {
+      try {
+        let worker = new SharedWorker(&quot;supercookies_sharedworker.js&quot;);
+        worker.port.start();
+//        console.log(&quot;worker&quot;, worker);
+        const messagePromise = new Promise((resolve) =&gt; {
+          worker.port.onmessage = (e) =&gt; resolve(e.data);
+        });
+        worker.port.postMessage(secret);
+        await messagePromise;
+      } catch (e) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+    }
+
+read: async () =&gt; {
+      let worker = new SharedWorker(&quot;supercookies_sharedworker.js&quot;);
+      worker.port.start();
+      const messagePromise = new Promise((resolve, reject) =&gt; {
+        worker.port.onmessage = (e) =&gt; resolve(e.data);
+        setTimeout(() =&gt; reject(new Error(&quot;no SharedWorker message received&quot;)), 200);
+      });
+      worker.port.postMessage(&quot;request&quot;);
+      const message = await messagePromise;
+      if (message === &quot;none&quot;) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+      return message;
+    }
+
+result, same first party: 
+Error: no SharedWorker message received,
+Error: no SharedWorker message received
+
+result, different first party: 
+Error: The operation is insecure.,
+Error: The operation is insecure.
+
+unsupported: false, false
+
+passed: undefined
+
+test failed: true, true</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>TLS Session ID</div>
+            <pre class="tooltipText">The TLS protocol is used by HTTPS to make connections secure. If the browser were to re-use a TLS session, then the session ID could be used to track users across websites.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async () =&gt; {
+      let results = await fetch(&quot;https://tls.privacytests2.org:8900/&quot;);
+      return (await results.json()).sessionId;
+    }
+
+read: async () =&gt; {
+      let results = await fetch(&quot;https://tls.privacytests2.org:8900/&quot;);
+      return (await results.json()).sessionId;
+    }
+
+result, same first party: 
+2a479b0da481f7f5ac02116200d33cf5e2ae0fffff46a82291ed113969cee7ed,
+1af1d6307a505b9454ed313c60e24bc10b4bcb150c534145a2d6db965a4c4c12
+
+result, different first party: 
+b3ee6efe1fa697ffd20d5296a2db1c417aefc9ad137ebe4592d06558a5884dbf,
+89e53e82a51705070a4d75e7ffe4d2611123cd8969cc105aaef1d11f2cf48db3
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Web SQL Database</div>
+            <pre class="tooltipText">The Web SQL Database is a deprecated web API for storing data in an SQL database.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      if (!window.openDatabase) {
+        throw new Error(&quot;gported&quot;);
+      }
+      let database = window.openDatabase(&quot;sqlite_supercookie&quot;, &quot;&quot;, &quot;supercookie&quot;, 1024 * 1024);
+      let tx = new Promise((resolve) =&gt; database.transaction(tx =&gt; {
+        tx.executeSql(
+          `CREATE TABLE IF NOT EXISTS cache(
+             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+             name TEXT NOT NULL,
+             value TEXT NOT NULL,
+             UNIQUE (name)
+           )`,
+          [], (tx, rs) =&gt; {}, (tx, err) =&gt; {});
+        tx.executeSql(
+          `INSERT OR REPLACE INTO cache(name, value)
+           VALUES(?, ?)`,
+          [&quot;secret&quot;, key], (tx, rs) =&gt; {}, (tx, rs) =&gt; {});
+      }));
+    }
+
+read: async () =&gt; {
+      let database = window.openDatabase(&quot;sqlite_supercookie&quot;, &quot;&quot;, &quot;supercookie&quot;, 1024 * 1024);
+      let result = await new Promise((resolve, reject) =&gt; database.transaction(tx =&gt; {
+        tx.executeSql(
+          &quot;SELECT value FROM cache WHERE name=?&quot;,
+          [&quot;secret&quot;],
+          (tx, rs) =&gt; resolve(rs),
+          (tx, err) =&gt; reject(err));
+      }));
+      return result.rows.item(0).value;
+    }
+
+result, same first party: 
+Error: window.openDatabase is not a function,
+Error: window.openDatabase is not a function
+
+result, different first party: 
+Error: window.openDatabase is not a function,
+Error: window.openDatabase is not a function
+
+unsupported: false, false
+
+passed: undefined
+
+test failed: true, true</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>XMLHttpRequest cache</div>
+            <pre class="tooltipText">Similar to the newer Fetch API, any resource received may be cached by the browser. The cache is potentially vulnerable to cross-site tracking attack.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      const req = new XMLHttpRequest();
+      const loadPromise = new Promise(resolve =&gt; req.addEventListener(&quot;load&quot;, resolve));
+      req.open(&quot;GET&quot;, testURI(&quot;resource&quot;, &quot;xhr&quot;, key));
+      req.send();
+      await loadPromise;
+      return key;
+    }
+
+read: async (key) =&gt; {
+      const req = new XMLHttpRequest();
+      const loadPromise = new Promise(resolve =&gt; req.addEventListener(&quot;load&quot;, resolve));
+      req.open(&quot;GET&quot;, testURI(&quot;resource&quot;, &quot;xhr&quot;, key));
+      req.send();
+      await loadPromise;
+      let countResponse = await fetch(testURI(&quot;ctr&quot;, &quot;xhr&quot;, key),
+                                      {cache: &quot;reload&quot;});
+      return (await countResponse.text()).trim();
+    }
+
+result, same first party: 1, 1
+
+result, different first party: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="8" class="subheading tooltipParent">
+            <div><span class="subheading-title">Navigation tests</span><span class="tagline">Which browsers prevent websites from sharing tracking data when you click on a link?</span></div>
+            <pre class="tooltipText">When you click a hyperlink to navigate your browser from one site to another, certain browser APIs allow the first site to communicate to the second site. These privacy vulnerabilities can be fixed by introducing new limits on how much data is transfered between sites.&#39;,</span>
+        </th></tr><tr><td class="tooltipParent">
+                <div>document.referrer</div>
+                <pre class="tooltipText">The Referer [sic] request header is a mechanism used by browsers to let a website know where the user is visiting from. This header is inherently tracking users across websites. In recent times, browsers have switched to a policy of trimming a referrer to convey less tracking information, but Referer continues to convey cross-site tracking data by default.</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">write: (secret) =&gt; { /* do nothing */ }
+
+read: () =&gt; document.referrer
+
+result, same first party: 
+https://test-pages.privacytests2.org/,
+https://test-pages.privacytests2.org/
+
+result, different first party: 
+https://test-pages.privacytests2.org/,
+https://test-pages.privacytests2.org/
+
+unsupported: false, false
+
+passed: false, false
+
+test failed: false, false</pre>
+          </th>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>sessionStorage</div>
+            <pre class="tooltipText">The sessionStorage API is similar to the localStorage API, but it does not persist across tabs or across browser sessions. Nonetheless, it can be used to track users if they navigate from one website to another. This tracking can be thwarted by partitioning sessionStorage between websites.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (secret) =&gt; sessionStorage.setItem(&quot;secret&quot;, secret)
+
+read: () =&gt; sessionStorage.getItem(&quot;secret&quot;)
+
+result, same first party: 
+8248c3d7-7819-436d-9381-07ed98dae446,
+6f34075d-f334-4ced-b376-29d9abe02bbf
+
+result, different first party: , 
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>window.name</div>
+            <pre class="tooltipText">The window.name API allows websites to store data that will persist after the user has navigated the tab to a different website. This mechanism could be partitioned so that data is not allowed to persist between websites.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (secret) =&gt; window.name = &quot;name_&quot; + secret
+
+read: () =&gt; window.name
+
+result, same first party: 
+name_8248c3d7-7819-436d-9381-07ed98dae446,
+name_6f34075d-f334-4ced-b376-29d9abe02bbf
+
+result, different first party: , 
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="8" class="subheading tooltipParent">
+            <div><span class="subheading-title">HTTPS tests</span><span class="tagline">Which browsers prevent unencrypted network connections?</span></div>
+            <pre class="tooltipText">HTTPS is the protocol that web browsers use to connect securely to websites. When HTTPS is being used, the connection is encrypted so that third parties on the network cannot read content being sent between the server and your browser. In the past, insecure connections were the default and websites would need to actively request that a browser use HTTPS. Now the status quo is shifting, and browser makers are moving toward a world where HTTPS is the default protocol.`</span>
+        </th></tr><tr><td class="tooltipParent">
+                <div>Insecure website warning</div>
+                <pre class="tooltipText"></span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">passed: true, true
+result: 
+Insecure website never loaded,
+Insecure website never loaded</pre>
+          </th>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Upgradable address</div>
+            <pre class="tooltipText">Checks to see if an insecure address entered into the browser&#39;s address bar is upgraded to HTTPS whenever possible.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">upgraded: true, true
+passed: true, true</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Upgradable hyperlink</div>
+            <pre class="tooltipText">Checks to see if the user has clicked on a hyperlink to an insecure address, if the browser upgrades that address to HTTPS whenever possible.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">upgraded: true, true
+passed: true, true</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Upgradable image</div>
+            <pre class="tooltipText">Checks to see if the browser attempts to upgrade an insecure address for an image to HTTPS whenever possible.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">passed: true, true
+result: upgraded, upgraded</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Upgradable script</div>
+            <pre class="tooltipText">Checks to see if the browser attempts to upgrade an insecure address for an script to HTTPS whenever possible.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">passed: true, true
+result: upgraded, upgraded</pre>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="8" class="subheading tooltipParent">
+            <div><span class="subheading-title">Misc tests</span><span class="tagline">Which browsers provide additional assorted privacy protections?</span></div>
+            <pre class="tooltipText">This category includes tests for the presence of miscellaneous privacy features</span>
+        </th></tr><tr><td class="tooltipParent">
+                <div>ECH enabled</div>
+                <pre class="tooltipText">Encrypted Client Hello (ECH) is a new protocol that hides the website you are visiting from third-party network eavesdroppers.</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">SNI_status: plaintext
+passed: false, false</pre>
+          </th>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>GPC enabled first-party</div>
+            <pre class="tooltipText">The Global Privacy Control is an HTTP header that can be sent by a browser to instruct a website not to sell the user&#39;s personal data to third parties. This test checks to see if the GPC header is sent by default to the top-level website.</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">header value: undefined
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>GPC enabled third-party</div>
+            <pre class="tooltipText">The Global Privacy Control is an HTTP header that can be sent by a browser to instruct a visited website not to sell the user&#39;s personal data to other parties. This test checks to see if the GPC header is sent to third-party elements on the web page.</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>IP address leak</div>
+            <pre class="tooltipText">IP addresses can be used to uniquely identify a large percentage of users. A proxy, VPN, or Tor can mask a user&#39;s IP address.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">passed: true, true</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Stream isolation</div>
+            <pre class="tooltipText">Browsers that use Tor can use a different Tor circuit per top-level website.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: () =&gt; {
+      if (!usingTor) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+    }
+read: async () =&gt; {
+      if (usingTor) {
+        return ipAddress;
+      } else {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+    }
+unsupported: false, false
+readSameFirstParty: 
+2001:67c:6ec:203:192:42:116:193,
+2a0b:f4c2:1::1
+readDifferentFirstParty: 
+2001:67c:6ec:203:192:42:116:196,
+2a0b:f4c2:2::37
+passed: true, true
+testFailed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Tor enabled</div>
+            <pre class="tooltipText">The Tor network sends the browser&#39;s web requests through a series of relays to hide a user&#39;s IP address, thereby helping to mask their identity and location. This test checks to see if the Tor network is being used by default.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">IsTorExit: true, true
+passed: true, true</pre>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="8" class="subheading tooltipParent">
+            <div><span class="subheading-title">Fingerprinting resistance tests</span><span class="tagline">Which browsers hide what's unique about your device?</span></div>
+            <pre class="tooltipText">Fingerprinting is a technique trackers use to uniquely identify you as you browse the web. A fingerprinting script will measure several characteristics of your browser and, combining this data, will build a fingerprint that may uniquely identify you among web users. Browsers can introduce countermeasures, such as minimizing the distinguishing information disclosed by certain web APIs so your browser is harder to pick out from the crowd (so-called &#39;fingerprinting resistance&#39;).`,</span>
+        </th></tr><tr><td class="tooltipParent">
+                <div>Media query screen height</div>
+                <pre class="tooltipText">Height of the user&#39;s screen in pixels.</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">expression: undefined
+desired expression: undefined
+actual value: undefined
+desired value: undefined
+passed: false,false</pre>
+          </th>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Media query screen width</div>
+            <pre class="tooltipText">Width of the user&#39;s screen in pixels.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">expression: undefined
+desired expression: undefined
+actual value: 980,980
+desired value: undefined
+passed: true,true</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>outerHeight</div>
+            <pre class="tooltipText">Height of the browser window in pixels, including browser chrome.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">expression: outerHeight
+desired expression: undefined
+actual value: 1822,1822
+desired value: undefined
+passed: true,true</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>screen.height</div>
+            <pre class="tooltipText">Height of the user&#39;s screen, in pixels.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">expression: screen.height
+desired expression: undefined
+actual value: 1822,1822
+desired value: undefined
+passed: true,true</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>screen.width</div>
+            <pre class="tooltipText">Width of the user&#39;s screen, in pixels.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">expression: screen.width
+desired expression: undefined
+actual value: 980,980
+desired value: undefined
+passed: true,true</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>screenX</div>
+            <pre class="tooltipText">Position, in pixels, of the left edge of the browser window on screen.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">expression: screenX
+desired expression: undefined
+actual value: 0,0
+desired value: undefined
+passed: true,true</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>screenY</div>
+            <pre class="tooltipText">Position, in pixels, of the top edge of the browser window on screen.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">expression: screenY
+desired expression: undefined
+actual value: 0,0
+desired value: undefined
+passed: true,true</pre>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="8" class="subheading tooltipParent">
+            <div><span class="subheading-title">Tracking query parameter tests</span><span class="tagline">Which browsers remove URL parameters that can track you?</span></div>
+            <pre class="tooltipText">When you browse from one web page to another, tracking companies will frequently attach a &#39;tracking query parameter&#39; to the address of the second web page. That query parameter may contain a unique identifier that tracks you individually as you browse the web. And these query parameters are frequently synchronized with cookies, making them a powerful tracking vector. Web browsers can protect you from known tracking query parameters by stripping them from web addresses before your browser sends them. (The set of tracking query parameters tested here was largely borrowed from Brave.)`</span>
+        </th></tr><tr><td class="tooltipParent">
+                <div>__hsfp</div>
+                <pre class="tooltipText">HubSpot tracking parameter</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </th>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>__hssc</div>
+            <pre class="tooltipText">HubSpot tracking parameter</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>__hstc</div>
+            <pre class="tooltipText">HubSpot tracking parameter</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>__s</div>
+            <pre class="tooltipText">Drip.com email address tracking parameter</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>_hsenc</div>
+            <pre class="tooltipText">HubSpot tracking parameter</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>_openstat</div>
+            <pre class="tooltipText">Yandex tracking parameter</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>dclid</div>
+            <pre class="tooltipText">DoubleClick Click ID (Google)</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>fbclid</div>
+            <pre class="tooltipText">Facebook Click Identifier</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>gclid</div>
+            <pre class="tooltipText">Google Click Identifier</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>hsCtaTracking</div>
+            <pre class="tooltipText">HubSpot tracking parameter</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>mc_eid</div>
+            <pre class="tooltipText">Mailchimp Email ID (email recipient&#39;s address)</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>mkt_tok</div>
+            <pre class="tooltipText">Adobe Marketo tracking parameter</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>ml_subscriber</div>
+            <pre class="tooltipText">MailerLite email tracking</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>ml_subscriber_hash</div>
+            <pre class="tooltipText">MailerLite email tracking</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>msclkid</div>
+            <pre class="tooltipText">Microsoft Click ID</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>oly_anon_id</div>
+            <pre class="tooltipText">Omeda marketing &#39;anonymous&#39; customer id</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>oly_enc_id</div>
+            <pre class="tooltipText">Omeda marketing &#39;known&#39; customer id</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>rb_clickid</div>
+            <pre class="tooltipText">Unknown high-entropy tracking parameter</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>s_cid</div>
+            <pre class="tooltipText">Adobe Site Catalyst tracking parameter</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>vero_conv</div>
+            <pre class="tooltipText">Vero tracking parameter</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>vero_id</div>
+            <pre class="tooltipText">Vero tracking parameter</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>wickedid</div>
+            <pre class="tooltipText">Wicked Reports e-commerce tracking</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>yclid</div>
+            <pre class="tooltipText">Yandex Click ID</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">value: 8303910894658098
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="8" class="subheading tooltipParent">
+            <div><span class="subheading-title">Tracker content blocking tests</span><span class="tagline">Which browsers block important known tracking scripts and pixels?</span></div>
+            <pre class="tooltipText">When you visit a web page, it frequently has third-party embedded tracking content, such as scripts and tracking pixels. These embedded components spy on you. Some browsers and browser extensions maintain list of tracking companies and block their content from being loaded. This section checks to see if a browser blocks 20 of the largest trackers listed by https://whotracks.me.`</span>
+        </th></tr><tr><td class="tooltipParent">
+                <div>Adobe</div>
+                <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://munchkin.marketo.net/munchkin.js</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://munchkin.marketo.net/munchkin.js
+passed: false, false</pre>
+          </th>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Adobe Audience Manager</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://dpm.demdex.net/ibs</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://dpm.demdex.net/ibs
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Amazon adsystem</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://s.amazon-adsystem.com/dcm</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://s.amazon-adsystem.com/dcm
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>AppNexus</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://ib.adnxs.com/px?id=178248&amp;t=1</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://ib.adnxs.com/px?id=178248&amp;t=1
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Bing Ads</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://bat.bing.com/bat.js</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://bat.bing.com/bat.js
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Chartbeat</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://static.chartbeat.com/js/chartbeat.js</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://static.chartbeat.com/js/chartbeat.js
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Criteo</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://dis.criteo.com/dis/rtb/appnexus/cookiematch.aspx</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://dis.criteo.com/dis/rtb/appnexus/cookiematch.aspx
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>DoubleClick (Google)</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://securepubads.g.doubleclick.net/static/glade.js</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://securepubads.g.doubleclick.net/static/glade.js
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Facebook tracking</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://connect.facebook.net/en_US/fbevents.js</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://connect.facebook.net/en_US/fbevents.js
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Google (third-party ad pixel)</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://www.google.com/pagead/1p-user-list/</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://www.google.com/pagead/1p-user-list/
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Google Analytics</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://google-analytics.com/urchin.js</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://google-analytics.com/urchin.js
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Google Tag Manager</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Index Exchange</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&amp;external_user_id=629685505537&amp;C=1</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&amp;external_user_id=629685505537&amp;C=1
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>New Relic</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://js-agent.newrelic.com/nr-1212.min.js</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://js-agent.newrelic.com/nr-1212.min.js
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Quantcast</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://pixel.quantserve.com/pixel</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://pixel.quantserve.com/pixel
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Scorecard Research Beacon</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://sb.scorecardresearch.com/internal-c2/default/cs.js</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://sb.scorecardresearch.com/internal-c2/default/cs.js
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Taboola</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://trc.taboola.com/futureplc-tomsguide/trc/3/json</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://trc.taboola.com/futureplc-tomsguide/trc/3/json
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Twitter pixel</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://t.co/i/adsct</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://t.co/i/adsct
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Yandex Ads</div>
+            <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://yandex.ru/ads/system/header-bidding.js</span>
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+>
+<pre class="tooltipText">url: https://yandex.ru/ads/system/header-bidding.js
+passed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="8" class="subheading tooltipParent">
+            <div><span class="subheading-title">Cross-session first-party tracking tests</span><span class="tagline">Which browsers prevent websites from tracking you across browser sessions?</span></div>
+            <pre class="tooltipText">A common vulnerability of web browsers is that they allow websites (&quot;first parties&quot;) to &#39;tag&#39; your browser with some tracking data. This tag can be used to re-identify you when you return to a website you visited before. This category of leaks can be prevented by browser if they clean or isolate data between browser sessions. (In cases where a user has logged into a website or entered detailed information, it may be justifiable for a browser to retain information across sessions. These tests check when no such justification exists: when you have entered no significant information into a website, will the browser still retain data that allows you to be tracked across sessions?)</span>
+        </th></tr><tr><td class="tooltipParent">
+                <div>Alt-Svc</div>
+                <pre class="tooltipText">Alt-Svc allows the server to indicate to the web browser that a resource should be loaded on a different server. Because this is a persistent setting, it could be used to track users across websites if it is not correctly partitioned.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async () =&gt; {
+      // Clear Alt-Svc caching first.
+      let responseText = &quot;&quot;;
+      for (let i = 0; i &lt; 3; ++i) {
+        await fetch(altSvcOrigin + &quot;/clear&quot;);
+        await sleepMs(100);
+      }
+      responseText = await fetchText(altSvcOrigin + &quot;/protocol&quot;);
+      console.log(&quot;after clear:&quot;, responseText);
+      // Store &quot;h3&quot; state in Alt-Svc cache
+      for (let i = 0; i &lt; 3; ++i) {
+        await fetch(altSvcOrigin + &quot;/set&quot;);
+        await sleepMs(100);
+      }
+      responseText = await fetchText(altSvcOrigin + &quot;/protocol&quot;);
+      console.log(&quot;after set:&quot;, responseText);
+    }
+
+read: async () =&gt; {
+      const protocol = await fetchText(altSvcOrigin + &quot;/protocol&quot;);
+      if ((new URL(location)).searchParams.get(&quot;thirdparty&quot;) === &quot;same&quot;) {
+        if (protocol !== &quot;h3&quot;) {
+          throw new Error(&quot;Unsupported&quot;);
+        }
+      }
+      return protocol;
+    }
+
+result, same session: h2, h2
+
+result, different session: h2, h2
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </th>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>CacheStorage</div>
+            <pre class="tooltipText">The Cache API is a content storage mechanism originally introduced to support ServiceWorkers. If the same Cache object is accessible to multiple websites, it can be abused to track users.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      try {
+        let cache = await caches.open(&quot;supercookies&quot;);
+        cache.addAll([`test.css?key=${key}`]);
+      } catch (e) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+    }
+
+read: async () =&gt; {
+      let cache = await caches.open(&quot;supercookies&quot;);
+      let cacheKeys = await cache.keys();
+      let url = cacheKeys[0].url;
+      return (new URL(url)).searchParams.get(&quot;key&quot;);
+    }
+
+result, same session: 
+Error: The operation is insecure.,
+Error: The operation is insecure.
+
+result, different session: 
+Error: The operation is insecure.,
+Error: The operation is insecure.
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>cookie (HTTP)</div>
+            <pre class="tooltipText">The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website&#39;s behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (secret) =&gt; {
+      // Request a page that will send an HTTPOnly &#39;set-cookie&#39; response header with secret value.
+      await fetch(`${baseURI}cookie?secret=${secret}_http`);
+    }
+
+read: async () =&gt; {
+      // Test if we now send a requests with a &#39;cookie&#39; header containing the secret.
+      let response = await fetch(`${baseURI}headers`);
+      let cookie = (await response.json())[&quot;cookie&quot;];
+      return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
+    }
+
+result, same session: , 
+
+result, different session: , 
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>cookie (JS)</div>
+            <pre class="tooltipText">The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website&#39;s behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (secret) =&gt; {
+      document.cookie = `secret=${secret}_js; max-age=3600; SameSite=None; Secure`;
+    }
+
+read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
+
+result, same session: 
+8248c3d7-7819-436d-9381-07ed98dae446_1p_js,
+6f34075d-f334-4ced-b376-29d9abe02bbf_1p_js
+
+result, different session: , 
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>CookieStore</div>
+            <pre class="tooltipText">The Cookie Store API is an alternative asynchronous API for managing cookies, supported by some browsers.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: (data) =&gt; {
+      const msPerHour = 60 * 60 * 1000;
+      if (!window.cookieStore) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+      window.cookieStore.set({
+        name: &quot;partition_test&quot;,
+        value: data,
+        expires: Date.now() + msPerHour,
+        sameSite: &quot;none&quot;
+      });
+    }
+
+read: async () =&gt; {
+      if (!window.cookieStore) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+      const cookie = await window.cookieStore.get(&quot;partition_test&quot;);
+      if (!cookie) {
+        return null;
+      }
+      return cookie.value;
+    }
+
+result, same session: 
+Error: Unsupported,
+Error: Unsupported
+
+result, different session: 
+Error: Unsupported,
+Error: Unsupported
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>CSS cache</div>
+            <pre class="tooltipText">CSS stylesheets are cached, and if that cache is shared between websites, it can be used to track users across sites.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      const href = testURI(&quot;resource&quot;, &quot;css&quot;, key);
+      const head = document.getElementsByTagName(&quot;head&quot;)[0];
+      head.innerHTML += `&lt;link type=&quot;text/css&quot; rel=&quot;stylesheet&quot; href=&quot;${href}&quot;&gt;`;
+      const testElement = document.querySelector(&quot;#css&quot;);
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith(&quot;fake&quot;)) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return key;
+    }
+
+read: async (key) =&gt; {
+      const href = testURI(&quot;resource&quot;, &quot;css&quot;, key);
+      const head = document.getElementsByTagName(&quot;head&quot;)[0];
+      head.innerHTML += `&lt;link type=&quot;text/css&quot; rel=&quot;stylesheet&quot; href=&quot;${href}&quot;&gt;`;
+      const testElement = document.querySelector(&quot;#css&quot;);
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith(&quot;fake&quot;)) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return fontFamily;
+    }
+
+result, same session: 
+fake_22132366256066205,
+fake_12087016905229331
+
+result, different session: 
+fake_32926134101473536,
+fake_8628915425315324
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>favicon cache</div>
+            <pre class="tooltipText">A favicon is an icon that represents a website, typically shown in browser tab and bookmarks menu. If the favicon cache is not partitioned, it can be used to track users across websites.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (key) =&gt; key
+
+read: async (key) =&gt; {
+      // Wait for the favicon to load (defined in supercookies.html)
+      await sleepMs(2000);
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;favicon&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      let count = (await response.text()).trim();
+      if (count === &quot;0&quot;) {
+        throw new Error(&quot;No requests received&quot;);
+      }
+      return count;
+    }
+
+result, same session: 1, 1
+
+result, different session: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>fetch cache</div>
+            <pre class="tooltipText">When a resource is received via the Fetch API, it is frequently cached. That cache can potentially be abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      let response = await fetch(testURI(&quot;resource&quot;, &quot;fetch&quot;, key),
+                                 {cache: &quot;force-cache&quot;});
+      return key;
+    }
+
+read: async (key) =&gt; {
+      let response = await fetch(testURI(&quot;resource&quot;, &quot;fetch&quot;, key),
+                                 {cache: &quot;force-cache&quot;});
+      let countResponse = await fetch(testURI(&quot;ctr&quot;, &quot;fetch&quot;, key),
+                                      {cache: &quot;reload&quot;});
+      return (await countResponse.text()).trim();
+    }
+
+result, same session: 1, 1
+
+result, different session: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>font cache</div>
+            <pre class="tooltipText">Web fonts are sometimes stored in their own cache, which is vulnerable to being abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      let style = document.createElement(&quot;style&quot;);
+      style.type=&#39;text/css&#39;;
+      let fontURI = testURI(&quot;resource&quot;, &quot;font&quot;, key);
+      style.innerHTML = `@font-face {font-family: &quot;myFont&quot;; src: url(&quot;${fontURI}&quot;); } body { font-family: &quot;myFont&quot; }`;
+      document.getElementsByTagName(&quot;head&quot;)[0].appendChild(style);
+      return key;
+    }
+
+read: async (key) =&gt; {
+      const text = document.createElement(&quot;span&quot;);
+      text.id = &quot;text&quot;;
+      text.innerText = &quot;test&quot;;
+      document.body.appendChild(text);
+      const originalWidth = text.getBoundingClientRect().width;
+      let style = document.createElement(&quot;style&quot;);
+      style.type=&#39;text/css&#39;;
+      let fontURI = testURI(&quot;resource&quot;, &quot;font&quot;, key);
+      style.innerHTML = `@font-face {font-family: &quot;myFont&quot;; src: url(&quot;${fontURI}&quot;); } #text { font-family: &quot;myFont&quot; }`;
+      document.getElementsByTagName(&quot;head&quot;)[0].appendChild(style);
+      let newWidth;
+      do {
+        await sleepMs(100);
+        newWidth = text.getBoundingClientRect().width;
+      } while (newWidth &lt; 0 || newWidth === originalWidth)
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;font&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      return (await response.text()).trim();
+    }
+
+result, same session: 1, 1
+
+result, different session: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>iframe cache</div>
+            <pre class="tooltipText">An iframe is an element in a web page than allows websites to embed a second web page. Caching of this web page could be abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
+      let iframe = document.createElement(&quot;iframe&quot;);
+      document.body.appendChild(iframe);
+      iframe.addEventListener(&quot;load&quot;, () =&gt; resolve(key), {once: true});
+      iframe.src = testURI(&quot;resource&quot;, &quot;page&quot;, key);
+    })
+
+read: async (key) =&gt; {
+      let iframe = document.createElement(&quot;iframe&quot;);
+      document.body.appendChild(iframe);
+      let iframeLoadPromise = new Promise((resolve, reject) =&gt; {
+        iframe.addEventListener(&quot;load&quot;, resolve, {once: true});
+      });
+      let address = testURI(&quot;resource&quot;, &quot;page&quot;, key);
+      iframe.src = address;
+      await iframeLoadPromise;
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;page&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      return (await response.text()).trim();
+    }
+
+result, same session: 1, 1
+
+result, different session: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>image cache</div>
+            <pre class="tooltipText">Caching of images in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
+      let img = document.createElement(&quot;img&quot;);
+      document.body.appendChild(img);
+      img.addEventListener(&quot;load&quot;, () =&gt; resolve(key), {once: true});
+      img.src = testURI(&quot;resource&quot;, &quot;image&quot;, key);
+    })
+
+read: async (key) =&gt; {
+      let img = document.createElement(&quot;img&quot;);
+      document.body.appendChild(img);
+      let imgLoadPromise = new Promise((resolve, reject) =&gt; {
+        img.addEventListener(&quot;load&quot;, resolve, {once: true});
+      });
+      img.src = testURI(&quot;resource&quot;, &quot;image&quot;, key);
+      await imgLoadPromise;
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;image&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      return (await response.text()).trim();
+    }
+
+result, same session: 1, 1
+
+result, different session: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>indexedDB</div>
+            <pre class="tooltipText">The IndexedDB API exposes a transactional database to web pages. That database can be used to track users across websites, unless it is partitioned.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (secret) =&gt; {
+      try {
+        return await IdbKeyVal.set(&quot;secret&quot;, secret);
+      } catch (e) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+    }
+
+read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
+
+result, same session: 
+8248c3d7-7819-436d-9381-07ed98dae446_1p,
+6f34075d-f334-4ced-b376-29d9abe02bbf_1p
+
+result, different session: undefined
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>localStorage</div>
+            <pre class="tooltipText">The localStorage API gives websites access to a key-value database that will remain available across visits. If the localStorage API is not partitioned or blocked, it can also be used to track users across websites.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
+
+read: () =&gt; localStorage.getItem(&quot;secret&quot;)
+
+result, same session: 
+8248c3d7-7819-436d-9381-07ed98dae446_1p,
+6f34075d-f334-4ced-b376-29d9abe02bbf_1p
+
+result, different session: , 
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>prefetch cache</div>
+            <pre class="tooltipText">A &lt;link rel=&#39;prefetch&#39;...&gt; suggests to browsers they should fetch a resource ahead of time and cache it. But if browsers don&#39;t partition this cache, it can be used to track users across websites.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      let link = document.createElement(&quot;link&quot;);
+      link.rel = &quot;prefetch&quot;;
+      link.href = testURI(&quot;resource&quot;, &quot;prefetch&quot;, key);
+      document.getElementsByTagName(&quot;head&quot;)[0].appendChild(link);
+      return key;
+    }
+
+read: async (key) =&gt; {
+      let link = document.createElement(&quot;link&quot;);
+      link.rel = &quot;prefetch&quot;;
+      link.href = testURI(&quot;resource&quot;, &quot;prefetch&quot;, key);
+      document.getElementsByTagName(&quot;head&quot;)[0].appendChild(link);
+      await sleepMs(500);
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;prefetch&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      let countString = (await response.text()).trim();
+      if (parseInt(countString) === 0) {
+        throw new Error(&quot;No requests received&quot;);
+      }
+      return countString;
+    }
+
+result, same session: 
+Error: No requests received,
+Error: No requests received
+
+result, different session: 
+Error: No requests received,
+Error: No requests received
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>script cache</div>
+            <pre class="tooltipText">Caching of scripts in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
+      let script = document.createElement(&quot;script&quot;);
+      document.body.appendChild(script);
+      script.addEventListener(&quot;load&quot;, () =&gt; resolve(key), {once: true});
+      script.src = testURI(&quot;resource&quot;, &quot;script&quot;, key);
+    })
+
+read: async (key) =&gt; {
+      let script = document.createElement(&quot;script&quot;);
+      document.body.appendChild(script);
+      let scriptLoadPromise = new Promise((resolve, reject) =&gt; {
+        script.addEventListener(&quot;load&quot;, resolve, {once: true});
+      });
+      script.src = testURI(&quot;resource&quot;, &quot;script&quot;, key);
+      await scriptLoadPromise;
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;script&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      return (await response.text()).trim();
+    }
+
+result, same session: 1, 1
+
+result, different session: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Web SQL Database</div>
+            <pre class="tooltipText">The Web SQL Database is a deprecated web API for storing data in an SQL database.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      if (!window.openDatabase) {
+        throw new Error(&quot;gported&quot;);
+      }
+      let database = window.openDatabase(&quot;sqlite_supercookie&quot;, &quot;&quot;, &quot;supercookie&quot;, 1024 * 1024);
+      let tx = new Promise((resolve) =&gt; database.transaction(tx =&gt; {
+        tx.executeSql(
+          `CREATE TABLE IF NOT EXISTS cache(
+             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+             name TEXT NOT NULL,
+             value TEXT NOT NULL,
+             UNIQUE (name)
+           )`,
+          [], (tx, rs) =&gt; {}, (tx, err) =&gt; {});
+        tx.executeSql(
+          `INSERT OR REPLACE INTO cache(name, value)
+           VALUES(?, ?)`,
+          [&quot;secret&quot;, key], (tx, rs) =&gt; {}, (tx, rs) =&gt; {});
+      }));
+    }
+
+read: async () =&gt; {
+      let database = window.openDatabase(&quot;sqlite_supercookie&quot;, &quot;&quot;, &quot;supercookie&quot;, 1024 * 1024);
+      let result = await new Promise((resolve, reject) =&gt; database.transaction(tx =&gt; {
+        tx.executeSql(
+          &quot;SELECT value FROM cache WHERE name=?&quot;,
+          [&quot;secret&quot;],
+          (tx, rs) =&gt; resolve(rs),
+          (tx, err) =&gt; reject(err));
+      }));
+      return result.rows.item(0).value;
+    }
+
+result, same session: 
+Error: window.openDatabase is not a function,
+Error: window.openDatabase is not a function
+
+result, different session: 
+Error: window.openDatabase is not a function,
+Error: window.openDatabase is not a function
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>XMLHttpRequest cache</div>
+            <pre class="tooltipText">Similar to the newer Fetch API, any resource received may be cached by the browser. The cache is potentially vulnerable to cross-site tracking attack.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      const req = new XMLHttpRequest();
+      const loadPromise = new Promise(resolve =&gt; req.addEventListener(&quot;load&quot;, resolve));
+      req.open(&quot;GET&quot;, testURI(&quot;resource&quot;, &quot;xhr&quot;, key));
+      req.send();
+      await loadPromise;
+      return key;
+    }
+
+read: async (key) =&gt; {
+      const req = new XMLHttpRequest();
+      const loadPromise = new Promise(resolve =&gt; req.addEventListener(&quot;load&quot;, resolve));
+      req.open(&quot;GET&quot;, testURI(&quot;resource&quot;, &quot;xhr&quot;, key));
+      req.send();
+      await loadPromise;
+      let countResponse = await fetch(testURI(&quot;ctr&quot;, &quot;xhr&quot;, key),
+                                      {cache: &quot;reload&quot;});
+      return (await countResponse.text()).trim();
+    }
+
+result, same session: 1, 1
+
+result, different session: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="8" class="subheading tooltipParent">
+            <div><span class="subheading-title">Cross-session third-party tracking tests</span><span class="tagline">Which browsers prevent third-party trackers from tracking you across browser sessions?</span></div>
+            <pre class="tooltipText">A common vulnerability of web browsers is that they allow third-party trackers to &#39;tag&#39; your browser with some tracking data. This tag can be used to re-identify you when you return to a website you visited before. This category of leaks can be prevented by browser if they clean or isolate data between browser sessions. (In cases where a user has logged into a website or entered detailed information, it may be justifiable for a browser to retain information across sessions. These tests check when no such justification exists: when you have entered no significant information into a website, will the browser still retain data that allows you to be tracked across sessions?)</span>
+        </th></tr><tr><td class="tooltipParent">
+                <div>Alt-Svc</div>
+                <pre class="tooltipText">Alt-Svc allows the server to indicate to the web browser that a resource should be loaded on a different server. Because this is a persistent setting, it could be used to track users across websites if it is not correctly partitioned.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async () =&gt; {
+      // Clear Alt-Svc caching first.
+      let responseText = &quot;&quot;;
+      for (let i = 0; i &lt; 3; ++i) {
+        await fetch(altSvcOrigin + &quot;/clear&quot;);
+        await sleepMs(100);
+      }
+      responseText = await fetchText(altSvcOrigin + &quot;/protocol&quot;);
+      console.log(&quot;after clear:&quot;, responseText);
+      // Store &quot;h3&quot; state in Alt-Svc cache
+      for (let i = 0; i &lt; 3; ++i) {
+        await fetch(altSvcOrigin + &quot;/set&quot;);
+        await sleepMs(100);
+      }
+      responseText = await fetchText(altSvcOrigin + &quot;/protocol&quot;);
+      console.log(&quot;after set:&quot;, responseText);
+    }
+
+read: async () =&gt; {
+      const protocol = await fetchText(altSvcOrigin + &quot;/protocol&quot;);
+      if ((new URL(location)).searchParams.get(&quot;thirdparty&quot;) === &quot;same&quot;) {
+        if (protocol !== &quot;h3&quot;) {
+          throw new Error(&quot;Unsupported&quot;);
+        }
+      }
+      return protocol;
+    }
+
+result, same session: h2, h2
+
+result, different session: h2, h2
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </th>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>CacheStorage</div>
+            <pre class="tooltipText">The Cache API is a content storage mechanism originally introduced to support ServiceWorkers. If the same Cache object is accessible to multiple websites, it can be abused to track users.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      try {
+        let cache = await caches.open(&quot;supercookies&quot;);
+        cache.addAll([`test.css?key=${key}`]);
+      } catch (e) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+    }
+
+read: async () =&gt; {
+      let cache = await caches.open(&quot;supercookies&quot;);
+      let cacheKeys = await cache.keys();
+      let url = cacheKeys[0].url;
+      return (new URL(url)).searchParams.get(&quot;key&quot;);
+    }
+
+result, same session: 
+Error: The operation is insecure.,
+Error: The operation is insecure.
+
+result, different session: 
+Error: The operation is insecure.,
+Error: The operation is insecure.
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>cookie (HTTP)</div>
+            <pre class="tooltipText">The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website&#39;s behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (secret) =&gt; {
+      // Request a page that will send an HTTPOnly &#39;set-cookie&#39; response header with secret value.
+      await fetch(`${baseURI}cookie?secret=${secret}_http`);
+    }
+
+read: async () =&gt; {
+      // Test if we now send a requests with a &#39;cookie&#39; header containing the secret.
+      let response = await fetch(`${baseURI}headers`);
+      let cookie = (await response.json())[&quot;cookie&quot;];
+      return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
+    }
+
+result, same session: , 
+
+result, different session: , 
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>cookie (JS)</div>
+            <pre class="tooltipText">The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website&#39;s behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: (secret) =&gt; {
+      document.cookie = `secret=${secret}_js; max-age=3600; SameSite=None; Secure`;
+    }
+
+read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
+
+result, same session: , 
+
+result, different session: , 
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>CookieStore</div>
+            <pre class="tooltipText">The Cookie Store API is an alternative asynchronous API for managing cookies, supported by some browsers.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: (data) =&gt; {
+      const msPerHour = 60 * 60 * 1000;
+      if (!window.cookieStore) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+      window.cookieStore.set({
+        name: &quot;partition_test&quot;,
+        value: data,
+        expires: Date.now() + msPerHour,
+        sameSite: &quot;none&quot;
+      });
+    }
+
+read: async () =&gt; {
+      if (!window.cookieStore) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+      const cookie = await window.cookieStore.get(&quot;partition_test&quot;);
+      if (!cookie) {
+        return null;
+      }
+      return cookie.value;
+    }
+
+result, same session: 
+Error: Unsupported,
+Error: Unsupported
+
+result, different session: 
+Error: Unsupported,
+Error: Unsupported
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>CSS cache</div>
+            <pre class="tooltipText">CSS stylesheets are cached, and if that cache is shared between websites, it can be used to track users across sites.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      const href = testURI(&quot;resource&quot;, &quot;css&quot;, key);
+      const head = document.getElementsByTagName(&quot;head&quot;)[0];
+      head.innerHTML += `&lt;link type=&quot;text/css&quot; rel=&quot;stylesheet&quot; href=&quot;${href}&quot;&gt;`;
+      const testElement = document.querySelector(&quot;#css&quot;);
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith(&quot;fake&quot;)) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return key;
+    }
+
+read: async (key) =&gt; {
+      const href = testURI(&quot;resource&quot;, &quot;css&quot;, key);
+      const head = document.getElementsByTagName(&quot;head&quot;)[0];
+      head.innerHTML += `&lt;link type=&quot;text/css&quot; rel=&quot;stylesheet&quot; href=&quot;${href}&quot;&gt;`;
+      const testElement = document.querySelector(&quot;#css&quot;);
+      let fontFamily;
+      while (true) {
+        await sleepMs(100);
+        fontFamily = getComputedStyle(testElement).fontFamily;
+        if (fontFamily.startsWith(&quot;fake&quot;)) {
+          break;
+        }
+      }
+      console.log(fontFamily);
+      return fontFamily;
+    }
+
+result, same session: 
+fake_8614102711164202,
+fake_7250744791009944
+
+result, different session: 
+fake_2397113858897013,
+fake_15433210177661372
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>favicon cache</div>
+            <pre class="tooltipText">A favicon is an icon that represents a website, typically shown in browser tab and bookmarks menu. If the favicon cache is not partitioned, it can be used to track users across websites.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (key) =&gt; key
+
+read: async (key) =&gt; {
+      // Wait for the favicon to load (defined in supercookies.html)
+      await sleepMs(2000);
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;favicon&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      let count = (await response.text()).trim();
+      if (count === &quot;0&quot;) {
+        throw new Error(&quot;No requests received&quot;);
+      }
+      return count;
+    }
+
+result, same session: 1, 1
+
+result, different session: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>fetch cache</div>
+            <pre class="tooltipText">When a resource is received via the Fetch API, it is frequently cached. That cache can potentially be abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      let response = await fetch(testURI(&quot;resource&quot;, &quot;fetch&quot;, key),
+                                 {cache: &quot;force-cache&quot;});
+      return key;
+    }
+
+read: async (key) =&gt; {
+      let response = await fetch(testURI(&quot;resource&quot;, &quot;fetch&quot;, key),
+                                 {cache: &quot;force-cache&quot;});
+      let countResponse = await fetch(testURI(&quot;ctr&quot;, &quot;fetch&quot;, key),
+                                      {cache: &quot;reload&quot;});
+      return (await countResponse.text()).trim();
+    }
+
+result, same session: 1, 1
+
+result, different session: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>font cache</div>
+            <pre class="tooltipText">Web fonts are sometimes stored in their own cache, which is vulnerable to being abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      let style = document.createElement(&quot;style&quot;);
+      style.type=&#39;text/css&#39;;
+      let fontURI = testURI(&quot;resource&quot;, &quot;font&quot;, key);
+      style.innerHTML = `@font-face {font-family: &quot;myFont&quot;; src: url(&quot;${fontURI}&quot;); } body { font-family: &quot;myFont&quot; }`;
+      document.getElementsByTagName(&quot;head&quot;)[0].appendChild(style);
+      return key;
+    }
+
+read: async (key) =&gt; {
+      const text = document.createElement(&quot;span&quot;);
+      text.id = &quot;text&quot;;
+      text.innerText = &quot;test&quot;;
+      document.body.appendChild(text);
+      const originalWidth = text.getBoundingClientRect().width;
+      let style = document.createElement(&quot;style&quot;);
+      style.type=&#39;text/css&#39;;
+      let fontURI = testURI(&quot;resource&quot;, &quot;font&quot;, key);
+      style.innerHTML = `@font-face {font-family: &quot;myFont&quot;; src: url(&quot;${fontURI}&quot;); } #text { font-family: &quot;myFont&quot; }`;
+      document.getElementsByTagName(&quot;head&quot;)[0].appendChild(style);
+      let newWidth;
+      do {
+        await sleepMs(100);
+        newWidth = text.getBoundingClientRect().width;
+      } while (newWidth &lt; 0 || newWidth === originalWidth)
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;font&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      return (await response.text()).trim();
+    }
+
+result, same session: 1, 1
+
+result, different session: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>iframe cache</div>
+            <pre class="tooltipText">An iframe is an element in a web page than allows websites to embed a second web page. Caching of this web page could be abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
+      let iframe = document.createElement(&quot;iframe&quot;);
+      document.body.appendChild(iframe);
+      iframe.addEventListener(&quot;load&quot;, () =&gt; resolve(key), {once: true});
+      iframe.src = testURI(&quot;resource&quot;, &quot;page&quot;, key);
+    })
+
+read: async (key) =&gt; {
+      let iframe = document.createElement(&quot;iframe&quot;);
+      document.body.appendChild(iframe);
+      let iframeLoadPromise = new Promise((resolve, reject) =&gt; {
+        iframe.addEventListener(&quot;load&quot;, resolve, {once: true});
+      });
+      let address = testURI(&quot;resource&quot;, &quot;page&quot;, key);
+      iframe.src = address;
+      await iframeLoadPromise;
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;page&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      return (await response.text()).trim();
+    }
+
+result, same session: 1, 1
+
+result, different session: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>image cache</div>
+            <pre class="tooltipText">Caching of images in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
+      let img = document.createElement(&quot;img&quot;);
+      document.body.appendChild(img);
+      img.addEventListener(&quot;load&quot;, () =&gt; resolve(key), {once: true});
+      img.src = testURI(&quot;resource&quot;, &quot;image&quot;, key);
+    })
+
+read: async (key) =&gt; {
+      let img = document.createElement(&quot;img&quot;);
+      document.body.appendChild(img);
+      let imgLoadPromise = new Promise((resolve, reject) =&gt; {
+        img.addEventListener(&quot;load&quot;, resolve, {once: true});
+      });
+      img.src = testURI(&quot;resource&quot;, &quot;image&quot;, key);
+      await imgLoadPromise;
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;image&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      return (await response.text()).trim();
+    }
+
+result, same session: 1, 1
+
+result, different session: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>indexedDB</div>
+            <pre class="tooltipText">The IndexedDB API exposes a transactional database to web pages. That database can be used to track users across websites, unless it is partitioned.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (secret) =&gt; {
+      try {
+        return await IdbKeyVal.set(&quot;secret&quot;, secret);
+      } catch (e) {
+        throw new Error(&quot;Unsupported&quot;);
+      }
+    }
+
+read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
+
+result, same session: 
+Error: The operation is insecure.,
+Error: The operation is insecure.
+
+result, different session: 
+Error: The operation is insecure.,
+Error: The operation is insecure.
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>localStorage</div>
+            <pre class="tooltipText">The localStorage API gives websites access to a key-value database that will remain available across visits. If the localStorage API is not partitioned or blocked, it can also be used to track users across websites.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
+
+read: () =&gt; localStorage.getItem(&quot;secret&quot;)
+
+result, same session: 
+Error: The operation is insecure.,
+Error: The operation is insecure.
+
+result, different session: 
+Error: The operation is insecure.,
+Error: The operation is insecure.
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>prefetch cache</div>
+            <pre class="tooltipText">A &lt;link rel=&#39;prefetch&#39;...&gt; suggests to browsers they should fetch a resource ahead of time and cache it. But if browsers don&#39;t partition this cache, it can be used to track users across websites.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      let link = document.createElement(&quot;link&quot;);
+      link.rel = &quot;prefetch&quot;;
+      link.href = testURI(&quot;resource&quot;, &quot;prefetch&quot;, key);
+      document.getElementsByTagName(&quot;head&quot;)[0].appendChild(link);
+      return key;
+    }
+
+read: async (key) =&gt; {
+      let link = document.createElement(&quot;link&quot;);
+      link.rel = &quot;prefetch&quot;;
+      link.href = testURI(&quot;resource&quot;, &quot;prefetch&quot;, key);
+      document.getElementsByTagName(&quot;head&quot;)[0].appendChild(link);
+      await sleepMs(500);
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;prefetch&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      let countString = (await response.text()).trim();
+      if (parseInt(countString) === 0) {
+        throw new Error(&quot;No requests received&quot;);
+      }
+      return countString;
+    }
+
+result, same session: 
+Error: No requests received,
+Error: No requests received
+
+result, different session: 
+Error: No requests received,
+Error: No requests received
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>script cache</div>
+            <pre class="tooltipText">Caching of scripts in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
+      let script = document.createElement(&quot;script&quot;);
+      document.body.appendChild(script);
+      script.addEventListener(&quot;load&quot;, () =&gt; resolve(key), {once: true});
+      script.src = testURI(&quot;resource&quot;, &quot;script&quot;, key);
+    })
+
+read: async (key) =&gt; {
+      let script = document.createElement(&quot;script&quot;);
+      document.body.appendChild(script);
+      let scriptLoadPromise = new Promise((resolve, reject) =&gt; {
+        script.addEventListener(&quot;load&quot;, resolve, {once: true});
+      });
+      script.src = testURI(&quot;resource&quot;, &quot;script&quot;, key);
+      await scriptLoadPromise;
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;script&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      return (await response.text()).trim();
+    }
+
+result, same session: 1, 1
+
+result, different session: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Web SQL Database</div>
+            <pre class="tooltipText">The Web SQL Database is a deprecated web API for storing data in an SQL database.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      if (!window.openDatabase) {
+        throw new Error(&quot;gported&quot;);
+      }
+      let database = window.openDatabase(&quot;sqlite_supercookie&quot;, &quot;&quot;, &quot;supercookie&quot;, 1024 * 1024);
+      let tx = new Promise((resolve) =&gt; database.transaction(tx =&gt; {
+        tx.executeSql(
+          `CREATE TABLE IF NOT EXISTS cache(
+             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+             name TEXT NOT NULL,
+             value TEXT NOT NULL,
+             UNIQUE (name)
+           )`,
+          [], (tx, rs) =&gt; {}, (tx, err) =&gt; {});
+        tx.executeSql(
+          `INSERT OR REPLACE INTO cache(name, value)
+           VALUES(?, ?)`,
+          [&quot;secret&quot;, key], (tx, rs) =&gt; {}, (tx, rs) =&gt; {});
+      }));
+    }
+
+read: async () =&gt; {
+      let database = window.openDatabase(&quot;sqlite_supercookie&quot;, &quot;&quot;, &quot;supercookie&quot;, 1024 * 1024);
+      let result = await new Promise((resolve, reject) =&gt; database.transaction(tx =&gt; {
+        tx.executeSql(
+          &quot;SELECT value FROM cache WHERE name=?&quot;,
+          [&quot;secret&quot;],
+          (tx, rs) =&gt; resolve(rs),
+          (tx, err) =&gt; reject(err));
+      }));
+      return result.rows.item(0).value;
+    }
+
+result, same session: 
+Error: window.openDatabase is not a function,
+Error: window.openDatabase is not a function
+
+result, different session: 
+Error: window.openDatabase is not a function,
+Error: window.openDatabase is not a function
+
+unsupported: true, true
+
+passed: undefined
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>XMLHttpRequest cache</div>
+            <pre class="tooltipText">Similar to the newer Fetch API, any resource received may be cached by the browser. The cache is potentially vulnerable to cross-site tracking attack.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      const req = new XMLHttpRequest();
+      const loadPromise = new Promise(resolve =&gt; req.addEventListener(&quot;load&quot;, resolve));
+      req.open(&quot;GET&quot;, testURI(&quot;resource&quot;, &quot;xhr&quot;, key));
+      req.send();
+      await loadPromise;
+      return key;
+    }
+
+read: async (key) =&gt; {
+      const req = new XMLHttpRequest();
+      const loadPromise = new Promise(resolve =&gt; req.addEventListener(&quot;load&quot;, resolve));
+      req.open(&quot;GET&quot;, testURI(&quot;resource&quot;, &quot;xhr&quot;, key));
+      req.send();
+      await loadPromise;
+      let countResponse = await fetch(testURI(&quot;ctr&quot;, &quot;xhr&quot;, key),
+                                      {cache: &quot;reload&quot;});
+      return (await countResponse.text()).trim();
+    }
+
+result, same session: 1, 1
+
+result, different session: 2, 2
+
+unsupported: false, false
+
+passed: true, true
+
+test failed: false, false</pre>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="8" class="subheading tooltipParent">
+            <div><span class="subheading-title">DNS privacy tests</span><span class="tagline">Which browsers keep their DNS queries encrypted?</span></div>
+            <pre class="tooltipText">The Domain Name System (DNS) is the method by which web browsers look up the IP address for each website you visit. In a DNS query, a web browser will ask a DNS resolver (somewhere on the internet) for the IP address corresponding to a domain name (such as nytimes.com) for a website you want to visit. Traditionally, most web browsers have sent their DNS queries unencrypted, which means your ISP or anyone else on the network between your computer and the DNS resolver can eavesdrop on the websites you visit. In recent years, web browsers and operating systems have begun to introduce encrypted DNS, including the DNS over HTTPS (DoH) protocol, to encrypt the DNS request from your browser and the response from the resolver to keep your browsing history from leaking. These tests check whether a browser is still protecting its DNS requests by sending them encrypted.</span>
+        </th></tr></table><p class="footer">Tests ran at 2024-02-03 01:30:42 UTC.
+         Source version: <a href="https://github.com/privacytests/privacytests.org/tree/6515e5cb4e099dde92f66bcf5621af666bb32ad9"
+    >6515e5cb</a>.
+    Raw data in <a href="tor-android2.json">JSON</a>.
+    </p><script type="module">
+  const table = document.querySelector(".comparison-table");
+  let visibleTooltip = null;
+  const hide = () => {
+    if (visibleTooltip) {
+      visibleTooltip.style.display = "none";
+      visibleTooltip.parentElement.style.backgroundColor = "";
+      visibleTooltip = null;
+    }
+  }
+  const show = (tooltip) => {
+    hide();
+    const viewportWidth = document.documentElement.clientWidth;
+    tooltip.style.display = "block";
+    tooltip.parentElement.style.backgroundColor = "#ffa";
+    const tooltipRight = tooltip.getClientRects()[0].right;
+    const tableRight = table.getClientRects()[0].right;
+    const overflowX = tooltipRight- tableRight + 8;
+    if (overflowX > 0) {
+      tooltip.style.transform="translate(" + (-overflowX) +"px, -12px)";
+    }
+    visibleTooltip = tooltip;
+  }
+  document.addEventListener("mousedown", e => {
+    if (e.button !== 0) {
+      return;
+    }
+    const tooltipParent = e.composedPath().filter(element => element.classList?.contains("tooltipParent"))[0];
+    if (tooltipParent) {
+      const tooltip = tooltipParent.querySelector(".tooltipText");
+      if (tooltip) {
+        tooltip === visibleTooltip ? hide() : show(tooltip);
+      }
+    } else if (e.target.classList.contains("tooltipText")) {
+      hide();
+    } else {
+      hide();
+    }
+  });
+  //document.addEventListener("scroll", hide);
+</script>
+          </th>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
