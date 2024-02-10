@@ -66,6 +66,7 @@ const getDNS = (networkService) => {
 };
 
 const setDNS = (networkService, dnsAddresses) => {
+  console.log(`setting DNS addresses on ${networkService} to ${dnsAddresses}`)
   let addressCommands;
   if (dnsAddresses === undefined || (dnsAddresses && dnsAddresses.length === 0)) {
     addressCommands = '"Empty"';

@@ -6,8 +6,9 @@ const clients = new Set();
 const setupServer = () => {
   const unixServer = net.createServer(function (client) {
     // Allow local connections only
-    if (!['::1', '127.0.0.1', 'localhost'].includes(client.remoteAddress)) {
+    if (!['::1', '127.0.0.1', 'localhost', '::ffff:127.0.0.1'].includes(client.remoteAddress)) {
       client.destroy();
+      console.log(`Rejected connection from ${client.remoteAddress}.`)
       return;
     }
     client.on('data', () => {
@@ -24,14 +25,16 @@ const setupServer = () => {
 
 const runTcpDump = () => {
   const proc = exec('tcpdump -l udp port 53');
-  proc.stdout.on('data', data => clients.forEach(client => {
+  proc.stdout.on('data', data => {
     console.log(data);
-    try {
-      client.write(data);
-    } catch (e) {
-      console.log(e);
-    }
-  }));
+    clients.forEach(client => {
+      try {
+        client.write(data);
+      } catch (e) {
+        console.log(e);
+      }
+    })
+  });
   proc.on('exit', () => {
     runTcpDump();
   });
