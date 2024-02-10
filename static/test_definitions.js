@@ -3,7 +3,7 @@ export let tests = (async () => {
 
 const IdbKeyVal = await import('https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs');
 
-const baseURI = document.location.origin + "/live/";
+const baseURI = /*document.location.origin + "/live/";*/ "https://test-pages.privacytests2.org/live/";
 
 const altSvcOrigin = document.location.origin.includes("privacytests3.org") ?
       "https://altsvc.privacytests3.org:4435" : "https://altsvc.privacytests2.org:4433";
@@ -327,43 +327,6 @@ return {
       let results = await fetch("https://tls.privacytests2.org:8900/");
       return (await results.json()).sessionId;
     }
-  },
-  "Web SQL Database": {
-    category: "supercookies",
-    description: "The Web SQL Database is a deprecated web API for storing data in an SQL database.",
-    // Borrowed from https://github.com/samyk/evercookie
-    write: async (key) => {
-      if (!window.openDatabase) {
-        throw new Error("gported");
-      }
-      let database = window.openDatabase("sqlite_supercookie", "", "supercookie", 1024 * 1024);
-      let tx = new Promise((resolve) => database.transaction(tx => {
-        tx.executeSql(
-          `CREATE TABLE IF NOT EXISTS cache(
-             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-             name TEXT NOT NULL,
-             value TEXT NOT NULL,
-             UNIQUE (name)
-           )`,
-          [], (tx, rs) => {}, (tx, err) => {});
-        tx.executeSql(
-          `INSERT OR REPLACE INTO cache(name, value)
-           VALUES(?, ?)`,
-          ["secret", key], (tx, rs) => {}, (tx, rs) => {});
-      }));
-    },
-    read: async () => {
-      let database = window.openDatabase("sqlite_supercookie", "", "supercookie", 1024 * 1024);
-      let result = await new Promise((resolve, reject) => database.transaction(tx => {
-        tx.executeSql(
-          "SELECT value FROM cache WHERE name=?",
-          ["secret"],
-          (tx, rs) => resolve(rs),
-          (tx, err) => reject(err));
-      }));
-      return result.rows.item(0).value;
-    },
-    session: true,
   },
 /*  "basic_auth": {
     write: async (key) => {
