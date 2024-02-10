@@ -1,4 +1,37 @@
 # News
+## [Issue 80](/archive/issue80): 2024-02-01
+
+### New browser versions
+
+On Desktop:
+* Brave 1.62
+* Chrome 121.0
+* Edge 121.0
+* Firefox 122.0
+* Librewolf 122.0-2
+* Safari 17.3
+* Ungoogled 121.0
+
+On iOS:
+* Chrome 121.6167
+* Firefox 122.0
+* Focus 122.0
+* Yandex 2401.1
+
+On Android:
+* Brave 1.62
+* Chrome 121.0
+* Duckduckgo 5.185
+* Edge 121.0
+* Firefox 122.0
+* Focus 122.0
+* Opera 80.1
+* Yandex 24.1
+
+### New tests
+
+This issue includes DNS privacy tests for the first time.
+
 ## [Issue 79](/archive/issue79): 2024-01-18
 
 ### New browser versions

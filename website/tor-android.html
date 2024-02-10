@@ -386,9 +386,9 @@ table.comparison-table .date {
         </div>
       </div>
       <div class="banner" id="issueBanner">
-        <div class="left-heading">No. 79</div>
+        <div class="left-heading">No. 80</div>
         <div class="middle-heading">Open-source tests of web browser privacy.</div>
-        <div class="right-heading">Updated 2024-01-16</div>
+        <div class="right-heading">Updated 2024-02-03</div>
       </div>
       <div class="banner" id="navBanner">
         <div class="navItem "><a href=".">Desktop browsers</a></div>
@@ -463,18 +463,15 @@ read: async () =&gt; {
       return protocol;
     }
 
-result, same first party: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, same first party: Error: Unsupported
 
-result, different first party: h2, h2, h2
+result, different first party: h2
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </th>
         </tr>
         <tr>
@@ -500,21 +497,15 @@ read: async (secret) =&gt; {
       return blobResponse.text();
     }
 
-result, same first party: 
-Error: NetworkError when attempting to fetch resource.,
-Error: NetworkError when attempting to fetch resource.,
-Error: NetworkError when attempting to fetch resource.
+result, same first party: Error: NetworkError when attempting to fetch resource.
 
-result, different first party: 
-Error: NetworkError when attempting to fetch resource.,
-Error: NetworkError when attempting to fetch resource.,
-Error: NetworkError when attempting to fetch resource.
+result, different first party: Error: NetworkError when attempting to fetch resource.
 
-unsupported: false, false, false
+unsupported: false
 
 passed: undefined
 
-test failed: true, true, true</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
@@ -548,21 +539,15 @@ read: () =&gt;
         setTimeout(() =&gt; reject({message: &quot;no BroadcastChannel message&quot;}), 3000);
       })
 
-result, same first party: 
-Error: no BroadcastChannel message,
-Error: no BroadcastChannel message,
-Error: no BroadcastChannel message
+result, same first party: Error: no BroadcastChannel message
 
-result, different first party: 
-Error: The operation is insecure.,
-Error: The operation is insecure.,
-Error: The operation is insecure.
+result, different first party: Error: The operation is insecure.
 
-unsupported: false, false, false
+unsupported: false
 
 passed: undefined
 
-test failed: true, true, true</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
@@ -587,21 +572,15 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 
-result, same first party: 
-Error: The operation is insecure.,
-Error: The operation is insecure.,
-Error: The operation is insecure.
+result, same first party: Error: The operation is insecure.
 
-result, different first party: 
-Error: The operation is insecure.,
-Error: The operation is insecure.,
-Error: The operation is insecure.
+result, different first party: Error: The operation is insecure.
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -622,18 +601,15 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 
-result, same first party: 
-05da0cf3-c3f1-456e-9131-51fd4bb8933d_http,
-e12f334e-76b0-4ebc-aa46-96e6aa14c022_http,
-39960fb8-e89f-4bf8-99a2-136a8909aa1c_http
+result, same first party: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718_http
 
-result, different first party: , , 
+result, different first party: null
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -648,18 +624,15 @@ test failed: false, false, false</pre>
 
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 
-result, same first party: 
-05da0cf3-c3f1-456e-9131-51fd4bb8933d_js,
-e12f334e-76b0-4ebc-aa46-96e6aa14c022_js,
-39960fb8-e89f-4bf8-99a2-136a8909aa1c_js
+result, same first party: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718_js
 
-result, different first party: , , 
+result, different first party: null
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -692,21 +665,15 @@ read: async () =&gt; {
       return cookie.value;
     }
 
-result, same first party: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, same first party: Error: Unsupported
 
-result, different first party: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, different first party: Error: Unsupported
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -749,21 +716,15 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 
-result, same first party: 
-fake_45350076601686284,
-fake_303031359304494,
-fake_16408129641634162
+result, same first party: fake_39426724781899525
 
-result, different first party: 
-fake_044834183127311356,
-fake_17896262748628522,
-fake_9995927196246372
+result, different first party: fake_008487300557912691
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -786,15 +747,15 @@ read: async (key) =&gt; {
       return count;
     }
 
-result, same first party: 1, 1, 1
+result, same first party: 1
 
-result, different first party: 1, 1, 1
+result, different first party: 1
 
-unsupported: false, false, false
+unsupported: false
 
-passed: false, false, false
+passed: false
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -817,15 +778,15 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same first party: 1, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -864,15 +825,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same first party: 1, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -904,21 +865,15 @@ read: async () =&gt; {
       }
     }
 
-result, same first party: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, same first party: Error: Unsupported
 
-result, different first party: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, different first party: Error: Unsupported
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -936,18 +891,15 @@ read: async () =&gt; {
       return await response.text();
     }
 
-result, same first party: 
-05da0cf3-c3f1-456e-9131-51fd4bb8933d,
-e12f334e-76b0-4ebc-aa46-96e6aa14c022,
-39960fb8-e89f-4bf8-99a2-136a8909aa1c
+result, same first party: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718
 
-result, different first party: , , 
+result, different first party: 
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -965,18 +917,15 @@ read: async () =&gt; {
       return await response.text();
     }
 
-result, same first party: 
-05da0cf3-c3f1-456e-9131-51fd4bb8933d,
-e12f334e-76b0-4ebc-aa46-96e6aa14c022,
-39960fb8-e89f-4bf8-99a2-136a8909aa1c
+result, same first party: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718
 
-result, different first party: , , 
+result, different first party: 
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1005,15 +954,15 @@ read: async () =&gt; {
       return await response.text();
     }
 
-result, same first party: , , 
+result, same first party: 
 
-result, different first party: , , 
+result, different first party: 
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1026,18 +975,15 @@ test failed: false, false, false</pre>
 
 read: null
 
-result, same first party: , , 
+result, same first party: null
 
-result, different first party: 
-HTTPS used by default; no HSTS cache issue expected,
-HTTPS used by default; no HSTS cache issue expected,
-HTTPS used by default; no HSTS cache issue expected
+result, different first party: HTTPS used by default; no HSTS cache issue expected
 
-unsupported: , , 
+unsupported: null
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1050,18 +996,15 @@ test failed: false, false, false</pre>
 
 read: null
 
-result, same first party: , , 
+result, same first party: null
 
-result, different first party: 
-HTTPS used by default; no HSTS cache issue expected,
-HTTPS used by default; no HSTS cache issue expected,
-HTTPS used by default; no HSTS cache issue expected
+result, different first party: HTTPS used by default; no HSTS cache issue expected
 
-unsupported: , , 
+unsupported: null
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1091,15 +1034,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same first party: 1, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1128,15 +1071,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same first party: 1, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1155,21 +1098,15 @@ test failed: false, false, false</pre>
 
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 
-result, same first party: 
-05da0cf3-c3f1-456e-9131-51fd4bb8933d,
-e12f334e-76b0-4ebc-aa46-96e6aa14c022,
-39960fb8-e89f-4bf8-99a2-136a8909aa1c
+result, same first party: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718
 
-result, different first party: 
-Error: The operation is insecure.,
-Error: The operation is insecure.,
-Error: The operation is insecure.
+result, different first party: Error: The operation is insecure.
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1182,21 +1119,15 @@ test failed: false, false, false</pre>
 
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 
-result, same first party: 
-05da0cf3-c3f1-456e-9131-51fd4bb8933d,
-e12f334e-76b0-4ebc-aa46-96e6aa14c022,
-39960fb8-e89f-4bf8-99a2-136a8909aa1c
+result, same first party: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718
 
-result, different first party: 
-Error: The operation is insecure.,
-Error: The operation is insecure.,
-Error: The operation is insecure.
+result, different first party: Error: The operation is insecure.
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1222,21 +1153,15 @@ read: async () =&gt; {
       }
     }
 
-result, same first party: 
-Error: queryResult.held[0] is undefined,
-Error: queryResult.held[0] is undefined,
-Error: queryResult.held[0] is undefined
+result, same first party: Error: queryResult.held[0] is undefined
 
-result, different first party: 
-Error: LockManager.query: query() is not allowed in this context,
-Error: LockManager.query: query() is not allowed in this context,
-Error: LockManager.query: query() is not allowed in this context
+result, different first party: Error: LockManager.query: query() is not allowed in this context
 
-unsupported: false, false, false
+unsupported: false
 
 passed: undefined
 
-test failed: true, true, true</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1268,21 +1193,52 @@ read: async (key) =&gt; {
       return countString;
     }
 
-result, same first party: 
-Error: No requests received,
-Error: No requests received,
-Error: No requests received
+result, same first party: Error: No requests received
 
-result, different first party: 
-Error: No requests received,
-Error: No requests received,
-Error: No requests received
+result, different first party: Error: No requests received
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>script cache</div>
+            <pre class="tooltipText">Caching of scripts in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
+      let script = document.createElement(&quot;script&quot;);
+      document.body.appendChild(script);
+      script.addEventListener(&quot;load&quot;, () =&gt; resolve(key), {once: true});
+      script.src = testURI(&quot;resource&quot;, &quot;script&quot;, key);
+    })
+
+read: async (key) =&gt; {
+      let script = document.createElement(&quot;script&quot;);
+      document.body.appendChild(script);
+      let scriptLoadPromise = new Promise((resolve, reject) =&gt; {
+        script.addEventListener(&quot;load&quot;, resolve, {once: true});
+      });
+      script.src = testURI(&quot;resource&quot;, &quot;script&quot;, key);
+      await scriptLoadPromise;
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;script&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      return (await response.text()).trim();
+    }
+
+result, same first party: 1
+
+result, different first party: 2
+
+unsupported: false
+
+passed: true
+
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1322,21 +1278,15 @@ read: async () =&gt; {
       return await response.text();
     }
 
-result, same first party: 
-Error: navigator.serviceWorker is undefined,
-Error: navigator.serviceWorker is undefined,
-Error: navigator.serviceWorker is undefined
+result, same first party: Error: navigator.serviceWorker is undefined
 
-result, different first party: 
-Error: navigator.serviceWorker is undefined,
-Error: navigator.serviceWorker is undefined,
-Error: navigator.serviceWorker is undefined
+result, different first party: Error: navigator.serviceWorker is undefined
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1375,21 +1325,15 @@ read: async () =&gt; {
       return message;
     }
 
-result, same first party: 
-Error: no SharedWorker message received,
-Error: no SharedWorker message received,
-Error: no SharedWorker message received
+result, same first party: Error: no SharedWorker message received
 
-result, different first party: 
-Error: The operation is insecure.,
-Error: The operation is insecure.,
-Error: The operation is insecure.
+result, different first party: Error: The operation is insecure.
 
-unsupported: false, false, false
+unsupported: false
 
 passed: undefined
 
-test failed: true, true, true</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1408,21 +1352,15 @@ read: async () =&gt; {
       return (await results.json()).sessionId;
     }
 
-result, same first party: 
-493d8539561950d574214f4f4516fc95a4611e0e8b5f11b604bc9f2e4ba31aa7,
-1c7e017b8f8fb115702793f915d0b2343d1f0a30043830856ca9e7d89b9359fb,
-af199da6fda83950dc010ab10fbe2ca1aa004e07eda6f8e6fd0c9a28b7736aae
+result, same first party: 1c3342e24239fdac295d69ac64a9973ee5f3eaafe35fbac92f87464aa220d5d5
 
-result, different first party: 
-0a347f1b033264e379737f103bb8b4b5425e4779e9ab563139de7093a27d1c16,
-f9e251dd9692a075e123d9987c8101132d6a918c9314961d157596449be280eb,
-5289d8c85e5a446f93b51fc83fdd2e232ba3fa568016e4f0a3a7a47a2d13f25e
+result, different first party: 9cb718538263da06add36391bb82ea1d4144cb93e4a34684279891c47b9ede32
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1464,21 +1402,15 @@ read: async () =&gt; {
       return result.rows.item(0).value;
     }
 
-result, same first party: 
-Error: window.openDatabase is not a function,
-Error: window.openDatabase is not a function,
-Error: window.openDatabase is not a function
+result, same first party: Error: window.openDatabase is not a function
 
-result, different first party: 
-Error: window.openDatabase is not a function,
-Error: window.openDatabase is not a function,
-Error: window.openDatabase is not a function
+result, different first party: Error: window.openDatabase is not a function
 
-unsupported: false, false, false
+unsupported: false
 
 passed: undefined
 
-test failed: true, true, true</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1507,15 +1439,15 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same first party: 1, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1531,21 +1463,15 @@ test failed: false, false, false</pre>
 
 read: () =&gt; document.referrer
 
-result, same first party: 
-https://test-pages.privacytests2.org/,
-https://test-pages.privacytests2.org/,
-https://test-pages.privacytests2.org/
+result, same first party: https://test-pages.privacytests2.org/
 
-result, different first party: 
-https://test-pages.privacytests2.org/,
-https://test-pages.privacytests2.org/,
-https://test-pages.privacytests2.org/
+result, different first party: https://test-pages.privacytests2.org/
 
-unsupported: false, false, false
+unsupported: false
 
-passed: false, false, false
+passed: false
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </th>
         </tr>
         <tr>
@@ -1558,18 +1484,15 @@ test failed: false, false, false</pre>
 
 read: () =&gt; sessionStorage.getItem(&quot;secret&quot;)
 
-result, same first party: 
-05da0cf3-c3f1-456e-9131-51fd4bb8933d,
-e12f334e-76b0-4ebc-aa46-96e6aa14c022,
-39960fb8-e89f-4bf8-99a2-136a8909aa1c
+result, same first party: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718
 
-result, different first party: , , 
+result, different first party: null
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1582,18 +1505,15 @@ test failed: false, false, false</pre>
 
 read: () =&gt; window.name
 
-result, same first party: 
-name_05da0cf3-c3f1-456e-9131-51fd4bb8933d,
-name_e12f334e-76b0-4ebc-aa46-96e6aa14c022,
-name_39960fb8-e89f-4bf8-99a2-136a8909aa1c
+result, same first party: name_8cb8d76f-3f41-4ee7-99ea-eee31e3a0718
 
-result, different first party: , , 
+result, different first party: 
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1605,8 +1525,8 @@ test failed: false, false, false</pre>
                 <pre class="tooltipText"></span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true,true,true
-result: Insecure website never loaded,Insecure website never loaded,Insecure website never loaded</pre>
+<pre class="tooltipText">passed: true
+result: Insecure website never loaded</pre>
           </th>
         </tr>
         <tr>
@@ -1615,8 +1535,8 @@ result: Insecure website never loaded,Insecure website never loaded,Insecure web
             <pre class="tooltipText">Checks to see if an insecure address entered into the browser&#39;s address bar is upgraded to HTTPS whenever possible.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">upgraded: true,true,true
-passed: true,true,true</pre>
+<pre class="tooltipText">upgraded: true
+passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1625,8 +1545,8 @@ passed: true,true,true</pre>
             <pre class="tooltipText">Checks to see if the user has clicked on a hyperlink to an insecure address, if the browser upgrades that address to HTTPS whenever possible.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">upgraded: true,true,true
-passed: true,true,true</pre>
+<pre class="tooltipText">upgraded: true
+passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1635,8 +1555,8 @@ passed: true,true,true</pre>
             <pre class="tooltipText">Checks to see if the browser attempts to upgrade an insecure address for an image to HTTPS whenever possible.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true,true,true
-result: upgraded,upgraded,upgraded</pre>
+<pre class="tooltipText">passed: true
+result: upgraded</pre>
           </td>
         </tr>
         <tr>
@@ -1645,8 +1565,8 @@ result: upgraded,upgraded,upgraded</pre>
             <pre class="tooltipText">Checks to see if the browser attempts to upgrade an insecure address for an script to HTTPS whenever possible.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true,true,true
-result: upgraded,upgraded,upgraded</pre>
+<pre class="tooltipText">passed: true
+result: upgraded</pre>
           </td>
         </tr>
         <tr>
@@ -1659,7 +1579,7 @@ result: upgraded,upgraded,upgraded</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">SNI_status: plaintext
-passed: false,false,false</pre>
+passed: false</pre>
           </th>
         </tr>
         <tr>
@@ -1669,7 +1589,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">header value: undefined
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1678,7 +1598,7 @@ passed: false,false,false</pre>
             <pre class="tooltipText">The Global Privacy Control is an HTTP header that can be sent by a browser to instruct a visited website not to sell the user&#39;s personal data to other parties. This test checks to see if the GPC header is sent to third-party elements on the web page.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">passed: false,false,false</pre>
+<pre class="tooltipText">passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1687,7 +1607,7 @@ passed: false,false,false</pre>
             <pre class="tooltipText">IP addresses can be used to uniquely identify a large percentage of users. A proxy, VPN, or Tor can mask a user&#39;s IP address.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true,true,true</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1708,11 +1628,11 @@ read: async () =&gt; {
         throw new Error(&quot;Unsupported&quot;);
       }
     }
-unsupported: false,false,false
-readSameFirstParty: 2a0b:f4c2::23,2001:67c:6ec:203:192:42:116:186,2a0b:f4c0:16c:15::1
-readDifferentFirstParty: 2001:67c:6ec:203:192:42:116:186,2a0b:f4c2:2::32,2605:6400:d814:5125::
-passed: true,true,true
-testFailed: false,false,false</pre>
+unsupported: false
+readSameFirstParty: 2a0b:f4c2:1::1
+readDifferentFirstParty: 2620:18c:0:192::227
+passed: true
+testFailed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1721,8 +1641,8 @@ testFailed: false,false,false</pre>
             <pre class="tooltipText">The Tor network sends the browser&#39;s web requests through a series of relays to hide a user&#39;s IP address, thereby helping to mask their identity and location. This test checks to see if the Tor network is being used by default.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">IsTorExit: true,true,true
-passed: true,true,true</pre>
+<pre class="tooltipText">IsTorExit: true
+passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1738,7 +1658,7 @@ passed: true,true,true</pre>
 desired expression: undefined
 actual value: undefined
 desired value: undefined
-passed: false,false,false</pre>
+passed: false</pre>
           </th>
         </tr>
         <tr>
@@ -1749,9 +1669,9 @@ passed: false,false,false</pre>
 >
 <pre class="tooltipText">expression: undefined
 desired expression: undefined
-actual value: 980,980,980
+actual value: 980
 desired value: undefined
-passed: true,true,true</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1762,9 +1682,9 @@ passed: true,true,true</pre>
 >
 <pre class="tooltipText">expression: outerHeight
 desired expression: undefined
-actual value: 1822,1822,1822
+actual value: 1822
 desired value: undefined
-passed: true,true,true</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1775,9 +1695,9 @@ passed: true,true,true</pre>
 >
 <pre class="tooltipText">expression: screen.height
 desired expression: undefined
-actual value: 1822,1822,1822
+actual value: 1822
 desired value: undefined
-passed: true,true,true</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1788,9 +1708,9 @@ passed: true,true,true</pre>
 >
 <pre class="tooltipText">expression: screen.width
 desired expression: undefined
-actual value: 980,980,980
+actual value: 980
 desired value: undefined
-passed: true,true,true</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1801,9 +1721,9 @@ passed: true,true,true</pre>
 >
 <pre class="tooltipText">expression: screenX
 desired expression: undefined
-actual value: 0,0,0
+actual value: 0
 desired value: undefined
-passed: true,true,true</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1814,9 +1734,9 @@ passed: true,true,true</pre>
 >
 <pre class="tooltipText">expression: screenY
 desired expression: undefined
-actual value: 0,0,0
+actual value: 0
 desired value: undefined
-passed: true,true,true</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1828,8 +1748,8 @@ passed: true,true,true</pre>
                 <pre class="tooltipText">HubSpot tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </th>
         </tr>
         <tr>
@@ -1838,8 +1758,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">HubSpot tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1848,8 +1768,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">HubSpot tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1858,8 +1778,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">Drip.com email address tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1868,8 +1788,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">HubSpot tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1878,8 +1798,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">Yandex tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1888,8 +1808,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">DoubleClick Click ID (Google)</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1898,8 +1818,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">Facebook Click Identifier</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1908,8 +1828,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">Google Click Identifier</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1918,8 +1838,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">HubSpot tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1928,8 +1848,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">Mailchimp Email ID (email recipient&#39;s address)</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1938,8 +1858,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">Adobe Marketo tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1948,8 +1868,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">MailerLite email tracking</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1958,8 +1878,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">MailerLite email tracking</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1968,8 +1888,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">Microsoft Click ID</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1978,8 +1898,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">Omeda marketing &#39;anonymous&#39; customer id</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1988,8 +1908,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">Omeda marketing &#39;known&#39; customer id</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1998,8 +1918,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">Unknown high-entropy tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2008,8 +1928,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">Adobe Site Catalyst tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2018,8 +1938,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">Vero tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2028,8 +1948,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">Vero tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2038,8 +1958,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">Wicked Reports e-commerce tracking</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2048,8 +1968,8 @@ passed: false,false,false</pre>
             <pre class="tooltipText">Yandex Click ID</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3196850088960117
-passed: false,false,false</pre>
+<pre class="tooltipText">value: 8303910894658098
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2062,7 +1982,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://munchkin.marketo.net/munchkin.js
-passed: false,false,false</pre>
+passed: false</pre>
           </th>
         </tr>
         <tr>
@@ -2072,7 +1992,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://dpm.demdex.net/ibs
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2082,7 +2002,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://s.amazon-adsystem.com/dcm
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2092,7 +2012,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://ib.adnxs.com/px?id=178248&amp;t=1
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2102,7 +2022,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://bat.bing.com/bat.js
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2112,7 +2032,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://static.chartbeat.com/js/chartbeat.js
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2122,7 +2042,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://dis.criteo.com/dis/rtb/appnexus/cookiematch.aspx
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2132,7 +2052,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://securepubads.g.doubleclick.net/static/glade.js
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2142,7 +2062,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://connect.facebook.net/en_US/fbevents.js
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2152,7 +2072,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://www.google.com/pagead/1p-user-list/
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2162,7 +2082,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://google-analytics.com/urchin.js
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2172,7 +2092,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2182,7 +2102,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&amp;external_user_id=629685505537&amp;C=1
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2192,7 +2112,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://js-agent.newrelic.com/nr-1212.min.js
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2202,7 +2122,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://pixel.quantserve.com/pixel
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2212,7 +2132,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://sb.scorecardresearch.com/internal-c2/default/cs.js
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2222,7 +2142,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://trc.taboola.com/futureplc-tomsguide/trc/3/json
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2232,7 +2152,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://t.co/i/adsct
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2242,7 +2162,7 @@ passed: false,false,false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://yandex.ru/ads/system/header-bidding.js
-passed: false,false,false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2282,15 +2202,15 @@ read: async () =&gt; {
       return protocol;
     }
 
-result, same session: h2, h2, h2
+result, same session: h2
 
-result, different session: h2, h2, h2
+result, different session: h2
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </th>
         </tr>
         <tr>
@@ -2315,28 +2235,22 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 
-result, same session: 
-Error: The operation is insecure.,
-Error: The operation is insecure.,
-Error: The operation is insecure.
+result, same session: Error: The operation is insecure.
 
-result, different session: 
-Error: The operation is insecure.,
-Error: The operation is insecure.,
-Error: The operation is insecure.
+result, different session: Error: The operation is insecure.
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>cookie (HTTP)</div>
             <pre class="tooltipText">The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website&#39;s behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.</span>
-              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
 >
 <pre class="tooltipText">write: async (secret) =&gt; {
       // Request a page that will send an HTTPOnly &#39;set-cookie&#39; response header with secret value.
@@ -2350,18 +2264,15 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 
-result, same session: 
-05da0cf3-c3f1-456e-9131-51fd4bb8933d_1p_http,
-e12f334e-76b0-4ebc-aa46-96e6aa14c022_1p_http,
-39960fb8-e89f-4bf8-99a2-136a8909aa1c_1p_http
+result, same session: null
 
-result, different session: , , 
+result, different session: null
 
-unsupported: false, false, false
+unsupported: true
 
-passed: true, true, true
+passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2376,18 +2287,15 @@ test failed: false, false, false</pre>
 
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 
-result, same session: 
-05da0cf3-c3f1-456e-9131-51fd4bb8933d_1p_js,
-e12f334e-76b0-4ebc-aa46-96e6aa14c022_1p_js,
-39960fb8-e89f-4bf8-99a2-136a8909aa1c_1p_js
+result, same session: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718_1p_js
 
-result, different session: , , 
+result, different session: null
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2420,21 +2328,15 @@ read: async () =&gt; {
       return cookie.value;
     }
 
-result, same session: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, same session: Error: Unsupported
 
-result, different session: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, different session: Error: Unsupported
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2477,21 +2379,15 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 
-result, same session: 
-fake_37014226281472373,
-fake_5666484679898169,
-fake_17921646676435432
+result, same session: fake_2377776813679222
 
-result, different session: 
-fake_11038184805019013,
-fake_20462734458303733,
-fake_663726290279457
+result, different session: fake_773120311820412
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2514,15 +2410,15 @@ read: async (key) =&gt; {
       return count;
     }
 
-result, same session: 1, 1, 1
+result, same session: 1
 
-result, different session: 2, 2, 2
+result, different session: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2545,15 +2441,15 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same session: 1, 1, 1
+result, same session: 1
 
-result, different session: 2, 2, 2
+result, different session: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2592,15 +2488,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1
+result, same session: 1
 
-result, different session: 2, 2, 2
+result, different session: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2630,15 +2526,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1
+result, same session: 1
 
-result, different session: 2, 2, 2
+result, different session: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2667,15 +2563,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1
+result, same session: 1
 
-result, different session: 2, 2, 2
+result, different session: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2694,18 +2590,15 @@ test failed: false, false, false</pre>
 
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 
-result, same session: 
-05da0cf3-c3f1-456e-9131-51fd4bb8933d_1p,
-e12f334e-76b0-4ebc-aa46-96e6aa14c022_1p,
-39960fb8-e89f-4bf8-99a2-136a8909aa1c_1p
+result, same session: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718_1p
 
 result, different session: undefined
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2718,18 +2611,15 @@ test failed: false, false, false</pre>
 
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 
-result, same session: 
-05da0cf3-c3f1-456e-9131-51fd4bb8933d_1p,
-e12f334e-76b0-4ebc-aa46-96e6aa14c022_1p,
-39960fb8-e89f-4bf8-99a2-136a8909aa1c_1p
+result, same session: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718_1p
 
-result, different session: , , 
+result, different session: null
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2761,21 +2651,52 @@ read: async (key) =&gt; {
       return countString;
     }
 
-result, same session: 
-Error: No requests received,
-Error: No requests received,
-Error: No requests received
+result, same session: Error: No requests received
 
-result, different session: 
-Error: No requests received,
-Error: No requests received,
-Error: No requests received
+result, different session: Error: No requests received
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>script cache</div>
+            <pre class="tooltipText">Caching of scripts in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
+      let script = document.createElement(&quot;script&quot;);
+      document.body.appendChild(script);
+      script.addEventListener(&quot;load&quot;, () =&gt; resolve(key), {once: true});
+      script.src = testURI(&quot;resource&quot;, &quot;script&quot;, key);
+    })
+
+read: async (key) =&gt; {
+      let script = document.createElement(&quot;script&quot;);
+      document.body.appendChild(script);
+      let scriptLoadPromise = new Promise((resolve, reject) =&gt; {
+        script.addEventListener(&quot;load&quot;, resolve, {once: true});
+      });
+      script.src = testURI(&quot;resource&quot;, &quot;script&quot;, key);
+      await scriptLoadPromise;
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;script&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      return (await response.text()).trim();
+    }
+
+result, same session: 1
+
+result, different session: 2
+
+unsupported: false
+
+passed: true
+
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2817,21 +2738,15 @@ read: async () =&gt; {
       return result.rows.item(0).value;
     }
 
-result, same session: 
-Error: window.openDatabase is not a function,
-Error: window.openDatabase is not a function,
-Error: window.openDatabase is not a function
+result, same session: Error: window.openDatabase is not a function
 
-result, different session: 
-Error: window.openDatabase is not a function,
-Error: window.openDatabase is not a function,
-Error: window.openDatabase is not a function
+result, different session: Error: window.openDatabase is not a function
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2860,15 +2775,15 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same session: 1, 1, 1
+result, same session: 1
 
-result, different session: 2, 2, 2
+result, different session: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2908,15 +2823,15 @@ read: async () =&gt; {
       return protocol;
     }
 
-result, same session: h2, h2, h2
+result, same session: h2
 
-result, different session: h2, h2, h2
+result, different session: h2
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </th>
         </tr>
         <tr>
@@ -2941,21 +2856,15 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 
-result, same session: 
-Error: The operation is insecure.,
-Error: The operation is insecure.,
-Error: The operation is insecure.
+result, same session: Error: The operation is insecure.
 
-result, different session: 
-Error: The operation is insecure.,
-Error: The operation is insecure.,
-Error: The operation is insecure.
+result, different session: Error: The operation is insecure.
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2976,15 +2885,15 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 
-result, same session: , , 
+result, same session: null
 
-result, different session: , , 
+result, different session: null
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2999,15 +2908,15 @@ test failed: false, false, false</pre>
 
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 
-result, same session: , , 
+result, same session: null
 
-result, different session: , , 
+result, different session: null
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3040,21 +2949,15 @@ read: async () =&gt; {
       return cookie.value;
     }
 
-result, same session: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, same session: Error: Unsupported
 
-result, different session: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, different session: Error: Unsupported
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3097,21 +3000,15 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 
-result, same session: 
-fake_6737734321740285,
-fake_6028757871350283,
-fake_6870912088307757
+result, same session: fake_8911006433775948
 
-result, different session: 
-fake_30946513894864514,
-fake_19142189358681372,
-fake_18395455790585347
+result, different session: fake_7603699091817058
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3134,15 +3031,15 @@ read: async (key) =&gt; {
       return count;
     }
 
-result, same session: 1, 1, 1
+result, same session: 1
 
-result, different session: 2, 2, 2
+result, different session: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3165,15 +3062,15 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same session: 1, 1, 1
+result, same session: 1
 
-result, different session: 2, 2, 2
+result, different session: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3212,15 +3109,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1
+result, same session: 1
 
-result, different session: 2, 2, 2
+result, different session: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3250,15 +3147,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1
+result, same session: 1
 
-result, different session: 2, 2, 2
+result, different session: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3287,15 +3184,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1
+result, same session: 1
 
-result, different session: 2, 2, 2
+result, different session: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3314,21 +3211,15 @@ test failed: false, false, false</pre>
 
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 
-result, same session: 
-Error: The operation is insecure.,
-Error: The operation is insecure.,
-Error: The operation is insecure.
+result, same session: Error: The operation is insecure.
 
-result, different session: 
-Error: The operation is insecure.,
-Error: The operation is insecure.,
-Error: The operation is insecure.
+result, different session: Error: The operation is insecure.
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3341,21 +3232,15 @@ test failed: false, false, false</pre>
 
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 
-result, same session: 
-Error: The operation is insecure.,
-Error: The operation is insecure.,
-Error: The operation is insecure.
+result, same session: Error: The operation is insecure.
 
-result, different session: 
-Error: The operation is insecure.,
-Error: The operation is insecure.,
-Error: The operation is insecure.
+result, different session: Error: The operation is insecure.
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3387,21 +3272,52 @@ read: async (key) =&gt; {
       return countString;
     }
 
-result, same session: 
-Error: No requests received,
-Error: No requests received,
-Error: No requests received
+result, same session: Error: No requests received
 
-result, different session: 
-Error: No requests received,
-Error: No requests received,
-Error: No requests received
+result, different session: Error: No requests received
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>script cache</div>
+            <pre class="tooltipText">Caching of scripts in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
+      let script = document.createElement(&quot;script&quot;);
+      document.body.appendChild(script);
+      script.addEventListener(&quot;load&quot;, () =&gt; resolve(key), {once: true});
+      script.src = testURI(&quot;resource&quot;, &quot;script&quot;, key);
+    })
+
+read: async (key) =&gt; {
+      let script = document.createElement(&quot;script&quot;);
+      document.body.appendChild(script);
+      let scriptLoadPromise = new Promise((resolve, reject) =&gt; {
+        script.addEventListener(&quot;load&quot;, resolve, {once: true});
+      });
+      script.src = testURI(&quot;resource&quot;, &quot;script&quot;, key);
+      await scriptLoadPromise;
+      let response = await fetch(
+        testURI(&quot;ctr&quot;, &quot;script&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
+      return (await response.text()).trim();
+    }
+
+result, same session: 1
+
+result, different session: 2
+
+unsupported: false
+
+passed: true
+
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3443,21 +3359,15 @@ read: async () =&gt; {
       return result.rows.item(0).value;
     }
 
-result, same session: 
-Error: window.openDatabase is not a function,
-Error: window.openDatabase is not a function,
-Error: window.openDatabase is not a function
+result, same session: Error: window.openDatabase is not a function
 
-result, different session: 
-Error: window.openDatabase is not a function,
-Error: window.openDatabase is not a function,
-Error: window.openDatabase is not a function
+result, different session: Error: window.openDatabase is not a function
 
-unsupported: true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3486,20 +3396,26 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same session: 1, 1, 1
+result, same session: 1
 
-result, different session: 2, 2, 2
+result, different session: 2
 
-unsupported: false, false, false
+unsupported: false
 
-passed: true, true, true
+passed: true
 
-test failed: false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
-      </table>
-      <p class="footer">Tests ran at 2024-01-16 05:10:30 UTC. Source version: <a href="https://github.com/privacytests/privacytests.org/tree/b44ceeb9cef191f376692aaeb685c5dc6fb0e009">b44ceeb9</a>. Raw data in <a href="tor-android.json">JSON</a>.</p>
-      <script type="module">
+        <tr>
+          <th colspan="8" class="subheading tooltipParent">
+            <div><span class="subheading-title">DNS privacy tests</span><span class="tagline">Which browsers keep their DNS queries encrypted?</span></div>
+            <pre class="tooltipText">The Domain Name System (DNS) is the method by which web browsers look up the IP address for each website you visit. In a DNS query, a web browser will ask a DNS resolver (somewhere on the internet) for the IP address corresponding to a domain name (such as nytimes.com) for a website you want to visit. Traditionally, most web browsers have sent their DNS queries unencrypted, which means your ISP or anyone else on the network between your computer and the DNS resolver can eavesdrop on the websites you visit. In recent years, web browsers and operating systems have begun to introduce encrypted DNS, including the DNS over HTTPS (DoH) protocol, to encrypt the DNS request from your browser and the response from the resolver to keep your browsing history from leaking. These tests check whether a browser is still protecting its DNS requests by sending them encrypted.</span>
+        </th></tr></table><p class="footer">Tests ran at 2024-02-03 01:07:30 UTC.
+         Source version: <a href="https://github.com/privacytests/privacytests.org/tree/6515e5cb4e099dde92f66bcf5621af666bb32ad9"
+    >6515e5cb</a>.
+    Raw data in <a href="tor-android.json">JSON</a>.
+    </p><script type="module">
   const table = document.querySelector(".comparison-table");
   let visibleTooltip = null;
   const hide = () => {
@@ -3540,6 +3456,9 @@ test failed: false, false, false</pre>
   });
   //document.addEventListener("scroll", hide);
 </script>
+          </th>
+        </tr>
+      </table>
     </div>
   </body>
 </html>
