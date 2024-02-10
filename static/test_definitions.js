@@ -3,7 +3,7 @@ export let tests = (async () => {
 
 const IdbKeyVal = await import('https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs');
 
-const baseURI = /*document.location.origin + "/live/";*/ "https://test-pages.privacytests2.org/live/";
+const baseURI = document.location.origin + "/live/";
 
 const altSvcOrigin = document.location.origin.includes("privacytests3.org") ?
       "https://altsvc.privacytests3.org:4435" : "https://altsvc.privacytests2.org:4433";
