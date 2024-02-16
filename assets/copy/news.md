@@ -1,4 +1,24 @@
 # News
+## [Issue 81](/archive/issue81): 2024-02-14
+
+### New browser versions
+
+On Desktop:
+* Opera 107.0
+
+On iOS:
+* Edge 121.2277
+* Firefox 122.2
+* Focus 122.1
+* Opera 4.5
+* Yandex 2401.3
+
+On Android:
+* Duckduckgo 5.187
+* Focus 122.1
+* Opera 80.2
+* Tor 115.2
+
 ## [Issue 80](/archive/issue80): 2024-02-01
 
 ### New browser versions
