@@ -305,7 +305,7 @@ const resultsSection = ({ bestResults, category, tooltipFunction }) => {
   return section;
 };
 
-const resultsToTable = (results, title, subtitle, includeTrackingCookies) => {
+const resultsToTable = (results, title, subtitle, includeTrackingCookies, testMyBrowser) => {
   console.log(results);
   const bestResults = results
     .filter(m => m.testResults)
@@ -320,7 +320,8 @@ const resultsToTable = (results, title, subtitle, includeTrackingCookies) => {
   }
   const sections = readYAMLFile('../assets/copy/sections.yaml');
   for (const { category, name, description, tagline, tooltipType } of sections) {
-    if (!(!includeTrackingCookies && category === 'tracker_cookies')) {
+    if (!(!includeTrackingCookies && category === 'tracker_cookies') &&
+        !(testMyBrowser && ['session', 'dns', 'tracker_cookies'].includes(category))) {
       body.push([{ subheading: name, description, tagline }]);
       body = body.concat(resultsSection({
         bestResults,
@@ -343,8 +344,8 @@ const dateString = (dateTime) => {
 };
 
 // Creates the content for a page.
-const content = (results, jsonFilename, title, nightly, incognito) => {
-  const { headers, body } = resultsToTable(results.all_tests, tableTitleHTML(title), '(default settings)', results.platform === 'Desktop');
+const content = (results, jsonFilename, title, nightly, incognito, testMyBrowser) => {
+  const { headers, body } = resultsToTable(results.all_tests, tableTitleHTML(title), '(default settings)', results.platform === 'Desktop', testMyBrowser);
   const issueNumberPath = path.join(__dirname, 'issue-number');
   const issueNumberExists = fs.existsSync(issueNumberPath);
   const issueNumber = issueNumberExists ? fs.readFileSync(issueNumberPath).toString().trim() : undefined;
@@ -398,7 +399,7 @@ const content = (results, jsonFilename, title, nightly, incognito) => {
     </p>` + `<script type="module">${tooltipScript}</script>`;
 };
 
-const contentPage = ({ results, title, basename, previewImageUrl, tableTitle, nightly, incognito }) =>
+const contentPage = ({ results, title, basename, previewImageUrl, tableTitle, nightly, incognito, testMyBrowser }) =>
   cleanHtml(
     template.htmlPage({
       title,
@@ -408,7 +409,7 @@ const contentPage = ({ results, title, basename, previewImageUrl, tableTitle, ni
         path.join(__dirname, '/../assets/css/template.css'),
         path.join(__dirname, '../assets/css/table.css')
       ],
-      content: content(results, basename, tableTitle, nightly, incognito)
+      content: content(results, basename, tableTitle, nightly, incognito, testMyBrowser)
     }));
 
 // Reads in a file and parses it to a JSON object.
@@ -438,7 +439,7 @@ const resultsKeys = [
   'readSameSession', 'readDifferentSession',
   'actual_value', 'desired_value',
   'IsTorExit', 'cloudflareDoH', 'nextDoH', 'result',
-  'unsupported', 'upgraded', 'cookieFound', 'leak detected',
+  'unsupported', 'upgraded', 'cookieFound', 'leak detected'
 ];
 
 // Finds any repeated trials of tests and aggregate the results
@@ -493,7 +494,7 @@ const getMergedResults = (dataFiles) => {
 
 const createTitle = ({ nightly, incognito, timeStarted, platform }) => {
   const year = (new Date(timeStarted)).getFullYear().toString();
-  const onPlatformPhrase = platform === "Desktop" ? "" : `on ${platform} `;
+  const onPlatformPhrase = platform === 'Desktop' ? '' : `on ${platform} `;
   return `What are the best ${nightly ? 'alpha ' : ''}${incognito ? 'incognito modes' : 'private browsers'} ${onPlatformPhrase}in ${year}?`;
 };
 
