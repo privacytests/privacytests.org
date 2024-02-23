@@ -305,7 +305,7 @@ const resultsSection = ({ bestResults, category, tooltipFunction }) => {
   return section;
 };
 
-const resultsToTable = (results, title, subtitle, includeTrackingCookies, testMyBrowser) => {
+const resultsToTable = (results, title, subtitle, desktopOnly, testMyBrowser) => {
   console.log(results);
   const bestResults = results
     .filter(m => m.testResults)
@@ -320,7 +320,7 @@ const resultsToTable = (results, title, subtitle, includeTrackingCookies, testMy
   }
   const sections = readYAMLFile('../assets/copy/sections.yaml');
   for (const { category, name, description, tagline, tooltipType } of sections) {
-    if (!(!includeTrackingCookies && category === 'tracker_cookies') &&
+    if (!(!desktopOnly && ['tracker_cookies', 'dns'].includes(category)) &&
         !(testMyBrowser && ['session_1p', 'session_3p', 'dns', 'tracker_cookies'].includes(category))) {
       body.push([{ subheading: name, description, tagline }]);
       body = body.concat(resultsSection({
