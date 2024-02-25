@@ -156,7 +156,7 @@ const webdriverSession = _.memoize(() =>
     path: '/wd/hub',
     capabilities: {
       platformName: 'Android',
-      'appium:newCommandTimeout': 300,
+      'appium:newCommandTimeout': 600,
       'appium:automationName': 'UiAutomator2',
       'appium:uiautomator2ServerInstallTimeout': 90000
     }
@@ -243,7 +243,9 @@ class AndroidBrowser {
     }
     try {
       const highFive = await findElement(this.client, this.packageName, this.highFiveButton);
-      this.client.elementClick(highFive);
+      if (highFive !== undefined) {
+        await this.client.elementClick(highFive);
+      }
     } catch (e) {
       console.log("No high five button found");
     }
