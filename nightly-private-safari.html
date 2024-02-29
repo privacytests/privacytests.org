@@ -388,7 +388,7 @@ table.comparison-table .date {
       <div class="banner" id="issueBanner">
         <div class="left-heading">No. 81</div>
         <div class="middle-heading">Open-source tests of web browser privacy.</div>
-        <div class="right-heading">Updated 2024-02-28</div>
+        <div class="right-heading">Updated 2024-02-16</div>
       </div>
       <div class="banner" id="navBanner">
         <div class="navItem "><a href=".">Desktop browsers</a></div>
@@ -465,19 +465,15 @@ read: async () =&gt; {
       return protocol;
     }
 
-result, same first party: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, same first party: Error: Unsupported
 
-result, different first party: h2, h2, h2, h2
+result, different first party: h2
 
-unsupported: true, true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </th>
         </tr>
         <tr>
@@ -503,23 +499,15 @@ read: async (secret) =&gt; {
       return blobResponse.text();
     }
 
-result, same first party: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e,
-79e1534f-03fd-4501-8a15-705a49b0fa8d,
-6375e919-03d3-406a-b840-4e64665ae15e
+result, same first party: Error: Load failed
 
-result, different first party: 
-Error: Load failed,
-Error: Load failed,
-Error: Load failed,
-Error: Load failed
+result, different first party: Error: Load failed
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
@@ -553,23 +541,15 @@ read: () =&gt;
         setTimeout(() =&gt; reject({message: &quot;no BroadcastChannel message&quot;}), 3000);
       })
 
-result, same first party: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e,
-79e1534f-03fd-4501-8a15-705a49b0fa8d,
-6375e919-03d3-406a-b840-4e64665ae15e
+result, same first party: Error: no BroadcastChannel message
 
-result, different first party: 
-Error: no BroadcastChannel message,
-Error: no BroadcastChannel message,
-Error: no BroadcastChannel message,
-Error: no BroadcastChannel message
+result, different first party: Error: no BroadcastChannel message
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
@@ -594,23 +574,15 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 
-result, same first party: 
-47a37c68-eb39-4765-8686-ffe721bfeb14,
-47a37c68-eb39-4765-8686-ffe721bfeb14,
-47a37c68-eb39-4765-8686-ffe721bfeb14,
-47a37c68-eb39-4765-8686-ffe721bfeb14
+result, same first party: Error: undefined is not an object (evaluating &#39;cacheKeys[0].url&#39;)
 
-result, different first party: 
-Error: undefined is not an object (evaluating &#39;cacheKeys[0].url&#39;),
-Error: undefined is not an object (evaluating &#39;cacheKeys[0].url&#39;),
-Error: undefined is not an object (evaluating &#39;cacheKeys[0].url&#39;),
-Error: undefined is not an object (evaluating &#39;cacheKeys[0].url&#39;)
+result, different first party: Error: undefined is not an object (evaluating &#39;cacheKeys[0].url&#39;)
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
@@ -631,19 +603,15 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 
-result, same first party: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d_http,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e_http,
-79e1534f-03fd-4501-8a15-705a49b0fa8d_http,
-6375e919-03d3-406a-b840-4e64665ae15e_http
+result, same first party: null
 
-result, different first party: , , , 
+result, different first party: null
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
@@ -658,19 +626,15 @@ test failed: false, false, false, false</pre>
 
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 
-result, same first party: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d_js,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e_js,
-79e1534f-03fd-4501-8a15-705a49b0fa8d_js,
-6375e919-03d3-406a-b840-4e64665ae15e_js
+result, same first party: null
 
-result, different first party: , , , 
+result, different first party: null
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
@@ -703,23 +667,15 @@ read: async () =&gt; {
       return cookie.value;
     }
 
-result, same first party: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, same first party: Error: Unsupported
 
-result, different first party: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, different first party: Error: Unsupported
 
-unsupported: true, true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -762,23 +718,15 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 
-result, same first party: 
-fake_26548687407311,
-fake_5668618977487192,
-fake_3492016285229531,
-fake_7645111260675634
+result, same first party: fake_006061347023315955
 
-result, different first party: 
-fake_80223200420825,
-fake_2246969517992976,
-fake_9988237264973214,
-fake_4140109794937976
+result, different first party: fake_6504522285861836
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -801,15 +749,15 @@ read: async (key) =&gt; {
       return count;
     }
 
-result, same first party: 1, 1, 1, 1
+result, same first party: 1
 
-result, different first party: 2, 2, 2, 2
+result, different first party: 2
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -832,15 +780,15 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same first party: 2, 2, 2, 2
+result, same first party: 2
 
-result, different first party: 3, 3, 3, 3
+result, different first party: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -879,15 +827,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same first party: 2, 2, 2, 2
+result, same first party: 2
 
-result, different first party: 3, 3, 3, 3
+result, different first party: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -919,19 +867,15 @@ read: async () =&gt; {
       }
     }
 
-result, same first party: , , , 
+result, same first party: Error: Unsupported
 
-result, different first party: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, different first party: Error: Unsupported
 
-unsupported: true, true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -950,18 +894,14 @@ read: async () =&gt; {
     }
 
 result, same first party: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e,
-79e1534f-03fd-4501-8a15-705a49b0fa8d,
-6375e919-03d3-406a-b840-4e64665ae15e
 
-result, different first party: , , , 
+result, different first party: 
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
@@ -980,25 +920,21 @@ read: async () =&gt; {
     }
 
 result, same first party: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e,
-79e1534f-03fd-4501-8a15-705a49b0fa8d,
-6375e919-03d3-406a-b840-4e64665ae15e
 
-result, different first party: , , , 
+result, different first party: 
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>H3 connection</div>
             <pre class="tooltipText">HTTP/3 is a new standard HTTP connection protocol, still in draft but widely supported by browsers. If it is not partitioned, it can be used to track users across websites.</span>
-              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
 >
 <pre class="tooltipText">write: async (secret) =&gt; {
       // Ensure that we can switch over to h3 via alt-svc:
@@ -1021,22 +957,14 @@ read: async () =&gt; {
     }
 
 result, same first party: 
-Error: Load failed,
-,
-,
-Error: Load failed
 
 result, different first party: 
-Error: Load failed,
-Error: Load failed,
-Error: Load failed,
-Error: Load failed
 
-unsupported: false, true, true, false
+unsupported: true
 
 passed: undefined
 
-test failed: true, false, false, true</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1049,40 +977,36 @@ test failed: true, false, false, true</pre>
 
 read: read HSTS flag
 
-result, same first party: not tested, not tested, not tested, not tested
+result, same first party: not tested
 
-result, different first party: Used http, Used http, Used http, Used http
+result, different first party: Used http
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>HSTS cache (fetch)</div>
             <pre class="tooltipText">The HTTP Strict-Transport-Security response header allows a website to signal that it should only be accessed via HTTPS. The browser remembers this directive in a database, but if this database is not partitioned, then it can be used to track users across websites.&quot;</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: set HSTS flag
 
 read: read HSTS flag
 
-result, same first party: not tested, not tested, not tested, not tested
+result, same first party: not tested
 
-result, different first party: 
-Upgraded to https,
-Upgraded to https,
-Upgraded to https,
-Upgraded to https
+result, different first party: Used http
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1112,15 +1036,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same first party: 1, 1, 1, 1
+result, same first party: 2
 
-result, different first party: 2, 2, 2, 2
+result, different first party: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1149,15 +1073,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same first party: 2, 2, 2, 2
+result, same first party: 2
 
-result, different first party: 3, 3, 3, 3
+result, different first party: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1176,19 +1100,15 @@ test failed: false, false, false, false</pre>
 
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 
-result, same first party: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e,
-79e1534f-03fd-4501-8a15-705a49b0fa8d,
-6375e919-03d3-406a-b840-4e64665ae15e
+result, same first party: undefined
 
 result, different first party: undefined
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1201,19 +1121,15 @@ test failed: false, false, false, false</pre>
 
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 
-result, same first party: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e,
-79e1534f-03fd-4501-8a15-705a49b0fa8d,
-6375e919-03d3-406a-b840-4e64665ae15e
+result, same first party: null
 
-result, different first party: , , , 
+result, different first party: null
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1239,23 +1155,15 @@ read: async () =&gt; {
       }
     }
 
-result, same first party: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e,
-79e1534f-03fd-4501-8a15-705a49b0fa8d,
-6375e919-03d3-406a-b840-4e64665ae15e
+result, same first party: Error: undefined is not an object (evaluating &#39;queryResult.held[0].name&#39;)
 
-result, different first party: 
-Error: undefined is not an object (evaluating &#39;queryResult.held[0].name&#39;),
-Error: undefined is not an object (evaluating &#39;queryResult.held[0].name&#39;),
-Error: undefined is not an object (evaluating &#39;queryResult.held[0].name&#39;),
-Error: undefined is not an object (evaluating &#39;queryResult.held[0].name&#39;)
+result, different first party: Error: undefined is not an object (evaluating &#39;queryResult.held[0].name&#39;)
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1287,23 +1195,15 @@ read: async (key) =&gt; {
       return countString;
     }
 
-result, same first party: 
-Error: No requests received,
-Error: No requests received,
-Error: No requests received,
-Error: No requests received
+result, same first party: Error: No requests received
 
-result, different first party: 
-Error: No requests received,
-Error: No requests received,
-Error: No requests received,
-Error: No requests received
+result, different first party: Error: No requests received
 
-unsupported: true, true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1332,15 +1232,15 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same first party: 2, 2, 2, 2
+result, same first party: 2
 
-result, different first party: 3, 3, 3, 3
+result, different first party: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1380,22 +1280,22 @@ read: async () =&gt; {
       return await response.text();
     }
 
-result, same first party: , , , 
+result, same first party: 
 
-result, different first party: , , , 
+result, different first party: 
 
-unsupported: false, false, false, false
+unsupported: false
 
 passed: undefined
 
-test failed: true, true, true, true</pre>
+test failed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>SharedWorker</div>
             <pre class="tooltipText">The SharedWorker API allows scripts from multiple tabs to share a background thread of computation. If SharedWorker is not partitioned, then it can be abused to shared data between websites in your browser.</span>
-              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
 >
 <pre class="tooltipText">write: async (secret) =&gt; {
       try {
@@ -1427,23 +1327,15 @@ read: async () =&gt; {
       return message;
     }
 
-result, same first party: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e,
-79e1534f-03fd-4501-8a15-705a49b0fa8d,
-6375e919-03d3-406a-b840-4e64665ae15e
+result, same first party: Error: Unsupported
 
-result, different first party: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, different first party: Error: Unsupported
 
-unsupported: false, false, false, false
+unsupported: true
 
-passed: true, true, true, true
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1462,23 +1354,15 @@ read: async () =&gt; {
       return (await results.json()).sessionId;
     }
 
-result, same first party: 
-47059ed0a7f9877b1875b726cd16b006a54667f7c60519185f82647147b8e331,
-55bff0e6b8f5290e4fae35c8717bffbe2b8e891d602de583a5b2b7990975baee,
-da271fbfda97462c09e7f3c4163754bc918e9fe1ba20ff0bb475a0ec3359f0fd,
-402c5bed2188e489c03f25135793024cf1b89b817e917577017782cfa2039217
+result, same first party: 8218a3139b6d4fe89f001b57b48ac09c95aa6728981410769b750e72948561b8
 
-result, different first party: 
-ead495cd4061da0319ed71cf76914da894565273aa9b88b1892adc761c8fb617,
-747da6ae36c5a251b90d122ab57f9f361d214553a0be1b6eba0a3b3555c6ac18,
-73936d49c6255061d8774a2d0254cc1e05d56d8b5b7b5130d50cfb2bd1fac87d,
-85fde12014b0e4e267bbee4238837bb39d88914a5117d770cfeb08bccb612340
+result, different first party: fc5512196177b773971e04a8efb276e187b3641124d4f4f299389d382d8bffaa
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1507,15 +1391,15 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same first party: 2, 2, 2, 2
+result, same first party: 2
 
-result, different first party: 3, 3, 3, 3
+result, different first party: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1525,29 +1409,21 @@ test failed: false, false, false, false</pre>
         </th></tr><tr><td class="tooltipParent">
                 <div>document.referrer</div>
                 <pre class="tooltipText">The Referer [sic] request header is a mechanism used by browsers to let a website know where the user is visiting from. This header is inherently tracking users across websites. In recent times, browsers have switched to a policy of trimming a referrer to convey less tracking information, but Referer continues to convey cross-site tracking data by default.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: (secret) =&gt; { /* do nothing */ }
 
 read: () =&gt; document.referrer
 
-result, same first party: 
-https://test-pages.privacytests2.org/,
-https://test-pages.privacytests2.org/,
-https://test-pages.privacytests2.org/,
-https://test-pages.privacytests2.org/
+result, same first party: https://test-pages.privacytests2.org/
 
 result, different first party: 
-https://test-pages.privacytests2.org/,
-https://test-pages.privacytests2.org/,
-https://test-pages.privacytests2.org/,
-https://test-pages.privacytests2.org/
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </th>
         </tr>
         <tr>
@@ -1560,19 +1436,15 @@ test failed: false, false, false, false</pre>
 
 read: () =&gt; sessionStorage.getItem(&quot;secret&quot;)
 
-result, same first party: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e,
-79e1534f-03fd-4501-8a15-705a49b0fa8d,
-6375e919-03d3-406a-b840-4e64665ae15e
+result, same first party: 23a15dba-7082-45fa-b840-1a32813398fc
 
-result, different first party: , , , 
+result, different first party: null
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1585,19 +1457,15 @@ test failed: false, false, false, false</pre>
 
 read: () =&gt; window.name
 
-result, same first party: 
-name_68b2c2f1-a39c-485a-86b2-c7e214f1fc1d,
-name_e6a47141-0b94-4a92-a3e0-842e9d407f0e,
-name_79e1534f-03fd-4501-8a15-705a49b0fa8d,
-name_6375e919-03d3-406a-b840-4e64665ae15e
+result, same first party: name_23a15dba-7082-45fa-b840-1a32813398fc
 
-result, different first party: , , , 
+result, different first party: 
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: true, true, true, true
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1609,12 +1477,8 @@ test failed: false, false, false, false</pre>
                 <pre class="tooltipText">Checks to see if the browser stops loading an insecure website and warns the user before giving them the option to continue. Known as HTTPS-Only Mode in some browsers.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">passed: false, false, false, false
-result: 
-Insecure website loaded,
-Insecure website loaded,
-Insecure website loaded,
-Insecure website loaded</pre>
+<pre class="tooltipText">passed: false
+result: Insecure website loaded</pre>
           </th>
         </tr>
         <tr>
@@ -1623,8 +1487,8 @@ Insecure website loaded</pre>
             <pre class="tooltipText">Checks to see if an insecure address entered into the browser&#39;s address bar is upgraded to HTTPS whenever possible.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">upgraded: false, false, false, false
-passed: false, false, false, false</pre>
+<pre class="tooltipText">upgraded: false
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1633,8 +1497,8 @@ passed: false, false, false, false</pre>
             <pre class="tooltipText">Checks to see if the user has clicked on a hyperlink to an insecure address, if the browser upgrades that address to HTTPS whenever possible.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">upgraded: false, false, false, false
-passed: false, false, false, false</pre>
+<pre class="tooltipText">upgraded: false
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1643,12 +1507,8 @@ passed: false, false, false, false</pre>
             <pre class="tooltipText">Checks to see if the browser attempts to upgrade an insecure address for an image to HTTPS whenever possible.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">passed: false, false, false, false
-result: 
-loaded insecurely,
-loaded insecurely,
-loaded insecurely,
-loaded insecurely</pre>
+<pre class="tooltipText">passed: false
+result: loaded insecurely</pre>
           </td>
         </tr>
         <tr>
@@ -1657,8 +1517,8 @@ loaded insecurely</pre>
             <pre class="tooltipText">Checks to see if the browser attempts to upgrade an insecure address for an script to HTTPS whenever possible.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
-result: blocked, blocked, blocked, blocked</pre>
+<pre class="tooltipText">passed: true
+result: blocked</pre>
           </td>
         </tr>
         <tr>
@@ -1671,7 +1531,7 @@ result: blocked, blocked, blocked, blocked</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">SNI_status: plaintext
-passed: false, false, false, false</pre>
+passed: false</pre>
           </th>
         </tr>
         <tr>
@@ -1681,7 +1541,7 @@ passed: false, false, false, false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">header value: undefined
-passed: false, false, false, false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1690,7 +1550,7 @@ passed: false, false, false, false</pre>
             <pre class="tooltipText">The Global Privacy Control is an HTTP header that can be sent by a browser to instruct a visited website not to sell the user&#39;s personal data to other parties. This test checks to see if the GPC header is sent to third-party elements on the web page.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1699,7 +1559,7 @@ passed: false, false, false, false</pre>
             <pre class="tooltipText">IP addresses can be used to uniquely identify a large percentage of users. A proxy, VPN, or Tor can mask a user&#39;s IP address.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1720,18 +1580,10 @@ read: async () =&gt; {
         throw new Error(&quot;Unsupported&quot;);
       }
     }
-unsupported: true, true, true, true
-readSameFirstParty: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
-readDifferentFirstParty: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
-testFailed: false, false, false, false</pre>
+unsupported: true
+readSameFirstParty: Error: Unsupported
+readDifferentFirstParty: Error: Unsupported
+testFailed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1740,8 +1592,8 @@ testFailed: false, false, false, false</pre>
             <pre class="tooltipText">The Tor network sends the browser&#39;s web requests through a series of relays to hide a user&#39;s IP address, thereby helping to mask their identity and location. This test checks to see if the Tor network is being used by default.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">IsTorExit: false, false, false, false
-passed: false, false, false, false</pre>
+<pre class="tooltipText">IsTorExit: false
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -1751,91 +1603,91 @@ passed: false, false, false, false</pre>
         </th></tr><tr><td class="tooltipParent">
                 <div>Media query screen height</div>
                 <pre class="tooltipText">Height of the user&#39;s screen in pixels.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">expression: undefined
 desired expression: undefined
-actual value: 1440,1440,1440,1440
+actual value: 860
 desired value: undefined
-passed: false,false,false,false</pre>
+passed: true</pre>
           </th>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>Media query screen width</div>
             <pre class="tooltipText">Width of the user&#39;s screen in pixels.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">expression: undefined
 desired expression: undefined
-actual value: 2560,2560,2560,2560
+actual value: 1083
 desired value: undefined
-passed: false,false,false,false</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>outerHeight</div>
             <pre class="tooltipText">Height of the browser window in pixels, including browser chrome.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">expression: outerHeight
 desired expression: undefined
-actual value: 940,940,940,940
+actual value: 860
 desired value: undefined
-passed: false,false,false,false</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>screen.height</div>
             <pre class="tooltipText">Height of the user&#39;s screen, in pixels.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">expression: screen.height
 desired expression: undefined
-actual value: 1440,1440,1440,1440
+actual value: 860
 desired value: undefined
-passed: false,false,false,false</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>screen.width</div>
             <pre class="tooltipText">Width of the user&#39;s screen, in pixels.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">expression: screen.width
 desired expression: undefined
-actual value: 2560,2560,2560,2560
+actual value: 1083
 desired value: undefined
-passed: false,false,false,false</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>screenX</div>
             <pre class="tooltipText">Position, in pixels, of the left edge of the browser window on screen.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">expression: screenX
 desired expression: undefined
-actual value: 340,340,340,340
+actual value: 0
 desired value: undefined
-passed: false,false,false,false</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>screenY</div>
             <pre class="tooltipText">Position, in pixels, of the top edge of the browser window on screen.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">expression: screenY
 desired expression: undefined
-actual value: 500,500,500,500
+actual value: 0
 desired value: undefined
-passed: false,false,false,false</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1848,7 +1700,7 @@ passed: false,false,false,false</pre>
 desired expression: undefined
 actual value: undefined
 desired value: undefined
-passed: true,true,true,true</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1858,230 +1710,207 @@ passed: true,true,true,true</pre>
         </th></tr><tr><td class="tooltipParent">
                 <div>__hsfp</div>
                 <pre class="tooltipText">HubSpot tracking parameter</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </th>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>__hssc</div>
             <pre class="tooltipText">HubSpot tracking parameter</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>__hstc</div>
             <pre class="tooltipText">HubSpot tracking parameter</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>__s</div>
             <pre class="tooltipText">Drip.com email address tracking parameter</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>_hsenc</div>
             <pre class="tooltipText">HubSpot tracking parameter</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>_openstat</div>
             <pre class="tooltipText">Yandex tracking parameter</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>dclid</div>
             <pre class="tooltipText">DoubleClick Click ID (Google)</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>fbclid</div>
             <pre class="tooltipText">Facebook Click Identifier</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>gclid</div>
             <pre class="tooltipText">Google Click Identifier</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>hsCtaTracking</div>
             <pre class="tooltipText">HubSpot tracking parameter</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>mc_eid</div>
             <pre class="tooltipText">Mailchimp Email ID (email recipient&#39;s address)</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>mkt_tok</div>
             <pre class="tooltipText">Adobe Marketo tracking parameter</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>ml_subscriber</div>
             <pre class="tooltipText">MailerLite email tracking</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>ml_subscriber_hash</div>
             <pre class="tooltipText">MailerLite email tracking</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>msclkid</div>
             <pre class="tooltipText">Microsoft Click ID</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>oly_anon_id</div>
             <pre class="tooltipText">Omeda marketing &#39;anonymous&#39; customer id</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>oly_enc_id</div>
             <pre class="tooltipText">Omeda marketing &#39;known&#39; customer id</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>rb_clickid</div>
             <pre class="tooltipText">Unknown high-entropy tracking parameter</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>s_cid</div>
             <pre class="tooltipText">Adobe Site Catalyst tracking parameter</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>vero_conv</div>
             <pre class="tooltipText">Vero tracking parameter</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>vero_id</div>
             <pre class="tooltipText">Vero tracking parameter</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>wickedid</div>
             <pre class="tooltipText">Wicked Reports e-commerce tracking</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>yclid</div>
             <pre class="tooltipText">Yandex Click ID</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">value: 3928911665442163
-passed: false, false, false, false</pre>
+<pre class="tooltipText">passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -2094,7 +1923,7 @@ passed: false, false, false, false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://munchkin.marketo.net/munchkin.js
-passed: false, false, false, false</pre>
+passed: false</pre>
           </th>
         </tr>
         <tr>
@@ -2104,7 +1933,7 @@ passed: false, false, false, false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://dpm.demdex.net/ibs
-passed: false, false, false, false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2114,7 +1943,7 @@ passed: false, false, false, false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://s.amazon-adsystem.com/dcm
-passed: false, false, false, false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2124,7 +1953,7 @@ passed: false, false, false, false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://ib.adnxs.com/px?id=178248&amp;t=1
-passed: false, false, false, false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2134,17 +1963,17 @@ passed: false, false, false, false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://bat.bing.com/bat.js
-passed: false, false, false, false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>Chartbeat</div>
             <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://static.chartbeat.com/js/chartbeat.js</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">url: https://static.chartbeat.com/js/chartbeat.js
-passed: false, false, false, false</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -2154,7 +1983,7 @@ passed: false, false, false, false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://dis.criteo.com/dis/rtb/appnexus/cookiematch.aspx
-passed: false, false, false, false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2164,17 +1993,17 @@ passed: false, false, false, false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://securepubads.g.doubleclick.net/static/glade.js
-passed: false, false, false, false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>Facebook tracking</div>
             <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://connect.facebook.net/en_US/fbevents.js</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">url: https://connect.facebook.net/en_US/fbevents.js
-passed: false, false, false, false</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -2184,37 +2013,37 @@ passed: false, false, false, false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://www.google.com/pagead/1p-user-list/
-passed: false, false, false, false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>Google Analytics</div>
             <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://google-analytics.com/urchin.js</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">url: https://google-analytics.com/urchin.js
-passed: false, false, false, false</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>Google Tag Manager</div>
             <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">url: https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL
-passed: false, false, false, false</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>Index Exchange</div>
             <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&amp;external_user_id=629685505537&amp;C=1</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">url: https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&amp;external_user_id=629685505537&amp;C=1
-passed: false, false, false, false</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -2224,17 +2053,17 @@ passed: false, false, false, false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://js-agent.newrelic.com/nr-1212.min.js
-passed: false, false, false, false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>Quantcast</div>
             <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://pixel.quantserve.com/pixel</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">url: https://pixel.quantserve.com/pixel
-passed: false, false, false, false</pre>
+passed: true</pre>
           </td>
         </tr>
         <tr>
@@ -2244,7 +2073,7 @@ passed: false, false, false, false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://sb.scorecardresearch.com/internal-c2/default/cs.js
-passed: false, false, false, false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2254,7 +2083,7 @@ passed: false, false, false, false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://trc.taboola.com/futureplc-tomsguide/trc/3/json
-passed: false, false, false, false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2264,7 +2093,7 @@ passed: false, false, false, false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://t.co/i/adsct
-passed: false, false, false, false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2274,7 +2103,7 @@ passed: false, false, false, false</pre>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">url: https://yandex.ru/ads/system/header-bidding.js
-passed: false, false, false, false</pre>
+passed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2286,9 +2115,9 @@ passed: false, false, false, false</pre>
                 <pre class="tooltipText">Tests whether the browser stops cookies from munchkin.marketo.net from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://munchkin.marketo.net/munchkin.js
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </th>
         </tr>
         <tr>
@@ -2297,9 +2126,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from dpm.demdex.net from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://dpm.demdex.net/ibs
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2308,9 +2137,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from s.amazon-adsystem.com from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://s.amazon-adsystem.com/dcm
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2319,9 +2148,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from ib.adnxs.com from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://ib.adnxs.com/px?id=178248&amp;t=1
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2330,9 +2159,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from bat.bing.com from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://bat.bing.com/bat.js
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2341,9 +2170,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from static.chartbeat.com from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://static.chartbeat.com/js/chartbeat.js
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2352,9 +2181,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from dis.criteo.com from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://dis.criteo.com/dis/rtb/appnexus/cookiematch.aspx
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2363,9 +2192,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from securepubads.g.doubleclick.net from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://securepubads.g.doubleclick.net/static/glade.js
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2374,9 +2203,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from connect.facebook.net from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://connect.facebook.net/en_US/fbevents.js
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2385,9 +2214,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from www.google.com from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://www.google.com/pagead/1p-user-list/
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2396,9 +2225,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from google-analytics.com from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://google-analytics.com/urchin.js
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2407,9 +2236,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from www.googletagmanager.com from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2418,9 +2247,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from dsum-sec.casalemedia.com from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&amp;external_user_id=629685505537&amp;C=1
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2429,9 +2258,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from js-agent.newrelic.com from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://js-agent.newrelic.com/nr-1212.min.js
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2440,9 +2269,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from pixel.quantserve.com from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://pixel.quantserve.com/pixel
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2451,9 +2280,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from sb.scorecardresearch.com from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://sb.scorecardresearch.com/internal-c2/default/cs.js
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2462,9 +2291,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from trc.taboola.com from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://trc.taboola.com/futureplc-tomsguide/trc/3/json
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2473,9 +2302,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from t.co from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://t.co/i/adsct
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2484,9 +2313,9 @@ cookieFound: false, false, false, false</pre>
             <pre class="tooltipText">Tests whether the browser stops cookies from yandex.ru from tracking users across websites.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
+<pre class="tooltipText">passed: true
 url: https://yandex.ru/ads/system/header-bidding.js
-cookieFound: false, false, false, false</pre>
+cookieFound: false</pre>
           </td>
         </tr>
         <tr>
@@ -2496,7 +2325,7 @@ cookieFound: false, false, false, false</pre>
         </th></tr><tr><td class="tooltipParent">
                 <div>Alt-Svc</div>
                 <pre class="tooltipText">Alt-Svc allows the server to indicate to the web browser that a resource should be loaded on a different server. Because this is a persistent setting, it could be used to track users across websites if it is not correctly partitioned.</span>
-              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
 >
 <pre class="tooltipText">write: async () =&gt; {
       // Clear Alt-Svc caching first.
@@ -2526,15 +2355,15 @@ read: async () =&gt; {
       return protocol;
     }
 
-result, same session: h2, h3, h3, h2
+result, same session: h2
 
-result, different session: h3, h2, h2, h3
+result, different session: h2
 
-unsupported: true, false, false, true
+unsupported: true
 
-passed: , true, true
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </th>
         </tr>
         <tr>
@@ -2559,30 +2388,22 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 
-result, same session: 
-Error: Failed reading data from the file system,
-Error: Failed reading data from the file system,
-Error: Failed reading data from the file system,
-Error: Failed reading data from the file system
+result, same session: Error: undefined is not an object (evaluating &#39;cacheKeys[0].url&#39;)
 
-result, different session: 
-Error: Failed reading data from the file system,
-Error: Failed reading data from the file system,
-Error: Failed reading data from the file system,
-Error: Failed reading data from the file system
+result, different session: Error: undefined is not an object (evaluating &#39;cacheKeys[0].url&#39;)
 
-unsupported: true, true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>cookie (HTTP)</div>
             <pre class="tooltipText">The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website&#39;s behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
 >
 <pre class="tooltipText">write: async (secret) =&gt; {
       // Request a page that will send an HTTPOnly &#39;set-cookie&#39; response header with secret value.
@@ -2596,30 +2417,22 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 
-result, same session: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d_1p_http,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e_1p_http,
-79e1534f-03fd-4501-8a15-705a49b0fa8d_1p_http,
-6375e919-03d3-406a-b840-4e64665ae15e_1p_http
+result, same session: null
 
-result, different session: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d_1p_http,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e_1p_http,
-79e1534f-03fd-4501-8a15-705a49b0fa8d_1p_http,
-6375e919-03d3-406a-b840-4e64665ae15e_1p_http
+result, different session: null
 
-unsupported: false, false, false, false
+unsupported: true
 
-passed: false, false, false, false
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>cookie (JS)</div>
             <pre class="tooltipText">The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website&#39;s behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
 >
 <pre class="tooltipText">write: (secret) =&gt; {
       document.cookie = `secret=${secret}_js; max-age=3600; SameSite=None; Secure`;
@@ -2627,23 +2440,15 @@ test failed: false, false, false, false</pre>
 
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 
-result, same session: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d_1p_js,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e_1p_js,
-79e1534f-03fd-4501-8a15-705a49b0fa8d_1p_js,
-6375e919-03d3-406a-b840-4e64665ae15e_1p_js
+result, same session: null
 
-result, different session: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d_1p_js,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e_1p_js,
-79e1534f-03fd-4501-8a15-705a49b0fa8d_1p_js,
-6375e919-03d3-406a-b840-4e64665ae15e_1p_js
+result, different session: null
 
-unsupported: false, false, false, false
+unsupported: true
 
-passed: false, false, false, false
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -2676,30 +2481,22 @@ read: async () =&gt; {
       return cookie.value;
     }
 
-result, same session: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, same session: Error: Unsupported
 
-result, different session: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, different session: Error: Unsupported
 
-unsupported: true, true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>CSS cache</div>
             <pre class="tooltipText">CSS stylesheets are cached, and if that cache is shared between websites, it can be used to track users across sites.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: async (key) =&gt; {
       const href = testURI(&quot;resource&quot;, &quot;css&quot;, key);
@@ -2735,30 +2532,22 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 
-result, same session: 
-fake_32609922187621,
-fake_8600764968905004,
-fake_8722249735172383,
-fake_6113764170136247
+result, same session: fake_4250308559578806
 
-result, different session: 
-fake_32609922187621,
-fake_8600764968905004,
-fake_8722249735172383,
-fake_6113764170136247
+result, different session: fake_13152689507740045
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>favicon cache</div>
             <pre class="tooltipText">A favicon is an icon that represents a website, typically shown in browser tab and bookmarks menu. If the favicon cache is not partitioned, it can be used to track users across websites.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: (key) =&gt; key
 
@@ -2774,22 +2563,22 @@ read: async (key) =&gt; {
       return count;
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 1
 
-result, different session: 1, 1, 1, 1
+result, different session: 2
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>fetch cache</div>
             <pre class="tooltipText">When a resource is received via the Fetch API, it is frequently cached. That cache can potentially be abused for cross-site tracking.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: async (key) =&gt; {
       let response = await fetch(testURI(&quot;resource&quot;, &quot;fetch&quot;, key),
@@ -2805,22 +2594,22 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 2
 
-result, different session: 1, 1, 1, 1
+result, different session: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>font cache</div>
             <pre class="tooltipText">Web fonts are sometimes stored in their own cache, which is vulnerable to being abused for cross-site tracking.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: async (key) =&gt; {
       let style = document.createElement(&quot;style&quot;);
@@ -2852,22 +2641,22 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 2
 
-result, different session: 1, 1, 1, 1
+result, different session: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>iframe cache</div>
             <pre class="tooltipText">An iframe is an element in a web page than allows websites to embed a second web page. Caching of this web page could be abused for cross-site tracking.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
       let iframe = document.createElement(&quot;iframe&quot;);
@@ -2890,22 +2679,22 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 2
 
-result, different session: 1, 1, 1, 1
+result, different session: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>image cache</div>
             <pre class="tooltipText">Caching of images in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
       let img = document.createElement(&quot;img&quot;);
@@ -2927,22 +2716,22 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 2
 
-result, different session: 1, 1, 1, 1
+result, different session: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>indexedDB</div>
             <pre class="tooltipText">The IndexedDB API exposes a transactional database to web pages. That database can be used to track users across websites, unless it is partitioned.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
 >
 <pre class="tooltipText">write: async (secret) =&gt; {
       try {
@@ -2954,52 +2743,36 @@ test failed: false, false, false, false</pre>
 
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 
-result, same session: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d_1p,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e_1p,
-79e1534f-03fd-4501-8a15-705a49b0fa8d_1p,
-6375e919-03d3-406a-b840-4e64665ae15e_1p
+result, same session: undefined
 
-result, different session: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d_1p,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e_1p,
-79e1534f-03fd-4501-8a15-705a49b0fa8d_1p,
-6375e919-03d3-406a-b840-4e64665ae15e_1p
+result, different session: undefined
 
-unsupported: false, false, false, false
+unsupported: true
 
-passed: false, false, false, false
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>localStorage</div>
             <pre class="tooltipText">The localStorage API gives websites access to a key-value database that will remain available across visits. If the localStorage API is not partitioned or blocked, it can also be used to track users across websites.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
 >
 <pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
 
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 
-result, same session: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d_1p,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e_1p,
-79e1534f-03fd-4501-8a15-705a49b0fa8d_1p,
-6375e919-03d3-406a-b840-4e64665ae15e_1p
+result, same session: null
 
-result, different session: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d_1p,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e_1p,
-79e1534f-03fd-4501-8a15-705a49b0fa8d_1p,
-6375e919-03d3-406a-b840-4e64665ae15e_1p
+result, different session: null
 
-unsupported: false, false, false, false
+unsupported: true
 
-passed: false, false, false, false
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3031,30 +2804,22 @@ read: async (key) =&gt; {
       return countString;
     }
 
-result, same session: 
-Error: No requests received,
-Error: No requests received,
-Error: No requests received,
-Error: No requests received
+result, same session: Error: No requests received
 
-result, different session: 
-Error: No requests received,
-Error: No requests received,
-Error: No requests received,
-Error: No requests received
+result, different session: Error: No requests received
 
-unsupported: true, true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>script cache</div>
             <pre class="tooltipText">Caching of scripts in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
       let script = document.createElement(&quot;script&quot;);
@@ -3076,22 +2841,22 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 2
 
-result, different session: 1, 1, 1, 1
+result, different session: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>XMLHttpRequest cache</div>
             <pre class="tooltipText">Similar to the newer Fetch API, any resource received may be cached by the browser. The cache is potentially vulnerable to cross-site tracking attack.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: async (key) =&gt; {
       const req = new XMLHttpRequest();
@@ -3113,15 +2878,15 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 2
 
-result, different session: 1, 1, 1, 1
+result, different session: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3161,22 +2926,22 @@ read: async () =&gt; {
       return protocol;
     }
 
-result, same session: h2, h2, h2, h2
+result, same session: h2
 
-result, different session: h2, h2, h2, h2
+result, different session: h2
 
-unsupported: true, true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </th>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>CacheStorage</div>
             <pre class="tooltipText">The Cache API is a content storage mechanism originally introduced to support ServiceWorkers. If the same Cache object is accessible to multiple websites, it can be abused to track users.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
 >
 <pre class="tooltipText">write: async (key) =&gt; {
       try {
@@ -3194,23 +2959,15 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 
-result, same session: 
-47a37c68-eb39-4765-8686-ffe721bfeb14_3p,
-47a37c68-eb39-4765-8686-ffe721bfeb14_3p,
-47a37c68-eb39-4765-8686-ffe721bfeb14_3p,
-47a37c68-eb39-4765-8686-ffe721bfeb14_3p
+result, same session: Error: undefined is not an object (evaluating &#39;cacheKeys[0].url&#39;)
 
-result, different session: 
-47a37c68-eb39-4765-8686-ffe721bfeb14_3p,
-47a37c68-eb39-4765-8686-ffe721bfeb14_3p,
-47a37c68-eb39-4765-8686-ffe721bfeb14_3p,
-47a37c68-eb39-4765-8686-ffe721bfeb14_3p
+result, different session: Error: undefined is not an object (evaluating &#39;cacheKeys[0].url&#39;)
 
-unsupported: false, false, false, false
+unsupported: true
 
-passed: false, false, false, false
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3231,15 +2988,15 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 
-result, same session: , , , 
+result, same session: null
 
-result, different session: , , , 
+result, different session: null
 
-unsupported: true, true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3254,15 +3011,15 @@ test failed: false, false, false, false</pre>
 
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 
-result, same session: , , , 
+result, same session: null
 
-result, different session: , , , 
+result, different session: null
 
-unsupported: true, true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3295,30 +3052,22 @@ read: async () =&gt; {
       return cookie.value;
     }
 
-result, same session: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, same session: Error: Unsupported
 
-result, different session: 
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported,
-Error: Unsupported
+result, different session: Error: Unsupported
 
-unsupported: true, true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>CSS cache</div>
             <pre class="tooltipText">CSS stylesheets are cached, and if that cache is shared between websites, it can be used to track users across sites.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: async (key) =&gt; {
       const href = testURI(&quot;resource&quot;, &quot;css&quot;, key);
@@ -3354,30 +3103,22 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 
-result, same session: 
-fake_42054169663757146,
-fake_517260794881752,
-fake_9732156060299162,
-fake_3266590783752077
+result, same session: fake_4844290501543915
 
-result, different session: 
-fake_42054169663757146,
-fake_517260794881752,
-fake_9732156060299162,
-fake_3266590783752077
+result, different session: fake_8636210923342937
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>favicon cache</div>
             <pre class="tooltipText">A favicon is an icon that represents a website, typically shown in browser tab and bookmarks menu. If the favicon cache is not partitioned, it can be used to track users across websites.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: (key) =&gt; key
 
@@ -3393,22 +3134,22 @@ read: async (key) =&gt; {
       return count;
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 2
 
-result, different session: 1, 1, 1, 1
+result, different session: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>fetch cache</div>
             <pre class="tooltipText">When a resource is received via the Fetch API, it is frequently cached. That cache can potentially be abused for cross-site tracking.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: async (key) =&gt; {
       let response = await fetch(testURI(&quot;resource&quot;, &quot;fetch&quot;, key),
@@ -3424,22 +3165,22 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 2
 
-result, different session: 1, 1, 1, 1
+result, different session: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>font cache</div>
             <pre class="tooltipText">Web fonts are sometimes stored in their own cache, which is vulnerable to being abused for cross-site tracking.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: async (key) =&gt; {
       let style = document.createElement(&quot;style&quot;);
@@ -3471,22 +3212,22 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 2
 
-result, different session: 1, 1, 1, 1
+result, different session: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>iframe cache</div>
             <pre class="tooltipText">An iframe is an element in a web page than allows websites to embed a second web page. Caching of this web page could be abused for cross-site tracking.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
       let iframe = document.createElement(&quot;iframe&quot;);
@@ -3509,22 +3250,22 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 2
 
-result, different session: 1, 1, 1, 1
+result, different session: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>image cache</div>
             <pre class="tooltipText">Caching of images in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
       let img = document.createElement(&quot;img&quot;);
@@ -3546,22 +3287,22 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 2
 
-result, different session: 1, 1, 1, 1
+result, different session: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>indexedDB</div>
             <pre class="tooltipText">The IndexedDB API exposes a transactional database to web pages. That database can be used to track users across websites, unless it is partitioned.</span>
-              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
 >
 <pre class="tooltipText">write: async (secret) =&gt; {
       try {
@@ -3573,44 +3314,36 @@ test failed: false, false, false, false</pre>
 
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 
-result, same session: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d_3p,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e_3p,
-79e1534f-03fd-4501-8a15-705a49b0fa8d_3p,
-6375e919-03d3-406a-b840-4e64665ae15e_3p
+result, same session: undefined
 
 result, different session: undefined
 
-unsupported: false, false, false, false
+unsupported: true
 
-passed: true, true, true, true
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>localStorage</div>
             <pre class="tooltipText">The localStorage API gives websites access to a key-value database that will remain available across visits. If the localStorage API is not partitioned or blocked, it can also be used to track users across websites.</span>
-              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
 >
 <pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
 
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 
-result, same session: 
-68b2c2f1-a39c-485a-86b2-c7e214f1fc1d_3p,
-e6a47141-0b94-4a92-a3e0-842e9d407f0e_3p,
-79e1534f-03fd-4501-8a15-705a49b0fa8d_3p,
-6375e919-03d3-406a-b840-4e64665ae15e_3p
+result, same session: null
 
-result, different session: , , , 
+result, different session: null
 
-unsupported: false, false, false, false
+unsupported: true
 
-passed: true, true, true, true
+passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3642,30 +3375,22 @@ read: async (key) =&gt; {
       return countString;
     }
 
-result, same session: 
-Error: No requests received,
-Error: No requests received,
-Error: No requests received,
-Error: No requests received
+result, same session: Error: No requests received
 
-result, different session: 
-Error: No requests received,
-Error: No requests received,
-Error: No requests received,
-Error: No requests received
+result, different session: Error: No requests received
 
-unsupported: true, true, true, true
+unsupported: true
 
 passed: undefined
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>script cache</div>
             <pre class="tooltipText">Caching of scripts in web browsers is a standard behavior. But if that cache leaks between websites, it can be abused for cross-site tracking.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: (key) =&gt; new Promise((resolve, reject) =&gt; {
       let script = document.createElement(&quot;script&quot;);
@@ -3687,22 +3412,22 @@ read: async (key) =&gt; {
       return (await response.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 2
 
-result, different session: 1, 1, 1, 1
+result, different session: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
           <td class="tooltipParent">
             <div>XMLHttpRequest cache</div>
             <pre class="tooltipText">Similar to the newer Fetch API, any resource received may be cached by the browser. The cache is potentially vulnerable to cross-site tracking attack.</span>
-              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
 <pre class="tooltipText">write: async (key) =&gt; {
       const req = new XMLHttpRequest();
@@ -3724,15 +3449,15 @@ read: async (key) =&gt; {
       return (await countResponse.text()).trim();
     }
 
-result, same session: 1, 1, 1, 1
+result, same session: 2
 
-result, different session: 1, 1, 1, 1
+result, different session: 3
 
-unsupported: false, false, false, false
+unsupported: false
 
-passed: false, false, false, false
+passed: true
 
-test failed: false, false, false, false</pre>
+test failed: false</pre>
           </td>
         </tr>
         <tr>
@@ -3746,8 +3471,8 @@ test failed: false, false, false, false</pre>
   encrypted DNS if the computer is located in Brazil.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">passed: false, false, false, false
-leak detected: true, true, true, true</pre>
+<pre class="tooltipText">passed: false
+leak detected: true</pre>
           </th>
         </tr>
         <tr>
@@ -3758,8 +3483,8 @@ leak detected: true, true, true, true</pre>
   encrypted DNS if the computer is located in China.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">passed: false, false, false, false
-leak detected: true, true, true, true</pre>
+<pre class="tooltipText">passed: false
+leak detected: true</pre>
           </td>
         </tr>
         <tr>
@@ -3770,8 +3495,8 @@ leak detected: true, true, true, true</pre>
   encrypted DNS if the computer is located in Germany.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">passed: false, false, false, false
-leak detected: true, true, true, true</pre>
+<pre class="tooltipText">passed: false
+leak detected: true</pre>
           </td>
         </tr>
         <tr>
@@ -3782,8 +3507,8 @@ leak detected: true, true, true, true</pre>
   encrypted DNS if the computer is located in India.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">passed: false, false, false, false
-leak detected: true, true, true, true</pre>
+<pre class="tooltipText">passed: false
+leak detected: true</pre>
           </td>
         </tr>
         <tr>
@@ -3794,8 +3519,8 @@ leak detected: true, true, true, true</pre>
   encrypted DNS if the computer is located in Nigeria.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">passed: false, false, false, false
-leak detected: true, true, true, true</pre>
+<pre class="tooltipText">passed: false
+leak detected: true</pre>
           </td>
         </tr>
         <tr>
@@ -3806,8 +3531,8 @@ leak detected: true, true, true, true</pre>
   encrypted DNS if the computer is located in Russia.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">passed: false, false, false, false
-leak detected: true, true, true, true</pre>
+<pre class="tooltipText">passed: false
+leak detected: true</pre>
           </td>
         </tr>
         <tr>
@@ -3818,8 +3543,8 @@ leak detected: true, true, true, true</pre>
   encrypted DNS if the computer is located in United States.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">passed: false, false, false, false
-leak detected: true, true, true, true</pre>
+<pre class="tooltipText">passed: false
+leak detected: true</pre>
           </td>
         </tr>
         <tr>
@@ -3830,8 +3555,8 @@ leak detected: true, true, true, true</pre>
   encrypted DNS if the operating system&#39;s default DNS provider is Cloudflare.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
-leak detected: false, false, false, false</pre>
+<pre class="tooltipText">passed: true
+leak detected: false</pre>
           </td>
         </tr>
         <tr>
@@ -3842,8 +3567,8 @@ leak detected: false, false, false, false</pre>
   encrypted DNS if the operating system&#39;s default DNS provider is Comodo.</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">passed: false, false, false, false
-leak detected: true, true, true, true</pre>
+<pre class="tooltipText">passed: false
+leak detected: true</pre>
           </td>
         </tr>
         <tr>
@@ -3854,8 +3579,8 @@ leak detected: true, true, true, true</pre>
   encrypted DNS if the operating system&#39;s default DNS provider is Google.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
-leak detected: false, false, false, false</pre>
+<pre class="tooltipText">passed: true
+leak detected: false</pre>
           </td>
         </tr>
         <tr>
@@ -3866,12 +3591,12 @@ leak detected: false, false, false, false</pre>
   encrypted DNS if the operating system&#39;s default DNS provider is Quad9.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
 >
-<pre class="tooltipText">passed: true, true, true, true
-leak detected: false, false, false, false</pre>
+<pre class="tooltipText">passed: true
+leak detected: false</pre>
           </td>
         </tr>
       </table>
-      <p class="footer">Tests ran at 2024-02-28 00:52:51 UTC. Source version: <a href="https://github.com/privacytests/privacytests.org/tree/80fc570d31071130f3fe7e4c677e299bad287783">80fc570d</a>. Raw data in <a href="nightly-private-safari.json">JSON</a>.</p>
+      <p class="footer">Tests ran at 2024-02-16 02:36:57 UTC. Source version: <a href="https://github.com/privacytests/privacytests.org/tree/68d5b24c2b5eebcf465442df66568592721b205a">68d5b24c</a>. Raw data in <a href="nightly-private-safari.json">JSON</a>.</p>
       <script type="module">
   const table = document.querySelector(".comparison-table");
   let visibleTooltip = null;

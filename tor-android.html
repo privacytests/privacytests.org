@@ -386,9 +386,9 @@ table.comparison-table .date {
         </div>
       </div>
       <div class="banner" id="issueBanner">
-        <div class="left-heading">No. 81</div>
+        <div class="left-heading">No. 80</div>
         <div class="middle-heading">Open-source tests of web browser privacy.</div>
-        <div class="right-heading">Updated 2024-02-26</div>
+        <div class="right-heading">Updated 2024-02-03</div>
       </div>
       <div class="banner" id="navBanner">
         <div class="navItem "><a href=".">Desktop browsers</a></div>
@@ -601,7 +601,7 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 
-result, same first party: e85b0754-2faa-4301-ac69-8e6393042f7b_http
+result, same first party: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718_http
 
 result, different first party: null
 
@@ -624,7 +624,7 @@ test failed: false</pre>
 
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 
-result, same first party: e85b0754-2faa-4301-ac69-8e6393042f7b_js
+result, same first party: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718_js
 
 result, different first party: null
 
@@ -716,9 +716,9 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 
-result, same first party: fake_44085609032092066
+result, same first party: fake_39426724781899525
 
-result, different first party: fake_9088620574390711
+result, different first party: fake_008487300557912691
 
 unsupported: false
 
@@ -731,7 +731,7 @@ test failed: false</pre>
           <td class="tooltipParent">
             <div>favicon cache</div>
             <pre class="tooltipText">A favicon is an icon that represents a website, typically shown in browser tab and bookmarks menu. If the favicon cache is not partitioned, it can be used to track users across websites.</span>
-              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+              </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
 <pre class="tooltipText">write: (key) =&gt; key
 
@@ -749,11 +749,11 @@ read: async (key) =&gt; {
 
 result, same first party: 1
 
-result, different first party: 2
+result, different first party: 1
 
 unsupported: false
 
-passed: true
+passed: false
 
 test failed: false</pre>
           </td>
@@ -891,7 +891,7 @@ read: async () =&gt; {
       return await response.text();
     }
 
-result, same first party: e85b0754-2faa-4301-ac69-8e6393042f7b
+result, same first party: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718
 
 result, different first party: 
 
@@ -917,7 +917,7 @@ read: async () =&gt; {
       return await response.text();
     }
 
-result, same first party: e85b0754-2faa-4301-ac69-8e6393042f7b
+result, same first party: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718
 
 result, different first party: 
 
@@ -1098,7 +1098,7 @@ test failed: false</pre>
 
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 
-result, same first party: e85b0754-2faa-4301-ac69-8e6393042f7b
+result, same first party: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718
 
 result, different first party: Error: The operation is insecure.
 
@@ -1119,7 +1119,7 @@ test failed: false</pre>
 
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 
-result, same first party: e85b0754-2faa-4301-ac69-8e6393042f7b
+result, same first party: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718
 
 result, different first party: Error: The operation is insecure.
 
@@ -1352,15 +1352,65 @@ read: async () =&gt; {
       return (await results.json()).sessionId;
     }
 
-result, same first party: 9e655eb42769ac22735feeaeb440791a7145d3904684f6726dbc7f703558ee6b
+result, same first party: 1c3342e24239fdac295d69ac64a9973ee5f3eaafe35fbac92f87464aa220d5d5
 
-result, different first party: 761d722cf274e74e4ef9a90f8343ffd471f3746c017c53223d3377f1266658c2
+result, different first party: 9cb718538263da06add36391bb82ea1d4144cb93e4a34684279891c47b9ede32
 
 unsupported: false
 
 passed: true
 
 test failed: false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Web SQL Database</div>
+            <pre class="tooltipText">The Web SQL Database is a deprecated web API for storing data in an SQL database.</span>
+              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      if (!window.openDatabase) {
+        throw new Error(&quot;gported&quot;);
+      }
+      let database = window.openDatabase(&quot;sqlite_supercookie&quot;, &quot;&quot;, &quot;supercookie&quot;, 1024 * 1024);
+      let tx = new Promise((resolve) =&gt; database.transaction(tx =&gt; {
+        tx.executeSql(
+          `CREATE TABLE IF NOT EXISTS cache(
+             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+             name TEXT NOT NULL,
+             value TEXT NOT NULL,
+             UNIQUE (name)
+           )`,
+          [], (tx, rs) =&gt; {}, (tx, err) =&gt; {});
+        tx.executeSql(
+          `INSERT OR REPLACE INTO cache(name, value)
+           VALUES(?, ?)`,
+          [&quot;secret&quot;, key], (tx, rs) =&gt; {}, (tx, rs) =&gt; {});
+      }));
+    }
+
+read: async () =&gt; {
+      let database = window.openDatabase(&quot;sqlite_supercookie&quot;, &quot;&quot;, &quot;supercookie&quot;, 1024 * 1024);
+      let result = await new Promise((resolve, reject) =&gt; database.transaction(tx =&gt; {
+        tx.executeSql(
+          &quot;SELECT value FROM cache WHERE name=?&quot;,
+          [&quot;secret&quot;],
+          (tx, rs) =&gt; resolve(rs),
+          (tx, err) =&gt; reject(err));
+      }));
+      return result.rows.item(0).value;
+    }
+
+result, same first party: Error: window.openDatabase is not a function
+
+result, different first party: Error: window.openDatabase is not a function
+
+unsupported: false
+
+passed: undefined
+
+test failed: true</pre>
           </td>
         </tr>
         <tr>
@@ -1434,7 +1484,7 @@ test failed: false</pre>
 
 read: () =&gt; sessionStorage.getItem(&quot;secret&quot;)
 
-result, same first party: e85b0754-2faa-4301-ac69-8e6393042f7b
+result, same first party: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718
 
 result, different first party: null
 
@@ -1455,7 +1505,7 @@ test failed: false</pre>
 
 read: () =&gt; window.name
 
-result, same first party: name_e85b0754-2faa-4301-ac69-8e6393042f7b
+result, same first party: name_8cb8d76f-3f41-4ee7-99ea-eee31e3a0718
 
 result, different first party: 
 
@@ -1579,8 +1629,8 @@ read: async () =&gt; {
       }
     }
 unsupported: false
-readSameFirstParty: 2a10:8a40:f313::29
-readDifferentFirstParty: 2a03:94e0:ffff:185:181:61:0:115
+readSameFirstParty: 2a0b:f4c2:1::1
+readDifferentFirstParty: 2620:18c:0:192::227
 passed: true
 testFailed: false</pre>
           </td>
@@ -1698,7 +1748,7 @@ passed: true</pre>
                 <pre class="tooltipText">HubSpot tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </th>
         </tr>
@@ -1708,7 +1758,7 @@ passed: false</pre>
             <pre class="tooltipText">HubSpot tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1718,7 +1768,7 @@ passed: false</pre>
             <pre class="tooltipText">HubSpot tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1728,7 +1778,7 @@ passed: false</pre>
             <pre class="tooltipText">Drip.com email address tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1738,7 +1788,7 @@ passed: false</pre>
             <pre class="tooltipText">HubSpot tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1748,7 +1798,7 @@ passed: false</pre>
             <pre class="tooltipText">Yandex tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1758,7 +1808,7 @@ passed: false</pre>
             <pre class="tooltipText">DoubleClick Click ID (Google)</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1768,7 +1818,7 @@ passed: false</pre>
             <pre class="tooltipText">Facebook Click Identifier</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1778,7 +1828,7 @@ passed: false</pre>
             <pre class="tooltipText">Google Click Identifier</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1788,7 +1838,7 @@ passed: false</pre>
             <pre class="tooltipText">HubSpot tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1798,7 +1848,7 @@ passed: false</pre>
             <pre class="tooltipText">Mailchimp Email ID (email recipient&#39;s address)</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1808,7 +1858,7 @@ passed: false</pre>
             <pre class="tooltipText">Adobe Marketo tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1818,7 +1868,7 @@ passed: false</pre>
             <pre class="tooltipText">MailerLite email tracking</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1828,7 +1878,7 @@ passed: false</pre>
             <pre class="tooltipText">MailerLite email tracking</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1838,7 +1888,7 @@ passed: false</pre>
             <pre class="tooltipText">Microsoft Click ID</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1848,7 +1898,7 @@ passed: false</pre>
             <pre class="tooltipText">Omeda marketing &#39;anonymous&#39; customer id</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1858,7 +1908,7 @@ passed: false</pre>
             <pre class="tooltipText">Omeda marketing &#39;known&#39; customer id</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1868,7 +1918,7 @@ passed: false</pre>
             <pre class="tooltipText">Unknown high-entropy tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1878,7 +1928,7 @@ passed: false</pre>
             <pre class="tooltipText">Adobe Site Catalyst tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1888,7 +1938,7 @@ passed: false</pre>
             <pre class="tooltipText">Vero tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1898,7 +1948,7 @@ passed: false</pre>
             <pre class="tooltipText">Vero tracking parameter</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1908,7 +1958,7 @@ passed: false</pre>
             <pre class="tooltipText">Wicked Reports e-commerce tracking</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -1918,7 +1968,7 @@ passed: false</pre>
             <pre class="tooltipText">Yandex Click ID</span>
               </td><td class='tooltipParent'><img alt='Failed' src='' class='dataPoint bad'
 >
-<pre class="tooltipText">value: 3928911665442163
+<pre class="tooltipText">value: 8303910894658098
 passed: false</pre>
           </td>
         </tr>
@@ -2200,7 +2250,7 @@ test failed: false</pre>
           <td class="tooltipParent">
             <div>cookie (HTTP)</div>
             <pre class="tooltipText">The cookie, first introduced by Netscape in 1994, is a small amount of data stored by your browser on a website&#39;s behalf. It has legitimate uses, but it is also the classic cross-site tracking mechanism, and today still the most popular method of tracking users across websites. Browsers can stop cookies from being used for cross-site tracking by either blocking or partitioning them.</span>
-              </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
 >
 <pre class="tooltipText">write: async (secret) =&gt; {
       // Request a page that will send an HTTPOnly &#39;set-cookie&#39; response header with secret value.
@@ -2214,13 +2264,13 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 
-result, same session: e85b0754-2faa-4301-ac69-8e6393042f7b_1p_http
+result, same session: null
 
 result, different session: null
 
-unsupported: false
+unsupported: true
 
-passed: true
+passed: undefined
 
 test failed: false</pre>
           </td>
@@ -2237,7 +2287,7 @@ test failed: false</pre>
 
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 
-result, same session: e85b0754-2faa-4301-ac69-8e6393042f7b_1p_js
+result, same session: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718_1p_js
 
 result, different session: null
 
@@ -2329,9 +2379,9 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 
-result, same session: fake_15423062321485248
+result, same session: fake_2377776813679222
 
-result, different session: fake_1204185163180207
+result, different session: fake_773120311820412
 
 unsupported: false
 
@@ -2540,7 +2590,7 @@ test failed: false</pre>
 
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 
-result, same session: e85b0754-2faa-4301-ac69-8e6393042f7b_1p
+result, same session: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718_1p
 
 result, different session: undefined
 
@@ -2561,7 +2611,7 @@ test failed: false</pre>
 
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 
-result, same session: e85b0754-2faa-4301-ac69-8e6393042f7b_1p
+result, same session: 8cb8d76f-3f41-4ee7-99ea-eee31e3a0718_1p
 
 result, different session: null
 
@@ -2645,6 +2695,56 @@ result, different session: 2
 unsupported: false
 
 passed: true
+
+test failed: false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
+            <div>Web SQL Database</div>
+            <pre class="tooltipText">The Web SQL Database is a deprecated web API for storing data in an SQL database.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      if (!window.openDatabase) {
+        throw new Error(&quot;gported&quot;);
+      }
+      let database = window.openDatabase(&quot;sqlite_supercookie&quot;, &quot;&quot;, &quot;supercookie&quot;, 1024 * 1024);
+      let tx = new Promise((resolve) =&gt; database.transaction(tx =&gt; {
+        tx.executeSql(
+          `CREATE TABLE IF NOT EXISTS cache(
+             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+             name TEXT NOT NULL,
+             value TEXT NOT NULL,
+             UNIQUE (name)
+           )`,
+          [], (tx, rs) =&gt; {}, (tx, err) =&gt; {});
+        tx.executeSql(
+          `INSERT OR REPLACE INTO cache(name, value)
+           VALUES(?, ?)`,
+          [&quot;secret&quot;, key], (tx, rs) =&gt; {}, (tx, rs) =&gt; {});
+      }));
+    }
+
+read: async () =&gt; {
+      let database = window.openDatabase(&quot;sqlite_supercookie&quot;, &quot;&quot;, &quot;supercookie&quot;, 1024 * 1024);
+      let result = await new Promise((resolve, reject) =&gt; database.transaction(tx =&gt; {
+        tx.executeSql(
+          &quot;SELECT value FROM cache WHERE name=?&quot;,
+          [&quot;secret&quot;],
+          (tx, rs) =&gt; resolve(rs),
+          (tx, err) =&gt; reject(err));
+      }));
+      return result.rows.item(0).value;
+    }
+
+result, same session: Error: window.openDatabase is not a function
+
+result, different session: Error: window.openDatabase is not a function
+
+unsupported: true
+
+passed: undefined
 
 test failed: false</pre>
           </td>
@@ -2900,9 +3000,9 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 
-result, same session: fake_5099660454673309
+result, same session: fake_8911006433775948
 
-result, different session: fake_512174386027288
+result, different session: fake_7603699091817058
 
 unsupported: false
 
@@ -3222,6 +3322,56 @@ test failed: false</pre>
         </tr>
         <tr>
           <td class="tooltipParent">
+            <div>Web SQL Database</div>
+            <pre class="tooltipText">The Web SQL Database is a deprecated web API for storing data in an SQL database.</span>
+              </td><td class='tooltipParent'><img alt='Unsupported' src='' class='dataPoint na'
+>
+<pre class="tooltipText">write: async (key) =&gt; {
+      if (!window.openDatabase) {
+        throw new Error(&quot;gported&quot;);
+      }
+      let database = window.openDatabase(&quot;sqlite_supercookie&quot;, &quot;&quot;, &quot;supercookie&quot;, 1024 * 1024);
+      let tx = new Promise((resolve) =&gt; database.transaction(tx =&gt; {
+        tx.executeSql(
+          `CREATE TABLE IF NOT EXISTS cache(
+             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+             name TEXT NOT NULL,
+             value TEXT NOT NULL,
+             UNIQUE (name)
+           )`,
+          [], (tx, rs) =&gt; {}, (tx, err) =&gt; {});
+        tx.executeSql(
+          `INSERT OR REPLACE INTO cache(name, value)
+           VALUES(?, ?)`,
+          [&quot;secret&quot;, key], (tx, rs) =&gt; {}, (tx, rs) =&gt; {});
+      }));
+    }
+
+read: async () =&gt; {
+      let database = window.openDatabase(&quot;sqlite_supercookie&quot;, &quot;&quot;, &quot;supercookie&quot;, 1024 * 1024);
+      let result = await new Promise((resolve, reject) =&gt; database.transaction(tx =&gt; {
+        tx.executeSql(
+          &quot;SELECT value FROM cache WHERE name=?&quot;,
+          [&quot;secret&quot;],
+          (tx, rs) =&gt; resolve(rs),
+          (tx, err) =&gt; reject(err));
+      }));
+      return result.rows.item(0).value;
+    }
+
+result, same session: Error: window.openDatabase is not a function
+
+result, different session: Error: window.openDatabase is not a function
+
+unsupported: true
+
+passed: undefined
+
+test failed: false</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="tooltipParent">
             <div>XMLHttpRequest cache</div>
             <pre class="tooltipText">Similar to the newer Fetch API, any resource received may be cached by the browser. The cache is potentially vulnerable to cross-site tracking attack.</span>
               </td><td class='tooltipParent'><img alt='Passed' src='' class='dataPoint good'
@@ -3257,9 +3407,15 @@ passed: true
 test failed: false</pre>
           </td>
         </tr>
-      </table>
-      <p class="footer">Tests ran at 2024-02-26 15:09:45 UTC. Source version: <a href="https://github.com/privacytests/privacytests.org/tree/80fc570d31071130f3fe7e4c677e299bad287783">80fc570d</a>. Raw data in <a href="tor-android.json">JSON</a>.</p>
-      <script type="module">
+        <tr>
+          <th colspan="8" class="subheading tooltipParent">
+            <div><span class="subheading-title">DNS privacy tests</span><span class="tagline">Which browsers keep their DNS queries encrypted?</span></div>
+            <pre class="tooltipText">The Domain Name System (DNS) is the method by which web browsers look up the IP address for each website you visit. In a DNS query, a web browser will ask a DNS resolver (somewhere on the internet) for the IP address corresponding to a domain name (such as nytimes.com) for a website you want to visit. Traditionally, most web browsers have sent their DNS queries unencrypted, which means your ISP or anyone else on the network between your computer and the DNS resolver can eavesdrop on the websites you visit. In recent years, web browsers and operating systems have begun to introduce encrypted DNS, including the DNS over HTTPS (DoH) protocol, to encrypt the DNS request from your browser and the response from the resolver to keep your browsing history from leaking. These tests check whether a browser is still protecting its DNS requests by sending them encrypted.</span>
+        </th></tr></table><p class="footer">Tests ran at 2024-02-03 01:07:30 UTC.
+         Source version: <a href="https://github.com/privacytests/privacytests.org/tree/6515e5cb4e099dde92f66bcf5621af666bb32ad9"
+    >6515e5cb</a>.
+    Raw data in <a href="tor-android.json">JSON</a>.
+    </p><script type="module">
   const table = document.querySelector(".comparison-table");
   let visibleTooltip = null;
   const hide = () => {
@@ -3300,6 +3456,9 @@ test failed: false</pre>
   });
   //document.addEventListener("scroll", hide);
 </script>
+          </th>
+        </tr>
+      </table>
     </div>
   </body>
 </html>
