@@ -1,4 +1,25 @@
 # News
+## [Issue 83](/archive/issue83): 2024-03-15
+
+### New browser versions
+
+On Desktop:
+* Safari 17.4
+
+On iOS:
+* Duckduckgo 7.110
+* Edge 122.2365
+* Firefox 123.3
+* Safari 17.4
+* Yandex 2401.7
+
+On Android:
+* Duckduckgo 5.192
+* Edge 122.0
+* Firefox 123.1
+* Focus 123.1
+* Opera 80.6
+
 ## [Issue 82](/archive/issue82): 2024-03-01
 
 ### New browser versions
