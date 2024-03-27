@@ -47,7 +47,7 @@ const runTcpDump = () => {
 const main = () => {
   setupServer();
   runTcpDump();
-  console.log("Watching Do53.\nListening for connections at port ${LISTENING_PORT}");
+  console.log(`Watching Do53.\nListening for connections at port ${LISTENING_PORT}.`);
 };
 
 if (require.main === module) {
