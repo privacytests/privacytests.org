@@ -250,7 +250,7 @@ const websocketSend = (sessionId, data) => {
   if (!websockets.get(sessionId)) {
     throw new Error(`no websocket exists for sessionId=${sessionId}`);
   }
-  const payload = JSON.stringify({ sessionId, data });
+  const payload = JSON.stringify({ sessionId, data }, null, "  ");
   console.log('sending payload:', payload);
   websockets.get(sessionId).send(payload);
 };
