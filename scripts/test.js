@@ -245,20 +245,21 @@ const runSessionTestsRaw = async (browserSession) => {
   await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=write&firstParty=true&label=1p`);
   const sameSessionResults_3p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&label=3p`);
   const sameSessionResults_1p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&firstParty=true&label=1p`);
-  await sleepMs(1000);
+  await sleepMs(5000);
   await browserSession.browser.restart();
   await sleepMs(1000);
   const crossSessionResults_3p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&label=3p`);
   const crossSessionResults_1p = await runPageTest(browserSession, `${kIframeRootThird}/session.html?mode=read&firstParty=true&label=1p`);
+  await sleepMs(5000);
   return { sameSessionResults_3p, crossSessionResults_3p, sameSessionResults_1p, crossSessionResults_1p };
 };
 
 // Run the cross-session state tests and return analyzed results.
 const runSessionTests = async (browserSession) => {
   const { sameSessionResults_3p, crossSessionResults_3p, sameSessionResults_1p, crossSessionResults_1p } = await runSessionTestsRaw(browserSession);
-  const sessionResults_3p = analyzeSessionResults(sameSessionResults_3p, crossSessionResults_3p);
-  const sessionResults_1p = analyzeSessionResults(sameSessionResults_1p, crossSessionResults_1p);
-  return { sessionResults_3p, sessionResults_1p };
+  const session_3p = analyzeSessionResults(sameSessionResults_3p, crossSessionResults_3p);
+  const session_1p = analyzeSessionResults(sameSessionResults_1p, crossSessionResults_1p);
+  return { session_3p, session_1p };
 };
 
 // Run the insecure connection test. Returns { insecureResults, insecurePassed }.
@@ -356,9 +357,8 @@ const runTestsStage1 = async ({ browserSession, categories, skip }) => {
 
   // Cross-session tests
   if (categories.includes('session')) {
-    const { sessionResults_1p, sessionResults_3p } = await runSessionTests(browserSession);
-    results.session_1p = sessionResults_1p;
-    results.session_3p = sessionResults_3p;
+    const sessionResults = await runSessionTests(browserSession);
+    results = { ...results, ...sessionResults };
   }
 
   // Main tests
@@ -472,7 +472,7 @@ const runTestsBatch = async (
       try {
         browserSessions = (await asyncMapParallel((config) => prepareBrowserSession(config, hurry), browserList)).map(item => item.value);
         console.log({ browserSessions });
-        const testResultsStage1 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage1({ browserSession, categories }), 600000), browserSessions);
+        const testResultsStage1 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage1({ browserSession, categories }), 1000000), browserSessions);
         let testResultsStage2 = [];
         let testResultsStage3 = [];
         if (!android && !ios) {
