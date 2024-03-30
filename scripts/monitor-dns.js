@@ -1,6 +1,9 @@
 const net = require('net');
 const { exec } = require('node:child_process');
 
+
+const LISTENING_PORT = 9999;
+
 const clients = new Set();
 
 const setupServer = () => {
@@ -19,7 +22,7 @@ const setupServer = () => {
     });
     clients.add(client);
   });
-  unixServer.listen(9999);
+  unixServer.listen(LISTENING_PORT);
   return unixServer;
 };
 
@@ -44,6 +47,7 @@ const runTcpDump = () => {
 const main = () => {
   setupServer();
   runTcpDump();
+  console.log(`Watching Do53.\nListening for connections at port ${LISTENING_PORT}.`);
 };
 
 if (require.main === module) {
