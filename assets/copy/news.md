@@ -1,4 +1,35 @@
 # News
+## [Issue 84](/archive/issue84): 2024-04-01
+
+### New browser versions
+
+On Desktop:
+* Brave 1.64
+* Chrome 123.0
+* Edge 123.0
+* Firefox 124.0
+* Librewolf 124.0
+* Opera 109.0
+* Ungoogled 123.0
+
+On iOS:
+* Duckduckgo 7.109
+* Edge 121.2277
+* Firefox 123.1
+* Safari 17.3
+* Yandex 2401.5
+
+On Android:
+* Brave 1.64
+* Chrome 123.0
+* Duckduckgo 5.194
+* Firefox 124.1
+* Focus 124.1
+* Mull 123.1
+* Opera 81.2
+* Vivaldi 6.6
+* Yandex 24.1
+
 ## [Issue 83](/archive/issue83): 2024-03-15
 
 ### New browser versions
