@@ -399,12 +399,13 @@ const content = (results, jsonFilename, title, nightly, incognito, testMyBrowser
     </p>` + `<script type="module">${tooltipScript}</script>`;
 };
 
-const contentPage = ({ results, title, basename, previewImageUrl, tableTitle, nightly, incognito, testMyBrowser }) =>
+const contentPage = ({ results, title, basename, canonicalUrl, previewImageUrl, tableTitle, nightly, incognito, testMyBrowser }) =>
   cleanHtml(
     template.htmlPage({
       title,
       date: new Date(results.timeStarted),
       previewImageUrl,
+      canonicalUrl,
       cssFiles: [
         path.join(__dirname, '/../assets/css/template.css'),
         path.join(__dirname, '../assets/css/table.css')
@@ -504,6 +505,7 @@ const renderPage = async ({ dataFiles, aggregate }) => {
   const resultsFileHTMLLatest = '../results/latest.html';
   const resultsFileHTML = resultsFilesJSON[0].replace(/\.json$/, '.html');
   const resultsFilePreviewImage = resultsFileHTML.replace('.html', '-preview.png');
+  const resultsFileCanonicalUrl = resultsFileHTML.replace('.html', '');
   //  fs.copyFile(resultsFile, "../results/" + path.basename(resultsFile), fs.constants.COPYFILE_EXCL);
   console.log(`Reading from raw results files: ${resultsFilesJSON}`);
   const results = getMergedResults(resultsFilesJSON);
@@ -531,6 +533,7 @@ const renderPage = async ({ dataFiles, aggregate }) => {
     incognito,
     basename,
     results: processedResults,
+    canonicalUrl: path.basename(resultsFileCanonicalUrl),
     previewImageUrl: path.basename(resultsFilePreviewImage)
   });
   fs.writeFileSync(resultsFileHTMLLatest, content);

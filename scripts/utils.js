@@ -24,9 +24,9 @@ const exec = (command, options) => {
 
 // Returns an list of the PIDs for immediate children
 const childProcesses = (pid) => {
-  if (os.platform() === "win32") {
+  if (os.platform() === 'win32') {
     const raw = childProcess.execSync(`wmic process where ParentProcessId="${pid}" get ProcessId`).toString();
-    const lines = raw.trim().split("\n").map(x => x.trim()).slice(1);
+    const lines = raw.trim().split('\n').map(x => x.trim()).slice(1);
     return lines.map(x => parseInt(x));
   } else {
     try {
@@ -52,7 +52,7 @@ const killProcesses = (pids) => {
     try {
       process.kill(pid, process.SIGTERM);
     } catch (e) {
-      //console.log(e);
+      // console.log(e);
     }
   });
 };
@@ -70,5 +70,12 @@ const readYAMLFile = (file) => {
 
 const dataUriFromFile = filePath => datauri(path.join(__dirname, filePath)).content;
 
-module.exports = { sleepMs, execSync, exec, execAsync,
-  killProcessAndDescendants, readYAMLFile, dataUriFromFile };
+module.exports = {
+ sleepMs,
+execSync,
+exec,
+execAsync,
+  killProcessAndDescendants,
+readYAMLFile,
+dataUriFromFile 
+};
