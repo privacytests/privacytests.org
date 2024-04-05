@@ -49,6 +49,9 @@ const readResultsFromNodes = (pageNodes, browserNames) => {
     const testTitle = row.querySelector('td.tooltipParent div');
     if (testTitle) {
       const rowResults = row.querySelectorAll('td img.dataPoint').map(node => node._attrs.class.replace('dataPoint', '').trim());
+      if (browserNames.length !== rowResults.length) {
+        throw new Error("browser names don't match result columns");
+      }
       const resultObject = zipObject(browserNames, rowResults);
       results[currentSubheading][testTitle.innerText] = resultObject;
     }
