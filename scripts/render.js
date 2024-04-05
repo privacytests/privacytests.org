@@ -81,7 +81,7 @@ const htmlTable = ({ headers, body, className }) => {
             <span class="subheading-title">${escapeHtml(item.subheading)}</span>
             <span class="tagline">${item.tagline}</span>
           </div>
-          <pre class="tooltipText">${escapeHtml(description)}</span>
+          <pre class="tooltipText">${escapeHtml(description)}</pre>
         </th>`);
         firstSubheading = false;
       } else {
@@ -287,7 +287,7 @@ const resultsSection = ({ bestResults, category, tooltipFunction }) => {
     const description = bestResultsForCategory[rowName].description ?? '';
     row.push(`<td class="tooltipParent">
                 <div>${rowName}</div>
-                <pre class="tooltipText">${escapeHtml(description)}</span>
+                <pre class="tooltipText">${escapeHtml(description)}</pre>
               </td>`);
     for (const resultMap of resultMaps) {
       try {
