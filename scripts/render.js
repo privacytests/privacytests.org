@@ -10,11 +10,16 @@ const template = require('./template.js');
 const _ = require('lodash');
 const { readYAMLFile, dataUriFromFile } = require('./utils.js');
 const cleaner = require('clean-html');
+const { HtmlValidate } = require('html-validate');
 
-const cleanHtml = (content) => new Promise(resolve => cleaner.clean(
-  content,
-  { wrap: 0, 'preserve-tags': ['script', 'style', 'pre'] },
-  resolve));
+const cleanHtml = async (content) => {
+  const step1 = await new Promise(resolve => cleaner.clean(content,
+    { wrap: 0, 'preserve-tags': ['script', 'style', 'pre'] },
+    resolve));
+  // Remove trailing whitespace:
+  const step2 = step1.replaceAll(/\s+\n/g, '\n');
+  return step2;
+};
 
 const escapeHtml = str => str.replace(/[&<>'"]/g,
   tag => ({
@@ -61,10 +66,11 @@ const deepCopy = (json) => JSON.parse(JSON.stringify(json));
 const htmlTable = ({ headers, body, className }) => {
   const elements = [];
   elements.push(`<table class="${className}">`);
+  elements.push('<tbody>');
   elements.push('<tr>');
   if (headers) {
     for (const header of headers) {
-      elements.push(`<th class="table-header" style="text-transform: capitalize;">${header}</th>`);
+      elements.push(`<th class="table-header">${header}</th>`);
     }
   }
   elements.push('</tr>');
@@ -81,7 +87,7 @@ const htmlTable = ({ headers, body, className }) => {
             <span class="subheading-title">${escapeHtml(item.subheading)}</span>
             <span class="tagline">${item.tagline}</span>
           </div>
-          <pre class="tooltipText">${escapeHtml(description)}</span>
+          <pre class="tooltipText">${escapeHtml(description)}</pre>
         </th>`);
         firstSubheading = false;
       } else {
@@ -90,6 +96,7 @@ const htmlTable = ({ headers, body, className }) => {
     }
     elements.push('</tr>');
   }
+  elements.push('</tbody>');
   elements.push('</table>');
   return elements.join('');
 };
@@ -287,7 +294,7 @@ const resultsSection = ({ bestResults, category, tooltipFunction }) => {
     const description = bestResultsForCategory[rowName].description ?? '';
     row.push(`<td class="tooltipParent">
                 <div>${rowName}</div>
-                <pre class="tooltipText">${escapeHtml(description)}</span>
+                <pre class="tooltipText">${escapeHtml(description)}</pre>
               </td>`);
     for (const resultMap of resultMaps) {
       try {
@@ -335,7 +342,7 @@ const resultsToTable = (results, title, subtitle, desktopOnly, testMyBrowser) =>
 
 // Create the title HTML for a results table.
 const tableTitleHTML = (title) => `
-  <div class="table-title">${title}</div>`;
+  <span class="table-title">${title}</span>`;
 
 // Create dateString from the given date and time string.
 const dateString = (dateTime) => {
@@ -379,9 +386,9 @@ const content = (results, jsonFilename, title, nightly, incognito, testMyBrowser
     </div>
     <div class="banner" id="legend">
       <div id="key">
-        <div><img class="marker good" alt="Passed"> = Passed privacy test</div>
-        <div><img class="marker bad" alt="Failed"> = Failed privacy test</div>
-        <div><img class="marker na" alt="Unsupported"> = No such feature</div>
+        <div><img class="marker good" alt="Passed" src=""> = Passed privacy test</div>
+        <div><img class="marker bad" alt="Failed" src=""> = Failed privacy test</div>
+        <div><img class="marker na" alt="Unsupported" src=""> = No such feature</div>
       </div>
       <div class="banner" id="instructions">
         <div><span class="click-anywhere">(Click anywhere for more info.)</span></div>
@@ -536,6 +543,18 @@ const renderPage = async ({ dataFiles, aggregate }) => {
     canonicalUrl: path.basename(resultsFileCanonicalUrl),
     previewImageUrl: path.basename(resultsFilePreviewImage)
   });
+  const htmlvalidate = new HtmlValidate();
+  const report = await htmlvalidate.validateString(content, {
+    rules: {
+      'attribute-allowed-values': 'off',
+      'wcag/h63': 'off',
+      'element-permitted-content': 'off'
+    }
+  });
+  if (!report.valid) {
+    console.log(report.results[0].messages);
+    throw new Error('HTML validation failed.');
+  }
   fs.writeFileSync(resultsFileHTMLLatest, content);
   console.log(`Wrote out ${fileUrl(resultsFileHTMLLatest)}`);
   fs.copyFileSync(resultsFileHTMLLatest, resultsFileHTML);
