@@ -63,9 +63,9 @@ const htmlPage = ({ content, cssFiles, previewImageUrl, canonicalUrl, title }) =
 `
     : '';
   return `<!DOCTYPE html>
-<html>
+<html lang='en'>
   <head>
-    <meta charset='utf8'/>
+    <meta charset='UTF-8'/>
     ${ogImageIfNeeded}
     <link href="${faviconDataURI}" rel="icon" type="image/x-icon">
     <title>${title}</title>
