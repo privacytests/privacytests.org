@@ -38,7 +38,7 @@ const header = () => `
       <a href="https://mastodon.social/@privacytests" title="@privacytests on Mastodon.\nJoin the discussion!" rel="me"><img alt="Mastodon icon" src="${mastodonDataURI}"></a>
     </div>
     <div class="link-header">
-      <a href="https://www.linkedin.com/company/79572347" title="@privacytests on LinkedIn.\nJoin the discussion!"><img alt="LinkedIn icon" src="${linkedinDataURI}"></a>
+      <a href="https://www.linkedin.com/company/privacytests-org" title="@privacytests on LinkedIn.\nJoin the discussion!"><img alt="LinkedIn icon" src="${linkedinDataURI}"></a>
     </div>
     <div class="link-header">
       <a href="mailto:contact@privacytests.org" title="Contact me directly via email:\ncontact@privacytests.org.\nFeedback is welcome!"><img alt="Email icon" src="${emailDataURI}"></a>
