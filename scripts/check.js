@@ -20,7 +20,7 @@ const slurp = async (pathOrURL) => {
     content = await response.text();
   } else {
     const fullPath = path.resolve(pathOrURL);
-    const buffer = await fsPromises.readFileSync(fullPath);
+    const buffer = await fsPromises.readFile(fullPath);
     content = buffer.toString();
   }
   return content;
