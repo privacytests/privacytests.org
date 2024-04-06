@@ -1,5 +1,5 @@
 const { parse } = require('node-html-parser');
-const fs = require('node:fs');
+const fsPromises = require('node:fs/promises');
 const path = require('node:path');
 const { zipObject } = require('lodash');
 const jsonDiff = require('json-diff');
@@ -20,7 +20,7 @@ const slurp = async (pathOrURL) => {
     content = await response.text();
   } else {
     const fullPath = path.resolve(pathOrURL);
-    const buffer = fs.readFileSync(fullPath);
+    const buffer = await fsPromises.readFileSync(fullPath);
     content = buffer.toString();
   }
   return content;
@@ -59,12 +59,6 @@ const readResultsFromNodes = (pageNodes, browserNames) => {
   return results;
 };
 
-const readIssueNumber = async (pathOrURL) => {
-  const content = await slurp(pathOrURL);
-  const nodes = parse(content);
-  return readIssueNumberFromNodes(nodes);
-};
-
 const readDataFromPage = async (pathOrURL) => {
   const content = await slurp(pathOrURL);
   const nodes = parse(content);
@@ -75,6 +69,9 @@ const readDataFromPage = async (pathOrURL) => {
   return { issueNumber, browserNames, results };
 };
 
-export const latestPublishedIssue = () => {
-  return readIssueNumber('https://privacytests.org');
-};
+const comparePages = async (pathOrURL1, pathOrURL2) => {
+  const [results1, results2] = await Promise.all([
+    readDataFromPage(pathOrURL1), readDataFromPage(pathOrURL2)
+  ]);
+  return jsonDiff.diff(results1, results2);
+}
