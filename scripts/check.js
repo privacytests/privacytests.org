@@ -69,9 +69,9 @@ const readDataFromPage = async (pathOrURL) => {
   return { issueNumber, browserNames, results };
 };
 
-const comparePages = async (pathOrURL1, pathOrURL2) => {
+export const comparePages = async (pathOrURL1, pathOrURL2) => {
   const [results1, results2] = await Promise.all([
     readDataFromPage(pathOrURL1), readDataFromPage(pathOrURL2)
   ]);
   return jsonDiff.diff(results1, results2);
-}
+};
