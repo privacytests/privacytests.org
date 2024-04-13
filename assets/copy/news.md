@@ -1,4 +1,28 @@
 # News
+## [Issue 85](/archive/issue85): 2024-04-12
+
+### New browser versions
+
+In this issue, I have added Cromite to the Android browsers tested.
+
+On iOS:
+* Brave 1.63
+* Duckduckgo 7.114
+* Edge 123.2420
+* Firefox 124.3
+* Yandex 2404.1
+
+On Android:
+* Cromite 123.0
+* Duckduckgo 5.195
+* Edge 123.0
+* Firefox 124.2
+* Focus 124.2
+* Mull 124.2
+* Opera 81.3
+* Yandex 24.2
+
+
 ## [Issue 84](/archive/issue84): 2024-04-01
 
 ### New browser versions
