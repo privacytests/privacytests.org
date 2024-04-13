@@ -92,7 +92,6 @@ const locationDefinition = (countryName, countryCode) =>
   ({
     name: `Location: ${countryName}`,
     country: countryCode,
-    ip: '8.26.56.26',
     description: locationDescription(countryName)
   });
 
