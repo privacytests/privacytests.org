@@ -3,6 +3,7 @@ const fsPromises = require('node:fs/promises');
 const path = require('node:path');
 const { zipObject } = require('lodash');
 const jsonDiff = require('json-diff');
+const minimist = require('minimist');
 
 const validURL = potentialUrl => {
   try {
@@ -28,7 +29,17 @@ const slurp = async (pathOrURL) => {
 
 const readBrowserVersionsFromNodes = (pageNodes) =>
   Object.fromEntries(pageNodes.querySelectorAll('.comparison-table tr th.table-header')
-    .map(x => x.innerText.trim().split(/\s+/)).slice(1));
+    .slice(1)
+    .map(x => {
+      const chunks = x.innerText.trim().split(/\s+/);
+      let name = chunks[0];
+      const version = chunks[1];
+      const windowType = chunks[2] ? chunks[2].toLowerCase() : undefined;
+      if (windowType === "tor") {
+        name += "-tor";
+      }
+      return [name, version];
+    }));
 
 const readIssueNumberFromNodes = (pageNodes) => {
   const elementText = pageNodes.querySelector('.left-heading').innerText;
@@ -69,9 +80,31 @@ const readDataFromPage = async (pathOrURL) => {
   return { issueNumber, browserNames, results };
 };
 
-export const comparePages = async (pathOrURL1, pathOrURL2) => {
+const comparePages = async (pathOrURL1, pathOrURL2) => {
   const [results1, results2] = await Promise.all([
     readDataFromPage(pathOrURL1), readDataFromPage(pathOrURL2)
   ]);
   return jsonDiff.diff(results1, results2);
 };
+
+const printComparison = async (inputFiles1, inputFiles2) => {
+  const results = await comparePages(inputFiles1, inputFiles2);
+  console.log(JSON.stringify(results, undefined, "  "));
+};
+
+const main = () => {
+  const { _: inputFiles } = minimist(process.argv.slice(2));
+  if (inputFiles[0] === undefined) {
+    console.log("Please provide a path to check.");
+  }
+  if (inputFiles[1] === undefined) {
+    inputFiles.unshift(`https://privacytests.org/${path.basename(inputFiles[0])}`);
+  }
+  printComparison(inputFiles[0], inputFiles[1]);
+};
+
+if (require.main === module) {
+  main();
+}
+
+module.exports = { comparePages };
