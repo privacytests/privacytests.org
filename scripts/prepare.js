@@ -139,11 +139,14 @@ const updateNewsCopy = ({ issueNumber, date }) => {
 
 // The main function. Copy publishable files, and add them to git.
 const main = () => {
+  const date = process.argv[2];
+  if (date === undefined) {
+    throw new Error("please enter a date");
+  }
   const indexPath = '../website';
   const issueNumber = fs.readFileSync('issue-number').toString().trim();
   const archivePath = `../website/archive/issue${issueNumber}`;
   createDir(archivePath);
-  const date = process.argv[2];
   const resultsPath = `../results/${date}`;
   copyDirFilesAndGitAdd(resultsPath, archivePath, allowedSuffixes);
   copyDirFilesAndGitAdd(resultsPath, indexPath, allowedSuffixes);
