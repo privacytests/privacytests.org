@@ -5,6 +5,10 @@ const { zipObject } = require('lodash');
 const jsonDiff = require('json-diff');
 const minimist = require('minimist');
 
+const printJSON = (data) => console.log(JSON.stringify(data, undefined, "  "));
+
+const deepCopy = (data) => JSON.parse(JSON.stringify(data));
+
 const validURL = potentialUrl => {
   try {
     return new URL(potentialUrl);
@@ -89,7 +93,47 @@ const comparePages = async (pathOrURL1, pathOrURL2) => {
 
 const printComparison = async (inputFiles1, inputFiles2) => {
   const results = await comparePages(inputFiles1, inputFiles2);
-  console.log(JSON.stringify(results, undefined, "  "));
+  printJSON(results);
+  return results;
+};
+
+const standardFiles = [
+  "index",
+  "private",
+  "ios",
+  "android",
+  "nightly",
+  "nightly-private",
+];
+
+const compareResults = async (dateString) => {
+  const resultsPath = path.join("../results/", dateString);
+  const comparison = {};
+  for (const standardFile of standardFiles) {
+    const filename = `${standardFile}.html`;
+    console.log(`Checking ${filename}...`);
+    comparison[standardFile] =
+      await comparePages(`https://privacytests.org/${filename}`,
+                         path.join(resultsPath, filename));
+  }
+  return comparison;
+};
+
+const checkResults = (results) => {
+  for (const page of Object.keys(results)) {
+    if (results[page]["results"] !== undefined ||
+        results[page]["browserNames"] !== undefined) {
+      throw new Error("Unexpected test results!");
+    }
+  }
+};
+
+const compareAndCheck = async (dateString, ignore = false) => {
+  const results = await compareResults(dateString);
+  printJSON(results);
+  if (!ignore) {
+    await checkResults(results);
+  }
 };
 
 const main = () => {
@@ -107,4 +151,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { comparePages };
+module.exports = { comparePages, compareAndCheck };
