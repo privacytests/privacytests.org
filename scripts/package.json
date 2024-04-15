@@ -52,7 +52,7 @@
   "scripts": {
     "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render --live\" -e css,js,md & ./node_modules/@compodoc/live-server/live-server.js --open=../results/latest.html ..",
     "copy-dev": "./node_modules/nodemon/bin/nodemon.js --exec \"node copy\" --watch copy --watch . -e js,md,css --watch ../assets/copy/ --watch ../assets/css/ & ./node_modules/@compodoc/live-server/live-server.js ../website/",
-    "publish": "cd .. && git subtree push --prefix website origin gh-pages"
+    "publish": "cd .. && git subtree push --prefix website origin gh-pages && node bump"
   },
   "jshintConfig": {
     "esversion": 11,
