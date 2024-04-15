@@ -2,6 +2,8 @@
 const fs = require('fs');
 const path = require('node:path');
 const { execSync } = require('child_process');
+const { compareAndCheck } = require('./check.js');
+const minimist = require('minimist');
 
 // Constants
 const allowedSuffixes = ['.html', '.json', '.png'];
@@ -138,11 +140,13 @@ const updateNewsCopy = ({ issueNumber, date }) => {
 };
 
 // The main function. Copy publishable files, and add them to git.
-const main = () => {
-  const date = process.argv[2];
+const main = async () => {
+  const { _: mainArguments, force } = minimist(process.argv.slice(2));
+  const date = mainArguments[0].toString();
   if (date === undefined) {
     throw new Error("please enter a date");
   }
+  await compareAndCheck(date, force);
   const indexPath = '../website';
   const issueNumber = fs.readFileSync('issue-number').toString().trim();
   const archivePath = `../website/archive/issue${issueNumber}`;
@@ -153,4 +157,6 @@ const main = () => {
   updateNewsCopy({ issueNumber, date });
 };
 
-main();
+if (require.main === module) {
+  main();
+}
