@@ -7,6 +7,7 @@ const twitterDataURI = dataUriFromFile(`${imageDir}/twitter.svg`);
 const githubDataURI = dataUriFromFile(`${imageDir}/github.svg`);
 const emailDataURI = dataUriFromFile(`${imageDir}/email.svg`);
 const mastodonDataURI = dataUriFromFile(`${imageDir}/mastodon.svg`);
+const linkedinDataURI = dataUriFromFile(`${imageDir}/linkedin.svg`);
 const logoDataURI = dataUriFromFile(`${imageDir}/privacyTestsLogo.png`);
 
 // The header common to all pages on the site.
@@ -37,13 +38,16 @@ const header = () => `
       <a href="https://mastodon.social/@privacytests" title="@privacytests on Mastodon.\nJoin the discussion!" rel="me"><img alt="Mastodon icon" src="${mastodonDataURI}"></a>
     </div>
     <div class="link-header">
+      <a href="https://www.linkedin.com/company/privacytests-org" title="@privacytests on LinkedIn.\nJoin the discussion!"><img alt="LinkedIn icon" src="${linkedinDataURI}"></a>
+    </div>
+    <div class="link-header">
       <a href="mailto:contact@privacytests.org" title="Contact me directly via email:\ncontact@privacytests.org.\nFeedback is welcome!"><img alt="Email icon" src="${emailDataURI}"></a>
     </div>
   </div>
 </div>`;
 
 // The basic structure of an HTML page
-const htmlPage = ({ content, cssFiles, previewImageUrl, title }) => {
+const htmlPage = ({ content, cssFiles, previewImageUrl, canonicalUrl, title }) => {
   let inlineCSS = '';
   for (const cssFile of cssFiles) {
     inlineCSS += fs.readFileSync(cssFile);
@@ -55,12 +59,13 @@ const htmlPage = ({ content, cssFiles, previewImageUrl, title }) => {
      <meta property="og:title" content="Which browsers are best for privacy?"/>
      <meta property="og:description" content="An open-source privacy audit of popular web browsers."/>
      <meta property="og:type" content="website"/>
+     <meta property="og:url" content="https://privacytests.org/${canonicalUrl}"/>
 `
     : '';
   return `<!DOCTYPE html>
-<html>
+<html lang='en'>
   <head>
-    <meta charset='utf8'/>
+    <meta charset='UTF-8'/>
     ${ogImageIfNeeded}
     <link href="${faviconDataURI}" rel="icon" type="image/x-icon">
     <title>${title}</title>

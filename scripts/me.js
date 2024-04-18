@@ -27,6 +27,7 @@ const main = () => {
         path.join(__dirname, '/../assets/css/me.css'),
         path.join(__dirname, '/../assets/css/template.css')
       ],
+      canonicalUrl: 'me.html',
       title: 'Test my browser'
     }));
 };

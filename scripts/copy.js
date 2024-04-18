@@ -14,10 +14,12 @@ const generateHtmlFile = async (filename) => {
   const copy = fs.readFileSync(`../assets/copy/${filename}`, 'utf8');
   const newFilename = filename.replace('.md', '.html');
   const previewFilename = filename.replace('.md', '-preview.png');
+  const canonicalUrl = filename.replace('.md', '');
   const htmlOutput = template.htmlPage({
     title: 'Open-source tests of web browser privacy',
     content: wrapCopy(marked.parse(copy)),
     cssFiles: ['../assets/css/template.css'],
+    canonicalUrl,
     previewImageUrl: previewFilename
   });
   //  console.log(htmlOutput);

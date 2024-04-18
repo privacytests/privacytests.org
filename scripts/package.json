@@ -26,6 +26,8 @@
     "clean-html": "^2.0.1",
     "datauri": "^4.1.0",
     "dateformat": "^3.0.3",
+    "html-validate": "^8.18.1",
+    "json-diff": "^1.0.6",
     "jstoxml": "^3.2.10",
     "lodash": "^4.17.21",
     "marked": "^4.0.10",
@@ -33,6 +35,7 @@
     "minimist": "^1.2.5",
     "mockttp": "^3.10.1",
     "node-fetch": "^2.6.5",
+    "node-html-parser": "^6.1.13",
     "open": "^7.3.0",
     "plist": "^3.0.5",
     "sharp": "^0.32.6",
@@ -49,7 +52,7 @@
   "scripts": {
     "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render --live\" -e css,js,md & ./node_modules/@compodoc/live-server/live-server.js --open=../results/latest.html ..",
     "copy-dev": "./node_modules/nodemon/bin/nodemon.js --exec \"node copy\" --watch copy --watch . -e js,md,css --watch ../assets/copy/ --watch ../assets/css/ & ./node_modules/@compodoc/live-server/live-server.js ../website/",
-    "publish": "cd .. && git subtree push --prefix website origin gh-pages"
+    "publish": "cd .. && git subtree push --prefix website origin gh-pages && node bump"
   },
   "jshintConfig": {
     "esversion": 11,
