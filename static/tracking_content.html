@@ -28,11 +28,15 @@
        testElement.src = url2.href;
        try {
          let result = await resultPromise;
-         // DuckDuckGo injects a surrogate script, so should pass test even though the load succeeds.
+         // DuckDuckGo and Brave inject non-tracking surrogate scripts, so should pass test even though the load succeeds.
+         // https://github.com/duckduckgo/tracker-surrogates/blob/main/surrogates/chartbeat.js
+         // https://github.com/brave/uBlock/blob/master/src/web_accessible_resources/chartbeat.js
          if (window.pSUPERFLY &&
-             window.pSUPERFLY.__proto__.toString() === '() => {}') {
+             (window.pSUPERFLY.__proto__.toString() === '() => {}' ||
+              ((window.pSUPERFLY.activity.toString() === 'function() {\n    }') &&
+               (window.pSUPERFLY.virtualPage.toString() === 'function() {\n    }')))) {
            passed = true;
-           console.log(url, "ddg surrogate, https://github.com/duckduckgo/tracker-surrogates/blob/main/surrogates/chartbeat.js");
+           console.log(url, "surrogate script detected");
          } else {;
            passed = false;
            console.log(url, result);
