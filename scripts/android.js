@@ -31,6 +31,11 @@ const browserInfo = {
     urlBarClick: 'omnibox_container',
     urlBarKeys: 'url_bar'
   },
+  cromite: {
+    releasePackageName: 'org.cromite.cromite',
+    urlBarClick: 'url_bar',
+    urlBarKeys: 'url_bar'
+  },
   duckduckgo: {
     displayName: 'DuckDuckGo',
     releasePackageName: 'com.duckduckgo.mobile.android',
@@ -112,8 +117,9 @@ const browserInfo = {
     releasePackageName: 'com.yandex.browser',
     nightlyPackageName: 'com.yandex.browser.alpha',
     urlBarClick: 'bro_omnibar_address_title_text',
-    urlBarClick2: "//android.widget.Button[@text='search or site']",
+    urlBarClick2: "//android.widget.TextView[@text='search or site']",
     urlBarKeys: 'suggest_omnibox_query_edit',
+    startupClick: 'bro_popup_cross_icon',
     contentElement: 'renderView'
   }
 };
