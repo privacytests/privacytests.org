@@ -6,13 +6,12 @@ const net = require('node:net');
 const domainsSeen = new Set();
 
 const createSocket = (port) => new Promise((resolve, reject) => {
-  try {
-    const socket = net.createConnection(
-      port,
-      () => resolve(socket));
-  } catch (e) {
-    reject(e);
-  }
+  const socket = net.createConnection(
+    port,
+    () => resolve(socket));
+  socket.on("error", (err) => {
+    reject(err);
+  });
 });
 
 const domainRegex = /\s([a-z0-9\-]+\.privacytests3\.org)[\s.]/g;
@@ -157,4 +156,4 @@ const runDnsTests = async (browserSessions) => {
   return results;
 };
 
-module.exports = { runDnsTests };
+module.exports = { observeDomains, runDnsTests };

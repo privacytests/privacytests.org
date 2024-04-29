@@ -21,7 +21,7 @@ const WebSocket = require('ws');
 const cookieProxy = require('./cookie-proxy');
 const { sleepMs, readYAMLFile } = require('./utils');
 const path = require('node:path');
-const { runDnsTests } = require('./dns-test.js');
+const { observeDomains, runDnsTests } = require('./dns-test.js');
 const systemNetworkSettings = require('./system-network-settings');
 
 // ## Constants
@@ -464,6 +464,15 @@ const runTestsBatch = async (
   console.log(categories);
   const timeStarted = new Date().toISOString();
   cookieProxy.simulateTrackingCookies(cookieProxyPort, debug);
+  if (categories.includes('dns')) {
+    // Make sure we can connect to the monitor-dns.js socket listener
+    try {
+      await observeDomains();
+    } catch (e) {
+      console.log("Unable to connect to port 9999. Is ./monitor-dns.js running?");
+      process.exit(1);
+    }
+  }
   const failures = [];
   for (let iter = 0; iter < repeat; ++iter) {
     for (const browserList of browserLists) {
