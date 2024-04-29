@@ -1,4 +1,32 @@
+/* Light mode colors */
+@media (prefers-color-scheme: light) {
+    :root {
+        --header-bg-color: #eee;
+        --header-text-color: #000000;
+        --header-image-filter: none;
+        --body-bg-color: #FFFFFF;
+        --body-text-color: #000000;
+        --table-bg-color: #FFFFFF;
+        --table-bg-color-alt: #eee;
+    }
+}
+
+/* Dark mode colors */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --header-bg-color: #4b4b4b;
+        --header-text-color: #FFFFFF;
+        --header-image-filter: brightness(0) saturate(100%) invert(84%) sepia(100%) saturate(2%) hue-rotate(102deg) brightness(104%) contrast(101%);
+        --body-bg-color: #121212;
+        --body-text-color: #FFFFFF;
+        --table-bg-color: #2f2f2f;
+        --table-bg-color-alt: #3c3b3b;
+    }
+}
+
 body {
+    background-color: var(--body-bg-color);
+    color: var(--body-text-color);
     font-family: sans-serif;
     margin: 0px;
     display: flex;
@@ -17,9 +45,9 @@ body {
 }
 
 .header {
-    background-color: #eee;
+    background-color: var(--header-bg-color);
     /* border-bottom: darkgreen 1px solid; */
-    color: rgb(80, 80, 80);
+    color: var(--body-text-color);
     /*display:table-cell;*/
     display: flex;
     /*flex-flow: row wrap;*/
@@ -92,7 +120,11 @@ body {
 
 .header a {
     text-decoration: none;
-    color: black;
+    color: var(--header-text-color);
+}
+
+.link-header img {
+    filter: var(--header-image-filter);
 }
 
 .title {
@@ -130,14 +162,19 @@ h1.title {
 }
 
 table.comparison-table {
+    background-color: var(--table-bg-color);
     border-collapse: collapse;
     margin-top: 10px;
     position: relative;
     margin: 10px 10px;
 }
 
+table.comparison-table tr {
+    background-color: var(--table-bg-color);
+}
+
 table.comparison-table tr th.table-header {
-    background-color: white;
+    background-color: var(--table-bg-color);
     text-align: center;
     word-break: break-all;
     vertical-align: top;
@@ -159,11 +196,12 @@ table.comparison-table .subtitle {
     font-size: 14px;
     padding-top: 10px;
     line-height: 22px;
-    color: gray
+    color: gray;
 }
 
 table.comparison-table tr th.table-header:not(:first-child) {
     white-space: nowrap;
+    background-color: var(--table-bg-color);
 }
 
 table.comparison-table tr:first-child th:first-child {
@@ -171,11 +209,11 @@ table.comparison-table tr:first-child th:first-child {
 }
 
 table.comparison-table tr:nth-child(2n+1) td {
-    background-color: #eee;
+    background-color: var(--table-bg-color-alt);
 }
 
 table.comparison-table tr:nth-child(2n) td {
-    background-color: white;
+    background-color: var(--table-bg-color);
 }
 
 table.comparison-table tr td {
@@ -187,6 +225,8 @@ table.comparison-table tr td {
 }
 
 table.comparison-table .subheading {
+    background-color: var(--table-bg-color);
+    color: var(--body-text-color);
     padding-top: 30px;
     padding-bottom: 5px;
     font-weight: bold;
@@ -200,13 +240,13 @@ table.comparison-table .subheading>div {
 
 table.comparison-table .subheading-title {
     font-size: 18px;
-    color: #222;
+    color: var(--body-text-color);
 }
 
 table.comparison-table .subheading .tagline {
     font-weight: normal;
     font-size: 16px;
-    color: #222;
+    color: var(--body-text-color);
     padding: 8px 0px;
 }
 
@@ -289,6 +329,7 @@ table.comparison-table .date {
 
 #navBanner a {
     text-decoration: none;
+    color: inherit;
 }
 
 .navItem:hover {
