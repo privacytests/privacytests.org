@@ -62,6 +62,10 @@ const killProcessAndDescendants = (pid) => {
   killProcesses(descendantProcesses(pid));
 };
 
+const killProcessesWithPattern = (pattern) => {
+  execSync(`pkill -f "${pattern}"`);
+}
+
 // Read a YAML file from disk.
 const readYAMLFile = (file) => {
   const fileContents = fs.readFileSync(file, 'utf8');
@@ -71,11 +75,12 @@ const readYAMLFile = (file) => {
 const dataUriFromFile = filePath => datauri(path.join(__dirname, filePath)).content;
 
 module.exports = {
- sleepMs,
-execSync,
-exec,
-execAsync,
+  sleepMs,
+  execSync,
+  exec,
+  execAsync,
   killProcessAndDescendants,
-readYAMLFile,
-dataUriFromFile 
+  killProcessesWithPattern,
+  readYAMLFile,
+  dataUriFromFile
 };
