@@ -640,6 +640,11 @@ const updateAll = async (config) => {
   await showVersions(config);
 };
 
+const killAll = (config) => {
+  const browserList = configToBrowserList(config);
+  DesktopBrowser.killAll(browserList.map(item => item.browser));
+}
+
 // ## Main program
 
 // Reads in command-line arguments, config file, runs the required
@@ -671,6 +676,10 @@ const main = async () => {
       await updateAll(config);
       process.exit();
       // Program has ended.
+    }
+    if (config.kill) {
+      killAll(config);
+      process.exit();
     }
     if (config.versions || config.version) {
       await showVersions(config);
