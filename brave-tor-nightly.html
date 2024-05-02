@@ -375,9 +375,9 @@ table.comparison-table .date {
         </div>
       </div>
       <div class="banner" id="issueBanner">
-        <div class="left-heading">No. 84</div>
+        <div class="left-heading">No. 86</div>
         <div class="middle-heading">Open-source tests of web browser privacy.</div>
-        <div class="right-heading">Updated 2024-04-12</div>
+        <div class="right-heading">Updated 2024-04-30</div>
       </div>
       <div class="banner" id="navBanner">
         <div class="navItem "><a href=".">Desktop browsers</a></div>
@@ -410,7 +410,7 @@ table.comparison-table .date {
                 <br>
                 brave
                 <br>
-                1.66
+                1.67
               </span>
               <br>
               Tor
@@ -459,12 +459,11 @@ result, same first party:
 Error: Unsupported,
 Error: Unsupported,
 Error: Unsupported,
-Error: Unsupported,
 Error: Unsupported
-result, different first party: h2, h2, h2, h2, h2
-unsupported: true, true, true, true, true
+result, different first party: h2, h2, h2, h2
+unsupported: true, true, true, true
 passed: undefined
-test failed: false, false, false, false, false</pre>
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -490,20 +489,18 @@ read: async (secret) =&gt; {
       return blobResponse.text();
     }
 result, same first party:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce,
-35c92114-903d-4422-8d1e-9802e49ecd65,
-c2620fbf-9668-4301-a614-66d3452bf8df,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd,
+526971b8-350b-480b-bca0-71ea018f7af2,
+a0ae978a-8cc7-459b-8614-08909359399f
 result, different first party:
 Error: Failed to fetch,
 Error: Failed to fetch,
 Error: Failed to fetch,
-Error: Failed to fetch,
 Error: Failed to fetch
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -537,20 +534,18 @@ read: () =&gt;
         setTimeout(() =&gt; reject({message: &quot;no BroadcastChannel message&quot;}), 3000);
       })
 result, same first party:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce,
-35c92114-903d-4422-8d1e-9802e49ecd65,
-c2620fbf-9668-4301-a614-66d3452bf8df,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd,
+526971b8-350b-480b-bca0-71ea018f7af2,
+a0ae978a-8cc7-459b-8614-08909359399f
 result, different first party:
 Error: no BroadcastChannel message,
 Error: no BroadcastChannel message,
 Error: no BroadcastChannel message,
-Error: no BroadcastChannel message,
 Error: no BroadcastChannel message
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -575,20 +570,18 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 result, same first party:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce,
-35c92114-903d-4422-8d1e-9802e49ecd65,
-c2620fbf-9668-4301-a614-66d3452bf8df,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd,
+526971b8-350b-480b-bca0-71ea018f7af2,
+a0ae978a-8cc7-459b-8614-08909359399f
 result, different first party:
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
-Error: Cannot read properties of undefined (reading &#39;url&#39;),
 Error: Cannot read properties of undefined (reading &#39;url&#39;)
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -609,15 +602,14 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 result, same first party:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce_http,
-35c92114-903d-4422-8d1e-9802e49ecd65_http,
-c2620fbf-9668-4301-a614-66d3452bf8df_http,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac_http,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e_http
-result, different first party: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86_http,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd_http,
+526971b8-350b-480b-bca0-71ea018f7af2_http,
+a0ae978a-8cc7-459b-8614-08909359399f_http
+result, different first party: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -632,15 +624,14 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 result, same first party:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce_js,
-35c92114-903d-4422-8d1e-9802e49ecd65_js,
-c2620fbf-9668-4301-a614-66d3452bf8df_js,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac_js,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e_js
-result, different first party: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86_js,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd_js,
+526971b8-350b-480b-bca0-71ea018f7af2_js,
+a0ae978a-8cc7-459b-8614-08909359399f_js
+result, different first party: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -673,15 +664,14 @@ read: async () =&gt; {
       return cookie.value;
     }
 result, same first party:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce,
-35c92114-903d-4422-8d1e-9802e49ecd65,
-c2620fbf-9668-4301-a614-66d3452bf8df,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e
-result, different first party: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd,
+526971b8-350b-480b-bca0-71ea018f7af2,
+a0ae978a-8cc7-459b-8614-08909359399f
+result, different first party: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -724,20 +714,18 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 result, same first party:
-fake_534484537517057,
-fake_4436917188530254,
-fake_15158487828349454,
-fake_8300023552404416,
-fake_009914085141822904
+fake_9694510580496949,
+fake_8951940088234294,
+fake_10751318068653193,
+fake_8083650853074709
 result, different first party:
-fake_17895189634739506,
-fake_20908184453646816,
-fake_34113599016165375,
-fake_9315698050047447,
-fake_055915207092963826
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+fake_9641513173508187,
+fake_614288710415561,
+fake_14889635332111073,
+fake_5432950391105709
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -759,11 +747,11 @@ read: async (key) =&gt; {
       }
       return count;
     }
-result, same first party: 1, 1, 1, 1, 1
-result, different first party: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same first party: 1, 1, 1, 1
+result, different first party: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -785,11 +773,11 @@ read: async (key) =&gt; {
                                       {cache: &quot;reload&quot;});
       return (await countResponse.text()).trim();
     }
-result, same first party: 1, 1, 1, 1, 1
-result, different first party: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same first party: 1, 1, 1, 1
+result, different first party: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -827,11 +815,11 @@ read: async (key) =&gt; {
         testURI(&quot;ctr&quot;, &quot;font&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
       return (await response.text()).trim();
     }
-result, same first party: 1, 1, 1, 1, 1
-result, different first party: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same first party: 1, 1, 1, 1
+result, different first party: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -863,20 +851,18 @@ read: async () =&gt; {
       }
     }
 result, same first party:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce,
-35c92114-903d-4422-8d1e-9802e49ecd65,
-c2620fbf-9668-4301-a614-66d3452bf8df,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd,
+526971b8-350b-480b-bca0-71ea018f7af2,
+a0ae978a-8cc7-459b-8614-08909359399f
 result, different first party:
 Error: Unsupported,
 Error: Unsupported,
 Error: Unsupported,
-Error: Unsupported,
 Error: Unsupported
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -894,15 +880,14 @@ read: async () =&gt; {
       return await response.text();
     }
 result, same first party:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce,
-35c92114-903d-4422-8d1e-9802e49ecd65,
-c2620fbf-9668-4301-a614-66d3452bf8df,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e
-result, different first party: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd,
+526971b8-350b-480b-bca0-71ea018f7af2,
+a0ae978a-8cc7-459b-8614-08909359399f
+result, different first party: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -920,15 +905,14 @@ read: async () =&gt; {
       return await response.text();
     }
 result, same first party:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce,
-35c92114-903d-4422-8d1e-9802e49ecd65,
-c2620fbf-9668-4301-a614-66d3452bf8df,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e
-result, different first party: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd,
+526971b8-350b-480b-bca0-71ea018f7af2,
+a0ae978a-8cc7-459b-8614-08909359399f
+result, different first party: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -956,11 +940,11 @@ read: async () =&gt; {
       let response = await fetch(`https://h3.privacytests2.org:4434/connection_id`);
       return await response.text();
     }
-result, same first party: , , , ,
-result, different first party: , , , ,
-unsupported: true, true, true, true, true
+result, same first party: , , ,
+result, different first party: , , ,
+unsupported: true, true, true, true
 passed: undefined
-test failed: false, false, false, false, false</pre>
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -972,16 +956,15 @@ test failed: false, false, false, false, false</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">write: null
 read: null
-result, same first party: , , , ,
+result, same first party: , , ,
 result, different first party:
 HTTPS used by default; no HSTS cache issue expected,
 HTTPS used by default; no HSTS cache issue expected,
 HTTPS used by default; no HSTS cache issue expected,
-HTTPS used by default; no HSTS cache issue expected,
 HTTPS used by default; no HSTS cache issue expected
-unsupported: , , , ,
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+unsupported: , , ,
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -993,16 +976,15 @@ test failed: false, false, false, false, false</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">write: null
 read: null
-result, same first party: , , , ,
+result, same first party: , , ,
 result, different first party:
 HTTPS used by default; no HSTS cache issue expected,
 HTTPS used by default; no HSTS cache issue expected,
 HTTPS used by default; no HSTS cache issue expected,
-HTTPS used by default; no HSTS cache issue expected,
 HTTPS used by default; no HSTS cache issue expected
-unsupported: , , , ,
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+unsupported: , , ,
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1031,11 +1013,11 @@ read: async (key) =&gt; {
         testURI(&quot;ctr&quot;, &quot;page&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
       return (await response.text()).trim();
     }
-result, same first party: 1, 1, 1, 1, 1
-result, different first party: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same first party: 1, 1, 1, 1
+result, different first party: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1063,11 +1045,11 @@ read: async (key) =&gt; {
         testURI(&quot;ctr&quot;, &quot;image&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
       return (await response.text()).trim();
     }
-result, same first party: 1, 1, 1, 1, 1
-result, different first party: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same first party: 1, 1, 1, 1
+result, different first party: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1086,15 +1068,14 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 result, same first party:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce,
-35c92114-903d-4422-8d1e-9802e49ecd65,
-c2620fbf-9668-4301-a614-66d3452bf8df,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd,
+526971b8-350b-480b-bca0-71ea018f7af2,
+a0ae978a-8cc7-459b-8614-08909359399f
 result, different first party: undefined
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1107,15 +1088,14 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 result, same first party:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce,
-35c92114-903d-4422-8d1e-9802e49ecd65,
-c2620fbf-9668-4301-a614-66d3452bf8df,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e
-result, different first party: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd,
+526971b8-350b-480b-bca0-71ea018f7af2,
+a0ae978a-8cc7-459b-8614-08909359399f
+result, different first party: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1141,20 +1121,18 @@ read: async () =&gt; {
       }
     }
 result, same first party:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce,
-35c92114-903d-4422-8d1e-9802e49ecd65,
-c2620fbf-9668-4301-a614-66d3452bf8df,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd,
+526971b8-350b-480b-bca0-71ea018f7af2,
+a0ae978a-8cc7-459b-8614-08909359399f
 result, different first party:
 Error: Cannot read properties of undefined (reading &#39;name&#39;),
 Error: Cannot read properties of undefined (reading &#39;name&#39;),
 Error: Cannot read properties of undefined (reading &#39;name&#39;),
-Error: Cannot read properties of undefined (reading &#39;name&#39;),
 Error: Cannot read properties of undefined (reading &#39;name&#39;)
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1185,11 +1163,11 @@ read: async (key) =&gt; {
       }
       return countString;
     }
-result, same first party: 1, 1, 1, 1, 1
-result, different first party: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same first party: 1, 1, 1, 1
+result, different first party: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1217,11 +1195,11 @@ read: async (key) =&gt; {
         testURI(&quot;ctr&quot;, &quot;script&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
       return (await response.text()).trim();
     }
-result, same first party: 1, 1, 1, 1, 1
-result, different first party: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same first party: 1, 1, 1, 1
+result, different first party: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1316,29 +1294,14 @@ result, same first party:
 &lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
 &lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
 &lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
-,
-&lt;html&gt;
-&lt;head&gt;&lt;title&gt;404 Not Found&lt;/title&gt;&lt;/head&gt;
-&lt;body&gt;
-&lt;center&gt;&lt;h1&gt;404 Not Found&lt;/h1&gt;&lt;/center&gt;
-&lt;hr&gt;&lt;center&gt;nginx/1.18.0 (Ubuntu)&lt;/center&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-&lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
-&lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
-&lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
-&lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
-&lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
-&lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
 result, different first party:
 Error: ServiceWorker registration failed,
-,
 Error: ServiceWorker registration failed,
-,
+Error: ServiceWorker registration failed,
 Error: ServiceWorker registration failed
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1377,20 +1340,18 @@ read: async () =&gt; {
       return message;
     }
 result, same first party:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce,
-35c92114-903d-4422-8d1e-9802e49ecd65,
-c2620fbf-9668-4301-a614-66d3452bf8df,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd,
+526971b8-350b-480b-bca0-71ea018f7af2,
+a0ae978a-8cc7-459b-8614-08909359399f
 result, different first party:
 Error: no SharedWorker message received,
 Error: no SharedWorker message received,
 Error: no SharedWorker message received,
-Error: no SharedWorker message received,
 Error: no SharedWorker message received
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1409,20 +1370,18 @@ read: async () =&gt; {
       return (await results.json()).sessionId;
     }
 result, same first party:
-061732d5f3edd3011807a8bbe4a9ce4aa87b901618139616ae7a6e560959d20a,
-667b13ce736ad0ca82f054d96ceb2f5bc10908ff81b8561a97cbb3b30fce364d,
-6c7a0a5e3c84ee31f04e525663d55e2b2ffa9c611b905513c32423034e192107,
-ec6f57f045c22839fa57d346931818853942a353620304bef40388b86c9fde8d,
-64821dccd214aa805c02769e32bc570e1b779a3f4dceb00289e5c5167e2714b2
+5e3b3475fe5e47b9dc97fe764c3542050295eeb6720780146c4e452da77c6a99,
+831b904614181b1c5165e832d1c903f57b6ae04b8797791c535caf03d89a999a,
+b44f9b48f4b38e2679a6ec41533512dd763bb08814d5dfd0edda6398cbb513f3,
+44cc96fed81b3978a5997e60d65361cb2597db50aac59a74ba642e282c252764
 result, different first party:
-cfb8e1e9602bb70debe4bea7aa22e079ea6f02204c641ee002acbd59a8769fb3,
-a53095e94d687c8fa8f0c505f39c13ecde431bf0e64982c195dfabf4d524b076,
-a6bf6f4f26da7eaa10da0fb2a84139cfebead21f347624e2e48edf8850cfa108,
-a9914263bd8ed4652c78867e9103ee07cdf6099fc894087a721b21e3a8e1a24f,
-e2e0630705eaa125548fd10222be5f9ba160129eba5b7cb873064eb9db0e874e
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+b4b2f878983ee671ceca5f75c1e79bc12467e083d8fb9690f930a2f917061c51,
+6e6db5f354195a9881c8d9439cf6711a1510b011dfeab16598d5b6f132d48ecf,
+fb86e1aca35a325f4c21176c5892ac1eb497b01f66f80a30e9331d4d6d321a81,
+de0addce99335194ed5c1868fdc47f8a80c2319691e211409e7f6be3fc022f24
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1450,11 +1409,11 @@ read: async (key) =&gt; {
                                       {cache: &quot;reload&quot;});
       return (await countResponse.text()).trim();
     }
-result, same first party: 1, 1, 1, 1, 1
-result, different first party: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same first party: 1, 1, 1, 1
+result, different first party: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1476,17 +1435,15 @@ result, same first party:
 https://test-pages.privacytests2.org/,
 https://test-pages.privacytests2.org/,
 https://test-pages.privacytests2.org/,
-https://test-pages.privacytests2.org/,
 https://test-pages.privacytests2.org/
 result, different first party:
 https://test-pages.privacytests2.org/,
 https://test-pages.privacytests2.org/,
 https://test-pages.privacytests2.org/,
-https://test-pages.privacytests2.org/,
 https://test-pages.privacytests2.org/
-unsupported: false, false, false, false, false
-passed: false, false, false, false, false
-test failed: false, false, false, false, false</pre>
+unsupported: false, false, false, false
+passed: false, false, false, false
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1499,15 +1456,14 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; sessionStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; sessionStorage.getItem(&quot;secret&quot;)
 result, same first party:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce,
-35c92114-903d-4422-8d1e-9802e49ecd65,
-c2620fbf-9668-4301-a614-66d3452bf8df,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e
-result, different first party: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd,
+526971b8-350b-480b-bca0-71ea018f7af2,
+a0ae978a-8cc7-459b-8614-08909359399f
+result, different first party: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1520,15 +1476,14 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; window.name = &quot;name_&quot; + secret
 read: () =&gt; window.name
 result, same first party:
-name_77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce,
-name_35c92114-903d-4422-8d1e-9802e49ecd65,
-name_c2620fbf-9668-4301-a614-66d3452bf8df,
-name_6f68c061-5a1f-492a-98a3-f2f3b02fc1ac,
-name_1f2b76bb-4aaa-4a02-9117-5a79960fad2e
-result, different first party: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+name_a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86,
+name_f97dbdb9-ca84-43ab-8c30-653dc82861bd,
+name_526971b8-350b-480b-bca0-71ea018f7af2,
+name_a0ae978a-8cc7-459b-8614-08909359399f
+result, different first party: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1544,9 +1499,8 @@ test failed: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 result:
-Insecure website never loaded,
 Insecure website never loaded,
 Insecure website never loaded,
 Insecure website never loaded,
@@ -1560,8 +1514,8 @@ Insecure website never loaded</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">upgraded: true, true, true, true, true
-passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">upgraded: true, true, true, true
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1571,8 +1525,8 @@ passed: true, true, true, true, true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">upgraded: true, true, true, true, true
-passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">upgraded: true, true, true, true
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1582,8 +1536,8 @@ passed: true, true, true, true, true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
-result: upgraded, upgraded, upgraded, upgraded, upgraded</pre>
+              <pre class="tooltipText">passed: true, true, true, true
+result: upgraded, upgraded, upgraded, upgraded</pre>
             </td>
           </tr>
           <tr>
@@ -1593,8 +1547,8 @@ result: upgraded, upgraded, upgraded, upgraded, upgraded</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
-result: blocked, blocked, blocked, blocked, blocked</pre>
+              <pre class="tooltipText">passed: true, true, true, true
+result: blocked, blocked, blocked, blocked</pre>
             </td>
           </tr>
           <tr>
@@ -1611,7 +1565,7 @@ result: blocked, blocked, blocked, blocked, blocked</pre>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
               <pre class="tooltipText">SNI_status: plaintext
-passed: false, false, false, false, false</pre>
+passed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1622,7 +1576,7 @@ passed: false, false, false, false, false</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">header value: 1
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1633,7 +1587,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">sec-gpc: 1
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1643,7 +1597,7 @@ passed: true, true, true, true, true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1665,21 +1619,19 @@ read: async () =&gt; {
         throw new Error(&quot;Unsupported&quot;);
       }
     }
-unsupported: false, false, false, false, false
+unsupported: false, false, false, false
 readSameFirstParty:
-192.42.116.24,
-198.98.48.20,
-185.243.218.202,
-185.220.101.34,
-185.220.101.103
+192.42.116.179,
+45.141.215.170,
+185.220.101.17,
+192.42.116.218
 readDifferentFirstParty:
-192.42.116.189,
-185.220.101.29,
-185.142.239.49,
-185.220.100.240,
-185.220.101.13
-passed: true, true, true, true, true
-testFailed: false, false, false, false, false</pre>
+185.233.100.23,
+185.220.101.38,
+185.181.61.115,
+185.220.101.74
+passed: true, true, true, true
+testFailed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -1689,8 +1641,8 @@ testFailed: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">IsTorExit: true, true, true, true, true
-passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">IsTorExit: true, true, true, true
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1708,9 +1660,9 @@ passed: true, true, true, true, true</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">expression: undefined
 desired expression: undefined
-actual value: 1287,1292,1291,1291,1289
+actual value: 1295,1295,1291,1293
 desired value: undefined
-passed: true,true,true,true,true</pre>
+passed: true,true,true,true</pre>
             </td>
           </tr>
           <tr>
@@ -1722,9 +1674,9 @@ passed: true,true,true,true,true</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">expression: undefined
 desired expression: undefined
-actual value: 1163,1156,1157,1158,1162
+actual value: 1156,1161,1164,1158
 desired value: undefined
-passed: true,true,true,true,true</pre>
+passed: true,true,true,true</pre>
             </td>
           </tr>
           <tr>
@@ -1736,9 +1688,9 @@ passed: true,true,true,true,true</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">expression: outerHeight
 desired expression: undefined
-actual value: 1287,1292,1291,1291,1289
+actual value: 1295,1295,1291,1293
 desired value: undefined
-passed: true,true,true,true,true</pre>
+passed: true,true,true,true</pre>
             </td>
           </tr>
           <tr>
@@ -1750,9 +1702,9 @@ passed: true,true,true,true,true</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">expression: screen.height
 desired expression: undefined
-actual value: 1287,1292,1291,1291,1289
+actual value: 1295,1295,1291,1293
 desired value: undefined
-passed: true,true,true,true,true</pre>
+passed: true,true,true,true</pre>
             </td>
           </tr>
           <tr>
@@ -1764,9 +1716,9 @@ passed: true,true,true,true,true</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">expression: screen.width
 desired expression: undefined
-actual value: 1163,1156,1157,1158,1162
+actual value: 1156,1161,1164,1158
 desired value: undefined
-passed: true,true,true,true,true</pre>
+passed: true,true,true,true</pre>
             </td>
           </tr>
           <tr>
@@ -1778,9 +1730,9 @@ passed: true,true,true,true,true</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">expression: screenX
 desired expression: undefined
-actual value: 7,4,6,6,1
+actual value: 6,2,4,7
 desired value: undefined
-passed: true,true,true,true,true</pre>
+passed: true,true,true,true</pre>
             </td>
           </tr>
           <tr>
@@ -1792,9 +1744,9 @@ passed: true,true,true,true,true</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">expression: screenY
 desired expression: undefined
-actual value: 3,4,8,4,6
+actual value: 3,2,7,8
 desired value: undefined
-passed: true,true,true,true,true</pre>
+passed: true,true,true,true</pre>
             </td>
           </tr>
           <tr>
@@ -1808,7 +1760,7 @@ passed: true,true,true,true,true</pre>
 desired expression: undefined
 actual value: undefined
 desired value: undefined
-passed: true,true,true,true,true</pre>
+passed: true,true,true,true</pre>
             </td>
           </tr>
           <tr>
@@ -1824,7 +1776,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1834,7 +1786,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1844,7 +1796,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1854,7 +1806,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1864,7 +1816,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1874,7 +1826,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1884,7 +1836,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1894,7 +1846,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1904,7 +1856,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1914,7 +1866,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1924,7 +1876,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1934,7 +1886,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1944,7 +1896,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1954,7 +1906,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1964,7 +1916,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1974,7 +1926,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1984,7 +1936,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -1994,7 +1946,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2004,7 +1956,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2014,7 +1966,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2024,7 +1976,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2034,7 +1986,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2044,7 +1996,7 @@ passed: true,true,true,true,true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true</pre>
+              <pre class="tooltipText">passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2061,7 +2013,7 @@ passed: true,true,true,true,true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://munchkin.marketo.net/munchkin.js
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2072,7 +2024,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://dpm.demdex.net/ibs
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2083,7 +2035,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://s.amazon-adsystem.com/dcm
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2094,7 +2046,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://ib.adnxs.com/px?id=178248&amp;t=1
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2105,7 +2057,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://bat.bing.com/bat.js
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2114,9 +2066,9 @@ passed: true, true, true, true, true</pre>
               <pre class="tooltipText">Tests whether the browser blocks the page from loading the tracker at https://static.chartbeat.com/js/chartbeat.js</pre>
             </td>
             <td class="tooltipParent">
-              <img alt="Failed" src="" class="dataPoint bad">
+              <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://static.chartbeat.com/js/chartbeat.js
-passed: false, false, false, false, false</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2127,7 +2079,7 @@ passed: false, false, false, false, false</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://dis.criteo.com/dis/rtb/appnexus/cookiematch.aspx
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2138,7 +2090,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://securepubads.g.doubleclick.net/static/glade.js
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2149,7 +2101,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://connect.facebook.net/en_US/fbevents.js
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2160,7 +2112,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://www.google.com/pagead/1p-user-list/
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2171,7 +2123,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://google-analytics.com/urchin.js
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2182,7 +2134,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2193,7 +2145,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&amp;external_user_id=629685505537&amp;C=1
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2204,7 +2156,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://js-agent.newrelic.com/nr-1212.min.js
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2215,7 +2167,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://pixel.quantserve.com/pixel
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2226,7 +2178,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://sb.scorecardresearch.com/internal-c2/default/cs.js
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2237,7 +2189,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://trc.taboola.com/futureplc-tomsguide/trc/3/json
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2248,7 +2200,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://t.co/i/adsct
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2259,7 +2211,7 @@ passed: true, true, true, true, true</pre>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">url: https://yandex.ru/ads/system/header-bidding.js
-passed: true, true, true, true, true</pre>
+passed: true, true, true, true</pre>
             </td>
           </tr>
           <tr>
@@ -2275,9 +2227,9 @@ passed: true, true, true, true, true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://munchkin.marketo.net/munchkin.js
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2287,9 +2239,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://dpm.demdex.net/ibs
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2299,9 +2251,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://s.amazon-adsystem.com/dcm
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2311,9 +2263,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://ib.adnxs.com/px?id=178248&amp;t=1
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2323,9 +2275,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://bat.bing.com/bat.js
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2335,9 +2287,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://static.chartbeat.com/js/chartbeat.js
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2347,9 +2299,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://dis.criteo.com/dis/rtb/appnexus/cookiematch.aspx
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2359,9 +2311,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://securepubads.g.doubleclick.net/static/glade.js
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2371,9 +2323,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://connect.facebook.net/en_US/fbevents.js
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2383,9 +2335,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://www.google.com/pagead/1p-user-list/
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2395,9 +2347,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://google-analytics.com/urchin.js
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2407,9 +2359,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://www.googletagmanager.com/gtag.js?id=GTM-NX4SMZL
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2419,9 +2371,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://dsum-sec.casalemedia.com/crum?cm_dsp_id=10&amp;external_user_id=629685505537&amp;C=1
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2431,9 +2383,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://js-agent.newrelic.com/nr-1212.min.js
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2443,9 +2395,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://pixel.quantserve.com/pixel
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2455,9 +2407,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://sb.scorecardresearch.com/internal-c2/default/cs.js
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2467,9 +2419,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://trc.taboola.com/futureplc-tomsguide/trc/3/json
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2479,9 +2431,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://t.co/i/adsct
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2491,9 +2443,9 @@ cookieFound: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
+              <pre class="tooltipText">passed: true, true, true, true
 url: https://yandex.ru/ads/system/header-bidding.js
-cookieFound: false, false, false, false, false</pre>
+cookieFound: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2535,11 +2487,11 @@ read: async () =&gt; {
       }
       return protocol;
     }
-result, same session: h2, h2, h2, h2, h2
-result, different session: h2, h2, h2, h2, h2
-unsupported: true, true, true, true, true
+result, same session: h2, h2, h2, h2
+result, different session: h2, h2, h2, h2
+unsupported: true, true, true, true
 passed: undefined
-test failed: false, false, false, false, false</pre>
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2564,20 +2516,18 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 result, same session:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce_1p,
-35c92114-903d-4422-8d1e-9802e49ecd65_1p,
-c2620fbf-9668-4301-a614-66d3452bf8df_1p,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac_1p,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e_1p
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86_1p,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd_1p,
+526971b8-350b-480b-bca0-71ea018f7af2_1p,
+a0ae978a-8cc7-459b-8614-08909359399f_1p
 result, different session:
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
-Error: Cannot read properties of undefined (reading &#39;url&#39;),
 Error: Cannot read properties of undefined (reading &#39;url&#39;)
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2598,15 +2548,14 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 result, same session:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce_1p_http,
-35c92114-903d-4422-8d1e-9802e49ecd65_1p_http,
-c2620fbf-9668-4301-a614-66d3452bf8df_1p_http,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac_1p_http,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e_1p_http
-result, different session: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86_1p_http,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd_1p_http,
+526971b8-350b-480b-bca0-71ea018f7af2_1p_http,
+a0ae978a-8cc7-459b-8614-08909359399f_1p_http
+result, different session: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2621,15 +2570,14 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 result, same session:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce_1p_js,
-35c92114-903d-4422-8d1e-9802e49ecd65_1p_js,
-c2620fbf-9668-4301-a614-66d3452bf8df_1p_js,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac_1p_js,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e_1p_js
-result, different session: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86_1p_js,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd_1p_js,
+526971b8-350b-480b-bca0-71ea018f7af2_1p_js,
+a0ae978a-8cc7-459b-8614-08909359399f_1p_js
+result, different session: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2662,15 +2610,14 @@ read: async () =&gt; {
       return cookie.value;
     }
 result, same session:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce_1p,
-35c92114-903d-4422-8d1e-9802e49ecd65_1p,
-c2620fbf-9668-4301-a614-66d3452bf8df_1p,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac_1p,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e_1p
-result, different session: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86_1p,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd_1p,
+526971b8-350b-480b-bca0-71ea018f7af2_1p,
+a0ae978a-8cc7-459b-8614-08909359399f_1p
+result, different session: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2713,20 +2660,18 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 result, same session:
-fake_8744604225526602,
-fake_9107607097260726,
-fake_31069750302326016,
-fake_3099223367007824,
-fake_5586723240247888
+fake_6684760447424294,
+fake_08895671311125275,
+fake_9109387056937357,
+fake_5897082014712607
 result, different session:
-fake_9148446411754676,
-fake_8991655699486814,
-fake_4102647854639605,
-fake_8172540657733145,
-fake_7976333881790969
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+fake_47964938997408946,
+fake_2838979271818909,
+fake_10001994660484415,
+fake_34917647125553475
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2748,11 +2693,11 @@ read: async (key) =&gt; {
       }
       return count;
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2774,11 +2719,11 @@ read: async (key) =&gt; {
                                       {cache: &quot;reload&quot;});
       return (await countResponse.text()).trim();
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2816,11 +2761,11 @@ read: async (key) =&gt; {
         testURI(&quot;ctr&quot;, &quot;font&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
       return (await response.text()).trim();
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2849,11 +2794,11 @@ read: async (key) =&gt; {
         testURI(&quot;ctr&quot;, &quot;page&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
       return (await response.text()).trim();
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2881,11 +2826,11 @@ read: async (key) =&gt; {
         testURI(&quot;ctr&quot;, &quot;image&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
       return (await response.text()).trim();
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2904,15 +2849,14 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 result, same session:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce_1p,
-35c92114-903d-4422-8d1e-9802e49ecd65_1p,
-c2620fbf-9668-4301-a614-66d3452bf8df_1p,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac_1p,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e_1p
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86_1p,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd_1p,
+526971b8-350b-480b-bca0-71ea018f7af2_1p,
+a0ae978a-8cc7-459b-8614-08909359399f_1p
 result, different session: undefined
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2925,15 +2869,14 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 result, same session:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce_1p,
-35c92114-903d-4422-8d1e-9802e49ecd65_1p,
-c2620fbf-9668-4301-a614-66d3452bf8df_1p,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac_1p,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e_1p
-result, different session: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86_1p,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd_1p,
+526971b8-350b-480b-bca0-71ea018f7af2_1p,
+a0ae978a-8cc7-459b-8614-08909359399f_1p
+result, different session: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2964,11 +2907,11 @@ read: async (key) =&gt; {
       }
       return countString;
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -2996,11 +2939,11 @@ read: async (key) =&gt; {
         testURI(&quot;ctr&quot;, &quot;script&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
       return (await response.text()).trim();
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3028,11 +2971,11 @@ read: async (key) =&gt; {
                                       {cache: &quot;reload&quot;});
       return (await countResponse.text()).trim();
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3074,11 +3017,11 @@ read: async () =&gt; {
       }
       return protocol;
     }
-result, same session: h2, h2, h2, h2, h2
-result, different session: h2, h2, h2, h2, h2
-unsupported: true, true, true, true, true
+result, same session: h2, h2, h2, h2
+result, different session: h2, h2, h2, h2
+unsupported: true, true, true, true
 passed: undefined
-test failed: false, false, false, false, false</pre>
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3103,20 +3046,18 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 result, same session:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce_3p,
-35c92114-903d-4422-8d1e-9802e49ecd65_3p,
-c2620fbf-9668-4301-a614-66d3452bf8df_3p,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac_3p,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e_3p
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86_3p,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd_3p,
+526971b8-350b-480b-bca0-71ea018f7af2_3p,
+a0ae978a-8cc7-459b-8614-08909359399f_3p
 result, different session:
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
-Error: Cannot read properties of undefined (reading &#39;url&#39;),
 Error: Cannot read properties of undefined (reading &#39;url&#39;)
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3137,15 +3078,14 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 result, same session:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce_3p_http,
-35c92114-903d-4422-8d1e-9802e49ecd65_3p_http,
-c2620fbf-9668-4301-a614-66d3452bf8df_3p_http,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac_3p_http,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e_3p_http
-result, different session: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86_3p_http,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd_3p_http,
+526971b8-350b-480b-bca0-71ea018f7af2_3p_http,
+a0ae978a-8cc7-459b-8614-08909359399f_3p_http
+result, different session: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3160,15 +3100,14 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 result, same session:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce_3p_js,
-35c92114-903d-4422-8d1e-9802e49ecd65_3p_js,
-c2620fbf-9668-4301-a614-66d3452bf8df_3p_js,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac_3p_js,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e_3p_js
-result, different session: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86_3p_js,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd_3p_js,
+526971b8-350b-480b-bca0-71ea018f7af2_3p_js,
+a0ae978a-8cc7-459b-8614-08909359399f_3p_js
+result, different session: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3201,15 +3140,14 @@ read: async () =&gt; {
       return cookie.value;
     }
 result, same session:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce_3p,
-35c92114-903d-4422-8d1e-9802e49ecd65_3p,
-c2620fbf-9668-4301-a614-66d3452bf8df_3p,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac_3p,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e_3p
-result, different session: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86_3p,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd_3p,
+526971b8-350b-480b-bca0-71ea018f7af2_3p,
+a0ae978a-8cc7-459b-8614-08909359399f_3p
+result, different session: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3252,20 +3190,18 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 result, same session:
-fake_2809358123469754,
-fake_34193050236470013,
-fake_5059821233276796,
-fake_8992459288242001,
-fake_25416332253478524
+fake_6013936188149644,
+fake_1205816344028694,
+fake_7607395326895572,
+fake_35117441333089117
 result, different session:
-fake_15060254872222578,
-fake_44249460841877086,
-fake_31513400314210793,
-fake_3784631236945577,
-fake_5664405073469476
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+fake_3919221565607507,
+fake_19620850408877022,
+fake_9351718150645241,
+fake_2729104211550719
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3287,11 +3223,11 @@ read: async (key) =&gt; {
       }
       return count;
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3313,11 +3249,11 @@ read: async (key) =&gt; {
                                       {cache: &quot;reload&quot;});
       return (await countResponse.text()).trim();
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3355,11 +3291,11 @@ read: async (key) =&gt; {
         testURI(&quot;ctr&quot;, &quot;font&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
       return (await response.text()).trim();
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3388,11 +3324,11 @@ read: async (key) =&gt; {
         testURI(&quot;ctr&quot;, &quot;page&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
       return (await response.text()).trim();
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3420,11 +3356,11 @@ read: async (key) =&gt; {
         testURI(&quot;ctr&quot;, &quot;image&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
       return (await response.text()).trim();
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3443,15 +3379,14 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 result, same session:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce_3p,
-35c92114-903d-4422-8d1e-9802e49ecd65_3p,
-c2620fbf-9668-4301-a614-66d3452bf8df_3p,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac_3p,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e_3p
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86_3p,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd_3p,
+526971b8-350b-480b-bca0-71ea018f7af2_3p,
+a0ae978a-8cc7-459b-8614-08909359399f_3p
 result, different session: undefined
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3464,15 +3399,14 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 result, same session:
-77fbae8d-b5d3-47a0-aa5b-54a18fc2e7ce_3p,
-35c92114-903d-4422-8d1e-9802e49ecd65_3p,
-c2620fbf-9668-4301-a614-66d3452bf8df_3p,
-6f68c061-5a1f-492a-98a3-f2f3b02fc1ac_3p,
-1f2b76bb-4aaa-4a02-9117-5a79960fad2e_3p
-result, different session: , , , ,
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+a88a1ed7-8b3a-4dcf-8dea-8d8c04b3af86_3p,
+f97dbdb9-ca84-43ab-8c30-653dc82861bd_3p,
+526971b8-350b-480b-bca0-71ea018f7af2_3p,
+a0ae978a-8cc7-459b-8614-08909359399f_3p
+result, different session: , , ,
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3503,11 +3437,11 @@ read: async (key) =&gt; {
       }
       return countString;
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3535,11 +3469,11 @@ read: async (key) =&gt; {
         testURI(&quot;ctr&quot;, &quot;script&quot;, key), {&quot;cache&quot;: &quot;reload&quot;});
       return (await response.text()).trim();
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3567,11 +3501,11 @@ read: async (key) =&gt; {
                                       {cache: &quot;reload&quot;});
       return (await countResponse.text()).trim();
     }
-result, same session: 1, 1, 1, 1, 1
-result, different session: 2, 2, 2, 2, 2
-unsupported: false, false, false, false, false
-passed: true, true, true, true, true
-test failed: false, false, false, false, false</pre>
+result, same session: 1, 1, 1, 1
+result, different session: 2, 2, 2, 2
+unsupported: false, false, false, false
+passed: true, true, true, true
+test failed: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3589,8 +3523,8 @@ test failed: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
-leak detected: false, false, false, false, false</pre>
+              <pre class="tooltipText">passed: true, true, true, true
+leak detected: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3602,8 +3536,8 @@ leak detected: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
-leak detected: false, false, false, false, false</pre>
+              <pre class="tooltipText">passed: true, true, true, true
+leak detected: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3615,8 +3549,8 @@ leak detected: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
-leak detected: false, false, false, false, false</pre>
+              <pre class="tooltipText">passed: true, true, true, true
+leak detected: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3628,8 +3562,8 @@ leak detected: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
-leak detected: false, false, false, false, false</pre>
+              <pre class="tooltipText">passed: true, true, true, true
+leak detected: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3641,8 +3575,8 @@ leak detected: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
-leak detected: false, false, false, false, false</pre>
+              <pre class="tooltipText">passed: true, true, true, true
+leak detected: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3654,8 +3588,8 @@ leak detected: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
-leak detected: false, false, false, false, false</pre>
+              <pre class="tooltipText">passed: true, true, true, true
+leak detected: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3667,8 +3601,8 @@ leak detected: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
-leak detected: false, false, false, false, false</pre>
+              <pre class="tooltipText">passed: true, true, true, true
+leak detected: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3680,8 +3614,8 @@ leak detected: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
-leak detected: false, false, false, false, false</pre>
+              <pre class="tooltipText">passed: true, true, true, true
+leak detected: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3693,8 +3627,8 @@ leak detected: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
-leak detected: false, false, false, false, false</pre>
+              <pre class="tooltipText">passed: true, true, true, true
+leak detected: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3706,8 +3640,8 @@ leak detected: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
-leak detected: false, false, false, false, false</pre>
+              <pre class="tooltipText">passed: true, true, true, true
+leak detected: false, false, false, false</pre>
             </td>
           </tr>
           <tr>
@@ -3719,13 +3653,13 @@ leak detected: false, false, false, false, false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">passed: true, true, true, true, true
-leak detected: false, false, false, false, false</pre>
+              <pre class="tooltipText">passed: true, true, true, true
+leak detected: false, false, false, false</pre>
             </td>
           </tr>
         </tbody>
       </table>
-      <p class="footer">Tests ran at 2024-04-12 04:44:06 UTC. Source version: <a href="https://github.com/privacytests/privacytests.org/tree/eb966acadd4bea5163ecbbcacc0b2a07443068f5">eb966aca</a>. Raw data in <a href="brave-tor-nightly.json">JSON</a>.</p>
+      <p class="footer">Tests ran at 2024-04-30 16:43:17 UTC. Source version: <a href="https://github.com/privacytests/privacytests.org/tree/be6de267c77ac948d64c4a27d144cec90c205fbf">be6de267</a>. Raw data in <a href="brave-tor-nightly.json">JSON</a>.</p>
       <script type="module">
   const table = document.querySelector(".comparison-table");
   let visibleTooltip = null;
