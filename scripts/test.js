@@ -464,12 +464,12 @@ const runTestsBatch = async (
   console.log(categories);
   const timeStarted = new Date().toISOString();
   cookieProxy.simulateTrackingCookies(cookieProxyPort, debug);
-  if (categories.includes('dns')) {
+  if (categories.includes('dns') && !android && !ios) {
     // Make sure we can connect to the monitor-dns.js socket listener
     try {
       await observeDomains();
     } catch (e) {
-      console.log("Unable to connect to port 9999. Is ./monitor-dns.js running?");
+      console.log('Unable to connect to port 9999. Is ./monitor-dns.js running?');
       process.exit(1);
     }
   }
@@ -652,7 +652,7 @@ const updateAll = async (config) => {
 const killAll = (config) => {
   const browserList = configToBrowserList(config);
   DesktopBrowser.killAll(browserList.map(item => item.browser));
-}
+};
 
 // ## Main program
 
