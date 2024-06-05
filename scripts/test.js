@@ -26,7 +26,7 @@ const systemNetworkSettings = require('./system-network-settings');
 
 // ## Constants
 
-const cookieProxyPort = 9090;
+const mitmProxyPort = 9090;
 
 // ## Utility functions
 
@@ -456,6 +456,12 @@ const prepareBrowserSession = async (config, hurry) => {
   return { browser, websocket };
 };
 
+const runTelemetryTests = async (browserSessions) => {
+  await DesktopBrowser.setGlobalProxyUsageEnabled(true, mitmProxyPort);
+  console.log("hi");
+  await DesktopBrowser.setGlobalProxyUsageEnabled(false);
+};
+
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
 const runTestsBatch = async (
@@ -463,7 +469,7 @@ const runTestsBatch = async (
   const allTests = [];
   console.log(categories);
   const timeStarted = new Date().toISOString();
-  cookieProxy.simulateTrackingCookies(cookieProxyPort, debug);
+  cookieProxy.simulateTrackingCookies(mitmProxyPort, debug);
   if (categories.includes('dns') && !android && !ios) {
     // Make sure we can connect to the monitor-dns.js socket listener
     try {
@@ -485,12 +491,13 @@ const runTestsBatch = async (
         let testResultsStage2 = [];
         let testResultsStage3 = [];
         if (!android && !ios) {
-          await DesktopBrowser.setGlobalProxyUsageEnabled(true, cookieProxyPort);
+          await DesktopBrowser.setGlobalProxyUsageEnabled(true, mitmProxyPort);
           testResultsStage2 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage2({ browserSession, categories }), 100000), browserSessions);
           await DesktopBrowser.setGlobalProxyUsageEnabled(false);
           if (categories.includes('dns')) {
             testResultsStage3 = await runDnsTests(browserSessions);
           }
+          await runTelemetryTests(browserSessions);
         }
         for (let i = 0; i < browserList.length; ++i) {
           if (testResultsStage1[i].status === 'rejected' || (!android && !ios && testResultsStage2[i].status === 'rejected')) {
@@ -529,7 +536,7 @@ const runTestsBatch = async (
     }
   }
   log('FAILURES: ', failures);
-  cookieProxy.stopTrackingCookieSimulation();
+  cookieProxy.stopMitmProxy();
   const timeStopped = new Date().toISOString();
   let platform;
   if (android) {

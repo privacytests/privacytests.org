@@ -68,12 +68,11 @@ const beforeRequestReadCookie = async (request, debug) => {
   }
 };
 
-// Start the simulation of tracking cookies by launching a proxy
-// that reads and writes third-party cookies. Injects a tracking
-// cookie if URL has "pto_write_cookie" query parameter; looks
-// for a cookie if URL has "pto_read_cookie" query parameter.
-const simulateTrackingCookies = async (port, debug = false) => {
-  console.log('simulateTrackingCookies');
+const readOutgoingData = async (request) => {
+  console.log(request);
+}
+
+const runMitmProxy = async ({port, beforeResponse, beforeRequest, debug}) => {
   // Allows us to match requests to responses.
   const certPaths = await cert.setupCertificate();
   // Create a proxy server with a self-signed HTTPS CA certificate:
@@ -89,24 +88,43 @@ const simulateTrackingCookies = async (port, debug = false) => {
       'content-disposition': 'inline; filename=rootCA.pem'
     });
   server.forAnyRequest().thenPassThrough({
-    // Inject cookies for responses
-    beforeResponse: (response) => {
-      return beforeResponseWriteCookie(response, debug);
-    },
-    // Look for cookies in requests
-    beforeRequest: (request) => {
-      return beforeRequestReadCookie(request, debug);
-    }
+    beforeResponse: (response) => beforeResponse(response, debug),
+    beforeRequest: (request) => beforeRequest(request, debug)
   });
   await server.start(port);
+};
+
+// Start the simulation of tracking cookies by launching a proxy
+// that reads and writes third-party cookies. Injects a tracking
+// cookie if URL has "pto_write_cookie" query parameter; looks
+// for a cookie if URL has "pto_read_cookie" query parameter.
+const simulateTrackingCookies = async (port, debug = false) => {
+  console.log('simulateTrackingCookies');
+  await runMitmProxy({
+    port,
+    beforeResponse: beforeResponseWriteCookie,
+    beforeRequest: beforeRequestReadCookie,
+    debug
+  });
   console.log(`Tracking cookie proxy running on port ${server.port}`);
 };
+
+const watchTelemetry = async (port, debug = false) => {
+  console.log('watchTelemetry');
+  await runMitmProxy({
+    port,
+    beforeRequest: readOutgoingData,
+    beforeResponse: () => {},
+    debug
+  });
+  console.log('Watching telemetry')
+}
 
 // Returns the list of leaky hosts.
 const getLeakyHosts = (sessionId) => hostsThatLeak[sessionId];
 
 // Stop the tracking cookie simulation.
-const stopTrackingCookieSimulation = () => {
+const stopMitmProxy = () => {
   server.stop();
 };
 
@@ -116,4 +134,4 @@ if (require.main === module) {
   // stopTrackingCookieSimulation();
 }
 
-module.exports = { simulateTrackingCookies, getLeakyHosts, stopTrackingCookieSimulation };
+module.exports = { simulateTrackingCookies, getLeakyHosts, stopMitmProxy };
