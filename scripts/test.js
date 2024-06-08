@@ -342,7 +342,7 @@ const runTrackingCookieTest = async (browserSession) => {
   return analyzeTrackingCookieTestResults(leakyHosts);
 };
 
-// Run all of our privacy tests using selenium for a given driver. Returns
+// Run the first stage of privacy tests. Returns
 // a map of test types to test result maps. Such as
 // `
 // { "fingerprinting" : { "window.screen.width" : { /* results */ }, ... },
@@ -350,10 +350,12 @@ const runTrackingCookieTest = async (browserSession) => {
 //   "https" : { ... },
 //   "navigation" : { ... },
 //   "supercookies" : { ... } }
-const runTestsStage1 = async ({ browserSession, categories, skip }) => {
+const runTestsStage1 = async ({ browserSession, categories }) => {
   await DesktopBrowser.setGlobalProxyUsageEnabled(false);
   let results = {};
-  log({ categories });
+
+  // Start up browser with existing profile
+  await browserSession.browser.launch(false);
 
   // Cross-session tests
   if (categories.includes('session')) {
@@ -403,10 +405,14 @@ const runTestsStage1 = async ({ browserSession, categories, skip }) => {
       ...{ 'HSTS cache': hstsResult, 'HSTS cache (fetch)': hsts2Result }
     };
   }
+
+  // Kill the browser
+  await browserSession.browser.kill();
   return results;
 };
 
 const runTestsStage2 = async ({ browserSession, categories }) => {
+  await browserSession.browser.launch(false);
   const results = {};
   // Tracking cookies
   if (browserSession.browser instanceof DesktopBrowser &&
@@ -416,6 +422,7 @@ const runTestsStage2 = async ({ browserSession, categories }) => {
     const trackingCookieResult = await runTrackingCookieTest(browserSession);
     Object.assign(results, { tracker_cookies: trackingCookieResult });
   }
+  await browserSession.browser.kill();
   return results;
 };
 
@@ -429,12 +436,18 @@ const asyncMapParallel = async (asyncFunction, array) => {
   return await Promise.allSettled(Array.prototype.map.call(array, asyncFunction));
 };
 
-/*
 // Call asyncFunction on items in array in series.
 const asyncMapSeries = async (asyncFunction, array) => {
   const results = [];
   for (const item of array) {
-    results.push(await asyncFunction(item));
+    let result;
+    try {
+      const value = await asyncFunction(item);
+      result = { value, status: "fulfilled"};
+    } catch (e) {
+      result = { reason: e, status: "rejected"};
+    }
+    results.push(result);
   }
   return results;
 };
@@ -442,16 +455,15 @@ const asyncMapSeries = async (asyncFunction, array) => {
 // Call asyncFunction on items in array in series or parallel.
 const asyncMap = (parallel, asyncFunction, array) =>
   (parallel ? asyncMapParallel : asyncMapSeries)(asyncFunction, array);
-*/
 
 const prepareBrowserSession = async (config, hurry) => {
   const browser = createBrowserObject(config);
   const websocket = await createWebsocket();
-  await browser.launch();
   if (!hurry && browser instanceof DesktopBrowser) {
+    await browser.launch();
     // Give browser the chance to load any feature flags.
     await sleepMs(60000);
-    await browser.restart();
+    await browser.kill();
   }
   return { browser, websocket };
 };
@@ -485,19 +497,19 @@ const runTestsBatch = async (
       const timeStarted = new Date().toISOString();
       let browserSessions;
       try {
-        browserSessions = (await asyncMapParallel((config) => prepareBrowserSession(config, hurry), browserList)).map(item => item.value);
+        browserSessions = (await asyncMap(false, (config) => prepareBrowserSession(config, hurry), browserList)).map(item => item.value);
         console.log({ browserSessions });
-        const testResultsStage1 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage1({ browserSession, categories }), 1000000), browserSessions);
+        const testResultsStage1 = await asyncMap(false, (browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage1({ browserSession, categories }), 1000000), browserSessions);
         let testResultsStage2 = [];
         let testResultsStage3 = [];
         if (!android && !ios) {
           await DesktopBrowser.setGlobalProxyUsageEnabled(true, mitmProxyPort);
-          testResultsStage2 = await asyncMapParallel((browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage2({ browserSession, categories }), 100000), browserSessions);
+          testResultsStage2 = await asyncMap(false, (browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage2({ browserSession, categories }), 100000), browserSessions);
           await DesktopBrowser.setGlobalProxyUsageEnabled(false);
           if (categories.includes('dns')) {
             testResultsStage3 = await runDnsTests(browserSessions);
           }
-          await runTelemetryTests(browserSessions);
+          //await runTelemetryTests(browserSessions);
         }
         for (let i = 0; i < browserList.length; ++i) {
           if (testResultsStage1[i].status === 'rejected' || (!android && !ios && testResultsStage2[i].status === 'rejected')) {
@@ -524,7 +536,7 @@ const runTestsBatch = async (
       }
       if (!debug) {
         for (const browserSession of browserSessions) {
-          await closeWebSocket(browserSession.websocket);
+          closeWebSocket(browserSession.websocket);
           try {
             console.log(`killing ${browserSession.browser.browser}`);
             await browserSession.browser.kill();
@@ -584,6 +596,9 @@ const readConfig = (commandLineData) => {
   }
   if (commandLineData.skip) {
     commandLineData.skip = commandLineData.skip.split(',');
+  }
+  if (commandLineData.categories) {
+    commandLineData.categories = commandLineData.categories.split(',');
   }
   const yamlConfig = configFile ? readYAMLFile(configFile) : null;
   const config = Object.assign({}, defaultConfig, yamlConfig, commandLineData);
