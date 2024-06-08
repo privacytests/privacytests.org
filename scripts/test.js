@@ -443,9 +443,9 @@ const asyncMapSeries = async (asyncFunction, array) => {
     let result;
     try {
       const value = await asyncFunction(item);
-      result = { value, status: "fulfilled"};
+      result = { value, status: 'fulfilled' };
     } catch (e) {
-      result = { reason: e, status: "rejected"};
+      result = { reason: e, status: 'rejected' };
     }
     results.push(result);
   }
@@ -468,11 +468,13 @@ const prepareBrowserSession = async (config, hurry) => {
   return { browser, websocket };
 };
 
+/*
 const runTelemetryTests = async (browserSessions) => {
   await DesktopBrowser.setGlobalProxyUsageEnabled(true, mitmProxyPort);
-  console.log("hi");
+  console.log('hi');
   await DesktopBrowser.setGlobalProxyUsageEnabled(false);
 };
+*/
 
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
@@ -509,7 +511,7 @@ const runTestsBatch = async (
           if (categories.includes('dns')) {
             testResultsStage3 = await runDnsTests(browserSessions);
           }
-          //await runTelemetryTests(browserSessions);
+          // await runTelemetryTests(browserSessions);
         }
         for (let i = 0; i < browserList.length; ++i) {
           if (testResultsStage1[i].status === 'rejected' || (!android && !ios && testResultsStage2[i].status === 'rejected')) {
