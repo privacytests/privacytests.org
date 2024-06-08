@@ -139,8 +139,8 @@ const runDnsTests = async (browserSessions) => {
   await observeDomains();
   const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
   const originalDnsIps = systemNetworkSettings.getDNS(preferredNetworkService);
-  // Restart all browsers with a fresh profile:
-  await Promise.all(browserSessions.map(session => session.browser.restart(true)));
+  // Start all browsers with a fresh profile:
+  await Promise.all(browserSessions.map(session => session.browser.launch(true)));
   await sleepMs(4000);
   const results = [];
   for (const testDef of dnsTestDefinitions) {
@@ -153,6 +153,8 @@ const runDnsTests = async (browserSessions) => {
     }
   }
   systemNetworkSettings.setDNS(preferredNetworkService, []);
+  // Kill all the browsers
+  await Promise.all(browserSessions.map(session => session.browser.kill()));
   return results;
 };
 
