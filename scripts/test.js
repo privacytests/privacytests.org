@@ -12,7 +12,6 @@ const minimist = require('minimist');
 const dateFormat = require('dateformat');
 const os = require('os');
 const process = require('process');
-const fetch = require('node-fetch');
 const render = require('./render');
 const { DesktopBrowser } = os.platform() === 'darwin' ? require('./desktop.js') : require('./desktop-linux.js');
 const { AndroidBrowser } = require('./android.js');
