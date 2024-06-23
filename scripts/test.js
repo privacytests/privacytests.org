@@ -478,7 +478,7 @@ const runTelemetryTests = async (browserSessions) => {
 // Runs a batch of tests (multiple browsers).
 // Returns results in a JSON object.
 const runTestsBatch = async (
-  browserLists, { debug, android, ios, categories, repeat, hurry } = { debug: false, repeat: 1, hurry: false }) => {
+  browserLists, { debug, android, ios, categories, repeat, hurry, series } = { debug: false, repeat: 1, hurry: false, series: false }) => {
   const allTests = [];
   console.log(categories);
   const timeStarted = new Date().toISOString();
@@ -498,14 +498,14 @@ const runTestsBatch = async (
       const timeStarted = new Date().toISOString();
       let browserSessions;
       try {
-        browserSessions = (await asyncMap(false, (config) => prepareBrowserSession(config, hurry), browserList)).map(item => item.value);
+        browserSessions = (await asyncMap(!series, (config) => prepareBrowserSession(config, hurry), browserList)).map(item => item.value);
         console.log({ browserSessions });
-        const testResultsStage1 = await asyncMap(false, (browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage1({ browserSession, categories }), 1000000), browserSessions);
+        const testResultsStage1 = await asyncMap(!series, (browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage1({ browserSession, categories }), 1000000), browserSessions);
         let testResultsStage2 = [];
         let testResultsStage3 = [];
         if (!android && !ios) {
           await DesktopBrowser.setGlobalProxyUsageEnabled(true, mitmProxyPort);
-          testResultsStage2 = await asyncMap(false, (browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage2({ browserSession, categories }), 100000), browserSessions);
+          testResultsStage2 = await asyncMap(!series, (browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage2({ browserSession, categories }), 100000), browserSessions);
           await DesktopBrowser.setGlobalProxyUsageEnabled(false);
           if (categories.includes('dns')) {
             testResultsStage3 = await runDnsTests(browserSessions);
