@@ -375,9 +375,9 @@ table.comparison-table .date {
         </div>
       </div>
       <div class="banner" id="issueBanner">
-        <div class="left-heading">No. 87</div>
+        <div class="left-heading">No. 88</div>
         <div class="middle-heading">Open-source tests of web browser privacy.</div>
-        <div class="right-heading">Updated 2024-05-21</div>
+        <div class="right-heading">Updated 2024-06-23</div>
       </div>
       <div class="banner" id="navBanner">
         <div class="navItem "><a href=".">Desktop browsers</a></div>
@@ -410,7 +410,7 @@ table.comparison-table .date {
                 <br>
                 safari
                 <br>
-                17.4
+                17.5
               </span>
               <br>
               private
@@ -456,7 +456,7 @@ read: async () =&gt; {
       return protocol;
     }
 result, same first party: Error: Unsupported
-result, different first party: h3
+result, different first party: h2
 unsupported: true
 passed: undefined
 test failed: false</pre>
@@ -484,7 +484,7 @@ read: async (secret) =&gt; {
       let blobResponse = await fetch(blobUrl);
       return blobResponse.text();
     }
-result, same first party: 1b4423ba-1728-4764-a40c-edb59ebfd0c4
+result, same first party: 69a79222-d440-419b-908d-7143921da86a
 result, different first party: Error: Load failed
 unsupported: false
 passed: true
@@ -521,7 +521,7 @@ read: () =&gt;
         bc.postMessage(&quot;request&quot;);
         setTimeout(() =&gt; reject({message: &quot;no BroadcastChannel message&quot;}), 3000);
       })
-result, same first party: 1b4423ba-1728-4764-a40c-edb59ebfd0c4
+result, same first party: 69a79222-d440-419b-908d-7143921da86a
 result, different first party: Error: no BroadcastChannel message
 unsupported: false
 passed: true
@@ -549,7 +549,7 @@ read: async () =&gt; {
       let url = cacheKeys[0].url;
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
-result, same first party: 1b4423ba-1728-4764-a40c-edb59ebfd0c4
+result, same first party: 69a79222-d440-419b-908d-7143921da86a
 result, different first party: Error: undefined is not an object (evaluating &#39;cacheKeys[0].url&#39;)
 unsupported: false
 passed: true
@@ -573,7 +573,7 @@ read: async () =&gt; {
       let cookie = (await response.json())[&quot;cookie&quot;];
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
-result, same first party: 1b4423ba-1728-4764-a40c-edb59ebfd0c4_http
+result, same first party: 69a79222-d440-419b-908d-7143921da86a_http
 result, different first party: null
 unsupported: false
 passed: true
@@ -591,7 +591,7 @@ test failed: false</pre>
       document.cookie = `secret=${secret}_js; max-age=3600; SameSite=None; Secure`;
     }
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
-result, same first party: 1b4423ba-1728-4764-a40c-edb59ebfd0c4_js
+result, same first party: 69a79222-d440-419b-908d-7143921da86a_js
 result, different first party: null
 unsupported: false
 passed: true
@@ -673,8 +673,8 @@ read: async (key) =&gt; {
       console.log(fontFamily);
       return fontFamily;
     }
-result, same first party: fake_4285972883850364
-result, different first party: fake_244621024147734
+result, same first party: fake_0063354096646361935
+result, different first party: fake_41940649366161287
 unsupported: false
 passed: true
 test failed: false</pre>
@@ -823,7 +823,7 @@ read: async () =&gt; {
       let response = await fetch(`https://h1.privacytests2.org:8901/?mode=read`, {cache: &quot;no-store&quot;});
       return await response.text();
     }
-result, same first party: 1b4423ba-1728-4764-a40c-edb59ebfd0c4
+result, same first party: 69a79222-d440-419b-908d-7143921da86a
 result, different first party:
 unsupported: false
 passed: true
@@ -844,7 +844,7 @@ read: async () =&gt; {
       let response = await fetch(`https://h2.privacytests2.org:8902/?mode=read`, {cache: &quot;no-store&quot;});
       return await response.text();
     }
-result, same first party: 1b4423ba-1728-4764-a40c-edb59ebfd0c4
+result, same first party: 69a79222-d440-419b-908d-7143921da86a
 result, different first party:
 unsupported: false
 passed: true
@@ -876,8 +876,8 @@ read: async () =&gt; {
       let response = await fetch(`https://h3.privacytests2.org:4434/connection_id`);
       return await response.text();
     }
-result, same first party: 8943dba0bcc68bde62dd60a5ec26cd54
-result, different first party: 4d5e82d26cac426e2a924deafa29ca97
+result, same first party: 643feb6cbaed98c541f408e50ff228f8
+result, different first party: 3c56bf65fd912f6221783f74c14a78b5
 unsupported: false
 passed: true
 test failed: false</pre>
@@ -995,7 +995,7 @@ test failed: false</pre>
       }
     }
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
-result, same first party: 1b4423ba-1728-4764-a40c-edb59ebfd0c4
+result, same first party: 69a79222-d440-419b-908d-7143921da86a
 result, different first party: undefined
 unsupported: false
 passed: true
@@ -1011,7 +1011,7 @@ test failed: false</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
-result, same first party: 1b4423ba-1728-4764-a40c-edb59ebfd0c4
+result, same first party: 69a79222-d440-419b-908d-7143921da86a
 result, different first party: null
 unsupported: false
 passed: true
@@ -1040,7 +1040,7 @@ read: async () =&gt; {
         return queryResult.held[0].name;
       }
     }
-result, same first party: 1b4423ba-1728-4764-a40c-edb59ebfd0c4
+result, same first party: 69a79222-d440-419b-908d-7143921da86a
 result, different first party: Error: undefined is not an object (evaluating &#39;queryResult.held[0].name&#39;)
 unsupported: false
 passed: true
@@ -1192,7 +1192,7 @@ read: async () =&gt; {
       }
       return message;
     }
-result, same first party: 1b4423ba-1728-4764-a40c-edb59ebfd0c4
+result, same first party: 69a79222-d440-419b-908d-7143921da86a
 result, different first party: Error: Unsupported
 unsupported: false
 passed: true
@@ -1214,8 +1214,8 @@ read: async () =&gt; {
       let results = await fetch(&quot;https://tls.privacytests2.org:8900/&quot;);
       return (await results.json()).sessionId;
     }
-result, same first party: a2c6b94b406b25e2bd023390e91cf6f00f7e11bc245d9e79d22c738e2c20f5a0
-result, different first party: 5155987d749d23124ca0c380b84a2661879022730c6a3de7fa797356535a8b0a
+result, same first party: 505b8c64fdbfb346001c797f9811620316558fa55c0da7168c850830b6526e61
+result, different first party: 620ae97c2ede591f0568da839f9d8e7039ddceb1a51dea8fb2d7561ccec6b277
 unsupported: false
 passed: true
 test failed: false</pre>
@@ -1284,7 +1284,7 @@ test failed: false</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">write: (secret) =&gt; sessionStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; sessionStorage.getItem(&quot;secret&quot;)
-result, same first party: 1b4423ba-1728-4764-a40c-edb59ebfd0c4
+result, same first party: 69a79222-d440-419b-908d-7143921da86a
 result, different first party: null
 unsupported: false
 passed: true
@@ -1300,7 +1300,7 @@ test failed: false</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">write: (secret) =&gt; window.name = &quot;name_&quot; + secret
 read: () =&gt; window.name
-result, same first party: name_1b4423ba-1728-4764-a40c-edb59ebfd0c4
+result, same first party: name_69a79222-d440-419b-908d-7143921da86a
 result, different first party:
 unsupported: false
 passed: true
@@ -1583,7 +1583,7 @@ passed: true</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1594,7 +1594,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1605,7 +1605,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1616,7 +1616,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1627,7 +1627,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1638,7 +1638,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1649,7 +1649,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1660,7 +1660,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1671,7 +1671,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1682,7 +1682,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1693,7 +1693,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1704,7 +1704,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1715,7 +1715,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1726,7 +1726,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1737,7 +1737,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1748,7 +1748,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1759,7 +1759,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1770,7 +1770,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1781,7 +1781,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1792,7 +1792,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1803,7 +1803,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1814,7 +1814,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -1825,7 +1825,7 @@ passed: false</pre>
             </td>
             <td class="tooltipParent">
               <img alt="Failed" src="" class="dataPoint bad">
-              <pre class="tooltipText">value: 8338591859372562
+              <pre class="tooltipText">value: 893063556361088
 passed: false</pre>
             </td>
           </tr>
@@ -2290,7 +2290,7 @@ cookieFound: false</pre>
               <pre class="tooltipText">Alt-Svc allows the server to indicate to the web browser that a resource should be loaded on a different server. Because this is a persistent setting, it could be used to track users across websites if it is not correctly partitioned.</pre>
             </td>
             <td class="tooltipParent">
-              <img alt="Passed" src="" class="dataPoint good">
+              <img alt="Unsupported" src="" class="dataPoint na">
               <pre class="tooltipText">write: async () =&gt; {
       // Clear Alt-Svc caching first.
       let responseText = &quot;&quot;;
@@ -2317,10 +2317,10 @@ read: async () =&gt; {
       }
       return protocol;
     }
-result, same session: h3
-result, different session: h2
-unsupported: false
-passed: true
+result, same session: h2
+result, different session: h3
+unsupported: true
+passed: undefined
 test failed: false</pre>
             </td>
           </tr>
@@ -2345,7 +2345,7 @@ read: async () =&gt; {
       let url = cacheKeys[0].url;
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
-result, same session: 1b4423ba-1728-4764-a40c-edb59ebfd0c4_1p
+result, same session: 69a79222-d440-419b-908d-7143921da86a_1p
 result, different session: Error: undefined is not an object (evaluating &#39;cacheKeys[0].url&#39;)
 unsupported: false
 passed: true
@@ -2369,8 +2369,8 @@ read: async () =&gt; {
       let cookie = (await response.json())[&quot;cookie&quot;];
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
-result, same session: 1b4423ba-1728-4764-a40c-edb59ebfd0c4_1p_http
-result, different session: 1b4423ba-1728-4764-a40c-edb59ebfd0c4_1p_http
+result, same session: 69a79222-d440-419b-908d-7143921da86a_1p_http
+result, different session: 69a79222-d440-419b-908d-7143921da86a_1p_http
 unsupported: false
 passed: false
 test failed: false</pre>
@@ -2387,7 +2387,7 @@ test failed: false</pre>
       document.cookie = `secret=${secret}_js; max-age=3600; SameSite=None; Secure`;
     }
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
-result, same session: 1b4423ba-1728-4764-a40c-edb59ebfd0c4_1p_js
+result, same session: 69a79222-d440-419b-908d-7143921da86a_1p_js
 result, different session: null
 unsupported: false
 passed: true
@@ -2469,8 +2469,8 @@ read: async (key) =&gt; {
       console.log(fontFamily);
       return fontFamily;
     }
-result, same session: fake_4831129847138711
-result, different session: fake_4831129847138711
+result, same session: fake_5577125161596985
+result, different session: fake_5577125161596985
 unsupported: false
 passed: false
 test failed: false</pre>
@@ -2650,7 +2650,7 @@ test failed: false</pre>
       }
     }
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
-result, same session: 1b4423ba-1728-4764-a40c-edb59ebfd0c4_1p
+result, same session: 69a79222-d440-419b-908d-7143921da86a_1p
 result, different session: undefined
 unsupported: false
 passed: true
@@ -2666,7 +2666,7 @@ test failed: false</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
-result, same session: 1b4423ba-1728-4764-a40c-edb59ebfd0c4_1p
+result, same session: 69a79222-d440-419b-908d-7143921da86a_1p
 result, different session: null
 unsupported: false
 passed: true
@@ -2839,7 +2839,7 @@ read: async () =&gt; {
       let url = cacheKeys[0].url;
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
-result, same session: 1b4423ba-1728-4764-a40c-edb59ebfd0c4_3p
+result, same session: 69a79222-d440-419b-908d-7143921da86a_3p
 result, different session: Error: undefined is not an object (evaluating &#39;cacheKeys[0].url&#39;)
 unsupported: false
 passed: true
@@ -2963,8 +2963,8 @@ read: async (key) =&gt; {
       console.log(fontFamily);
       return fontFamily;
     }
-result, same session: fake_38154173830061944
-result, different session: fake_38154173830061944
+result, same session: fake_0011389509811461362
+result, different session: fake_0011389509811461362
 unsupported: false
 passed: false
 test failed: false</pre>
@@ -3144,7 +3144,7 @@ test failed: false</pre>
       }
     }
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
-result, same session: 1b4423ba-1728-4764-a40c-edb59ebfd0c4_3p
+result, same session: 69a79222-d440-419b-908d-7143921da86a_3p
 result, different session: undefined
 unsupported: false
 passed: true
@@ -3160,7 +3160,7 @@ test failed: false</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
-result, same session: 1b4423ba-1728-4764-a40c-edb59ebfd0c4_3p
+result, same session: 69a79222-d440-419b-908d-7143921da86a_3p
 result, different session: null
 unsupported: false
 passed: true
@@ -3417,7 +3417,7 @@ leak detected: false</pre>
           </tr>
         </tbody>
       </table>
-      <p class="footer">Tests ran at 2024-05-21 23:29:28 UTC. Source version: <a href="https://github.com/privacytests/privacytests.org/tree/8aded865c154d787279a530579ec2f9c3a72df4e">8aded865</a>. Raw data in <a href="private-safari.json">JSON</a>.</p>
+      <p class="footer">Tests ran at 2024-06-23 07:25:19 UTC. Source version: <a href="https://github.com/privacytests/privacytests.org/tree/feed96884eefc1fee9045aa499a7ccb6cc4f7d8c">feed9688</a>. Raw data in <a href="private-safari.json">JSON</a>.</p>
       <script type="module">
   const table = document.querySelector(".comparison-table");
   let visibleTooltip = null;
