@@ -375,9 +375,9 @@ table.comparison-table .date {
         </div>
       </div>
       <div class="banner" id="issueBanner">
-        <div class="left-heading">No. 88</div>
+        <div class="left-heading">No. 90</div>
         <div class="middle-heading">Open-source tests of web browser privacy.</div>
-        <div class="right-heading">Updated 2024-07-14</div>
+        <div class="right-heading">Updated 2024-08-19</div>
       </div>
       <div class="banner" id="navBanner">
         <div class="navItem "><a href=".">Desktop browsers</a></div>
@@ -719,17 +719,17 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 result, same first party:
-fake_2716923340885762,
-fake_2692317331508529,
-fake_47518203290526495,
-fake_8979565263620017,
-fake_5576088788387221
+fake_004876149231670901,
+fake_13307940348923686,
+fake_12970527809010068,
+fake_43525078973397413,
+fake_8292652613305149
 result, different first party:
-fake_6272270413484604,
-fake_23253974688000278,
-fake_9880155317893005,
-fake_9185696746407628,
-fake_04388143001770617
+fake_004754891627721136,
+fake_5033197754983125,
+fake_3656095419765466,
+fake_0967638291315176,
+fake_6974182872460704
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
 test failed: false, false, false, false, false</pre>
@@ -1310,17 +1310,17 @@ read: async () =&gt; {
       return (await results.json()).sessionId;
     }
 result, same first party:
-88e700dad5e52aeb248b67cb1d8af73bf7ef7a756294182dc7e6023ad5a9c174,
-c65b246a84c787f7d8e51dac7ae3e71884b69332b400fa67bce1a2bc8b9441f8,
-47edc3ffe0bc1cddcfa9d581d13e114bf14c3a3a81b73ee297935b56d954b308,
-29cf06e83d0a9f13e20827ed8704959f9ab2f6eae3b1b806e7730cb121219536,
-e798d4c878d30b5d18ce897a4e0b24e8cabd6ebcbbc19d18c760b5b92eb6c7e2
+97d7516c288897112aa8da95b18024345d4bc9b7456bc23a6eb756c4219b9d35,
+02395673efcea4adf5f2291a170ae4f6801bebba8e7f6710255002a994170fa0,
+582c912ca78c96ea49a608d90709b32192d44d07814da74ca22a0ac9ec242d5a,
+ac3bf76d8b63bff89ba72faf52022339e3b390dd56e62eae8dec34d028cac1ff,
+e960a83b8eb48a245651e7070cb66047d5a05ce90082f7b5cbe7b42fb81f4895
 result, different first party:
-9940c3d34da67639a46b2ff4d0758f0ff660e4f5668f8868a6f788db56fb4000,
-75d96f5ab848a844c5c13cea03fec2228493972ad4c8a49987fc95ca8a46c825,
-d907cb335e99a3f4f1053a823522fda31b144f1c1388becf52fcb4f2554ed7e9,
-cd63360cd617199e6fedc8d61ccf81e11184bc0e072b31d765f14c51b8d97372,
-66a510c13ae3bfbda7bf20523baf8179e7b64070bf270ddb45fd3dd52642cd8c
+92992d6f76d9787758ca7e69d0d9f13934eb08f98a9d53a4c299fb7ffca23945,
+a5a8992694ed696157e9da6f986f004a7c598ec3642d3d2f9cc5d5efc7d0b4f3,
+a6ab0537e6c94ab94fdb30cb8beeadd58e97a87dd2045b557ef7276decd85106,
+c12e301ca25482858f35ac05b35a2638cb43a6c915d9065ab396711b6192bb3b,
+1c455c34e63868e1956bb9826ec120cd06c741c9c3ca9ab4d1b9f5f93ad44a1e
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
 test failed: false, false, false, false, false</pre>
@@ -1395,11 +1395,11 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; sessionStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; sessionStorage.getItem(&quot;secret&quot;)
 result, same first party:
-bb25a332-4acc-4c17-8919-47bdfb74fcd0,
-eade2a6d-4730-4314-9289-762a4440863c,
-d0bbec99-ccca-4106-9391-a34bec8ce140,
-5b527912-a4ff-4947-95f4-ea73eb6c8836,
-98432bee-de74-49b2-82fc-86510cecb19b
+4ca37c6c-94e2-4d29-abba-8fa8c588d2ae,
+b795325b-e0e8-42fe-af3c-de357076a032,
+5b314a2b-0144-4d84-beaf-3b61f5875980,
+3727e2fd-4669-4624-a66f-f73d4412b92c,
+38dae5ef-16c9-477d-ba1f-248ae1b146c3
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -1416,11 +1416,11 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; window.name = &quot;name_&quot; + secret
 read: () =&gt; window.name
 result, same first party:
-name_bb25a332-4acc-4c17-8919-47bdfb74fcd0,
-name_eade2a6d-4730-4314-9289-762a4440863c,
-name_d0bbec99-ccca-4106-9391-a34bec8ce140,
-name_5b527912-a4ff-4947-95f4-ea73eb6c8836,
-name_98432bee-de74-49b2-82fc-86510cecb19b
+name_4ca37c6c-94e2-4d29-abba-8fa8c588d2ae,
+name_b795325b-e0e8-42fe-af3c-de357076a032,
+name_5b314a2b-0144-4d84-beaf-3b61f5875980,
+name_3727e2fd-4669-4624-a66f-f73d4412b92c,
+name_38dae5ef-16c9-477d-ba1f-248ae1b146c3
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -2602,17 +2602,17 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 result, same session:
-fake_39983924283485495,
-fake_5408291227827657,
-fake_3992982165814212,
-fake_447819227459904,
-fake_1801423011042087
+fake_6020250890600163,
+fake_03023846914259609,
+fake_2584282891432794,
+fake_16469553391248914,
+fake_3218182373624685
 result, different session:
-fake_10469383624486261,
-fake_516088033616533,
-fake_8122373181259945,
-fake_2970570274685864,
-fake_3558868663960175
+fake_9670128144070371,
+fake_22510391981876499,
+fake_7760554989978057,
+fake_5536112556084387,
+fake_10023474824557765
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
 test failed: false, false, false, false, false</pre>
@@ -3136,17 +3136,17 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 result, same session:
-fake_7326553991254461,
-fake_22202813332188231,
-fake_6408727780457464,
-fake_6486007767854569,
-fake_9032223914826751
+fake_3371702929546023,
+fake_2707510666022759,
+fake_564308673544895,
+fake_7988405946561952,
+fake_35210369004308006
 result, different session:
-fake_9451823440095246,
-fake_23223025064767855,
-fake_8718021051142297,
-fake_7956057931338363,
-fake_12147758446571055
+fake_01477513440239675,
+fake_7068613721180048,
+fake_8536728661655713,
+fake_25729315417389254,
+fake_28557995024693406
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
 test failed: false, false, false, false, false</pre>
@@ -3609,7 +3609,7 @@ leak detected: false, false, false, false, false</pre>
           </tr>
         </tbody>
       </table>
-      <p class="footer">Tests ran at 2024-07-14 17:42:16 UTC. Source version: <a href="https://github.com/privacytests/privacytests.org/tree/6279092a4c9887238dff7164ed83949e17496898">6279092a</a>. Raw data in <a href="nightly-private-safari.json">JSON</a>.</p>
+      <p class="footer">Tests ran at 2024-08-19 04:57:30 UTC. Source version: <a href="https://github.com/privacytests/privacytests.org/tree/3d9829632b2bcea137175634b28a895b4d437e19">3d982963</a>. Raw data in <a href="nightly-private-safari.json">JSON</a>.</p>
       <script type="module">
   const table = document.querySelector(".comparison-table");
   let visibleTooltip = null;

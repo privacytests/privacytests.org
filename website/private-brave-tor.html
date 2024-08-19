@@ -375,9 +375,9 @@ table.comparison-table .date {
         </div>
       </div>
       <div class="banner" id="issueBanner">
-        <div class="left-heading">No. 88</div>
+        <div class="left-heading">No. 90</div>
         <div class="middle-heading">Open-source tests of web browser privacy.</div>
-        <div class="right-heading">Updated 2024-07-14</div>
+        <div class="right-heading">Updated 2024-08-17</div>
       </div>
       <div class="banner" id="navBanner">
         <div class="navItem "><a href=".">Desktop browsers</a></div>
@@ -410,7 +410,7 @@ table.comparison-table .date {
                 <br>
                 brave
                 <br>
-                1.67
+                1.68
               </span>
               <br>
               Tor
@@ -490,11 +490,11 @@ read: async (secret) =&gt; {
       return blobResponse.text();
     }
 result, same first party:
-70b877e6-1fff-4c92-b097-07fe865af0e7,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88,
-cea986cd-f898-4335-8595-91b115375fe2,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b,
-86889480-9df7-41ea-80a0-4a3be162f2d7
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff,
+006613ad-6a6a-4173-8b92-f4d66941c25c,
+a46dd116-e1d7-460b-baa5-27082e063e59,
+763321c9-0470-4825-a105-f4a89b7c69f0,
+0e1fae52-b506-4c64-a1cd-f4668b122e10
 result, different first party:
 Error: Failed to fetch,
 Error: Failed to fetch,
@@ -537,11 +537,11 @@ read: () =&gt;
         setTimeout(() =&gt; reject({message: &quot;no BroadcastChannel message&quot;}), 3000);
       })
 result, same first party:
-70b877e6-1fff-4c92-b097-07fe865af0e7,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88,
-cea986cd-f898-4335-8595-91b115375fe2,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b,
-86889480-9df7-41ea-80a0-4a3be162f2d7
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff,
+006613ad-6a6a-4173-8b92-f4d66941c25c,
+a46dd116-e1d7-460b-baa5-27082e063e59,
+763321c9-0470-4825-a105-f4a89b7c69f0,
+0e1fae52-b506-4c64-a1cd-f4668b122e10
 result, different first party:
 Error: no BroadcastChannel message,
 Error: no BroadcastChannel message,
@@ -575,11 +575,11 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 result, same first party:
-70b877e6-1fff-4c92-b097-07fe865af0e7,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88,
-cea986cd-f898-4335-8595-91b115375fe2,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b,
-86889480-9df7-41ea-80a0-4a3be162f2d7
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff,
+006613ad-6a6a-4173-8b92-f4d66941c25c,
+a46dd116-e1d7-460b-baa5-27082e063e59,
+763321c9-0470-4825-a105-f4a89b7c69f0,
+0e1fae52-b506-4c64-a1cd-f4668b122e10
 result, different first party:
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
@@ -609,11 +609,11 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 result, same first party:
-70b877e6-1fff-4c92-b097-07fe865af0e7_http,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88_http,
-cea986cd-f898-4335-8595-91b115375fe2_http,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b_http,
-86889480-9df7-41ea-80a0-4a3be162f2d7_http
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff_http,
+006613ad-6a6a-4173-8b92-f4d66941c25c_http,
+a46dd116-e1d7-460b-baa5-27082e063e59_http,
+763321c9-0470-4825-a105-f4a89b7c69f0_http,
+0e1fae52-b506-4c64-a1cd-f4668b122e10_http
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -632,11 +632,11 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 result, same first party:
-70b877e6-1fff-4c92-b097-07fe865af0e7_js,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88_js,
-cea986cd-f898-4335-8595-91b115375fe2_js,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b_js,
-86889480-9df7-41ea-80a0-4a3be162f2d7_js
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff_js,
+006613ad-6a6a-4173-8b92-f4d66941c25c_js,
+a46dd116-e1d7-460b-baa5-27082e063e59_js,
+763321c9-0470-4825-a105-f4a89b7c69f0_js,
+0e1fae52-b506-4c64-a1cd-f4668b122e10_js
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -673,11 +673,11 @@ read: async () =&gt; {
       return cookie.value;
     }
 result, same first party:
-70b877e6-1fff-4c92-b097-07fe865af0e7,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88,
-cea986cd-f898-4335-8595-91b115375fe2,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b,
-86889480-9df7-41ea-80a0-4a3be162f2d7
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff,
+006613ad-6a6a-4173-8b92-f4d66941c25c,
+a46dd116-e1d7-460b-baa5-27082e063e59,
+763321c9-0470-4825-a105-f4a89b7c69f0,
+0e1fae52-b506-4c64-a1cd-f4668b122e10
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -724,17 +724,17 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 result, same first party:
-fake_6491982778832417,
-fake_2254374773935297,
-fake_3595620570294562,
-fake_8692114353910856,
-fake_19827158514025922
+fake_40805564552435847,
+fake_9048558014984731,
+fake_7583740723356325,
+fake_7317470432164896,
+fake_7479290468236985
 result, different first party:
-fake_7032096642942325,
-fake_9323926280592576,
-fake_4926211147273294,
-fake_9049454313728555,
-fake_4558819527229907
+fake_7605971577363497,
+fake_6179247685217308,
+fake_6508456115293575,
+fake_12680740068849916,
+fake_9167376921070147
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
 test failed: false, false, false, false, false</pre>
@@ -863,11 +863,11 @@ read: async () =&gt; {
       }
     }
 result, same first party:
-70b877e6-1fff-4c92-b097-07fe865af0e7,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88,
-cea986cd-f898-4335-8595-91b115375fe2,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b,
-86889480-9df7-41ea-80a0-4a3be162f2d7
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff,
+006613ad-6a6a-4173-8b92-f4d66941c25c,
+a46dd116-e1d7-460b-baa5-27082e063e59,
+763321c9-0470-4825-a105-f4a89b7c69f0,
+0e1fae52-b506-4c64-a1cd-f4668b122e10
 result, different first party:
 Error: Unsupported,
 Error: Unsupported,
@@ -894,11 +894,11 @@ read: async () =&gt; {
       return await response.text();
     }
 result, same first party:
-70b877e6-1fff-4c92-b097-07fe865af0e7,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88,
-cea986cd-f898-4335-8595-91b115375fe2,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b,
-86889480-9df7-41ea-80a0-4a3be162f2d7
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff,
+006613ad-6a6a-4173-8b92-f4d66941c25c,
+a46dd116-e1d7-460b-baa5-27082e063e59,
+763321c9-0470-4825-a105-f4a89b7c69f0,
+0e1fae52-b506-4c64-a1cd-f4668b122e10
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -920,11 +920,11 @@ read: async () =&gt; {
       return await response.text();
     }
 result, same first party:
-70b877e6-1fff-4c92-b097-07fe865af0e7,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88,
-cea986cd-f898-4335-8595-91b115375fe2,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b,
-86889480-9df7-41ea-80a0-4a3be162f2d7
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff,
+006613ad-6a6a-4173-8b92-f4d66941c25c,
+a46dd116-e1d7-460b-baa5-27082e063e59,
+763321c9-0470-4825-a105-f4a89b7c69f0,
+0e1fae52-b506-4c64-a1cd-f4668b122e10
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -1086,11 +1086,11 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 result, same first party:
-70b877e6-1fff-4c92-b097-07fe865af0e7,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88,
-cea986cd-f898-4335-8595-91b115375fe2,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b,
-86889480-9df7-41ea-80a0-4a3be162f2d7
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff,
+006613ad-6a6a-4173-8b92-f4d66941c25c,
+a46dd116-e1d7-460b-baa5-27082e063e59,
+763321c9-0470-4825-a105-f4a89b7c69f0,
+0e1fae52-b506-4c64-a1cd-f4668b122e10
 result, different first party: undefined
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -1107,11 +1107,11 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 result, same first party:
-70b877e6-1fff-4c92-b097-07fe865af0e7,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88,
-cea986cd-f898-4335-8595-91b115375fe2,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b,
-86889480-9df7-41ea-80a0-4a3be162f2d7
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff,
+006613ad-6a6a-4173-8b92-f4d66941c25c,
+a46dd116-e1d7-460b-baa5-27082e063e59,
+763321c9-0470-4825-a105-f4a89b7c69f0,
+0e1fae52-b506-4c64-a1cd-f4668b122e10
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -1141,11 +1141,11 @@ read: async () =&gt; {
       }
     }
 result, same first party:
-70b877e6-1fff-4c92-b097-07fe865af0e7,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88,
-cea986cd-f898-4335-8595-91b115375fe2,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b,
-86889480-9df7-41ea-80a0-4a3be162f2d7
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff,
+006613ad-6a6a-4173-8b92-f4d66941c25c,
+a46dd116-e1d7-460b-baa5-27082e063e59,
+763321c9-0470-4825-a105-f4a89b7c69f0,
+0e1fae52-b506-4c64-a1cd-f4668b122e10
 result, different first party:
 Error: Cannot read properties of undefined (reading &#39;name&#39;),
 Error: Cannot read properties of undefined (reading &#39;name&#39;),
@@ -1330,7 +1330,7 @@ result, same first party:
 &lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
 &lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
 &lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
-result, different first party: , Error: ServiceWorker registration failed, , Error: ServiceWorker registration failed,
+result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
 test failed: false, false, false, false, false</pre>
@@ -1372,11 +1372,11 @@ read: async () =&gt; {
       return message;
     }
 result, same first party:
-70b877e6-1fff-4c92-b097-07fe865af0e7,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88,
-cea986cd-f898-4335-8595-91b115375fe2,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b,
-86889480-9df7-41ea-80a0-4a3be162f2d7
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff,
+006613ad-6a6a-4173-8b92-f4d66941c25c,
+a46dd116-e1d7-460b-baa5-27082e063e59,
+763321c9-0470-4825-a105-f4a89b7c69f0,
+0e1fae52-b506-4c64-a1cd-f4668b122e10
 result, different first party:
 Error: no SharedWorker message received,
 Error: no SharedWorker message received,
@@ -1404,17 +1404,17 @@ read: async () =&gt; {
       return (await results.json()).sessionId;
     }
 result, same first party:
-9c8f2cd43f8c65f3f2a51c34dc86be8520b070d522e8ff6d1590f3770c8aad32,
-db2d34cf80c1dbfc9ffccb10fed00909d6ecad37a7a2f980c668b1af47f0e97d,
-d15325ee60bf718ca47d9741507229f0c3b513e69c3a622a7219a990720d53e5,
-e2a3be7a208b9be2cffdf39790a02434686a319519ab0817aa46b07a39dde156,
-0a8f1aca21bce9aebdd26dfb5ddc90d9b4ade8f732a83d42f43cf461fc9afbff
+2ff1138dc189cd40875821b64a42173295b3b4e189c990b8bf4c1d7127ae437d,
+4bf2deb44c0bba4323a915d4a7995ae7d52ef1bb14829e8d2fdb36141d1d45cb,
+8c513a52bb8a4619470a3ad29fa127171f1b7fff5ce96cf8c8b155751eb9289b,
+9f969dd3ac938a73b68dd5fc50ec00fa2c77e417881304207a070d90000d68d4,
+cd670fd25cb3a7fbdd531b6e6b814b84fb4cab8dcfa4d75c1f141769490dd0d0
 result, different first party:
-05281bffa76d4773545dd507cd4298f9d92ba63f549850469ec86a36c4642c24,
-2d67041df3872328cdad457cfdeaf98172a10d2e9cd4f0ebef79a8b3cdf3d1ac,
-93d0f164fa9d1214fdfb935cde584b9e37d243da356a27175e501be4829650cb,
-6a5596c3c5d2b4cfee382d8a9290d27038fe24ee6688a0681915b3ac4610d7e9,
-82280f1dc01c41cc14fb927fca99c27c826453cfb208f23384b08454a77275c9
+62e60707d887a51e80973af7f6ec76b04be917bb1c4d0e3064d0ba6bae6c4b61,
+c7941be2536826b62172ef7b82aa9a7f150807d0c7e3431c11059846d415facc,
+83b183edbe0df97538b9dd970b3f94d6a4c48f3671ff8da887b25089b9c47c1d,
+f758b5977fd5b4f50a080e27d9b158f578bcdf9365ef04ea8e4a43113dba93f1,
+7958f75c605b85f5053c6d5bd3ea026e3d570b8d6206ff884597a9682c83d57f
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
 test failed: false, false, false, false, false</pre>
@@ -1494,11 +1494,11 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; sessionStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; sessionStorage.getItem(&quot;secret&quot;)
 result, same first party:
-70b877e6-1fff-4c92-b097-07fe865af0e7,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88,
-cea986cd-f898-4335-8595-91b115375fe2,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b,
-86889480-9df7-41ea-80a0-4a3be162f2d7
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff,
+006613ad-6a6a-4173-8b92-f4d66941c25c,
+a46dd116-e1d7-460b-baa5-27082e063e59,
+763321c9-0470-4825-a105-f4a89b7c69f0,
+0e1fae52-b506-4c64-a1cd-f4668b122e10
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -1515,11 +1515,11 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; window.name = &quot;name_&quot; + secret
 read: () =&gt; window.name
 result, same first party:
-name_70b877e6-1fff-4c92-b097-07fe865af0e7,
-name_9fa263d7-8e4e-4b79-8740-a322e8c1bc88,
-name_cea986cd-f898-4335-8595-91b115375fe2,
-name_86777e27-9cea-4dc9-9b49-5f0f4f47a46b,
-name_86889480-9df7-41ea-80a0-4a3be162f2d7
+name_cec7f93d-115e-4f2c-a2bd-7e51d58109ff,
+name_006613ad-6a6a-4173-8b92-f4d66941c25c,
+name_a46dd116-e1d7-460b-baa5-27082e063e59,
+name_763321c9-0470-4825-a105-f4a89b7c69f0,
+name_0e1fae52-b506-4c64-a1cd-f4668b122e10
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -1662,17 +1662,17 @@ read: async () =&gt; {
     }
 unsupported: false, false, false, false, false
 readSameFirstParty:
-51.178.45.216,
-109.70.100.5,
-185.220.101.64,
-45.141.215.97,
-5.45.98.162
-readDifferentFirstParty:
 45.83.104.137,
-2.58.56.43,
-185.243.218.204,
-80.67.172.162,
-185.220.101.7
+109.248.147.137,
+192.42.116.191,
+185.243.218.202,
+23.154.177.20
+readDifferentFirstParty:
+204.8.96.176,
+185.220.101.5,
+185.220.101.100,
+104.244.77.208,
+192.42.116.197
 passed: true, true, true, true, true
 testFailed: false, false, false, false, false</pre>
             </td>
@@ -1703,7 +1703,7 @@ passed: true, true, true, true, true</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">expression: undefined
 desired expression: undefined
-actual value: 1293,1292,1297,1297,1298
+actual value: 1294,1296,1297,1298,1291
 desired value: undefined
 passed: true,true,true,true,true</pre>
             </td>
@@ -1717,7 +1717,7 @@ passed: true,true,true,true,true</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">expression: undefined
 desired expression: undefined
-actual value: 1201,1204,1200,1208,1200
+actual value: 1206,1202,1208,1203,1200
 desired value: undefined
 passed: true,true,true,true,true</pre>
             </td>
@@ -1731,7 +1731,7 @@ passed: true,true,true,true,true</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">expression: outerHeight
 desired expression: undefined
-actual value: 1293,1292,1297,1297,1298
+actual value: 1294,1296,1297,1298,1291
 desired value: undefined
 passed: true,true,true,true,true</pre>
             </td>
@@ -1745,7 +1745,7 @@ passed: true,true,true,true,true</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">expression: screen.height
 desired expression: undefined
-actual value: 1293,1292,1297,1297,1298
+actual value: 1294,1296,1297,1298,1291
 desired value: undefined
 passed: true,true,true,true,true</pre>
             </td>
@@ -1759,7 +1759,7 @@ passed: true,true,true,true,true</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">expression: screen.width
 desired expression: undefined
-actual value: 1201,1204,1200,1208,1200
+actual value: 1206,1202,1208,1203,1200
 desired value: undefined
 passed: true,true,true,true,true</pre>
             </td>
@@ -1773,7 +1773,7 @@ passed: true,true,true,true,true</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">expression: screenX
 desired expression: undefined
-actual value: 4,5,0,0,6
+actual value: 6,0,8,8,3
 desired value: undefined
 passed: true,true,true,true,true</pre>
             </td>
@@ -1787,7 +1787,7 @@ passed: true,true,true,true,true</pre>
               <img alt="Passed" src="" class="dataPoint good">
               <pre class="tooltipText">expression: screenY
 desired expression: undefined
-actual value: 1,0,4,3,1
+actual value: 6,4,2,8,5
 desired value: undefined
 passed: true,true,true,true,true</pre>
             </td>
@@ -2559,11 +2559,11 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 result, same session:
-70b877e6-1fff-4c92-b097-07fe865af0e7_1p,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88_1p,
-cea986cd-f898-4335-8595-91b115375fe2_1p,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b_1p,
-86889480-9df7-41ea-80a0-4a3be162f2d7_1p
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff_1p,
+006613ad-6a6a-4173-8b92-f4d66941c25c_1p,
+a46dd116-e1d7-460b-baa5-27082e063e59_1p,
+763321c9-0470-4825-a105-f4a89b7c69f0_1p,
+0e1fae52-b506-4c64-a1cd-f4668b122e10_1p
 result, different session:
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
@@ -2593,11 +2593,11 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 result, same session:
-70b877e6-1fff-4c92-b097-07fe865af0e7_1p_http,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88_1p_http,
-cea986cd-f898-4335-8595-91b115375fe2_1p_http,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b_1p_http,
-86889480-9df7-41ea-80a0-4a3be162f2d7_1p_http
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff_1p_http,
+006613ad-6a6a-4173-8b92-f4d66941c25c_1p_http,
+a46dd116-e1d7-460b-baa5-27082e063e59_1p_http,
+763321c9-0470-4825-a105-f4a89b7c69f0_1p_http,
+0e1fae52-b506-4c64-a1cd-f4668b122e10_1p_http
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -2616,11 +2616,11 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 result, same session:
-70b877e6-1fff-4c92-b097-07fe865af0e7_1p_js,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88_1p_js,
-cea986cd-f898-4335-8595-91b115375fe2_1p_js,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b_1p_js,
-86889480-9df7-41ea-80a0-4a3be162f2d7_1p_js
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff_1p_js,
+006613ad-6a6a-4173-8b92-f4d66941c25c_1p_js,
+a46dd116-e1d7-460b-baa5-27082e063e59_1p_js,
+763321c9-0470-4825-a105-f4a89b7c69f0_1p_js,
+0e1fae52-b506-4c64-a1cd-f4668b122e10_1p_js
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -2657,11 +2657,11 @@ read: async () =&gt; {
       return cookie.value;
     }
 result, same session:
-70b877e6-1fff-4c92-b097-07fe865af0e7_1p,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88_1p,
-cea986cd-f898-4335-8595-91b115375fe2_1p,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b_1p,
-86889480-9df7-41ea-80a0-4a3be162f2d7_1p
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff_1p,
+006613ad-6a6a-4173-8b92-f4d66941c25c_1p,
+a46dd116-e1d7-460b-baa5-27082e063e59_1p,
+763321c9-0470-4825-a105-f4a89b7c69f0_1p,
+0e1fae52-b506-4c64-a1cd-f4668b122e10_1p
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -2708,17 +2708,17 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 result, same session:
-fake_6069406133840056,
-fake_980333673893711,
-fake_5116616507260441,
-fake_10131644388995475,
-fake_32584432896102866
+fake_6109045070510075,
+fake_20731465349875822,
+fake_3978581189021566,
+fake_4393506442621642,
+fake_3238185440786303
 result, different session:
-fake_14495740982524463,
-fake_5830493434768946,
-fake_3070292450013208,
-fake_2699426148382946,
-fake_720963595130726
+fake_797672650861551,
+fake_8185556303693853,
+fake_8148320208256221,
+fake_03237030791419748,
+fake_4632783497047044
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
 test failed: false, false, false, false, false</pre>
@@ -2899,11 +2899,11 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 result, same session:
-70b877e6-1fff-4c92-b097-07fe865af0e7_1p,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88_1p,
-cea986cd-f898-4335-8595-91b115375fe2_1p,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b_1p,
-86889480-9df7-41ea-80a0-4a3be162f2d7_1p
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff_1p,
+006613ad-6a6a-4173-8b92-f4d66941c25c_1p,
+a46dd116-e1d7-460b-baa5-27082e063e59_1p,
+763321c9-0470-4825-a105-f4a89b7c69f0_1p,
+0e1fae52-b506-4c64-a1cd-f4668b122e10_1p
 result, different session: undefined
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -2920,11 +2920,11 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 result, same session:
-70b877e6-1fff-4c92-b097-07fe865af0e7_1p,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88_1p,
-cea986cd-f898-4335-8595-91b115375fe2_1p,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b_1p,
-86889480-9df7-41ea-80a0-4a3be162f2d7_1p
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff_1p,
+006613ad-6a6a-4173-8b92-f4d66941c25c_1p,
+a46dd116-e1d7-460b-baa5-27082e063e59_1p,
+763321c9-0470-4825-a105-f4a89b7c69f0_1p,
+0e1fae52-b506-4c64-a1cd-f4668b122e10_1p
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -3098,11 +3098,11 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 result, same session:
-70b877e6-1fff-4c92-b097-07fe865af0e7_3p,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88_3p,
-cea986cd-f898-4335-8595-91b115375fe2_3p,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b_3p,
-86889480-9df7-41ea-80a0-4a3be162f2d7_3p
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff_3p,
+006613ad-6a6a-4173-8b92-f4d66941c25c_3p,
+a46dd116-e1d7-460b-baa5-27082e063e59_3p,
+763321c9-0470-4825-a105-f4a89b7c69f0_3p,
+0e1fae52-b506-4c64-a1cd-f4668b122e10_3p
 result, different session:
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
@@ -3132,11 +3132,11 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 result, same session:
-70b877e6-1fff-4c92-b097-07fe865af0e7_3p_http,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88_3p_http,
-cea986cd-f898-4335-8595-91b115375fe2_3p_http,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b_3p_http,
-86889480-9df7-41ea-80a0-4a3be162f2d7_3p_http
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff_3p_http,
+006613ad-6a6a-4173-8b92-f4d66941c25c_3p_http,
+a46dd116-e1d7-460b-baa5-27082e063e59_3p_http,
+763321c9-0470-4825-a105-f4a89b7c69f0_3p_http,
+0e1fae52-b506-4c64-a1cd-f4668b122e10_3p_http
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -3155,11 +3155,11 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 result, same session:
-70b877e6-1fff-4c92-b097-07fe865af0e7_3p_js,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88_3p_js,
-cea986cd-f898-4335-8595-91b115375fe2_3p_js,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b_3p_js,
-86889480-9df7-41ea-80a0-4a3be162f2d7_3p_js
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff_3p_js,
+006613ad-6a6a-4173-8b92-f4d66941c25c_3p_js,
+a46dd116-e1d7-460b-baa5-27082e063e59_3p_js,
+763321c9-0470-4825-a105-f4a89b7c69f0_3p_js,
+0e1fae52-b506-4c64-a1cd-f4668b122e10_3p_js
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -3196,11 +3196,11 @@ read: async () =&gt; {
       return cookie.value;
     }
 result, same session:
-70b877e6-1fff-4c92-b097-07fe865af0e7_3p,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88_3p,
-cea986cd-f898-4335-8595-91b115375fe2_3p,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b_3p,
-86889480-9df7-41ea-80a0-4a3be162f2d7_3p
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff_3p,
+006613ad-6a6a-4173-8b92-f4d66941c25c_3p,
+a46dd116-e1d7-460b-baa5-27082e063e59_3p,
+763321c9-0470-4825-a105-f4a89b7c69f0_3p,
+0e1fae52-b506-4c64-a1cd-f4668b122e10_3p
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -3247,17 +3247,17 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 result, same session:
-fake_16624125911946797,
-fake_41602336229594683,
-fake_408010810358995,
-fake_5369450652015275,
-fake_9257325929701776
+fake_738834640260617,
+fake_9397068866342735,
+fake_2167207370217603,
+fake_5104691861619506,
+fake_6513679315793648
 result, different session:
-fake_36417256893137506,
-fake_049528552615891064,
-fake_21674261891737712,
-fake_6082468084873427,
-fake_06498797946020995
+fake_49411945009879843,
+fake_6705982006060633,
+fake_8665228558045137,
+fake_6674405746348997,
+fake_3595306464403656
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
 test failed: false, false, false, false, false</pre>
@@ -3438,11 +3438,11 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 result, same session:
-70b877e6-1fff-4c92-b097-07fe865af0e7_3p,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88_3p,
-cea986cd-f898-4335-8595-91b115375fe2_3p,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b_3p,
-86889480-9df7-41ea-80a0-4a3be162f2d7_3p
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff_3p,
+006613ad-6a6a-4173-8b92-f4d66941c25c_3p,
+a46dd116-e1d7-460b-baa5-27082e063e59_3p,
+763321c9-0470-4825-a105-f4a89b7c69f0_3p,
+0e1fae52-b506-4c64-a1cd-f4668b122e10_3p
 result, different session: undefined
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -3459,11 +3459,11 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 result, same session:
-70b877e6-1fff-4c92-b097-07fe865af0e7_3p,
-9fa263d7-8e4e-4b79-8740-a322e8c1bc88_3p,
-cea986cd-f898-4335-8595-91b115375fe2_3p,
-86777e27-9cea-4dc9-9b49-5f0f4f47a46b_3p,
-86889480-9df7-41ea-80a0-4a3be162f2d7_3p
+cec7f93d-115e-4f2c-a2bd-7e51d58109ff_3p,
+006613ad-6a6a-4173-8b92-f4d66941c25c_3p,
+a46dd116-e1d7-460b-baa5-27082e063e59_3p,
+763321c9-0470-4825-a105-f4a89b7c69f0_3p,
+0e1fae52-b506-4c64-a1cd-f4668b122e10_3p
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -3720,7 +3720,7 @@ leak detected: false, false, false, false, false</pre>
           </tr>
         </tbody>
       </table>
-      <p class="footer">Tests ran at 2024-07-14 09:02:35 UTC. Source version: <a href="https://github.com/privacytests/privacytests.org/tree/6279092a4c9887238dff7164ed83949e17496898">6279092a</a>. Raw data in <a href="private-brave-tor.json">JSON</a>.</p>
+      <p class="footer">Tests ran at 2024-08-17 19:53:10 UTC. Source version: <a href="https://github.com/privacytests/privacytests.org/tree/3d9829632b2bcea137175634b28a895b4d437e19">3d982963</a>. Raw data in <a href="private-brave-tor.json">JSON</a>.</p>
       <script type="module">
   const table = document.querySelector(".comparison-table");
   let visibleTooltip = null;
