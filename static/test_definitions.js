@@ -28,7 +28,15 @@ const { ipAddress, usingTor } = await (async () => {
   }
   const wtfJSON = await response.json();
   const ipAddress = wtfJSON["YourFuckingIPAddress"];
-  const onionooResponse = await fetch(`https://onionoo.torproject.org/details?limit=1&search=${ipAddress}`);
+  let onionooResponse;
+  for (let i = 0; i < 10; ++i) {
+    try {
+      onionooResponse = await fetch(`https://onionoo.torproject.org/details?limit=1&search=${ipAddress}`);
+      break;
+    } catch (e) {
+      console.log(e);
+    }
+  }
   const onionooJSON = await onionooResponse.json();
   const usingTor = onionooJSON.relays.length > 0;
   return { ipAddress, usingTor };
