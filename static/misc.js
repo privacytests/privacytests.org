@@ -37,27 +37,6 @@ const testECH = async () => {
   };
 };
 
-const testDoH = async () => {
-  const description = "Checks if DNS over HTTPS is enabled by default.";
-  let cloudflareDoH;
-  try {
-    let cloudflareDoHResponse = await fetchJSON("https://is-doh.help.every1dns.net/resolvertest");
-    cloudflareDoH = cloudflareDoHResponse === 1;
-  } catch (e) {
-    console.log(e);
-    cloudflareDoH = false;
-  }
-  let nextDoH;
-  try {
-    // TODO: Get this working correctly.
-    let nextDoHResponse = await fetchJSON("https://test.nextdns.io/");
-  } catch (e) {
-    nextDoH = false;
-  }
-  let passed = cloudflareDoH || nextDoH;
-  return { cloudflareDoH, nextDoH, passed, description };
-};
-
 const testGPC = async () => {
   // Ask the server what headers it sees.
   const description = "The Global Privacy Control is an HTTP header that can be sent by a browser to instruct a visited website not to sell the user's personal data to other parties. This test checks to see if the GPC header is sent to third-party elements on the web page.";

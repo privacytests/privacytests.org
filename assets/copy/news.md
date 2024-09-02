@@ -1,4 +1,163 @@
 # News
+## [Issue 90](/archive/issue90): 2024-08-17
+
+### New browser versions
+
+On Desktop:
+* Brave 1.68
+* Chrome 127.0
+* Duckduckgo 1.96
+* Edge 127.0
+* Firefox 128.0
+* Librewolf 129.0
+* Ungoogled 127.0
+
+On iOS:
+* Chrome 127.6533
+* Duckduckgo 7.131
+* Firefox 129.1
+* Focus 129.0
+* Yandex 2407.2
+
+On Android:
+* Brave 1.68
+* Chrome 127.0
+* Cromite 127.0
+* Duckduckgo 5.210
+* Edge 127.0
+* Firefox 129.0
+* Focus 129.0
+* Mull 127.0
+* Opera 83.5
+* Yandex 24.7
+
+## [Issue 89](/archive/issue89): 2024-07-14
+
+### New browser versions
+
+On Desktop:
+* Librewolf 128.0-2
+* Opera 112.0
+
+On iOS:
+* Brave 1.67
+* Duckduckgo 7.127
+* Edge 126.2592
+* Firefox 128.0
+* Focus 128.0
+* Vivaldi 6.3388
+* Yandex 2406.3
+
+On Android:
+* Duckduckgo 5.207
+* Edge 126.0
+* Firefox 128.0
+* Focus 128.0
+* Opera 83.3
+* Vivaldi 6.8
+
+
+## [Issue 88](/archive/issue88): 2024-06-23
+
+### New browser versions
+
+On Desktop:
+* Brave 1.67
+* Chrome 126.0
+* Edge 126.0
+* Firefox 127.0
+* Librewolf 127.0-1
+* Mullvad 13.5
+* Opera 111.0
+* Safari 17.5
+* Tor 13.5
+* Ungoogled 126.0
+* Vivaldi 6.8
+
+On iOS:
+* Brave 1.66
+* Chrome 126.6478
+* Duckduckgo 7.124
+* Edge 125.2535
+* Firefox 127.0
+* Focus 127.0
+* Opera 4.7
+* Yandex 2406.2
+
+On Android:
+* Brave 1.67
+* Chrome 126.0
+* Duckduckgo 5.204
+* Firefox 127.0
+* Focus 127.0
+* Opera 83.1
+* Yandex 24.6
+
+## [Issue 87](/archive/issue87): 2024-05-21
+
+### New browser versions
+
+On Desktop:
+* Brave 1.66
+* Chrome 125.0
+* Edge 125.0
+* Librewolf 126.0-1
+* Ungoogled 125.0
+
+On iOS:
+* Brave 1.65
+* Duckduckgo 7.119
+* Firefox 126.1
+* Focus 126.1
+* Safari 17.5
+* Vivaldi 6.3335
+* Yandex 2404.5
+
+On Android:
+* Brave 1.66
+* Chrome 125.0
+* Cromite 125.0
+* Duckduckgo 5.200
+* Edge 125.0
+* Firefox 126.0
+* Focus 126.0
+* Mull 125.3
+* Opera 82.3
+* Vivaldi 6.7
+
+## [Issue 86](/archive/issue86): 2024-04-30
+
+### New browser versions
+
+On Desktop:
+* Brave 1.65
+* Chrome 124.0
+* Edge 124.0
+* Firefox 125.0
+* Ungoogled 124.0
+* Vivaldi 6.7
+
+On iOS:
+* Brave 1.64
+* Chrome 124.6367
+* Duckduckgo 7.116
+* Edge 124.2478
+* Firefox 125.2
+* Focus 125.0
+* Yandex 2404.3
+
+On Android:
+* Brave 1.65
+* Chrome 124.0
+* Cromite 124.0
+* Duckduckgo 5.197
+* Edge 124.0
+* Firefox 125.2
+* Focus 125.2
+* Opera 81.6
+* Samsung 25.0
+* Yandex 24.4
+
 ## [Issue 85](/archive/issue85): 2024-04-12
 
 ### New browser versions
