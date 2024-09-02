@@ -1,9 +1,11 @@
+const path = require('node:path');
+
 const { readCurrentIssueNumber} = require('./check.js');
 const fs = require('node:fs/promises');
 
 const maybeBumpIssueNumber = async () => {
   const publishedIssueNumber = (await readCurrentIssueNumber()).toString();
-  const issueNumberFileContents = (await fs.readFile('issue-number')).toString().trim();
+  const issueNumberFileContents = (await fs.readFile(path.join(__dirname, 'issue-number'))).toString().trim();
   console.log(`Published issue number: ${publishedIssueNumber}\nLocal issue number: ${issueNumberFileContents}`);
   if (publishedIssueNumber === issueNumberFileContents) {
     const lastIssueNumberInteger = parseInt(publishedIssueNumber);

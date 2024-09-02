@@ -136,6 +136,12 @@ const compareAndCheck = async (dateString, ignore = false) => {
   }
 };
 
+const readCurrentIssueNumber = async () => {
+  const content = await slurp("https://privacytests.org");
+  const nodes = parse(content);
+  return readIssueNumberFromNodes(nodes);
+};
+
 const main = () => {
   const { _: inputFiles } = minimist(process.argv.slice(2));
   if (inputFiles[0] === undefined) {
@@ -151,4 +157,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { comparePages, compareAndCheck };
+module.exports = { comparePages, compareAndCheck, readCurrentIssueNumber };

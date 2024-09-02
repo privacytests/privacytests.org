@@ -6,13 +6,12 @@ const net = require('node:net');
 const domainsSeen = new Set();
 
 const createSocket = (port) => new Promise((resolve, reject) => {
-  try {
-    const socket = net.createConnection(
-      port,
-      () => resolve(socket));
-  } catch (e) {
-    reject(e);
-  }
+  const socket = net.createConnection(
+    port,
+    () => resolve(socket));
+  socket.on("error", (err) => {
+    reject(err);
+  });
 });
 
 const domainRegex = /\s([a-z0-9\-]+\.privacytests3\.org)[\s.]/g;
@@ -140,8 +139,8 @@ const runDnsTests = async (browserSessions) => {
   await observeDomains();
   const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
   const originalDnsIps = systemNetworkSettings.getDNS(preferredNetworkService);
-  // Restart all browsers with a fresh profile:
-  await Promise.all(browserSessions.map(session => session.browser.restart(true)));
+  // Start all browsers with a fresh profile:
+  await Promise.all(browserSessions.map(session => session.browser.launch(true)));
   await sleepMs(4000);
   const results = [];
   for (const testDef of dnsTestDefinitions) {
@@ -154,7 +153,9 @@ const runDnsTests = async (browserSessions) => {
     }
   }
   systemNetworkSettings.setDNS(preferredNetworkService, []);
+  // Kill all the browsers
+  await Promise.all(browserSessions.map(session => session.browser.kill()));
   return results;
 };
 
-module.exports = { runDnsTests };
+module.exports = { observeDomains, runDnsTests };

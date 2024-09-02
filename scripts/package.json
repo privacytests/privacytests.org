@@ -34,7 +34,6 @@
     "memoizee": "^0.4.12",
     "minimist": "^1.2.5",
     "mockttp": "^3.10.1",
-    "node-fetch": "^2.6.5",
     "node-html-parser": "^6.1.13",
     "open": "^7.3.0",
     "plist": "^3.0.5",
@@ -46,13 +45,13 @@
   "devDependencies": {
     "@compodoc/live-server": "^1.2.2",
     "file-url": "^2.0.2",
-    "gh-pages": "^3.0.0",
+    "gh-pages": "^5.0.0",
     "nodemon": "^3.0.1"
   },
   "scripts": {
     "develop": "./node_modules/nodemon/bin/nodemon.js --exec \"node render --live\" -e css,js,md & ./node_modules/@compodoc/live-server/live-server.js --open=../results/latest.html ..",
     "copy-dev": "./node_modules/nodemon/bin/nodemon.js --exec \"node copy\" --watch copy --watch . -e js,md,css --watch ../assets/copy/ --watch ../assets/css/ & ./node_modules/@compodoc/live-server/live-server.js ../website/",
-    "publish": "cd .. && git subtree push --prefix website origin gh-pages && node bump"
+    "publish": "cd .. && git subtree push --prefix website origin gh-pages && node scripts/bump"
   },
   "jshintConfig": {
     "esversion": 11,

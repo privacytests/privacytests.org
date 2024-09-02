@@ -3,7 +3,7 @@ const fsPromises = require('node:fs/promises');
 const { join: joinDir } = require('path');
 const { exec, execSync, execAsync, sleepMs } = require('./utils');
 const systemNetworkSettings = require('./system-network-settings');
-const { killProcessAndDescendants } = require('./utils');
+const { killProcessesWithPattern } = require('./utils');
 const path = require('node:path');
 
 /*
@@ -322,6 +322,12 @@ class DesktopBrowser {
 
   static hasTorWindows (browserName) {
     return !!macOSdefaultBrowserSettings[browserName].torFlag;
+  }
+
+  static killAll (browserNames) {
+    const appNames = browserNames.map(name => macOSdefaultBrowserSettings[name].name);
+    console.log(appNames);
+    killProcessesWithPattern(appNames.join("|"));
   }
 }
 
