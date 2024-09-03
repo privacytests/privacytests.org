@@ -59,6 +59,7 @@ const macOSdefaultBrowserSettings = {
     basedOn: 'firefox',
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1', MOZ_CRASHREPORTER_DISABLE: '1' },
     update: ['Firefox', 'About Firefox'],
+    postLaunchDelay: 1000,
     updateNightly: ['Firefox Nightly', 'About Nightly']
   },
   librewolf: {
