@@ -66,8 +66,8 @@ const browserInfo = {
   opera: {
     name: 'Opera',
     bundleId: 'com.opera.OperaTouch',
-    urlBarClickClass: 'XCUIElementTypeTextField', // Hoping this is the only one present
-    urlBarKeys: 'addressBar', // parent element
+    urlBarClick: 'addressBar',
+    urlBarKeys: 'addressBar',
     urlBarClear: 'clearText'
   },
   safari: {

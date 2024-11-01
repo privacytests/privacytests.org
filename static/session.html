@@ -1,48 +1,54 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Testing cross-session state</title>
-    <meta charset="utf8"/>
-    <link id="favicon" rel="shortcut icon" type="image/png" href="" />
-  </head>
-  <body>
-    <script src="./post_data.js"></script>
-    <script>
+
+<head>
+  <title>Testing cross-session state</title>
+  <meta charset="utf8" />
+  <link id="favicon" rel="shortcut icon" type="image/png" href="" />
+</head>
+
+<body>
+  <script src="./post_data.js"></script>
+  <script>
     const sleep = async (t) => new Promise(resolve => window.setTimeout(resolve, t));
-     (async () => {
-       try {
-         const param = (key) => new URLSearchParams(window.location.search).get(key);
-         const mode = param("mode");
-         const sessionId = param("sessionId");
-         const firstParty = param("firstParty");
-         const label = param("label");
-         console.log({mode, sessionId, firstParty});
-         const favicon = document.getElementById("favicon");
-         const baseURI = `https://test-pages.privacytests${firstParty === "true" ? "3" : "2"}.org`;
-         favicon.setAttribute("href", `${baseURI}/live/resource?type=favicon&key=${sessionId}_${label}`);
-         const listener = async ({data, origin}) => {
-           if (!origin.includes("privacytests")) {
-             return;
-           }
-           if (event.data.command === "disableDarkMode" || event.data.command === "enableDarkMode") {
-             return;
-           }
-           document.body.setAttribute("data-test-results", JSON.stringify(data));
-           const category = `session_${mode}_${firstParty ? "1p" : "3p"}`;
-           await postData(data, category);
-           location.href = "https://example.com";
-           removeEventListener(listener);
-         };
-         addEventListener("message", listener);
-         let iframe = document.createElement("iframe");
-         iframe.height="1000px"
-         document.body.appendChild(iframe);
-         iframe.src = `${baseURI}/session_inner.html${window.location.search}`;
-         iframe.allow = "geolocation camera microphone";
-       } catch (e) {
-         showError(e);
-       }
+    (async () => {
+      try {
+        const param = (key) => new URLSearchParams(window.location.search).get(key);
+        const mode = param("mode");
+        const sessionId = param("sessionId");
+        const firstParty = param("firstParty");
+        const label = param("label");
+        console.log({ mode, sessionId, firstParty });
+        const favicon = document.getElementById("favicon");
+        const baseURI = `https://test-pages.privacytests${firstParty === "true" ? "3" : "2"}.org`;
+        favicon.setAttribute("href", `${baseURI}/live/resource?type=favicon&key=${sessionId}_${label}`);
+        const listener = async ({ data, origin }) => {
+          if (!origin.includes("privacytests")) {
+            return;
+          }
+          if (event.data.command === "disableDarkMode" || event.data.command === "enableDarkMode") {
+            return;
+          }
+          if (event.data.data.messageType === "say-same-origin-iframe-is-ready") {
+            return;
+          }
+          document.body.setAttribute("data-test-results", JSON.stringify(data));
+          const category = `session_${mode}_${firstParty ? "1p" : "3p"}`;
+          await postData(data, category);
+          location.href = "https://example.com";
+          removeEventListener(listener);
+        };
+        addEventListener("message", listener);
+        let iframe = document.createElement("iframe");
+        iframe.height = "1000px"
+        document.body.appendChild(iframe);
+        iframe.src = `${baseURI}/session_inner.html${window.location.search}`;
+        iframe.allow = "geolocation camera microphone";
+      } catch (e) {
+        showError(e);
+      }
     })();
-    </script>
-  </body>
+  </script>
+</body>
+
 </html>
