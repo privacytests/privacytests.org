@@ -59,6 +59,7 @@ const macOSdefaultBrowserSettings = {
     basedOn: 'firefox',
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1', MOZ_CRASHREPORTER_DISABLE: '1' },
     update: ['Firefox', 'About Firefox'],
+    postLaunchDelay: 1000,
     updateNightly: ['Firefox Nightly', 'About Nightly']
   },
   librewolf: {
@@ -91,7 +92,6 @@ const macOSdefaultBrowserSettings = {
     name: 'Safari',
     nightlyName: 'Safari Technology Preview',
     useOpen: true,
-    incognitoCommand: 'osascript safariPBM.applescript',
     basedOn: 'safari'
   },
   tor: {
@@ -178,6 +178,12 @@ const fixChromePreferences = async (file) => {
   console.log('fixed Chrome preferences in', file);
 };
 
+const fixSafari = (incognito, nightly) => {
+  const name = nightly ? "SafariTechnologyPreview" : "Safari"
+  execSync(`defaults write com.apple.${name} AlwaysRestoreSessionAtLaunch -bool false`);
+  execSync(`defaults write com.apple.${name} OpenPrivateWindowWhenNotRestoringSessionAtLaunch -bool ${incognito ? "true" : "false"}`);
+}
+
 // A Browser object represents a browser we run tests on.
 class DesktopBrowser {
   constructor ({ browser, path, incognito, tor, nightly, appDir }) {
@@ -213,15 +219,14 @@ class DesktopBrowser {
         }
       }
       if (this.browser === 'chrome') {
-        fixChromePreferences(path.join(this._profilePath, 'Default', 'Preferences'));
+        await fixChromePreferences(path.join(this._profilePath, 'Default', 'Preferences'));
       }
+    }
+    if (this.browser === 'safari') {
+      fixSafari(this.incognito, this.nightly);
     }
     this._process = exec(this._command, { env: this._defaults.env });
     await sleepMs(this.tor ? this._defaults.torPostLaunchDelay : (this._defaults.postLaunchDelay ?? 500));
-    if (this.incognito && this._defaults.incognitoCommand) {
-      exec(`${this._defaults.incognitoCommand} "${this._appName}"`);
-      await sleepMs(1000);
-    }
   }
 
   // Get the browser version.
