@@ -28,9 +28,6 @@
         if (event.data.command === "disableDarkMode" || event.data.command === "enableDarkMode") {
           return;
         }
-        if (event.data.data.messageType === "say-same-origin-iframe-is-ready") {
-          return;
-        }
         removeEventListener("message", listener);
         showData("origin", event.origin);
         const data = event.data;
