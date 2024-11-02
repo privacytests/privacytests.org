@@ -62,7 +62,7 @@ export let runAllTests = async (tests, { category, sessionId, mode } = {category
   let results = await runTests(testsFiltered, params["mode"], params);
   console.log("results:",results);
   if (window.location !== parent.location) {
-    parent.postMessage(results, "*");
+    parent.postMessage(JSON.stringify(results), "*");
   }
   return results;
 };
