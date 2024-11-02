@@ -25,13 +25,13 @@
         if (!event.origin.includes("privacytests")) {
           return;
         }
-        if (event.data.command === "disableDarkMode" || event.data.command === "enableDarkMode") {
+        const data = JSON.parse(event.data);
+        if (data.command === "disableDarkMode" || data.command === "enableDarkMode") {
           return;
         }
         removeEventListener("message", listener);
         showData("origin", event.origin);
-        const data = event.data;
-        document.body.setAttribute("data-test-results", JSON.stringify(data));
+        document.body.setAttribute("data-test-results", event.data);
         const category = `supercookies_${mode}_${thirdparty}`;
         if (mode === "read") {
           // document.body.style.backgroundColor = "green";
