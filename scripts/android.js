@@ -184,7 +184,6 @@ class AndroidBrowser {
     }
     await this.client.activateApp(this.packageName);
     await sleepMs(8000);
-    console.log('this.startupClick:', this.startupClick);
     if (this.startupClick) {
       const startupButton = await findElement(this.client, this.packageName, this.startupClick);
       if (startupButton) {
