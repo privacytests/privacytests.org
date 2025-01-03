@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const port = 3333;
 const path = require('node:path');
+const { Readable } = require( "stream" );
 
 const resourceFiles = {
   favicon: 'favicon.png',
@@ -267,6 +268,11 @@ app.get('/client_hints.html', (req, res) => {
     isIframe
       ? JSON.stringify(clientHintsHeaders(req))
       : '<iframe width="100%" height="100%" src=\'/live/client_hints.html?iframe=true\'></iframe>'));
+});
+
+app.get('/torbulkexitlist', async (req, res) => {
+  const fetchResponse = await fetch('https://check.torproject.org/torbulkexitlist');
+  Readable.fromWeb(fetchResponse.body).pipe(res);
 });
 
 app.listen(port, () => console.log(`listening for file requests on ${port}`));
