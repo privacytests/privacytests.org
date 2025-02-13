@@ -28,13 +28,17 @@ const insecureSubresourceTest = async (tag, fileName) => {
 };
 
 const runTests = async () => {
-  let resultsJSON = {
-    "Upgradable image": await insecureSubresourceTest("img", "image.png"),
-    "Upgradable script": await insecureSubresourceTest("script", "test.js"),
-  };
-  document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
-  console.log(resultsJSON);
-  await postDataAndCarryOn(resultsJSON, "https");
+  try {
+    let resultsJSON = {
+      "Upgradable image": await insecureSubresourceTest("img", "image.png"),
+      "Upgradable script": await insecureSubresourceTest("script", "test.js"),
+    };
+    document.body.setAttribute("data-test-results", JSON.stringify(resultsJSON));
+    console.log(resultsJSON);
+    await postDataAndCarryOn(resultsJSON, "https");
+  } catch (e) {
+    showError(e);
+  }
 };
 
 runTests();
