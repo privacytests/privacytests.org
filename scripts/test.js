@@ -26,6 +26,7 @@ const systemNetworkSettings = require('./system-network-settings');
 // ## Constants
 
 const mitmProxyPort = 9090;
+const CLOUDFLARE_DNS = "1.1.1.1"
 
 // ## Utility functions
 
@@ -196,6 +197,8 @@ const runPageTest = async (browserSession, url, timeout) => {
 
 // Run the main browser tests.
 const runMainTests = async (browserSession, categories) => {
+  const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
+  systemNetworkSettings.setDNS(preferredNetworkService, CLOUDFLARE_DNS);
   const signal = await runPageTest(browserSession, `${kIframeRootSame}/supercookies.html?mode=write&thirdparty=same`);
   if (!signal.supercookie_write_finished) {
     throw new Error('failed to get signal that the supercookie write finished');
