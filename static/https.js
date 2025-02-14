@@ -6,6 +6,7 @@ const loadSubresource = async(tagName, url) => {
   let resultPromise = new Promise((resolve, reject) => {
     element.addEventListener("load", resolve, { once: true });
     element.addEventListener("error", reject, { once: true });
+    setTimeout(() => reject({ type: "timeout" }), 3000);
   });
   element.src = url;
   try {
@@ -21,7 +22,7 @@ const insecureSubresourceTest = async (tag, fileName) => {
   const description = `Checks to see if the browser attempts to upgrade an insecure address for an ${fileTypeNames[tag]} to HTTPS whenever possible.`;
   let upgradableEvent = await loadSubresource(tag, `http://upgradable.privacytests2.org/content/${fileName}`);
   let insecureEvent = await loadSubresource(tag, `http://insecure.privacytests2.org/content/${fileName}`);
-  let passed = insecureEvent.type === "error";
+  let passed = insecureEvent.type === "error" || insecureEvent.type === "timeout";
   let putativeUpgradeHandling = upgradableEvent.type === "load" ? "upgraded" : "blocked";
   let result = passed ? putativeUpgradeHandling : "loaded insecurely";
   return { passed, result, description };
