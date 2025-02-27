@@ -5,13 +5,17 @@ const fetchJSON = async (...fetchArgs) => {
   return response.json();
 };
 
+const fetchText = async(...fetchArgs) => {
+  const response = await fetch(...fetchArgs);
+  return response.text();
+};
+
 const testTor = async () => {
   let wtfJSON = await fetchJSON("https://wtfismyip.com/json");
   const ipAddress = wtfJSON["YourFuckingIPAddress"];
   console.log(wtfJSON);
-  let onionooJSON = await fetchJSON(`https://onionoo.torproject.org/details?limit=1&search=${ipAddress}`);
-  console.log(onionooJSON);
-  let IsTorExit = (onionooJSON.relays.length > 0);
+  let torList = await fetchText('https://test-pages.privacytests2.org/live/torbulkexitlist');
+  let IsTorExit = torList.includes(ipAddress);
   return {
     "Tor enabled" : {
       IsTorExit,
