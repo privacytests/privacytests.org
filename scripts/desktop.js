@@ -130,6 +130,7 @@ const macOSdefaultBrowserSettings = {
   },
   zen: {
     name: 'Zen',
+    privateFlag: 'private-window',
     basedOn: 'firefox',
     update: ['Zen', 'About Zen'],
     postLaunchDelay: 2000
