@@ -127,6 +127,12 @@ const macOSdefaultBrowserSettings = {
     basedOn: 'firefox',
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
     update: ['Waterfox', 'About Waterfox']
+  },
+  zen: {
+    name: 'Zen',
+    basedOn: 'firefox',
+    update: ['Zen', 'About Zen'],
+    postLaunchDelay: 2000
   }
 };
 
@@ -178,11 +184,23 @@ const fixChromePreferences = async (file) => {
   console.log('fixed Chrome preferences in', file);
 };
 
+const fixZenPreferences = async (file) => {
+  let content = (await fsPromises.readFile(file)).toString();
+  if (content.includes("zen.welcome-screen.seen")) {
+    content = content.replace(
+      'user_pref("zen.welcome-screen.seen", false)',
+      'user_pref("zen.welcome-screen.seen", true)')
+  } else {
+    content += '\nuser_pref("zen.welcome-screen.seen", true);'
+  }
+  await fsPromises.writeFile(file, content)
+};
+
 const fixSafari = (incognito, nightly) => {
   const name = nightly ? "SafariTechnologyPreview" : "Safari"
   execSync(`defaults write com.apple.${name} AlwaysRestoreSessionAtLaunch -bool false`);
   execSync(`defaults write com.apple.${name} OpenPrivateWindowWhenNotRestoringSessionAtLaunch -bool ${incognito ? "true" : "false"}`);
-}
+};
 
 // A Browser object represents a browser we run tests on.
 class DesktopBrowser {
@@ -220,6 +238,9 @@ class DesktopBrowser {
       }
       if (this.browser === 'chrome') {
         await fixChromePreferences(path.join(this._profilePath, 'Default', 'Preferences'));
+      }
+      if (this.browser === 'zen') {
+        await fixZenPreferences(path.join(this._profilePath, "prefs.js"))
       }
     }
     if (this.browser === 'safari') {
