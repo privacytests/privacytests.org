@@ -347,6 +347,12 @@ class DesktopBrowser {
     }
   }
 
+  static getScreenResolution () {
+    const response = execSync('system_profiler SPDisplaysDataType | grep "UI Looks like:"').toString();
+    const [, width, height] = response.match(/(\d+)\sx\s(\d+)/)
+    return { width: parseInt(width), height: parseInt(height)}
+  }
+
   static hasTorWindows (browserName) {
     return !!macOSdefaultBrowserSettings[browserName].torFlag;
   }
