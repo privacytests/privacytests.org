@@ -364,6 +364,12 @@ const content = (results, jsonFilename, title, nightly, incognito, testMyBrowser
       <div class="middle-heading">Open-source tests of web browser privacy.</div>
       <div class="right-heading">Updated ${results.timeStarted ? dateString(results.timeStarted) : '??'}</div>
     </div>
+    <div class="banner" id="coiBanner">
+      <div>
+        <strong>Conflict of Interest statement</strong>: I am an employee of Brave Software, the developer of Brave Browser, which is one of the browsers listed on this site.
+        While I strive to provide fair and unbiased information, <a href="/about#full-disclosure-and-transparency">my affiliation</a> may influence my&nbsp;perspective.
+      </div>
+    </div>
     <div class="banner" id="navBanner">
       <div class="navItem ${!incognito && !nightly && results.platform !== 'Android' && results.platform !== 'iOS' ? 'selectedItem' : ''}">
         <a href=".">Desktop browsers</a>
