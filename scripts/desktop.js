@@ -338,7 +338,7 @@ class DesktopBrowser {
 
   static async countActiveVpns () {
     try {
-      const response = execSync('ifconfig -v | grep VPN').toString();
+      const response = execSync('ifconfig -v | grep "type:VPN"').toString();
       const lines = response.split('\n').map(line => line.trim()).filter(line => line.length > 0);
       console.log(lines);
       return lines.length;
