@@ -96,7 +96,6 @@ const pageSequence = [
   `${first_party_root_same}/navigation.html?mode=write&thirdparty=same`,
   `${first_party_root_same}/navigation.html?mode=read&thirdparty=same`,
   `${first_party_root_different}/navigation.html?mode=read&thirdparty=different`,
-  `${first_party_root_same}/fingerprinting.html`,
   `${first_party_root_same}/tracking_content.html`,
   `${first_party_root_same}/misc.html`,
   queryParameterTestUrl(TRACKING_QUERY_PARAMETERS),
@@ -176,7 +175,7 @@ const moveTestBetweenCategories = (testName, src, dest) => {
 const processResults = (rawResults) => {
   try {
     const {
-      misc, https, upgradable_hyperlink, fingerprinting, query, trackers,
+      misc, https, upgradable_hyperlink, query, trackers,
       navigation_write_same, navigation_read_same, navigation_read_different,
       supercookies_write_same, supercookies_read_same, supercookies_read_different
     } = rawResults;
@@ -194,7 +193,6 @@ const processResults = (rawResults) => {
       misc,
       query: processQueryResults(query),
       https: Object.assign({}, https, upgradable_hyperlink),
-      fingerprinting,
       navigation,
       supercookies,
       trackers
