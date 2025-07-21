@@ -112,6 +112,7 @@ const tooltipScript = `
     if (visibleTooltip) {
       visibleTooltip.style.display = "none";
       visibleTooltip.parentElement.style.backgroundColor = "";
+      visibleTooltip.parentElement.style.color = "";
       visibleTooltip = null;
     }
   }
@@ -120,6 +121,7 @@ const tooltipScript = `
     const viewportWidth = document.documentElement.clientWidth;
     tooltip.style.display = "block";
     tooltip.parentElement.style.backgroundColor = "#ffa";
+    tooltip.parentElement.style.color = "black";
     const tooltipRight = tooltip.getClientRects()[0].right;
     const tableRight = table.getClientRects()[0].right;
     const overflowX = tooltipRight- tableRight + 8;
