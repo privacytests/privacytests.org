@@ -44,8 +44,8 @@ const browserInfo = {
   firefox: {
     name: 'Firefox',
     bundleId: 'org.mozilla.ios.Firefox',
-    urlBarClick: 'url',
-    urlBarKeys: 'address'
+    urlBarClick: 'AddressToolbar.address',
+    urlBarKeys: 'AddressToolbar.address'
   },
   focus: {
     name: 'Firefox Focus',
@@ -128,7 +128,7 @@ const webdriverSession = _.memoize(() =>
       'appium:deviceName': 'iPhone SE',
       'appium:wdaLaunchTimeout': 60000,
       'appium:wdaConnectionTimeout': 60000,
-      'appium:platformVersion': '17.0',
+      'appium:platformVersion': '18.2',
       'appium:showXcodeLog': true
     }
   }));
