@@ -377,7 +377,7 @@ table.comparison-table .date {
       <div class="banner" id="issueBanner">
         <div class="left-heading">No. 94</div>
         <div class="middle-heading">Open-source tests of web browser privacy.</div>
-        <div class="right-heading">Updated 2025-02-25</div>
+        <div class="right-heading">Updated 2025-08-12</div>
       </div>
       <div class="banner" id="navBanner">
         <div class="navItem "><a href=".">Desktop browsers</a></div>
@@ -410,7 +410,7 @@ table.comparison-table .date {
                 <br>
                 brave
                 <br>
-                1.75
+                1.81
               </span>
               <br>
               Tor
@@ -490,11 +490,11 @@ read: async (secret) =&gt; {
       return blobResponse.text();
     }
 result, same first party:
-ecd28cec-6361-4bca-b57c-1fb36ab81285,
-700cef2c-4cef-49b4-af66-aba49ebd3dde,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92
+e7bebf0a-9623-4709-b481-47a318b6f037,
+e4ef1561-018c-4570-b984-47b3c459b7eb,
+3c678a65-4546-4a33-a7d6-dcb258964678,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07
 result, different first party:
 Error: Failed to fetch,
 Error: Failed to fetch,
@@ -537,11 +537,11 @@ read: () =&gt;
         setTimeout(() =&gt; reject({message: &quot;no BroadcastChannel message&quot;}), 3000);
       })
 result, same first party:
-ecd28cec-6361-4bca-b57c-1fb36ab81285,
-700cef2c-4cef-49b4-af66-aba49ebd3dde,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92
+e7bebf0a-9623-4709-b481-47a318b6f037,
+e4ef1561-018c-4570-b984-47b3c459b7eb,
+3c678a65-4546-4a33-a7d6-dcb258964678,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07
 result, different first party:
 Error: no BroadcastChannel message,
 Error: no BroadcastChannel message,
@@ -575,11 +575,11 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 result, same first party:
-ecd28cec-6361-4bca-b57c-1fb36ab81285,
-700cef2c-4cef-49b4-af66-aba49ebd3dde,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92
+e7bebf0a-9623-4709-b481-47a318b6f037,
+e4ef1561-018c-4570-b984-47b3c459b7eb,
+3c678a65-4546-4a33-a7d6-dcb258964678,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07
 result, different first party:
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
@@ -609,11 +609,11 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 result, same first party:
-ecd28cec-6361-4bca-b57c-1fb36ab81285_http,
-700cef2c-4cef-49b4-af66-aba49ebd3dde_http,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451_http,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09_http,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92_http
+e7bebf0a-9623-4709-b481-47a318b6f037_http,
+e4ef1561-018c-4570-b984-47b3c459b7eb_http,
+3c678a65-4546-4a33-a7d6-dcb258964678_http,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b_http,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07_http
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -632,11 +632,11 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 result, same first party:
-ecd28cec-6361-4bca-b57c-1fb36ab81285_js,
-700cef2c-4cef-49b4-af66-aba49ebd3dde_js,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451_js,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09_js,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92_js
+e7bebf0a-9623-4709-b481-47a318b6f037_js,
+e4ef1561-018c-4570-b984-47b3c459b7eb_js,
+3c678a65-4546-4a33-a7d6-dcb258964678_js,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b_js,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07_js
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -673,11 +673,11 @@ read: async () =&gt; {
       return cookie.value;
     }
 result, same first party:
-ecd28cec-6361-4bca-b57c-1fb36ab81285,
-700cef2c-4cef-49b4-af66-aba49ebd3dde,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92
+e7bebf0a-9623-4709-b481-47a318b6f037,
+e4ef1561-018c-4570-b984-47b3c459b7eb,
+3c678a65-4546-4a33-a7d6-dcb258964678,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -724,17 +724,17 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 result, same first party:
-fake_6536819158894207,
-fake_5401339455082275,
-fake_4189771292691744,
-fake_7449052181488514,
-fake_34239057782113447
+fake_8325541926784326,
+fake_9636626764814127,
+fake_9864339736594767,
+fake_13986225417869336,
+fake_47333141044135174
 result, different first party:
-fake_9974332770493082,
-fake_6602990244094065,
-fake_05826113263090216,
-fake_15035178067853838,
-fake_15719362241021928
+fake_1536770947490118,
+fake_640339922237807,
+fake_6952146082827608,
+fake_21480840568478965,
+fake_29702512296390804
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
 test failed: false, false, false, false, false</pre>
@@ -863,11 +863,11 @@ read: async () =&gt; {
       }
     }
 result, same first party:
-ecd28cec-6361-4bca-b57c-1fb36ab81285,
-700cef2c-4cef-49b4-af66-aba49ebd3dde,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92
+e7bebf0a-9623-4709-b481-47a318b6f037,
+e4ef1561-018c-4570-b984-47b3c459b7eb,
+3c678a65-4546-4a33-a7d6-dcb258964678,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07
 result, different first party:
 Error: Unsupported,
 Error: Unsupported,
@@ -894,11 +894,11 @@ read: async () =&gt; {
       return await response.text();
     }
 result, same first party:
-ecd28cec-6361-4bca-b57c-1fb36ab81285,
-700cef2c-4cef-49b4-af66-aba49ebd3dde,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92
+e7bebf0a-9623-4709-b481-47a318b6f037,
+e4ef1561-018c-4570-b984-47b3c459b7eb,
+3c678a65-4546-4a33-a7d6-dcb258964678,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -920,11 +920,11 @@ read: async () =&gt; {
       return await response.text();
     }
 result, same first party:
-ecd28cec-6361-4bca-b57c-1fb36ab81285,
-700cef2c-4cef-49b4-af66-aba49ebd3dde,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92
+e7bebf0a-9623-4709-b481-47a318b6f037,
+e4ef1561-018c-4570-b984-47b3c459b7eb,
+3c678a65-4546-4a33-a7d6-dcb258964678,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -1086,11 +1086,11 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 result, same first party:
-ecd28cec-6361-4bca-b57c-1fb36ab81285,
-700cef2c-4cef-49b4-af66-aba49ebd3dde,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92
+e7bebf0a-9623-4709-b481-47a318b6f037,
+e4ef1561-018c-4570-b984-47b3c459b7eb,
+3c678a65-4546-4a33-a7d6-dcb258964678,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07
 result, different first party: undefined
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -1107,11 +1107,11 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 result, same first party:
-ecd28cec-6361-4bca-b57c-1fb36ab81285,
-700cef2c-4cef-49b4-af66-aba49ebd3dde,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92
+e7bebf0a-9623-4709-b481-47a318b6f037,
+e4ef1561-018c-4570-b984-47b3c459b7eb,
+3c678a65-4546-4a33-a7d6-dcb258964678,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -1141,11 +1141,11 @@ read: async () =&gt; {
       }
     }
 result, same first party:
-ecd28cec-6361-4bca-b57c-1fb36ab81285,
-700cef2c-4cef-49b4-af66-aba49ebd3dde,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92
+e7bebf0a-9623-4709-b481-47a318b6f037,
+e4ef1561-018c-4570-b984-47b3c459b7eb,
+3c678a65-4546-4a33-a7d6-dcb258964678,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07
 result, different first party:
 Error: Cannot read properties of undefined (reading &#39;name&#39;),
 Error: Cannot read properties of undefined (reading &#39;name&#39;),
@@ -1265,7 +1265,7 @@ result, same first party:
 &lt;head&gt;&lt;title&gt;404 Not Found&lt;/title&gt;&lt;/head&gt;
 &lt;body&gt;
 &lt;center&gt;&lt;h1&gt;404 Not Found&lt;/h1&gt;&lt;/center&gt;
-&lt;hr&gt;&lt;center&gt;nginx/1.18.0 (Ubuntu)&lt;/center&gt;
+&lt;hr&gt;&lt;center&gt;nginx/1.24.0 (Ubuntu)&lt;/center&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 &lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
@@ -1279,7 +1279,7 @@ result, same first party:
 &lt;head&gt;&lt;title&gt;404 Not Found&lt;/title&gt;&lt;/head&gt;
 &lt;body&gt;
 &lt;center&gt;&lt;h1&gt;404 Not Found&lt;/h1&gt;&lt;/center&gt;
-&lt;hr&gt;&lt;center&gt;nginx/1.18.0 (Ubuntu)&lt;/center&gt;
+&lt;hr&gt;&lt;center&gt;nginx/1.24.0 (Ubuntu)&lt;/center&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 &lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
@@ -1293,7 +1293,7 @@ result, same first party:
 &lt;head&gt;&lt;title&gt;404 Not Found&lt;/title&gt;&lt;/head&gt;
 &lt;body&gt;
 &lt;center&gt;&lt;h1&gt;404 Not Found&lt;/h1&gt;&lt;/center&gt;
-&lt;hr&gt;&lt;center&gt;nginx/1.18.0 (Ubuntu)&lt;/center&gt;
+&lt;hr&gt;&lt;center&gt;nginx/1.24.0 (Ubuntu)&lt;/center&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 &lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
@@ -1307,7 +1307,7 @@ result, same first party:
 &lt;head&gt;&lt;title&gt;404 Not Found&lt;/title&gt;&lt;/head&gt;
 &lt;body&gt;
 &lt;center&gt;&lt;h1&gt;404 Not Found&lt;/h1&gt;&lt;/center&gt;
-&lt;hr&gt;&lt;center&gt;nginx/1.18.0 (Ubuntu)&lt;/center&gt;
+&lt;hr&gt;&lt;center&gt;nginx/1.24.0 (Ubuntu)&lt;/center&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 &lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
@@ -1321,7 +1321,7 @@ result, same first party:
 &lt;head&gt;&lt;title&gt;404 Not Found&lt;/title&gt;&lt;/head&gt;
 &lt;body&gt;
 &lt;center&gt;&lt;h1&gt;404 Not Found&lt;/h1&gt;&lt;/center&gt;
-&lt;hr&gt;&lt;center&gt;nginx/1.18.0 (Ubuntu)&lt;/center&gt;
+&lt;hr&gt;&lt;center&gt;nginx/1.24.0 (Ubuntu)&lt;/center&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 &lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
@@ -1330,7 +1330,11 @@ result, same first party:
 &lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
 &lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
 &lt;!-- a padding to disable MSIE and Chrome friendly error page --&gt;
-result, different first party: , , Error: ServiceWorker registration failed, , Error: ServiceWorker registration failed
+result, different first party:
+Error: ServiceWorker registration failed,
+,
+Error: ServiceWorker registration failed,
+,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
 test failed: false, false, false, false, false</pre>
@@ -1372,11 +1376,11 @@ read: async () =&gt; {
       return message;
     }
 result, same first party:
-ecd28cec-6361-4bca-b57c-1fb36ab81285,
-700cef2c-4cef-49b4-af66-aba49ebd3dde,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92
+e7bebf0a-9623-4709-b481-47a318b6f037,
+e4ef1561-018c-4570-b984-47b3c459b7eb,
+3c678a65-4546-4a33-a7d6-dcb258964678,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07
 result, different first party:
 Error: no SharedWorker message received,
 Error: no SharedWorker message received,
@@ -1404,17 +1408,17 @@ read: async () =&gt; {
       return (await results.json()).sessionId;
     }
 result, same first party:
-a8559431c9b33c8246484205d4b9886a7a23d6275320f4d641bc1a37439300fa,
-ac2dea2291a15f73291314569491141476f7ed6424114e852cc050a1c8d9e1ab,
-233f3bb3ee337b4ae079c901ff79579f39cd316128ce6c1a0ee573c9c687ddca,
-88e7618ef10a4899d4f810993c46cb3ac63d15f5864823a86b0238c7fc362166,
-cd968bc911a1c3ba38501bed0ed7da2877758c0f534e6d7e69eec403a4a5a183
+3fa0641b5527e3f5c63825d694d184eaa8f008913305757adf57a1527dee71d4,
+46f0d9b5fd79bdb73048f89da19c5e2b5f95e5b807b24a1e1da00e7dce9eccc3,
+84a3201b93fde6a292cd7ace04bcb0f7aecd5e2791b8469c3b657e2488b24f6f,
+7355afa29530ba2d6f031a894d9c7bb05c0bc17efad07da005b5d49fd47fdc42,
+c94878f1e7421742f91064e1dadb0e6159b6bcc505ce5c1d87f5edbc9019ea2d
 result, different first party:
-38a14b62873e9738a818d13fede16f9caa4f0eb797bf5732d5a9bc5b46e0efd7,
-a23c8aa0e8c8f944bf96258f3ae24b0a3fc1d76aecc027f7bec10fd582af044d,
-2bd466c13808eff775239b685e65e0c6bccd9cd21cef14f67cd96efc3b93210f,
-e7e6da728509fd6c3b544a6b736b9a86f35d0f1a50907c9ed540e9df1a10881d,
-fa57dffd19d616a24f6cc720f11b341ade357b8c34fee06916119ec8fce01bc4
+73045b335db0dc9c4d5ac3eddf2df72f95779f0ddb59a332b180bbea3343f417,
+0f4efbd1b23f6e90b642f1c71fc1193f14911ad2b1659484cbb564874416946d,
+6c2f41fb1325551fdb740b694def122e9d307abd1a9f107d837a8fb72abef289,
+b306ec7731f59fc93a31120cf1f932d006381f70e189b32f90a0a303fae2fcf8,
+2c616fd40414a6fab8921832c58787be5cd1dcd74123e12459336cd494d8eab1
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
 test failed: false, false, false, false, false</pre>
@@ -1494,11 +1498,11 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; sessionStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; sessionStorage.getItem(&quot;secret&quot;)
 result, same first party:
-ecd28cec-6361-4bca-b57c-1fb36ab81285,
-700cef2c-4cef-49b4-af66-aba49ebd3dde,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92
+e7bebf0a-9623-4709-b481-47a318b6f037,
+e4ef1561-018c-4570-b984-47b3c459b7eb,
+3c678a65-4546-4a33-a7d6-dcb258964678,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -1515,11 +1519,11 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; window.name = &quot;name_&quot; + secret
 read: () =&gt; window.name
 result, same first party:
-name_ecd28cec-6361-4bca-b57c-1fb36ab81285,
-name_700cef2c-4cef-49b4-af66-aba49ebd3dde,
-name_26fefd2a-13b5-47dc-a4b4-2e8458b12451,
-name_224dc2c0-b64a-45e2-b9a0-1a06db900a09,
-name_10d1d6d9-7fbc-4413-8cfc-5ad499b82f92
+name_e7bebf0a-9623-4709-b481-47a318b6f037,
+name_e4ef1561-018c-4570-b984-47b3c459b7eb,
+name_3c678a65-4546-4a33-a7d6-dcb258964678,
+name_80255f8c-1cdb-4b4d-8935-b12be3c4f16b,
+name_2d52c277-29ba-4fc1-bb25-d9dcb805bd07
 result, different first party: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -1662,17 +1666,12 @@ read: async () =&gt; {
     }
 unsupported: false, false, false, false, false
 readSameFirstParty:
-185.220.100.244,
-185.220.100.251,
-109.70.100.69,
-198.98.48.33,
-185.220.100.242
-readDifferentFirstParty:
-185.220.100.253,
-45.83.104.137,
-192.42.116.181,
-185.220.101.107,
-185.220.101.19
+45.143.200.32,
+192.42.116.210,
+45.138.16.42,
+171.25.193.40,
+185.150.28.13
+readDifferentFirstParty: 88.80.26.3, 107.189.5.188, 185.220.101.13, 192.42.116.180, 185.246.188.73
 passed: true, true, true, true, true
 testFailed: false, false, false, false, false</pre>
             </td>
@@ -1693,104 +1692,6 @@ passed: true, true, true, true, true</pre>
               <div><span class="subheading-title">Fingerprinting resistance tests</span><span class="tagline">Which browsers hide what's unique about your device?</span></div>
               <pre class="tooltipText">Fingerprinting is a technique trackers use to uniquely identify you as you browse the web. A fingerprinting script will measure several characteristics of your browser and, combining this data, will build a fingerprint that may uniquely identify you among web users. Browsers can introduce countermeasures, such as minimizing the distinguishing information disclosed by certain web APIs so your browser is harder to pick out from the crowd (so-called &#39;fingerprinting resistance&#39;).`,</pre>
             </th>
-          </tr>
-          <tr>
-            <td class="tooltipParent">
-              <div>Media query screen height</div>
-              <pre class="tooltipText">Height of the user&#39;s screen in pixels.</pre>
-            </td>
-            <td class="tooltipParent">
-              <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">expression: undefined
-desired expression: undefined
-actual value: 1296,1294,1298,1297,1296
-desired value: undefined
-passed: true,true,true,true,true</pre>
-            </td>
-          </tr>
-          <tr>
-            <td class="tooltipParent">
-              <div>Media query screen width</div>
-              <pre class="tooltipText">Width of the user&#39;s screen in pixels.</pre>
-            </td>
-            <td class="tooltipParent">
-              <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">expression: undefined
-desired expression: undefined
-actual value: 1206,1208,1203,1205,1203
-desired value: undefined
-passed: true,true,true,true,true</pre>
-            </td>
-          </tr>
-          <tr>
-            <td class="tooltipParent">
-              <div>outerHeight</div>
-              <pre class="tooltipText">Height of the browser window in pixels, including browser chrome.</pre>
-            </td>
-            <td class="tooltipParent">
-              <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">expression: outerHeight
-desired expression: undefined
-actual value: 1296,1294,1298,1297,1296
-desired value: undefined
-passed: true,true,true,true,true</pre>
-            </td>
-          </tr>
-          <tr>
-            <td class="tooltipParent">
-              <div>screen.height</div>
-              <pre class="tooltipText">Height of the user&#39;s screen, in pixels.</pre>
-            </td>
-            <td class="tooltipParent">
-              <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">expression: screen.height
-desired expression: undefined
-actual value: 1296,1294,1298,1297,1296
-desired value: undefined
-passed: true,true,true,true,true</pre>
-            </td>
-          </tr>
-          <tr>
-            <td class="tooltipParent">
-              <div>screen.width</div>
-              <pre class="tooltipText">Width of the user&#39;s screen, in pixels.</pre>
-            </td>
-            <td class="tooltipParent">
-              <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">expression: screen.width
-desired expression: undefined
-actual value: 1206,1208,1203,1205,1203
-desired value: undefined
-passed: true,true,true,true,true</pre>
-            </td>
-          </tr>
-          <tr>
-            <td class="tooltipParent">
-              <div>screenX</div>
-              <pre class="tooltipText">Position, in pixels, of the left edge of the browser window on screen.</pre>
-            </td>
-            <td class="tooltipParent">
-              <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">expression: screenX
-desired expression: undefined
-actual value: 3,6,2,6,6
-desired value: undefined
-passed: true,true,true,true,true</pre>
-            </td>
-          </tr>
-          <tr>
-            <td class="tooltipParent">
-              <div>screenY</div>
-              <pre class="tooltipText">Position, in pixels, of the top edge of the browser window on screen.</pre>
-            </td>
-            <td class="tooltipParent">
-              <img alt="Passed" src="" class="dataPoint good">
-              <pre class="tooltipText">expression: screenY
-desired expression: undefined
-actual value: 6,5,3,5,5
-desired value: undefined
-passed: true,true,true,true,true</pre>
-            </td>
           </tr>
           <tr>
             <td class="tooltipParent">
@@ -2559,11 +2460,11 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 result, same session:
-ecd28cec-6361-4bca-b57c-1fb36ab81285_1p,
-700cef2c-4cef-49b4-af66-aba49ebd3dde_1p,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451_1p,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09_1p,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92_1p
+e7bebf0a-9623-4709-b481-47a318b6f037_1p,
+e4ef1561-018c-4570-b984-47b3c459b7eb_1p,
+3c678a65-4546-4a33-a7d6-dcb258964678_1p,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b_1p,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07_1p
 result, different session:
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
@@ -2593,11 +2494,11 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 result, same session:
-ecd28cec-6361-4bca-b57c-1fb36ab81285_1p_http,
-700cef2c-4cef-49b4-af66-aba49ebd3dde_1p_http,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451_1p_http,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09_1p_http,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92_1p_http
+e7bebf0a-9623-4709-b481-47a318b6f037_1p_http,
+e4ef1561-018c-4570-b984-47b3c459b7eb_1p_http,
+3c678a65-4546-4a33-a7d6-dcb258964678_1p_http,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b_1p_http,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07_1p_http
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -2616,11 +2517,11 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 result, same session:
-ecd28cec-6361-4bca-b57c-1fb36ab81285_1p_js,
-700cef2c-4cef-49b4-af66-aba49ebd3dde_1p_js,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451_1p_js,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09_1p_js,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92_1p_js
+e7bebf0a-9623-4709-b481-47a318b6f037_1p_js,
+e4ef1561-018c-4570-b984-47b3c459b7eb_1p_js,
+3c678a65-4546-4a33-a7d6-dcb258964678_1p_js,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b_1p_js,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07_1p_js
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -2657,11 +2558,11 @@ read: async () =&gt; {
       return cookie.value;
     }
 result, same session:
-ecd28cec-6361-4bca-b57c-1fb36ab81285_1p,
-700cef2c-4cef-49b4-af66-aba49ebd3dde_1p,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451_1p,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09_1p,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92_1p
+e7bebf0a-9623-4709-b481-47a318b6f037_1p,
+e4ef1561-018c-4570-b984-47b3c459b7eb_1p,
+3c678a65-4546-4a33-a7d6-dcb258964678_1p,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b_1p,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07_1p
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -2708,17 +2609,17 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 result, same session:
-fake_4285967063719276,
-fake_744190757668358,
-fake_5698442847087113,
-fake_8622838700798636,
-fake_5966778955220182
+fake_15836548180826893,
+fake_015452541038015966,
+fake_48755171549831444,
+fake_4009576063188862,
+fake_05531973037211557
 result, different session:
-fake_6110735627352015,
-fake_5585143395875276,
-fake_6564301398439947,
-fake_7450427698283808,
-fake_82094378396971
+fake_10349920366061438,
+fake_802566957967046,
+fake_6185929674891923,
+fake_5922059839238336,
+fake_40517915956083983
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
 test failed: false, false, false, false, false</pre>
@@ -2899,11 +2800,11 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 result, same session:
-ecd28cec-6361-4bca-b57c-1fb36ab81285_1p,
-700cef2c-4cef-49b4-af66-aba49ebd3dde_1p,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451_1p,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09_1p,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92_1p
+e7bebf0a-9623-4709-b481-47a318b6f037_1p,
+e4ef1561-018c-4570-b984-47b3c459b7eb_1p,
+3c678a65-4546-4a33-a7d6-dcb258964678_1p,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b_1p,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07_1p
 result, different session: undefined
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -2920,11 +2821,11 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 result, same session:
-ecd28cec-6361-4bca-b57c-1fb36ab81285_1p,
-700cef2c-4cef-49b4-af66-aba49ebd3dde_1p,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451_1p,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09_1p,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92_1p
+e7bebf0a-9623-4709-b481-47a318b6f037_1p,
+e4ef1561-018c-4570-b984-47b3c459b7eb_1p,
+3c678a65-4546-4a33-a7d6-dcb258964678_1p,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b_1p,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07_1p
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -3098,11 +2999,11 @@ read: async () =&gt; {
       return (new URL(url)).searchParams.get(&quot;key&quot;);
     }
 result, same session:
-ecd28cec-6361-4bca-b57c-1fb36ab81285_3p,
-700cef2c-4cef-49b4-af66-aba49ebd3dde_3p,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451_3p,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09_3p,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92_3p
+e7bebf0a-9623-4709-b481-47a318b6f037_3p,
+e4ef1561-018c-4570-b984-47b3c459b7eb_3p,
+3c678a65-4546-4a33-a7d6-dcb258964678_3p,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b_3p,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07_3p
 result, different session:
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
 Error: Cannot read properties of undefined (reading &#39;url&#39;),
@@ -3132,11 +3033,11 @@ read: async () =&gt; {
       return cookie ? cookie.match(/secret=([\w-]+)/)[1]: null;
     }
 result, same session:
-ecd28cec-6361-4bca-b57c-1fb36ab81285_3p_http,
-700cef2c-4cef-49b4-af66-aba49ebd3dde_3p_http,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451_3p_http,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09_3p_http,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92_3p_http
+e7bebf0a-9623-4709-b481-47a318b6f037_3p_http,
+e4ef1561-018c-4570-b984-47b3c459b7eb_3p_http,
+3c678a65-4546-4a33-a7d6-dcb258964678_3p_http,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b_3p_http,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07_3p_http
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -3155,11 +3056,11 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; document.cookie ? document.cookie.match(/secret=([\w-]+)/)[1] : null
 result, same session:
-ecd28cec-6361-4bca-b57c-1fb36ab81285_3p_js,
-700cef2c-4cef-49b4-af66-aba49ebd3dde_3p_js,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451_3p_js,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09_3p_js,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92_3p_js
+e7bebf0a-9623-4709-b481-47a318b6f037_3p_js,
+e4ef1561-018c-4570-b984-47b3c459b7eb_3p_js,
+3c678a65-4546-4a33-a7d6-dcb258964678_3p_js,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b_3p_js,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07_3p_js
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -3196,11 +3097,11 @@ read: async () =&gt; {
       return cookie.value;
     }
 result, same session:
-ecd28cec-6361-4bca-b57c-1fb36ab81285_3p,
-700cef2c-4cef-49b4-af66-aba49ebd3dde_3p,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451_3p,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09_3p,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92_3p
+e7bebf0a-9623-4709-b481-47a318b6f037_3p,
+e4ef1561-018c-4570-b984-47b3c459b7eb_3p,
+3c678a65-4546-4a33-a7d6-dcb258964678_3p,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b_3p,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07_3p
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -3247,17 +3148,17 @@ read: async (key) =&gt; {
       return fontFamily;
     }
 result, same session:
-fake_7324893098405616,
-fake_7920150248122022,
-fake_29760127485660215,
-fake_549727429204689,
-fake_2852028393175361
+fake_06740240658863272,
+fake_4201819421220301,
+fake_904953443890719,
+fake_9697411904338189,
+fake_7982332718541305
 result, different session:
-fake_38435717874694353,
-fake_9181160476503791,
-fake_1511884755352626,
-fake_87209910865481,
-fake_82260251192668
+fake_05281724981359903,
+fake_32875564522119216,
+fake_09119707911267239,
+fake_17002328736128325,
+fake_8433544611883241
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
 test failed: false, false, false, false, false</pre>
@@ -3438,11 +3339,11 @@ test failed: false, false, false, false, false</pre>
     }
 read: () =&gt; IdbKeyVal.get(&quot;secret&quot;)
 result, same session:
-ecd28cec-6361-4bca-b57c-1fb36ab81285_3p,
-700cef2c-4cef-49b4-af66-aba49ebd3dde_3p,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451_3p,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09_3p,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92_3p
+e7bebf0a-9623-4709-b481-47a318b6f037_3p,
+e4ef1561-018c-4570-b984-47b3c459b7eb_3p,
+3c678a65-4546-4a33-a7d6-dcb258964678_3p,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b_3p,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07_3p
 result, different session: undefined
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -3459,11 +3360,11 @@ test failed: false, false, false, false, false</pre>
               <pre class="tooltipText">write: (secret) =&gt; localStorage.setItem(&quot;secret&quot;, secret)
 read: () =&gt; localStorage.getItem(&quot;secret&quot;)
 result, same session:
-ecd28cec-6361-4bca-b57c-1fb36ab81285_3p,
-700cef2c-4cef-49b4-af66-aba49ebd3dde_3p,
-26fefd2a-13b5-47dc-a4b4-2e8458b12451_3p,
-224dc2c0-b64a-45e2-b9a0-1a06db900a09_3p,
-10d1d6d9-7fbc-4413-8cfc-5ad499b82f92_3p
+e7bebf0a-9623-4709-b481-47a318b6f037_3p,
+e4ef1561-018c-4570-b984-47b3c459b7eb_3p,
+3c678a65-4546-4a33-a7d6-dcb258964678_3p,
+80255f8c-1cdb-4b4d-8935-b12be3c4f16b_3p,
+2d52c277-29ba-4fc1-bb25-d9dcb805bd07_3p
 result, different session: , , , ,
 unsupported: false, false, false, false, false
 passed: true, true, true, true, true
@@ -3720,7 +3621,7 @@ leak detected: false, false, false, false, false</pre>
           </tr>
         </tbody>
       </table>
-      <p class="footer">Tests ran at 2025-02-25 21:00:30 UTC. Source version: <a href="https://github.com/privacytests/privacytests.org/tree/208956588013f7a7e2c0e03c41eb8814cd3b4549">20895658</a>. Raw data in <a href="brave-tor.json">JSON</a>.</p>
+      <p class="footer">Tests ran at 2025-08-12 09:18:31 UTC. Source version: <a href="https://github.com/privacytests/privacytests.org/tree/1d8fb8b838178f23793f2e8d99e81f0f56a946b0">1d8fb8b8</a>. Raw data in <a href="brave-tor.json">JSON</a>.</p>
       <script type="module">
   const table = document.querySelector(".comparison-table");
   let visibleTooltip = null;
