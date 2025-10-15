@@ -38,9 +38,11 @@ I want to hear from you! All kinds of feedback: comments, suggestions, critiques
 
 ## Full disclosure and transparency
 
-*(Updated June 2022)*
+*(Updated October 2025)*
 
-This website and the browser privacy tests are an independent project by me, [Arthur Edelstein](https://www.linkedin.com/in/arthuredelstein/). I have developed this project on my own time and on my own initiative. Several months after first publishing the website, I became an employee of Brave, where I contribute to Brave's browser privacy engineering efforts as a Senior Research and Privacy Engineer. I continue to run this website independently of my employer, however. There is no connection with Brave marketing efforts whatsoever.
+This website and the browser privacy tests are an independent project by me, [Arthur Edelstein](https://www.linkedin.com/in/arthuredelstein/), initially launched to the public in 2021. I have developed this project on my own time and on my own initiative.
+
+I have extensive career experience in browser privacy, having previously worked for the Tor Project, Mozilla and Brave. At all times I have run this website independently.
 
 I am committed to maintaining this website's accuracy and impartiality. It is my goal not to promote any browser here, but rather to offer objective test results for all browsers that encourages a general improvement in privacy across the industry.
 
