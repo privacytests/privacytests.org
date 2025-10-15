@@ -13,6 +13,8 @@ brew install mkcert
 mkcert -install
 ```
 
+You may need to set Settings > Privacy & Security > Full Disk Access > Terminal > (enabled)
+
 ### On Linux
 
 `sudo apt-get install libpng-dev libxtst-dev libx11-dev`
