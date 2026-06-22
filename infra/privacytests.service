@@ -1,0 +1,12 @@
+[Unit]
+Description=PrivacyTests.org
+After=network.target
+
+[Service]
+WorkingDirectory=/home/arthur/privacytests.org/live
+ExecStart=/usr/local/bin/nodemon --exitcrash index.js
+Restart=always
+User=arthur
+
+[Install]
+WantedBy=multi-user.target
