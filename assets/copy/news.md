@@ -1,4 +1,43 @@
 # News
+## [Issue 94](/archive/issue94): 2025-02-25
+
+### New browser versions
+
+On Desktop:
+* Brave 1.75
+* Chrome 133.0
+* Duckduckgo 1.127
+* Edge 133.0
+* Firefox 135.0
+* Librewolf 135.0
+* Opera 117.0
+* Safari 18.3
+* Ungoogled 133.0
+* Vivaldi 7.1
+
+On iOS:
+* Brave 1.75
+* Chrome 133.6943
+* Duckduckgo 7.157
+* Edge 132.2957
+* Firefox 135.2
+* Focus 135.0
+* Opera 5.4
+* Safari 18.3
+* Vivaldi 7.3580
+* Yandex 2502.4
+
+On Android:
+* Brave 1.75
+* Chrome 133.0
+* Duckduckgo 5.225
+* Edge 133.0
+* Firefox 135.0
+* Focus 135.0
+* Opera 87.5
+* Vivaldi 7.1
+* Yandex 25.2
+
 ## [Issue 93](/archive/issue93): 2024-12-29
 
 ### New browser versions
