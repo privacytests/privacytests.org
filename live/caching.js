@@ -86,7 +86,9 @@ app.get('/resource', (req, res) => {
   if (file) {
     res.sendFile(file, { root: __dirname });
   } else {
-    res.send(fileGenerators[type]());
+    const content = fileGenerators[type]();
+    console.log(`Generating ${type} file: ${content}`);
+    res.send(content);
   }
 });
 app.get('/ctr', (req, res) => {
