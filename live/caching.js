@@ -275,6 +275,10 @@ app.get('/torbulkexitlist', async (req, res) => {
   Readable.fromWeb(fetchResponse.body).pipe(res);
 });
 
+app.get('/ip', (req, res) => {
+  res.send(getIpAddress(req));
+});
+
 app.listen(port, () => console.log(`listening for file requests on ${port}`));
 
 app.set('etag', true);
