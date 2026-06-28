@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 WorkingDirectory=/home/arthur/privacytests.org/aioquic
-ExecStart=/home/arthur/privacytests.org/aioquic/venv/bin/python3 examples/http3_server.py --certificate /home/arthur/certs/h3.arthuredelstein.net/cert1.pem --private-key /home/arthur/certs/h3.arthuredelstein.net/privkey1.pem -v
+ExecStart=/bin/bash /home/arthur/privacytests.org/aioquic/run_privacytests_org.sh
 Restart=always
 User=arthur
 
