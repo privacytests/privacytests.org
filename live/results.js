@@ -168,8 +168,10 @@ const processQueryResults = (queryParametersRaw) => {
 
 // Move a test from a source map to a destination map. (Mutates both maps.)
 const moveTestBetweenCategories = (testName, src, dest) => {
-  dest[testName] = src[testName];
-  delete src[testName];
+  if (testName in src) {
+    dest[testName] = src[testName];
+    delete src[testName];
+  }
 };
 
 const processResults = (rawResults) => {

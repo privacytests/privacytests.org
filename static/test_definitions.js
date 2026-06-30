@@ -460,6 +460,7 @@ return {
     write: (secret) => sessionStorage.setItem("secret", secret),
     read: () => sessionStorage.getItem("secret"),
   },
+/*
   "ServiceWorker": {
     category: "navigation",
     description: "The ServiceWorker API allows websites to run code in the background and store content in the browser for offline use. If a ServiceWorker can be accessed from multiple websites, it can be abused to track users across sites.",
@@ -492,7 +493,8 @@ return {
       let response = await fetch("serviceworker-read");
       return await response.text();
     }
-  },
+    },
+*/
   "CSS cache": {
     session: true,
     category: "navigation",
