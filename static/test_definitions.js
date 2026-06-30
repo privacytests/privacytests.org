@@ -112,11 +112,7 @@ return {
         setTimeout(() => reject(new Error("no SharedWorker message received")), 200);
       });
       worker.port.postMessage("request");
-      const message = await messagePromise;
-      if (message === "none") {
-        throw new Error("Unsupported");
-      }
-      return message;
+      return await messagePromise;
     }
   },
   "blob": {
