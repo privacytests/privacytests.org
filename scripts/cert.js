@@ -55,7 +55,7 @@ const setupCertificateNss = async () => {
 };
 
 const setupCertificateDarwin = async () => {
-  const mkcertPath = execSync('/opt/homebrew/bin/mkcert -CAROOT')
+  const mkcertPath = execSync(`${cmd('mkcert')} -CAROOT`)
     .toString().trim();
   return {
     keyPath: `${mkcertPath}/rootCA-key.pem`,
