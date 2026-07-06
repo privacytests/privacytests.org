@@ -42,7 +42,7 @@ I want to hear from you! All kinds of feedback: comments, suggestions, critiques
 
 This website and the browser privacy tests are an independent project by me, [Arthur Edelstein](https://www.linkedin.com/in/arthuredelstein/), initially launched to the public in 2021. I have developed this project on my own time and on my own initiative.
 
-I have extensive career experience in browser privacy, having previously worked for the Tor Project, Mozilla and Brave. At all times I have run this website independently.
+I have extensive career experience in browser privacy, having previously worked for the Tor Project, Mozilla and Brave. At all times I have run this project independently.
 
 I am committed to maintaining this website's accuracy and impartiality. It is my goal not to promote any browser here, but rather to offer objective test results for all browsers that encourages a general improvement in privacy across the industry.
 
