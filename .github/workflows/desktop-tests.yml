@@ -33,7 +33,7 @@ jobs:
           mkcert -install
 
       - name: Start DNS monitor
-        run: node monitor-dns.js &
+        run: sudo node monitor-dns.js &
 
       - name: Run Safari tests
         run: node test --browser=safari --out=safari.json
