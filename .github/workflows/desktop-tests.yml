@@ -1,0 +1,52 @@
+name: Desktop tests
+
+on:
+  push:
+    branches: [github_actions]
+  workflow_dispatch:
+
+env:
+  CI: true
+
+jobs:
+  desktop-tests:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: scripts
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: scripts/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install mkcert
+        run: |
+          brew install mkcert
+          mkcert -install
+
+      - name: Start DNS monitor
+        run: node monitor-dns.js &
+
+      - name: Run Safari tests
+        run: node test --browser=safari --out=safari.json
+        timeout-minutes: 90
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: safari-results
+          path: |
+            scripts/safari.json
+            scripts/safari.html
+            scripts/safari-preview.png
+            results/latest.html
+          if-no-files-found: warn
