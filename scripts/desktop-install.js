@@ -10,6 +10,26 @@ const downloadFile = (url, destPath) => {
   execSync(`curl -L -f -o "${destPath}" "${url}"`);
 };
 
+const resolveGitHubReleaseAssetUrl = (repo, assetPattern) => {
+  const release = JSON.parse(
+    execSync(`curl -sL "https://api.github.com/repos/${repo}/releases/latest"`, { encoding: 'utf8' })
+  );
+  const pattern = new RegExp(assetPattern);
+  const asset = release.assets.find((entry) => pattern.test(entry.name));
+  if (!asset) {
+    throw new Error(`No asset matching ${assetPattern} in ${repo} release ${release.tag_name}`);
+  }
+  return asset.browser_download_url;
+};
+
+const getDmgUrl = (settings) => {
+  if (settings.githubRelease) {
+    const { repo, assetPattern } = settings.githubRelease;
+    return resolveGitHubReleaseAssetUrl(repo, assetPattern);
+  }
+  return settings.dmgUrl;
+};
+
 const verifyInstaller = (installerPath, expectedKind) => {
   const { size } = fs.statSync(installerPath);
   if (size < 1024 * 1024) {
@@ -37,8 +57,9 @@ const installFromDmg = async (browserKey, settings) => {
   await fsPromises.mkdir(mountPoint, { recursive: true });
 
   try {
-    console.log(`Downloading ${browserKey} from ${settings.dmgUrl}`);
-    downloadFile(settings.dmgUrl, dmgPath);
+    const dmgUrl = getDmgUrl(settings);
+    console.log(`Downloading ${browserKey} from ${dmgUrl}`);
+    downloadFile(dmgUrl, dmgPath);
     verifyInstaller(dmgPath, 'DMG');
 
     execSync(`hdiutil attach "${dmgPath}" -nobrowse -mountpoint "${mountPoint}"`);
@@ -91,7 +112,7 @@ const installBrowser = async (browserKey) => {
     await installFromPkg(browserKey, settings);
     return;
   }
-  if (settings.dmgUrl) {
+  if (settings.dmgUrl || settings.githubRelease) {
     await installFromDmg(browserKey, settings);
     return;
   }

@@ -62,7 +62,10 @@ const macOSdefaultBrowserSettings = {
     basedOn: 'firefox',
     useOpen: true,
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
-    dmgUrl: 'https://github.com/mullvad/mullvad-browser/releases/latest/download/mullvad-browser-macos-universal.dmg',
+    githubRelease: {
+      repo: 'mullvad/mullvad-browser',
+      assetPattern: '^mullvad-browser-macos-.*\\.dmg$'
+    },
     update: ['Mullvad Browser', 'About Mullvad Browser']
   },
   opera: {
