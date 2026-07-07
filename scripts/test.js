@@ -650,6 +650,15 @@ const cleanup = async () => {
   cleanupRan = true;
 };
 
+const shutdown = async (exitCode) => {
+  try {
+    await cleanup();
+  } catch (e) {
+    log(e);
+  }
+  process.exit(exitCode);
+};
+
 // Output all versions of browsers in config to the console.
 const showVersions = async (config) => {
   const browserList = configToBrowserList(config);
@@ -686,12 +695,18 @@ const killAll = (config) => {
 // tests, writes them to a JSON data file, and then renders results to
 // a human-readable web page.
 const main = async () => {
-  ['exit', 'SIGINT', 'SIGUSR1', 'SIGUSR2', 'uncaughtException', 'SIGTERM'].forEach((eventType) => {
-    process.on(eventType, (code) => {
-      log(eventType, code);
-      cleanup(eventType);
-      process.exit(eventType === 'uncaughtException' ? 1 : 0);
+  process.on('exit', (code) => {
+    log('process.exit', code);
+  });
+  ['SIGINT', 'SIGUSR1', 'SIGUSR2', 'SIGTERM'].forEach((eventType) => {
+    process.on(eventType, () => {
+      log(eventType);
+      shutdown(1);
     });
+  });
+  process.on('uncaughtException', (err) => {
+    log('uncaughtException', err);
+    shutdown(1);
   });
   try {
     installTestFontIfNeeded();
@@ -735,6 +750,7 @@ const main = async () => {
     }
   } catch (e) {
     log(e);
+    await cleanup();
     process.exit(1);
   }
 };
