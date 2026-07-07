@@ -6,6 +6,7 @@ const macOSdefaultBrowserSettings = {
     torFlag: 'tor',
     torPostLaunchDelay: 10000,
     basedOn: 'chromium',
+    dmgUrl: 'https://laptop-updates.brave.com/latest/osx',
     update: ['Brave', 'About Brave'],
     updateNightly: ['Brave', 'About Brave']
   },
@@ -14,13 +15,15 @@ const macOSdefaultBrowserSettings = {
     nightlyName: 'Google Chrome Canary',
     privateFlag: 'incognito',
     basedOn: 'chromium',
+    dmgUrl: 'https://dl.google.com/chrome/mac/universal/stable/GGRO/googlechrome.dmg',
     update: ['Chrome', 'About Google Chrome'],
     updateNightly: ['Chrome Canary', 'About Google Chrome']
   },
   duckduckgo: {
     name: 'DuckDuckGo',
     nightlyName: 'DuckDuckGo',
-    useOpen: true
+    useOpen: true,
+    dmgUrl: 'https://staticcdn.duckduckgo.com/macos-desktop-browser/duckduckgo.dmg'
     //   incognitoCommand: "osascript safariPBM.applescript",
     //    basedOn: "safari",
   },
@@ -29,6 +32,7 @@ const macOSdefaultBrowserSettings = {
     nightlyName: 'Microsoft Edge Canary',
     privateFlag: 'inprivate',
     basedOn: 'chromium',
+    dmgUrl: 'https://go.microsoft.com/fwlink/?linkid=2093504',
     update: ['Microsoft Edge', 'About Microsoft Edge'],
     updateNightly: ['Microsoft Edge Canary', 'About Microsoft Edge']
   },
@@ -38,6 +42,7 @@ const macOSdefaultBrowserSettings = {
     privateFlag: 'private-window',
     basedOn: 'firefox',
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1', MOZ_CRASHREPORTER_DISABLE: '1' },
+    dmgUrl: 'https://download.mozilla.org/?product=firefox-latest-ssl&os=osx&lang=en-US',
     update: ['Firefox', 'About Firefox'],
     postLaunchDelay: 1000,
     updateNightly: ['Firefox Nightly', 'About Nightly']
@@ -57,6 +62,7 @@ const macOSdefaultBrowserSettings = {
     basedOn: 'firefox',
     useOpen: true,
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
+    dmgUrl: 'https://github.com/mullvad/mullvad-browser/releases/latest/download/mullvad-browser-macos-universal.dmg',
     update: ['Mullvad Browser', 'About Mullvad Browser']
   },
   opera: {
@@ -64,6 +70,7 @@ const macOSdefaultBrowserSettings = {
     nightlyName: 'Opera Developer',
     privateFlag: 'private',
     basedOn: 'chromium',
+    dmgUrl: 'https://ftp.opera.com/ftp/pub/opera/desktop/131.0.5877.116/mac/Opera_131.0.5877.116_Setup.dmg',
     update: ['Opera', 'About Opera'],
     updateNightly: ['Opera Developer', 'About Opera']
     // preferences: [[["ui","warn_on_quitting_opera_with_multiple_tabs"], false]]
@@ -97,6 +104,7 @@ const macOSdefaultBrowserSettings = {
     privateFlag: 'incognito',
     //    postLaunchDelay: 10000,
     basedOn: 'chromium',
+    dmgUrl: 'https://downloads.vivaldi.com/stable/universal/Vivaldi.dmg',
     // Assumes Vivaldi is on automatic updates:
     update: ['Vivaldi', 'About Vivaldi'],
     updateNightly: ['Vivaldi Snapshot', 'About Vivaldi']
@@ -112,6 +120,7 @@ const macOSdefaultBrowserSettings = {
     name: 'Zen',
     privateFlag: 'private-window',
     basedOn: 'firefox',
+    dmgUrl: 'https://github.com/zen-browser/desktop/releases/latest/download/zen.macos-universal.dmg',
     update: ['Zen', 'About Zen'],
     postLaunchDelay: 2000
   }
