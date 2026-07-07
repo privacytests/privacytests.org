@@ -55,4 +55,20 @@ const installBrowser = async (browserKey) => {
   }
 };
 
-module.exports = { installBrowser };
+const main = async () => {
+  const browserKeys = process.argv.slice(2);
+  if (browserKeys.length === 0) {
+    console.error('Usage: node desktop-install <browser> [browser...]');
+    process.exit(1);
+  }
+  for (const browserKey of browserKeys) {
+    await installBrowser(browserKey);
+  }
+};
+
+if (require.main === module) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}
