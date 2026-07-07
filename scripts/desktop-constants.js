@@ -32,7 +32,7 @@ const macOSdefaultBrowserSettings = {
     nightlyName: 'Microsoft Edge Canary',
     privateFlag: 'inprivate',
     basedOn: 'chromium',
-    dmgUrl: 'https://go.microsoft.com/fwlink/?linkid=2093504',
+    pkgUrl: 'https://go.microsoft.com/fwlink/?linkid=2093504',
     update: ['Microsoft Edge', 'About Microsoft Edge'],
     updateNightly: ['Microsoft Edge Canary', 'About Microsoft Edge']
   },
