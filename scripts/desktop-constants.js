@@ -104,7 +104,7 @@ const macOSdefaultBrowserSettings = {
     privateFlag: 'incognito',
     //    postLaunchDelay: 10000,
     basedOn: 'chromium',
-    dmgUrl: 'https://downloads.vivaldi.com/stable/universal/Vivaldi.dmg',
+    dmgUrl: 'https://downloads.vivaldi.com/stable/Vivaldi.dmg',
     // Assumes Vivaldi is on automatic updates:
     update: ['Vivaldi', 'About Vivaldi'],
     updateNightly: ['Vivaldi Snapshot', 'About Vivaldi']
