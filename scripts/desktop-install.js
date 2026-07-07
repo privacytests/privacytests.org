@@ -2,11 +2,23 @@ const fs = require('fs');
 const fsPromises = require('fs/promises');
 const os = require('os');
 const path = require('path');
+const minimist = require('minimist');
 const { execSync } = require('./utils');
 const { macOSdefaultBrowserSettings, defaultAppDirectory } = require('./desktop-constants');
 
 const downloadFile = (url, destPath) => {
   execSync(`curl -L -f -o "${destPath}" "${url}"`);
+};
+
+const verifyDmg = (dmgPath) => {
+  const { size } = fs.statSync(dmgPath);
+  if (size < 1024 * 1024) {
+    throw new Error(`Downloaded file is too small to be a DMG (${size} bytes)`);
+  }
+  const fileType = execSync(`file -b "${dmgPath}"`, { encoding: 'utf8' }).trim();
+  if (/HTML|ASCII text|XML|JSON/i.test(fileType)) {
+    throw new Error(`Downloaded file is not a DMG (${fileType})`);
+  }
 };
 
 const findAppBundle = (mountPoint, settings) => {
@@ -35,6 +47,7 @@ const installBrowser = async (browserKey) => {
   try {
     console.log(`Downloading ${browserKey} from ${settings.dmgUrl}`);
     downloadFile(settings.dmgUrl, dmgPath);
+    verifyDmg(dmgPath);
 
     execSync(`hdiutil attach "${dmgPath}" -nobrowse -mountpoint "${mountPoint}"`);
     mounted = true;
@@ -55,14 +68,32 @@ const installBrowser = async (browserKey) => {
   }
 };
 
+const removeBrowser = (browserKey) => {
+  const settings = macOSdefaultBrowserSettings[browserKey];
+  if (!settings) {
+    throw new Error(`Unknown browser "${browserKey}"`);
+  }
+  const appPath = path.join(defaultAppDirectory, `${settings.name}.app`);
+  if (!fs.existsSync(appPath)) {
+    throw new Error(`Browser "${browserKey}" is not installed at ${appPath}`);
+  }
+  execSync(`rm -rf "${appPath}"`);
+  console.log(`Removed ${path.basename(appPath)} from ${defaultAppDirectory}`);
+};
+
 const main = async () => {
-  const browserKeys = process.argv.slice(2);
+  const { _, remove } = minimist(process.argv.slice(2), { boolean: ['remove'] });
+  const browserKeys = _;
   if (browserKeys.length === 0) {
-    console.error('Usage: node desktop-install <browser> [browser...]');
+    console.error('Usage: node desktop-install [--remove] <browser> [browser...]');
     process.exit(1);
   }
   for (const browserKey of browserKeys) {
-    await installBrowser(browserKey);
+    if (remove) {
+      removeBrowser(browserKey);
+    } else {
+      await installBrowser(browserKey);
+    }
   }
 };
 
