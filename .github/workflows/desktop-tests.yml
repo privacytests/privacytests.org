@@ -10,6 +10,10 @@ env:
 
 jobs:
   desktop-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [safari, chrome]
     runs-on: macos-latest
     defaults:
       run:
@@ -32,21 +36,23 @@ jobs:
           brew install mkcert
           mkcert -install
 
+      - name: Install browser
+        run: node desktop-install ${{ matrix.browser }}
+
       - name: Start DNS monitor
         run: sudo node monitor-dns.js &
 
-      - name: Run Safari tests
-        run: node test --browser=safari --out=safari.json
+      - name: Run tests
+        run: node test --browser=${{ matrix.browser }} --out=../${{ matrix.browser }}.json
         timeout-minutes: 90
 
       - name: Upload results
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: safari-results
+          name: ${{ matrix.browser }}-results
           path: |
-            scripts/safari.json
-            scripts/safari.html
-            scripts/safari-preview.png
-            results/latest.html
+            ${{ matrix.browser }}.json
+            ${{ matrix.browser }}.html
+            ${{ matrix.browser }}-preview.png
           if-no-files-found: warn
