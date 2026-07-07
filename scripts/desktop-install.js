@@ -35,7 +35,7 @@ const installBrowser = async (browserKey) => {
     throw new Error(`Unknown browser "${browserKey}"`);
   }
   if (!settings.dmgUrl) {
-    throw new Error(`Browser "${browserKey}" has no dmgUrl configured`);
+    return;
   }
 
   const dmgPath = path.join(os.tmpdir(), `${browserKey}.dmg`);
