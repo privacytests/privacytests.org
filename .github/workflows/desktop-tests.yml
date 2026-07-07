@@ -33,6 +33,8 @@ jobs:
 
       - name: Install mkcert
         run: |
+          # macos-latest images ship with aws/tap pre-tapped but untrusted; brew warns on every command until trusted.
+          brew trust aws/tap
           brew install mkcert
           mkcert -install
 
