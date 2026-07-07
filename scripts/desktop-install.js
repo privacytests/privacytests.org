@@ -10,14 +10,14 @@ const downloadFile = (url, destPath) => {
   execSync(`curl -L -f -o "${destPath}" "${url}"`);
 };
 
-const verifyDmg = (dmgPath) => {
-  const { size } = fs.statSync(dmgPath);
+const verifyInstaller = (installerPath, expectedKind) => {
+  const { size } = fs.statSync(installerPath);
   if (size < 1024 * 1024) {
-    throw new Error(`Downloaded file is too small to be a DMG (${size} bytes)`);
+    throw new Error(`Downloaded file is too small to be a ${expectedKind} (${size} bytes)`);
   }
-  const fileType = execSync(`file -b "${dmgPath}"`, { encoding: 'utf8' }).trim();
+  const fileType = execSync(`file -b "${installerPath}"`, { encoding: 'utf8' }).trim();
   if (/HTML|ASCII text|XML|JSON/i.test(fileType)) {
-    throw new Error(`Downloaded file is not a DMG (${fileType})`);
+    throw new Error(`Downloaded file is not a ${expectedKind} (${fileType})`);
   }
 };
 
@@ -29,15 +29,7 @@ const findAppBundle = (mountPoint, settings) => {
   return appBundle;
 };
 
-const installBrowser = async (browserKey) => {
-  const settings = macOSdefaultBrowserSettings[browserKey];
-  if (!settings) {
-    throw new Error(`Unknown browser "${browserKey}"`);
-  }
-  if (!settings.dmgUrl) {
-    return;
-  }
-
+const installFromDmg = async (browserKey, settings) => {
   const dmgPath = path.join(os.tmpdir(), `${browserKey}.dmg`);
   const mountPoint = path.join(os.tmpdir(), `${browserKey}_mount`);
   let mounted = false;
@@ -47,7 +39,7 @@ const installBrowser = async (browserKey) => {
   try {
     console.log(`Downloading ${browserKey} from ${settings.dmgUrl}`);
     downloadFile(settings.dmgUrl, dmgPath);
-    verifyDmg(dmgPath);
+    verifyInstaller(dmgPath, 'DMG');
 
     execSync(`hdiutil attach "${dmgPath}" -nobrowse -mountpoint "${mountPoint}"`);
     mounted = true;
@@ -68,6 +60,43 @@ const installBrowser = async (browserKey) => {
   }
 };
 
+const installFromPkg = async (browserKey, settings) => {
+  const pkgPath = path.join(os.tmpdir(), `${browserKey}.pkg`);
+  const destApp = path.join(defaultAppDirectory, `${settings.name}.app`);
+
+  try {
+    console.log(`Downloading ${browserKey} from ${settings.pkgUrl}`);
+    downloadFile(settings.pkgUrl, pkgPath);
+    verifyInstaller(pkgPath, 'PKG');
+
+    if (fs.existsSync(destApp)) {
+      execSync(`sudo rm -rf "${destApp}"`);
+    }
+    execSync(`sudo installer -pkg "${pkgPath}" -target /`);
+    if (!fs.existsSync(destApp)) {
+      throw new Error(`PKG install did not create ${destApp}`);
+    }
+    console.log(`Installed ${path.basename(destApp)} to ${defaultAppDirectory}`);
+  } finally {
+    await fsPromises.unlink(pkgPath).catch(() => {});
+  }
+};
+
+const installBrowser = async (browserKey) => {
+  const settings = macOSdefaultBrowserSettings[browserKey];
+  if (!settings) {
+    throw new Error(`Unknown browser "${browserKey}"`);
+  }
+  if (settings.pkgUrl) {
+    await installFromPkg(browserKey, settings);
+    return;
+  }
+  if (settings.dmgUrl) {
+    await installFromDmg(browserKey, settings);
+    return;
+  }
+};
+
 const removeBrowser = (browserKey) => {
   const settings = macOSdefaultBrowserSettings[browserKey];
   if (!settings) {
@@ -77,7 +106,8 @@ const removeBrowser = (browserKey) => {
   if (!fs.existsSync(appPath)) {
     throw new Error(`Browser "${browserKey}" is not installed at ${appPath}`);
   }
-  execSync(`rm -rf "${appPath}"`);
+  const rmCommand = settings.pkgUrl ? `sudo rm -rf "${appPath}"` : `rm -rf "${appPath}"`;
+  execSync(rmCommand);
   console.log(`Removed ${path.basename(appPath)} from ${defaultAppDirectory}`);
 };
 
