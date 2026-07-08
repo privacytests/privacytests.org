@@ -67,7 +67,15 @@ const fixZenPreferences = async (file) => {
 };
 
 const fixFirefoxPreferences = async (file) => {
-  let content = (await fsPromises.readFile(file)).toString();
+  await fsPromises.mkdir(path.dirname(file), { recursive: true });
+  let content = '';
+  try {
+    content = (await fsPromises.readFile(file)).toString();
+  } catch (e) {
+    if (e.code !== 'ENOENT') {
+      throw e;
+    }
+  }
   const acceptedDate = Date.now().toString();
   const prefs = [
     ['termsofuse.acceptedVersion', 999],
@@ -135,9 +143,9 @@ class DesktopBrowser {
       if (this.browser === 'zen') {
         await fixZenPreferences(path.join(this._profilePath, "prefs.js"))
       }
-      if (this._defaults.basedOn === 'firefox' && this._profilePath && !this._defaults.useOpen) {
-        await fixFirefoxPreferences(path.join(this._profilePath, 'prefs.js'));
-      }
+    }
+    if (this.browser === 'firefox') {
+      await fixFirefoxPreferences(path.join(this._profilePath, 'prefs.js'));
     }
     if (this.browser === 'safari') {
       fixSafari(this.incognito, this.nightly);
