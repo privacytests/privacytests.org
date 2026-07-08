@@ -96,6 +96,10 @@ const macOSdefaultBrowserSettings = {
     basedOn: 'firefox',
     useOpen: true,
     postLaunchDelay: 10000,
+    directoryRelease: {
+      listUrl: 'https://dist.torproject.org/torbrowser/',
+      dmgUrlTemplate: 'https://dist.torproject.org/torbrowser/{version}/tor-browser-macos-{version}.dmg',
+    },
     update: ['Tor Browser', 'About Tor Browser'],
     updateNightly: ['Tor Browser', 'About Tor Browser']
   },
