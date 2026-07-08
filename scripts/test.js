@@ -34,6 +34,23 @@ const log = (...args) => {
   console.log(new Date().toISOString(), ...args);
 };
 
+const errorMessage = (error) => {
+  if (error instanceof Error) {
+    return error.stack ?? error.message;
+  }
+  return String(error);
+};
+
+const formatSettledResult = (result) => {
+  if (result?.status === 'rejected') {
+    return { status: 'rejected', reason: errorMessage(result.reason) };
+  }
+  if (result?.status === 'fulfilled') {
+    return { status: 'fulfilled' };
+  }
+  return result;
+};
+
 // Wraps a promise. If the promise resolves before timeMs, then
 // resolves to the promise's result. Otherwise rejects with a timeout error.
 const deadlinePromise = async (name, promise, timeMs) => {
@@ -551,7 +568,11 @@ const runTestsBatch = async (
       }
     }
   }
-  log('FAILURES: ', failures);
+  log('FAILURES:', failures.map(([browser, stage1, stage2]) => ({
+    browser: browser.browser,
+    stage1: formatSettledResult(stage1),
+    stage2: formatSettledResult(stage2),
+  })));
   cookieProxy.stopMitmProxy();
   const timeStopped = new Date().toISOString();
   let platform;

@@ -123,10 +123,20 @@ const installFromBrewCask = (browserKey, settings) => {
   console.log(`Installed ${path.basename(appPath)} to ${defaultAppDirectory}`);
 };
 
+const getAppPath = (settings) => path.join(defaultAppDirectory, `${settings.name}.app`);
+
 const installBrowser = async (browserKey) => {
   const settings = macOSdefaultBrowserSettings[browserKey];
   if (!settings) {
     throw new Error(`Unknown browser "${browserKey}"`);
+  }
+  if (settings.preinstalled) {
+    const appPath = getAppPath(settings);
+    if (!fs.existsSync(appPath)) {
+      throw new Error(`Browser "${browserKey}" is not installed at ${appPath}`);
+    }
+    console.log(`${settings.name} is preinstalled at ${appPath}`);
+    return;
   }
   if (settings.brewCask) {
     installFromBrewCask(browserKey, settings);
@@ -147,6 +157,9 @@ const removeBrowser = (browserKey) => {
   const settings = macOSdefaultBrowserSettings[browserKey];
   if (!settings) {
     throw new Error(`Unknown browser "${browserKey}"`);
+  }
+  if (settings.preinstalled) {
+    throw new Error(`Cannot remove preinstalled browser "${browserKey}"`);
   }
   if (settings.brewCask) {
     execSync(`brew uninstall --cask ${settings.brewCask}`);

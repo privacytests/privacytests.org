@@ -83,7 +83,8 @@ const macOSdefaultBrowserSettings = {
     name: 'Safari',
     nightlyName: 'Safari Technology Preview',
     useOpen: true,
-    basedOn: 'safari'
+    basedOn: 'safari',
+    preinstalled: true
   },
   tor: {
     name: 'Tor Browser',
