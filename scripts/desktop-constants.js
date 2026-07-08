@@ -48,12 +48,13 @@ const macOSdefaultBrowserSettings = {
     updateNightly: ['Firefox Nightly', 'About Nightly']
   },
   librewolf: {
-    name: 'librewolf',
-    displayName: 'LibreWolf',
+    name: 'LibreWolf',
+    binaryName: 'librewolf',
     privateFlag: 'private-window',
     basedOn: 'firefox',
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
-    updateCommand: '/opt/homebrew/bin/brew upgrade librewolf --no-quarantine',
+    brewCask: 'librewolf',
+    updateCommand: 'brew upgrade --cask librewolf',
     postLaunchDelay: 2000
   },
   mullvad: {

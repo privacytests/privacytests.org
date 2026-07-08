@@ -113,10 +113,24 @@ const installFromPkg = async (browserKey, settings) => {
   }
 };
 
+const installFromBrewCask = (browserKey, settings) => {
+  console.log(`Installing ${browserKey} via brew cask ${settings.brewCask}`);
+  execSync(`brew install --cask ${settings.brewCask}`);
+  const appPath = path.join(defaultAppDirectory, `${settings.name}.app`);
+  if (!fs.existsSync(appPath)) {
+    throw new Error(`brew cask ${settings.brewCask} did not create ${appPath}`);
+  }
+  console.log(`Installed ${path.basename(appPath)} to ${defaultAppDirectory}`);
+};
+
 const installBrowser = async (browserKey) => {
   const settings = macOSdefaultBrowserSettings[browserKey];
   if (!settings) {
     throw new Error(`Unknown browser "${browserKey}"`);
+  }
+  if (settings.brewCask) {
+    installFromBrewCask(browserKey, settings);
+    return;
   }
   if (settings.pkgUrl) {
     await installFromPkg(browserKey, settings);
@@ -126,12 +140,18 @@ const installBrowser = async (browserKey) => {
     await installFromDmg(browserKey, settings);
     return;
   }
+  throw new Error(`No install method configured for browser "${browserKey}"`);
 };
 
 const removeBrowser = (browserKey) => {
   const settings = macOSdefaultBrowserSettings[browserKey];
   if (!settings) {
     throw new Error(`Unknown browser "${browserKey}"`);
+  }
+  if (settings.brewCask) {
+    execSync(`brew uninstall --cask ${settings.brewCask}`);
+    console.log(`Uninstalled brew cask ${settings.brewCask}`);
+    return;
   }
   const appPath = path.join(defaultAppDirectory, `${settings.name}.app`);
   if (!fs.existsSync(appPath)) {
