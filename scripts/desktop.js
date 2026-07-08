@@ -145,7 +145,7 @@ class DesktopBrowser {
         await fixZenPreferences(path.join(this._profilePath, "prefs.js"))
       }
     }
-    if (this.browser === 'firefox' || this.browser === 'mullvad') {
+    if (this.browser === 'firefox' || this.browser === 'mullvad' || this.browser === 'librewolf') {
       await fixFirefoxPreferences(path.join(this._profilePath, 'prefs.js'));
     }
     if (this.browser === 'safari') {
