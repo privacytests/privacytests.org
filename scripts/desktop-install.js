@@ -146,6 +146,7 @@ const installFromBrewCask = (browserKey, settings) => {
   if (!fs.existsSync(appPath)) {
     throw new Error(`brew cask ${settings.brewCask} did not create ${appPath}`);
   }
+  execSync(`xattr -cr "${appPath}"`);
   console.log(`Installed ${path.basename(appPath)} to ${defaultAppDirectory}`);
 };
 
