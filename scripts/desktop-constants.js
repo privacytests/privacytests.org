@@ -74,7 +74,10 @@ const macOSdefaultBrowserSettings = {
     nightlyName: 'Opera Developer',
     privateFlag: 'private',
     basedOn: 'chromium',
-    dmgUrl: 'https://ftp.opera.com/ftp/pub/opera/desktop/131.0.5877.116/mac/Opera_131.0.5877.116_Setup.dmg',
+    directoryRelease: {
+      listUrl: 'https://ftp.opera.com/ftp/pub/opera/desktop/',
+      dmgUrlTemplate: 'https://get.geo.opera.com/pub/opera/desktop/{version}/mac/Opera_{version}_Setup.dmg',
+    },
     update: ['Opera', 'About Opera'],
     updateNightly: ['Opera Developer', 'About Opera']
     // preferences: [[["ui","warn_on_quitting_opera_with_multiple_tabs"], false]]
