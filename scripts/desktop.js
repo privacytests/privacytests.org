@@ -177,7 +177,7 @@ class DesktopBrowser {
 
   // Close the browser.
   async kill () {
-    await execAsync(`osascript -e 'quit app "${this._path}"'`);
+    await execAsync(`osascript -e 'quit app "${this._appName}"'`);
     await sleepMs(5000);
   }
 
