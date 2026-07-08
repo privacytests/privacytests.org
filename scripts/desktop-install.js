@@ -140,14 +140,28 @@ const installFromPkg = async (browserKey, settings) => {
 };
 
 const installFromBrewCask = (browserKey, settings) => {
+  const finalAppPath = path.join(defaultAppDirectory, `${settings.name}.app`);
+  const brewAppName = settings.brewCaskInstalledName ?? settings.name;
+  const brewAppPath = path.join(defaultAppDirectory, `${brewAppName}.app`);
+  const needsRename = brewAppName !== settings.name;
+
   console.log(`Installing ${browserKey} via brew cask ${settings.brewCask}`);
-  execSync(`brew install --cask ${settings.brewCask}`);
-  const appPath = path.join(defaultAppDirectory, `${settings.name}.app`);
-  if (!fs.existsSync(appPath)) {
-    throw new Error(`brew cask ${settings.brewCask} did not create ${appPath}`);
+  if (needsRename && fs.existsSync(finalAppPath)) {
+    execSync(`rm -rf "${brewAppPath}"`);
+    execSync(`mv "${finalAppPath}" "${brewAppPath}"`);
   }
-  execSync(`xattr -cr "${appPath}"`);
-  console.log(`Installed ${path.basename(appPath)} to ${defaultAppDirectory}`);
+  execSync(`brew install --cask ${settings.brewCask}`);
+  if (!fs.existsSync(brewAppPath)) {
+    throw new Error(`brew cask ${settings.brewCask} did not create ${brewAppPath}`);
+  }
+  if (needsRename) {
+    if (fs.existsSync(finalAppPath)) {
+      execSync(`rm -rf "${finalAppPath}"`);
+    }
+    execSync(`mv "${brewAppPath}" "${finalAppPath}"`);
+  }
+  execSync(`xattr -cr "${finalAppPath}"`);
+  console.log(`Installed ${path.basename(finalAppPath)} to ${defaultAppDirectory}`);
 };
 
 const getAppPath = (settings) => path.join(defaultAppDirectory, `${settings.name}.app`);
@@ -189,7 +203,17 @@ const removeBrowser = (browserKey) => {
     throw new Error(`Cannot remove preinstalled browser "${browserKey}"`);
   }
   if (settings.brewCask) {
+    const brewAppName = settings.brewCaskInstalledName ?? settings.name;
+    const brewAppPath = path.join(defaultAppDirectory, `${brewAppName}.app`);
+    const appPath = getAppPath(settings);
+    if (brewAppName !== settings.name && fs.existsSync(appPath)) {
+      execSync(`rm -rf "${brewAppPath}"`);
+      execSync(`mv "${appPath}" "${brewAppPath}"`);
+    }
     execSync(`brew uninstall --cask ${settings.brewCask}`);
+    if (fs.existsSync(appPath)) {
+      execSync(`rm -rf "${appPath}"`);
+    }
     console.log(`Uninstalled brew cask ${settings.brewCask}`);
     return;
   }

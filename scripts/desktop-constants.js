@@ -107,8 +107,11 @@ const macOSdefaultBrowserSettings = {
     name: 'Ungoogled Chromium',
     binaryName: 'Chromium',
     privateFlag: 'incognito',
-    updateCommand: "mv '/Applications/Ungoogled Chromium.app' /Applications/Chromium.app ; /opt/homebrew/bin/brew upgrade eloston-chromium --no-quarantine && mv /Applications/Chromium.app '/Applications/Ungoogled Chromium.app'",
-    basedOn: 'chromium'
+    basedOn: 'chromium',
+    brewCask: 'ungoogled-chromium',
+    brewCaskInstalledName: 'Chromium',
+    updateCommand: "mv '/Applications/Ungoogled Chromium.app' '/Applications/Chromium.app' 2>/dev/null || true; brew upgrade --cask ungoogled-chromium --no-quarantine; mv '/Applications/Chromium.app' '/Applications/Ungoogled Chromium.app'",
+    update: ['Ungoogled Chromium', 'About Chromium']
   },
   vivaldi: {
     name: 'Vivaldi',
