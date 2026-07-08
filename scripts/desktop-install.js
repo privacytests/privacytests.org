@@ -11,9 +11,19 @@ const downloadFile = (url, destPath) => {
 };
 
 const resolveGitHubReleaseAssetUrl = (repo, assetPattern) => {
+  const curlHeaders = [
+    '-H "Accept: application/vnd.github+json"',
+    '-H "User-Agent: privacytests.org-desktop-install"',
+  ];
+  if (process.env.GITHUB_TOKEN) {
+    curlHeaders.push(`-H "Authorization: Bearer ${process.env.GITHUB_TOKEN}"`);
+  }
   const release = JSON.parse(
-    execSync(`curl -sL "https://api.github.com/repos/${repo}/releases/latest"`, { encoding: 'utf8' })
+    execSync(`curl -sL ${curlHeaders.join(' ')} "https://api.github.com/repos/${repo}/releases/latest"`, { encoding: 'utf8' })
   );
+  if (!Array.isArray(release.assets)) {
+    throw new Error(`GitHub API error for ${repo}: ${release.message ?? JSON.stringify(release)}`);
+  }
   const pattern = new RegExp(assetPattern);
   const asset = release.assets.find((entry) => pattern.test(entry.name));
   if (!asset) {
