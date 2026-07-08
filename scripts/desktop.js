@@ -7,17 +7,6 @@ const { killProcessesWithPattern } = require('./utils');
 const path = require('node:path');
 const { macOSdefaultBrowserSettings, defaultAppDirectory } = require('./desktop-constants');
 
-/*
-/Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --incognito "https://example.com"
-/Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --tor "https://example.com"
-/Applications/Firefox.app/Contents/MacOS/firefox --private-window "https://example.com"
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --incognito "example.com"
-/Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge --inprivate "https://example.com"
-/Applications/Opera.app/Contents/MacOS/Opera --private "https://example.com"
-/Applications/Vivaldi.app/Contents/MacOS/Vivaldi --incognito "https://example.com"
-open -a Safari "https://example.com"
-*/
-
 const defaultBinaryPath = 'Contents/MacOS';
 
 const profileFlags = {
@@ -77,6 +66,29 @@ const fixZenPreferences = async (file) => {
   await fsPromises.writeFile(file, content)
 };
 
+const fixFirefoxPreferences = async (file) => {
+  let content = (await fsPromises.readFile(file)).toString();
+  const acceptedDate = Date.now().toString();
+  const prefs = [
+    ['termsofuse.acceptedVersion', 999],
+    ['termsofuse.acceptedDate', acceptedDate],
+    ['browser.termsofuse.prefMigrationCheck', true],
+    ['trailhead.firstrun.didSeeAboutWelcome', true],
+  ];
+  for (const [prefName, prefValue] of prefs) {
+    const formattedValue = typeof prefValue === 'string' ? `"${prefValue}"` : prefValue;
+    const prefLine = `user_pref("${prefName}", ${formattedValue});`;
+    const regex = new RegExp(`user_pref\\("${prefName}",[^;]+\\);`);
+    if (regex.test(content)) {
+      content = content.replace(regex, prefLine);
+    } else {
+      content += '\n' + prefLine;
+    }
+  }
+  await fsPromises.writeFile(file, content);
+  console.log('fixed Firefox preferences in', file);
+};
+
 const fixSafari = (incognito, nightly) => {
   const name = nightly ? "SafariTechnologyPreview" : "Safari"
   execSync(`defaults write com.apple.${name} AlwaysRestoreSessionAtLaunch -bool false`);
@@ -122,6 +134,9 @@ class DesktopBrowser {
       }
       if (this.browser === 'zen') {
         await fixZenPreferences(path.join(this._profilePath, "prefs.js"))
+      }
+      if (this._defaults.basedOn === 'firefox' && this._profilePath && !this._defaults.useOpen) {
+        await fixFirefoxPreferences(path.join(this._profilePath, 'prefs.js'));
       }
     }
     if (this.browser === 'safari') {
