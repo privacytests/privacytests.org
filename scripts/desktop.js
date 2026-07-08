@@ -82,6 +82,7 @@ const fixFirefoxPreferences = async (file) => {
     ['termsofuse.acceptedDate', acceptedDate],
     ['browser.termsofuse.prefMigrationCheck', true],
     ['trailhead.firstrun.didSeeAboutWelcome', true],
+    ['security.enterprise_roots.enabled', true],
   ];
   for (const [prefName, prefValue] of prefs) {
     const formattedValue = typeof prefValue === 'string' ? `"${prefValue}"` : prefValue;
@@ -144,7 +145,7 @@ class DesktopBrowser {
         await fixZenPreferences(path.join(this._profilePath, "prefs.js"))
       }
     }
-    if (this.browser === 'firefox') {
+    if (this.browser === 'firefox' || this.browser === 'mullvad') {
       await fixFirefoxPreferences(path.join(this._profilePath, 'prefs.js'));
     }
     if (this.browser === 'safari') {

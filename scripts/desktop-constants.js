@@ -60,7 +60,7 @@ const macOSdefaultBrowserSettings = {
     name: 'Mullvad Browser',
     binaryName: 'mullvadbrowser',
     basedOn: 'firefox',
-    useOpen: true,
+    //useOpen: true,
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
     githubRelease: {
       repo: 'mullvad/mullvad-browser',
