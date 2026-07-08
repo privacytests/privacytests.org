@@ -10,6 +10,18 @@ const downloadFile = (url, destPath) => {
   execSync(`curl -L -f -o "${destPath}" "${url}"`);
 };
 
+const compareVersions = (a, b) => {
+  const partsA = a.split('.').map(Number);
+  const partsB = b.split('.').map(Number);
+  for (let i = 0; i < Math.max(partsA.length, partsB.length); i++) {
+    const diff = (partsA[i] || 0) - (partsB[i] || 0);
+    if (diff !== 0) {
+      return diff;
+    }
+  }
+  return 0;
+};
+
 const resolveGitHubReleaseAssetUrl = (repo, assetPattern) => {
   const curlHeaders = [
     '-H "Accept: application/vnd.github+json"',
@@ -32,7 +44,21 @@ const resolveGitHubReleaseAssetUrl = (repo, assetPattern) => {
   return asset.browser_download_url;
 };
 
+const resolveDirectoryReleaseDmgUrl = ({ listUrl, dmgUrlTemplate }) => {
+  const listing = execSync(`curl -sL "${listUrl}"`, { encoding: 'utf8' });
+  const versionPattern = /href=["']?v?(\d+(?:\.\d+)+)\/?["' >]/gi;
+  const versions = [...listing.matchAll(versionPattern)].map((match) => match[1]);
+  if (versions.length === 0) {
+    throw new Error(`No versions found at ${listUrl}`);
+  }
+  const version = versions.sort(compareVersions).at(-1);
+  return dmgUrlTemplate.replaceAll('{version}', version);
+};
+
 const getDmgUrl = (settings) => {
+  if (settings.directoryRelease) {
+    return resolveDirectoryReleaseDmgUrl(settings.directoryRelease);
+  }
   if (settings.githubRelease) {
     const { repo, assetPattern } = settings.githubRelease;
     return resolveGitHubReleaseAssetUrl(repo, assetPattern);
@@ -146,7 +172,7 @@ const installBrowser = async (browserKey) => {
     await installFromPkg(browserKey, settings);
     return;
   }
-  if (settings.dmgUrl || settings.githubRelease) {
+  if (settings.dmgUrl || settings.githubRelease || settings.directoryRelease) {
     await installFromDmg(browserKey, settings);
     return;
   }
