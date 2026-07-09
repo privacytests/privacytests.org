@@ -1,6 +1,6 @@
 // # test.js: Runs privacy tests on browsers
 //
-// Usage: `node index config/production.yaml`
+// Usage: `node test --browser=firefox --out=../firefox.json`
 
 // ## imports
 
@@ -18,7 +18,7 @@ const { AndroidBrowser } = require('./android.js');
 const { IOSBrowser } = require('./iOS.js');
 const WebSocket = require('ws');
 const cookieProxy = require('./cookie-proxy');
-const { sleepMs, readYAMLFile } = require('./utils');
+const { sleepMs } = require('./utils');
 const path = require('node:path');
 const { observeDomains, runDnsTests } = require('./dns-test.js');
 const systemNetworkSettings = require('./system-network-settings');
@@ -552,43 +552,27 @@ const writeDataSync = ({ path, filename, data }) => {
   return filePath;
 };
 
-// ## Config files
+// ## Command-line options
 
 const readConfig = (commandLineData) => {
   const defaultConfig = { aggregate: true, debug: false, update: false };
-  const configFile = commandLineData._[0];
+  if (commandLineData._.length > 0) {
+    throw new Error(
+      `Unexpected argument: ${commandLineData._[0]}. Use flags only, e.g. --browser=firefox`);
+  }
   delete commandLineData._;
-  if (commandLineData.browser) {
-    commandLineData.browser = String(commandLineData.browser);
-  }
-  if (commandLineData.browsers) {
-    const browsers = String(commandLineData.browsers).split(',').map(s => s.trim()).filter(Boolean);
-    if (browsers.length !== 1) {
-      throw new Error(`Exactly one browser is required; got ${browsers.length}. Use --browser=firefox`);
-    }
-    commandLineData.browser = browsers[0];
-    delete commandLineData.browsers;
-  }
-  if (commandLineData.skip) {
-    commandLineData.skip = commandLineData.skip.split(',');
-  }
-  if (commandLineData.categories) {
-    commandLineData.categories = commandLineData.categories.split(',');
-  }
-  const yamlConfig = configFile ? readYAMLFile(configFile) : null;
-  const config = Object.assign({}, defaultConfig, yamlConfig, commandLineData);
-  if (config.browsers !== undefined) {
-    const browsers = Array.isArray(config.browsers)
-      ? config.browsers
-      : String(config.browsers).split(',').map(s => s.trim()).filter(Boolean);
-    if (browsers.length !== 1) {
-      throw new Error(`Exactly one browser is required; got ${browsers.length}. Set browser: firefox in config`);
-    }
-    config.browser = browsers[0];
-    delete config.browsers;
+  const config = Object.assign({}, defaultConfig, commandLineData);
+  if (config.browser) {
+    config.browser = String(config.browser);
   }
   if (!config.browser) {
-    throw new Error('A browser is required (browser: firefox in config or --browser=firefox)');
+    throw new Error('A browser is required (--browser=firefox)');
+  }
+  if (config.skip) {
+    config.skip = String(config.skip).split(',');
+  }
+  if (config.categories) {
+    config.categories = String(config.categories).split(',');
   }
   if (!config.categories) {
     config.categories = [
@@ -670,7 +654,7 @@ const killAll = () => {
 
 // ## Main program
 
-// Reads in command-line arguments, config file, runs the required
+// Reads in command-line arguments, runs the required
 // tests, writes them to a JSON data file, and then renders results to
 // a human-readable web page.
 const main = async () => {
@@ -697,7 +681,7 @@ const main = async () => {
       console.log(`VPNs detected: ${activeVpnCount}. Please disable all VPNs.`);
       throw new Error('Active VPN detected.');
     }
-    // Read config file and flags from command line
+    // Read flags from command line
     const commandLineData = minimist(process.argv.slice(2));
     const config = readConfig(commandLineData);
     log({ config });
