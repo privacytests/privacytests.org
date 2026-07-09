@@ -47,23 +47,17 @@ To run tests, point to a .yaml file:
 
 `node test config/desktop.yaml`
 
-Config files are YAML arrays. Each item in the array is an object
-that describes what should go into a single test. All parameters
+Config files are YAML objects that describe a single test run. All parameters
 are optional, except `browser`:
 
 ```
-browsers:                # Possible values include chrome, firefox, brave, opera, edge, vivaldi, etc.
-  - chrome
-  - firefox
-  - brave
-  - edge
+browser: firefox         # One browser per run (chrome, firefox, brave, opera, edge, vivaldi, etc.)
 android: false,          # Set to true to run on Android platform (default: false)
 ios: false,              # Set to true to run on iOS platform (default: false)
 incognito: false,        # Set incognito to true for testing private browsing windows. (default: false)
 tor: true                # Set tor to true for 'Brave Private Window with Tor.' (default: false)
-repeat: 5                # Integer, how many times we should repeat this test (default: 1)
-aggregate: true          # Whether to combine repeated runs of a browser into a single column (default: true)
-debug: false             # Whether to leave browsers open after test is done (default: false)
+aggregate: true          # Whether to combine results in the rendered output (default: true)
+debug: false             # Whether to leave the browser open after the test is done (default: false)
 app-dir: /path/to/apps   # On desktop, set where browsers are located (default: "/Applications/")
 filename: my-results     # Specifies the filename prefix for results (defaults to time run)
 out: ./results.json      # Specifies a full path for output results (overrides filename)
@@ -71,22 +65,21 @@ out: ./results.json      # Specifies a full path for output results (overrides f
 
 You can also use these flags on the command line, to supplement the yaml file or instead of one:
 
-* `--browsers chrome,firefox,vivaldi`: use the specified browsers, separated by commas
+* `--browser=firefox`: the browser to test
 * `--android`: Add flag to run on Android
 * `--ios`: Add flag to run on iOS
 * `--incognito`: Run tests in private browsing windows
 * `--tor`: Run test in Tor windows (available in Brave)
-* `--repeat 10`: repeat the whole set of tests 10 times
-* `--aggregate`: Combine results from the same browser into a single column (enabled by default)
-* `--debug`: Don't close browser(s) after test is done
+* `--aggregate`: Combine results in the rendered output (enabled by default)
+* `--debug`: Don't close the browser after the test is done
 * `--app-dir=/path/to/apps`: Use to point to directory containing browsers (default: `/Applications/`)
 * `--filename=my-results`: Use this flag to specify a filename prefix for the results files.
 * `--out=./results.json`: Use this flag to specific a full path for the results file.
 * `--categories=misc,https`: Limit tests to certain categories. Possible values: `main`, `supplementary`, `misc`, `https`. If this flag is omitted, all categories are run.
 
 So for example,
-`node test config/my-config.yaml --repeat=5 --filename=temp`
-runs the given config, but repeats tests for each browser 5 times and writes the results to temp*
+`node test config/my-config.yaml --browser=firefox --filename=temp`
+runs the given config for Firefox and writes the results to temp*
 
 ## Development
 

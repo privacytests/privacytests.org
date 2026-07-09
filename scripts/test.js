@@ -22,6 +22,7 @@ const { sleepMs, readYAMLFile } = require('./utils');
 const path = require('node:path');
 const { observeDomains, runDnsTests } = require('./dns-test.js');
 const systemNetworkSettings = require('./system-network-settings');
+const { macOSdefaultBrowserSettings } = require('./desktop-constants');
 
 // ## Constants
 
@@ -450,31 +451,6 @@ const createBrowserObject = (config) => {
   return config.android ? new AndroidBrowser(config) : (config.ios ? new IOSBrowser(config) : new DesktopBrowser(config));
 };
 
-// Call asyncFunction on items in array in parallel.
-const asyncMapParallel = async (asyncFunction, array) => {
-  return await Promise.allSettled(Array.prototype.map.call(array, asyncFunction));
-};
-
-// Call asyncFunction on items in array in series.
-const asyncMapSeries = async (asyncFunction, array) => {
-  const results = [];
-  for (const item of array) {
-    let result;
-    try {
-      const value = await asyncFunction(item);
-      result = { value, status: 'fulfilled' };
-    } catch (e) {
-      result = { reason: e, status: 'rejected' };
-    }
-    results.push(result);
-  }
-  return results;
-};
-
-// Call asyncFunction on items in array in series or parallel.
-const asyncMap = (parallel, asyncFunction, array) =>
-  (parallel ? asyncMapParallel : asyncMapSeries)(asyncFunction, array);
-
 const prepareBrowserSession = async (config, hurry) => {
   const browser = createBrowserObject(config);
   const websocket = await createWebsocket();
@@ -488,17 +464,17 @@ const prepareBrowserSession = async (config, hurry) => {
 };
 
 /*
-const runTelemetryTests = async (browserSessions) => {
+const runTelemetryTests = async (browserSession) => {
   await DesktopBrowser.setGlobalProxyUsageEnabled(true, mitmProxyPort);
   console.log('hi');
   await DesktopBrowser.setGlobalProxyUsageEnabled(false);
 };
 */
 
-// Runs a batch of tests (multiple browsers).
+// Runs privacy tests for a single browser configuration.
 // Returns results in a JSON object.
-const runTestsBatch = async (
-  browserLists, { debug, android, ios, categories, repeat, hurry, series } = { debug: false, repeat: 1, hurry: false, series: false }) => {
+const runTests = async (
+  browserSpec, { debug, android, ios, categories, hurry } = { debug: false, hurry: false }) => {
   const allTests = [];
   console.log(categories);
   const timeStarted = new Date().toISOString();
@@ -513,59 +489,75 @@ const runTestsBatch = async (
     }
   }
   const failures = [];
-  for (let iter = 0; iter < repeat; ++iter) {
-    for (const browserList of browserLists) {
-      const timeStarted = new Date().toISOString();
-      let browserSessions;
+  let browserSession;
+  try {
+    browserSession = await prepareBrowserSession(browserSpec, hurry);
+    console.log({ browserSession });
+
+    let testResultsStage1 = { status: 'fulfilled', value: null };
+    try {
+      const value = await deadlinePromise(
+        `${browserSpec.browser} tests`,
+        runTestsStage1({ browserSession, categories }),
+        1000000);
+      testResultsStage1 = { status: 'fulfilled', value };
+    } catch (reason) {
+      testResultsStage1 = { status: 'rejected', reason };
+    }
+
+    let testResultsStage2 = { status: 'fulfilled', value: null };
+    let testResultsStage3 = null;
+    if (!android && !ios) {
       try {
-        browserSessions = (await asyncMap(!series, (config) => prepareBrowserSession(config, hurry), browserList)).map(item => item.value);
-        console.log({ browserSessions });
-        const testResultsStage1 = await asyncMap(!series, (browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage1({ browserSession, categories }), 1000000), browserSessions);
-        let testResultsStage2 = [];
-        let testResultsStage3 = [];
-        if (!android && !ios) {
-          await DesktopBrowser.setGlobalProxyUsageEnabled(true, mitmProxyPort);
-          testResultsStage2 = await asyncMap(!series, (browserSession) => deadlinePromise(`${browserSession.browser.browser} tests`, runTestsStage2({ browserSession, categories }), 100000), browserSessions);
-          await DesktopBrowser.setGlobalProxyUsageEnabled(false);
-          if (categories.includes('dns')) {
-            testResultsStage3 = await runDnsTests(browserSessions);
-          }
-          // await runTelemetryTests(browserSessions);
+        await DesktopBrowser.setGlobalProxyUsageEnabled(true, mitmProxyPort);
+        try {
+          const value = await deadlinePromise(
+            `${browserSpec.browser} tests`,
+            runTestsStage2({ browserSession, categories }),
+            100000);
+          testResultsStage2 = { status: 'fulfilled', value };
+        } catch (reason) {
+          testResultsStage2 = { status: 'rejected', reason };
         }
-        for (let i = 0; i < browserList.length; ++i) {
-          if (testResultsStage1[i].status === 'rejected' || (!android && !ios && testResultsStage2[i].status === 'rejected')) {
-            failures.push([browserList[i], testResultsStage1[i], testResultsStage2[i]]);
-            continue;
-          }
-          const testResults = Object.assign({}, testResultsStage1[i].value, testResultsStage2[i]?.value, testResultsStage3[i]);
-          const { browser, incognito, tor, nightly } = browserList[i];
-          allTests.push({
-            browser,
-            incognito,
-            tor,
-            nightly,
-            testResults,
-            timeStarted,
-            reportedVersion: await browserSessions[i].browser.version(),
-            os: os.type(),
-            os_version: os.version()
-          });
-        }
-      } catch (e) {
-        log(e);
+      } finally {
         await DesktopBrowser.setGlobalProxyUsageEnabled(false);
       }
-      if (!debug) {
-        for (const browserSession of browserSessions) {
-          closeWebSocket(browserSession.websocket);
-          try {
-            console.log(`killing ${browserSession.browser.browser}`);
-            await browserSession.browser.kill();
-          } catch (e) {
-            log(e);
-          }
-        }
+      if (categories.includes('dns')) {
+        testResultsStage3 = await runDnsTests(browserSession);
       }
+      // await runTelemetryTests(browserSession);
+    }
+
+    if (testResultsStage1.status === 'rejected' ||
+        (!android && !ios && testResultsStage2.status === 'rejected')) {
+      failures.push([browserSpec, testResultsStage1, testResultsStage2]);
+    } else {
+      const testResults = Object.assign(
+        {}, testResultsStage1.value, testResultsStage2.value, testResultsStage3);
+      const { browser, incognito, tor, nightly } = browserSpec;
+      allTests.push({
+        browser,
+        incognito,
+        tor,
+        nightly,
+        testResults,
+        timeStarted,
+        reportedVersion: await browserSession.browser.version(),
+        os: os.type(),
+        os_version: os.version()
+      });
+    }
+  } catch (e) {
+    log(e);
+    await DesktopBrowser.setGlobalProxyUsageEnabled(false);
+  }
+  if (!debug && browserSession) {
+    closeWebSocket(browserSession.websocket);
+    try {
+      console.log(`killing ${browserSession.browser.browser}`);
+      await browserSession.browser.kill();
+    } catch (e) {
+      log(e);
     }
   }
   log('FAILURES:', failures.map(([browser, stage1, stage2]) => ({
@@ -609,15 +601,19 @@ const writeDataSync = ({ path, filename, data }) => {
 // ## Config files
 
 const readConfig = (commandLineData) => {
-  const defaultConfig = { aggregate: true, repeat: 1, debug: false, update: false };
+  const defaultConfig = { aggregate: true, debug: false, update: false };
   const configFile = commandLineData._[0];
   delete commandLineData._;
-  const commandLineBrowsers = commandLineData.browsers ?? commandLineData.browser;
-  if (commandLineBrowsers) {
-    commandLineData.browsers = commandLineBrowsers.split(',');
+  if (commandLineData.browser) {
+    commandLineData.browser = String(commandLineData.browser);
   }
-  if (commandLineData.except) {
-    commandLineData.except = commandLineData.except.split(',');
+  if (commandLineData.browsers) {
+    const browsers = String(commandLineData.browsers).split(',').map(s => s.trim()).filter(Boolean);
+    if (browsers.length !== 1) {
+      throw new Error(`Exactly one browser is required; got ${browsers.length}. Use --browser=firefox`);
+    }
+    commandLineData.browser = browsers[0];
+    delete commandLineData.browsers;
   }
   if (commandLineData.skip) {
     commandLineData.skip = commandLineData.skip.split(',');
@@ -627,6 +623,19 @@ const readConfig = (commandLineData) => {
   }
   const yamlConfig = configFile ? readYAMLFile(configFile) : null;
   const config = Object.assign({}, defaultConfig, yamlConfig, commandLineData);
+  if (config.browsers !== undefined) {
+    const browsers = Array.isArray(config.browsers)
+      ? config.browsers
+      : String(config.browsers).split(',').map(s => s.trim()).filter(Boolean);
+    if (browsers.length !== 1) {
+      throw new Error(`Exactly one browser is required; got ${browsers.length}. Set browser: firefox in config`);
+    }
+    config.browser = browsers[0];
+    delete config.browsers;
+  }
+  if (!config.browser) {
+    throw new Error('A browser is required (browser: firefox in config or --browser=firefox)');
+  }
   if (!config.categories) {
     config.categories = [
       'session', 'main', 'supplementary', 'misc', 'https', 'trackingCookies', 'dns'
@@ -640,23 +649,19 @@ const readConfig = (commandLineData) => {
   return config;
 };
 
-const configToBrowserList = (config) => {
-  const browserList = [];
-  for (const browser of config.browsers) {
-    if (!(config.except && config.except.includes(browser))) {
-      browserList.push({
-        browser,
-        nightly: !!config.nightly,
-        incognito: !!config.incognito,
-        android: !!config.android,
-        tor: !!config.tor,
-        ios: !!config.ios,
-        appDir: config['app-dir']
-      });
-    }
-  }
-  return browserList;
-};
+const configToBrowserSpec = (config) => ({
+  browser: config.browser,
+  nightly: !!config.nightly,
+  incognito: !!config.incognito,
+  android: !!config.android,
+  tor: !!config.tor,
+  ios: !!config.ios,
+  appDir: config['app-dir']
+});
+
+const allDesktopBrowserSpecs = (config) =>
+  Object.keys(macOSdefaultBrowserSettings).map(browser =>
+    configToBrowserSpec({ ...config, browser }));
 
 let cleanupRan = false;
 let originalDnsIps;
@@ -682,8 +687,8 @@ const shutdown = async (exitCode) => {
 
 // Output all versions of browsers in config to the console.
 const showVersions = async (config) => {
-  const browserList = configToBrowserList(config);
-  const versionData = await Promise.all(browserList.map(async browserSpec => {
+  const browserSpecs = allDesktopBrowserSpecs(config);
+  const versionData = await Promise.all(browserSpecs.map(async browserSpec => {
     const browserObject = createBrowserObject(browserSpec);
     const version = await browserObject.version();
     return { name: browserSpec.browser, version };
@@ -696,8 +701,8 @@ const showVersions = async (config) => {
 
 // Update all browsers listed in config.
 const updateAll = async (config) => {
-  const browserList = configToBrowserList(config);
-  await Promise.all(browserList.map(async browserSpec => {
+  const browserSpecs = allDesktopBrowserSpecs(config);
+  await Promise.all(browserSpecs.map(async browserSpec => {
     const browserObject = new DesktopBrowser(browserSpec);
     log(browserObject);
     await browserObject.update();
@@ -705,9 +710,8 @@ const updateAll = async (config) => {
   await showVersions(config);
 };
 
-const killAll = (config) => {
-  const browserList = configToBrowserList(config);
-  DesktopBrowser.killAll(browserList.map(item => item.browser));
+const killAll = () => {
+  DesktopBrowser.killAll(Object.keys(macOSdefaultBrowserSettings));
 };
 
 // ## Main program
@@ -749,17 +753,16 @@ const main = async () => {
       // Program has ended.
     }
     if (config.kill) {
-      killAll(config);
+      killAll();
       process.exit();
     }
     if (config.versions || config.version) {
       await showVersions(config);
       return;
     }
-    const expandedBrowserList = configToBrowserList(config);
-    log('List of browsers to run:', expandedBrowserList);
-    const browserLists = (config.android || config.ios) ? expandedBrowserList.map(x => [x]) : [expandedBrowserList];
-    const testResults = await runTestsBatch(browserLists, config);
+    const browserSpec = configToBrowserSpec(config);
+    log('Browser to run:', browserSpec);
+    const testResults = await runTests(browserSpec, config);
     const dataFile = writeDataSync({
       filename: config.filename,
       data: testResults,

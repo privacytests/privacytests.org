@@ -52,25 +52,18 @@ const generateRandomTestDomain = () => {
   return `${subdomain}.privacytests3.org`;
 };
 
-// const enableVpn = () => execAsync('mullvad connect');
-
-// const disableVpn = () => execAsync('mullvad disconnect');
-
-const setCountry = (browserSessions, countryCode) =>
-  Promise.allSettled(browserSessions.map(async (browserSession) => {
-    const browser = browserSession.browser;
-    // Right now we override the Firefox country. Other browsers
-    // don't seem to have locale-based settings, so we do nothing
-    // for those.
-    if (browser._defaults.basedOn === 'firefox') {
-      await browser.setPref('doh-rollout.home-region', countryCode.toUpperCase());
-    }
-    if (browser._defaults.basedOn === 'chromium') {
-      // Set kCFLocaleCountryCode somehow
-    }
-  }));
-
-// execAsync(`mullvad relay set location ${countryCode}`);
+const setCountry = async (browserSession, countryCode) => {
+  const browser = browserSession.browser;
+  // Right now we override the Firefox country. Other browsers
+  // don't seem to have locale-based settings, so we do nothing
+  // for those.
+  if (browser._defaults.basedOn === 'firefox') {
+    await browser.setPref('doh-rollout.home-region', countryCode.toUpperCase());
+  }
+  if (browser._defaults.basedOn === 'chromium') {
+    // Set kCFLocaleCountryCode somehow
+  }
+};
 
 const ispDescription = (name) => `
   Checks whether the browser decides to use
@@ -125,37 +118,31 @@ const checkForSecureDns = async (browserSession) => {
   return !unencrypted;
 };
 
-const testIfDnsIsEncrypted = async (browserSessions, { ip, country }) => {
-  await Promise.all(browserSessions.map(session => session.browser.kill()));
+const testIfDnsIsEncrypted = async (browserSession, { ip, country }) => {
+  await browserSession.browser.kill();
   const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
   await systemNetworkSettings.setDNS(preferredNetworkService, ip ?? '162.243.184.122');
-  await setCountry(browserSessions, country ?? 'aq'); // Antarctica by default
+  await setCountry(browserSession, country ?? 'aq'); // Antarctica by default
   await sleepMs(2000);
-  await Promise.all(browserSessions.map(session => session.browser.launch(false)));
-  return await Promise.all(browserSessions.map(checkForSecureDns));
+  await browserSession.browser.launch(false);
+  return await checkForSecureDns(browserSession);
 };
 
-const runDnsTests = async (browserSessions) => {
+const runDnsTests = async (browserSession) => {
   await observeDomains();
   const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
   const originalDnsIps = systemNetworkSettings.getDNS(preferredNetworkService);
-  // Start all browsers with a fresh profile:
-  await Promise.all(browserSessions.map(session => session.browser.launch(true)));
+  // Start the browser with a fresh profile:
+  await browserSession.browser.launch(true);
   await sleepMs(4000);
-  const results = [];
+  const dns = {};
   for (const testDef of dnsTestDefinitions) {
-    const passedList = await testIfDnsIsEncrypted(browserSessions, testDef);
-    const n = passedList.length;
-    for (let i = 0; i < n; ++i) {
-      const passed = passedList[i];
-      results[i] ??= { dns: {} };
-      results[i].dns[testDef.name] = { passed, description: testDef.description, 'leak detected': !passed };
-    }
+    const passed = await testIfDnsIsEncrypted(browserSession, testDef);
+    dns[testDef.name] = { passed, description: testDef.description, 'leak detected': !passed };
   }
   systemNetworkSettings.setDNS(preferredNetworkService, []);
-  // Kill all the browsers
-  await Promise.all(browserSessions.map(session => session.browser.kill()));
-  return results;
+  await browserSession.browser.kill();
+  return { dns };
 };
 
 module.exports = { observeDomains, runDnsTests };
