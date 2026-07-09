@@ -58,7 +58,7 @@ const getPreferredNetworkService = memoize(() => {
 
 const getDNS = (networkService) => {
   const response = run(`networksetup -getdnsservers "${networkService}"`);
-  if (response.trim() === 'There aren\'t any DNS Servers set on Wi-Fi.') {
+  if (response.trim().startsWith('There aren\'t any DNS Servers set on')) {
     return [];
   } else {
     return response.split('\n').map(line => line.trim()).filter(line => line.length > 0);
