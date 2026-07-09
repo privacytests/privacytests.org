@@ -178,7 +178,13 @@ class DesktopBrowser {
 
   // Close the browser.
   async kill () {
-    await execAsync(`osascript -e 'quit app "${this._appName}"'`);
+    try {
+      await execAsync(`osascript -e 'quit app "${this._appName}"'`);
+    } catch (e) {
+      if (!String(e.stderr ?? e.message).includes('(-600)')) {
+        throw e;
+      }
+    }
     await sleepMs(5000);
   }
 
