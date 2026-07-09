@@ -21,6 +21,9 @@ const cleanHtml = async (content) => {
   return step2;
 };
 
+const stubRe = /[^A-Za-z1-9 ]/g
+const titleToFragment = str => str.replace(stubRe, '').replace(' ', '-').toLowerCase()
+
 const escapeHtml = str => str.replace(/[&<>'"]/g,
   tag => ({
     '&': '&amp;',
@@ -84,7 +87,9 @@ const htmlTable = ({ headers, body, className }) => {
         elements.push(`
         <th colspan="8" class="${className} tooltipParent">
           <div>
-            <span class="subheading-title">${escapeHtml(item.subheading)}</span>
+            <span class="subheading-title" id="${titleToFragment(item.subheading)}">
+              <a href="#${titleToFragment(item.subheading)}">${escapeHtml(item.subheading)}</a>
+            </span>
             <span class="tagline">${item.tagline}</span>
           </div>
           <pre class="tooltipText">${escapeHtml(description)}</pre>
