@@ -93,8 +93,9 @@ const macOSdefaultBrowserSettings = {
     name: 'Tor Browser',
     nightlyName: 'Tor Browser Nightly',
     binaryName: 'firefox',
-    basedOn: 'firefox',
     useOpen: true,
+    basedOn: 'firefox',
+    env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1', MOZ_CRASHREPORTER_DISABLE: '1' },
     postLaunchDelay: 10000,
     directoryRelease: {
       listUrl: 'https://dist.torproject.org/torbrowser/',

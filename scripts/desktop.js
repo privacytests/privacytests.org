@@ -66,7 +66,18 @@ const fixZenPreferences = async (file) => {
   await fsPromises.writeFile(file, content)
 };
 
-const fixFirefoxPreferences = async (file) => {
+const firefoxPreferenceEntries = () => {
+  const acceptedDate = Date.now().toString();
+  return [
+    ['termsofuse.acceptedVersion', 999],
+    ['termsofuse.acceptedDate', acceptedDate],
+    ['browser.termsofuse.prefMigrationCheck', true],
+    ['trailhead.firstrun.didSeeAboutWelcome', true],
+    ['security.enterprise_roots.enabled', true],
+  ];
+};
+
+const setFirefoxPreferences = async (file, prefs) => {
   await fsPromises.mkdir(path.dirname(file), { recursive: true });
   let content = '';
   try {
@@ -76,14 +87,6 @@ const fixFirefoxPreferences = async (file) => {
       throw e;
     }
   }
-  const acceptedDate = Date.now().toString();
-  const prefs = [
-    ['termsofuse.acceptedVersion', 999],
-    ['termsofuse.acceptedDate', acceptedDate],
-    ['browser.termsofuse.prefMigrationCheck', true],
-    ['trailhead.firstrun.didSeeAboutWelcome', true],
-    ['security.enterprise_roots.enabled', true],
-  ];
   for (const [prefName, prefValue] of prefs) {
     const formattedValue = typeof prefValue === 'string' ? `"${prefValue}"` : prefValue;
     const prefLine = `user_pref("${prefName}", ${formattedValue});`;
@@ -95,7 +98,20 @@ const fixFirefoxPreferences = async (file) => {
     }
   }
   await fsPromises.writeFile(file, content);
+};
+
+const fixFirefoxPreferences = async (file) => {
+  await setFirefoxPreferences(file, firefoxPreferenceEntries());
   console.log('fixed Firefox preferences in', file);
+};
+
+const fixTorPreferences = async (file) => {
+  await setFirefoxPreferences(file, [
+    ...firefoxPreferenceEntries(),
+    ['torbrowser.settings.quickstart.enabled', true],
+    ['extensions.torlauncher.prompt_at_startup', false],
+  ]);
+  console.log('fixed Tor Browser preferences in', file);
 };
 
 const fixSafari = (incognito, nightly) => {
@@ -116,7 +132,26 @@ class DesktopBrowser {
     const profileCommand = profileFlags[this._defaults.basedOn];
     this._profilePath = profileCommand ? joinDir(__dirname, `profiles/${browser}${nightly ? '_nightly' : ''}_profile`) : undefined;
     if (this._defaults.useOpen) {
-      this._command = `open -a "${this._appPath}"`;
+      const openApp = `open -a "${this._appPath}"`;
+      this._openUrlCommand = openApp;
+      const launchArgs = [];
+      if (incognito && this._defaults.privateFlag) {
+        launchArgs.push(`--${this._defaults.privateFlag}`);
+      }
+      if (tor && this._defaults.torFlag) {
+        launchArgs.push(`--${this._defaults.torFlag}`);
+      }
+      if (this._profilePath) {
+        launchArgs.push(`-profile "${this._profilePath}"`);
+      }
+      if (launchArgs.length) {
+        const envFlags = this._defaults.env
+          ? Object.entries(this._defaults.env).map(([k, v]) => `--env ${k}=${v}`).join(' ')
+          : '';
+        this._launchCommand = `${openApp}${envFlags ? ' ' + envFlags : ''} --args ${launchArgs.join(' ')}`;
+      } else {
+        this._launchCommand = openApp;
+      }
     } else {
       const flags = `${incognito ? '--' + this._defaults.privateFlag : ''} ${tor ? '--' + this._defaults.torFlag : ''} ${this._profilePath ? `${profileCommand}"${this._profilePath}"` : ''}`;
       this._command = `"${this._path}" ${flags}`.trim();
@@ -148,10 +183,14 @@ class DesktopBrowser {
     if (this.browser === 'firefox' || this.browser === 'mullvad' || this.browser === 'librewolf') {
       await fixFirefoxPreferences(path.join(this._profilePath, 'prefs.js'));
     }
+    if (this.browser === 'tor') {
+      await fixTorPreferences(path.join(this._profilePath, 'prefs.js'));
+    }
     if (this.browser === 'safari') {
       fixSafari(this.incognito, this.nightly);
     }
-    this._process = exec(this._command, { env: this._defaults.env });
+    const launchCommand = this._launchCommand ?? this._command;
+    this._process = exec(launchCommand, this._defaults.useOpen ? {} : { env: this._defaults.env });
     await sleepMs(this.tor ? this._defaults.torPostLaunchDelay : (this._defaults.postLaunchDelay ?? 500));
   }
 
@@ -173,7 +212,8 @@ class DesktopBrowser {
     if (!this._process) {
       throw new Error('browser not launched');
     }
-    exec(`${this._command} "${url}"`);
+    const openUrlCommand = this._openUrlCommand ?? this._command;
+    exec(`${openUrlCommand} "${url}"`);
   }
 
   // Close the browser.
