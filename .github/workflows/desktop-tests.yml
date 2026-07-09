@@ -4,6 +4,7 @@ on:
   push:
     branches: [github_actions]
   workflow_dispatch:
+    cron: '0 3 * * *'
 
 env:
   CI: true
@@ -14,7 +15,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser: [brave, chrome, duckduckgo, edge, firefox, librewolf, mullvad, opera, safari, tor, ungoogled, vivaldi]
+        browser: [librewolf] #[brave, chrome, duckduckgo, edge, firefox, librewolf, mullvad, opera, safari, tor, ungoogled, vivaldi]
+        repetitions: [1, 2, 3, 4, 5]
     runs-on: macos-latest
     defaults:
       run:
