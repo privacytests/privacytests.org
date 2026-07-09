@@ -8,60 +8,80 @@
     <script id="testScript"></script>
     <script src="./post_data.js"></script>
     <script>
-     const testUrl = async ({url, sessionId, readCookies, writeCookies, type}) => {
-       let passed;
-       const isScript = url.includes(".js") || type === "script";
-       const testElement = document.createElement(isScript ? "script" : "img");
-       document.body.appendChild(testElement);
-       const url2 = new URL(url);
-       url2.searchParams.append("sessionId", sessionId);
-       if (readCookies) {
-         url2.searchParams.append("pto_read_cookie", "true");
-       }
-       if (writeCookies) {
-         url2.searchParams.append("pto_write_cookie", "true");
-       }
-       const resultPromise = new Promise((resolve, reject) => {
-         testElement.addEventListener("load", e => resolve(e), { once: true});
-         testElement.addEventListener("error", e => reject(e), { once: true});
+     const TRACKER_TIMEOUT_MS = 15000;
+     const TRACKER_MAX_ATTEMPTS = 3;
+
+     const sleepMs = (timeMs) => new Promise(resolve => setTimeout(resolve, timeMs));
+
+     const withTimeout = (promise, timeMs) => {
+       let timeoutId;
+       const timeout = new Promise((_, reject) => {
+         timeoutId = setTimeout(() => reject(new Error("timeout")), timeMs);
        });
-       testElement.src = url2.href;
-       try {
-         let result = await resultPromise;
-         // DuckDuckGo and Brave inject non-tracking surrogate scripts, so should pass test even though the load succeeds.
-         // https://github.com/duckduckgo/tracker-surrogates/blob/main/surrogates/chartbeat.js
-         // https://github.com/brave/uBlock/blob/master/src/web_accessible_resources/chartbeat.js
-         if (window.pSUPERFLY &&
-             (window.pSUPERFLY.__proto__.toString() === '() => {}' ||
-              ((window.pSUPERFLY.activity.toString() === 'function() {\n    }') &&
-               (window.pSUPERFLY.virtualPage.toString() === 'function() {\n    }')))) {
-           passed = true;
-           console.log(url, "surrogate script detected");
-         } else {;
-           passed = false;
-           console.log(url, result);
+       return Promise.race([promise, timeout]).finally(() => clearTimeout(timeoutId));
+     };
+
+     const loadTracker = ({url, sessionId, readCookies, writeCookies, type}) => {
+       const el = document.createElement(url.includes(".js") || type === "script" ? "script" : "img");
+       document.body.appendChild(el);
+       const trackerUrl = new URL(url);
+       trackerUrl.searchParams.set("sessionId", sessionId);
+       if (readCookies) trackerUrl.searchParams.set("pto_read_cookie", "true");
+       if (writeCookies) trackerUrl.searchParams.set("pto_write_cookie", "true");
+       const resultPromise = new Promise((resolve, reject) => {
+         el.addEventListener("load", resolve, { once: true });
+         el.addEventListener("error", reject, { once: true });
+       });
+       el.src = trackerUrl.href;
+       return { resultPromise, cleanup: () => el.remove() };
+     };
+
+     // DuckDuckGo and Brave inject non-tracking surrogate scripts; treat as blocked.
+     const isSurrogateScript = () => {
+       const fly = window.pSUPERFLY;
+       return fly &&
+         (fly.__proto__.toString() === '() => {}' ||
+          (fly.activity.toString() === 'function() {\n    }' &&
+           fly.virtualPage.toString() === 'function() {\n    }'));
+     };
+
+     const testUrl = async (args) => {
+       for (let attempt = 1; attempt <= TRACKER_MAX_ATTEMPTS; attempt++) {
+         const { resultPromise, cleanup } = loadTracker(args);
+         try {
+           const result = await withTimeout(resultPromise, TRACKER_TIMEOUT_MS);
+           const surrogate = isSurrogateScript();
+           console.log(args.url, surrogate ? "surrogate script detected" : result);
+           return { passed: surrogate };
+         } catch (err) {
+           if (err.message === "timeout") {
+             if (attempt < TRACKER_MAX_ATTEMPTS) {
+               console.log(args.url, `timeout (attempt ${attempt}), retrying`);
+               await sleepMs(500);
+               continue;
+             }
+             return { testFailed: true, result: "timeout" };
+           }
+           console.log(args.url, err);
+           return { passed: true };
+         } finally {
+           cleanup();
          }
-       } catch (err) {
-         passed = true;
-         console.log(url, err);
        }
-       return passed;
      };
 
      const runTest = async () => {
-       const searchParams = new URLSearchParams(window.location.search);
-       const sessionId = searchParams.get("sessionId");
-       const readCookies = searchParams.get("read_cookies") === "true";
-       const writeCookies = searchParams.get("write_cookies") === "true";
-       const response = await fetch("./trackers.json", { headers: {'Accept': 'application/json' } });
-       const tests = await response.json();
+       const params = new URLSearchParams(window.location.search);
+       const sessionId = params.get("sessionId");
+       const readCookies = params.get("read_cookies") === "true";
+       const writeCookies = params.get("write_cookies") === "true";
+       const tests = await (await fetch("./trackers.json")).json();
        const results = Object.fromEntries(await Promise.all(tests.map(async ({name, url, type}) => {
-         const passed = await testUrl({url, sessionId, readCookies, writeCookies, type});
          const description = `Tests whether the browser blocks the page from loading the tracker at ${url}`;
-         return [name, { url, passed, description }];
+         return [name, { url, description, ...await testUrl({url, sessionId, readCookies, writeCookies, type}) }];
        })));
        console.log(results);
-       await postDataAndCarryOn(results, (readCookies || writeCookies) ? "tracking_cookies" : "trackers");
+       await postDataAndCarryOn(results, readCookies || writeCookies ? "tracking_cookies" : "trackers");
      };
      runTest();
     </script>
