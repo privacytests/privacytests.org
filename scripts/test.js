@@ -522,12 +522,6 @@ const runTests = async (
   } finally {
     if (!debug && browserSession) {
       closeWebSocket(browserSession.websocket);
-      try {
-        console.log(`killing ${browserSession.browser.browser}`);
-        await browserSession.browser.kill();
-      } catch (e) {
-        log(e);
-      }
     }
   }
 };
