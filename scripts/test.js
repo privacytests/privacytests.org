@@ -35,23 +35,6 @@ const log = (...args) => {
   console.log(new Date().toISOString(), ...args);
 };
 
-const errorMessage = (error) => {
-  if (error instanceof Error) {
-    return error.stack ?? error.message;
-  }
-  return String(error);
-};
-
-const formatSettledResult = (result) => {
-  if (result?.status === 'rejected') {
-    return { status: 'rejected', reason: errorMessage(result.reason) };
-  }
-  if (result?.status === 'fulfilled') {
-    return { status: 'fulfilled' };
-  }
-  return result;
-};
-
 // Wraps a promise. If the promise resolves before timeMs, then
 // resolves to the promise's result. Otherwise rejects with a timeout error.
 const deadlinePromise = async (name, promise, timeMs) => {
@@ -475,107 +458,78 @@ const runTelemetryTests = async (browserSession) => {
 // Returns results in a JSON object.
 const runTests = async (
   browserSpec, { debug, android, ios, categories, hurry } = { debug: false, hurry: false }) => {
-  const allTests = [];
   console.log(categories);
   const timeStarted = new Date().toISOString();
   cookieProxy.simulateTrackingCookies(mitmProxyPort, debug);
   if (categories.includes('dns') && !android && !ios) {
-    // Make sure we can connect to the monitor-dns.js socket listener
     try {
       await observeDomains();
     } catch (e) {
       console.log('Unable to connect to port 9999. Is ./monitor-dns.js running?');
-      process.exit(1);
+      await cleanupAndShutdown(1);
     }
   }
-  const failures = [];
   let browserSession;
   try {
     browserSession = await prepareBrowserSession(browserSpec, hurry);
     console.log({ browserSession });
 
-    let testResultsStage1 = { status: 'fulfilled', value: null };
-    try {
-      const value = await deadlinePromise(
-        `${browserSpec.browser} tests`,
-        runTestsStage1({ browserSession, categories }),
-        1000000);
-      testResultsStage1 = { status: 'fulfilled', value };
-    } catch (reason) {
-      testResultsStage1 = { status: 'rejected', reason };
-    }
+    const testResultsStage1 = await deadlinePromise(
+      `${browserSpec.browser} stage 1`,
+      runTestsStage1({ browserSession, categories }),
+      1000000);
 
-    let testResultsStage2 = { status: 'fulfilled', value: null };
+    let testResultsStage2 = null;
     let testResultsStage3 = null;
     if (!android && !ios) {
+      await DesktopBrowser.setGlobalProxyUsageEnabled(true, mitmProxyPort);
       try {
-        await DesktopBrowser.setGlobalProxyUsageEnabled(true, mitmProxyPort);
-        try {
-          const value = await deadlinePromise(
-            `${browserSpec.browser} tests`,
-            runTestsStage2({ browserSession, categories }),
-            100000);
-          testResultsStage2 = { status: 'fulfilled', value };
-        } catch (reason) {
-          testResultsStage2 = { status: 'rejected', reason };
-        }
+        testResultsStage2 = await deadlinePromise(
+          `${browserSpec.browser} stage 2`,
+          runTestsStage2({ browserSession, categories }),
+          100000);
       } finally {
         await DesktopBrowser.setGlobalProxyUsageEnabled(false);
       }
       if (categories.includes('dns')) {
         testResultsStage3 = await runDnsTests(browserSession);
       }
-      // await runTelemetryTests(browserSession);
     }
 
-    if (testResultsStage1.status === 'rejected' ||
-        (!android && !ios && testResultsStage2.status === 'rejected')) {
-      failures.push([browserSpec, testResultsStage1, testResultsStage2]);
+    const testResults = Object.assign({}, testResultsStage1, testResultsStage2, testResultsStage3);
+    const { browser, incognito, tor, nightly } = browserSpec;
+    const allTests = [{
+      browser,
+      incognito,
+      tor,
+      nightly,
+      testResults,
+      timeStarted,
+      reportedVersion: await browserSession.browser.version(),
+      os: os.type(),
+      os_version: os.version()
+    }];
+    const timeStopped = new Date().toISOString();
+    let platform;
+    if (android) {
+      platform = 'Android';
+    } else if (ios) {
+      platform = 'iOS';
     } else {
-      const testResults = Object.assign(
-        {}, testResultsStage1.value, testResultsStage2.value, testResultsStage3);
-      const { browser, incognito, tor, nightly } = browserSpec;
-      allTests.push({
-        browser,
-        incognito,
-        tor,
-        nightly,
-        testResults,
-        timeStarted,
-        reportedVersion: await browserSession.browser.version(),
-        os: os.type(),
-        os_version: os.version()
-      });
+      platform = 'Desktop';
     }
-  } catch (e) {
-    log(e);
-    await DesktopBrowser.setGlobalProxyUsageEnabled(false);
-  }
-  if (!debug && browserSession) {
-    closeWebSocket(browserSession.websocket);
-    try {
-      console.log(`killing ${browserSession.browser.browser}`);
-      await browserSession.browser.kill();
-    } catch (e) {
-      log(e);
+    return { all_tests: allTests, git: gitHash(), timeStarted, timeStopped, platform };
+  } finally {
+    if (!debug && browserSession) {
+      closeWebSocket(browserSession.websocket);
+      try {
+        console.log(`killing ${browserSession.browser.browser}`);
+        await browserSession.browser.kill();
+      } catch (e) {
+        log(e);
+      }
     }
   }
-  log('FAILURES:', failures.map(([browser, stage1, stage2]) => ({
-    browser: browser.browser,
-    stage1: formatSettledResult(stage1),
-    stage2: formatSettledResult(stage2),
-  })));
-  cookieProxy.stopMitmProxy();
-  const timeStopped = new Date().toISOString();
-  let platform;
-  if (android) {
-    platform = 'Android';
-  } else if (ios) {
-    platform = 'iOS';
-  } else {
-    platform = 'Desktop';
-  }
-  return { all_tests: allTests, git: gitHash(), timeStarted, timeStopped, platform };
 };
 
 // ## Writing results
@@ -665,22 +619,22 @@ const allDesktopBrowserSpecs = (config) =>
 
 let cleanupRan = false;
 let originalDnsIps;
-const cleanup = async () => {
-  if (cleanupRan) {
-    return;
-  }
-  log('cleaning up');
-  await DesktopBrowser.setGlobalProxyUsageEnabled(false);
-  const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
-  systemNetworkSettings.setDNS(preferredNetworkService, originalDnsIps);
-  cleanupRan = true;
-};
-
-const shutdown = async (exitCode) => {
-  try {
-    await cleanup();
-  } catch (e) {
-    log(e);
+const cleanupAndShutdown = async (exitCode) => {
+  if (!cleanupRan) {
+    try {
+      log('cleaning up');
+      try {
+        cookieProxy.stopMitmProxy();
+      } catch (e) {
+        log(e);
+      }
+      await DesktopBrowser.setGlobalProxyUsageEnabled(false);
+      const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
+      systemNetworkSettings.setDNS(preferredNetworkService, originalDnsIps);
+      cleanupRan = true;
+    } catch (e) {
+      log(e);
+    }
   }
   process.exit(exitCode);
 };
@@ -726,12 +680,12 @@ const main = async () => {
   ['SIGINT', 'SIGUSR1', 'SIGUSR2', 'SIGTERM'].forEach((eventType) => {
     process.on(eventType, () => {
       log(eventType);
-      shutdown(1);
+      cleanupAndShutdown(1);
     });
   });
   process.on('uncaughtException', (err) => {
     log('uncaughtException', err);
-    shutdown(1);
+    cleanupAndShutdown(1);
   });
   try {
     installTestFontIfNeeded();
@@ -769,13 +723,10 @@ const main = async () => {
       path: config.out
     });
     await render.render({ dataFiles: [dataFile], aggregate: config.aggregate });
-    if (!config.debug) {
-      process.exit();
-    }
+    await cleanupAndShutdown(0);
   } catch (e) {
     log(e);
-    await cleanup();
-    process.exit(1);
+    await cleanupAndShutdown(1);
   }
 };
 
