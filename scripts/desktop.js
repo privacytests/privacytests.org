@@ -160,6 +160,7 @@ class DesktopBrowser {
 
   // Launch the browser.
   async launch (clean = true) {
+    console.log(`launch: ${this.browser} (clean=${clean})`);
     console.log(this._defaults);
     if (clean && this._profilePath) {
       // Delete old profiles if they exist.
@@ -212,12 +213,14 @@ class DesktopBrowser {
     if (!this._process) {
       throw new Error('browser not launched');
     }
+    console.log(`openUrl: ${this.browser}`, url);
     const openUrlCommand = this._openUrlCommand ?? this._command;
     exec(`${openUrlCommand} "${url}"`);
   }
 
   // Close the browser.
   async kill () {
+    console.log(`kill: ${this.browser} (${this._appName})`);
     try {
       await execAsync(`osascript -e 'quit app "${this._appName}"'`);
     } catch (e) {
@@ -230,6 +233,7 @@ class DesktopBrowser {
 
   // Restart the browser with same profile.
   async restart (clean = false) {
+    console.log(`restart: ${this.browser} (clean=${clean})`);
     await this.kill();
     await this.launch(clean);
   }
