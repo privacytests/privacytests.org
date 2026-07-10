@@ -319,6 +319,11 @@ class DesktopBrowser {
     }
   }
 
+  static async captureScreenshot (outputPath) {
+    await execAsync(`screencapture -x "${outputPath}"`);
+    console.log(`screenshot: wrote ${outputPath}`);
+  }
+
   static getScreenResolution () {
     const response = execSync('system_profiler SPDisplaysDataType | grep "UI Looks like:"').toString();
     const [, width, height] = response.match(/(\d+)\sx\s(\d+)/)
