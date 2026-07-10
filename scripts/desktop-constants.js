@@ -52,6 +52,7 @@ const macOSdefaultBrowserSettings = {
     binaryName: 'librewolf',
     privateFlag: 'private-window',
     basedOn: 'firefox',
+    useOpen: true,
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
     brewCask: 'librewolf',
     updateCommand: 'brew upgrade --cask librewolf',
