@@ -662,6 +662,8 @@ const killAll = () => {
   DesktopBrowser.killAll(Object.keys(macOSdefaultBrowserSettings));
 };
 
+const failureScreenshotPath = '../failure.png';
+
 // ## Main program
 
 // Reads in command-line arguments, runs the required
@@ -720,6 +722,11 @@ const main = async () => {
     await cleanupAndShutdown(0);
   } catch (e) {
     log(e);
+    try {
+      await DesktopBrowser.captureScreenshot(failureScreenshotPath);
+    } catch (screenshotError) {
+      log('failure screenshot failed', screenshotError);
+    }
     await cleanupAndShutdown(1);
   }
 };
