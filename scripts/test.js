@@ -109,6 +109,7 @@ const eventPromise = async (eventSource, eventType, timeout) =>
 
 const nextMessage = async (websocket, timeout) => {
   const event = await eventPromise(websocket, 'message', timeout);
+  log('websocket message received', event.data);
   return event.data;
 };
 
@@ -121,6 +122,12 @@ const connect = async (address, protocols, options) => {
 // Set up websocket.
 const createWebsocket = async () => {
   const websocket = await connect('wss://results.privacytests.org/ws');
+  websocket.on('close', (code, reason) => {
+    log('websocket closed', { sessionId: websocket._sessionId, code, reason: reason?.toString() });
+  });
+  websocket.on('error', (err) => {
+    log('websocket error', { sessionId: websocket._sessionId, error: err.message });
+  });
   const firstMessage = await nextMessage(websocket);
   log('message received', (new Date()).toISOString());
   log(firstMessage);
@@ -191,9 +198,14 @@ const openSessionUrl = (browserSession, url) => browserSession.browser.openUrl(
 
 // Open a page at url, and return the results once they are available.
 const runPageTest = async (browserSession, url, timeout) => {
+  const sessionId = browserSession.websocket._sessionId;
+  log('runPageTest: waiting for result', { sessionId, url, timeout });
   const nextItemPromise = nextBrowserValue(browserSession, timeout);
   await openSessionUrl(browserSession, url);
-  return await nextItemPromise;
+  log('runPageTest: opened url', { sessionId, url });
+  const result = await nextItemPromise;
+  log('runPageTest: received result', { sessionId, url });
+  return result;
 };
 
 // Run the main browser tests.
@@ -354,6 +366,7 @@ const runTrackingCookieTest = async (browserSession) => {
 //   "navigation" : { ... },
 //   "supercookies" : { ... } }
 const runTestsStage1 = async ({ browserSession, categories }) => {
+  log('stage 1 starting', { sessionId: browserSession.websocket._sessionId, categories });
   await DesktopBrowser.setGlobalProxyUsageEnabled(false);
   let results = {};
 
@@ -411,6 +424,7 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
 
   // Kill the browser
   await browserSession.browser.kill();
+  log('stage 1 finished', { sessionId: browserSession.websocket._sessionId });
   return results;
 };
 
@@ -438,10 +452,12 @@ const prepareBrowserSession = async (config, hurry) => {
   const browser = createBrowserObject(config);
   const websocket = await createWebsocket();
   if (!hurry && browser instanceof DesktopBrowser) {
+    log('prepareBrowserSession: warm-up starting', { browser: config.browser, hurry });
     await browser.launch();
     // Give browser the chance to load any feature flags.
     await sleepMs(60000);
     await browser.kill();
+    log('prepareBrowserSession: warm-up finished', { browser: config.browser, sessionId: websocket._sessionId });
   }
   return { browser, websocket };
 };
