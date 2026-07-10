@@ -56,13 +56,13 @@ const macOSdefaultBrowserSettings = {
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
     brewCask: 'librewolf',
     updateCommand: 'brew upgrade --cask librewolf',
-    postLaunchDelay: 2000
+    postLaunchDelay: 5000
   },
   mullvad: {
     name: 'Mullvad Browser',
     binaryName: 'mullvadbrowser',
     basedOn: 'firefox',
-    //useOpen: true,
+    useOpen: true,
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
     githubRelease: {
       repo: 'mullvad/mullvad-browser',
