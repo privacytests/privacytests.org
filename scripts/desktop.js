@@ -208,7 +208,7 @@ class DesktopBrowser {
     }
     const launchCommand = this._launchCommand ?? this._command;
     this._process = exec(launchCommand, this._defaults.useOpen ? {} : { env: this._defaults.env });
-    await sleepMs(this.tor ? this._defaults.torPostLaunchDelay : (this._defaults.postLaunchDelay ?? 500));
+    await sleepMs(this.tor ? this._defaults.torPostLaunchDelay : (this._defaults.postLaunchDelay ?? 2000));
     await this._logRunningProcesses('after launch');
   }
 

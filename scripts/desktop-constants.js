@@ -44,7 +44,7 @@ const macOSdefaultBrowserSettings = {
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1', MOZ_CRASHREPORTER_DISABLE: '1' },
     dmgUrl: 'https://download.mozilla.org/?product=firefox-latest-ssl&os=osx&lang=en-US',
     update: ['Firefox', 'About Firefox'],
-    postLaunchDelay: 1000,
+    postLaunchDelay: 5000,
     updateNightly: ['Firefox Nightly', 'About Nightly']
   },
   librewolf: {
@@ -68,6 +68,7 @@ const macOSdefaultBrowserSettings = {
       repo: 'mullvad/mullvad-browser',
       assetPattern: '^mullvad-browser-macos-.*\\.dmg$'
     },
+    postLaunchDelay: 5000,
     update: ['Mullvad Browser', 'About Mullvad Browser']
   },
   opera: {
@@ -125,21 +126,6 @@ const macOSdefaultBrowserSettings = {
     // Assumes Vivaldi is on automatic updates:
     update: ['Vivaldi', 'About Vivaldi'],
     updateNightly: ['Vivaldi Snapshot', 'About Vivaldi']
-  },
-  waterfox: {
-    name: 'waterfox',
-    privateFlag: 'private-window',
-    basedOn: 'firefox',
-    env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
-    update: ['Waterfox', 'About Waterfox']
-  },
-  zen: {
-    name: 'Zen',
-    privateFlag: 'private-window',
-    basedOn: 'firefox',
-    dmgUrl: 'https://github.com/zen-browser/desktop/releases/latest/download/zen.macos-universal.dmg',
-    update: ['Zen', 'About Zen'],
-    postLaunchDelay: 2000
   }
 };
 
