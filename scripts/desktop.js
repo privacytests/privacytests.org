@@ -122,11 +122,11 @@ const fixSafari = (incognito, nightly) => {
 
 // A Browser object represents a browser we run tests on.
 class DesktopBrowser {
-  constructor ({ browser, path, incognito, tor, nightly, appDir }) {
+  constructor ({ browser, executablePath, incognito, tor, nightly, appDir }) {
     Object.assign(this, { browser, incognito, tor, nightly });
     this._defaults = macOSdefaultBrowserSettings[browser];
     this._version = undefined;
-    this._path = path ?? browserPath({ browser, nightly, appDir });
+    this._path = executablePath ?? browserPath({ browser, nightly, appDir });
     this._appPath = this._path.split('.app')[0] + '.app';
     this._appName = nightly ? this._defaults.nightlyName : this._defaults.name;
     const profileCommand = profileFlags[this._defaults.basedOn];
