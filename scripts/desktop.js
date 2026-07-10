@@ -156,6 +156,22 @@ class DesktopBrowser {
       const flags = `${incognito ? '--' + this._defaults.privateFlag : ''} ${tor ? '--' + this._defaults.torFlag : ''} ${this._profilePath ? `${profileCommand}"${this._profilePath}"` : ''}`;
       this._command = `"${this._path}" ${flags}`.trim();
     }
+    this._processName = this._defaults.binaryName ?? path.basename(this._path);
+  }
+
+  async _logRunningProcesses (when) {
+    const name = this._processName;
+    try {
+      const { stdout } = await execAsync(`pgrep -l ${name}`);
+      const processes = stdout.trim().split('\n').filter(line => line.length > 0);
+      console.log(`pgrep ${name} (${when}):`, processes.length ? processes : '(none)');
+    } catch (e) {
+      if (e.code === 1) {
+        console.log(`pgrep ${name} (${when}): (none)`);
+      } else {
+        console.log(`pgrep ${name} (${when}): error`, e.message);
+      }
+    }
   }
 
   // Launch the browser.
@@ -193,6 +209,7 @@ class DesktopBrowser {
     const launchCommand = this._launchCommand ?? this._command;
     this._process = exec(launchCommand, this._defaults.useOpen ? {} : { env: this._defaults.env });
     await sleepMs(this.tor ? this._defaults.torPostLaunchDelay : (this._defaults.postLaunchDelay ?? 500));
+    await this._logRunningProcesses('after launch');
   }
 
   // Get the browser version.
@@ -229,6 +246,7 @@ class DesktopBrowser {
       }
     }
     await sleepMs(5000);
+    await this._logRunningProcesses('after kill');
   }
 
   // Restart the browser with same profile.
