@@ -4,7 +4,8 @@ on:
   push:
     branches: [github_actions]
   workflow_dispatch:
-    cron: '0 3 * * *'
+  schedule:
+    - cron: '0 8 * * *'
 
 env:
   CI: true
