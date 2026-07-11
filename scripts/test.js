@@ -66,8 +66,21 @@ const fetchJSON = async (...fetchArgs) => {
 
 // Fetch server reflexive IP address
 const fetchIpAddress = async () => {
-  const wtfismyip = await fetchJSON('https://ipv4.wtfismyip.com/json');
-  return wtfismyip.YourFuckingIPAddress;
+  const backoffMs = [1000, 2000];
+  for (let attempt = 0; attempt <= backoffMs.length; attempt++) {
+    try {
+      const wtfismyip = await fetchJSON('https://ipv4.wtfismyip.com/json');
+      return wtfismyip.YourFuckingIPAddress;
+    } catch (e) {
+      if (attempt < backoffMs.length) {
+        await sleepMs(backoffMs[attempt]);
+      } else {
+        log('fetchIpAddress: wtfismyip failed, falling back to ipify', e);
+      }
+    }
+  }
+  const ipify = await fetchJSON('https://api.ipify.org?format=json');
+  return ipify.ip;
 };
 
 // ## Prepare system
