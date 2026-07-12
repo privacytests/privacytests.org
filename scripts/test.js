@@ -513,10 +513,11 @@ const runTests = async (
     if (!android && !ios) {
       await DesktopBrowser.setGlobalProxyUsageEnabled(true, mitmProxyPort);
       try {
+        const stage2DeadlineMs = browserSpec.browser === 'tor' ? 200000 : 100000;
         testResultsStage2 = await deadlinePromise(
           `${browserSpec.browser} stage 2`,
           runTestsStage2({ browserSession, categories }),
-          100000);
+          stage2DeadlineMs);
       } finally {
         await DesktopBrowser.setGlobalProxyUsageEnabled(false);
       }
