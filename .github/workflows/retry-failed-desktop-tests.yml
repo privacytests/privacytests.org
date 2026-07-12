@@ -15,6 +15,6 @@ jobs:
       actions: write
     steps:
       - name: Re-run failed jobs on fresh runners
-        run: gh run rerun "${{ github.event.workflow_run.id }}" --failed
+        run: gh run rerun "${{ github.event.workflow_run.id }}" --failed --repo "${{ github.repository }}"
         env:
           GH_TOKEN: ${{ github.token }}
