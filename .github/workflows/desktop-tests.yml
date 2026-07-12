@@ -20,10 +20,13 @@ jobs:
       matrix:
         browser: [brave, chrome, duckduckgo, edge, firefox, librewolf, mullvad, opera, safari, tor, ungoogled, vivaldi]
         repetitions: [1, 2, 3, 4, 5]
+        incognito: [off, on]
     runs-on: macos-latest
     defaults:
       run:
         working-directory: scripts
+    env:
+      RESULT_BASENAME: ${{ matrix.incognito == 'on' && format('{0}-incognito', matrix.browser) || matrix.browser }}
 
     steps:
       - uses: actions/checkout@v5
@@ -51,16 +54,16 @@ jobs:
         run: sudo node monitor-dns.js &
 
       - name: Run tests
-        run: node test --browser=${{ matrix.browser }} --out=../${{ matrix.browser }}.json
+        run: node test --browser=${{ matrix.browser }}${{ matrix.incognito == 'on' && ' --incognito' || '' }} --out=../${{ env.RESULT_BASENAME }}.json
         timeout-minutes: 90
 
       - name: Upload results
         uses: actions/upload-artifact@v6
         if: always()
         with:
-          name: ${{ matrix.browser }}-results
+          name: ${{ env.RESULT_BASENAME }}-results
           path: |
-            ${{ matrix.browser }}.json
-            ${{ matrix.browser }}.html
+            ${{ env.RESULT_BASENAME }}.json
+            ${{ env.RESULT_BASENAME }}.html
             failure.png
           if-no-files-found: warn
