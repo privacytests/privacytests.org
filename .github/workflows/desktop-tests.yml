@@ -10,6 +10,8 @@ on:
 env:
   CI: true
   GITHUB_TOKEN: ${{ github.token }}
+  # capture-website pulls in puppeteer; CI doesn't generate previews, so skip its Chrome download.
+  PUPPETEER_SKIP_DOWNLOAD: true
 
 jobs:
   desktop-tests:
@@ -60,6 +62,5 @@ jobs:
           path: |
             ${{ matrix.browser }}.json
             ${{ matrix.browser }}.html
-            ${{ matrix.browser }}-preview.png
             failure.png
           if-no-files-found: warn
