@@ -74,6 +74,14 @@ const readYAMLFile = (file) => {
 
 const dataUriFromFile = filePath => datauri(path.join(__dirname, filePath)).content;
 
+// Parse keys like "brave-nightly" into { browser: "brave", nightly: true }.
+const parseBrowserKey = (browserKey) => {
+  if (typeof browserKey === 'string' && browserKey.endsWith('-nightly')) {
+    return { browser: browserKey.slice(0, -'-nightly'.length), nightly: true };
+  }
+  return { browser: browserKey, nightly: false };
+};
+
 module.exports = {
   sleepMs,
   execSync,
@@ -82,5 +90,6 @@ module.exports = {
   killProcessAndDescendants,
   killProcessesWithPattern,
   readYAMLFile,
-  dataUriFromFile
+  dataUriFromFile,
+  parseBrowserKey
 };

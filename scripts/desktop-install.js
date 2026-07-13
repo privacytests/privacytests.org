@@ -3,7 +3,7 @@ const fsPromises = require('fs/promises');
 const os = require('os');
 const path = require('path');
 const minimist = require('minimist');
-const { execSync } = require('./utils');
+const { execSync, parseBrowserKey } = require('./utils');
 const { macOSdefaultBrowserSettings, defaultAppDirectory } = require('./desktop-constants');
 
 const downloadFile = (url, destPath) => {
@@ -11,8 +11,9 @@ const downloadFile = (url, destPath) => {
 };
 
 const compareVersions = (a, b) => {
-  const partsA = a.split('.').map(Number);
-  const partsB = b.split('.').map(Number);
+  // Treat alpha markers as version separators so 16.0a8 -> 16.0.8.
+  const partsA = a.replace(/a/gi, '.').split('.').map(Number);
+  const partsB = b.replace(/a/gi, '.').split('.').map(Number);
   for (let i = 0; i < Math.max(partsA.length, partsB.length); i++) {
     const diff = (partsA[i] || 0) - (partsB[i] || 0);
     if (diff !== 0) {
@@ -44,26 +45,69 @@ const resolveGitHubReleaseAssetUrl = (repo, assetPattern) => {
   return asset.browser_download_url;
 };
 
-const resolveDirectoryReleaseDmgUrl = ({ listUrl, dmgUrlTemplate }) => {
+const resolveDirectoryReleaseDmgUrl = ({ listUrl, dmgUrlTemplate, versionPattern }) => {
   const listing = execSync(`curl -sL "${listUrl}"`, { encoding: 'utf8' });
-  const versionPattern = /href=["']?v?(\d+(?:\.\d+)+)\/?["' >]/gi;
-  const versions = [...listing.matchAll(versionPattern)].map((match) => match[1]);
+  const pattern = new RegExp(versionPattern ?? 'href=["\']?v?(\\d+(?:\\.\\d+)+)/?["\' >]', 'gi');
+  const versions = [...listing.matchAll(pattern)].map((match) => match[1]);
   if (versions.length === 0) {
     throw new Error(`No versions found at ${listUrl}`);
   }
-  const version = versions.sort(compareVersions).at(-1);
+  const version = [...new Set(versions)].sort(compareVersions).at(-1);
   return dmgUrlTemplate.replaceAll('{version}', version);
 };
 
-const getDmgUrl = (settings) => {
-  if (settings.directoryRelease) {
-    return resolveDirectoryReleaseDmgUrl(settings.directoryRelease);
+const resolveSparkleReleaseDmgUrl = ({ appcastUrl, dmgUrlTemplate }) => {
+  const appcast = execSync(`curl -sL "${appcastUrl}"`, { encoding: 'utf8' });
+  const versionMatch = appcast.match(/<sparkle:version>([^<]+)<\/sparkle:version>/) ||
+    appcast.match(/<title>(\d+(?:\.\d+)+)<\/title>/);
+  if (!versionMatch) {
+    throw new Error(`No Sparkle version found in ${appcastUrl}`);
   }
-  if (settings.githubRelease) {
-    const { repo, assetPattern } = settings.githubRelease;
+  return dmgUrlTemplate.replaceAll('{version}', versionMatch[1]);
+};
+
+const appDisplayName = (settings, nightly) =>
+  nightly ? (settings.nightlyName ?? settings.name) : settings.name;
+
+const resolveInstallSettings = (settings, nightly) => {
+  if (!nightly) {
+    return {
+      appName: settings.name,
+      brewCask: settings.brewCask,
+      brewCaskInstalledName: settings.brewCaskInstalledName,
+      preinstalled: settings.preinstalled,
+      pkgUrl: settings.pkgUrl,
+      dmgUrl: settings.dmgUrl,
+      githubRelease: settings.githubRelease,
+      directoryRelease: settings.directoryRelease,
+      sparkleRelease: settings.sparkleRelease,
+    };
+  }
+  return {
+    appName: settings.nightlyName ?? settings.name,
+    brewCask: settings.nightlyBrewCask ?? settings.brewCask,
+    brewCaskInstalledName: settings.nightlyBrewCaskInstalledName ?? settings.brewCaskInstalledName,
+    preinstalled: settings.nightlyBrewCask ? false : settings.preinstalled,
+    pkgUrl: settings.nightlyPkgUrl,
+    dmgUrl: settings.nightlyDmgUrl,
+    githubRelease: settings.nightlyGithubRelease,
+    directoryRelease: settings.nightlyDirectoryRelease,
+    sparkleRelease: settings.nightlySparkleRelease,
+  };
+};
+
+const getDmgUrl = (installSettings) => {
+  if (installSettings.directoryRelease) {
+    return resolveDirectoryReleaseDmgUrl(installSettings.directoryRelease);
+  }
+  if (installSettings.sparkleRelease) {
+    return resolveSparkleReleaseDmgUrl(installSettings.sparkleRelease);
+  }
+  if (installSettings.githubRelease) {
+    const { repo, assetPattern } = installSettings.githubRelease;
     return resolveGitHubReleaseAssetUrl(repo, assetPattern);
   }
-  return settings.dmgUrl;
+  return installSettings.dmgUrl;
 };
 
 const verifyInstaller = (installerPath, expectedKind) => {
@@ -77,15 +121,23 @@ const verifyInstaller = (installerPath, expectedKind) => {
   }
 };
 
-const findAppBundle = (mountPoint, settings) => {
-  const appBundle = path.join(mountPoint, `${settings.name}.app`);
-  if (!fs.existsSync(appBundle)) {
+const findAppBundle = (mountPoint, preferredAppName) => {
+  const preferred = path.join(mountPoint, `${preferredAppName}.app`);
+  if (fs.existsSync(preferred)) {
+    return preferred;
+  }
+  const apps = fs.readdirSync(mountPoint).filter((entry) => entry.endsWith('.app'));
+  if (apps.length === 1) {
+    return path.join(mountPoint, apps[0]);
+  }
+  if (apps.length === 0) {
     throw new Error(`Could not find app bundle in ${mountPoint}`);
   }
-  return appBundle;
+  throw new Error(
+    `Could not find "${preferredAppName}.app" in ${mountPoint} (found: ${apps.join(', ')})`);
 };
 
-const installFromDmg = async (browserKey, settings) => {
+const installFromDmg = async (browserKey, installSettings) => {
   const dmgPath = path.join(os.tmpdir(), `${browserKey}.dmg`);
   const mountPoint = path.join(os.tmpdir(), `${browserKey}_mount`);
   let mounted = false;
@@ -93,7 +145,10 @@ const installFromDmg = async (browserKey, settings) => {
   await fsPromises.mkdir(mountPoint, { recursive: true });
 
   try {
-    const dmgUrl = getDmgUrl(settings);
+    const dmgUrl = getDmgUrl(installSettings);
+    if (!dmgUrl) {
+      throw new Error(`No DMG URL configured for "${browserKey}"`);
+    }
     console.log(`Downloading ${browserKey} from ${dmgUrl}`);
     downloadFile(dmgUrl, dmgPath);
     verifyInstaller(dmgPath, 'DMG');
@@ -101,14 +156,14 @@ const installFromDmg = async (browserKey, settings) => {
     execSync(`hdiutil attach "${dmgPath}" -nobrowse -mountpoint "${mountPoint}"`);
     mounted = true;
 
-    const appBundle = findAppBundle(mountPoint, settings);
-    const destApp = path.join(defaultAppDirectory, path.basename(appBundle));
+    const appBundle = findAppBundle(mountPoint, installSettings.appName);
+    const destApp = path.join(defaultAppDirectory, `${installSettings.appName}.app`);
 
     if (fs.existsSync(destApp)) {
       execSync(`rm -rf "${destApp}"`);
     }
-    execSync(`cp -R "${appBundle}" "${defaultAppDirectory}/"`);
-    console.log(`Installed ${path.basename(appBundle)} to ${defaultAppDirectory}`);
+    execSync(`cp -R "${appBundle}" "${destApp}"`);
+    console.log(`Installed ${path.basename(destApp)} to ${defaultAppDirectory}`);
   } finally {
     if (mounted) {
       execSync(`hdiutil detach "${mountPoint}" -quiet`);
@@ -117,13 +172,13 @@ const installFromDmg = async (browserKey, settings) => {
   }
 };
 
-const installFromPkg = async (browserKey, settings) => {
+const installFromPkg = async (browserKey, installSettings) => {
   const pkgPath = path.join(os.tmpdir(), `${browserKey}.pkg`);
-  const destApp = path.join(defaultAppDirectory, `${settings.name}.app`);
+  const destApp = path.join(defaultAppDirectory, `${installSettings.appName}.app`);
 
   try {
-    console.log(`Downloading ${browserKey} from ${settings.pkgUrl}`);
-    downloadFile(settings.pkgUrl, pkgPath);
+    console.log(`Downloading ${browserKey} from ${installSettings.pkgUrl}`);
+    downloadFile(installSettings.pkgUrl, pkgPath);
     verifyInstaller(pkgPath, 'PKG');
 
     if (fs.existsSync(destApp)) {
@@ -139,20 +194,20 @@ const installFromPkg = async (browserKey, settings) => {
   }
 };
 
-const installFromBrewCask = (browserKey, settings) => {
-  const finalAppPath = path.join(defaultAppDirectory, `${settings.name}.app`);
-  const brewAppName = settings.brewCaskInstalledName ?? settings.name;
+const installFromBrewCask = (browserKey, installSettings) => {
+  const finalAppPath = path.join(defaultAppDirectory, `${installSettings.appName}.app`);
+  const brewAppName = installSettings.brewCaskInstalledName ?? installSettings.appName;
   const brewAppPath = path.join(defaultAppDirectory, `${brewAppName}.app`);
-  const needsRename = brewAppName !== settings.name;
+  const needsRename = brewAppName !== installSettings.appName;
 
-  console.log(`Installing ${browserKey} via brew cask ${settings.brewCask}`);
+  console.log(`Installing ${browserKey} via brew cask ${installSettings.brewCask}`);
   if (needsRename && fs.existsSync(finalAppPath)) {
     execSync(`rm -rf "${brewAppPath}"`);
     execSync(`mv "${finalAppPath}" "${brewAppPath}"`);
   }
-  execSync(`brew install --cask ${settings.brewCask}`);
+  execSync(`brew install --cask ${installSettings.brewCask}`);
   if (!fs.existsSync(brewAppPath)) {
-    throw new Error(`brew cask ${settings.brewCask} did not create ${brewAppPath}`);
+    throw new Error(`brew cask ${installSettings.brewCask} did not create ${brewAppPath}`);
   }
   if (needsRename) {
     if (fs.existsSync(finalAppPath)) {
@@ -164,64 +219,78 @@ const installFromBrewCask = (browserKey, settings) => {
   console.log(`Installed ${path.basename(finalAppPath)} to ${defaultAppDirectory}`);
 };
 
-const getAppPath = (settings) => path.join(defaultAppDirectory, `${settings.name}.app`);
+const getAppPath = (settings, nightly) =>
+  path.join(defaultAppDirectory, `${appDisplayName(settings, nightly)}.app`);
 
 const installBrowser = async (browserKey) => {
-  const settings = macOSdefaultBrowserSettings[browserKey];
+  const { browser, nightly } = parseBrowserKey(browserKey);
+  const settings = macOSdefaultBrowserSettings[browser];
   if (!settings) {
     throw new Error(`Unknown browser "${browserKey}"`);
   }
-  if (settings.preinstalled) {
-    const appPath = getAppPath(settings);
+  if (nightly && !settings.nightlyName && !settings.nightlyDmgUrl &&
+      !settings.nightlyPkgUrl && !settings.nightlyBrewCask &&
+      !settings.nightlyDirectoryRelease && !settings.nightlyGithubRelease &&
+      !settings.nightlySparkleRelease) {
+    throw new Error(`Browser "${browser}" has no nightly/early-release install configured`);
+  }
+
+  const installSettings = resolveInstallSettings(settings, nightly);
+
+  if (installSettings.preinstalled) {
+    const appPath = getAppPath(settings, nightly);
     if (!fs.existsSync(appPath)) {
       throw new Error(`Browser "${browserKey}" is not installed at ${appPath}`);
     }
-    console.log(`${settings.name} is preinstalled at ${appPath}`);
+    console.log(`${installSettings.appName} is preinstalled at ${appPath}`);
     return;
   }
-  if (settings.brewCask) {
-    installFromBrewCask(browserKey, settings);
+  if (installSettings.brewCask) {
+    installFromBrewCask(browserKey, installSettings);
     return;
   }
-  if (settings.pkgUrl) {
-    await installFromPkg(browserKey, settings);
+  if (installSettings.pkgUrl) {
+    await installFromPkg(browserKey, installSettings);
     return;
   }
-  if (settings.dmgUrl || settings.githubRelease || settings.directoryRelease) {
-    await installFromDmg(browserKey, settings);
+  if (installSettings.dmgUrl || installSettings.githubRelease ||
+      installSettings.directoryRelease || installSettings.sparkleRelease) {
+    await installFromDmg(browserKey, installSettings);
     return;
   }
   throw new Error(`No install method configured for browser "${browserKey}"`);
 };
 
 const removeBrowser = (browserKey) => {
-  const settings = macOSdefaultBrowserSettings[browserKey];
+  const { browser, nightly } = parseBrowserKey(browserKey);
+  const settings = macOSdefaultBrowserSettings[browser];
   if (!settings) {
     throw new Error(`Unknown browser "${browserKey}"`);
   }
-  if (settings.preinstalled) {
+  const installSettings = resolveInstallSettings(settings, nightly);
+  if (installSettings.preinstalled) {
     throw new Error(`Cannot remove preinstalled browser "${browserKey}"`);
   }
-  if (settings.brewCask) {
-    const brewAppName = settings.brewCaskInstalledName ?? settings.name;
+  if (installSettings.brewCask) {
+    const brewAppName = installSettings.brewCaskInstalledName ?? installSettings.appName;
     const brewAppPath = path.join(defaultAppDirectory, `${brewAppName}.app`);
-    const appPath = getAppPath(settings);
-    if (brewAppName !== settings.name && fs.existsSync(appPath)) {
+    const appPath = getAppPath(settings, nightly);
+    if (brewAppName !== installSettings.appName && fs.existsSync(appPath)) {
       execSync(`rm -rf "${brewAppPath}"`);
       execSync(`mv "${appPath}" "${brewAppPath}"`);
     }
-    execSync(`brew uninstall --cask ${settings.brewCask}`);
+    execSync(`brew uninstall --cask ${installSettings.brewCask}`);
     if (fs.existsSync(appPath)) {
       execSync(`rm -rf "${appPath}"`);
     }
-    console.log(`Uninstalled brew cask ${settings.brewCask}`);
+    console.log(`Uninstalled brew cask ${installSettings.brewCask}`);
     return;
   }
-  const appPath = path.join(defaultAppDirectory, `${settings.name}.app`);
+  const appPath = getAppPath(settings, nightly);
   if (!fs.existsSync(appPath)) {
     throw new Error(`Browser "${browserKey}" is not installed at ${appPath}`);
   }
-  const rmCommand = settings.pkgUrl ? `sudo rm -rf "${appPath}"` : `rm -rf "${appPath}"`;
+  const rmCommand = installSettings.pkgUrl ? `sudo rm -rf "${appPath}"` : `rm -rf "${appPath}"`;
   execSync(rmCommand);
   console.log(`Removed ${path.basename(appPath)} from ${defaultAppDirectory}`);
 };
@@ -231,6 +300,7 @@ const main = async () => {
   const browserKeys = _;
   if (browserKeys.length === 0) {
     console.error('Usage: node desktop-install [--remove] <browser> [browser...]');
+    console.error('Examples: node desktop-install firefox  |  node desktop-install firefox-nightly');
     process.exit(1);
   }
   for (const browserKey of browserKeys) {

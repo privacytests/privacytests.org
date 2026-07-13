@@ -1,6 +1,7 @@
 // # test.js: Runs privacy tests on browsers
 //
 // Usage: `node test --browser=firefox --out=../firefox.json`
+//        `node test --browser=firefox-nightly --out=../firefox-nightly.json`
 
 // ## imports
 
@@ -18,7 +19,7 @@ const { AndroidBrowser } = require('./android.js');
 const { IOSBrowser } = require('./iOS.js');
 const WebSocket = require('ws');
 const cookieProxy = require('./cookie-proxy');
-const { sleepMs } = require('./utils');
+const { sleepMs, parseBrowserKey } = require('./utils');
 const path = require('node:path');
 const { observeDomains, runDnsTests } = require('./dns-test.js');
 const systemNetworkSettings = require('./system-network-settings');
@@ -588,6 +589,12 @@ const readConfig = (commandLineData) => {
   const config = Object.assign({}, defaultConfig, commandLineData);
   if (config.browser) {
     config.browser = String(config.browser);
+    // Support --browser=firefox-nightly as an alias for --browser=firefox --nightly
+    const parsed = parseBrowserKey(config.browser);
+    config.browser = parsed.browser;
+    if (parsed.nightly) {
+      config.nightly = true;
+    }
   }
   if (!config.browser) {
     throw new Error('A browser is required (--browser=firefox)');
