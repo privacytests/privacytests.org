@@ -18,7 +18,28 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser: [brave, chrome, duckduckgo, edge, firefox, librewolf, mullvad, opera, safari, tor, ungoogled, vivaldi]
+        browser:
+          - brave
+          - chrome
+          - duckduckgo
+          - edge
+          - firefox
+          - librewolf
+          - mullvad
+          - opera
+          - safari
+          - tor
+          - ungoogled
+          - vivaldi
+          - brave-nightly
+          - chrome-nightly
+          - duckduckgo-nightly
+          - edge-nightly
+          - firefox-nightly
+          - opera-nightly
+          - safari-nightly
+          - tor-nightly
+          - vivaldi-nightly
         repetitions: [1, 2, 3, 4, 5]
         incognito: [off, on]
     runs-on: macos-latest
