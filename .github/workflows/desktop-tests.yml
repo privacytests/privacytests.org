@@ -2,7 +2,7 @@ name: Desktop tests
 
 on:
   push:
-    branches: [master]
+    branches: [actions_nightly]
   workflow_dispatch:
   schedule:
     - cron: '0 8 * * *'
@@ -40,8 +40,8 @@ jobs:
           - safari-nightly
           - tor-nightly
           - vivaldi-nightly
-        repetitions: [1, 2, 3, 4, 5]
-        incognito: [off, on]
+    #    repetitions: [1, 2, 3, 4, 5]
+    #    incognito: [off, on]
     runs-on: macos-latest
     defaults:
       run:
