@@ -56,6 +56,16 @@ const resolveDirectoryReleaseDmgUrl = ({ listUrl, dmgUrlTemplate, versionPattern
   return dmgUrlTemplate.replaceAll('{version}', version);
 };
 
+const resolveSparkleReleaseDmgUrl = ({ appcastUrl, dmgUrlTemplate }) => {
+  const appcast = execSync(`curl -sL "${appcastUrl}"`, { encoding: 'utf8' });
+  const versionMatch = appcast.match(/<sparkle:version>([^<]+)<\/sparkle:version>/) ||
+    appcast.match(/<title>(\d+(?:\.\d+)+)<\/title>/);
+  if (!versionMatch) {
+    throw new Error(`No Sparkle version found in ${appcastUrl}`);
+  }
+  return dmgUrlTemplate.replaceAll('{version}', versionMatch[1]);
+};
+
 const appDisplayName = (settings, nightly) =>
   nightly ? (settings.nightlyName ?? settings.name) : settings.name;
 
@@ -70,6 +80,7 @@ const resolveInstallSettings = (settings, nightly) => {
       dmgUrl: settings.dmgUrl,
       githubRelease: settings.githubRelease,
       directoryRelease: settings.directoryRelease,
+      sparkleRelease: settings.sparkleRelease,
     };
   }
   return {
@@ -81,12 +92,16 @@ const resolveInstallSettings = (settings, nightly) => {
     dmgUrl: settings.nightlyDmgUrl,
     githubRelease: settings.nightlyGithubRelease,
     directoryRelease: settings.nightlyDirectoryRelease,
+    sparkleRelease: settings.nightlySparkleRelease,
   };
 };
 
 const getDmgUrl = (installSettings) => {
   if (installSettings.directoryRelease) {
     return resolveDirectoryReleaseDmgUrl(installSettings.directoryRelease);
+  }
+  if (installSettings.sparkleRelease) {
+    return resolveSparkleReleaseDmgUrl(installSettings.sparkleRelease);
   }
   if (installSettings.githubRelease) {
     const { repo, assetPattern } = installSettings.githubRelease;
@@ -215,7 +230,8 @@ const installBrowser = async (browserKey) => {
   }
   if (nightly && !settings.nightlyName && !settings.nightlyDmgUrl &&
       !settings.nightlyPkgUrl && !settings.nightlyBrewCask &&
-      !settings.nightlyDirectoryRelease && !settings.nightlyGithubRelease) {
+      !settings.nightlyDirectoryRelease && !settings.nightlyGithubRelease &&
+      !settings.nightlySparkleRelease) {
     throw new Error(`Browser "${browser}" has no nightly/early-release install configured`);
   }
 
@@ -237,7 +253,8 @@ const installBrowser = async (browserKey) => {
     await installFromPkg(browserKey, installSettings);
     return;
   }
-  if (installSettings.dmgUrl || installSettings.githubRelease || installSettings.directoryRelease) {
+  if (installSettings.dmgUrl || installSettings.githubRelease ||
+      installSettings.directoryRelease || installSettings.sparkleRelease) {
     await installFromDmg(browserKey, installSettings);
     return;
   }

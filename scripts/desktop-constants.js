@@ -142,7 +142,11 @@ const macOSdefaultBrowserSettings = {
     //    postLaunchDelay: 10000,
     basedOn: 'chromium',
     dmgUrl: 'https://downloads.vivaldi.com/stable/Vivaldi.dmg',
-    nightlyBrewCask: 'vivaldi@snapshot',
+    // Brew's vivaldi@snapshot cask often lags and 404s; resolve via Sparkle appcast.
+    nightlySparkleRelease: {
+      appcastUrl: 'https://update.vivaldi.com/update/1.0/snapshot/mac/appcast.xml',
+      dmgUrlTemplate: 'https://downloads.vivaldi.com/snapshot/Vivaldi.{version}.universal.dmg',
+    },
     // Assumes Vivaldi is on automatic updates:
     update: ['Vivaldi', 'About Vivaldi'],
     updateNightly: ['Vivaldi Snapshot', 'About Vivaldi']
