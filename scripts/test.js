@@ -121,10 +121,32 @@ const eventPromise = async (eventSource, eventType, timeout) =>
     eventSource.addEventListener(eventType, listener, { once: true });
   });
 
+const websocketCloseError = (code, reason) => {
+  const reasonText = reason?.toString?.() ?? '';
+  return new Error(
+    `websocket closed (code ${code}${reasonText ? `: ${reasonText}` : ''})`);
+};
+
 const nextMessage = async (websocket, timeout) => {
-  const event = await eventPromise(websocket, 'message', timeout);
-  log('websocket message received', event.data);
-  return event.data;
+  if (websocket.readyState === WebSocket.CLOSING ||
+      websocket.readyState === WebSocket.CLOSED) {
+    throw websocketCloseError(websocket._closeCode, websocket._closeMessage);
+  }
+  let onClose;
+  const closePromise = new Promise((_, reject) => {
+    onClose = (code, reason) => reject(websocketCloseError(code, reason));
+    websocket.once('close', onClose);
+  });
+  try {
+    const event = await Promise.race([
+      eventPromise(websocket, 'message', timeout),
+      closePromise
+    ]);
+    log('websocket message received', event.data);
+    return event.data;
+  } finally {
+    websocket.off('close', onClose);
+  }
 };
 
 const connect = async (address, protocols, options) => {
