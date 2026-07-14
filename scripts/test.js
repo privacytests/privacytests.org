@@ -684,6 +684,26 @@ const killAll = () => {
 };
 
 const failureScreenshotPath = '../failure.png';
+const failureDiagnosticsDir = '../diagnostic-reports';
+
+const diagnosticReportMatchers = (browserSpec) => {
+  if (!browserSpec?.browser) {
+    return [];
+  }
+  const settings = macOSdefaultBrowserSettings[browserSpec.browser];
+  if (!settings) {
+    return [browserSpec.browser];
+  }
+  const primary = browserSpec.nightly
+    ? (settings.nightlyName ?? settings.name)
+    : settings.name;
+  const names = [primary, browserSpec.browser];
+  // STP crash reports use both display name and bundle-id style tokens.
+  if (browserSpec.browser === 'safari' && browserSpec.nightly) {
+    names.push('SafariTechnologyPreview', 'com.apple.SafariTechnologyPreview');
+  }
+  return [...new Set(names.filter(Boolean))];
+};
 
 // ## Main program
 
@@ -704,6 +724,7 @@ const main = async () => {
     log('uncaughtException', err);
     cleanupAndShutdown(1);
   });
+  let browserSpec;
   try {
     installTestFontIfNeeded();
     await DesktopBrowser.setGlobalProxyUsageEnabled(false);
@@ -731,7 +752,7 @@ const main = async () => {
       await showVersions(config);
       return;
     }
-    const browserSpec = configToBrowserSpec(config);
+    browserSpec = configToBrowserSpec(config);
     log('Browser to run:', browserSpec);
     const testResults = await runTests(browserSpec, config);
     const dataFile = writeDataSync({
@@ -747,6 +768,14 @@ const main = async () => {
       await DesktopBrowser.captureScreenshot(failureScreenshotPath);
     } catch (screenshotError) {
       log('failure screenshot failed', screenshotError);
+    }
+    try {
+      await DesktopBrowser.dumpDiagnosticReports({
+        outputDir: failureDiagnosticsDir,
+        matchSubstrings: diagnosticReportMatchers(browserSpec),
+      });
+    } catch (diagnosticsError) {
+      log('failure diagnostic-report dump failed', diagnosticsError);
     }
     await cleanupAndShutdown(1);
   }

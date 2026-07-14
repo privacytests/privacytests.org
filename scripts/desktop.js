@@ -5,6 +5,7 @@ const { exec, execSync, execAsync, sleepMs } = require('./utils');
 const systemNetworkSettings = require('./system-network-settings');
 const { killProcessesWithPattern } = require('./utils');
 const path = require('node:path');
+const os = require('node:os');
 const { macOSdefaultBrowserSettings, defaultAppDirectory } = require('./desktop-constants');
 
 const defaultBinaryPath = 'Contents/MacOS';
@@ -322,6 +323,82 @@ class DesktopBrowser {
   static async captureScreenshot (outputPath) {
     await execAsync(`screencapture -x "${outputPath}"`);
     console.log(`screenshot: wrote ${outputPath}`);
+  }
+
+  // Copy recent crash / spin reports matching the given name fragments into outputDir,
+  // and log a short preview so CI logs include the failure reason without downloading artifacts.
+  static async dumpDiagnosticReports ({
+    outputDir = '../diagnostic-reports',
+    matchSubstrings = [],
+    maxAgeMs = 2 * 60 * 60 * 1000,
+  } = {}) {
+    const home = os.homedir();
+    const sourceDirs = [
+      path.join(home, 'Library/Logs/DiagnosticReports'),
+      path.join(home, 'Library/Logs/DiagnosticReports/Retired'),
+    ];
+    const needles = matchSubstrings
+      .filter(Boolean)
+      .map((s) => String(s).toLowerCase());
+    if (needles.length === 0) {
+      console.log('dumpDiagnosticReports: no match substrings; skipping');
+      return [];
+    }
+
+    const cutoff = Date.now() - maxAgeMs;
+    const matches = [];
+    for (const dir of sourceDirs) {
+      let entries = [];
+      try {
+        entries = await fsPromises.readdir(dir);
+      } catch (e) {
+        if (e.code !== 'ENOENT') {
+          console.log(`dumpDiagnosticReports: cannot read ${dir}:`, e.message);
+        }
+        continue;
+      }
+      for (const entry of entries) {
+        const lower = entry.toLowerCase();
+        if (!needles.some((needle) => lower.includes(needle))) {
+          continue;
+        }
+        if (!/\.(ips|crash|spin|diag)$/i.test(entry)) {
+          continue;
+        }
+        const src = path.join(dir, entry);
+        let stat;
+        try {
+          stat = await fsPromises.stat(src);
+        } catch (e) {
+          continue;
+        }
+        if (!stat.isFile() || stat.mtimeMs < cutoff) {
+          continue;
+        }
+        matches.push({ src, entry, mtimeMs: stat.mtimeMs });
+      }
+    }
+
+    matches.sort((a, b) => b.mtimeMs - a.mtimeMs);
+    await fsPromises.mkdir(outputDir, { recursive: true });
+    const copied = [];
+    for (const { src, entry } of matches) {
+      const dest = path.join(outputDir, entry);
+      try {
+        await fsPromises.copyFile(src, dest);
+        copied.push(dest);
+        const preview = (await fsPromises.readFile(src, 'utf8')).slice(0, 4000);
+        console.log(`dumpDiagnosticReports: copied ${src} -> ${dest}`);
+        console.log(`dumpDiagnosticReports: preview of ${entry}:\n${preview}`);
+      } catch (e) {
+        console.log(`dumpDiagnosticReports: failed to copy ${src}:`, e.message);
+      }
+    }
+    if (copied.length === 0) {
+      console.log(
+        `dumpDiagnosticReports: no recent reports matching ${JSON.stringify(needles)} in ${sourceDirs.join(', ')}`);
+    }
+    return copied;
   }
 
   static getScreenResolution () {
