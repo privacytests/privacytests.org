@@ -42,12 +42,24 @@ jobs:
           - vivaldi-nightly
         repetitions: [1, 2, 3, 4, 5]
         incognito: [off, on]
+        # Brave Tor windows dont' fit in the matrix; add fixed iterations here instead.
+        include:
+          - { browser: brave, repetitions: 1, incognito: off, tor: on }
+          - { browser: brave, repetitions: 2, incognito: off, tor: on }
+          - { browser: brave, repetitions: 3, incognito: off, tor: on }
+          - { browser: brave, repetitions: 4, incognito: off, tor: on }
+          - { browser: brave, repetitions: 5, incognito: off, tor: on }
+          - { browser: brave-nightly, repetitions: 1, incognito: off, tor: on }
+          - { browser: brave-nightly, repetitions: 2, incognito: off, tor: on }
+          - { browser: brave-nightly, repetitions: 3, incognito: off, tor: on }
+          - { browser: brave-nightly, repetitions: 4, incognito: off, tor: on }
+          - { browser: brave-nightly, repetitions: 5, incognito: off, tor: on }
     runs-on: macos-latest
     defaults:
       run:
         working-directory: scripts
     env:
-      RESULT_BASENAME: ${{ matrix.incognito == 'on' && format('{0}-incognito', matrix.browser) || matrix.browser }}
+      RESULT_BASENAME: ${{ matrix.tor == 'on' && format('{0}-tor', matrix.browser) || (matrix.incognito == 'on' && format('{0}-incognito', matrix.browser) || matrix.browser) }}
 
     steps:
       - uses: actions/checkout@v5
@@ -75,7 +87,7 @@ jobs:
         run: sudo node monitor-dns.js &
 
       - name: Run tests
-        run: node test --browser=${{ matrix.browser }}${{ matrix.incognito == 'on' && ' --incognito' || '' }} --out=../${{ env.RESULT_BASENAME }}.json
+        run: node test --browser=${{ matrix.browser }}${{ matrix.incognito == 'on' && ' --incognito' || '' }}${{ matrix.tor == 'on' && ' --tor' || '' }} --out=../${{ env.RESULT_BASENAME }}.json
         timeout-minutes: 90
 
       - name: Upload results
