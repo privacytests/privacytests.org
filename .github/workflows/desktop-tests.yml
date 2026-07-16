@@ -42,7 +42,10 @@ jobs:
           - vivaldi-nightly
         repetitions: [1, 2, 3, 4, 5]
         incognito: [off, on]
-        # Brave Tor windows dont' fit in the matrix; add fixed iterations here instead.
+        # Default off so include rows with tor:on are added as new jobs
+        # instead of merging into (and replacing) the normal brave/off jobs.
+        tor: [off]
+        # Brave Tor windows don't fit in the matrix; add fixed iterations here instead.
         include:
           - { browser: brave, repetitions: 1, incognito: off, tor: on }
           - { browser: brave, repetitions: 2, incognito: off, tor: on }
