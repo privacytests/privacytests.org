@@ -1,7 +1,7 @@
 const fs = require('fs');
 const fsPromises = require('node:fs/promises');
 const { join: joinDir } = require('path');
-const { exec, execSync, execAsync, sleepMs } = require('./utils');
+const { exec, execSync, execAsync, sleepMs, browserProfilePath } = require('./utils');
 const systemNetworkSettings = require('./system-network-settings');
 const { killProcessesWithPattern } = require('./utils');
 const path = require('node:path');
@@ -130,7 +130,7 @@ class DesktopBrowser {
     this._appPath = this._path.split('.app')[0] + '.app';
     this._appName = nightly ? this._defaults.nightlyName : this._defaults.name;
     const profileCommand = profileFlags[this._defaults.basedOn];
-    this._profilePath = profileCommand ? joinDir(__dirname, `profiles/${browser}${nightly ? '_nightly' : ''}_profile`) : undefined;
+    this._profilePath = profileCommand ? browserProfilePath(browser, { nightly }) : undefined;
     if (this._defaults.useOpen) {
       const openApp = `open -a "${this._appPath}"`;
       this._openUrlCommand = openApp;
