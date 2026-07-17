@@ -2,6 +2,7 @@ const macOSdefaultBrowserSettings = {
   brave: {
     name: 'Brave Browser',
     nightlyName: 'Brave Browser Nightly',
+    usePkill: true,
     privateFlag: 'incognito',
     torFlag: 'tor',
     torPostLaunchDelay: 10000,

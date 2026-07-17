@@ -1,9 +1,8 @@
 const fs = require('fs');
 const fsPromises = require('node:fs/promises');
 const { join: joinDir } = require('path');
-const { exec, execSync, execAsync, sleepMs, browserProfilePath } = require('./utils');
+const { exec, execSync, execAsync, sleepMs, browserProfilePath, killProcessesWithPattern } = require('./utils');
 const systemNetworkSettings = require('./system-network-settings');
-const { killProcessesWithPattern } = require('./utils');
 const path = require('node:path');
 const { macOSdefaultBrowserSettings, defaultAppDirectory } = require('./desktop-constants');
 
@@ -238,11 +237,23 @@ class DesktopBrowser {
   // Close the browser.
   async kill () {
     console.log(`kill: ${this.browser} (${this._appName})`);
-    try {
-      await execAsync(`osascript -e 'quit app "${this._appName}"'`);
-    } catch (e) {
-      if (!String(e.stderr ?? e.message).includes('(-600)')) {
-        throw e;
+    if (this._defaults.usePkill) {
+      console.log(`kill: force-killing ${this._processName}`);
+      try {
+        await execAsync(`pkill -9 -f ${JSON.stringify(this._processName)}`);
+      } catch (e) {
+        // Ignore exit 1: browser may already be gone.
+        if (e.code !== 1) {
+          throw e;
+        }
+      }
+    } else {
+      try {
+        await execAsync(`osascript -e 'quit app "${this._appName}"'`);
+      } catch (e) {
+        if (!String(e.stderr ?? e.message).includes('(-600)')) {
+          throw e;
+        }
       }
     }
     await sleepMs(5000);
