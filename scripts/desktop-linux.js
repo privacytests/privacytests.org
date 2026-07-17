@@ -1,6 +1,5 @@
 const fs = require('node:fs');
-const { exec, execSync, killProcessAndDescendants } = require('./utils');
-const { join } = require('node:path');
+const { exec, execSync, killProcessAndDescendants, browserProfilePath } = require('./utils');
 const os = require('node:os');
 const path = require('node:path');
 const child_process = require('node:child_process');
@@ -87,7 +86,7 @@ class DesktopBrowser {
       windowsDefaultBrowserSettings[browser] :
       linuxDefaultBrowserSettings[browser];
     this._flags = standardFlags[this._defaults.basedOn];
-    this._profilePath = join(process.cwd(), 'profiles', browser);
+    this._profilePath = browserProfilePath(browser, { nightly });
     fs.mkdirSync(this._profilePath, { recursive: true });
     this._usingProxy = globalProxyUsageEnabled;
     this._pids = new Set();

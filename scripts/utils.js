@@ -82,6 +82,12 @@ const parseBrowserKey = (browserKey) => {
   return { browser: browserKey, nightly: false };
 };
 
+// Browser profiles live under the system temp dir
+const browserProfilePath = (browser, { nightly = false } = {}) => {
+  const name = `${browser}${nightly ? '_nightly' : ''}_profile`;
+  return path.join(os.tmpdir(), 'privacytests.org', 'profiles', name);
+};
+
 module.exports = {
   sleepMs,
   execSync,
@@ -91,5 +97,6 @@ module.exports = {
   killProcessesWithPattern,
   readYAMLFile,
   dataUriFromFile,
-  parseBrowserKey
+  parseBrowserKey,
+  browserProfilePath
 };
