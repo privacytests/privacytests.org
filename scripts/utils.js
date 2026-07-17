@@ -57,9 +57,9 @@ const killProcesses = (pids) => {
   });
 };
 
-// Kill a process and all of its descendants.
+// Kill a process and all of its descendants (children first, parent last).
 const killProcessAndDescendants = (pid) => {
-  killProcesses(descendantProcesses(pid));
+  killProcesses(descendantProcesses(pid).reverse());
 };
 
 const killProcessesWithPattern = (pattern) => {
