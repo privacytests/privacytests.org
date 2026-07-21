@@ -621,6 +621,9 @@ const readConfig = (commandLineData) => {
   if (!config.browser) {
     throw new Error('A browser is required (--browser=firefox)');
   }
+  if (config.browserstack && !config.android) {
+    throw new Error('--browserstack requires --android');
+  }
   if (config.skip) {
     config.skip = String(config.skip).split(',');
   }
@@ -647,6 +650,7 @@ const configToBrowserSpec = (config) => ({
   android: !!config.android,
   tor: !!config.tor,
   ios: !!config.ios,
+  browserstack: !!config.browserstack,
   appDir: config['app-dir']
 });
 

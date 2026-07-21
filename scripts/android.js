@@ -23,6 +23,7 @@ const browserInfo = {
   chrome: {
     releasePackageName: 'com.android.chrome',
     nightlyPackageName: 'com.chrome.canary',
+    appActivity: 'com.google.android.apps.chrome.Main',
     urlBarClick: 'search_box_text',
     urlBarKeys: 'url_bar'
   },
@@ -149,13 +150,25 @@ const findElementWithClass = async (client, className) => {
   return elementObject.ELEMENT;
 };
 
+const versionNameFromDumpsys = (raw) =>
+  String(raw).match(/versionName=(\S+)/)[1];
+
 const getAppVersion = _.memoize((packageName) => {
   const cmd = `/opt/homebrew/bin/adb shell dumpsys package ${packageName} | /usr/bin/grep versionName`;
-  const raw = execSync(cmd).toString();
-  return raw.match(/versionName=(\S+)/)[1];
+  return versionNameFromDumpsys(execSync(cmd).toString());
 });
 
-const webdriverSession = _.memoize(() =>
+const browserstackCredentials = () => {
+  const user = process.env.BROWSERSTACK_USERNAME;
+  const key = process.env.BROWSERSTACK_ACCESS_KEY;
+  if (!user || !key) {
+    throw new Error(
+      'BrowserStack requires BROWSERSTACK_USERNAME and BROWSERSTACK_ACCESS_KEY');
+  }
+  return { user, key };
+};
+
+const localAppiumSession = () =>
   WebDriver.newSession({
     port: 4723,
     hostname: '0.0.0.0',
@@ -166,21 +179,86 @@ const webdriverSession = _.memoize(() =>
       'appium:automationName': 'UiAutomator2',
       'appium:uiautomator2ServerInstallTimeout': 90000
     }
-  }));
+  });
+
+const browserstackApp = () => {
+  const app = process.env.BROWSERSTACK_APP;
+  if (!app) {
+    throw new Error(
+      'BrowserStack App Automate requires BROWSERSTACK_APP (bs://... or custom_id). ' +
+      'Upload BrowserStack\'s sample stub, e.g.:\n' +
+      'curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_ACCESS_KEY" ' +
+      '-X POST "https://api-cloud.browserstack.com/app-automate/upload" ' +
+      '-F \'data={"url":"https://www.browserstack.com/app-automate/sample-apps/android/WikipediaSample.apk","custom_id":"privacytests-stub"}\'\n' +
+      'Then: export BROWSERSTACK_APP=privacytests-stub'
+    );
+  }
+  return app;
+};
+
+const browserstackAppiumSession = () => {
+  const { user, key } = browserstackCredentials();
+  const bstackOptions = {
+    userName: user,
+    accessKey: key,
+    projectName: 'privacytests.org',
+    buildName: process.env.BROWSERSTACK_BUILD_NAME || 'android',
+    sessionName: process.env.BROWSERSTACK_SESSION_NAME || 'android-test',
+    deviceName: process.env.BROWSERSTACK_DEVICE_NAME || 'Google Pixel 7',
+    osVersion: process.env.BROWSERSTACK_OS_VERSION || '13.0',
+    appiumVersion: process.env.BROWSERSTACK_APPIUM_VERSION || '2.0.1'
+  };
+  const playUser = process.env.BROWSERSTACK_PLAY_USERNAME;
+  const playPass = process.env.BROWSERSTACK_PLAY_PASSWORD;
+  if (playUser && playPass) {
+    bstackOptions.appStoreConfiguration = {
+      username: playUser,
+      password: playPass
+    };
+  }
+  return WebDriver.newSession({
+    protocol: 'https',
+    hostname: 'hub-cloud.browserstack.com',
+    port: 443,
+    path: '/wd/hub',
+    user,
+    key,
+    capabilities: {
+      platformName: 'Android',
+      // Stub/sample app required to open an App Automate session; the browser
+      // under test is started later via activateApp().
+      'appium:app': browserstackApp(),
+      'appium:automationName': 'UiAutomator2',
+      'appium:autoGrantPermissions': true,
+      'appium:newCommandTimeout': 600,
+      'appium:noReset': true,
+      'bstack:options': bstackOptions
+    }
+  });
+};
+
+// Memoize separately for local vs BrowserStack so the flag can be flipped safely.
+const webdriverSession = _.memoize(
+  (browserstack) => browserstack ? browserstackAppiumSession() : localAppiumSession(),
+  (browserstack) => browserstack ? 'browserstack' : 'local'
+);
 
 class AndroidBrowser {
-  constructor ({ browser, incognito, tor, nightly }) {
-    Object.assign(this, { browser, incognito, tor, nightly }, browserInfo[browser]);
+  constructor ({ browser, incognito, tor, nightly, browserstack }) {
+    Object.assign(this, { browser, incognito, tor, nightly, browserstack }, browserInfo[browser]);
     this.packageName = nightly ? this.nightlyPackageName : this.releasePackageName;
   }
 
   // Launch the browser.
   async launch () {
-    this.client = await webdriverSession();
-    // If app is already open, terminate it so we start with a clean slate.
-    const state = await this.client.queryAppState(this.packageName);
-    if (state >= 2) {
-      this.client.terminateApp(this.packageName);
+    this.client = await webdriverSession(this.browserstack);
+    // Terminating Chrome on BrowserStack App Automate can kill the session
+    // (ChromeDriver/DevTools disconnect). Local Appium still needs a clean slate.
+    if (!this.browserstack) {
+      const state = await this.client.queryAppState(this.packageName);
+      if (state >= 2) {
+        await this.client.terminateApp(this.packageName);
+      }
     }
     await this.client.activateApp(this.packageName);
     await sleepMs(8000);
@@ -195,7 +273,14 @@ class AndroidBrowser {
 
   // Get the browser version.
   async version () {
-    return getAppVersion(this.packageName);
+    if (!this.browserstack) {
+      return getAppVersion(this.packageName);
+    }
+    const client = this.client || await webdriverSession(true);
+    const raw = await client.executeScript(
+      `browserstack_executor: {"action":"adbShell","arguments":{"command":"dumpsys package ${this.packageName}"}}`,
+      []);
+    return versionNameFromDumpsys(raw);
   }
 
   async openUrlOnce (url) {
@@ -223,7 +308,7 @@ class AndroidBrowser {
       await this.client.elementClick(goButton);
     } else {
       await this.client.elementSendKeys(urlBarToSendKeys, url);
-      await this.client.pressKeyCode(KEY_ENTER);
+      await this.client.appiumPressKeyCode(KEY_ENTER);
     }
   }
 
