@@ -32,7 +32,7 @@
            const category = `session_${mode}_${firstParty ? "1p" : "3p"}`;
            await postData(data, category);
            location.href = "https://example.com";
-           removeEventListener(listener);
+           removeEventListener("message", listener);
          };
          addEventListener("message", listener);
          let iframe = document.createElement("iframe");
