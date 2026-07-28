@@ -621,6 +621,9 @@ const readConfig = (commandLineData) => {
   if (!config.browser) {
     throw new Error('A browser is required (--browser=firefox)');
   }
+  if (config.browserstack && !config.android) {
+    throw new Error('--browserstack requires --android');
+  }
   if (config.skip) {
     config.skip = String(config.skip).split(',');
   }
@@ -647,6 +650,7 @@ const configToBrowserSpec = (config) => ({
   android: !!config.android,
   tor: !!config.tor,
   ios: !!config.ios,
+  browserstack: !!config.browserstack,
   appDir: config['app-dir']
 });
 
@@ -727,18 +731,20 @@ const main = async () => {
     cleanupAndShutdown(1);
   });
   try {
-    installTestFontIfNeeded();
-    await DesktopBrowser.setGlobalProxyUsageEnabled(false);
-    const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
-    originalDnsIps = systemNetworkSettings.getDNS(preferredNetworkService);
-    const activeVpnCount = await DesktopBrowser.countActiveVpns();
-    if (activeVpnCount > 0) {
-      console.log(`VPNs detected: ${activeVpnCount}. Please disable all VPNs.`);
-      throw new Error('Active VPN detected.');
-    }
-    // Read flags from command line
+    // Read flags early so Android/iOS runs can skip desktop-only network setup.
     const commandLineData = minimist(process.argv.slice(2));
     const config = readConfig(commandLineData);
+    if (!config.android && !config.ios) {
+      installTestFontIfNeeded();
+      await DesktopBrowser.setGlobalProxyUsageEnabled(false);
+      const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
+      originalDnsIps = systemNetworkSettings.getDNS(preferredNetworkService);
+      const activeVpnCount = await DesktopBrowser.countActiveVpns();
+      if (activeVpnCount > 0) {
+        console.log(`VPNs detected: ${activeVpnCount}. Please disable all VPNs.`);
+        throw new Error('Active VPN detected.');
+      }
+    }
     log({ config });
     if (config.update) {
       await updateAll(config);
