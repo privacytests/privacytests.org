@@ -97,9 +97,51 @@ jobs:
         uses: actions/upload-artifact@v6
         if: always()
         with:
-          name: ${{ env.RESULT_BASENAME }}-results
+          # Include repetitions so matrix cells don't collide on the same artifact name.
+          name: ${{ env.RESULT_BASENAME }}-${{ matrix.repetitions }}-results
           path: |
             ${{ env.RESULT_BASENAME }}.json
             ${{ env.RESULT_BASENAME }}.html
             failure.png
           if-no-files-found: warn
+
+  render-results:
+    needs: desktop-tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: scripts
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: scripts/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download test results
+        uses: actions/download-artifact@v6
+        with:
+          path: artifacts
+          pattern: '*-results'
+
+      - name: Render index, private, nightly, and nightly-private
+        run: node render-multiple --dir=../artifacts --out-dir=..
+
+      - name: Upload rendered pages
+        uses: actions/upload-artifact@v6
+        with:
+          name: rendered-pages
+          path: |
+            index.html
+            index.json
+            private.html
+            private.json
+            nightly.html
+            nightly.json
+            nightly-private.html
+            nightly-private.json
