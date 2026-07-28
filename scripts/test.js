@@ -244,10 +244,16 @@ const runPageTest = async (browserSession, url, timeout) => {
   return result;
 };
 
+const isMobileBrowser = (browser) =>
+  browser instanceof AndroidBrowser || browser instanceof IOSBrowser;
+
 // Run the main browser tests.
 const runMainTests = async (browserSession, categories) => {
-  const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
-  systemNetworkSettings.setDNS(preferredNetworkService, CLOUDFLARE_DNS);
+  // Host DNS changes are desktop/macOS-only (networksetup).
+  if (!isMobileBrowser(browserSession.browser)) {
+    const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
+    systemNetworkSettings.setDNS(preferredNetworkService, CLOUDFLARE_DNS);
+  }
   const signal = await runPageTest(browserSession, `${kIframeRootSame}/supercookies.html?mode=write&thirdparty=same`);
   if (!signal.supercookie_write_finished) {
     throw new Error('failed to get signal that the supercookie write finished');
@@ -403,7 +409,9 @@ const runTrackingCookieTest = async (browserSession) => {
 //   "supercookies" : { ... } }
 const runTestsStage1 = async ({ browserSession, categories }) => {
   log('stage 1 starting', { sessionId: browserSession.websocket._sessionId, categories });
-  await DesktopBrowser.setGlobalProxyUsageEnabled(false);
+  if (!isMobileBrowser(browserSession.browser)) {
+    await DesktopBrowser.setGlobalProxyUsageEnabled(false);
+  }
   let results = {};
 
   // Start up browser with existing profile
@@ -669,9 +677,12 @@ const cleanupAndShutdown = async (exitCode) => {
       } catch (e) {
         log(e);
       }
-      await DesktopBrowser.setGlobalProxyUsageEnabled(false);
-      const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
-      systemNetworkSettings.setDNS(preferredNetworkService, originalDnsIps);
+      // Only restore host network settings if we changed them (desktop runs).
+      if (originalDnsIps !== undefined) {
+        await DesktopBrowser.setGlobalProxyUsageEnabled(false);
+        const preferredNetworkService = systemNetworkSettings.getPreferredNetworkService();
+        systemNetworkSettings.setDNS(preferredNetworkService, originalDnsIps);
+      }
       cleanupRan = true;
     } catch (e) {
       log(e);
@@ -772,7 +783,9 @@ const main = async () => {
   } catch (e) {
     log(e);
     try {
-      await DesktopBrowser.captureScreenshot(failureScreenshotPath);
+      if (typeof DesktopBrowser.captureScreenshot === 'function') {
+        await DesktopBrowser.captureScreenshot(failureScreenshotPath);
+      }
     } catch (screenshotError) {
       log('failure screenshot failed', screenshotError);
     }
