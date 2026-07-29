@@ -43,6 +43,13 @@ jobs:
         # Default off so include rows with tor:on are added as new jobs
         # instead of merging into (and replacing) the normal brave/off jobs.
         tor: [off]
+        # Tor Browser has no distinct incognito mode (and --incognito is a no-op).
+        # Still include tor.json on private pages via render-multiple.
+        exclude:
+          - browser: tor
+            incognito: on
+          - browser: tor-nightly
+            incognito: on
         # Brave Tor windows don't fit in the matrix; add fixed iterations here instead.
         include:
           - { browser: brave, repetitions: 1, incognito: off, tor: on }

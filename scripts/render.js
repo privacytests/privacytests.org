@@ -521,7 +521,10 @@ const renderPage = async ({ dataFiles, aggregate }) => {
   //  console.log(results.all_tests[0]);
   //  console.log(JSON.stringify(results));
   const nightly = results.all_tests.every(t => (t.nightly === true));
-  const incognito = results.all_tests.every(t => (t.incognito === true || t.tor === true));
+  // Tor Browser itself is always "private-browsing-like"; include it on
+  // private-mode pages even though runs are not flagged --incognito/--tor.
+  const incognito = results.all_tests.every(t =>
+    (t.incognito === true || t.tor === true || t.browser === 'tor'));
   let tableTitle;
   if (nightly) {
     tableTitle = incognito ? 'Nightly private modes' : 'Nightly Builds';
