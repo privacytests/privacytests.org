@@ -38,11 +38,26 @@ const pageForBasename = (basename) => {
   return 'index';
 };
 
+// Tor Browser has no separate incognito run; reuse the same results on the
+// matching private-modes page so it can be compared with other browsers' PBM.
+const isTorBrowserBasename = (basename) =>
+  basename === 'tor' || basename === 'tor-nightly';
+
+const pagesForBasename = (basename) => {
+  const page = pageForBasename(basename);
+  if (isTorBrowserBasename(basename)) {
+    return [page, page === 'nightly' ? 'nightly-private' : 'private'];
+  }
+  return [page];
+};
+
 const bucketFiles = (jsonFiles) => {
   const buckets = Object.fromEntries(PAGE_NAMES.map(name => [name, []]));
   for (const filePath of jsonFiles) {
     const basename = path.basename(filePath, '.json');
-    buckets[pageForBasename(basename)].push(filePath);
+    for (const page of pagesForBasename(basename)) {
+      buckets[page].push(filePath);
+    }
   }
   return buckets;
 };
@@ -92,4 +107,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { bucketFiles, pageForBasename, walkJsonFiles };
+module.exports = { bucketFiles, pageForBasename, pagesForBasename, walkJsonFiles };
