@@ -741,10 +741,11 @@ const main = async () => {
     log('uncaughtException', err);
     cleanupAndShutdown(1);
   });
+  let config;
   try {
     // Read flags early so Android/iOS runs can skip desktop-only network setup.
     const commandLineData = minimist(process.argv.slice(2));
-    const config = readConfig(commandLineData);
+    config = readConfig(commandLineData);
     if (!config.android && !config.ios) {
       installTestFontIfNeeded();
       await DesktopBrowser.setGlobalProxyUsageEnabled(false);
@@ -783,7 +784,9 @@ const main = async () => {
   } catch (e) {
     log(e);
     try {
-      if (typeof DesktopBrowser.captureScreenshot === 'function') {
+      // Desktop screencapture is useless for iOS/Android (no Mac UI for the device).
+      if (!config?.android && !config?.ios &&
+          typeof DesktopBrowser.captureScreenshot === 'function') {
         await DesktopBrowser.captureScreenshot(failureScreenshotPath);
       }
     } catch (screenshotError) {
