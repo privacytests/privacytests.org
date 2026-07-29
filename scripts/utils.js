@@ -57,9 +57,9 @@ const killProcesses = (pids) => {
   });
 };
 
-// Kill a process and all of its descendants.
+// Kill a process and all of its descendants (children first, parent last).
 const killProcessAndDescendants = (pid) => {
-  killProcesses(descendantProcesses(pid));
+  killProcesses(descendantProcesses(pid).reverse());
 };
 
 const killProcessesWithPattern = (pattern) => {
@@ -74,6 +74,20 @@ const readYAMLFile = (file) => {
 
 const dataUriFromFile = filePath => datauri(path.join(__dirname, filePath)).content;
 
+// Parse keys like "brave-nightly" into { browser: "brave", nightly: true }.
+const parseBrowserKey = (browserKey) => {
+  if (typeof browserKey === 'string' && browserKey.endsWith('-nightly')) {
+    return { browser: browserKey.slice(0, -'-nightly'.length), nightly: true };
+  }
+  return { browser: browserKey, nightly: false };
+};
+
+// Browser profiles live under the system temp dir
+const browserProfilePath = (browser, { nightly = false } = {}) => {
+  const name = `${browser}${nightly ? '_nightly' : ''}_profile`;
+  return path.join(os.tmpdir(), 'privacytests.org', 'profiles', name);
+};
+
 module.exports = {
   sleepMs,
   execSync,
@@ -82,5 +96,7 @@ module.exports = {
   killProcessAndDescendants,
   killProcessesWithPattern,
   readYAMLFile,
-  dataUriFromFile
+  dataUriFromFile,
+  parseBrowserKey,
+  browserProfilePath
 };

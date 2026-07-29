@@ -1,0 +1,152 @@
+name: Desktop tests
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * *'
+
+env:
+  CI: true
+  GITHUB_TOKEN: ${{ github.token }}
+  # capture-website pulls in puppeteer; CI doesn't generate previews, so skip its Chrome download.
+  PUPPETEER_SKIP_DOWNLOAD: true
+
+jobs:
+  desktop-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        browser:
+          - brave
+          - chrome
+          - duckduckgo
+          - edge
+          - firefox
+          - librewolf
+          - mullvad
+          - opera
+          - safari
+          - tor
+          - ungoogled
+          - vivaldi
+          - brave-nightly
+          - chrome-nightly
+          - duckduckgo-nightly
+          - edge-nightly
+          - firefox-nightly
+          - opera-nightly
+#          - safari-nightly
+          - tor-nightly
+          - vivaldi-nightly
+        repetitions: [1, 2, 3, 4, 5]
+        incognito: [off, on]
+        # Default off so include rows with tor:on are added as new jobs
+        # instead of merging into (and replacing) the normal brave/off jobs.
+        tor: [off]
+        # Tor Browser has no distinct incognito mode (and --incognito is a no-op).
+        # Still include tor.json on private pages via render-multiple.
+        exclude:
+          - browser: tor
+            incognito: on
+          - browser: tor-nightly
+            incognito: on
+        # Brave Tor windows don't fit in the matrix; add fixed iterations here instead.
+        include:
+          - { browser: brave, repetitions: 1, incognito: off, tor: on }
+          - { browser: brave, repetitions: 2, incognito: off, tor: on }
+          - { browser: brave, repetitions: 3, incognito: off, tor: on }
+          - { browser: brave, repetitions: 4, incognito: off, tor: on }
+          - { browser: brave, repetitions: 5, incognito: off, tor: on }
+          - { browser: brave-nightly, repetitions: 1, incognito: off, tor: on }
+          - { browser: brave-nightly, repetitions: 2, incognito: off, tor: on }
+          - { browser: brave-nightly, repetitions: 3, incognito: off, tor: on }
+          - { browser: brave-nightly, repetitions: 4, incognito: off, tor: on }
+          - { browser: brave-nightly, repetitions: 5, incognito: off, tor: on }
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: scripts
+    env:
+      RESULT_BASENAME: ${{ matrix.tor == 'on' && format('{0}-tor', matrix.browser) || (matrix.incognito == 'on' && format('{0}-incognito', matrix.browser) || matrix.browser) }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: scripts/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install mkcert
+        run: |
+          # macos-latest images ship with aws/tap pre-tapped but untrusted; brew warns on every command until trusted.
+          brew trust aws/tap
+          brew install mkcert
+          mkcert -install
+
+      - name: Install browser
+        run: node desktop-install ${{ matrix.browser }}
+
+      - name: Start DNS monitor
+        run: sudo node monitor-dns.js &
+
+      - name: Run tests
+        run: node test --browser=${{ matrix.browser }}${{ matrix.incognito == 'on' && ' --incognito' || '' }}${{ matrix.tor == 'on' && ' --tor' || '' }} --out=../${{ env.RESULT_BASENAME }}.json
+        timeout-minutes: 90
+
+      - name: Upload results
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          # Include repetitions so matrix cells don't collide on the same artifact name.
+          name: ${{ env.RESULT_BASENAME }}-${{ matrix.repetitions }}-results
+          path: |
+            ${{ env.RESULT_BASENAME }}.json
+            ${{ env.RESULT_BASENAME }}.html
+            failure.png
+          if-no-files-found: warn
+
+  render-results:
+    needs: desktop-tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: scripts
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: scripts/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download test results
+        uses: actions/download-artifact@v6
+        with:
+          path: artifacts
+          pattern: '*-results'
+
+      - name: Render index, private, nightly, and nightly-private
+        run: node render-multiple --dir=../artifacts --out-dir=..
+
+      - name: Upload rendered pages
+        uses: actions/upload-artifact@v6
+        with:
+          name: rendered-pages
+          path: |
+            index.html
+            index.json
+            private.html
+            private.json
+            nightly.html
+            nightly.json
+            nightly-private.html
+            nightly-private.json

@@ -1,0 +1,12 @@
+[Unit]
+Description=aioquic HTTP/3 Server
+After=network.target
+
+[Service]
+WorkingDirectory=/home/arthur/privacytests.org/aioquic
+ExecStart=/bin/bash /home/arthur/privacytests.org/aioquic/run_privacytests_org.sh
+Restart=always
+User=arthur
+
+[Install]
+WantedBy=multi-user.target

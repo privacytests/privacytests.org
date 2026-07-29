@@ -86,7 +86,9 @@ app.get('/resource', (req, res) => {
   if (file) {
     res.sendFile(file, { root: __dirname });
   } else {
-    res.send(fileGenerators[type]());
+    const content = fileGenerators[type]();
+    console.log(`Generating ${type} file: ${content}`);
+    res.send(content);
   }
 });
 app.get('/ctr', (req, res) => {
@@ -273,6 +275,10 @@ app.get('/client_hints.html', (req, res) => {
 app.get('/torbulkexitlist', async (req, res) => {
   const fetchResponse = await fetch('https://check.torproject.org/torbulkexitlist');
   Readable.fromWeb(fetchResponse.body).pipe(res);
+});
+
+app.get('/ip', (req, res) => {
+  res.send(getIpAddress(req));
 });
 
 app.listen(port, () => console.log(`listening for file requests on ${port}`));

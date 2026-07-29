@@ -1,143 +1,11 @@
 const fs = require('fs');
 const fsPromises = require('node:fs/promises');
 const { join: joinDir } = require('path');
-const { exec, execSync, execAsync, sleepMs } = require('./utils');
+const { exec, execSync, execAsync, sleepMs, browserProfilePath, killProcessesWithPattern } = require('./utils');
 const systemNetworkSettings = require('./system-network-settings');
-const { killProcessesWithPattern } = require('./utils');
 const path = require('node:path');
+const { macOSdefaultBrowserSettings, defaultAppDirectory } = require('./desktop-constants');
 
-/*
-/Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --incognito "https://example.com"
-/Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --tor "https://example.com"
-/Applications/Firefox.app/Contents/MacOS/firefox --private-window "https://example.com"
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --incognito "example.com"
-/Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge --inprivate "https://example.com"
-/Applications/Opera.app/Contents/MacOS/Opera --private "https://example.com"
-/Applications/Vivaldi.app/Contents/MacOS/Vivaldi --incognito "https://example.com"
-open -a Safari "https://example.com"
-*/
-
-// macOS parts of the browser launch command
-const macOSdefaultBrowserSettings = {
-  brave: {
-    name: 'Brave Browser',
-    nightlyName: 'Brave Browser Nightly',
-    privateFlag: 'incognito',
-    torFlag: 'tor',
-    torPostLaunchDelay: 10000,
-    basedOn: 'chromium',
-    update: ['Brave', 'About Brave'],
-    updateNightly: ['Brave', 'About Brave']
-  },
-  chrome: {
-    name: 'Google Chrome',
-    nightlyName: 'Google Chrome Canary',
-    privateFlag: 'incognito',
-    basedOn: 'chromium',
-    update: ['Chrome', 'About Google Chrome'],
-    updateNightly: ['Chrome Canary', 'About Google Chrome']
-  },
-  duckduckgo: {
-    name: 'DuckDuckGo',
-    nightlyName: 'DuckDuckGo',
-    useOpen: true
-    //   incognitoCommand: "osascript safariPBM.applescript",
-    //    basedOn: "safari",
-  },
-  edge: {
-    name: 'Microsoft Edge',
-    nightlyName: 'Microsoft Edge Canary',
-    privateFlag: 'inprivate',
-    basedOn: 'chromium',
-    update: ['Microsoft Edge', 'About Microsoft Edge'],
-    updateNightly: ['Microsoft Edge Canary', 'About Microsoft Edge']
-  },
-  firefox: {
-    name: 'firefox',
-    nightlyName: 'Firefox Nightly',
-    privateFlag: 'private-window',
-    basedOn: 'firefox',
-    env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1', MOZ_CRASHREPORTER_DISABLE: '1' },
-    update: ['Firefox', 'About Firefox'],
-    postLaunchDelay: 1000,
-    updateNightly: ['Firefox Nightly', 'About Nightly']
-  },
-  librewolf: {
-    name: 'librewolf',
-    displayName: 'LibreWolf',
-    privateFlag: 'private-window',
-    basedOn: 'firefox',
-    env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
-    updateCommand: '/opt/homebrew/bin/brew upgrade librewolf --no-quarantine',
-    postLaunchDelay: 2000
-  },
-  mullvad: {
-    name: 'Mullvad Browser',
-    binaryName: 'mullvadbrowser',
-    basedOn: 'firefox',
-    useOpen: true,
-    env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
-    update: ['Mullvad Browser', 'About Mullvad Browser']
-  },
-  opera: {
-    name: 'Opera',
-    nightlyName: 'Opera Developer',
-    privateFlag: 'private',
-    basedOn: 'chromium',
-    update: ['Opera', 'About Opera'],
-    updateNightly: ['Opera Developer', 'About Opera']
-    // preferences: [[["ui","warn_on_quitting_opera_with_multiple_tabs"], false]]
-  },
-  safari: {
-    name: 'Safari',
-    nightlyName: 'Safari Technology Preview',
-    useOpen: true,
-    basedOn: 'safari'
-  },
-  tor: {
-    name: 'Tor Browser',
-    nightlyName: 'Tor Browser Nightly',
-    binaryName: 'firefox',
-    basedOn: 'firefox',
-    useOpen: true,
-    postLaunchDelay: 10000,
-    update: ['Tor Browser', 'About Tor Browser'],
-    updateNightly: ['Tor Browser', 'About Tor Browser']
-  },
-  ungoogled: {
-    name: 'Ungoogled Chromium',
-    binaryName: 'Chromium',
-    privateFlag: 'incognito',
-    updateCommand: "mv '/Applications/Ungoogled Chromium.app' /Applications/Chromium.app ; /opt/homebrew/bin/brew upgrade eloston-chromium --no-quarantine && mv /Applications/Chromium.app '/Applications/Ungoogled Chromium.app'",
-    basedOn: 'chromium'
-  },
-  vivaldi: {
-    name: 'Vivaldi',
-    nightlyName: 'Vivaldi Snapshot',
-    privateFlag: 'incognito',
-    //    postLaunchDelay: 10000,
-    basedOn: 'chromium',
-    // Assumes Vivaldi is on automatic updates:
-    update: ['Vivaldi', 'About Vivaldi'],
-    updateNightly: ['Vivaldi Snapshot', 'About Vivaldi']
-  },
-  waterfox: {
-    name: 'waterfox',
-    privateFlag: 'private-window',
-    basedOn: 'firefox',
-    env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
-    update: ['Waterfox', 'About Waterfox']
-  },
-  zen: {
-    name: 'Zen',
-    privateFlag: 'private-window',
-    basedOn: 'firefox',
-    update: ['Zen', 'About Zen'],
-    postLaunchDelay: 2000
-  }
-};
-
-const defaultAppDirectory = '/Applications';
 const defaultBinaryPath = 'Contents/MacOS';
 
 const profileFlags = {
@@ -197,6 +65,54 @@ const fixZenPreferences = async (file) => {
   await fsPromises.writeFile(file, content)
 };
 
+const firefoxPreferenceEntries = () => {
+  const acceptedDate = Date.now().toString();
+  return [
+    ['termsofuse.acceptedVersion', 999],
+    ['termsofuse.acceptedDate', acceptedDate],
+    ['browser.termsofuse.prefMigrationCheck', true],
+    ['trailhead.firstrun.didSeeAboutWelcome', true],
+    ['security.enterprise_roots.enabled', true],
+  ];
+};
+
+const setFirefoxPreferences = async (file, prefs) => {
+  await fsPromises.mkdir(path.dirname(file), { recursive: true });
+  let content = '';
+  try {
+    content = (await fsPromises.readFile(file)).toString();
+  } catch (e) {
+    if (e.code !== 'ENOENT') {
+      throw e;
+    }
+  }
+  for (const [prefName, prefValue] of prefs) {
+    const formattedValue = typeof prefValue === 'string' ? `"${prefValue}"` : prefValue;
+    const prefLine = `user_pref("${prefName}", ${formattedValue});`;
+    const regex = new RegExp(`user_pref\\("${prefName}",[^;]+\\);`);
+    if (regex.test(content)) {
+      content = content.replace(regex, prefLine);
+    } else {
+      content += '\n' + prefLine;
+    }
+  }
+  await fsPromises.writeFile(file, content);
+};
+
+const fixFirefoxPreferences = async (file) => {
+  await setFirefoxPreferences(file, firefoxPreferenceEntries());
+  console.log('fixed Firefox preferences in', file);
+};
+
+const fixTorPreferences = async (file) => {
+  await setFirefoxPreferences(file, [
+    ...firefoxPreferenceEntries(),
+    ['torbrowser.settings.quickstart.enabled', true],
+    ['extensions.torlauncher.prompt_at_startup', false],
+  ]);
+  console.log('fixed Tor Browser preferences in', file);
+};
+
 const fixSafari = (incognito, nightly) => {
   const name = nightly ? "SafariTechnologyPreview" : "Safari"
   execSync(`defaults write com.apple.${name} AlwaysRestoreSessionAtLaunch -bool false`);
@@ -205,25 +121,61 @@ const fixSafari = (incognito, nightly) => {
 
 // A Browser object represents a browser we run tests on.
 class DesktopBrowser {
-  constructor ({ browser, path, incognito, tor, nightly, appDir }) {
+  constructor ({ browser, executablePath, incognito, tor, nightly, appDir }) {
     Object.assign(this, { browser, incognito, tor, nightly });
     this._defaults = macOSdefaultBrowserSettings[browser];
     this._version = undefined;
-    this._path = path ?? browserPath({ browser, nightly, appDir });
+    this._path = executablePath ?? browserPath({ browser, nightly, appDir });
     this._appPath = this._path.split('.app')[0] + '.app';
     this._appName = nightly ? this._defaults.nightlyName : this._defaults.name;
     const profileCommand = profileFlags[this._defaults.basedOn];
-    this._profilePath = profileCommand ? joinDir(__dirname, `profiles/${browser}${nightly ? '_nightly' : ''}_profile`) : undefined;
+    this._profilePath = profileCommand ? browserProfilePath(browser, { nightly }) : undefined;
     if (this._defaults.useOpen) {
-      this._command = `open -a "${this._appPath}"`;
+      const openApp = `open -a "${this._appPath}"`;
+      this._openUrlCommand = openApp;
+      const launchArgs = [];
+      if (incognito && this._defaults.privateFlag) {
+        launchArgs.push(`--${this._defaults.privateFlag}`);
+      }
+      if (tor && this._defaults.torFlag) {
+        launchArgs.push(`--${this._defaults.torFlag}`);
+      }
+      if (this._profilePath) {
+        launchArgs.push(`-profile "${this._profilePath}"`);
+      }
+      if (launchArgs.length) {
+        const envFlags = this._defaults.env
+          ? Object.entries(this._defaults.env).map(([k, v]) => `--env ${k}=${v}`).join(' ')
+          : '';
+        this._launchCommand = `${openApp}${envFlags ? ' ' + envFlags : ''} --args ${launchArgs.join(' ')}`;
+      } else {
+        this._launchCommand = openApp;
+      }
     } else {
       const flags = `${incognito ? '--' + this._defaults.privateFlag : ''} ${tor ? '--' + this._defaults.torFlag : ''} ${this._profilePath ? `${profileCommand}"${this._profilePath}"` : ''}`;
       this._command = `"${this._path}" ${flags}`.trim();
+    }
+    this._processName = this._defaults.binaryName ?? path.basename(this._path);
+  }
+
+  async _logRunningProcesses (when) {
+    const name = this._processName;
+    try {
+      const { stdout } = await execAsync(`pgrep -l ${name}`);
+      const processes = stdout.trim().split('\n').filter(line => line.length > 0);
+      console.log(`pgrep ${name} (${when}):`, processes.length ? processes : '(none)');
+    } catch (e) {
+      if (e.code === 1) {
+        console.log(`pgrep ${name} (${when}): (none)`);
+      } else {
+        console.log(`pgrep ${name} (${when}): error`, e.message);
+      }
     }
   }
 
   // Launch the browser.
   async launch (clean = true) {
+    console.log(`launch: ${this.browser} (clean=${clean})`);
     console.log(this._defaults);
     if (clean && this._profilePath) {
       // Delete old profiles if they exist.
@@ -244,11 +196,19 @@ class DesktopBrowser {
         await fixZenPreferences(path.join(this._profilePath, "prefs.js"))
       }
     }
+    if (this.browser === 'firefox' || this.browser === 'mullvad' || this.browser === 'librewolf') {
+      await fixFirefoxPreferences(path.join(this._profilePath, 'prefs.js'));
+    }
+    if (this.browser === 'tor') {
+      await fixTorPreferences(path.join(this._profilePath, 'prefs.js'));
+    }
     if (this.browser === 'safari') {
       fixSafari(this.incognito, this.nightly);
     }
-    this._process = exec(this._command, { env: this._defaults.env });
-    await sleepMs(this.tor ? this._defaults.torPostLaunchDelay : (this._defaults.postLaunchDelay ?? 500));
+    const launchCommand = this._launchCommand ?? this._command;
+    this._process = exec(launchCommand, this._defaults.useOpen ? {} : { env: this._defaults.env });
+    await sleepMs(this.tor ? this._defaults.torPostLaunchDelay : (this._defaults.postLaunchDelay ?? 2000));
+    await this._logRunningProcesses('after launch');
   }
 
   // Get the browser version.
@@ -269,17 +229,40 @@ class DesktopBrowser {
     if (!this._process) {
       throw new Error('browser not launched');
     }
-    exec(`${this._command} "${url}"`);
+    console.log(`openUrl: ${this.browser}`, url);
+    const openUrlCommand = this._openUrlCommand ?? this._command;
+    exec(`${openUrlCommand} "${url}"`);
   }
 
   // Close the browser.
   async kill () {
-    await execAsync(`osascript -e 'quit app "${this._path}"'`);
+    console.log(`kill: ${this.browser} (${this._appName})`);
+    if (this._defaults.usePkill) {
+      console.log(`kill: force-killing ${this._processName}`);
+      try {
+        await execAsync(`pkill -9 -f ${JSON.stringify(this._processName)}`);
+      } catch (e) {
+        // Ignore exit 1: browser may already be gone.
+        if (e.code !== 1) {
+          throw e;
+        }
+      }
+    } else {
+      try {
+        await execAsync(`osascript -e 'quit app "${this._appName}"'`);
+      } catch (e) {
+        if (!String(e.stderr ?? e.message).includes('(-600)')) {
+          throw e;
+        }
+      }
+    }
     await sleepMs(5000);
+    await this._logRunningProcesses('after kill');
   }
 
   // Restart the browser with same profile.
   async restart (clean = false) {
+    console.log(`restart: ${this.browser} (clean=${clean})`);
     await this.kill();
     await this.launch(clean);
   }
@@ -345,6 +328,11 @@ class DesktopBrowser {
     } catch (e) {
       return 0;
     }
+  }
+
+  static async captureScreenshot (outputPath) {
+    await execAsync(`screencapture -x "${outputPath}"`);
+    console.log(`screenshot: wrote ${outputPath}`);
   }
 
   static getScreenResolution () {
