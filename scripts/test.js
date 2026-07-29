@@ -28,7 +28,7 @@ const { macOSdefaultBrowserSettings } = require('./desktop-constants');
 // ## Constants
 
 const mitmProxyPort = 9090;
-const CLOUDFLARE_DNS = "1.1.1.1"
+const CLOUDFLARE_DNS = '1.1.1.1';
 
 // ## Utility functions
 
@@ -133,7 +133,7 @@ const nextMessage = async (websocket, timeout) => {
     throw websocketCloseError(websocket._closeCode, websocket._closeMessage);
   }
   let onClose;
-  const closePromise = new Promise((_, reject) => {
+  const closePromise = new Promise((resolve, reject) => {
     onClose = (code, reason) => reject(websocketCloseError(code, reason));
     websocket.once('close', onClose);
   });
