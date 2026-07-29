@@ -13,6 +13,8 @@ brew install mkcert
 mkcert -install
 ```
 
+You may need to set Settings > Privacy & Security > Full Disk Access > Terminal > (enabled)
+
 ### On Linux
 
 `sudo apt-get install libpng-dev libxtst-dev libx11-dev`
@@ -41,50 +43,35 @@ You're ready to go!
 
 ## Usage
 
-To run tests, point to a .yaml file:
+Run tests with command-line flags. `--browser` is required:
 
-`node test config/desktop.yaml`
+`node test --browser=firefox --out=../firefox.json`
 
-Config files are YAML arrays. Each item in the array is an object
-that describes what should go into a single test. All parameters
-are optional, except `browser`:
+Options:
 
-```
-browsers:                # Possible values include chrome, firefox, brave, opera, edge, vivaldi, etc.
-  - chrome
-  - firefox
-  - brave
-  - edge
-android: false,          # Set to true to run on Android platform (default: false)
-ios: false,              # Set to true to run on iOS platform (default: false)
-incognito: false,        # Set incognito to true for testing private browsing windows. (default: false)
-tor: true                # Set tor to true for 'Brave Private Window with Tor.' (default: false)
-repeat: 5                # Integer, how many times we should repeat this test (default: 1)
-aggregate: true          # Whether to combine repeated runs of a browser into a single column (default: true)
-debug: false             # Whether to leave browsers open after test is done (default: false)
-app-dir: /path/to/apps   # On desktop, set where browsers are located (default: "/Applications/")
-filename: my-results     # Specifies the filename prefix for results (defaults to time run)
-out: ./results.json      # Specifies a full path for output results (overrides filename)
-```
+* `--browser=firefox`: the browser to test (chrome, firefox, brave, opera, edge, vivaldi, etc.)
+* `--android`: run on Android
+* `--ios`: run on iOS
+* `--incognito`: run tests in private browsing windows
+* `--tor`: run in Tor windows (Brave)
+* `--nightly`: use nightly browser builds where applicable
+* `--aggregate`: combine results in the rendered output (enabled by default)
+* `--debug`: don't close the browser after the test is done
+* `--app-dir=/path/to/apps`: directory containing browsers (default: `/Applications/`)
+* `--filename=my-results`: filename prefix for results files
+* `--out=./results.json`: full path for the results JSON file
+* `--categories=misc,https`: limit test categories (`main`, `supplementary`, `misc`, `https`, `session`, `trackingCookies`, `dns`)
+* `--skip=dns`: skip test categories
+* `--hurry`: skip the 60s feature-flag warmup on desktop
+* `--update`: update all installed desktop browsers
+* `--kill`: quit all desktop browsers
+* `--versions`: print installed browser versions
 
-You can also use these flags on the command line, to supplement the yaml file or instead of one:
+For example:
 
-* `--browsers chrome,firefox,vivaldi`: use the specified browsers, separated by commas
-* `--android`: Add flag to run on Android
-* `--ios`: Add flag to run on iOS
-* `--incognito`: Run tests in private browsing windows
-* `--tor`: Run test in Tor windows (available in Brave)
-* `--repeat 10`: repeat the whole set of tests 10 times
-* `--aggregate`: Combine results from the same browser into a single column (enabled by default)
-* `--debug`: Don't close browser(s) after test is done
-* `--app-dir=/path/to/apps`: Use to point to directory containing browsers (default: `/Applications/`)
-* `--filename=my-results`: Use this flag to specify a filename prefix for the results files.
-* `--out=./results.json`: Use this flag to specific a full path for the results file.
-* `--categories=misc,https`: Limit tests to certain categories. Possible values: `main`, `supplementary`, `misc`, `https`. If this flag is omitted, all categories are run.
+`node test --browser=firefox --filename=temp`
 
-So for example,
-`node test config/my-config.yaml --repeat=5 --filename=temp`
-runs the given config, but repeats tests for each browser 5 times and writes the results to temp*
+writes results to `temp*`
 
 ## Development
 

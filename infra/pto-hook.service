@@ -1,0 +1,12 @@
+[Unit]
+Description=PTO Hook
+After=network.target
+
+[Service]
+WorkingDirectory=/home/arthur/pto-hook
+ExecStart=/usr/local/bin/nodemon --exitcrash index.js
+Restart=always
+User=arthur
+
+[Install]
+WantedBy=multi-user.target
