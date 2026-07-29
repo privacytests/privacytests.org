@@ -98,6 +98,10 @@ const browserInfo = {
   }
 };
 
+const getPlatformVersion = _.memoize(() =>
+  execSync('/opt/homebrew/bin/ideviceinfo --key ProductVersion')
+    .toString().trim());
+
 const getAppVersions = _.memoize(() => {
   const appVersions = {};
   const plistRaw = execSync('/opt/homebrew/bin/ideviceinstaller  -l -o xml').toString();
@@ -106,10 +110,7 @@ const getAppVersions = _.memoize(() => {
     appVersions[plistItem.CFBundleIdentifier] = plistItem.CFBundleShortVersionString;
   }
   // Safari version number is the same as the iOS version:
-  const productVersion = execSync(
-    '/opt/homebrew/bin/ideviceinfo --key ProductVersion')
-    .toString().trim();
-  appVersions['com.apple.mobilesafari'] = productVersion;
+  appVersions['com.apple.mobilesafari'] = getPlatformVersion();
   return appVersions;
 });
 
@@ -123,12 +124,13 @@ const webdriverSession = _.memoize(() =>
       platformName: 'iOS',
       'appium:udid': 'auto',
       'appium:xcodeOrgId': 'MGQ2CFRT2X',
-      'appium:xcodeSigningId': 'iPhone Developer',
+      'appium:xcodeSigningId': 'Apple Development',
       'appium:automationName': 'XCUITest',
       'appium:deviceName': 'iPhone SE',
       'appium:wdaLaunchTimeout': 60000,
       'appium:wdaConnectionTimeout': 60000,
-      'appium:platformVersion': '18.2',
+      'appium:updatedWDABundleId': 'org.privacytests.WebDriverAgentRunner',
+      'appium:platformVersion': getPlatformVersion(),
       'appium:showXcodeLog': true
     }
   }));
