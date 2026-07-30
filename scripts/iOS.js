@@ -212,37 +212,47 @@ class IOSBrowser {
 
   // Open the url in a new tab.
   async openUrl (url) {
-    let urlBarToClick;
-    if (this.urlBarClickClass) {
-      urlBarToClick = await findElementWithClass(this.client, this.urlBarClickClass);
-    } else {
-      urlBarToClick = await findElementWithName(this.client, this.urlBarClick);
-      if (urlBarToClick === undefined) {
-        if (this.urlBarClick2) {
-          urlBarToClick = await findElementWithName(this.client, this.urlBarClick2);
-        }
+    try {
+      let urlBarToClick;
+      if (this.urlBarClickClass) {
+        urlBarToClick = await findElementWithClass(this.client, this.urlBarClickClass);
+      } else {
+        urlBarToClick = await findElementWithName(this.client, this.urlBarClick);
         if (urlBarToClick === undefined) {
-          urlBarToClick = await findElementWithName(this.client, this.urlBarKeys);
+          if (this.urlBarClick2) {
+            urlBarToClick = await findElementWithName(this.client, this.urlBarClick2);
+          }
+          if (urlBarToClick === undefined) {
+            urlBarToClick = await findElementWithName(this.client, this.urlBarKeys);
+          }
         }
       }
-    }
-    await this.client.elementClick(urlBarToClick);
-    await sleepMs(1000);
-    if (this.urlBarClear) {
-      try {
-        await clickElementWithName(this.client, this.urlBarClear);
-      } catch (e) {
-        console.log(e);
+      await this.client.elementClick(urlBarToClick);
+      await sleepMs(1000);
+      if (this.urlBarClear) {
+        try {
+          await clickElementWithName(this.client, this.urlBarClear);
+        } catch (e) {
+          console.log(e);
+        }
       }
+      let urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys);
+      if (urlBarToSendKeys === undefined && this.urlBarKeys2) {
+        urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys2);
+      }
+      if (!urlBarToSendKeys) {
+        throw new Error(`no url-bar text field found for ${this.browser}`);
+      }
+      await this.client.elementSendKeys(urlBarToSendKeys, url);
+      await this.client.elementSendKeys(urlBarToSendKeys, '\r');
+    } catch (e) {
+      try {
+        console.log('UI hierarchy after openUrl failure:\n', await this.client.getPageSource());
+      } catch (dumpError) {
+        console.log('Failed to dump UI hierarchy:', dumpError);
+      }
+      throw e;
     }
-    let urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys);
-    if (urlBarToSendKeys === undefined && this.urlBarKeys2) {
-      urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys2);
-    }
-    await this.client.elementSendKeys(urlBarToSendKeys, url);
-//    const goButton = await findElementWithName(this.client, 'Go');
-//    await this.client.elementClick(goButton);
-    await this.client.elementSendKeys(urlBarToSendKeys, "\r")
   }
 
   // Clean up and close the browser.
