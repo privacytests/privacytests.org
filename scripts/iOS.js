@@ -90,11 +90,11 @@ const browserInfo = {
     // startupClick: "Решить проблемы",
     // startupClick: 'Fix problems',
     startupClick: 'Close',
-    urlBarClick: 'Address bar',
-    urlBarClick2: 'sentryFakeOmniboxButton',
-    urlBarClear: 'Clear the input field',
-    // urlBarKeys: "Яндекс Браузер", // Just send keys to the application and hope our focus is correct
-    urlBarKeys: 'Yandex Browser' // Just send keys to the application and hope our focus is correct
+    urlBarClick: 'sentryFakeOmniboxButton',
+    urlBarClick2: 'Address bar',
+    //urlBarClear: 'Clear the input field',
+    // Focused field is an unnamed XCUIElementTypeTextView after omnibox open.
+    urlBarKeysClass: 'XCUIElementTypeTextView'
   }
 };
 
@@ -236,9 +236,14 @@ class IOSBrowser {
           console.log(e);
         }
       }
-      let urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys);
-      if (urlBarToSendKeys === undefined && this.urlBarKeys2) {
-        urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys2);
+      let urlBarToSendKeys;
+      if (this.urlBarKeysClass) {
+        urlBarToSendKeys = await findElementWithClass(this.client, this.urlBarKeysClass);
+      } else {
+        urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys);
+        if (urlBarToSendKeys === undefined && this.urlBarKeys2) {
+          urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys2);
+        }
       }
       if (!urlBarToSendKeys) {
         throw new Error(`no url-bar text field found for ${this.browser}`);
