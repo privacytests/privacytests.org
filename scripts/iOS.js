@@ -57,7 +57,7 @@ const browserInfo = {
   onion: {
     name: 'Onion Browser',
     bundleId: 'com.miketigas.OnionBrowser',
-    urlBarClickClass: 'XCUIElementTypeTextField', // Hoping this is the only one present
+    urlBarClickXpath: '//XCUIElementTypeTextField', // Hoping this is the only one present
     urlBarKeys: 'Onion Browser', // application element
     urlBarClear: 'Clear text',
     postLaunchDelay: 10000
@@ -74,6 +74,8 @@ const browserInfo = {
     name: 'Safari',
     bundleId: 'com.apple.mobilesafari',
     urlBarClick: 'TabBarItemTitle',
+    // iOS 26 capsule UI sometimes replaces TabBarItemTitle with Reader Available.
+    urlBarClickXpath: "//XCUIElementTypeOther[starts-with(@name,'CapsuleNavigationBar')]",
     urlBarKeys: 'URL'
   },
   vivaldi: {
@@ -94,7 +96,7 @@ const browserInfo = {
     urlBarClick2: 'Address bar',
     //urlBarClear: 'Clear the input field',
     // Focused field is an unnamed XCUIElementTypeTextView after omnibox open.
-    urlBarKeysClass: 'XCUIElementTypeTextView'
+    urlBarKeysXpath: '//XCUIElementTypeTextView'
   }
 };
 
@@ -148,24 +150,10 @@ const clickElementWithName = async (client, name) => {
   return await client.elementClick(element);
 };
 
-const findElementWithClass = async (client, className) => {
-  const elementObject = await client.findElement('class name', className);
-  return elementObject.ELEMENT;
-};
-
-/*
 const findElementWithXPath = async (client, xpath) => {
   const elementObject = await client.findElement('xpath', xpath);
   return elementObject.ELEMENT;
 };
-
-const clickSeries = async (client, names) => {
-  for (const name of names) {
-    console.log(`clicking ${name}`);
-    await clickElementWithName(client, name);
-  }
-};
-*/
 
 class IOSBrowser {
   constructor ({ browser, incognito, tor, nightly }) {
@@ -214,9 +202,7 @@ class IOSBrowser {
   async openUrl (url) {
     try {
       let urlBarToClick;
-      if (this.urlBarClickClass) {
-        urlBarToClick = await findElementWithClass(this.client, this.urlBarClickClass);
-      } else {
+      if (this.urlBarClick) {
         urlBarToClick = await findElementWithName(this.client, this.urlBarClick);
         if (urlBarToClick === undefined) {
           if (this.urlBarClick2) {
@@ -226,6 +212,9 @@ class IOSBrowser {
             urlBarToClick = await findElementWithName(this.client, this.urlBarKeys);
           }
         }
+      }
+      if (urlBarToClick === undefined && this.urlBarClickXpath) {
+        urlBarToClick = await findElementWithXPath(this.client, this.urlBarClickXpath);
       }
       await this.client.elementClick(urlBarToClick);
       await sleepMs(1000);
@@ -237,13 +226,14 @@ class IOSBrowser {
         }
       }
       let urlBarToSendKeys;
-      if (this.urlBarKeysClass) {
-        urlBarToSendKeys = await findElementWithClass(this.client, this.urlBarKeysClass);
-      } else {
+      if (this.urlBarKeys) {
         urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys);
         if (urlBarToSendKeys === undefined && this.urlBarKeys2) {
           urlBarToSendKeys = await findElementWithName(this.client, this.urlBarKeys2);
         }
+      }
+      if (urlBarToSendKeys === undefined && this.urlBarKeysXpath) {
+        urlBarToSendKeys = await findElementWithXPath(this.client, this.urlBarKeysXpath);
       }
       if (!urlBarToSendKeys) {
         throw new Error(`no url-bar text field found for ${this.browser}`);
@@ -272,7 +262,7 @@ class IOSBrowser {
   }
 
   async clickContent () {
-    const theWebView = await findElementWithClass(this.client, 'XCUIElementTypeWebView');
+    const theWebView = await findElementWithXPath(this.client, '//XCUIElementTypeWebView');
     await this.client.elementClick(theWebView);
   }
 }
