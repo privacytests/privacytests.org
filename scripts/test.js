@@ -640,8 +640,12 @@ const readConfig = (commandLineData) => {
   }
   if (!config.categories) {
     config.categories = [
-      'session', 'main', 'supplementary', 'misc', 'https', 'trackingCookies', 'dns'
+      'session', 'main', 'supplementary', 'misc', 'https', 'trackingCookies'
     ];
+    // DNS leak tests need monitor-dns.js on the Mac; not used for mobile yet.
+    if (!config.android && !config.ios) {
+      config.categories.push('dns');
+    }
   }
   if (config.skip) {
     for (const skipCategory of config.skip) {
