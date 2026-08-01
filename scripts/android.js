@@ -101,7 +101,8 @@ const browserInfo = {
     releasePackageName: 'org.torproject.torbrowser',
     nightlyPackageName: 'org.torproject.torbrowser_alpha',
     startupClick: 'tor_bootstrap_connect_button',
-    urlBarClick: 'toolbar',
+    urlBarClick: 'mozac_browser_toolbar_url_view',
+    urlBarClick2: 'toolbar_wrapper',
     urlBarKeys: 'mozac_browser_toolbar_edit_url_view'
   },
   uc: {
