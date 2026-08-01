@@ -1,0 +1,126 @@
+name: Mobile tests
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: mobile-android
+  cancel-in-progress: false
+
+env:
+  CI: true
+  GITHUB_TOKEN: ${{ github.token }}
+  # capture-website pulls in puppeteer; CI doesn't generate previews, so skip its Chrome download.
+  PUPPETEER_SKIP_DOWNLOAD: true
+
+jobs:
+  android-tests:
+    strategy:
+      fail-fast: false
+      # One physical device / Appium session — do not parallelize matrix cells.
+      max-parallel: 1
+      matrix:
+        browser:
+          - brave
+          - chrome
+          - duckduckgo
+          - edge
+          - firefox
+          - focus
+          - opera
+          - samsung
+          - tor
+          - vivaldi
+          - yandex
+        repetitions: [1] #[1, 2, 3, 4, 5]
+    # Runner name/label: "mobile" (self-hosted service under the `runner` user).
+    # Appium is expected to already be running on this host (port 4723).
+    runs-on: [self-hosted, mobile]
+    defaults:
+      run:
+        working-directory: scripts
+    env:
+      RESULT_BASENAME: ${{ matrix.browser }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: scripts/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Android tests
+        run: node test --android --browser=${{ matrix.browser }} --out=../${{ env.RESULT_BASENAME }}.json
+        timeout-minutes: 90
+
+      - name: Upload results
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          # Include repetitions so matrix cells don't collide on the same artifact name.
+          name: ${{ env.RESULT_BASENAME }}-${{ matrix.repetitions }}-results
+          path: |
+            ${{ env.RESULT_BASENAME }}.json
+            ${{ env.RESULT_BASENAME }}.html
+            failure.png
+          if-no-files-found: warn
+
+  render-results:
+    needs: android-tests
+    if: always()
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: scripts
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: scripts/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download test results
+        uses: actions/download-artifact@v6
+        with:
+          path: artifacts
+          pattern: '*-results'
+
+      - name: Merge and render Android page
+        run: |
+          mapfile -t files < <(find ../artifacts -type f -name '*.json' | sort)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No result JSON files found" >&2
+            exit 1
+          fi
+          node -e '
+            const fs = require("fs");
+            const files = process.argv.slice(1);
+            const merged = JSON.parse(fs.readFileSync(files[0], "utf8"));
+            for (const f of files.slice(1)) {
+              const item = JSON.parse(fs.readFileSync(f, "utf8"));
+              merged.all_tests = merged.all_tests.concat(item.all_tests);
+            }
+            fs.writeFileSync("../android.json", JSON.stringify(merged));
+            console.log(`Merged ${files.length} file(s), ${merged.all_tests.length} trial(s)`);
+          ' "${files[@]}"
+          node render ../android.json
+
+      - name: Upload rendered pages
+        uses: actions/upload-artifact@v6
+        with:
+          name: android-rendered-pages
+          path: |
+            android.html
+            android.json
+            results/latest.html
+          if-no-files-found: warn
