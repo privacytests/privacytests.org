@@ -1,8 +1,8 @@
-name: Retry failed desktop tests
+name: Retry failed tests
 
 on:
   workflow_run:
-    workflows: ["Desktop tests"]
+    workflows: ["Desktop tests", "Mobile tests"]
     types: [completed]
 
 jobs:
