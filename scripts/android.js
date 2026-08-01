@@ -420,7 +420,7 @@ class AndroidBrowser {
     const urlBarToSendKeys = await findElement(this.client, this.packageName, this.urlBarKeys);
     await this.client.elementClear(urlBarToSendKeys);
     await this.client.elementSendKeys(urlBarToSendKeys, url);
-    await this.client.pressKeyCode(KEY_ENTER);
+    await this.client.appiumPressKeyCode(KEY_ENTER);
   }
 
   // Open the url in a new tab.
@@ -502,7 +502,7 @@ const demoBrowser = async (client, browserName, url) => {
   await sleepMs(1000);
   const urlBarToSendKeys = await findElement(client, packageName, urlBarKeys);
   await client.elementSendKeys(urlBarToSendKeys, url);
-  await client.pressKeyCode(KEY_ENTER);
+  await client.appiumPressKeyCode(KEY_ENTER);
   await sleepMs(8000);
   await client.terminateApp(packageName);
 };
