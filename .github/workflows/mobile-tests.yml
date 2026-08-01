@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: mobile-android
+  group: mobile-tests
   cancel-in-progress: false
 
 env:
@@ -14,33 +14,45 @@ env:
   PUPPETEER_SKIP_DOWNLOAD: true
 
 jobs:
-  android-tests:
+  mobile-tests:
     strategy:
       fail-fast: false
-      # One physical device / Appium session — do not parallelize matrix cells.
+      # One Appium host / device pair — do not parallelize matrix cells.
       max-parallel: 1
       matrix:
-        browser:
-          - brave
-          - chrome
-          - duckduckgo
-          - edge
-          - firefox
-          - focus
-          - opera
-          - samsung
-          - tor
-          - vivaldi
-          - yandex
         repetitions: [1] #[1, 2, 3, 4, 5]
-    # Runner name/label: "mobile" (self-hosted service under the `runner` user).
-    # Appium is expected to already be running on this host (port 4723).
+        # Cartesian product with repetitions; platform-specific browser lists.
+        config:
+          # Android
+          - { platform: android, browser: brave }
+          - { platform: android, browser: chrome }
+          - { platform: android, browser: duckduckgo }
+          - { platform: android, browser: edge }
+          - { platform: android, browser: firefox }
+          - { platform: android, browser: focus }
+          - { platform: android, browser: opera }
+          - { platform: android, browser: samsung }
+          - { platform: android, browser: tor }
+          - { platform: android, browser: vivaldi }
+          - { platform: android, browser: yandex }
+          # iOS
+          - { platform: ios, browser: brave }
+          - { platform: ios, browser: chrome }
+          - { platform: ios, browser: duckduckgo }
+          - { platform: ios, browser: edge }
+          - { platform: ios, browser: firefox }
+          - { platform: ios, browser: focus }
+          - { platform: ios, browser: safari }
+          - { platform: ios, browser: vivaldi }
+          - { platform: ios, browser: onion }
+    # Runner name/label: "mobile". Appium is expected to already be running (port 4723).
     runs-on: [self-hosted, mobile]
     defaults:
       run:
         working-directory: scripts
     env:
-      RESULT_BASENAME: ${{ matrix.browser }}
+      PLATFORM: ${{ matrix.config.platform }}
+      BROWSER: ${{ matrix.config.browser }}
 
     steps:
       - uses: actions/checkout@v5
@@ -54,24 +66,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run Android tests
-        run: node test --android --browser=${{ matrix.browser }} --out=../${{ env.RESULT_BASENAME }}.json
+      - name: Run ${{ env.PLATFORM }} tests
+        run: |
+          RESULT_FILE="${PLATFORM}-${BROWSER}-${{ matrix.repetitions }}"
+          echo "RESULT_FILE=${RESULT_FILE}" >> "$GITHUB_ENV"
+          node test --${PLATFORM} --browser=${BROWSER} --out=../${RESULT_FILE}.json
         timeout-minutes: 90
 
       - name: Upload results
         uses: actions/upload-artifact@v6
         if: always()
         with:
-          # Include repetitions so matrix cells don't collide on the same artifact name.
-          name: ${{ env.RESULT_BASENAME }}-${{ matrix.repetitions }}-results
+          name: ${{ env.RESULT_FILE }}-results
           path: |
-            ${{ env.RESULT_BASENAME }}.json
-            ${{ env.RESULT_BASENAME }}.html
+            ${{ env.RESULT_FILE }}.json
+            ${{ env.RESULT_FILE }}.html
             failure.png
           if-no-files-found: warn
 
   render-results:
-    needs: android-tests
+    needs: mobile-tests
     if: always()
     runs-on: ubuntu-latest
     defaults:
@@ -95,32 +109,16 @@ jobs:
           path: artifacts
           pattern: '*-results'
 
-      - name: Merge and render Android page
-        run: |
-          mapfile -t files < <(find ../artifacts -type f -name '*.json' | sort)
-          if [ ${#files[@]} -eq 0 ]; then
-            echo "No result JSON files found" >&2
-            exit 1
-          fi
-          node -e '
-            const fs = require("fs");
-            const files = process.argv.slice(1);
-            const merged = JSON.parse(fs.readFileSync(files[0], "utf8"));
-            for (const f of files.slice(1)) {
-              const item = JSON.parse(fs.readFileSync(f, "utf8"));
-              merged.all_tests = merged.all_tests.concat(item.all_tests);
-            }
-            fs.writeFileSync("../android.json", JSON.stringify(merged));
-            console.log(`Merged ${files.length} file(s), ${merged.all_tests.length} trial(s)`);
-          ' "${files[@]}"
-          node render ../android.json
+      - name: Render android and ios
+        run: node render-multiple --dir=../artifacts --out-dir=..
 
       - name: Upload rendered pages
         uses: actions/upload-artifact@v6
         with:
-          name: android-rendered-pages
+          name: mobile-rendered-pages
           path: |
             android.html
             android.json
-            results/latest.html
+            ios.html
+            ios.json
           if-no-files-found: warn

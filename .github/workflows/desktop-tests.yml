@@ -44,7 +44,7 @@ jobs:
         # instead of merging into (and replacing) the normal brave/off jobs.
         tor: [off]
         # Tor Browser has no distinct incognito mode (and --incognito is a no-op).
-        # Still include tor.json on private pages via render-multiple.
+        # Still copy tor results into private/ / nightly-private/ after the run.
         exclude:
           - browser: tor
             incognito: on
@@ -67,7 +67,9 @@ jobs:
       run:
         working-directory: scripts
     env:
-      RESULT_BASENAME: ${{ matrix.tor == 'on' && format('{0}-tor', matrix.browser) || (matrix.incognito == 'on' && format('{0}-incognito', matrix.browser) || matrix.browser) }}
+      # Browser slug in the artifact name (matrix browser, plus -tor for Brave Tor windows).
+      RESULT_BROWSER: ${{ matrix.tor == 'on' && format('{0}-tor', matrix.browser) || matrix.browser }}
+      RESULT_PRIVATE: ${{ (matrix.incognito == 'on' || matrix.tor == 'on') && 'true' || 'false' }}
 
     steps:
       - uses: actions/checkout@v5
@@ -95,18 +97,31 @@ jobs:
         run: sudo node monitor-dns.js &
 
       - name: Run tests
-        run: node test --browser=${{ matrix.browser }}${{ matrix.incognito == 'on' && ' --incognito' || '' }}${{ matrix.tor == 'on' && ' --tor' || '' }} --out=../${{ env.RESULT_BASENAME }}.json
+        run: |
+          if [ "$RESULT_PRIVATE" = "true" ]; then
+            RESULT_FILE="${RESULT_BROWSER}-private-${{ matrix.repetitions }}"
+          else
+            RESULT_FILE="${RESULT_BROWSER}-${{ matrix.repetitions }}"
+          fi
+          echo "RESULT_FILE=${RESULT_FILE}" >> "$GITHUB_ENV"
+          node test --browser=${{ matrix.browser }}${{ matrix.incognito == 'on' && ' --incognito' || '' }}${{ matrix.tor == 'on' && ' --tor' || '' }} --out=../${RESULT_FILE}.json
+          # Tor Browser has no distinct incognito mode; also include on the private-modes page.
+          if [ "${{ matrix.browser }}" = "tor" ] || [ "${{ matrix.browser }}" = "tor-nightly" ]; then
+            cp "../${RESULT_FILE}.json" "../${RESULT_BROWSER}-private-${{ matrix.repetitions }}.json"
+            cp "../${RESULT_FILE}.html" "../${RESULT_BROWSER}-private-${{ matrix.repetitions }}.html"
+          fi
         timeout-minutes: 90
 
       - name: Upload results
         uses: actions/upload-artifact@v6
         if: always()
         with:
-          # Include repetitions so matrix cells don't collide on the same artifact name.
-          name: ${{ env.RESULT_BASENAME }}-${{ matrix.repetitions }}-results
+          name: ${{ env.RESULT_FILE }}-results
           path: |
-            ${{ env.RESULT_BASENAME }}.json
-            ${{ env.RESULT_BASENAME }}.html
+            ${{ env.RESULT_FILE }}.json
+            ${{ env.RESULT_FILE }}.html
+            ${{ env.RESULT_BROWSER }}-private-${{ matrix.repetitions }}.json
+            ${{ env.RESULT_BROWSER }}-private-${{ matrix.repetitions }}.html
             failure.png
           if-no-files-found: warn
 

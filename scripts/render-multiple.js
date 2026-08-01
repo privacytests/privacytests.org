@@ -1,5 +1,15 @@
-// Merge per-browser result JSON files from a directory and render the four
-// desktop summary pages: index, private, nightly, nightly-private.
+// Merge per-browser result JSON files from a directory and render summary pages.
+//
+// Results are named:
+//   <browser>[-private]-<repetition>.json
+//   android-<browser>-<repetition>.json
+//   ios-<browser>-<repetition>.json
+//
+// Desktop examples:
+//   tor-nightly-1.json          -> nightly
+//   tor-nightly-private-1.json  -> nightly-private
+//   brave-1.json                -> index
+//   brave-private-1.json        -> private
 //
 // Usage: node render-multiple --dir=../artifacts [--out-dir=..]
 
@@ -8,7 +18,14 @@ const path = require('node:path');
 const minimist = require('minimist');
 const { render } = require('./render');
 
-const PAGE_NAMES = ['index', 'private', 'nightly', 'nightly-private'];
+const PAGE_NAMES = [
+  'index',
+  'private',
+  'nightly',
+  'nightly-private',
+  'android',
+  'ios'
+];
 
 const walkJsonFiles = (dir) => {
   const results = [];
@@ -23,39 +40,30 @@ const walkJsonFiles = (dir) => {
   return results;
 };
 
-const pageForBasename = (basename) => {
-  const isPrivate = basename.endsWith('-incognito') || basename.endsWith('-tor');
-  const isNightly = basename.includes('nightly');
-  if (isPrivate && isNightly) {
-    return 'nightly-private';
+// Parse "<optional-platform-><browser>[-private]-<rep>" into a summary page name.
+const pageFromBasename = (basename) => {
+  if (basename.startsWith('android-'))
+    return 'android';
   }
+  if (basename.startsWith('ios-')) {
+    return 'ios';
+  }
+  const isPrivate = browser.endsWith('-private');
   if (isPrivate) {
-    return 'private';
+    browser = browser.slice(0, -'-private'.length);
   }
-  if (isNightly) {
-    return 'nightly';
+  const isNightly = browser.includes('nightly');
+  if (isPrivate) {
+    return isNightly ? 'nightly-private' : 'private';
   }
-  return 'index';
-};
-
-// Tor Browser has no separate incognito run; reuse the same results on the
-// matching private-modes page so it can be compared with other browsers' PBM.
-const isTorBrowserBasename = (basename) =>
-  basename === 'tor' || basename === 'tor-nightly';
-
-const pagesForBasename = (basename) => {
-  const page = pageForBasename(basename);
-  if (isTorBrowserBasename(basename)) {
-    return [page, page === 'nightly' ? 'nightly-private' : 'private'];
-  }
-  return [page];
+  return isNightly ? 'nightly' : 'index';
 };
 
 const bucketFiles = (jsonFiles) => {
   const buckets = Object.fromEntries(PAGE_NAMES.map(name => [name, []]));
   for (const filePath of jsonFiles) {
-    const basename = path.basename(filePath, '.json');
-    for (const page of pagesForBasename(basename)) {
+    const page = pageFromBasename(path.basename(filePath, '.json'));
+    if (page) {
       buckets[page].push(filePath);
     }
   }
@@ -91,6 +99,10 @@ const main = async () => {
   }
   const buckets = bucketFiles(walkJsonFiles(dir));
   for (const name of PAGE_NAMES) {
+    if (buckets[name].length === 0) {
+      console.log(`Skipping ${name}: no result files`);
+      continue;
+    }
     await renderPageFromFiles({
       name,
       files: buckets[name],
@@ -107,4 +119,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { bucketFiles, pageForBasename, pagesForBasename, walkJsonFiles };
+module.exports = { bucketFiles, pageFromBasename, walkJsonFiles, PAGE_NAMES };
