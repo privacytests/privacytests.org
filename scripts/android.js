@@ -50,8 +50,7 @@ const browserInfo = {
     nightlyPackageName: 'com.microsoft.emmx.canary',
     urlBarClick: 'url_bar',
     urlBarClick2: 'search_box_text',
-    urlBarKeys: 'url_bar',
-    goButton: 'line_1'
+    urlBarKeys: 'url_bar'
   },
   firefox: {
     releasePackageName: 'org.mozilla.firefox',
@@ -88,7 +87,8 @@ const browserInfo = {
     releasePackageName: 'com.opera.browser',
     nightlyPackageName: 'com.opera.browser.beta',
     urlBarClick: 'url_field',
-    urlBarKeys: 'url_field'
+    urlBarClick2: 'omnibar',
+    urlBarKeys: 'editable_url_field'
   },
   samsung: {
     releasePackageName: 'com.sec.android.app.sbrowser',
@@ -345,7 +345,7 @@ class AndroidBrowser {
   // Launch the browser.
   async launch () {
     this.client = await webdriverSession(this.browserstack);
-    // Terminating Chrome on BrowserStack App Automate can kill the session
+    // Terminating browser on BrowserStack App Automate can kill the session
     // (ChromeDriver/DevTools disconnect). Local Appium still needs a clean slate.
     if (!this.browserstack) {
       const state = await this.client.queryAppState(this.packageName);
@@ -418,14 +418,8 @@ class AndroidBrowser {
     }
     const urlBarToSendKeys = await findElement(this.client, this.packageName, this.urlBarKeys);
     await this.client.elementClear(urlBarToSendKeys);
-    if (this.goButton) {
-      await this.client.elementSendKeys(urlBarToSendKeys, url);
-      const goButton = await findElement(this.client, this.packageName, this.goButton);
-      await this.client.elementClick(goButton);
-    } else {
-      await this.client.elementSendKeys(urlBarToSendKeys, url);
-      await this.client.appiumPressKeyCode(KEY_ENTER);
-    }
+    await this.client.elementSendKeys(urlBarToSendKeys, url);
+    await this.client.pressKeyCode(KEY_ENTER);
   }
 
   // Open the url in a new tab.
