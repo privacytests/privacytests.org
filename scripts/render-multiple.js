@@ -42,12 +42,14 @@ const walkJsonFiles = (dir) => {
 
 // Parse "<optional-platform-><browser>[-private]-<rep>" into a summary page name.
 const pageFromBasename = (basename) => {
-  if (basename.startsWith('android-'))
+  if (basename.startsWith('android-')) {
     return 'android';
   }
   if (basename.startsWith('ios-')) {
     return 'ios';
   }
+  // Strip trailing repetition: brave-private-1 -> brave-private
+  let browser = basename.replace(/-\d+$/, '');
   const isPrivate = browser.endsWith('-private');
   if (isPrivate) {
     browser = browser.slice(0, -'-private'.length);
