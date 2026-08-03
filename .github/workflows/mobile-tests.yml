@@ -16,7 +16,29 @@ env:
   PUPPETEER_SKIP_DOWNLOAD: true
 
 jobs:
+  android-preflight:
+    runs-on: [self-hosted, mobile]
+    defaults:
+      run:
+        working-directory: scripts
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: scripts/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Update Android apps via Play Store
+        run: node android-preflight.js
+        timeout-minutes: 50
+
   mobile-tests:
+    needs: android-preflight
     strategy:
       fail-fast: false
       # One Appium host / device pair — do not parallelize matrix cells.
