@@ -131,6 +131,7 @@ const webdriverSession = _.memoize(() =>
       'appium:deviceName': 'iPhone SE',
       'appium:wdaLaunchTimeout': 60000,
       'appium:wdaConnectionTimeout': 60000,
+      'appium:newCommandTimeout': 300,
       'appium:updatedWDABundleId': 'org.privacytests.WebDriverAgentRunner',
       'appium:platformVersion': getPlatformVersion(),
       'appium:showXcodeLog': true
