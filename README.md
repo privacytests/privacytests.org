@@ -1,7 +1,7 @@
-# PrivacyTests.org
-PrivacyTests.org is an open-source testing program that measures browser privacy characteristics, and a website, https://privacytests.org, that renders the results for human consumption.
+# PrivacyTests
+PrivacyTests is an open-source testing program that measures browser privacy characteristics, and a website, https://privacytests.org, that renders the results for human consumption.
 
-PrivacyTests.org uses the MIT license.
+PrivacyTests uses the MIT license.
 
 * aioquic: a submodule with a fork of the aioquic project for HTTP3-related tests
 * assets: copy, css, icons, images, fonts for running tests and rendering pages
@@ -14,7 +14,7 @@ The published site lives in a separate repository, [privacytests-website](https:
 
 ```
 parent/
-  privacytests.org/          # this repository (tests)
+  privacytests/          # this repository (tests)
   privacytests-website/      # published HTML/JSON/PNG (optional for running tests)
 ```
 
