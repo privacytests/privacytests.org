@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('node:path');
 const { execSync } = require('child_process');
 const { compareAndCheck } = require('./check.js');
+const { getWebsiteDir } = require('./website-dir.js');
 const minimist = require('minimist');
 
 // Constants
@@ -57,7 +58,8 @@ const readBrowserVersions = (issueNumber) => {
   const browserVersions = {};
   for (const platform of Object.keys(platformToDataFile)) {
     const file = platformToDataFile[platform];
-    const data = JSON.parse(fs.readFileSync(`../website/archive/issue${issueNumber}/${file}`));
+    const data = JSON.parse(fs.readFileSync(
+      path.join(getWebsiteDir(), 'archive', `issue${issueNumber}`, file)));
     browserVersions[platform] = {};
     for (const test of data.all_tests) {
       if (test && test.browser !== undefined) {
@@ -147,9 +149,9 @@ const main = async () => {
     throw new Error("please enter a date");
   }
   await compareAndCheck(date, force);
-  const indexPath = '../website';
+  const indexPath = getWebsiteDir();
   const issueNumber = fs.readFileSync('issue-number').toString().trim();
-  const archivePath = `../website/archive/issue${issueNumber}`;
+  const archivePath = path.join(indexPath, 'archive', `issue${issueNumber}`);
   createDir(archivePath);
   const resultsPath = `../results/${date}`;
   copyDirFilesAndGitAdd(resultsPath, archivePath, allowedSuffixes);

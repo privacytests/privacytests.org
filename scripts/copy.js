@@ -1,6 +1,8 @@
 const fs = require('fs');
+const path = require('path');
 const marked = require('marked');
 const template = require('./template.js');
+const { getWebsiteDir } = require('./website-dir.js');
 
 // Wraps content in a div element.
 const wrapCopy = (content) => `
@@ -23,7 +25,7 @@ const generateHtmlFile = async (filename) => {
     previewImageUrl: previewFilename
   });
   //  console.log(htmlOutput);
-  const htmlPath = `../website/${newFilename}`;
+  const htmlPath = path.join(getWebsiteDir(), newFilename);
   fs.writeFileSync(htmlPath, htmlOutput, 'utf8');
   const previewImage = htmlPath.replace('.html', '-preview.png');
   console.log({ htmlPath, previewImage });

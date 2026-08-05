@@ -73,6 +73,16 @@ For example:
 
 writes results to `temp*`
 
+## Publishing the website
+
+The live site is the sibling repo [privacytests-website](https://github.com/privacytests/privacytests-website). Clone it next to `privacytests.org` (or set `WEBSITE_DIR`). Then:
+
+1. `node prepare <YYYYMMDD>` — copies rendered results into the website repo and `git add`s them
+2. Commit in `privacytests-website` (and any related copy changes here, e.g. `assets/copy/news.md`)
+3. `npm run publish` — pushes the website repo and bumps the local issue number
+
+Running tests does not require the website checkout.
+
 ## Development
 
 To hack on the code, and get fast feedback, use:
