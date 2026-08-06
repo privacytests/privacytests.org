@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>test hsts</title>
+    <meta charset="utf8">
+    <link rel="stylesheet" href="test.css">
+  </head>
+  <body>
+    <script src="./post_data.js"></script>
+    <script src="./hsts2.js"></script>
+    <script>
+     (async () => {
+       const results = await test_hsts();
+       await postData(results, "hsts2");
+     })();
+    </script>
+  </body>
+</html>
