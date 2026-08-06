@@ -4,6 +4,8 @@ After=network.target
 
 [Service]
 WorkingDirectory=/home/arthur/privacytests.org/live
+ExecStartPre=/usr/local/bin/npm install --prefix /home/arthur/privacytests.org/live
+ExecStartPre=/usr/local/bin/npm install --prefix /home/arthur/privacytests.org/scripts
 ExecStart=/usr/local/bin/nodemon --exitcrash index.js
 Restart=always
 User=arthur
