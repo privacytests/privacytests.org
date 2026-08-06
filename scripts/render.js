@@ -558,8 +558,10 @@ const renderPage = async ({ dataFiles, aggregate }) => {
     console.log(report.results[0].messages);
     throw new Error('HTML validation failed.');
   }
+  fs.mkdirSync(path.dirname(resultsFileHTMLLatest), { recursive: true });
   fs.writeFileSync(resultsFileHTMLLatest, content);
   console.log(`Wrote out ${fileUrl(resultsFileHTMLLatest)}`);
+  fs.mkdirSync(path.dirname(resultsFileHTML), { recursive: true });
   fs.copyFileSync(resultsFileHTMLLatest, resultsFileHTML);
   console.log(`Wrote out ${fileUrl(resultsFileHTML)}`);
   return { resultsFileHTML, resultsFilePreviewImage };
