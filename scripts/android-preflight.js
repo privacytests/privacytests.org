@@ -137,7 +137,13 @@ async function main () {
   try {
     const appState = await client.queryAppState(PLAY_STORE);
     if (appState >= 2) {
-      await client.terminateApp(PLAY_STORE);
+      try {
+        await client.terminateApp(PLAY_STORE);
+      } catch (e) {
+        console.warn(
+          'Could not fully terminate Play Store (continuing anyway):',
+          e.message || e);
+      }
       await sleepMs(1000);
     }
 
