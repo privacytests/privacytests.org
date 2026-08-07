@@ -242,12 +242,21 @@ class IOSBrowser {
       await this.client.elementSendKeys(urlBarToSendKeys, url);
       await this.client.elementSendKeys(urlBarToSendKeys, '\r');
     } catch (e) {
-      try {
-        console.log('UI hierarchy after openUrl failure:\n', await this.client.getPageSource());
-      } catch (dumpError) {
-        console.log('Failed to dump UI hierarchy:', dumpError);
-      }
+      await IOSBrowser.logUiHierarchy('UI hierarchy after openUrl failure');
       throw e;
+    }
+  }
+
+  static async logUiHierarchy (label = 'UI hierarchy') {
+    try {
+      if (!webdriverSession.cache || webdriverSession.cache.size === 0) {
+        console.log('No Appium session for UI dump');
+        return;
+      }
+      const client = await webdriverSession.cache.values().next().value;
+      console.log(`${label}:\n`, await client.getPageSource());
+    } catch (dumpError) {
+      console.log('Failed to dump UI hierarchy:', dumpError);
     }
   }
 

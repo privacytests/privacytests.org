@@ -440,13 +440,21 @@ class AndroidBrowser {
         }
       }
     }
+    await AndroidBrowser.logUiHierarchy('UI hierarchy after openUrl failure');
+    throw lastError;
+  }
+
+  static async logUiHierarchy (label = 'UI hierarchy') {
     try {
-      const source = await this.client.getPageSource();
-      console.log('UI hierarchy after openUrl failure:\n', source);
+      if (!webdriverSession.cache || webdriverSession.cache.size === 0) {
+        console.log('No Appium session for UI dump');
+        return;
+      }
+      const client = await webdriverSession.cache.values().next().value;
+      console.log(`${label}:\n`, await client.getPageSource());
     } catch (dumpError) {
       console.log('Failed to dump UI hierarchy:', dumpError);
     }
-    throw lastError;
   }
 
   async highFiveIfNecessary () {

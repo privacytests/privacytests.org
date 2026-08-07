@@ -788,9 +788,11 @@ const main = async () => {
   } catch (e) {
     log(e);
     try {
-      // Desktop screencapture is useless for iOS/Android (no Mac UI for the device).
-      if (!config?.android && !config?.ios &&
-          typeof DesktopBrowser.captureScreenshot === 'function') {
+      if (config?.ios) {
+        await IOSBrowser.logUiHierarchy('UI hierarchy at testing failure');
+      } else if (config?.android) {
+        await AndroidBrowser.logUiHierarchy('UI hierarchy at testing failure');
+      } else { // Desktop browsers
         await DesktopBrowser.captureScreenshot(failureScreenshotPath);
       }
     } catch (screenshotError) {
