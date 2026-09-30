@@ -1,4 +1,24 @@
 # News
+## [Issue 102](/archive/issue102): 2026-09-29
+
+### New browser versions
+
+On Desktop:
+* Brave 1.96
+* Chrome 154.0
+* Duckduckgo 1.209
+* Edge 154.0
+
+On iOS:
+* Chrome 154.8037
+* Duckduckgo 7.238
+
+On Android:
+* Brave 1.96
+* Opera 102.1
+
+## [Issue 101](/archive/issue101): 2026-09-22
+
 ## [Issue 100](/archive/issue100): 2026-09-14
 
 ### New browser versions
