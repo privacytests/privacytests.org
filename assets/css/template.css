@@ -7,6 +7,7 @@
   --header-link: black;
   --header-link-hover: darkblue;
   --blockquote-bg: #eee;
+  --logo-disc: #fff;
   --link: #0000ee;
   --link-visited: #551a8b;
 }
@@ -81,7 +82,7 @@ a:visited {
   display: flex;
   align-items: center;
 }
-.header div.title img {
+.header div.title .pto-logo {
   padding-right: 16px;
 }
 
@@ -125,7 +126,14 @@ a:visited {
   width: 20px;
 }
 .pto-logo {
-  height:48px;
+  height: 48px;
+  width: 48px;
+  display: block;
+  flex-shrink: 0;
+  box-sizing: content-box;
+}
+.pto-logo-disc {
+  fill: var(--logo-disc);
 }
 
 .header a:link,
@@ -186,6 +194,7 @@ h1.title {
     --header-link: #f2f2f2;
     --header-link-hover: #9ec1ff;
     --blockquote-bg: #202020;
+    --logo-disc: #3a3a3a;
     --link: #8ab4f8;
     --link-visited: #c58af9;
   }
