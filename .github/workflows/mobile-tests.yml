@@ -18,6 +18,8 @@ env:
 jobs:
   preflight:
     uses: ./.github/workflows/preflight.yml
+    with:
+      runs-on: mobile
 
   android-preflight:
     needs: preflight

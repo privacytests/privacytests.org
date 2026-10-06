@@ -2,10 +2,15 @@ name: Preflight
 
 on:
   workflow_call:
+    inputs:
+      runs-on:
+        description: Runner label for preflight checks
+        type: string
+        required: true
 
 jobs:
   checks:
-    runs-on: macos-latest
+    runs-on: ${{ inputs.runs-on }}
     steps:
       - uses: actions/checkout@v5
 

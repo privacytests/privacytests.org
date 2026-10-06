@@ -4,7 +4,7 @@ This directory includes scripts to run browser privacy tests (fingerprinting res
 
 ## Set up
 
-PrivacyTests can run tests on browser on Mac, Linux (partial), iOS and Android. Depending on the platform, you will need to install a few things.
+PrivacyTests can run tests on browser on Mac, iOS and Android. Depending on the platform, you will need to install a few things. (Linux and Windows are not currently supported.)
 
 ### On Mac
 
@@ -14,10 +14,6 @@ mkcert -install
 ```
 
 You may need to set Settings > Privacy & Security > Full Disk Access > Terminal > (enabled)
-
-### On Linux
-
-`sudo apt-get install libpng-dev libxtst-dev libx11-dev`
 
 ### iOS
 
