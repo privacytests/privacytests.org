@@ -36,17 +36,17 @@ This project is a work in progress and is under active development! I plan to co
 
 I want to hear from you! All kinds of feedback: comments, suggestions, critiques and questions are welcome. You can contact me via email (contact@privacytests.org), [X/Twitter](https://x.com/privacytests), [Mastodon](https://mastodon.social/@privacytests), or [github](https://github.com/arthuredelstein/privacytests.org/issues).
 
-## Full disclosure and transparency
+## About the Author
 
-*(Updated October 2025)*
+*(Updated October 2026)*
 
 This website and the browser privacy tests are an independent project by me, [Arthur Edelstein](https://www.linkedin.com/in/arthuredelstein/), initially launched to the public in 2021. I have developed this project on my own time and on my own initiative.
 
-I have extensive career experience in browser privacy, having previously worked for the Tor Project, Mozilla and Brave. At all times I have run this project independently.
+I have extensive career experience in browser privacy, having previously worked on for the Tor Project, Mozilla and Brave to improve their respective web browsers. At Tor, I introduced stream isolation, where Tor Browser uses a separate circuit for each website you visit. At Firefox, I was the product manager for the teams that developed Total Cookie Protection and HTTPS-Only Mode. At Brave, I introduced HTTPS by Default and co-authored a paper on the Pool-Party Attack. Currently I am building [Privacy Magic](https://privacymagic.com), a browser extension for Chrome.
 
-I am committed to maintaining this website's accuracy and impartiality. It is my goal not to promote any browser here, but rather to offer objective test results for all browsers that encourages a general improvement in privacy across the industry.
+At all times I have run this project independently; no company has sponsored this work or influence the results in any way. I am committed to maintaining this website's accuracy and impartiality. It is my goal not to promote any browser here, but rather to offer objective test results for all browsers that encourages a general improvement in privacy across the industry.
 
-By keeping this project fully open source, I endeavor to provide the maximum possible transparency and verifiability of the tests and results. Anyone who wishes to check the results can clone the git repository and run the browser tests independently. Ideas for additional tests, or code (pull requests) for additional tests that provide further insight into browser privacy, will be gratefully accepted.
+By keeping this project fully open source, I endeavor to provide the maximum possible transparency and verifiability of the tests and results. Anyone who wishes to check the results can clone the git repository and run the browser tests independently.
 
 ## Thanks
 
