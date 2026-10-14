@@ -573,7 +573,7 @@ const renderPage = async ({ dataFiles, aggregate }) => {
 
 const render = async ({ dataFiles, live, aggregate }) => {
   const { resultsFileHTML, resultsFilePreviewImage } = await renderPage({ dataFiles, aggregate });
-  // Skip opening results and preview generation in CI / live-server mode.
+  // Skip opening results and preview generation in CI / web-dev-server mode.
   if (!live && !process.env.CI) {
     open(fileUrl(resultsFileHTML));
     const createPreviewImage = (await import('./preview.mjs')).createPreviewImage;
