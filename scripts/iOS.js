@@ -73,7 +73,6 @@ const browserInfo = {
   safari: {
     name: 'Safari',
     bundleId: 'com.apple.mobilesafari',
-    urlBarClick: 'TabBarItemTitle',
     // iOS 26 capsule UI sometimes replaces TabBarItemTitle with Reader Available.
     urlBarClickXpath: "//XCUIElementTypeOther[starts-with(@name,'CapsuleNavigationBar')]",
     urlBarKeys: 'URL'
