@@ -1,3 +1,18 @@
+:root {
+  --table-header-bg: white;
+  --row-alt-bg: #eee;
+  --row-bg: white;
+  --muted: gray;
+  --heading: #222;
+  --date: rgb(70, 70, 70);
+  --border: lightgray;
+  --selected-border: #a9e6a9;
+  --tooltip-bg: #fffff7;
+  --tooltip-text: black;
+  --tooltip-border: gray;
+  --highlight: #ffa;
+}
+
 table.comparison-table {
   border-collapse:collapse;
   margin-top: 10px;
@@ -5,7 +20,7 @@ table.comparison-table {
   margin: 10px 10px;
 }
 table.comparison-table tr th.table-header {
-  background-color: white;
+  background-color: var(--table-header-bg);
   text-align: center;
   word-break: break-all;  
   vertical-align: top;
@@ -26,7 +41,7 @@ table.comparison-table .subtitle {
   font-size: 14px;
   padding-top: 10px;
   line-height: 22px;
-  color: gray
+  color: var(--muted)
 }
 table.comparison-table tr th.table-header:not(:first-child) {
   white-space: nowrap;
@@ -35,10 +50,10 @@ table.comparison-table tr:first-child th:first-child {
   z-index: 2;
 }
 table.comparison-table tr:nth-child(2n+1) td {
-  background-color: #eee;
+  background-color: var(--row-alt-bg);
 }
 table.comparison-table tr:nth-child(2n) td {
-  background-color: white;
+  background-color: var(--row-bg);
 }
 table.comparison-table tr td {
   min-width: 49px;
@@ -59,12 +74,12 @@ table.comparison-table .subheading > div {
 }
 table.comparison-table .subheading-title {
   font-size: 18px;
-  color:#222;
+  color: var(--heading);
 }
 table.comparison-table .subheading .tagline {
   font-weight: normal;
   font-size: 16px;
-  color:#222;
+  color: var(--heading);
   padding: 8px 0px;
 }
 table.comparison-table .first.subheading {
@@ -109,7 +124,7 @@ table.comparison-table .date {
   text-align: center;
   font-size: 14px;
   padding-top: 6px;
-  color: rgb(70, 70, 70);
+  color: var(--date);
 }
 .banner {
   padding: 10px;
@@ -119,12 +134,12 @@ table.comparison-table .date {
 #issueBanner {
   font-style: italic;
   font-size: 16px;
-  border-bottom: 1px lightgray solid;
+  border-bottom: 1px solid var(--border);
 }
 #navBanner {
   font-weight: bold;
   font-size: 16px;
-  border-bottom: 1px lightgray solid;
+  border-bottom: 1px solid var(--border);
   justify-content: center;
   align-content: stretch;
 }
@@ -141,7 +156,7 @@ table.comparison-table .date {
 }
 .selectedItem {
   font-weight: bold;
-  border-bottom: 4px #a9e6a9 solid;
+  border-bottom: 4px solid var(--selected-border);
 }
 .navItem:not(.selectedItem) {
   opacity: 60%;
@@ -179,10 +194,10 @@ table.comparison-table .date {
   justify-content: center;
   align-content: stretch;
   vertical-align: top;
-  border-bottom:  lightgray dotted 1px;
+  border-bottom: 1px dotted var(--border);
 }
 .banner .click-anywhere {
-  color: gray;
+  color: var(--muted);
   font-size: 14px;
   display: inline-block;
 }
@@ -207,10 +222,10 @@ table.comparison-table .date {
   cursor: pointer;
 }
 .tooltipText {
-  background-color: #fffff7;
+  background-color: var(--tooltip-bg);
   border-radius: 4px;
-  border: 1px solid gray;
-  color: black;
+  border: 1px solid var(--tooltip-border);
+  color: var(--tooltip-text);
   font-family: sans-serif;
   font-size: 14px;
   font-weight: normal;
@@ -229,4 +244,30 @@ table.comparison-table .date {
   border-radius: 6px;
   width: 32px;
   height: 32px;
+}
+
+/* The results page sets this highlight from script as an inline color. */
+.tooltipParent[style*="background-color"] {
+  background-color: var(--highlight) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --table-header-bg: #121212;
+    --row-alt-bg: #1c1c1c;
+    --row-bg: #121212;
+    --muted: #a3a3a3;
+    --heading: #f0f0f0;
+    --date: #b5b5b5;
+    --border: #3a3a3a;
+    --selected-border: #7dce7d;
+    --tooltip-bg: #22221c;
+    --tooltip-text: #eee;
+    --tooltip-border: #555;
+    --highlight: #3f3818;
+  }
+
+  .bad {
+    content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='187.124' height='187.124' fill='%23009edc'%3E%3Cg transform='translate(-9.232 -1.218)'%3E%3Crect width='38.255' height='227.157' x='-24.794' y='-253.285' ry='.667' style='fill:%23ff2d2d;stroke:none' transform='rotate(135)'/%3E%3Crect width='38.255' height='227.157' x='-158.834' y='-107.912' ry='.667' style='fill:%23ff2d2d;stroke:none' transform='rotate(-135)'/%3E%3C/g%3E%3C/svg%3E");
+  }
 }
