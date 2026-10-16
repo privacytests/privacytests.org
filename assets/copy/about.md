@@ -44,7 +44,7 @@ This website and the browser privacy tests are an independent project by me, [Ar
 
 I have extensive career experience in browser privacy, having previously worked on for the Tor Project, Mozilla and Brave to improve their respective web browsers. At Tor, I introduced stream isolation, where Tor Browser uses a separate circuit for each website you visit. At Firefox, I was the product manager for the teams that developed Total Cookie Protection and HTTPS-Only Mode. At Brave, I introduced HTTPS by Default and co-authored a paper on the Pool-Party Attack. Currently I am building [Privacy Magic](https://privacymagic.com), a browser extension for Chrome.
 
-At all times I have run this project independently; no company has sponsored this work or influence the results in any way. I am committed to maintaining this website's accuracy and impartiality. It is my goal not to promote any browser here, but rather to offer objective test results for all browsers that encourages a general improvement in privacy across the industry.
+At all times I have run this project independently; no company has sponsored this work or influenced the results in any way. I am committed to maintaining this website's accuracy and impartiality. It is my goal not to promote any browser here, but rather to offer objective test results for all browsers that encourages a general improvement in privacy across the industry.
 
 By keeping this project fully open source, I endeavor to provide the maximum possible transparency and verifiability of the tests and results. Anyone who wishes to check the results can clone the git repository and run the browser tests independently.
 
