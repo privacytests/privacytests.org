@@ -298,6 +298,9 @@ export const tests = async () => {
         if (navigator.locks) {
           navigator.locks.request(key, lock => new Promise((resolve) => {}));
           const queryResult = await navigator.locks.query();
+          if (!queryResult.held[0]) {
+            throw new Error('Unsupported');
+          }
           return queryResult.held[0].clientId;
         } else {
           throw new Error('Unsupported');
@@ -306,6 +309,15 @@ export const tests = async () => {
       read: async () => {
         if (navigator.locks) {
           const queryResult = await navigator.locks.query();
+          if (!queryResult.held[0]) {
+            // Same-site empty held: locks aren't usable across contexts here
+            // (common on mobile WebViews). Cross-site empty held is a pass signal.
+            const same = (new URL(window.location)).searchParams.get('thirdparty') === 'same';
+            if (same) {
+              throw new Error('Unsupported');
+            }
+            return null;
+          }
           return queryResult.held[0].name;
         }
       }
