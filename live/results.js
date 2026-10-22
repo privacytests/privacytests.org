@@ -143,6 +143,9 @@ const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDiff
     const readDifferentFirstPartyFailedToFetch = readDifferentFirstParty ? readDifferentFirstParty.startsWith('Error: Failed to fetch') : false;
     unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith('Error: No requests received') : false);
     unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith('Error: image load failed') : false);
+    // Same-site BroadcastChannel timeout: API exists but isn't usable across
+    // contexts in this browser (common on mobile WebViews).
+    unsupported = unsupported || (readSameFirstParty === 'Error: no BroadcastChannel message');
     const testFailed = !unsupported && (!readSameFirstParty || (readSameFirstParty.startsWith('Error:') && !readSameFirstPartyFailedToFetch));
     const passed = (testFailed || unsupported)
       ? undefined

@@ -162,7 +162,11 @@ export const tests = async () => {
             }
           };
           bc.postMessage('request');
-          setTimeout(() => reject(new Error('no BroadcastChannel message')), 3000);
+          setTimeout(() => {
+            // Same-site silence means BC isn't usable here (e.g. mobile WebView).
+            const same = (new URL(window.location)).searchParams.get('thirdparty') === 'same';
+            reject(new Error(same ? 'Unsupported' : 'no BroadcastChannel message'));
+          }, 3000);
         })
     },
     'fetch cache': {
