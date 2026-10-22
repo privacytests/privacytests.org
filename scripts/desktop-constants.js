@@ -52,8 +52,7 @@ const macOSdefaultBrowserSettings = {
     basedOn: 'firefox',
     useOpen: true,
     env: { MOZ_DISABLE_AUTO_SAFE_MODE: '1' },
-    brewTap: 'akdev1l/apps',
-    brewCask: 'akdev1l/apps/librewolf',
+    brewCask: 'librewolf',
     postLaunchDelay: 5000
   },
   mullvad: {
