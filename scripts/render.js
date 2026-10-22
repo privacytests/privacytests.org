@@ -192,9 +192,11 @@ const allHaveValue = (x, value) => {
 // more information.
 const testBody = ({ passed, testFailed, tooltip, unsupported }) => {
   const allUnsupported = allHaveValue(unsupported, true);
+  const allTestFailed = allHaveValue(testFailed, true);
   const anyDidntPass = Array.isArray(passed) ? passed.some(x => x === false) : (passed === false);
-  const altText = allUnsupported ? 'Unsupported' : (anyDidntPass ? 'Failed' : 'Passed');
-  return `<td class='tooltipParent'><img alt='${altText}' src='' class='dataPoint ${(allUnsupported) ? 'na' : (anyDidntPass ? 'bad' : 'good')}'
+  const markerClass = allUnsupported ? 'na' : (allTestFailed ? 'test-failed' : (anyDidntPass ? 'bad' : 'good'));
+  const altText = allUnsupported ? 'Unsupported' : (allTestFailed ? 'Test failed' : (anyDidntPass ? 'Failed' : 'Passed'));
+  return `<td class='tooltipParent'><img alt='${altText}' src='' class='dataPoint ${markerClass}'
 >
 <pre class="tooltipText">${escapeHtml(tooltip)}</pre></td>`;
 };
@@ -393,6 +395,7 @@ const content = (results, jsonFilename, title, nightly, incognito, testMyBrowser
         <div><img class="marker good" alt="Passed" src=""> = Passed privacy test</div>
         <div><img class="marker bad" alt="Failed" src=""> = Failed privacy test</div>
         <div><img class="marker na" alt="Unsupported" src=""> = No such feature</div>
+        <div><img class="marker test-failed" alt="Test failed" src=""> = Test failed</div>
       </div>
       <div class="banner" id="instructions">
         <div><span class="click-anywhere">(Click anywhere for more info.)</span></div>
