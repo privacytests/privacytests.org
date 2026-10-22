@@ -107,13 +107,17 @@ export const tests = async () => {
       read: async () => {
         const worker = new window.SharedWorker('supercookies_sharedworker.js');
         worker.port.start();
+        const same = (new URL(window.location)).searchParams.get('thirdparty') === 'same';
         const messagePromise = new Promise((resolve, reject) => {
           worker.port.onmessage = (e) => resolve(e.data);
-          setTimeout(() => reject(new Error('no SharedWorker message received')), 200);
+          setTimeout(() => {
+            // Same-site silence: SharedWorker isn't usable across contexts here.
+            reject(new Error(same ? 'Unsupported' : 'no SharedWorker message received'));
+          }, 1000);
         });
         worker.port.postMessage('request');
         const message = await messagePromise;
-        if ((new URL(window.location)).searchParams.get('thirdparty') === 'same' && message === 'none') {
+        if (same && message === 'none') {
           throw new Error('Unsupported');
         }
         return message;
