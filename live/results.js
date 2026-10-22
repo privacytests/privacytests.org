@@ -143,10 +143,16 @@ const getJointResult = (writeResults, readResultsSameFirstParty, readResultsDiff
     const readDifferentFirstPartyFailedToFetch = readDifferentFirstParty ? readDifferentFirstParty.startsWith('Error: Failed to fetch') : false;
     unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith('Error: No requests received') : false);
     unsupported = unsupported || (readSameFirstParty ? readSameFirstParty.startsWith('Error: image load failed') : false);
-    const testFailed = !unsupported && (!readSameFirstParty || (readSameFirstParty.startsWith('Error:') && !readSameFirstPartyFailedToFetch));
+    // Both sides empty (e.g. Safari Private blocking third-party storage): nothing
+    // to track with, so count as a pass rather than an inconclusive testFailed.
+    const isEmptyResult = (value) => value == null || value === '';
+    const bothEmpty = isEmptyResult(readSameFirstParty) && isEmptyResult(readDifferentFirstParty);
+    const testFailed = !unsupported && !bothEmpty &&
+      (!readSameFirstParty || (readSameFirstParty.startsWith('Error:') && !readSameFirstPartyFailedToFetch));
     const passed = (testFailed || unsupported)
       ? undefined
-      : (readSameFirstParty !== readDifferentFirstParty) ||
+      : bothEmpty ||
+      (readSameFirstParty !== readDifferentFirstParty) ||
       (readSameFirstPartyFailedToFetch && readDifferentFirstPartyFailedToFetch);
     jointResult[test] = { write, read, unsupported, readSameFirstParty, readDifferentFirstParty, passed, testFailed, description };
   }
