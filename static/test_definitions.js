@@ -126,20 +126,30 @@ export const tests = async () => {
     blob: {
       category: 'supercookies',
       description: "A 'blob URL' is a local reference to some raw data. Trackers can use a blob URL to share data between websites.",
-      write: (secret) => {
+      write: async (secret) => {
         try {
           const blobURL = URL.createObjectURL(new Blob([secret]));
-          fetch(`${baseURI}blob?mode=write&key=${secret}&blobUrl=${encodeURIComponent(blobURL)}`);
+          await fetch(`${baseURI}blob?mode=write&key=${secret}&blobUrl=${encodeURIComponent(blobURL)}`);
         } catch (e) {
           throw new Error('Unsupported');
         }
       },
       read: async (secret) => {
-        const response = await fetch(`${baseURI}blob?mode=read&key=${secret}`);
-        const result = await response.json();
-        const blobUrl = decodeURIComponent(result.blobUrl);
-        const blobResponse = await fetch(blobUrl);
-        return blobResponse.text();
+        const same = (new URL(window.location)).searchParams.get('thirdparty') === 'same';
+        try {
+          const response = await fetch(`${baseURI}blob?mode=read&key=${secret}`);
+          const result = await response.json();
+          const blobUrl = decodeURIComponent(result.blobUrl);
+          const blobResponse = await fetch(blobUrl);
+          return blobResponse.text();
+        } catch (e) {
+          // Same-site blob fetch failure: URL isn't usable across contexts here
+          // (common on iOS / some Android browsers). Cross-site failure is a pass signal.
+          if (same) {
+            throw new Error('Unsupported');
+          }
+          throw e;
+        }
       }
     },
     BroadcastChannel: {
