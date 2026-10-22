@@ -31,9 +31,16 @@ const testTor = async () => {
 };
 
 const testECH = async () => {
-  const response = await fetch(
-    'https://encryptedsni.com/cdn-cgi/trace',
-    { mode: 'cors', cache: 'reload' });
+  const echTraceUrl = 'https://encryptedsni.com/cdn-cgi/trace';
+  const fetchOpts = { mode: 'cors', cache: 'reload' };
+  // Discarded warmup: give DNS/HTTPS RR (ECH config) a chance to populate
+  // before the scored handshake. First connections often race A/AAAA vs HTTPS.
+  try {
+    await fetch(`${echTraceUrl}?t=${Date.now()}`, fetchOpts);
+  } catch (e) {
+    console.log('ECH warmup failed', e);
+  }
+  const response = await fetch(`${echTraceUrl}?t=${Date.now()}`, fetchOpts);
   const rawText = await response.text();
   const json = Object.fromEntries(rawText.split('\n').map(line => line.split('=')));
   const SNI_status = json.sni;
