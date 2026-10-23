@@ -5,6 +5,7 @@ const { exec, execSync, execAsync, sleepMs, browserProfilePath, killProcessesWit
 const systemNetworkSettings = require('./system-network-settings');
 const path = require('node:path');
 const { macOSdefaultBrowserSettings, defaultAppDirectory } = require('./desktop-constants');
+const { validateExtensionId, writeExternalExtension, enableInstalledExtension } = require('./chrome-extension');
 
 const defaultBinaryPath = 'Contents/MacOS';
 
@@ -121,9 +122,19 @@ const fixSafari = (incognito, nightly) => {
 
 // A Browser object represents a browser we run tests on.
 class DesktopBrowser {
-  constructor ({ browser, executablePath, incognito, tor, nightly, appDir }) {
+  constructor ({ browser, executablePath, incognito, tor, nightly, appDir, extension }) {
     Object.assign(this, { browser, incognito, tor, nightly });
     this._defaults = macOSdefaultBrowserSettings[browser];
+    this._extensionId = extension ? validateExtensionId(extension) : undefined;
+    this._extensionAcknowledged = false;
+    if (this._extensionId && this._defaults.basedOn !== 'chromium') {
+      throw new Error(
+        `--extension requires a Chromium-based browser such as Chrome or Edge (got ${browser}).`);
+    }
+    if (this._extensionId && incognito) {
+      throw new Error(
+        '--extension applies to a normal window. Incognito does not load extensions.');
+    }
     this._version = undefined;
     this._path = executablePath ?? browserPath({ browser, nightly, appDir });
     this._appPath = this._path.split('.app')[0] + '.app';
@@ -205,10 +216,36 @@ class DesktopBrowser {
     if (this.browser === 'safari') {
       fixSafari(this.incognito, this.nightly);
     }
-    const launchCommand = this._launchCommand ?? this._command;
+    // After a clean wipe, and again on every relaunch. Chrome installs from
+    // this file once and keeps the extension's state while the file remains.
+    if (this._extensionId) {
+      await writeExternalExtension(this._profilePath, this._extensionId);
+    }
+    let launchCommand = this._launchCommand ?? this._command;
+    // Debugging port only until this profile enables the extension. Later
+    // launches use the same flags as a stock run.
+    if (this._extensionId && !this._extensionAcknowledged) {
+      launchCommand += ' --remote-debugging-port=0 chrome://extensions';
+    }
     this._process = exec(launchCommand, this._defaults.useOpen ? {} : { env: this._defaults.env });
     await sleepMs(this.tor ? this._defaults.torPostLaunchDelay : (this._defaults.postLaunchDelay ?? 2000));
     await this._logRunningProcesses('after launch');
+  }
+
+  // Turn on an externally installed extension in this running browser.
+  // No-op once the profile has acknowledged it.
+  async acknowledgeExtension () {
+    if (!this._extensionId || this._extensionAcknowledged) {
+      return;
+    }
+    if (!this._process) {
+      throw new Error('browser not launched');
+    }
+    await enableInstalledExtension({
+      userDataDir: this._profilePath,
+      extensionId: this._extensionId
+    });
+    this._extensionAcknowledged = true;
   }
 
   // Get the browser version.

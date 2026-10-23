@@ -154,7 +154,7 @@ const resultsToDescription = ({
   browser,
   reportedVersion,
   os, os_version,
-  prefs, incognito, tor, nightly
+  prefs, incognito, tor, nightly, extension
 }) => {
   const browserFinal = browser;
   const browserVersionLong = reportedVersion;
@@ -179,6 +179,9 @@ const resultsToDescription = ({
   }
   if (tor === true) {
     finalText += '<br>Tor';
+  }
+  if (extension) {
+    finalText += `<br>${extension}`;
   }
   return finalText;
 };

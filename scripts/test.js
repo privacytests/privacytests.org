@@ -2,6 +2,7 @@
 //
 // Usage: `node test --browser=firefox --out=../firefox.json`
 //        `node test --browser=firefox-nightly --out=../firefox-nightly.json`
+//        `node test --browser=chrome --extension=<store id> --out=../chrome.json`
 
 // ## imports
 
@@ -24,6 +25,7 @@ const path = require('node:path');
 const { observeDomains, runDnsTests } = require('./dns-test.js');
 const systemNetworkSettings = require('./system-network-settings');
 const { macOSdefaultBrowserSettings } = require('./desktop-constants');
+const { validateExtensionId } = require('./chrome-extension');
 
 // ## Constants
 
@@ -447,6 +449,9 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
 
   // Start up browser with existing profile
   await browserSession.browser.launch(false);
+  if (typeof browserSession.browser.acknowledgeExtension === 'function') {
+    await browserSession.browser.acknowledgeExtension();
+  }
 
   // Cross-session tests
   if (categories.includes('session')) {
@@ -527,9 +532,21 @@ const prepareBrowserSession = async (config, hurry) => {
   const browser = createBrowserObject(config);
   if (!hurry && browser instanceof DesktopBrowser) {
     log('prepareBrowserSession: warm-up starting', { browser: config.browser, hurry });
+    const warmupMs = 60000;
+    const started = Date.now();
     await browser.launch();
-    // Give browser the chance to load any feature flags.
-    await sleepMs(60000);
+    try {
+      // Feature flags load during this window. An extension is enabled here,
+      // before the quit that saves the profile.
+      await browser.acknowledgeExtension();
+      const remaining = warmupMs - (Date.now() - started);
+      if (remaining > 0) {
+        await sleepMs(remaining);
+      }
+    } catch (e) {
+      await browser.kill();
+      throw e;
+    }
     await browser.kill();
     log('prepareBrowserSession: warm-up finished', { browser: config.browser });
   }
@@ -589,12 +606,13 @@ const runTests = async (
     }
 
     const testResults = Object.assign({}, testResultsStage1, testResultsStage2, testResultsStage3);
-    const { browser, incognito, tor, nightly } = browserSpec;
+    const { browser, incognito, tor, nightly, extension } = browserSpec;
     const allTests = [{
       browser,
       incognito,
       tor,
       nightly,
+      extension,
       testResults,
       timeStarted,
       reportedVersion: await browserSession.browser.version(),
@@ -687,6 +705,12 @@ const readConfig = (commandLineData) => {
   if (!config.browser) {
     throw new Error('A browser is required (--browser=firefox)');
   }
+  if (config.extension) {
+    config.extension = validateExtensionId(config.extension);
+    if (os.platform() !== 'darwin') {
+      throw new Error('--extension is supported on macOS.');
+    }
+  }
   if (config.browserstack && !config.android) {
     throw new Error('--browserstack requires --android');
   }
@@ -721,7 +745,8 @@ const configToBrowserSpec = (config) => ({
   tor: coerceBoolean(config.tor),
   ios: coerceBoolean(config.ios),
   browserstack: coerceBoolean(config.browserstack),
-  appDir: config['app-dir']
+  appDir: config['app-dir'],
+  extension: config.extension
 });
 
 const allDesktopBrowserSpecs = (config) =>
