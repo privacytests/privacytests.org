@@ -4,6 +4,7 @@
 
 const fsPromises = require('node:fs/promises');
 const path = require('node:path');
+const WebSocket = require('ws');
 const { sleepMs } = require('./utils');
 
 const EXTENSION_ID_RE = /^[a-p]{32}$/;
