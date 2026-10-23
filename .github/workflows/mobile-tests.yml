@@ -121,38 +121,11 @@ jobs:
 
   render-results:
     needs: mobile-tests
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: scripts
-    steps:
-      - uses: actions/checkout@v5
-
-      - uses: actions/setup-node@v5
-        with:
-          node-version: '24'
-          cache: npm
-          cache-dependency-path: scripts/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Download test results
-        uses: actions/download-artifact@v6
-        with:
-          path: artifacts
-          pattern: '*-results'
-
-      - name: Render android and ios
-        run: node render-multiple --dir=../artifacts --out-dir=..
-
-      - name: Upload rendered pages
-        uses: actions/upload-artifact@v6
-        with:
-          name: mobile-rendered-pages
-          path: |
-            android.html
-            android.json
-            ios.html
-            ios.json
-          if-no-files-found: warn
+    uses: ./.github/workflows/render-results.yml
+    with:
+      artifact-name: mobile-rendered-pages
+      paths: |
+        android.html
+        android.json
+        ios.html
+        ios.json

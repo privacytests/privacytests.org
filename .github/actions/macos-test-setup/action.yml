@@ -1,0 +1,24 @@
+name: macOS privacytests setup
+description: Node, npm ci, and mkcert for macOS privacytest runners
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v5
+      with:
+        node-version: '24'
+        cache: npm
+        cache-dependency-path: scripts/package-lock.json
+
+    - name: Install dependencies
+      shell: bash
+      working-directory: scripts
+      run: npm ci
+
+    - name: Install mkcert
+      shell: bash
+      run: |
+        # macos-latest images ship with aws/tap pre-tapped but untrusted; brew warns on every command until trusted.
+        brew trust aws/tap
+        brew install mkcert
+        mkcert -install

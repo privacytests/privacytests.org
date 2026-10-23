@@ -4,6 +4,7 @@
 //   <browser>[-private]-<repetition>.json
 //   android-<browser>-<repetition>.json
 //   ios-<browser>-<repetition>.json
+//   chrome[-<extension-slug>]-<repetition>.json   (extensions page)
 //
 // Desktop examples:
 //   tor-nightly-1.json          -> nightly
@@ -11,7 +12,10 @@
 //   brave-1.json                -> index
 //   brave-private-1.json        -> private
 //
-// Usage: node render-multiple --dir=../artifacts [--out-dir=..]
+// Extensions (all files -> one page):
+//   node render-multiple --dir=../artifacts --pages=extensions --out-dir=..
+//
+// Usage: node render-multiple --dir=../artifacts [--out-dir=..] [--pages=...]
 
 const fs = require('fs');
 const path = require('node:path');
@@ -88,7 +92,11 @@ const removeMinorityVersions = (files) => {
     const test = JSON.parse(fs.readFileSync(filePath, 'utf8')).all_tests[0];
     return {
       filePath,
-      key: `${test.browser}${test.tor ? '-tor' : ''}`,
+      key: [
+        test.browser,
+        test.tor ? 'tor' : '',
+        test.extension || ''
+      ].filter(Boolean).join('-'),
       version: test.reportedVersion
     };
   });
@@ -113,12 +121,22 @@ const renderPageFromFiles = async ({ name, files, outDir, aggregate }) => {
 };
 
 const main = async () => {
-  const { dir, 'out-dir': outDir, aggregate } = minimist(process.argv.slice(2), {
+  const { dir, 'out-dir': outDir, aggregate, pages } = minimist(process.argv.slice(2), {
     default: { 'out-dir': '..', aggregate: true },
-    string: ['dir', 'out-dir']
+    string: ['dir', 'out-dir', 'pages']
   });
   if (!dir) {
     throw new Error('Required: --dir=path/to/artifacts');
+  }
+  // Extensions workflow: every result file goes on one comparison page.
+  if (pages === 'extensions') {
+    await renderPageFromFiles({
+      name: 'extensions',
+      files: removeMinorityVersions(walkJsonFiles(dir)),
+      outDir,
+      aggregate: aggregate === true
+    });
+    return;
   }
   const buckets = bucketFiles(walkJsonFiles(dir));
   for (const name of PAGE_NAMES) {

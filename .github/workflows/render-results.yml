@@ -1,0 +1,62 @@
+name: Render results
+
+on:
+  workflow_call:
+    inputs:
+      pages:
+        description: Passed to render-multiple --pages= (empty = default buckets from filenames)
+        type: string
+        required: false
+        default: ''
+      artifact-name:
+        description: Name of the uploaded rendered-pages artifact
+        type: string
+        required: true
+      paths:
+        description: Multiline list of files to upload (relative to repo root)
+        type: string
+        required: true
+
+env:
+  CI: true
+  # capture-website pulls in puppeteer; CI doesn't generate previews, so skip its Chrome download.
+  PUPPETEER_SKIP_DOWNLOAD: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: scripts
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: scripts/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download test results
+        uses: actions/download-artifact@v6
+        with:
+          path: artifacts
+          pattern: '*-results'
+
+      - name: Render summary pages
+        run: |
+          PAGES_FLAG=""
+          if [ -n "${{ inputs.pages }}" ]; then
+            PAGES_FLAG="--pages=${{ inputs.pages }}"
+          fi
+          node render-multiple --dir=../artifacts ${PAGES_FLAG} --out-dir=..
+
+      - name: Upload rendered pages
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ${{ inputs.paths }}
+          if-no-files-found: warn

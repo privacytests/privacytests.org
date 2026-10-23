@@ -521,8 +521,11 @@ const getMergedResults = (dataFiles) => {
   return finalResults;
 };
 
-const createTitle = ({ nightly, incognito, timeStarted, platform }) => {
+const createTitle = ({ nightly, incognito, timeStarted, platform, extensions }) => {
   const year = (new Date(timeStarted)).getFullYear().toString();
+  if (extensions) {
+    return `What are the best privacy Chrome extensions in ${year}?`;
+  }
   const onPlatformPhrase = platform === 'Desktop' ? '' : `on ${platform} `;
   return `What are the best ${nightly ? 'alpha ' : ''}${incognito ? 'incognito modes' : 'private browsers'} ${onPlatformPhrase}in ${year}?`;
 };
@@ -547,8 +550,12 @@ const renderPage = async ({ dataFiles, aggregate }) => {
   // private-mode pages even though runs are not flagged --incognito/--tor.
   const incognito = results.all_tests.every(t =>
     (t.incognito === true || t.tor === true || t.browser === 'tor'));
+  const basename = path.basename(resultsFilesJSON[0]);
+  const extensions = basename.startsWith('extensions');
   let tableTitle;
-  if (nightly) {
+  if (extensions) {
+    tableTitle = 'Chrome Extensions';
+  } else if (nightly) {
     tableTitle = incognito ? 'Nightly private modes' : 'Nightly Builds';
   } else if (results.platform === 'Android') {
     tableTitle = 'Android Browsers';
@@ -557,9 +564,14 @@ const renderPage = async ({ dataFiles, aggregate }) => {
   } else {
     tableTitle = incognito ? 'Desktop private modes' : 'Desktop Browsers';
   }
-  const basename = path.basename(resultsFilesJSON[0]);
   const content = await contentPage({
-    title: createTitle({ platform: results.platform, nightly, incognito, timeStarted: processedResults.timeStarted }),
+    title: createTitle({
+      platform: results.platform,
+      nightly,
+      incognito,
+      extensions,
+      timeStarted: processedResults.timeStarted
+    }),
     tableTitle,
     nightly,
     incognito,

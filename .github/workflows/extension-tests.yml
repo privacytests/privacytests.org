@@ -1,0 +1,85 @@
+name: Extension tests
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *'
+
+env:
+  CI: true
+  GITHUB_TOKEN: ${{ github.token }}
+  # capture-website pulls in puppeteer; CI doesn't generate previews, so skip its Chrome download.
+  PUPPETEER_SKIP_DOWNLOAD: true
+
+jobs:
+  preflight:
+    uses: ./.github/workflows/preflight.yml
+    with:
+      runs-on: macos-latest
+
+  extension-tests:
+    needs: preflight
+    strategy:
+      fail-fast: false
+      matrix:
+        # One rep for now; expand this list later (cartesian with config).
+        repetitions: [1]
+        # Stock Chrome plus privacy extensions (Web Store ids).
+        config:
+          - { slug: chrome, extension: '' }
+          - { slug: chrome-ubol, extension: ddkjiahejlhfcafbddmgiahcphecmpfh }
+          - { slug: chrome-adguard, extension: bgnkhhnnamicmpeenaelnjfhikgbkllg }
+          - { slug: chrome-ghostery, extension: mlomiejdfkolichcflejclcbmpeanihj }
+          - { slug: chrome-ddg, extension: bkdgflcldnnnapblkhphbgpggdiikppg }
+          - { slug: chrome-adblock, extension: gighmmpiobklfepjocnamgkkbiglidom }
+          - { slug: chrome-abp, extension: cfhdojbkjhnklbpkdaibdccddilifddb }
+          - { slug: chrome-privacy-badger, extension: pkehgijcmpdhfbdbbnkijodmdjhbjlgp }
+          - { slug: chrome-jshelter, extension: ammoloihpcbognfddfjcljgembpibcmb }
+          - { slug: chrome-privacy-magic, extension: cobojehlalmfnplnblndhofhgeglljkc }
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: scripts
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ./.github/actions/macos-test-setup
+
+      - name: Install Chrome
+        run: node desktop-install chrome
+
+      - name: Start DNS monitor
+        run: sudo node monitor-dns.js &
+
+      - name: Run tests
+        run: |
+          RESULT_FILE="${{ matrix.config.slug }}-${{ matrix.repetitions }}"
+          echo "RESULT_FILE=${RESULT_FILE}" >> "$GITHUB_ENV"
+          EXTENSION_FLAG=""
+          if [ -n "${{ matrix.config.extension }}" ]; then
+            EXTENSION_FLAG="--extension=${{ matrix.config.extension }}"
+          fi
+          node test --browser=chrome ${EXTENSION_FLAG} --out=../${RESULT_FILE}.json
+        timeout-minutes: 90
+
+      - name: Upload results
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: ${{ env.RESULT_FILE }}-results
+          path: |
+            ${{ env.RESULT_FILE }}.json
+            ${{ env.RESULT_FILE }}.html
+            failure.png
+          if-no-files-found: warn
+
+  render-results:
+    needs: extension-tests
+    uses: ./.github/workflows/render-results.yml
+    with:
+      pages: extensions
+      artifact-name: rendered-extensions
+      paths: |
+        extensions.html
+        extensions.json

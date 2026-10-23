@@ -80,21 +80,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v5
-        with:
-          node-version: '24'
-          cache: npm
-          cache-dependency-path: scripts/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install mkcert
-        run: |
-          # macos-latest images ship with aws/tap pre-tapped but untrusted; brew warns on every command until trusted.
-          brew trust aws/tap
-          brew install mkcert
-          mkcert -install
+      - uses: ./.github/actions/macos-test-setup
 
       - name: Install browser
         run: node desktop-install ${{ matrix.browser }}
@@ -133,41 +119,15 @@ jobs:
 
   render-results:
     needs: desktop-tests
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: scripts
-    steps:
-      - uses: actions/checkout@v5
-
-      - uses: actions/setup-node@v5
-        with:
-          node-version: '24'
-          cache: npm
-          cache-dependency-path: scripts/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Download test results
-        uses: actions/download-artifact@v6
-        with:
-          path: artifacts
-          pattern: '*-results'
-
-      - name: Render index, private, nightly, and nightly-private
-        run: node render-multiple --dir=../artifacts --out-dir=..
-
-      - name: Upload rendered pages
-        uses: actions/upload-artifact@v6
-        with:
-          name: rendered-pages
-          path: |
-            index.html
-            index.json
-            private.html
-            private.json
-            nightly.html
-            nightly.json
-            nightly-private.html
-            nightly-private.json
+    uses: ./.github/workflows/render-results.yml
+    with:
+      artifact-name: rendered-pages
+      paths: |
+        index.html
+        index.json
+        private.html
+        private.json
+        nightly.html
+        nightly.json
+        nightly-private.html
+        nightly-private.json
