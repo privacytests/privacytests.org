@@ -449,9 +449,6 @@ const runTestsStage1 = async ({ browserSession, categories }) => {
 
   // Start up browser with existing profile
   await browserSession.browser.launch(false);
-  if (typeof browserSession.browser.acknowledgeExtension === 'function') {
-    await browserSession.browser.acknowledgeExtension();
-  }
 
   // Cross-session tests
   if (categories.includes('session')) {
@@ -534,11 +531,10 @@ const prepareBrowserSession = async (config, hurry) => {
     log('prepareBrowserSession: warm-up starting', { browser: config.browser, hurry });
     const warmupMs = 60000;
     const started = Date.now();
-    await browser.launch();
+    // launch() enables any --extension before returning. The rest of this
+    // window is for feature flags to load, then we quit and keep the profile.
     try {
-      // Feature flags load during this window. An extension is enabled here,
-      // before the quit that saves the profile.
-      await browser.acknowledgeExtension();
+      await browser.launch();
       const remaining = warmupMs - (Date.now() - started);
       if (remaining > 0) {
         await sleepMs(remaining);

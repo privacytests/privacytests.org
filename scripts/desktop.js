@@ -192,6 +192,8 @@ class DesktopBrowser {
       // Delete old profiles if they exist.
       console.log(`Deleting any old ${this._profilePath}`);
       await fsPromises.rm(this._profilePath, { recursive: true, force: true, maxRetries: 3 });
+      // A wiped profile must re-acknowledge an External Extensions install.
+      this._extensionAcknowledged = false;
     } else {
       if (this.browser === 'opera') {
         try {
@@ -230,6 +232,8 @@ class DesktopBrowser {
     this._process = exec(launchCommand, this._defaults.useOpen ? {} : { env: this._defaults.env });
     await sleepMs(this.tor ? this._defaults.torPostLaunchDelay : (this._defaults.postLaunchDelay ?? 2000));
     await this._logRunningProcesses('after launch');
+    // Enable after every launch that still needs it, including DNS's clean start.
+    await this.acknowledgeExtension();
   }
 
   // Turn on an externally installed extension in this running browser.
