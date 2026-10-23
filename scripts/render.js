@@ -9,6 +9,10 @@ const minimist = require('minimist');
 const template = require('./template.js');
 const _ = require('lodash');
 const { readYAMLFile, dataUriFromFile } = require('./utils.js');
+const {
+  preloadExtensionDisplay,
+  extensionDisplayInfoSync
+} = require('./extension-render.js');
 const cleaner = require('clean-html');
 const { HtmlValidate } = require('html-validate');
 
@@ -181,7 +185,14 @@ const resultsToDescription = ({
     finalText += '<br>Tor';
   }
   if (extension) {
-    finalText += `<br>${extension}`;
+    const { shortName, version, logoDataUri } = extensionDisplayInfoSync(extension);
+    if (logoDataUri) {
+      finalText += `<br><img class="browser-logo-image" alt="${escapeHtml(shortName)} logo" src="${logoDataUri}" width="32" height="32">`;
+    }
+    finalText += `<br>${escapeHtml(shortName)}`;
+    if (version) {
+      finalText += `<br>${escapeHtml(version)}`;
+    }
   }
   return finalText;
 };
@@ -527,6 +538,7 @@ const renderPage = async ({ dataFiles, aggregate }) => {
   console.log(`Reading from raw results files: ${resultsFilesJSON}`);
   const results = getMergedResults(resultsFilesJSON);
   console.log(results.all_tests.length);
+  await preloadExtensionDisplay(results.all_tests);
   const processedResults = aggregate ? aggregateRepeatedTrials(results) : results;
   //  console.log(results.all_tests[0]);
   //  console.log(JSON.stringify(results));
