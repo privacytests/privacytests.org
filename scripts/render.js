@@ -186,6 +186,8 @@ const resultsToDescription = ({
   }
   if (extension) {
     const { shortName, version, logoDataUri } = extensionDisplayInfoSync(extension);
+    // One blank line between the Chrome version and the extension icon.
+    finalText += '<br>';
     if (logoDataUri) {
       finalText += `<br><img class="browser-logo-image" alt="${escapeHtml(shortName)} logo" src="${logoDataUri}" width="32" height="32">`;
     }
@@ -551,10 +553,11 @@ const renderPage = async ({ dataFiles, aggregate }) => {
   const incognito = results.all_tests.every(t =>
     (t.incognito === true || t.tor === true || t.browser === 'tor'));
   const basename = path.basename(resultsFilesJSON[0]);
-  const extensions = basename.startsWith('extensions');
+  const extensions = basename.startsWith('extensions') ||
+    results.all_tests.some(t => t.extension);
   let tableTitle;
   if (extensions) {
-    tableTitle = 'Chrome Extensions';
+    tableTitle = 'Chrome extensions';
   } else if (nightly) {
     tableTitle = incognito ? 'Nightly private modes' : 'Nightly Builds';
   } else if (results.platform === 'Android') {
